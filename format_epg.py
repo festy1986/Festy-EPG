@@ -17,65 +17,34 @@ def format_date(date_str):
     except:
         return ""
 
-def get_episode_code(prog, subtitle, desc):
-    # 1) Prefer explicit <episode-num>
-    for ep in prog.findall("episode-num"):
-        value = clean(ep.text or "")
-        system = (ep.get("system") or "").lower()
-
-        m = re.search(r"[Ss](\d+)\s*[Ee](\d+)", value)
-        if m:
-            s, e = m.groups()
-            return f"S{int(s):02d}E{int(e):02d}"
-
-        if system == "xmltv_ns":
-            m = re.match(r"(\d+)\.(\d+)\.?", value)
-            if m:
-                s, e = m.groups()
-                return f"S{int(s)+1:02d}E{int(e)+1:02d}"
-
-    # 2) Fallback: look in subtitle + desc
-    combined = f"{subtitle} {desc}"
-
-    m = re.search(r"[Ss](\d+)\s*[Ee](\d+)", combined)
-    if m:
-        s, e = m.groups()
-        return f"S{int(s):02d}E{int(e):02d}"
-
-    m = re.search(r"\b(\d+)[xX](\d+)\b", combined)
-    if m:
-        s, e = m.groups()
-        return f"S{int(s):02d}E{int(e):02d}"
-
-    return ""
-
-def strip_episode_code(text):
+def get_episode_code(text):
     if not text:
         return ""
-    text = re.sub(r"[Ss]\d+\s*[Ee]\d+", "", text)
-    text = re.sub(r"\b\d+[xX]\d+\b", "", text)
-    return clean(text)
+    m = re.search(r"[Ss](\d+)\s*[Ee](\d+)", text)
+    if m:
+        s, e = m.groups()
+        return f"S{int(s):02d}E{int(e):02d}"
+    return ""
 
 parser = etree.XMLParser(recover=True)
 tree = etree.parse("epg.xml", parser)
 root = tree.getroot()
 
 for prog in root.findall("programme"):
-    show_title = clean(prog.findtext("title") or "")
+
     subtitle = clean(prog.findtext("sub-title") or "")
     desc = clean(prog.findtext("desc") or "")
     date = clean(prog.findtext("date") or "")
-    category = " ".join((c.text or "") for c in prog.findall("category")).lower()
+    category = " ".join([(c.text or "") for c in prog.findall("category")]).lower()
 
     desc_node = prog.find("desc")
     if desc_node is None:
         desc_node = etree.SubElement(prog, "desc")
 
-    # Movies: description should be plot + (YEAR)
+    # MOVIES
     if "movie" in category:
         year = date[:4] if len(date) >= 4 else ""
         plot = clean(desc)
-
         if plot and year:
             desc_node.text = f"{plot}. ({year})"
         elif year:
@@ -84,34 +53,19 @@ for prog in root.findall("programme"):
             desc_node.text = plot
         continue
 
-    # TV episodes:
-    # - NEVER use show_title in description output
-    # - ONLY use subtitle as episode title
-    # - If subtitle is missing, do not replace it with show_title
+    # TV EPISODES (STRICT)
 
-    episode_title = strip_episode_code(subtitle)
-    ep_code = get_episode_code(prog, subtitle, desc)
+    episode_title = subtitle  # ONLY source
+    ep_code = get_episode_code(f"{subtitle} {desc}")
 
+    # Clean plot
     plot = desc
-
-    # Remove any show title leakage from plot
-    if show_title:
-        plot = re.sub(re.escape(show_title), "", plot, flags=re.I)
-
-    # Remove subtitle if repeated in plot
     if subtitle:
         plot = re.sub(re.escape(subtitle), "", plot, flags=re.I)
+    plot = re.sub(r"[Ss]\d+\s*[Ee]\d+", "", plot)
+    plot = clean(plot)
 
-    # Remove cleaned episode title if repeated in plot
-    if episode_title:
-        plot = re.sub(re.escape(episode_title), "", plot, flags=re.I)
-
-    # Remove episode code if repeated in plot
-    plot = strip_episode_code(plot)
-
-    # Build EXACT desired format:
-    # Episode Title - SxxExx. Plot description. (MM/DD/YYYY)
-
+    # Build EXACT format
     line = ""
 
     if episode_title:
@@ -128,15 +82,13 @@ for prog in root.findall("programme"):
         else:
             line = plot
 
-    final = line.strip()
-
     airdate = format_date(date)
     if airdate:
-        if final:
-            final += f". ({airdate})"
+        if line:
+            line += f". ({airdate})"
         else:
-            final = f"({airdate})"
+            line = f"({airdate})"
 
-    desc_node.text = final
+    desc_node.text = line.strip()
 
 tree.write("epg.xml", encoding="utf-8", xml_declaration=True)
