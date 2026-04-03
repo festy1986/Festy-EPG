@@ -1,0 +1,10 @@
+<tv>
+  <channel id="test.channel">
+    <display-name>Test Channel</display-name>
+  </channel>
+
+  <programme start="20260403160000 -0400" stop="20260403163000 -0400" channel="test.channel">
+    <title>Test Show</title>
+    <desc>Test Episode - S01E01. This is a test description. (04/03/2026)</desc>
+  </programme>
+</tv>
