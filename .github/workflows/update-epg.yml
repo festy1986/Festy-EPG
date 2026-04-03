@@ -21,6 +21,10 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install lxml
+        run: |
+          pip install lxml
+
       - name: Download US EPG
         run: |
           curl -L -o epg.xml https://iptv-org.github.io/epg/guides/us.xml
