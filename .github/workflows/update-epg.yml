@@ -27,8 +27,7 @@ jobs:
 
       - name: Download US EPG
         run: |
-          curl -L -o epg.xml.gz https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz
-          gunzip -f epg.xml.gz
+          curl -L -o epg.xml https://iptv-epg.org/files/epg-us.xml
 
       - name: Run formatter
         run: |
