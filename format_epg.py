@@ -17,19 +17,18 @@ def format_date(date_str):
     except:
         return ""
 
-def get_episode_code_from_nodes(prog, subtitle, desc):
-    # Prefer explicit episode-num first
+def get_episode_code(prog, subtitle, desc):
     for ep in prog.findall("episode-num"):
-        val = clean(ep.text or "")
+        value = clean(ep.text or "")
         system = (ep.get("system") or "").lower()
 
-        m = re.search(r'[Ss](\d+)\s*[Ee](\d+)', val)
+        m = re.search(r'[Ss](\d+)\s*[Ee](\d+)', value)
         if m:
             s, e = m.groups()
             return f"S{int(s):02d}E{int(e):02d}"
 
         if system == "xmltv_ns":
-            m = re.match(r"(\d+)\.(\d+)\.?", val)
+            m = re.match(r"(\d+)\.(\d+)\.?", value)
             if m:
                 s, e = m.groups()
                 return f"S{int(s)+1:02d}E{int(e)+1:02d}"
@@ -47,9 +46,7 @@ def get_episode_code_from_nodes(prog, subtitle, desc):
 
     return ""
 
-def remove_episode_code(text):
-    if not text:
-        return ""
+def strip_episode_code(text):
     text = re.sub(r'[Ss]\d+\s*[Ee]\d+', '', text)
     text = re.sub(r'\b\d+[xX]\d+\b', '', text)
     return clean(text)
@@ -63,48 +60,40 @@ for prog in root.findall("programme"):
     subtitle = clean(prog.findtext("sub-title") or "")
     desc = clean(prog.findtext("desc") or "")
     date = clean(prog.findtext("date") or "")
-    category = " ".join([(c.text or "") for c in prog.findall("category")]).lower()
+    category = " ".join((c.text or "") for c in prog.findall("category")).lower()
 
     desc_node = prog.find("desc")
     if desc_node is None:
         desc_node = etree.SubElement(prog, "desc")
 
-    # Movies
     if "movie" in category:
         year = date[:4] if len(date) >= 4 else ""
         plot = clean(desc)
-        if year and plot:
-            desc_node.text = f"{plot}. ({year})"
-        elif year:
-            desc_node.text = f"({year})"
-        else:
-            desc_node.text = plot
+        desc_node.text = f"{plot}. ({year})" if plot and year else (f"({year})" if year else plot)
         continue
 
-    # TV episodes
-    episode_title = remove_episode_code(subtitle)
-    ep_code = get_episode_code_from_nodes(prog, subtitle, desc)
+    # STRICT TV RULES:
+    # - Never use show_title in desc output
+    # - Only use subtitle as episode title
+    # - If subtitle missing, do not substitute show title
+
+    episode_title = strip_episode_code(subtitle)
+    ep_code = get_episode_code(prog, subtitle, desc)
 
     plot = desc
 
-    # Never allow show title into plot
     if show_title:
-        plot = re.sub(re.escape(show_title), '', plot, flags=re.I)
+        plot = re.sub(re.escape(show_title), "", plot, flags=re.I)
 
-    # Remove subtitle from plot if duplicated
     if subtitle:
-        plot = re.sub(re.escape(subtitle), '', plot, flags=re.I)
+        plot = re.sub(re.escape(subtitle), "", plot, flags=re.I)
 
-    # Remove cleaned episode title from plot if duplicated
     if episode_title:
-        plot = re.sub(re.escape(episode_title), '', plot, flags=re.I)
+        plot = re.sub(re.escape(episode_title), "", plot, flags=re.I)
 
-    # Remove episode code from plot
-    plot = remove_episode_code(plot)
-    plot = clean(plot)
+    plot = strip_episode_code(plot)
 
     parts = []
-
     if episode_title and ep_code:
         parts.append(f"{episode_title} - {ep_code}")
     elif episode_title:
@@ -115,14 +104,11 @@ for prog in root.findall("programme"):
     if plot:
         parts.append(plot)
 
-    final = ". ".join([p for p in parts if p]).strip()
+    final = ". ".join(p for p in parts if p).strip()
 
     airdate = format_date(date)
     if airdate:
-        if final:
-            final += f". ({airdate})"
-        else:
-            final = f"({airdate})"
+        final = f"{final}. ({airdate})" if final else f"({airdate})"
 
     desc_node.text = final
 
