@@ -1,0 +1,17 @@
+name: Update EPG
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * *"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Show repo files
+        run: ls -la
