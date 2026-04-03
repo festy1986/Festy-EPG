@@ -16,9 +16,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Download US EPG
         run: |
           curl -L -o epg.xml https://iptv-org.github.io/epg/guides/us.xml
+
+      - name: Run formatter
+        run: |
+          python format_epg.py
 
       - name: Commit and push
         run: |
