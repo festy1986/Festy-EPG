@@ -2,17 +2,17 @@ from lxml import etree
 import re
 from datetime import datetime
 
-def extract_episode_and_title(text):
+def extract_episode(text):
     if not text:
-        return "", ""
+        return "", text
 
-    # Match S06 E14 or S06E14
+    # Find S06E14 or S06 E14
     match = re.search(r'[Ss](\d+)\s*[Ee](\d+)', text)
     if match:
         s, e = match.groups()
         ep = f"S{int(s):02d}E{int(e):02d}"
 
-        # remove episode part from string
+        # Remove episode code from text
         cleaned = re.sub(r'[Ss]\d+\s*[Ee]\d+', '', text).strip()
         return ep, cleaned
 
@@ -38,31 +38,44 @@ for prog in root.findall("programme"):
     date = (prog.findtext("date") or "").strip()
     category = (prog.findtext("category") or "").lower()
 
-    # MOVIE handling
+    # MOVIES
     if "movie" in category:
         year = date[:4] if date else ""
-        new_desc = f"{desc.rstrip('.')}. ({year})" if year else desc
+        new_desc = f"{title}. ({year})" if year else title
+
     else:
-        # Combine subtitle + desc for parsing
-        combined = f"{subtitle} {desc}".strip()
+        # STEP 1: Extract episode + clean subtitle
+        ep, clean_sub = extract_episode(subtitle)
 
-        ep, ep_title = extract_episode_and_title(combined)
+        # STEP 2: Pick best episode title
+        episode_title = clean_sub if clean_sub else title
 
-        airdate = format_date(date)
+        # STEP 3: Clean description (remove duplicates)
+        desc_clean = desc
 
-        # Build final string EXACTLY how you want
-        first_line = ep_title if ep_title else title
+        # Remove subtitle if duplicated inside description
+        if episode_title.lower() in desc_clean.lower():
+            desc_clean = desc_clean.replace(episode_title, "").strip()
+
+        # Remove episode pattern from desc
+        desc_clean = re.sub(r'[Ss]\d+\s*[Ee]\d+', '', desc_clean).strip()
+
+        # STEP 4: Build final line
+        line = episode_title
 
         if ep:
-            first_line = f"{first_line} - {ep}"
+            line += f" - {ep}"
 
-        final = f"{first_line}. {desc.rstrip('.')}"
-        
+        if desc_clean:
+            line += f". {desc_clean}"
+
+        airdate = format_date(date)
         if airdate:
-            final += f". ({airdate})"
+            line += f". ({airdate})"
 
-        new_desc = final.strip()
+        new_desc = line.strip()
 
+    # Replace description completely
     desc_node = prog.find("desc")
     if desc_node is None:
         desc_node = etree.SubElement(prog, "desc")
