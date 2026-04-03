@@ -2,23 +2,21 @@ from lxml import etree
 import re
 from datetime import datetime
 
-def normalize_episode(text):
+def extract_episode_and_title(text):
     if not text:
-        return ""
+        return "", ""
 
-    patterns = [
-        r'[Ss](\d+)[Ee](\d+)',
-        r'(\d+)[xX](\d+)',
-        r'Season\s*(\d+).*Episode\s*(\d+)'
-    ]
+    # Match S06 E14 or S06E14
+    match = re.search(r'[Ss](\d+)\s*[Ee](\d+)', text)
+    if match:
+        s, e = match.groups()
+        ep = f"S{int(s):02d}E{int(e):02d}"
 
-    for p in patterns:
-        m = re.search(p, text, re.I)
-        if m:
-            s, e = m.groups()
-            return f"S{int(s):02d}E{int(e):02d}"
+        # remove episode part from string
+        cleaned = re.sub(r'[Ss]\d+\s*[Ee]\d+', '', text).strip()
+        return ep, cleaned
 
-    return ""
+    return "", text
 
 def format_date(date_str):
     if not date_str:
@@ -29,50 +27,46 @@ def format_date(date_str):
     except:
         return ""
 
-parser = etree.XMLParser(recover=True, encoding="utf-8")
+parser = etree.XMLParser(recover=True)
 tree = etree.parse("epg.xml", parser)
 root = tree.getroot()
 
 for prog in root.findall("programme"):
-    title = prog.findtext("title", default="") or ""
-    desc = prog.findtext("desc", default="") or ""
-    subtitle = prog.findtext("sub-title", default="") or ""
-    date = prog.findtext("date", default="") or ""
-    category = prog.findtext("category", default="") or ""
+    title = (prog.findtext("title") or "").strip()
+    desc = (prog.findtext("desc") or "").strip()
+    subtitle = (prog.findtext("sub-title") or "").strip()
+    date = (prog.findtext("date") or "").strip()
+    category = (prog.findtext("category") or "").lower()
 
-    ep = normalize_episode(f"{subtitle} {desc}")
-    is_movie = "movie" in category.lower()
-
-    desc = desc.strip().rstrip(".")
-    subtitle = subtitle.strip()
-    title = title.strip()
-
-    if is_movie:
-        year = date[:4] if len(date) >= 4 else ""
-        if year:
-            new_desc = f"{desc}. ({year})" if desc else f"({year})"
-        else:
-            new_desc = desc
+    # MOVIE handling
+    if "movie" in category:
+        year = date[:4] if date else ""
+        new_desc = f"{desc.rstrip('.')}. ({year})" if year else desc
     else:
+        # Combine subtitle + desc for parsing
+        combined = f"{subtitle} {desc}".strip()
+
+        ep, ep_title = extract_episode_and_title(combined)
+
         airdate = format_date(date)
-        first_part = subtitle if subtitle else title
+
+        # Build final string EXACTLY how you want
+        first_line = ep_title if ep_title else title
 
         if ep:
-            first_part = f"{first_part} - {ep}"
+            first_line = f"{first_line} - {ep}"
 
-        if desc:
-            new_desc = f"{first_part}. {desc}. "
-        else:
-            new_desc = f"{first_part}. "
-
+        final = f"{first_line}. {desc.rstrip('.')}"
+        
         if airdate:
-            new_desc += f"({airdate})"
+            final += f". ({airdate})"
 
-        new_desc = new_desc.strip()
+        new_desc = final.strip()
 
     desc_node = prog.find("desc")
     if desc_node is None:
         desc_node = etree.SubElement(prog, "desc")
+
     desc_node.text = new_desc
 
 tree.write("epg.xml", encoding="utf-8", xml_declaration=True)
