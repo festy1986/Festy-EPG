@@ -39,7 +39,7 @@ const masterList = [
   "GREAT AMERICAN FAMILY"
 ];
 
-const exactAliases = {
+const aliases = {
   "FOX PORTLAND": ["WPFO"],
   "NBC PORTLAND": ["WCSH"],
   "ABC PORTLAND": ["WMTW"],
@@ -49,30 +49,37 @@ const exactAliases = {
   "ESPN 2 HD": ["ESPN2", "ESPN 2"],
   "ESPN NEWS": ["ESPNEWS", "ESPN NEWS"],
   "WE": ["WETV", "WE TV"],
-  "BET": ["BET"],
-  "MTV": ["MTV"],
-  "MTV 2": ["MTV2", "MTV 2"],
-  "FXM": ["FXMOVIECHANNEL", "FX MOVIE CHANNEL"],
   "TRU TV": ["TRUTV", "TRU TV"],
   "A&E": ["A&E", "A AND E"],
   "E! ENTERTAINMENT": ["E", "E ENTERTAINMENT"],
-  "NAT GEO WILD": ["NATIONAL GEOGRAPHIC WILD", "NAT GEO WILD"],
-  "NAT GEO MUNDO": ["NAT GEO MUNDO", "NATIONAL GEOGRAPHIC MUNDO"],
+  "FXM": ["FXMOVIECHANNEL", "FX MOVIE CHANNEL"],
+  "NAT GEO WILD": ["NATIONALGEOGRAPHICWILD", "NATIONAL GEOGRAPHIC WILD", "NAT GEO WILD"],
+  "NAT GEO MUNDO": ["NATGEOMUNDO", "NAT GEO MUNDO", "NATIONAL GEOGRAPHIC MUNDO"],
   "HALLMARK MYSTERY": ["HALLMARK MYSTERY", "HALLMARK MOVIES MYSTERIES"],
-  "CRIME AND INVESTIGATION": ["CRIME PLUS INVESTIGATION", "CRIME INVESTIGATION"],
-  "INVESTIGATION DISCOVERY": ["INVESTIGATION DISCOVERY"],
-  "AMERICAN HEROES CHANNEL": ["AMERICAN HEROES CHANNEL"],
-  "AMC PLUS": ["AMC PLUS", "AMC+"],
-  "ION PLUS": ["ION PLUS"],
-  "ION MYSTERY": ["ION MYSTERY"],
+  "CRIME AND INVESTIGATION": ["CRIMEPLUSINVESTIGATION", "CRIME PLUS INVESTIGATION", "CRIME INVESTIGATION"],
+  "INVESTIGATION DISCOVERY": ["INVESTIGATIONDISCOVERY", "INVESTIGATION DISCOVERY"],
+  "AMERICAN HEROES CHANNEL": ["AMERICANHEROESCHANNEL", "AMERICAN HEROES CHANNEL"],
+  "AMC PLUS": ["AMCPLUS", "AMC PLUS", "AMC+"],
+  "ION PLUS": ["IONPLUS", "ION PLUS"],
+  "ION MYSTERY": ["IONMYSTERY", "ION MYSTERY"],
   "COZI TV": ["COZI", "COZI TV"],
   "METV": ["METV", "ME TV"],
-  "HEROES & ICONS": ["HEROES ICONS", "H&I"],
-  "GAME SHOW NETWORK": ["GAME SHOW NETWORK", "GSN"]
+  "HEROES & ICONS": ["HEROESICONS", "HEROES ICONS", "H&I"],
+  "GAME SHOW NETWORK": ["GAMESHOWNETWORK", "GAME SHOW NETWORK", "GSN"]
+};
+
+const rejectContains = {
+  "BET": ["BETHER"],
+  "MTV": ["MTV2", "MTVLIVE", "MTVCLASSIC"],
+  "HBO": ["HBOFAMILY", "HBOCOMEDY", "HBOZONE", "HBOSIGNATURE", "HBO2"],
+  "CINEMAX": ["ACTIONMAX", "THRILLERMAX", "MOVIEMAX", "MOREMAX", "OUTERMAX", "5STARMAX"],
+  "SHOWTIME": ["SHOWTIMEFAMILYZONE", "SHOWTIMEWOMEN", "SHOWTIMENEXT", "SHOWTIMEEXTREME", "SHOWTIME2", "SHOWTIMESHOWCASE"],
+  "STARZ": ["STARZENCORE", "STARZEDGE", "STARZCOMEDY", "STARZCINEMA", "STARZKIDSFAMILY", "STARZINBLACK"],
+  "MGM": ["MGMPLUSDRIVEIN", "MGMPLUSMARQUEE", "MGMPLUSHITS", "MGMPLUSHORROR"]
 };
 
 const premiumKeywords = [
-  "HBO", "CINEMAX", "MAX",
+  "HBO", "CINEMAX", "ACTIONMAX", "THRILLERMAX", "MOVIEMAX", "MOREMAX", "OUTERMAX", "5STARMAX",
   "SHOWTIME", "PARAMOUNT PLUS WITH SHOWTIME",
   "STARZ", "ENCORE",
   "MGM", "MGM PLUS",
@@ -104,6 +111,9 @@ function norm(s) {
     .replace(/\+/g, " PLUS ")
     .replace(/\bHD\b/g, "")
     .replace(/\bSD\b/g, "")
+    .replace(/\.US\b/g, "")
+    .replace(/@EAST/g, "")
+    .replace(/@WEST/g, "")
     .replace(/[^\w\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -140,6 +150,7 @@ function haystack(block) {
   return [
     getName(block),
     getAttr(block, "xmltv_id"),
+    getAttr(block, "name"),
     getAttr(block, "site_id")
   ].join(" ");
 }
@@ -169,30 +180,47 @@ function add(block, reason) {
   matchedReport.push(`${getName(block)}  ← ${reason}`);
 }
 
-function exactMatch(name) {
-  const aliases = [name, ...(exactAliases[name] || [])];
-  const aliasNorms = aliases.map(norm);
-  const aliasCompacts = aliases.map(compact);
+function isRejected(wanted, block) {
+  const bad = rejectContains[wanted] || [];
+  const c = compact(haystack(block));
+  return bad.some(x => c.includes(compact(x)));
+}
 
-  return allChannels.find(block => {
-    const fields = [
-      getName(block),
-      getAttr(block, "xmltv_id"),
-      getAttr(block, "name")
-    ];
+function findBest(wanted) {
+  const searchTerms = [wanted, ...(aliases[wanted] || [])];
+  const wantedCompacts = searchTerms.map(compact);
 
-    return fields.some(field => {
-      const n = norm(field);
-      const c = compact(field);
-      return aliasNorms.includes(n) || aliasCompacts.includes(c);
+  const candidates = allChannels.filter(block => {
+    if (isRejected(wanted, block)) return false;
+
+    const h = compact(haystack(block));
+
+    return wantedCompacts.some(term => {
+      if (!term) return false;
+      return h === term || h.startsWith(term) || h.includes(term);
     });
   });
+
+  if (!candidates.length) return null;
+
+  candidates.sort((a, b) => {
+    const aName = compact(getName(a));
+    const bName = compact(getName(b));
+    const main = compact(wanted);
+
+    const aExact = aName === main ? 0 : 1;
+    const bExact = bName === main ? 0 : 1;
+
+    return aExact - bExact || aName.length - bName.length;
+  });
+
+  return candidates[0];
 }
 
 for (const wanted of masterList) {
   if (skipMaster.has(wanted)) continue;
 
-  const hit = exactMatch(wanted);
+  const hit = findBest(wanted);
   if (hit) add(hit, `master list: ${wanted}`);
   else missing.push(wanted);
 }
