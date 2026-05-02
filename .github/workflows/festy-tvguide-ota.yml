@@ -24,18 +24,18 @@ jobs:
       - name: Run TVGuide OTA grabber
         run: |
           mkdir -p guides scripts
-
           node scripts/grab-tvguide-ota.js
         env:
           TVGUIDE_PROVIDER_ID: 9100000664
           DAYS: 1
           OUTPUT: guides/tvguide.xml
+          CHUNK_MINUTES: 120
 
-      - name: Commit guide
+      - name: Commit TVGuide OTA guide
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
           git add guides/tvguide.xml
-          git commit -m "Update TVGuide OTA" || echo "No changes"
+          git commit -m "Update TVGuide OTA guide" || echo "No changes to commit"
           git push
