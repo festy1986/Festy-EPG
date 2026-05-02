@@ -1,4 +1,4 @@
-name: Festy Raw TVGuide
+name: TVGuide Raw Spectrum Dump
 
 on:
   workflow_dispatch:
@@ -7,56 +7,111 @@ permissions:
   contents: write
 
 jobs:
-  raw-tvguide:
+  dump-tvguide-raw:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Dump raw Spectrum Cumberland TVGuide channels
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Dump raw TVGuide lineup to guides/tvguide.xml
         run: |
           mkdir -p guides
 
           node <<'EOF'
           const fs = require('fs')
 
-          const LINEUP_ID = '9100002976'
-          const start = new Date().toISOString().slice(0, 10) + 'T00:00:00.000Z'
-          const url = `https://backend.tvguide.com/tvschedules/tvguide/${LINEUP_ID}/web?start=${encodeURIComponent(start)}`
+          const lineupId = '9100002976'
+          const start = Math.floor(Date.now() / 1000)
 
-          async function main() {
-            console.log('Fetching raw TVGuide lineup:', url)
+          const url = `https://backend.tvguide.com/tvschedules/tvguide/${lineupId}/web?start=${start}`
 
-            const res = await fetch(url, {
-              headers: {
-                'user-agent': 'Mozilla/5.0',
-                'accept': 'application/json,text/plain,*/*',
-                'referer': 'https://www.tvguide.com/listings/'
-              }
-            })
+          console.log(`Fetching raw TVGuide lineup: ${url}`)
 
-            const text = await res.text()
-
-            // raw dump goes here
-            fs.writeFileSync('guides/tvguide.xml', text)
-
-            if (!res.ok) {
-              console.error('TVGuide returned status:', res.status)
-              console.error(text.slice(0, 1000))
-              process.exit(1)
+          fetch(url, {
+            headers: {
+              'accept': 'application/json',
+              'user-agent': 'Mozilla/5.0'
             }
-
-            console.log('Raw Spectrum Cumberland lineup saved to guides/tvguide.xml')
-          }
-
-          main().catch(err => {
-            console.error(err)
-            process.exit(1)
           })
+            .then(async res => {
+              const text = await res.text()
+              console.log(`TVGuide returned status: ${res.status}`)
+
+              if (!res.ok) {
+                console.log(text)
+                process.exit(1)
+              }
+
+              const data = JSON.parse(text)
+
+              const channels = []
+
+              function walk(obj) {
+                if (!obj || typeof obj !== 'object') return
+
+                if (obj.sourceId || obj.stationId || obj.channelNo || obj.callSign || obj.name) {
+                  const id = obj.sourceId || obj.stationId || obj.id || ''
+                  const number = obj.channelNo || obj.channelNumber || ''
+                  const name = obj.callSign || obj.name || obj.fullName || obj.title || ''
+
+                  if (id && name) {
+                    channels.push({ id, number, name })
+                  }
+                }
+
+                for (const value of Object.values(obj)) {
+                  if (Array.isArray(value)) value.forEach(walk)
+                  else walk(value)
+                }
+              }
+
+              walk(data)
+
+              const seen = new Set()
+              const unique = channels.filter(ch => {
+                const key = `${ch.id}|${ch.name}|${ch.number}`
+                if (seen.has(key)) return false
+                seen.add(key)
+                return true
+              })
+
+              unique.sort((a, b) => {
+                const an = parseInt(a.number || '999999', 10)
+                const bn = parseInt(b.number || '999999', 10)
+                return an - bn
+              })
+
+              let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n`
+
+              for (const ch of unique) {
+                const safeName = String(ch.name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                const safeId = String(ch.id).replace(/&/g, '&amp;')
+                const safeNum = String(ch.number).replace(/&/g, '&amp;')
+
+                xml += `  <channel site="tvguide.com" lang="en" xmltv_id="${safeName}.us" site_id="${lineupId}#${safeId}">${safeName}</channel>`
+                if (safeNum) xml += ` <!-- ${safeNum} -->`
+                xml += `\n`
+              }
+
+              xml += `</channels>\n`
+
+              fs.writeFileSync('guides/tvguide.xml', xml)
+
+              console.log(`Wrote ${unique.length} raw TVGuide channels to guides/tvguide.xml`)
+            })
+            .catch(err => {
+              console.error(err)
+              process.exit(1)
+            })
           EOF
 
-      - name: Commit raw dump
+      - name: Commit raw TVGuide lineup
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -64,8 +119,8 @@ jobs:
           git add guides/tvguide.xml
 
           if git diff --cached --quiet; then
-            echo "No changes."
+            echo "No changes to commit"
           else
-            git commit -m "Dump raw TVGuide Spectrum Cumberland lineup"
+            git commit -m "Dump raw TVGuide Spectrum lineup"
             git push
           fi
