@@ -61,10 +61,24 @@ jobs:
           dayjs.extend(utc)
           dayjs.extend(timezone)
 
+          const DETAIL_DELAY_MS = 350
+
+          const stats = {
+            detailAttempts: 0,
+            detailSuccess: 0,
+            detailMissingUrl: 0,
+            detailEmpty: 0,
+            detailFailed: 0,
+            detailStatus: {},
+            programsWithEpisodeMeta: 0,
+            programsWithMovieYear: 0,
+            programsWithOnlyBasicMeta: 0
+          }
+
           module.exports = {
             site: 'tvguide.com',
             delay: 3000,
-            days: 2,
+            days: 1,
 
             url({ date, channel }) {
               const [providerId, sourceId] = String(channel.site_id).split('#')
@@ -76,7 +90,7 @@ jobs:
 
             request: {
               method: 'GET',
-              timeout: 10000,
+              timeout: 15000,
               cache: { ttl: 60 * 60 * 1000 },
               headers() {
                 return {
@@ -90,12 +104,16 @@ jobs:
               const programs = []
               const items = parseItems(content, channel)
 
+              console.log(`[PARSE] ${channel.name} | schedule programs=${items.length}`)
+
               for (const item of items) {
-                const details = await loadProgramDetails(item)
+                await sleep(DETAIL_DELAY_MS)
+
+                const details = await loadProgramDetails(item, channel)
 
                 const title = cleanTitle(item.title || details.title || '')
                 const episodeTitle = cleanSpaces(details.episodeTitle || '')
-                const description = fixBrokenDescription(details.description || item.description || '')
+                const description = fixBrokenDescription(pickBetterDescription(details.description, item.description))
                 const seasonNumber = details.seasonNumber || ''
                 const episodeNumber = details.episodeNumber || ''
                 const releaseYear = details.releaseYear || ''
@@ -113,13 +131,23 @@ jobs:
 
                 if (type === 'movie') {
                   finalDescription = description
-                  if (releaseYear) finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
+
+                  if (releaseYear) {
+                    stats.programsWithMovieYear++
+                    finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
+                  }
                 } else {
                   let prefix = ''
 
                   if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
                   else if (episodeTitle) prefix = episodeTitle
                   else if (episodeCode) prefix = episodeCode
+
+                  if (episodeTitle || episodeCode || episodeAirDate) {
+                    stats.programsWithEpisodeMeta++
+                  } else {
+                    stats.programsWithOnlyBasicMeta++
+                  }
 
                   if (prefix && description) finalDescription = `${prefix}. ${description}`
                   else if (prefix) finalDescription = `${prefix}.`
@@ -136,27 +164,68 @@ jobs:
                 })
               }
 
+              console.log(`[DONE] ${channel.name} | output programs=${programs.length}`)
+              printStatsBrief(channel.name)
+
               return programs
             }
           }
 
-          async function loadProgramDetails(item) {
-            if (!item.programDetails) return {}
+          async function loadProgramDetails(item, channel) {
+            if (!item.programDetails) {
+              stats.detailMissingUrl++
+              console.log(`[DETAIL MISSING URL] ${channel.name} | ${item.title || 'Unknown title'}`)
+              return {}
+            }
+
+            stats.detailAttempts++
 
             const url = item.programDetails.includes('?')
               ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
               : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
 
-            return axios
-              .get(url, {
-                timeout: 10000,
+            try {
+              const response = await axios.get(url, {
+                timeout: 15000,
                 headers: {
                   Referer: 'https://www.tvguide.com/',
                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
                 }
               })
-              .then(r => r.data?.data?.item || {})
-              .catch(() => ({}))
+
+              const detail = response.data?.data?.item || {}
+
+              if (!Object.keys(detail).length) {
+                stats.detailEmpty++
+                console.log(`[DETAIL EMPTY] ${channel.name} | ${item.title || 'Unknown title'} | status=${response.status}`)
+                return {}
+              }
+
+              stats.detailSuccess++
+
+              const hasUsefulMeta =
+                detail.episodeTitle ||
+                detail.seasonNumber ||
+                detail.episodeNumber ||
+                detail.releaseYear ||
+                detail.episodeAirDate ||
+                detail.description
+
+              if (!hasUsefulMeta) {
+                console.log(`[DETAIL BASIC ONLY] ${channel.name} | ${item.title || detail.title || 'Unknown title'}`)
+              }
+
+              return detail
+            } catch (err) {
+              stats.detailFailed++
+
+              const status = err.response?.status || err.code || err.message || 'unknown'
+              stats.detailStatus[status] = (stats.detailStatus[status] || 0) + 1
+
+              console.log(`[DETAIL FAIL] ${channel.name} | ${item.title || 'Unknown title'} | ${status}`)
+
+              return {}
+            }
           }
 
           function parseItems(content, channel) {
@@ -175,6 +244,13 @@ jobs:
 
             console.log(`[WARN] No exact schedule match for ${channel.name} | sourceId=${sourceId} | returned items=${items.length}`)
 
+            items.forEach((item, index) => {
+              const id = item.sourceId || item.channelSourceId || item.id || 'no-id'
+              const callsign = item.callSign || item.callsign || item.name || item.channelName || 'no-name'
+              const count = Array.isArray(item.programSchedules) ? item.programSchedules.length : 0
+              console.log(`[CANDIDATE] ${channel.name} | #${index + 1} | id=${id} | name=${callsign} | programs=${count}`)
+            })
+
             const best = items
               .map(item => ({
                 item,
@@ -189,6 +265,16 @@ jobs:
             }
 
             return []
+          }
+
+          function pickBetterDescription(detailDescription, itemDescription) {
+            const detail = cleanSpaces(detailDescription || '')
+            const basic = cleanSpaces(itemDescription || '')
+
+            if (!detail) return basic
+            if (!basic) return detail
+
+            return detail.length >= basic.length ? detail : basic
           }
 
           function cleanTitle(value) {
@@ -249,15 +335,33 @@ jobs:
             if (!value) return ''
             return dayjs.unix(value).format('MM/DD/YYYY')
           }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function printStatsBrief(channelName) {
+            console.log(
+              `[STATS] ${channelName} | detail attempts=${stats.detailAttempts} success=${stats.detailSuccess} missingUrl=${stats.detailMissingUrl} empty=${stats.detailEmpty} failed=${stats.detailFailed} episodeMeta=${stats.programsWithEpisodeMeta} movieYears=${stats.programsWithMovieYear} basicOnly=${stats.programsWithOnlyBasicMeta}`
+            )
+
+            const statuses = Object.entries(stats.detailStatus)
+              .map(([key, value]) => `${key}:${value}`)
+              .join(', ')
+
+            if (statuses) {
+              console.log(`[DETAIL STATUS] ${statuses}`)
+            }
+          }
           EOF
 
-      - name: Grab TVGuide guide - 2 days
+      - name: Grab TVGuide guide - 1 days
         run: |
           cd epg
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy.channels.xml \
             --output=../guide.xml \
-            --days=2
+            --days=1
 
           cd ..
           if [ ! -s guide.xml ]; then
