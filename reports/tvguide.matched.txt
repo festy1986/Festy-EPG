@@ -1,83 +1,38 @@
-PBS.us@East  ← master list: PBS
-TCM.us@East  ← master list: TCM
-OWN.us@East  ← master list: OWN
-BETHer.us@East  ← master list: BET
-Freeform.us@East  ← master list: FREEFORM
-ESPN.us@SD  ← master list: ESPN
-WeTV.us@East  ← master list: WE
-Oxygen.us@East  ← master list: OXYGEN
-Nickelodeon.us@East  ← master list: NICKELODEON
-MSNBC.us@SD  ← master list: MSNBC
-CNN.us@SD  ← master list: CNN
-HLN.us@SD  ← master list: HLN
-CNBC.us@SD  ← master list: CNBC
-TNT.us@East  ← master list: TNT
-Lifetime.us@East  ← master list: LIFETIME
-TLC.us@East  ← master list: TLC
-AMC.us@East  ← master list: AMC
-HGTV.us@East  ← master list: HGTV
-Bravo.us@East  ← master list: BRAVO
-Syfy.us@East  ← master list: SYFY
-FX.us@East  ← master list: FX
-FXX.us@East  ← master list: FXX
-FXMovieChannel.us@SD  ← master list: FXM
-TBS.us@East  ← master list: TBS
-VH1.us@East  ← master list: VH1
-MTV2.us@East  ← master list: MTV
-CMT.us@East  ← master list: CMT
-MagnoliaNetwork.us@East  ← master list: MAGNOLIA
-Pop.us@East  ← master list: POP
-VICETV.us@SD  ← master list: VICE
-Reelz.us@SD  ← master list: REELZ
-Fuse.us@East  ← master list: FUSE
-IFC.us@East  ← master list: IFC
-FYI.us@East  ← master list: FYI
-Logo.us@East  ← master list: LOGO
-Ovation.us@SD  ← master list: OVATION
-HBOFamily.us@East  ← master list: HBO
-Cinemax.us@East  ← master list: CINEMAX
-ShowtimeFamilyZone.us@East  ← master list: SHOWTIME
-StarzEncoreBlack.us@East  ← master list: STARZ
-MGMPlusDriveIn.us@SD  ← master list: MGM
-ThrillerMax.us@East  ← premium sweep
-Univision.us@East  ← OTA/local sweep
-InvestigationDiscovery.us@East  ← OTA/local sweep
-ShowtimeWomen.us@East  ← premium sweep
-StarzEncoreClassic.us@East  ← premium sweep
-NationalGeographicWild.us@East  ← OTA/local sweep
-ShowtimeExtreme.us@East  ← premium sweep
-HBO.us@East  ← premium sweep
-StarzKidsFamily.us@East  ← premium sweep
-HBOComedy.us@East  ← premium sweep
-DestinationAmerica.us@SD  ← OTA/local sweep
-MGMHD.us@SD  ← premium sweep
-StarzEncore.us@East  ← premium sweep
-StarzEncoreSuspense.us@East  ← premium sweep
-StarzEncoreFamily.us@East  ← premium sweep
-StarzInBlack.us@East  ← premium sweep
-OuterMax.us@East  ← premium sweep
-ActionMax.us@East  ← premium sweep
-Showtime.us@East  ← premium sweep
-ShowtimeNext.us@East  ← premium sweep
-Showtime2.us@East  ← premium sweep
-MGMPlusMarquee.us@SD  ← premium sweep
-Flix.us@East  ← premium sweep
-MovieMax.us@East  ← premium sweep
-NationalGeographic.us@East  ← OTA/local sweep
-HBO2.us@East  ← premium sweep
-StarzComedy.us@East  ← premium sweep
-CrimePlusInvestigation.us@SD  ← OTA/local sweep
-ShowtimeShowcase.us@East  ← premium sweep
-StarzEncoreAction.us@East  ← premium sweep
-StarzEncoreWesterns.us@East  ← premium sweep
-HBOSignature.us@East  ← premium sweep
-StarzCinema.us@East  ← premium sweep
-HBOZone.us@East  ← premium sweep
-StarzEdge.us@East  ← premium sweep
-IONTV.us@East  ← OTA/local sweep
-5StarMax.us@East  ← premium sweep
-NewsNation.us@SD  ← OTA/local sweep
-MGMPlusHits.us@East  ← premium sweep
-Starz.us@East  ← premium sweep
-MoreMax.us@East  ← premium sweep
-AmericanHeroesChannel.us@SD  ← OTA/local sweep
+ThrillerMax.us@East  ← premium movie sweep
+ShowtimeFamilyZone.us@East  ← premium movie sweep
+StarzEncoreBlack.us@East  ← premium movie sweep
+ShowtimeWomen.us@East  ← premium movie sweep
+StarzEncoreClassic.us@East  ← premium movie sweep
+HBOFamily.us@East  ← premium movie sweep
+ShowtimeExtreme.us@East  ← premium movie sweep
+HBO.us@East  ← premium movie sweep
+MGMPlusDriveIn.us@SD  ← premium movie sweep
+StarzKidsFamily.us@East  ← premium movie sweep
+HBOComedy.us@East  ← premium movie sweep
+MGMHD.us@SD  ← premium movie sweep
+StarzEncore.us@East  ← premium movie sweep
+StarzEncoreSuspense.us@East  ← premium movie sweep
+StarzEncoreFamily.us@East  ← premium movie sweep
+StarzInBlack.us@East  ← premium movie sweep
+OuterMax.us@East  ← premium movie sweep
+ActionMax.us@East  ← premium movie sweep
+Showtime.us@East  ← premium movie sweep
+ShowtimeNext.us@East  ← premium movie sweep
+Showtime2.us@East  ← premium movie sweep
+MGMPlusMarquee.us@SD  ← premium movie sweep
+Flix.us@East  ← premium movie sweep
+MovieMax.us@East  ← premium movie sweep
+HBO2.us@East  ← premium movie sweep
+StarzComedy.us@East  ← premium movie sweep
+ShowtimeShowcase.us@East  ← premium movie sweep
+StarzEncoreAction.us@East  ← premium movie sweep
+StarzEncoreWesterns.us@East  ← premium movie sweep
+HBOSignature.us@East  ← premium movie sweep
+StarzCinema.us@East  ← premium movie sweep
+Cinemax.us@East  ← premium movie sweep
+HBOZone.us@East  ← premium movie sweep
+StarzEdge.us@East  ← premium movie sweep
+5StarMax.us@East  ← premium movie sweep
+MGMPlusHits.us@East  ← premium movie sweep
+Starz.us@East  ← premium movie sweep
+MoreMax.us@East  ← premium movie sweep
