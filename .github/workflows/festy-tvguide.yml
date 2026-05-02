@@ -39,16 +39,28 @@ jobs:
       - name: Grab TVGuide guide - 2 days
         run: |
           cd epg
-          npm run grab -- --channels=sites/tvguide.com/festy.channels.xml --output=guide.xml --days=2
+          npx tsx scripts/commands/epg/grab.ts --channels=sites/tvguide.com/festy.channels.xml --output=guide.xml --days=2
 
-      - name: Move guide to repo root
+      - name: Find and move guide to repo root
         run: |
-          if [ ! -f epg/guide.xml ]; then
-            echo "Missing epg/guide.xml"
+          echo "Looking for generated XML files..."
+          find epg -type f -name "*.xml" | sort
+
+          if [ -f epg/guide.xml ]; then
+            mv epg/guide.xml ./guide.xml
+          elif [ -f epg/output/guide.xml ]; then
+            mv epg/output/guide.xml ./guide.xml
+          elif [ -f epg/guides/tvguide.com.xml ]; then
+            mv epg/guides/tvguide.com.xml ./guide.xml
+          else
+            echo "Could not find generated guide.xml"
+            echo "Listing recent files:"
+            find epg -type f -printf "%T@ %p\n" | sort -nr | head -50
             exit 1
           fi
 
-          mv epg/guide.xml ./guide.xml
+          echo "Moved guide to ./guide.xml"
+          ls -lh guide.xml
 
       - name: Apply Festy metadata formatting
         run: |
@@ -111,10 +123,6 @@ jobs:
             let m
             while ((m = re.exec(block))) out.push(decodeXml(m[1]).trim())
             return out.filter(Boolean)
-          }
-
-          function hasTag(block, tag) {
-            return new RegExp(`<${tag}\\b`, 'i').test(block)
           }
 
           function cleanTitle(s) {
@@ -239,7 +247,7 @@ jobs:
 
             attrs = attrs.replace(/channel="[^"]*"/i, `channel="${escAttr(newChannel)}"`)
 
-            let title = cleanTitle(textOf(body, 'title'))
+            const title = cleanTitle(textOf(body, 'title'))
             const subTitle = cleanSpaces(textOf(body, 'sub-title'))
             const descRaw = textOf(body, 'desc')
             const desc = fixBrokenDescription(descRaw)
@@ -256,19 +264,15 @@ jobs:
               finalDesc = desc
               if (y) finalDesc = finalDesc ? `${finalDesc} (${y})` : `(${y})`
             } else {
-              const prefixParts = []
+              let prefix = ''
 
-              if (subTitle && ep) prefixParts.push(`${subTitle} - ${ep}`)
-              else if (subTitle) prefixParts.push(subTitle)
-              else if (ep) prefixParts.push(ep)
+              if (subTitle && ep) prefix = `${subTitle} - ${ep}`
+              else if (subTitle) prefix = subTitle
+              else if (ep) prefix = ep
 
-              if (prefixParts.length && desc) {
-                finalDesc = `${prefixParts.join(' ')}. ${desc}`
-              } else if (prefixParts.length) {
-                finalDesc = `${prefixParts.join(' ')}.`
-              } else {
-                finalDesc = desc
-              }
+              if (prefix && desc) finalDesc = `${prefix}. ${desc}`
+              else if (prefix) finalDesc = `${prefix}.`
+              else finalDesc = desc
 
               if (airDate) finalDesc = finalDesc ? `${finalDesc} (${airDate})` : `(${airDate})`
             }
@@ -277,7 +281,11 @@ jobs:
 
             let newBody = body
 
-            newBody = newBody.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i, `<title lang="en">${escText(title)}</title>`)
+            if (/<title\b/i.test(newBody)) {
+              newBody = newBody.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i, `<title lang="en">${escText(title)}</title>`)
+            } else {
+              newBody = `\n    <title lang="en">${escText(title)}</title>${newBody}`
+            }
 
             if (/<desc\b/i.test(newBody)) {
               newBody = newBody.replace(/<desc\b[^>]*>[\s\S]*?<\/desc>/i, `<desc lang="en">${escText(finalDesc)}</desc>`)
