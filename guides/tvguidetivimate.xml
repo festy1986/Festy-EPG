@@ -1,267 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tv>
-  <channel id="9233005457">
-    <display-name>NEW ENGLAND CABLE NEWS</display-name>
+  <channel id="9200012351">
+    <display-name>ESPN 2</display-name>
   </channel>
-  <channel id="9200004312">
-    <display-name>NESN</display-name>
+  <channel id="9233015468">
+    <display-name>CBS SPORTS NETWORK</display-name>
   </channel>
-  <channel id="9266071282">
-    <display-name>NESN PLUS</display-name>
+  <channel id="9200014910">
+    <display-name>FXX</display-name>
   </channel>
-  <channel id="9266070890">
-    <display-name>NBC SPORTS BOSTON</display-name>
+  <channel id="9200001026">
+    <display-name>FXM</display-name>
   </channel>
-  <channel id="9200006937">
-    <display-name>ESPN</display-name>
+  <channel id="9233008142">
+    <display-name>TRAVEL CHANNEL</display-name>
   </channel>
-  <channel id="9200006523">
-    <display-name>ESPN NEWS</display-name>
+  <channel id="9200016258">
+    <display-name>THE WEATHER CHANNEL</display-name>
   </channel>
-  <channel id="9233000539">
-    <display-name>FOX SPORTS 1</display-name>
+  <channel id="9200012265">
+    <display-name>MTV 2</display-name>
   </channel>
-  <channel id="9200009884">
-    <display-name>FOX SPORTS 2</display-name>
+  <channel id="9233009429">
+    <display-name>LMN</display-name>
   </channel>
-  <channel id="9233000078">
-    <display-name>NFL NETWORK</display-name>
+  <channel id="9200020638">
+    <display-name>AWE</display-name>
   </channel>
-  <channel id="9200016261">
-    <display-name>NHL NETWORK</display-name>
+  <channel id="9233013492">
+    <display-name>HBO HITS</display-name>
   </channel>
-  <channel id="9200002579">
-    <display-name>MLB NETWORK</display-name>
+  <channel id="9200002532">
+    <display-name>HBO DRAMA</display-name>
   </channel>
-  <channel id="9233005688">
-    <display-name>NBA TV</display-name>
+  <channel id="9233003785">
+    <display-name>HBO COMEDY</display-name>
   </channel>
-  <channel id="9233004106">
-    <display-name>USA NETWORK</display-name>
+  <channel id="9200000143">
+    <display-name>CINEMAX</display-name>
   </channel>
-  <channel id="9233011830">
-    <display-name>TNT</display-name>
+  <channel id="9200006529">
+    <display-name>CINEMAX HITS</display-name>
   </channel>
-  <channel id="9233000403">
-    <display-name>TBS</display-name>
+  <channel id="9233006971">
+    <display-name>CINEMAX ACTION</display-name>
   </channel>
-  <channel id="9200009547">
-    <display-name>TRU TV</display-name>
+  <channel id="9233006977">
+    <display-name>CINEMAX CLASSICS</display-name>
   </channel>
-  <channel id="9200004889">
-    <display-name>A&amp;E</display-name>
+  <channel id="9233011188">
+    <display-name>PARAMOUNT+ WITH SHOWTIME</display-name>
   </channel>
-  <channel id="9233011832">
-    <display-name>AMC</display-name>
+  <channel id="9200014450">
+    <display-name>SHOWTIME 2</display-name>
   </channel>
-  <channel id="9200006932">
-    <display-name>FX</display-name>
+  <channel id="9233015495">
+    <display-name>SHOWTIME EXTREME</display-name>
   </channel>
-  <channel id="9200004316">
-    <display-name>SYFY</display-name>
+  <channel id="9200000968">
+    <display-name>SHOWTIME FAMILY ZONE</display-name>
   </channel>
-  <channel id="9200000497">
-    <display-name>FREEFORM</display-name>
+  <channel id="9200016686">
+    <display-name>SHOWTIME NEXT</display-name>
   </channel>
-  <channel id="9233013810">
-    <display-name>PARAMOUNT NETWORK</display-name>
+  <channel id="9200002975">
+    <display-name>SHOWTIME WOMEN</display-name>
   </channel>
-  <channel id="9233009509">
-    <display-name>COMEDY CENTRAL</display-name>
+  <channel id="9233003805">
+    <display-name>SHOWTIME SHOWCASE</display-name>
   </channel>
-  <channel id="9233005468">
-    <display-name>TV LAND</display-name>
+  <channel id="9233013260">
+    <display-name>THE MOVIE CHANNEL</display-name>
   </channel>
-  <channel id="9200014701">
-    <display-name>BBC AMERICA</display-name>
+  <channel id="9200009198">
+    <display-name>TMC XTRA</display-name>
   </channel>
-  <channel id="9233006961">
-    <display-name>IFC</display-name>
+  <channel id="9233003754">
+    <display-name>STARZ EDGE</display-name>
   </channel>
-  <channel id="9233004104">
-    <display-name>HGTV</display-name>
+  <channel id="9200009352">
+    <display-name>STARZ CINEMA</display-name>
   </channel>
-  <channel id="9233009448">
-    <display-name>FOOD NETWORK</display-name>
+  <channel id="9233001912">
+    <display-name>STARZ COMEDY</display-name>
   </channel>
-  <channel id="9233004112">
-    <display-name>TLC</display-name>
+  <channel id="9200020089">
+    <display-name>STARZ KIDS &amp; FAMILY</display-name>
   </channel>
-  <channel id="9233004102">
-    <display-name>DISCOVERY CHANNEL</display-name>
+  <channel id="9233013634">
+    <display-name>MGM+ HITS</display-name>
   </channel>
-  <channel id="9233015612">
-    <display-name>DISCOVERY FAMILY</display-name>
+  <channel id="9200020594">
+    <display-name>MGM+ MARQUEE</display-name>
   </channel>
-  <channel id="9200000462">
-    <display-name>DISCOVERY SCIENCE</display-name>
-  </channel>
-  <channel id="9233013857">
-    <display-name>DISCOVERY LIFE</display-name>
-  </channel>
-  <channel id="9200002243">
-    <display-name>INVESTIGATION DISCOVERY</display-name>
-  </channel>
-  <channel id="9200014472">
-    <display-name>DESTINATION AMERICA</display-name>
-  </channel>
-  <channel id="9200000664">
-    <display-name>MAGNOLIA</display-name>
-  </channel>
-  <channel id="9233013462">
-    <display-name>ANIMAL PLANET</display-name>
-  </channel>
-  <channel id="9233009337">
-    <display-name>NATIONAL GEOGRAPHIC</display-name>
-  </channel>
-  <channel id="9233002054">
-    <display-name>NAT GEO WILD</display-name>
-  </channel>
-  <channel id="9233001924">
-    <display-name>SMITHSONIAN CHANNEL</display-name>
-  </channel>
-  <channel id="9200002886">
-    <display-name>BRAVO</display-name>
-  </channel>
-  <channel id="9200012343">
-    <display-name>E! ENTERTAINMENT</display-name>
-  </channel>
-  <channel id="9200014754">
-    <display-name>MTV</display-name>
-  </channel>
-  <channel id="9233000037">
-    <display-name>VH1</display-name>
-  </channel>
-  <channel id="9233000169">
-    <display-name>CMT</display-name>
-  </channel>
-  <channel id="9233005931">
-    <display-name>BET</display-name>
-  </channel>
-  <channel id="9200002736">
-    <display-name>OWN</display-name>
-  </channel>
-  <channel id="9200018188">
-    <display-name>WE</display-name>
-  </channel>
-  <channel id="9200012145">
-    <display-name>OXYGEN</display-name>
-  </channel>
-  <channel id="9200020452">
-    <display-name>LIFETIME</display-name>
-  </channel>
-  <channel id="9200018304">
-    <display-name>POP</display-name>
-  </channel>
-  <channel id="9200000630">
-    <display-name>VICE</display-name>
-  </channel>
-  <channel id="9233015619">
-    <display-name>REELZ</display-name>
-  </channel>
-  <channel id="9233000161">
-    <display-name>FYI</display-name>
-  </channel>
-  <channel id="9233013354">
-    <display-name>LOGO</display-name>
-  </channel>
-  <channel id="9233011488">
-    <display-name>FUSE</display-name>
-  </channel>
-  <channel id="9233005811">
-    <display-name>OVATION</display-name>
-  </channel>
-  <channel id="9200000846">
-    <display-name>ASPIRE</display-name>
-  </channel>
-  <channel id="9200007166">
-    <display-name>UP TV</display-name>
-  </channel>
-  <channel id="9200009636">
-    <display-name>GREAT AMERICAN FAMILY</display-name>
-  </channel>
-  <channel id="9200011893">
-    <display-name>DISNEY CHANNEL</display-name>
-  </channel>
-  <channel id="9200004848">
-    <display-name>CARTOON NETWORK</display-name>
-  </channel>
-  <channel id="9233011497">
-    <display-name>NICKELODEON</display-name>
-  </channel>
-  <channel id="9233015586">
-    <display-name>HALLMARK CHANNEL</display-name>
-  </channel>
-  <channel id="9200020115">
-    <display-name>HALLMARK MYSTERY</display-name>
-  </channel>
-  <channel id="9233012938">
-    <display-name>HALLMARK DRAMA</display-name>
-  </channel>
-  <channel id="9233003944">
-    <display-name>GAME SHOW NETWORK</display-name>
-  </channel>
-  <channel id="9200009887">
-    <display-name>INSP</display-name>
-  </channel>
-  <channel id="9200010020">
-    <display-name>FETV</display-name>
-  </channel>
-  <channel id="9233003866">
-    <display-name>TCM</display-name>
-  </channel>
-  <channel id="9233015616">
-    <display-name>COOKING CHANNEL</display-name>
-  </channel>
-  <channel id="9233004224">
-    <display-name>AMERICAN HEROES CHANNEL</display-name>
-  </channel>
-  <channel id="9200009215">
-    <display-name>CRIME AND INVESTIGATION</display-name>
-  </channel>
-  <channel id="9200006358">
-    <display-name>OUTDOOR CHANNEL</display-name>
-  </channel>
-  <channel id="9200008780">
-    <display-name>HBO</display-name>
-  </channel>
-  <channel id="9233000217">
-    <display-name>FLIX</display-name>
-  </channel>
-  <channel id="9233005475">
-    <display-name>STARZ</display-name>
-  </channel>
-  <channel id="9233008017">
-    <display-name>STARZ ENCORE</display-name>
-  </channel>
-  <channel id="9200009486">
-    <display-name>STARZ ENCORE ACTION</display-name>
-  </channel>
-  <channel id="9233004320">
-    <display-name>STARZ ENCORE BLACK</display-name>
-  </channel>
-  <channel id="9233004290">
-    <display-name>STARZ ENCORE CLASSIC</display-name>
-  </channel>
-  <channel id="9233015964">
-    <display-name>STARZ ENCORE SUSPENSE</display-name>
-  </channel>
-  <channel id="9233008131">
-    <display-name>STARZ ENCORE WESTERNS</display-name>
-  </channel>
-  <channel id="9200011867">
-    <display-name>STARZ ENCORE FAMILY</display-name>
-  </channel>
-  <channel id="9200012058">
-    <display-name>STARZ INBLACK</display-name>
-  </channel>
-  <channel id="9200009335">
-    <display-name>MGM+</display-name>
-  </channel>
-  <channel id="9200020633">
-    <display-name>MOVIEPLEX</display-name>
-  </channel>
-  <channel id="9233009319">
-    <display-name>INDIEPLEX</display-name>
+  <channel id="9200006851">
+    <display-name>MGM+ DRIVE-IN</display-name>
   </channel>
 </tv>
