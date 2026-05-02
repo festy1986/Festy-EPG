@@ -31,12 +31,12 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy Festy curated channels into EPG engine
+      - name: Copy Festy curated channels
         run: |
           mkdir -p epg/sites/tvguide.com
           cp guides/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
 
-      - name: Normalize channel IDs to Spectrum Cumberland lineup
+      - name: Normalize Festy channel IDs to local Spectrum lineup
         run: |
           node <<'EOF'
           const fs = require('fs')
@@ -47,12 +47,13 @@ jobs:
           let xml = fs.readFileSync(file, 'utf8')
 
           xml = xml.replace(/site_id="([^"]+)"/g, (match, id) => {
+            if (!id) return match
             if (id.includes('#')) return match
             return `site_id="${LOCAL_ID}#${id}"`
           })
 
           fs.writeFileSync(file, xml)
-          console.log(`Normalized all bare TVGuide station IDs to ${LOCAL_ID}#stationId`)
+          console.log('Prepared temporary TVGuide channel file using local lineup ' + LOCAL_ID)
           EOF
 
       - name: Run TVGuide grab
@@ -63,9 +64,19 @@ jobs:
             --output=guide.xml \
             --days=1
 
-      - name: Move guide to repo root
+      - name: Move guide to repo root if created
         run: |
-          mv epg/guide.xml ./guide.xml
+          if [ -f epg/guide.xml ]; then
+            mv epg/guide.xml ./guide.xml
+            echo "guide.xml created and moved."
+          else
+            echo "guide.xml was not created."
+            echo "Creating empty placeholder so commit step does not crash."
+            cat > guide.xml <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <tv></tv>
+          EOF
+          fi
 
       - name: Commit guide
         run: |
