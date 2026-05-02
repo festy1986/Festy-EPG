@@ -38,21 +38,21 @@ jobs:
           cat > epg/sites/tvguide.com/festy-ota.channels.xml <<'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <channels>
-            <channel site="tvguide.com" lang="en" xmltv_id="ABC PORTLAND" site_id="9100001134#9200014312">ABC PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA TV" site_id="9100001134#9233011099">ANTENNA TV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="CBS PORTLAND" site_id="9100001134#9233001666">CBS PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="COMET" site_id="9100001134#9200005724">COMET</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="COURT TV" site_id="9100001134#9233005846">COURT TV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="CW BOSTON" site_id="9100001134#9200006484">CW BOSTON</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="FOX PORTLAND" site_id="9100001134#9233003676">FOX PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="GRIT" site_id="9100001134#9233003377">GRIT</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="HEROES &amp; ICONS" site_id="9100001134#9200020338">HEROES &amp; ICONS</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ION MYSTERY" site_id="9100001134#9200017556">ION MYSTERY</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ION PLUS" site_id="9100001134#9200008618">ION PLUS</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="LAFF" site_id="9100001134#9266073627">LAFF</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="METV" site_id="9100001134#9200016252">METV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="NBC PORTLAND" site_id="9100001134#9233006796">NBC PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="PBS" site_id="9100001134#9233009254">PBS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ABC PORTLAND" site_id="910000113#9200014312">ABC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA TV" site_id="910000113#9233011099">ANTENNA TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CBS PORTLAND" site_id="910000113#9233001666">CBS PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COMET" site_id="910000113#9200005724">COMET</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COURT TV" site_id="910000113#9233005846">COURT TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CW BOSTON" site_id="910000113#9200006484">CW BOSTON</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="FOX PORTLAND" site_id="910000113#9233003676">FOX PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="GRIT" site_id="910000113#9233003377">GRIT</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="HEROES &amp; ICONS" site_id="910000113#9200020338">HEROES &amp; ICONS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION MYSTERY" site_id="910000113#9200017556">ION MYSTERY</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION PLUS" site_id="910000113#9200008618">ION PLUS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="LAFF" site_id="910000113#9266073627">LAFF</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="METV" site_id="910000113#9200016252">METV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="NBC PORTLAND" site_id="910000113#9233006796">NBC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="PBS" site_id="910000113#9233009254">PBS</channel>
           </channels>
           EOF
 
@@ -74,7 +74,7 @@ jobs:
 
             url({ date, channel }) {
               const [providerId, sourceId] = String(channel.site_id).split('#')
-              console.log(`[OTA] ${channel.name} | ${date.format('YYYY-MM-DD')} | sourceId=${sourceId}`)
+              console.log(`[OTA] ${channel.name} | ${date.format('YYYY-MM-DD')} | providerId=${providerId} | sourceId=${sourceId}`)
               return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
             },
 
@@ -98,7 +98,6 @@ jobs:
 
               for (const item of items) {
                 await sleep(DETAIL_DELAY_MS)
-
                 const details = await loadProgramDetails(item)
 
                 const title = cleanTitle(item.title || details.title || '')
@@ -121,13 +120,11 @@ jobs:
 
                 if (type === 'movie') {
                   finalDescription = description
-
                   if (releaseYear) {
                     finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
                   }
                 } else {
                   let prefix = ''
-
                   if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
                   else if (episodeTitle) prefix = episodeTitle
                   else if (episodeCode) prefix = episodeCode
@@ -194,20 +191,14 @@ jobs:
               .filter(x => x.count > 0)
               .sort((a, b) => b.count - a.count)[0]
 
-            if (best) {
-              return best.item.programSchedules
-            }
-
-            return []
+            return best ? best.item.programSchedules : []
           }
 
           function pickBetterDescription(detailDescription, itemDescription) {
             const detail = cleanSpaces(detailDescription || '')
             const basic = cleanSpaces(itemDescription || '')
-
             if (!detail) return basic
             if (!basic) return detail
-
             return detail.length >= basic.length ? detail : basic
           }
 
@@ -231,25 +222,8 @@ jobs:
           function fixBrokenDescription(value) {
             let d = cleanSpaces(value)
             if (!d) return ''
-
             d = d.replace(/\.\.\.$/, '').trim()
             d = d.replace(/[,:;–—-]\s*$/, '').trim()
-
-            const words = d.split(/\s+/)
-            const last = words[words.length - 1] || ''
-            const stripped = last.toLowerCase().replace(/[^a-z]/g, '')
-
-            const badEndings = [
-              'stor', 'storie', 'experienc', 'becaus', 'includ', 'discover',
-              'investigat', 'myster', 'famil', 'friend', 'someth', 'everyth',
-              'meanwhil', 'continu', 'return', 'learn', 'realiz'
-            ]
-
-            if (badEndings.includes(stripped) && words.length > 1) {
-              words.pop()
-              d = words.join(' ').trim()
-            }
-
             if (!/[.!?]$/.test(d)) d += '.'
             return d
           }
