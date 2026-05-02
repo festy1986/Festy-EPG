@@ -14,50 +14,31 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Clone IPTV-org EPG for fallback lookup only
+      - name: Prepare folders
+        run: |
+          mkdir -p sites/tvguide.com
+          mkdir -p guides
+
+      - name: Clone IPTV-org EPG fallback
         run: |
           git clone --depth 1 https://github.com/iptv-org/epg.git
 
-      - name: Patch only missing channels into final list
+      - name: Patch only missing channels
         run: |
           cat > /tmp/patch-missing-tvguide.js <<'EOF'
           const fs = require('fs')
           const path = require('path')
 
-          const finalFile = 'sites/tvguide.com/festy.channels.xml'
-          const iptvMasterFile = 'epg/sites/tvguide.com/tvguide.com.channels.xml'
+          const standardFinal = 'sites/tvguide.com/festy.channels.xml'
+          const iptvMaster = 'epg/sites/tvguide.com/tvguide.com.channels.xml'
 
           const targets = [
-            {
-              display: 'Grit',
-              xmltv_id: 'Grit.us',
-              aliases: ['GRIT', 'Grit', 'Grit TV', 'WIPL-DT4']
-            },
-            {
-              display: 'ION Plus',
-              xmltv_id: 'IONPlus.us',
-              aliases: ['ION PLUS', 'IONPlus', 'Ion Plus', 'WIPL-DT5']
-            },
-            {
-              display: 'Hallmark Family',
-              xmltv_id: 'HallmarkFamily.us',
-              aliases: ['HALLMARK FAMILY', 'Hallmark Family', 'HALLMARK DRAMA', 'Hallmark Drama']
-            },
-            {
-              display: 'Court TV',
-              xmltv_id: 'CourtTV.us',
-              aliases: ['COURT TV', 'CourtTV', 'Court TV', 'WIPL-DT2']
-            },
-            {
-              display: 'Antenna TV',
-              xmltv_id: 'AntennaTV.us',
-              aliases: ['ANTENNA TV', 'Antenna TV', 'Antenna', 'WPFO-DT4']
-            },
-            {
-              display: 'Cozi TV',
-              xmltv_id: 'CoziTV.us',
-              aliases: ['COZI TV', 'Cozi TV', 'Cozi']
-            }
+            ['Grit', 'Grit.us', ['GRIT', 'Grit', 'Grit TV', 'WIPL-DT4']],
+            ['ION Plus', 'IONPlus.us', ['ION PLUS', 'IONPlus', 'Ion Plus', 'WIPL-DT5']],
+            ['Hallmark Family', 'HallmarkFamily.us', ['HALLMARK FAMILY', 'Hallmark Family', 'HALLMARK DRAMA', 'Hallmark Drama']],
+            ['Court TV', 'CourtTV.us', ['COURT TV', 'CourtTV', 'Court TV', 'WIPL-DT2']],
+            ['Antenna TV', 'AntennaTV.us', ['ANTENNA TV', 'Antenna TV', 'Antenna', 'WPFO-DT4']],
+            ['Cozi TV', 'CoziTV.us', ['COZI TV', 'Cozi TV', 'Cozi']]
           ]
 
           function norm(s) {
@@ -75,57 +56,61 @@ jobs:
             const re = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
             const out = []
             let m
-
             while ((m = re.exec(xml))) {
               const attrs = m[1]
               out.push({
                 full: m[0],
-                site: (attrs.match(/site="([^"]*)"/) || [])[1] || 'tvguide.com',
                 site_id: (attrs.match(/site_id="([^"]*)"/) || [])[1] || '',
                 lang: (attrs.match(/lang="([^"]*)"/) || [])[1] || 'en',
                 xmltv_id: (attrs.match(/xmltv_id="([^"]*)"/) || [])[1] || '',
                 name: m[2].trim()
               })
             }
-
             return out
           }
 
-          function findRawPortlandFile() {
-            const files = []
-
-            function walk(dir) {
-              for (const item of fs.readdirSync(dir)) {
-                const full = path.join(dir, item)
-                if (full.includes(`${path.sep}.git${path.sep}`)) continue
-                if (full.includes(`${path.sep}epg${path.sep}`)) continue
-                if (fs.statSync(full).isDirectory()) walk(full)
-                else if (full.endsWith('.xml')) files.push(full)
-              }
+          function walk(dir, files = []) {
+            if (!fs.existsSync(dir)) return files
+            for (const item of fs.readdirSync(dir)) {
+              const full = path.join(dir, item)
+              if (full.includes(`${path.sep}.git${path.sep}`)) continue
+              if (full.includes(`${path.sep}epg${path.sep}`)) continue
+              const stat = fs.statSync(full)
+              if (stat.isDirectory()) walk(full, files)
+              else if (full.endsWith('.xml')) files.push(full)
             }
-
-            walk('.')
-
-            let best = null
-
-            for (const file of files) {
-              if (file === finalFile) continue
-              if (file.includes('tvguide.xml')) continue
-
-              const channels = parse(fs.readFileSync(file, 'utf8'))
-              if (channels.length < 200) continue
-
-              if (!best || channels.length > best.count) {
-                best = { file, count: channels.length }
-              }
-            }
-
-            return best
+            return files
           }
 
-          function findInSource(channels, aliases) {
-            const terms = aliases.map(norm)
+          function findFinalList() {
+            if (fs.existsSync(standardFinal)) return standardFinal
 
+            const candidates = []
+            for (const file of walk('.')) {
+              if (file.includes('tvguide.xml')) continue
+              const count = parse(fs.readFileSync(file, 'utf8')).length
+              if (count >= 20 && count < 300) candidates.push({ file, count })
+            }
+
+            candidates.sort((a, b) => b.count - a.count)
+            return candidates[0]?.file || null
+          }
+
+          function findRawList(finalFile) {
+            const candidates = []
+            for (const file of walk('.')) {
+              if (file === finalFile) continue
+              if (file.includes('tvguide.xml')) continue
+              const count = parse(fs.readFileSync(file, 'utf8')).length
+              if (count >= 300) candidates.push({ file, count })
+            }
+
+            candidates.sort((a, b) => b.count - a.count)
+            return candidates[0]?.file || null
+          }
+
+          function findSource(channels, aliases) {
+            const terms = aliases.map(norm)
             return channels.find(ch =>
               terms.includes(norm(ch.name)) ||
               terms.includes(norm(ch.xmltv_id)) ||
@@ -134,62 +119,70 @@ jobs:
             )
           }
 
-          function lineFrom(source, target) {
-            return `  <channel site="tvguide.com" site_id="${source.site_id}" lang="${source.lang || 'en'}" xmltv_id="${target.xmltv_id}">${target.display}</channel>`
+          function makeLine(src, display, xmltv) {
+            return `  <channel site="tvguide.com" site_id="${src.site_id}" lang="${src.lang || 'en'}" xmltv_id="${xmltv}">${display}</channel>`
           }
 
-          if (!fs.existsSync(finalFile)) {
-            console.error(`Missing final filtered list: ${finalFile}`)
-            process.exit(1)
+          let finalFile = findFinalList()
+
+          if (!finalFile) {
+            fs.writeFileSync(standardFinal, '<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n</channels>\n')
+            finalFile = standardFinal
+            console.log(`NO EXISTING FINAL LIST FOUND. CREATED: ${standardFinal}`)
+          } else if (finalFile !== standardFinal) {
+            fs.copyFileSync(finalFile, standardFinal)
+            console.log(`COPIED EXISTING FINAL LIST: ${finalFile} -> ${standardFinal}`)
+            finalFile = standardFinal
+          } else {
+            console.log(`USING EXISTING FINAL LIST: ${standardFinal}`)
           }
 
-          let finalXml = fs.readFileSync(finalFile, 'utf8')
-          const finalChannels = parse(finalXml)
+          const rawFile = findRawList(finalFile)
+          const rawChannels = rawFile ? parse(fs.readFileSync(rawFile, 'utf8')) : []
+          const iptvChannels = parse(fs.readFileSync(iptvMaster, 'utf8'))
 
-          const raw = findRawPortlandFile()
-          const rawChannels = raw ? parse(fs.readFileSync(raw.file, 'utf8')) : []
-          const iptvChannels = parse(fs.readFileSync(iptvMasterFile, 'utf8'))
+          console.log(`RAW PORTLAND SOURCE: ${rawFile || 'not found'}`)
+          console.log('PATCHING ONLY THE MISSING TARGET CHANNELS.')
 
-          console.log(`FINAL LIST: ${finalFile}`)
-          console.log(`RAW PORTLAND FALLBACK: ${raw ? raw.file : 'not found'}`)
-          console.log('ONLY PATCHING TARGET CHANNELS. NOTHING ELSE IS REBUILT.')
+          let xml = fs.readFileSync(finalFile, 'utf8')
 
-          for (const target of targets) {
-            const already = parse(finalXml).find(ch =>
-              norm(ch.xmltv_id) === norm(target.xmltv_id) ||
-              target.aliases.some(a => norm(ch.name) === norm(a))
+          for (const [display, xmltv, aliases] of targets) {
+            const current = parse(xml)
+            const existing = current.find(ch =>
+              norm(ch.xmltv_id) === norm(xmltv) ||
+              aliases.some(a => norm(ch.name) === norm(a))
             )
 
-            let source = findInSource(rawChannels, target.aliases)
+            let source = findSource(rawChannels, aliases)
             let sourceName = 'RAW PORTLAND'
 
             if (!source) {
-              source = findInSource(iptvChannels, target.aliases)
+              source = findSource(iptvChannels, aliases)
               sourceName = 'IPTV-ORG MASTER'
             }
 
             if (!source || !source.site_id) {
-              console.log(`MISS: ${target.display}`)
+              console.log(`MISS: ${display}`)
               continue
             }
 
-            const newLine = lineFrom(source, target)
+            const line = makeLine(source, display, xmltv)
 
-            if (already) {
-              finalXml = finalXml.replace(already.full, newLine)
-              console.log(`PATCHED EXISTING: ${target.display} from ${sourceName} | site_id=${source.site_id}`)
+            if (existing) {
+              xml = xml.replace(existing.full, line)
+              console.log(`PATCHED: ${display} from ${sourceName} | site_id=${source.site_id}`)
             } else {
-              finalXml = finalXml.replace('</channels>', `${newLine}\n</channels>`)
-              console.log(`ADDED MISSING: ${target.display} from ${sourceName} | site_id=${source.site_id}`)
+              xml = xml.replace('</channels>', `${line}\n</channels>`)
+              console.log(`ADDED: ${display} from ${sourceName} | site_id=${source.site_id}`)
             }
           }
 
-          fs.writeFileSync(finalFile, finalXml)
+          fs.writeFileSync(finalFile, xml)
           EOF
 
           node /tmp/patch-missing-tvguide.js
 
-      - name: Commit patched final list
+      - name: Commit patched list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -197,7 +190,7 @@ jobs:
           git add sites/tvguide.com/festy.channels.xml
 
           if git diff --cached --quiet; then
-            echo "No missing channel changes to commit."
+            echo "No changes to commit."
           else
             git commit -m "Patch missing TVGuide channels"
             git push
