@@ -1,99 +1,34 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tv>
-  <channel id="9200012351">
-    <display-name>ESPN 2</display-name>
-  </channel>
-  <channel id="9233015468">
-    <display-name>CBS SPORTS NETWORK</display-name>
-  </channel>
-  <channel id="9200014910">
-    <display-name>FXX</display-name>
-  </channel>
-  <channel id="9200001026">
-    <display-name>FXM</display-name>
-  </channel>
-  <channel id="9233008142">
-    <display-name>TRAVEL CHANNEL</display-name>
-  </channel>
-  <channel id="9200016258">
-    <display-name>THE WEATHER CHANNEL</display-name>
-  </channel>
-  <channel id="9200012265">
-    <display-name>MTV 2</display-name>
-  </channel>
-  <channel id="9233009429">
-    <display-name>LMN</display-name>
-  </channel>
-  <channel id="9200020638">
-    <display-name>AWE</display-name>
-  </channel>
-  <channel id="9233013492">
-    <display-name>HBO HITS</display-name>
-  </channel>
-  <channel id="9200002532">
-    <display-name>HBO DRAMA</display-name>
-  </channel>
-  <channel id="9233003785">
-    <display-name>HBO COMEDY</display-name>
-  </channel>
-  <channel id="9200000143">
-    <display-name>CINEMAX</display-name>
-  </channel>
-  <channel id="9200006529">
-    <display-name>CINEMAX HITS</display-name>
-  </channel>
-  <channel id="9233006971">
-    <display-name>CINEMAX ACTION</display-name>
-  </channel>
-  <channel id="9233006977">
-    <display-name>CINEMAX CLASSICS</display-name>
-  </channel>
-  <channel id="9233011188">
-    <display-name>PARAMOUNT+ WITH SHOWTIME</display-name>
-  </channel>
-  <channel id="9200014450">
-    <display-name>SHOWTIME 2</display-name>
-  </channel>
-  <channel id="9233015495">
-    <display-name>SHOWTIME EXTREME</display-name>
-  </channel>
-  <channel id="9200000968">
-    <display-name>SHOWTIME FAMILY ZONE</display-name>
-  </channel>
-  <channel id="9200016686">
-    <display-name>SHOWTIME NEXT</display-name>
-  </channel>
-  <channel id="9200002975">
-    <display-name>SHOWTIME WOMEN</display-name>
-  </channel>
-  <channel id="9233003805">
-    <display-name>SHOWTIME SHOWCASE</display-name>
-  </channel>
-  <channel id="9233013260">
-    <display-name>THE MOVIE CHANNEL</display-name>
-  </channel>
-  <channel id="9200009198">
-    <display-name>TMC XTRA</display-name>
-  </channel>
-  <channel id="9233003754">
-    <display-name>STARZ EDGE</display-name>
-  </channel>
-  <channel id="9200009352">
-    <display-name>STARZ CINEMA</display-name>
-  </channel>
-  <channel id="9233001912">
-    <display-name>STARZ COMEDY</display-name>
-  </channel>
-  <channel id="9200020089">
-    <display-name>STARZ KIDS &amp; FAMILY</display-name>
-  </channel>
-  <channel id="9233013634">
-    <display-name>MGM+ HITS</display-name>
-  </channel>
-  <channel id="9200020594">
-    <display-name>MGM+ MARQUEE</display-name>
-  </channel>
-  <channel id="9200006851">
-    <display-name>MGM+ DRIVE-IN</display-name>
-  </channel>
+<?xml version="1.0" encoding="UTF-8" ?><tv date="20260502">
+<channel id="ESPN.2.us"><display-name>ESPN 2</display-name><url>https://tvguide.com</url></channel>
+<channel id="CBS.SPORTS.NETWORK.us"><display-name>CBS SPORTS NETWORK</display-name><url>https://tvguide.com</url></channel>
+<channel id="FXX.us"><display-name>FXX</display-name><icon src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/FXX_Logo.svg/960px-FXX_Logo.svg.png"/><url>https://tvguide.com</url></channel>
+<channel id="FXM.us"><display-name>FXM</display-name><icon src="https://comteco.com.bo/img/upload/canales/svCJXa.png"/><url>https://tvguide.com</url></channel>
+<channel id="TRAVEL.CHANNEL.us"><display-name>TRAVEL CHANNEL</display-name><url>https://tvguide.com</url></channel>
+<channel id="THE.WEATHER.CHANNEL.us"><display-name>THE WEATHER CHANNEL</display-name><url>https://tvguide.com</url></channel>
+<channel id="MTV.2.us"><display-name>MTV 2</display-name><url>https://tvguide.com</url></channel>
+<channel id="LMN.us"><display-name>LMN</display-name><url>https://tvguide.com</url></channel>
+<channel id="AWE.us"><display-name>AWE</display-name><icon src="https://i.imgur.com/OjpCtGj.png"/><url>https://tvguide.com</url></channel>
+<channel id="HBO.HITS.us"><display-name>HBO HITS</display-name><url>https://tvguide.com</url></channel>
+<channel id="HBO.DRAMA.us"><display-name>HBO DRAMA</display-name><url>https://tvguide.com</url></channel>
+<channel id="HBO.COMEDY.us"><display-name>HBO COMEDY</display-name><url>https://tvguide.com</url></channel>
+<channel id="CINEMAX.us"><display-name>CINEMAX</display-name><url>https://tvguide.com</url></channel>
+<channel id="CINEMAX.HITS.us"><display-name>CINEMAX HITS</display-name><url>https://tvguide.com</url></channel>
+<channel id="CINEMAX.ACTION.us"><display-name>CINEMAX ACTION</display-name><url>https://tvguide.com</url></channel>
+<channel id="CINEMAX.CLASSICS.us"><display-name>CINEMAX CLASSICS</display-name><url>https://tvguide.com</url></channel>
+<channel id="PARAMOUNTPLUS.WITH.SHOWTIME.us"><display-name>PARAMOUNT+ WITH SHOWTIME</display-name><url>https://tvguide.com</url></channel>
+<channel id="SHOWTIME.2.us"><display-name>SHOWTIME 2</display-name><url>https://tvguide.com</url></channel>
+<channel id="SHOWTIME.EXTREME.us"><display-name>SHOWTIME EXTREME</display-name><url>https://tvguide.com</url></channel>
+<channel id="SHOWTIME.FAMILY.ZONE.us"><display-name>SHOWTIME FAMILY ZONE</display-name><url>https://tvguide.com</url></channel>
+<channel id="SHOWTIME.NEXT.us"><display-name>SHOWTIME NEXT</display-name><url>https://tvguide.com</url></channel>
+<channel id="SHOWTIME.WOMEN.us"><display-name>SHOWTIME WOMEN</display-name><url>https://tvguide.com</url></channel>
+<channel id="SHOWTIME.SHOWCASE.us"><display-name>SHOWTIME SHOWCASE</display-name><url>https://tvguide.com</url></channel>
+<channel id="THE.MOVIE.CHANNEL.us"><display-name>THE MOVIE CHANNEL</display-name><url>https://tvguide.com</url></channel>
+<channel id="TMC.XTRA.us"><display-name>TMC XTRA</display-name><url>https://tvguide.com</url></channel>
+<channel id="STARZ.EDGE.us"><display-name>STARZ EDGE</display-name><url>https://tvguide.com</url></channel>
+<channel id="STARZ.CINEMA.us"><display-name>STARZ CINEMA</display-name><url>https://tvguide.com</url></channel>
+<channel id="STARZ.COMEDY.us"><display-name>STARZ COMEDY</display-name><url>https://tvguide.com</url></channel>
+<channel id="STARZ.KIDS.AND.FAMILY.us"><display-name>STARZ KIDS &amp; FAMILY</display-name><url>https://tvguide.com</url></channel>
+<channel id="MGMPLUS.HITS.us"><display-name>MGM+ HITS</display-name><url>https://tvguide.com</url></channel>
+<channel id="MGMPLUS.MARQUEE.us"><display-name>MGM+ MARQUEE</display-name><url>https://tvguide.com</url></channel>
+<channel id="MGMPLUS.DRIVE.IN.us"><display-name>MGM+ DRIVE-IN</display-name><url>https://tvguide.com</url></channel>
 </tv>
