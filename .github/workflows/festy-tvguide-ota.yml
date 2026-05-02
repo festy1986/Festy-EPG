@@ -1,52 +1,269 @@
-name: Festy OTA Guides
+name: Festy TVGuide OTA
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 */12 * * *"
+    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  build-ota-and-clean-spectrum:
+  build-tvguide-ota:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout your repo
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Clone IPTV-org EPG engine
+        run: |
+          rm -rf epg
+          git clone --depth 1 https://github.com/iptv-org/epg.git epg
+
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Build OTA raw master and curated guides
+      - name: Install EPG dependencies
         run: |
-          mkdir -p guides scripts
-          node scripts/grab-tvguide-ota.js
-        env:
-          TVGUIDE_PROVIDER_ID: 9100000664
-          DAYS: 14
-          RAW_OUTPUT: guides/OTALocalsguide.raw.xml
-          CURATED_OUTPUT: guides/OTALocalsguide.xml
+          cd epg
+          npm install
 
-      - name: Remove OTA channels from Spectrum guide
+      - name: Create OTA channel file and metadata config
         run: |
-          if [ -f guides/tvguide.xml ]; then
-            node scripts/remove-ota-from-spectrum.js
-          else
-            echo "guides/tvguide.xml not found, skipping Spectrum cleanup"
+          mkdir -p epg/sites/tvguide.com
+
+          cat > epg/sites/tvguide.com/festy-ota.channels.xml <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <channels>
+            <channel site="tvguide.com" lang="en" xmltv_id="ABC.PORTLAND.us" site_id="9100002976#9200014312">ABC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA.TV.us" site_id="9100002976#9233011099">ANTENNA TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CBS.PORTLAND.us" site_id="9100002976#9233001666">CBS PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COMET.us" site_id="9100002976#9200005724">COMET</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COURT.TV.us" site_id="9100002976#9233005846">COURT TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CW.BOSTON.us" site_id="9100002976#9200006484">CW BOSTON</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="FOX.PORTLAND.us" site_id="9100002976#9233003676">FOX PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="GRIT.us" site_id="9100002976#9233003377">GRIT</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="HEROES.AND.ICONS.us" site_id="9100002976#9200020338">HEROES &amp; ICONS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION.MYSTERY.us" site_id="9100002976#9200017556">ION MYSTERY</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION.PLUS.us" site_id="9100002976#9200008618">ION PLUS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="LAFF.us" site_id="9100002976#9266073627">LAFF</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="METV.us" site_id="9100002976#9200016252">METV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="NBC.PORTLAND.us" site_id="9100002976#9233006796">NBC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="PBS.us" site_id="9100002976#9233009254">PBS</channel>
+          </channels>
+          EOF
+
+          cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
+          const axios = require('axios')
+          const dayjs = require('dayjs')
+          const utc = require('dayjs/plugin/utc')
+          const timezone = require('dayjs/plugin/timezone')
+
+          dayjs.extend(utc)
+          dayjs.extend(timezone)
+
+          const DETAIL_DELAY_MS = 350
+
+          module.exports = {
+            site: 'tvguide.com',
+            delay: 3000,
+            days: 1,
+
+            url({ date, channel }) {
+              const [providerId, sourceId] = String(channel.site_id).split('#')
+              console.log(`[CHANNEL] ${channel.name} | site_id=${channel.site_id} | sourceId=${sourceId}`)
+              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+            },
+
+            request: {
+              method: 'GET',
+              timeout: 15000,
+              cache: { ttl: 60 * 60 * 1000 },
+              headers() {
+                return {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              }
+            },
+
+            async parser({ content, channel }) {
+              const programs = []
+              const items = parseItems(content, channel)
+
+              for (const item of items) {
+                await sleep(DETAIL_DELAY_MS)
+                const details = await loadProgramDetails(item)
+
+                const title = cleanTitle(item.title || details.title || '')
+                const episodeTitle = cleanSpaces(details.episodeTitle || '')
+                const description = fixBrokenDescription(pickBetterDescription(details.description, item.description))
+                const seasonNumber = details.seasonNumber || ''
+                const episodeNumber = details.episodeNumber || ''
+                const releaseYear = details.releaseYear || ''
+                const episodeAirDate = details.episodeAirDate || ''
+                const type = String(details.type || item.type || '').toLowerCase()
+
+                const episodeCode =
+                  seasonNumber && episodeNumber
+                    ? `S${String(seasonNumber).padStart(2, '0')}E${String(episodeNumber).padStart(2, '0')}`
+                    : ''
+
+                const airDate = formatTVGuideDate(episodeAirDate) || formatUnixDate(item.startTime)
+
+                let finalDescription = ''
+
+                if (type === 'movie') {
+                  finalDescription = description
+                  if (releaseYear) {
+                    finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
+                  }
+                } else {
+                  let prefix = ''
+                  if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
+                  else if (episodeTitle) prefix = episodeTitle
+                  else if (episodeCode) prefix = episodeCode
+
+                  if (prefix && description) finalDescription = `${prefix}. ${description}`
+                  else if (prefix) finalDescription = `${prefix}.`
+                  else finalDescription = description
+
+                  if (airDate) finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
+                }
+
+                programs.push({
+                  title,
+                  description: cleanSpaces(finalDescription),
+                  start: dayjs.unix(item.startTime),
+                  stop: dayjs.unix(item.endTime)
+                })
+              }
+
+              console.log(`[DONE] ${channel.name} | output programs=${programs.length}`)
+              return programs
+            }
+          }
+
+          async function loadProgramDetails(item) {
+            if (!item.programDetails) return {}
+
+            const url = item.programDetails.includes('?')
+              ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+              : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+
+            try {
+              const response = await axios.get(url, {
+                timeout: 15000,
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              })
+
+              return response.data?.data?.item || {}
+            } catch {
+              return {}
+            }
+          }
+
+          function parseItems(content, channel) {
+            const data = JSON.parse(content)
+            const items = data?.data?.items || []
+            const sourceId = String(channel.site_id).split('#').pop()
+
+            const matched = items.find(item => {
+              return String(item.sourceId || item.channelSourceId || item.id || '') === sourceId
+            })
+
+            if (matched?.programSchedules?.length) return matched.programSchedules
+
+            return []
+          }
+
+          function pickBetterDescription(detailDescription, itemDescription) {
+            const detail = cleanSpaces(detailDescription || '')
+            const basic = cleanSpaces(itemDescription || '')
+            if (!detail) return basic
+            if (!basic) return detail
+            return detail.length >= basic.length ? detail : basic
+          }
+
+          function cleanTitle(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
+          }
+
+          function fixBrokenDescription(value) {
+            let d = cleanSpaces(value)
+            if (!d) return ''
+            d = d.replace(/\.\.\.$/, '').trim()
+            d = d.replace(/[,:;–—-]\s*$/, '').trim()
+            if (!/[.!?]$/.test(d)) d += '.'
+            return d
+          }
+
+          function formatTVGuideDate(value) {
+            const match = String(value || '').match(/\/Date\((\d+)\)\//)
+            if (!match) return ''
+            const date = new Date(Number(match[1]))
+            return date.toLocaleDateString('en-US', {
+              month: '2-digit',
+              day: '2-digit',
+              year: 'numeric'
+            })
+          }
+
+          function formatUnixDate(value) {
+            if (!value) return ''
+            return dayjs.unix(value).format('MM/DD/YYYY')
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+          EOF
+
+      - name: Grab OTA locals guide
+        run: |
+          cd epg
+          npx tsx scripts/commands/epg/grab.ts \
+            --channels=sites/tvguide.com/festy-ota.channels.xml \
+            --output=../guides/OTALocalsguide.xml \
+            --days=1
+
+          cd ..
+          if [ ! -s guides/OTALocalsguide.xml ]; then
+            echo "guides/OTALocalsguide.xml was not created or is empty"
+            exit 1
           fi
-        env:
-          INPUT: guides/tvguide.xml
-          OUTPUT: guides/tvguide.xml
 
-      - name: Commit updated guides
+          ls -lh guides/OTALocalsguide.xml
+
+      - name: Commit OTA locals guide
         run: |
           git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.email "github-actions@github.com"
 
-          git add guides/OTALocalsguide.raw.xml guides/OTALocalsguide.xml guides/tvguide.xml
-          git commit -m "Update OTA guides and clean Spectrum guide" || echo "No changes to commit"
-          git push
+          git add guides/OTALocalsguide.xml
+
+          if git diff --cached --quiet; then
+            echo "No OTA locals guide changes to commit"
+          else
+            git commit -m "Update OTA locals guide with TVGuide metadata"
+            git push
+          fi
