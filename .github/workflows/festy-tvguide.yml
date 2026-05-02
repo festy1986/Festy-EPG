@@ -1,4 +1,4 @@
-name: Festy TVGuide (Local Cumberland)
+name: Festy TVGuide
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout your repo
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Clone EPG engine clean
@@ -31,16 +31,35 @@ jobs:
           cd epg
           npm install
 
-      - name: Force Cumberland County lineup ID
+      - name: Copy Festy curated channels into EPG engine
         run: |
-          cd epg
-          sed -i 's/910000113/9100002976/g' sites/tvguide.com/tvguide.com.config.js
+          mkdir -p epg/sites/tvguide.com
+          cp guides/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
 
-      - name: Build TVGuide guide
+      - name: Normalize channel IDs to Spectrum Cumberland lineup
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const file = 'epg/sites/tvguide.com/festy.channels.xml'
+          const LOCAL_ID = '9100002976'
+
+          let xml = fs.readFileSync(file, 'utf8')
+
+          xml = xml.replace(/site_id="([^"]+)"/g, (match, id) => {
+            if (id.includes('#')) return match
+            return `site_id="${LOCAL_ID}#${id}"`
+          })
+
+          fs.writeFileSync(file, xml)
+          console.log(`Normalized all bare TVGuide station IDs to ${LOCAL_ID}#stationId`)
+          EOF
+
+      - name: Run TVGuide grab
         run: |
           cd epg
           npm run grab -- \
-            --channels=sites/tvguide.com/tvguide.com.channels.xml \
+            --channels=sites/tvguide.com/festy.channels.xml \
             --output=guide.xml \
             --days=1
 
@@ -58,6 +77,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No guide changes to commit."
           else
-            git commit -m "Update TVGuide Cumberland local guide"
+            git commit -m "Update Festy TVGuide"
             git push
           fi
