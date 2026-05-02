@@ -29,7 +29,7 @@ jobs:
           TVGUIDE_PROVIDER_ID: 9100000664
           DAYS: 14
           OUTPUT: guides/tvguide.xml
-          CHUNK_MINUTES: 120
+          CHUNK_MINUTES: 1440
 
       - name: Commit TVGuide OTA guide
         run: |
