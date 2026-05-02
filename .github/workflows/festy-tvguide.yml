@@ -30,10 +30,8 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy Festy TVGuide files into engine
+      - name: Copy Festy TVGuide channel list into engine
         run: |
-          mkdir -p epg/sites/tvguide.com
-          cp sites/tvguide.com/tvguide.com.config.js epg/sites/tvguide.com/tvguide.com.config.js
           cp sites/tvguide.com/tvguide.com.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
 
       - name: Apply final safe channel fixes
@@ -56,39 +54,6 @@ jobs:
               site_id: '9233010939',
               xmltv_id: 'HallmarkFamily.us',
               name: 'Hallmark Family'
-            }
-          ]
-
-          const rescueAliases = [
-            {
-              match: ['GRIT'],
-              aliases: ['GRIT', 'Grit', 'Grit TV'],
-              xmltv_id: 'Grit.us',
-              name: 'Grit'
-            },
-            {
-              match: ['ION PLUS', 'IONPLUS'],
-              aliases: ['ION PLUS', 'IONPlus', 'Ion Plus'],
-              xmltv_id: 'IONPlus.us',
-              name: 'ION Plus'
-            },
-            {
-              match: ['COURT TV', 'COURTTV'],
-              aliases: ['COURT TV', 'CourtTV', 'Court TV'],
-              xmltv_id: 'CourtTV.us',
-              name: 'Court TV'
-            },
-            {
-              match: ['ANTENNA TV', 'ANTENNA'],
-              aliases: ['ANTENNA TV', 'Antenna', 'Antenna TV'],
-              xmltv_id: 'AntennaTV.us',
-              name: 'Antenna TV'
-            },
-            {
-              match: ['COZI TV', 'COZI'],
-              aliases: ['COZI TV', 'Cozi', 'Cozi TV'],
-              xmltv_id: 'CoziTV.us',
-              name: 'Cozi TV'
             }
           ]
 
@@ -125,11 +90,11 @@ jobs:
 
           function upsertChannel(matchNames, site_id, xmltv_id, name, lang = 'en') {
             const channels = parseChannels(xml)
-            const normalizedMatches = matchNames.map(norm)
+            const matches = matchNames.map(norm)
 
             const target = channels.find(ch =>
-              normalizedMatches.includes(norm(ch.name)) ||
-              normalizedMatches.includes(norm(ch.xmltv_id))
+              matches.includes(norm(ch.name)) ||
+              matches.includes(norm(ch.xmltv_id))
             )
 
             const line = channelLine(site_id, xmltv_id, name, lang)
@@ -145,27 +110,6 @@ jobs:
 
           for (const fix of forcedAdds) {
             upsertChannel(fix.match, fix.site_id, fix.xmltv_id, fix.name)
-          }
-
-          for (const fix of rescueAliases) {
-            const channels = parseChannels(xml)
-
-            const source = channels.find(ch =>
-              ch.site_id &&
-              fix.aliases.some(alias =>
-                norm(ch.name) === norm(alias) ||
-                norm(ch.xmltv_id) === norm(alias) ||
-                norm(ch.name).includes(norm(alias)) ||
-                norm(ch.xmltv_id).includes(norm(alias))
-              )
-            )
-
-            if (!source) {
-              console.log(`MISS: ${fix.name} not found in current TVGuide lineup`)
-              continue
-            }
-
-            upsertChannel(fix.match, source.site_id, fix.xmltv_id, fix.name, source.lang)
           }
 
           fs.writeFileSync(file, xml)
