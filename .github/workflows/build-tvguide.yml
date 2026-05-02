@@ -1,4 +1,4 @@
-name: Build TVGuide Channels
+name: Build TVGuide Channel Lists
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  build-tvguide-channels:
+  build-tvguide:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,8 @@ jobs:
           cd engine
           npm install
 
-      - name: Generate 153 upstream TVGuide channels with Portland ID
+      # --- STEP 1: Build upstream 153 list (localized) ---
+      - name: Generate upstream TVGuide channel list
         run: |
           mkdir -p channels
 
@@ -50,19 +51,28 @@ jobs:
           );
 
           fs.writeFileSync(output, xml);
-          console.log("Wrote upstream channel list with local ID");
+          console.log("Upstream channel list generated");
           NODE
 
-      - name: Commit upstream channel list
+      # --- STEP 2: Build Festy final list using your script ---
+      - name: Build Festy channel list
+        run: |
+          node scripts/build-festy-tvguide-channels.js
+
+      # --- STEP 3: Commit everything ---
+      - name: Commit channel lists and reports
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
           git add channels/tvguide.upstream.channels.xml
+          git add channels/tvguide.festy.channels.xml
+          git add reports/tvguide.matched.txt
+          git add reports/tvguide.missing.txt
 
           if git diff --cached --quiet; then
             echo "No changes."
           else
-            git commit -m "Update upstream TVGuide channel list (153 channels)"
+            git commit -m "Update TVGuide channel lists"
             git push
           fi
