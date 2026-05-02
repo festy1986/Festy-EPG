@@ -14,24 +14,42 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Run TVGuide Tivimate curated builder
+      - name: Verify raw input exists
+        run: |
+          if [ ! -s guides/tvguide.xml ]; then
+            echo "Missing or empty guides/tvguide.xml"
+            exit 1
+          fi
+
+          echo "Raw file preview:"
+          head -20 guides/tvguide.xml
+
+      - name: Run curated builder
         run: |
           node scripts/build-tvguidetivimate-curated.js
 
-      - name: Verify curated file exists
+      - name: Verify output
         run: |
-          test -s guides/tvguidetivimate.xml
+          if [ ! -s guides/tvguidetivimate.xml ]; then
+            echo "tvguidetivimate.xml was not created"
+            exit 1
+          fi
+
+          echo "Curated output preview:"
           head -40 guides/tvguidetivimate.xml
 
-      - name: Commit curated TVGuide Tivimate list
+          echo "Channel count:"
+          grep -c "<channel" guides/tvguidetivimate.xml || true
+
+      - name: Commit curated list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguidetivimate.xml guides/tvguidetivimate.raw.xml
+          git add guides/tvguidetivimate.xml
 
           if git diff --cached --quiet; then
-            echo "No curated changes to commit"
+            echo "No changes to commit"
           else
             git commit -m "Build curated TVGuide Tivimate channel list"
             git push
