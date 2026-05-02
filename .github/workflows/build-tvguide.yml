@@ -30,54 +30,51 @@ jobs:
           cd engine
           npm install
 
-      - name: Build full Portland Maine TVGuide channel list
+      - name: Switch TVGuide to Portland Maine local lineup
         run: |
-          mkdir -p generated
-
           node <<'NODE'
           const fs = require("fs");
 
-          const LOCAL_TVGUIDE_ID = "9100002976";
+          const configPath = "engine/sites/tvguide.com/tvguide.com.config.js";
+          const PORTLAND_MAINE_TVGUIDE_ID = "9100002976";
 
-          const input = "engine/sites/tvguide.com/tvguide.com.channels.xml";
-          const output = "generated/tvguide.channels.xml";
+          let config = fs.readFileSync(configPath, "utf8");
 
-          let xml = fs.readFileSync(input, "utf8");
-
-          xml = xml.replace(
-            /site_id="([^"]+)"/g,
-            (match, id) => {
-              if (id.includes("#")) return match;
-              return `site_id="${LOCAL_TVGUIDE_ID}#${id}"`;
-            }
+          config = config.replace(
+            /const providerId = ['"][^'"]+['"]/,
+            `const providerId = '${PORTLAND_MAINE_TVGUIDE_ID}'`
           );
 
-          fs.writeFileSync(output, xml);
-          console.log(`Wrote ${output} using local TVGuide ID ${LOCAL_TVGUIDE_ID}`);
+          fs.writeFileSync(configPath, config);
+          console.log(`TVGuide providerId set to ${PORTLAND_MAINE_TVGUIDE_ID}`);
           NODE
 
-      - name: Copy generated TVGuide channels into engine
+      - name: Generate full Portland Maine TVGuide channel list
         run: |
-          cp generated/tvguide.channels.xml engine/sites/tvguide.com/tvguide.channels.xml
+          cd engine
+          mkdir -p ../guides
+          npm run channels:parse --- \
+            --config=sites/tvguide.com/tvguide.com.config.js \
+            --output=../guides/tvguide.channels.xml
 
-      - name: Build TVGuide
+      - name: Build TVGuide XML (1 day test)
         run: |
           cd engine
           npm run grab --- \
-            --channels=sites/tvguide.com/tvguide.channels.xml \
-            --output=../tvguide.xml \
+            --channels=../guides/tvguide.channels.xml \
+            --output=../guides/tvguide.xml \
             --days=1
 
-      - name: Commit guide and generated channel list
+      - name: Commit TVGuide files
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add tvguide.xml generated/tvguide.channels.xml
+          git add guides/tvguide.channels.xml guides/tvguide.xml
 
           if git diff --cached --quiet; then
             echo "No TVGuide changes."
           else
-            git commit -m "Update TVGuide"
+            git commit -m "Update TVGuide (Portland ME full lineup)"
             git push
           fi
