@@ -3,17 +3,15 @@ const fs = require('fs')
 const PROVIDER_ID = process.env.TVGUIDE_PROVIDER_ID || '9100000664'
 const OUTPUT = process.env.OUTPUT || 'guides/tvguide.xml'
 const DAYS = Number(process.env.DAYS || 1)
-const CHUNK_MINUTES = Number(process.env.CHUNK_MINUTES || 120)
 
 const BASE = 'https://backend.tvguide.com/tvschedules/tvguide'
 
-function xmlEscape(value = '') {
-  return String(value)
+function xmlEscape(v = '') {
+  return String(v)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
 }
 
 function xmltvTime(unix) {
@@ -38,228 +36,128 @@ function startOfTodayEpoch() {
   )
 }
 
-async function fetchChunk(startEpoch, durationMinutes) {
-  const url = `${BASE}/${PROVIDER_ID}/web?start=${startEpoch}&duration=${durationMinutes}`
+async function fetchDay(startEpoch) {
+  const url = `${BASE}/${PROVIDER_ID}/web?start=${startEpoch}&duration=1440`
 
-  console.log(`[fetch] ${url}`)
+  console.log(`[fetch-day] ${new Date(startEpoch * 1000).toISOString().slice(0,10)}`)
 
   const res = await fetch(url, {
     headers: {
       accept: 'application/json',
       referer: 'https://www.tvguide.com/',
-      'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36'
+      'user-agent': 'Mozilla/5.0'
     }
   })
 
   if (!res.ok) {
-    throw new Error(`TVGuide request failed: ${res.status} ${res.statusText}`)
+    throw new Error(`TVGuide request failed`)
   }
 
   return res.json()
 }
 
 function getItems(json) {
-  if (Array.isArray(json?.data?.items)) return json.data.items
-  if (Array.isArray(json?.items)) return json.items
-  return []
-}
-
-function makeLogoUrl(logo) {
-  if (!logo) return ''
-  if (logo.startsWith('http')) return logo
-  return `https://www.tvguide.com/a/img/catalog${logo}`
+  return json?.data?.items || []
 }
 
 async function main() {
   fs.mkdirSync('guides', { recursive: true })
 
-  const dayStart = startOfTodayEpoch()
-  const dayEnd = dayStart + DAYS * 24 * 60 * 60
-  const totalMinutes = DAYS * 24 * 60
+  const baseStart = startOfTodayEpoch()
 
   const channels = new Map()
-  const programmes = new Map()
+  const programmesByDay = []
 
-  console.log('[info] starting TVGuide OTA grab')
-  console.log(`[info] provider ID: ${PROVIDER_ID}`)
-  console.log(`[info] days: ${DAYS}`)
-  console.log(`[info] output: ${OUTPUT}`)
-  console.log(`[info] chunk minutes: ${CHUNK_MINUTES}`)
+  for (let d = 0; d < DAYS; d++) {
+    const dayStart = baseStart + d * 86400
+    const dayEnd = dayStart + 86400
 
-  for (let offset = 0; offset < totalMinutes; offset += CHUNK_MINUTES) {
-    const chunkStart = dayStart + offset * 60
-    const json = await fetchChunk(chunkStart, CHUNK_MINUTES)
+    const json = await fetchDay(dayStart)
     const items = getItems(json)
 
-    if (!items.length) {
-      console.log(`[warn] no items found for chunk ${chunkStart}`)
-      continue
-    }
+    const programmes = new Map()
 
     for (const item of items) {
-      const channel = item.channel
-      if (!channel || !channel.sourceId) continue
+      const ch = item.channel
+      if (!ch?.sourceId) continue
 
-      const channelId = String(channel.sourceId)
+      const id = String(ch.sourceId)
 
-      const fullName =
-        channel.fullName ||
-        channel.networkName ||
-        channel.name ||
-        `Channel ${channelId}`
-
-      channels.set(channelId, {
-        id: channelId,
-        fullName,
-        name: channel.name || '',
-        number: channel.number || '',
-        networkName: channel.networkName || '',
-        logo: makeLogoUrl(channel.logo || '')
+      channels.set(id, {
+        id,
+        name: ch.fullName || ch.name || id
       })
 
-      const schedules = Array.isArray(item.programSchedules)
-        ? item.programSchedules
-        : []
-
-      for (const p of schedules) {
+      for (const p of item.programSchedules || []) {
         if (!p.startTime || !p.endTime) continue
 
         if (p.endTime <= dayStart) continue
         if (p.startTime >= dayEnd) continue
 
-        const originalStart = p.startTime
-        const originalEnd = p.endTime
-
-        const startTime = Math.max(originalStart, dayStart)
-        const endTime = Math.min(originalEnd, dayEnd)
-
-        if (endTime <= startTime) continue
-
-        const key = [
-          channelId,
-          originalStart,
-          originalEnd,
-          p.programId || '',
-          p.title || ''
-        ].join('|')
+        const key = `${id}|${p.startTime}|${p.endTime}|${p.programId || ''}`
 
         programmes.set(key, {
-          channelId,
-          start: startTime,
-          stop: endTime,
-          title: p.title || 'Unknown',
-          subTitle: p.episodeTitle || p.subtitle || '',
-          desc: p.description || p.shortDescription || '',
-          category: p.catName || '',
-          rating: p.rating || ''
+          channelId: id,
+          start: Math.max(p.startTime, dayStart),
+          stop: Math.min(p.endTime, dayEnd),
+          title: p.title || 'Unknown'
         })
       }
     }
+
+    programmesByDay.push({ dayStart, programmes })
   }
 
-  if (!channels.size) {
-    throw new Error('No channels found in TVGuide backend response')
+  // 🔥 LOG PER DAY (this is what you wanted)
+  console.log('\n[INFO] PER-DAY TOTALS\n')
+
+  for (const day of programmesByDay) {
+    const date = new Date(day.dayStart * 1000).toISOString().slice(0,10)
+
+    const counts = {}
+
+    for (const p of day.programmes.values()) {
+      counts[p.channelId] = (counts[p.channelId] || 0) + 1
+    }
+
+    console.log(`\n=== ${date} ===`)
+
+    for (const [id, count] of Object.entries(counts)) {
+      console.log(`${channels.get(id)?.name} → ${count}`)
+    }
   }
 
-  const sortedChannels = [...channels.values()].sort((a, b) => {
-    const an = parseFloat(a.number)
-    const bn = parseFloat(b.number)
+  // flatten for XML
+  const allProgrammes = []
 
-    if (!Number.isNaN(an) && !Number.isNaN(bn)) return an - bn
-    if (!Number.isNaN(an)) return -1
-    if (!Number.isNaN(bn)) return 1
-
-    return a.fullName.localeCompare(b.fullName)
-  })
-
-  const countsByChannel = new Map()
-
-  for (const p of programmes.values()) {
-    countsByChannel.set(p.channelId, (countsByChannel.get(p.channelId) || 0) + 1)
+  for (const day of programmesByDay) {
+    allProgrammes.push(...day.programmes.values())
   }
 
-  console.log('')
-  console.log('[info] FINAL FULL-DAY PROGRAM TOTALS PER CHANNEL')
-  console.log('')
-
-  for (const ch of sortedChannels) {
-    console.log(
-      `[day-total] ${ch.fullName} | ${ch.number || 'no-number'} | ${ch.id} | ${countsByChannel.get(ch.id) || 0} programme(s)`
-    )
-  }
-
-  console.log('')
-  console.log(`[info] found ${channels.size} channel(s)`)
-  console.log(`[info] found ${programmes.size} programme(s) total`)
-  console.log('')
-
+  // XML
   const lines = []
-
   lines.push('<?xml version="1.0" encoding="UTF-8"?>')
-  lines.push('<tv generator-info-name="festy1986 TVGuide OTA">')
+  lines.push('<tv>')
 
-  for (const ch of sortedChannels) {
+  for (const ch of channels.values()) {
     lines.push(`  <channel id="${xmlEscape(ch.id)}">`)
-    lines.push(`    <display-name>${xmlEscape(ch.fullName)}</display-name>`)
-
-    if (ch.name && ch.name !== ch.fullName) {
-      lines.push(`    <display-name>${xmlEscape(ch.name)}</display-name>`)
-    }
-
-    if (ch.networkName && ch.networkName !== ch.name) {
-      lines.push(`    <display-name>${xmlEscape(ch.networkName)}</display-name>`)
-    }
-
-    if (ch.number) {
-      lines.push(`    <display-name>${xmlEscape(ch.number)}</display-name>`)
-    }
-
-    if (ch.logo) {
-      lines.push(`    <icon src="${xmlEscape(ch.logo)}" />`)
-    }
-
+    lines.push(`    <display-name>${xmlEscape(ch.name)}</display-name>`)
     lines.push('  </channel>')
   }
 
-  const sortedProgrammes = [...programmes.values()].sort((a, b) => {
-    if (a.channelId !== b.channelId) return a.channelId.localeCompare(b.channelId)
-    return a.start - b.start
-  })
-
-  for (const p of sortedProgrammes) {
+  for (const p of allProgrammes.sort((a,b)=>a.start-b.start)) {
     lines.push(
-      `  <programme start="${xmltvTime(p.start)}" stop="${xmltvTime(p.stop)}" channel="${xmlEscape(p.channelId)}">`
+      `  <programme start="${xmltvTime(p.start)}" stop="${xmltvTime(p.stop)}" channel="${p.channelId}">`
     )
-
-    lines.push(`    <title lang="en">${xmlEscape(p.title)}</title>`)
-
-    if (p.subTitle) {
-      lines.push(`    <sub-title lang="en">${xmlEscape(p.subTitle)}</sub-title>`)
-    }
-
-    if (p.desc) {
-      lines.push(`    <desc lang="en">${xmlEscape(p.desc)}</desc>`)
-    }
-
-    if (p.category) {
-      lines.push(`    <category lang="en">${xmlEscape(p.category)}</category>`)
-    }
-
-    if (p.rating) {
-      lines.push('    <rating>')
-      lines.push(`      <value>${xmlEscape(p.rating)}</value>`)
-      lines.push('    </rating>')
-    }
-
+    lines.push(`    <title>${xmlEscape(p.title)}</title>`)
     lines.push('  </programme>')
   }
 
   lines.push('</tv>')
 
-  fs.writeFileSync(OUTPUT, lines.join('\n') + '\n')
+  fs.writeFileSync(OUTPUT, lines.join('\n'))
 
-  console.log(`[done] wrote ${OUTPUT}`)
+  console.log(`\n[done] wrote ${OUTPUT}`)
 }
 
 main().catch(err => {
