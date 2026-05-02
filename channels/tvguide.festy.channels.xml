@@ -1,5 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site site="tvguide.com">
-<channels>
-  <channel site="tvguide.com" site_id="9100002976#9200000016" lang="en" xmltv_id="CookingChannel.us@SD">Cooking</channel>
+<channel site="tvguide.com" site_id="9100002976#9233004141" lang="en" xmltv_id="PBS.us@East">PBS HD</channel>
+<channel site="tvguide.com" site_id="9100002976#9200017928" lang="en" xmltv_id="TCM.us@East">Turner Classic Movies</channel>
+<channel site="tvguide.com" site_id="9100002976#9200002736" lang="en" xmltv_id="OWN.us@East">OWN</channel>
+<channel site="tvguide.com" site_id="9100002976#9200020665" lang="en" xmltv_id="BETHer.us@East">BET Her</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006942" lang="en" xmltv_id="Freeform.us@East">Freeform</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006937" lang="en" xmltv_id="ESPN.us@SD">ESPN</channel>
+<channel site="tvguide.com" site_id="9100002976#9200018188" lang="en" xmltv_id="WeTV.us@East">WE tv</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004949" lang="en" xmltv_id="Oxygen.us@East">Oxygen</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006939" lang="en" xmltv_id="Nickelodeon.us@East">Nickelodeon</channel>
+<channel site="tvguide.com" site_id="9100002976#9233006803" lang="en" xmltv_id="MSNBC.us@SD">MSNBC</channel>
+<channel site="tvguide.com" site_id="9100002976#9233013812" lang="en" xmltv_id="CNN.us@SD">CNN</channel>
+<channel site="tvguide.com" site_id="9100002976#9200016601" lang="en" xmltv_id="HLN.us@SD">HLN</channel>
+<channel site="tvguide.com" site_id="9100002976#9200009413" lang="en" xmltv_id="CNBC.us@SD">CNBC</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011830" lang="en" xmltv_id="TNT.us@East">TNT</channel>
+<channel site="tvguide.com" site_id="9100002976#9200020452" lang="en" xmltv_id="Lifetime.us@East">Lifetime</channel>
+<channel site="tvguide.com" site_id="9100002976#9233004112" lang="en" xmltv_id="TLC.us@East">TLC</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011832" lang="en" xmltv_id="AMC.us@East">AMC</channel>
+<channel site="tvguide.com" site_id="9100002976#9233004104" lang="en" xmltv_id="HGTV.us@East">HGTV</channel>
+<channel site="tvguide.com" site_id="9100002976#9200002886" lang="en" xmltv_id="Bravo.us@East">Bravo</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004316" lang="en" xmltv_id="Syfy.us@East">Syfy</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006932" lang="en" xmltv_id="FX.us@East">FX</channel>
+<channel site="tvguide.com" site_id="9100002976#9200018644" lang="en" xmltv_id="FXX.us@East">FXX</channel>
+<channel site="tvguide.com" site_id="9100002976#9233013967" lang="en" xmltv_id="FXMovieChannel.us@SD">FX Movie</channel>
+<channel site="tvguide.com" site_id="9100002976#9233000403" lang="en" xmltv_id="TBS.us@East">tbs</channel>
+<channel site="tvguide.com" site_id="9100002976#9233000037" lang="en" xmltv_id="VH1.us@East">VH1</channel>
+<channel site="tvguide.com" site_id="9100002976#9200000872" lang="en" xmltv_id="MTV2.us@East">MTV2</channel>
+<channel site="tvguide.com" site_id="9100002976#9200012085" lang="en" xmltv_id="CMT.us@East">CMT</channel>
+<channel site="tvguide.com" site_id="9100002976#9200012415" lang="en" xmltv_id="MagnoliaNetwork.us@East">MAGNOLIA Network</channel>
+<channel site="tvguide.com" site_id="9100002976#9200020464" lang="en" xmltv_id="Pop.us@East">Pop Network</channel>
+<channel site="tvguide.com" site_id="9100002976#9233002242" lang="en" xmltv_id="VICETV.us@SD">VICE</channel>
+<channel site="tvguide.com" site_id="9100002976#9200011769" lang="en" xmltv_id="Reelz.us@SD">Reelz</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011488" lang="en" xmltv_id="Fuse.us@East">Fuse HD</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004303" lang="en" xmltv_id="IFC.us@East">IFC</channel>
+<channel site="tvguide.com" site_id="9100002976#9200020460" lang="en" xmltv_id="FYI.us@East">FYI</channel>
+<channel site="tvguide.com" site_id="9100002976#9233013354" lang="en" xmltv_id="Logo.us@East">LOGO</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011240" lang="en" xmltv_id="Ovation.us@SD">Ovation</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004595" lang="en" xmltv_id="HBOFamily.us@East">HBO Family</channel>
+<channel site="tvguide.com" site_id="9100002976#9233009829" lang="en" xmltv_id="Cinemax.us@East">Cinemax</channel>
+<channel site="tvguide.com" site_id="9100002976#9200000968" lang="en" xmltv_id="ShowtimeFamilyZone.us@East">SHOWTIME FAMILY ZONE</channel>
+<channel site="tvguide.com" site_id="9100002976#9200001097" lang="en" xmltv_id="StarzEncoreBlack.us@East">STARZ ENCORE Black</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006851" lang="en" xmltv_id="MGMPlusDriveIn.us@SD">MGM+ Drive-In</channel>
+<channel site="tvguide.com" site_id="9100002976#9200000856" lang="en" xmltv_id="ThrillerMax.us@East">ThrillerMax</channel>
+<channel site="tvguide.com" site_id="9100002976#9200000867" lang="es" xmltv_id="Univision.us@East">Univision</channel>
+<channel site="tvguide.com" site_id="9100002976#9200002243" lang="en" xmltv_id="InvestigationDiscovery.us@East">Investigation Discovery</channel>
+<channel site="tvguide.com" site_id="9100002976#9200002975" lang="en" xmltv_id="ShowtimeWomen.us@East">SHOWTIME WOMEN</channel>
+<channel site="tvguide.com" site_id="9100002976#9200003144" lang="en" xmltv_id="StarzEncoreClassic.us@East">STARZ ENCORE Classic</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004683" lang="en" xmltv_id="NationalGeographicWild.us@East">National Geographic Wild</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004879" lang="en" xmltv_id="ShowtimeExtreme.us@East">SHOWTIME EXTREME</channel>
+<channel site="tvguide.com" site_id="9100002976#9200004886" lang="en" xmltv_id="HBO.us@East">HBO</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006977" lang="en" xmltv_id="StarzKidsFamily.us@East">STARZ Kids &amp; Family</channel>
+<channel site="tvguide.com" site_id="9100002976#9200006981" lang="en" xmltv_id="HBOComedy.us@East">HBO Comedy</channel>
+<channel site="tvguide.com" site_id="9100002976#9200009245" lang="en" xmltv_id="DestinationAmerica.us@SD">Destination America</channel>
+<channel site="tvguide.com" site_id="9100002976#9200009335" lang="en" xmltv_id="MGMHD.us@SD">MGM+ HD</channel>
+<channel site="tvguide.com" site_id="9100002976#9200009649" lang="en" xmltv_id="StarzEncore.us@East">STARZ ENCORE</channel>
+<channel site="tvguide.com" site_id="9100002976#9200011866" lang="en" xmltv_id="StarzEncoreSuspense.us@East">STARZ ENCORE Suspense</channel>
+<channel site="tvguide.com" site_id="9100002976#9200011867" lang="en" xmltv_id="StarzEncoreFamily.us@East">STARZ ENCORE Family</channel>
+<channel site="tvguide.com" site_id="9100002976#9200011898" lang="en" xmltv_id="StarzInBlack.us@East">STARZ InBlack</channel>
+<channel site="tvguide.com" site_id="9100002976#9200014841" lang="en" xmltv_id="OuterMax.us@East">OuterMax</channel>
+<channel site="tvguide.com" site_id="9100002976#9200016592" lang="en" xmltv_id="ActionMax.us@East">ActionMax</channel>
+<channel site="tvguide.com" site_id="9100002976#9200016599" lang="en" xmltv_id="Showtime.us@East">Paramount+ with Showtime</channel>
+<channel site="tvguide.com" site_id="9100002976#9200016686" lang="en" xmltv_id="ShowtimeNext.us@East">SHOWTIME NEXT</channel>
+<channel site="tvguide.com" site_id="9100002976#9200018178" lang="en" xmltv_id="Showtime2.us@East">SHOWTIME 2</channel>
+<channel site="tvguide.com" site_id="9100002976#9200020594" lang="en" xmltv_id="MGMPlusMarquee.us@SD">MGM+ Marquee HD</channel>
+<channel site="tvguide.com" site_id="9100002976#9233000217" lang="en" xmltv_id="Flix.us@East">Flix</channel>
+<channel site="tvguide.com" site_id="9100002976#9233000532" lang="en" xmltv_id="MovieMax.us@East">MovieMax</channel>
+<channel site="tvguide.com" site_id="9100002976#9233002310" lang="en" xmltv_id="NationalGeographic.us@East">National Geographic</channel>
+<channel site="tvguide.com" site_id="9100002976#9233003524" lang="en" xmltv_id="HBO2.us@East">HBO 2</channel>
+<channel site="tvguide.com" site_id="9100002976#9233003558" lang="en" xmltv_id="StarzComedy.us@East">STARZ Comedy</channel>
+<channel site="tvguide.com" site_id="9100002976#9233003673" lang="en" xmltv_id="CrimePlusInvestigation.us@SD">Crime &amp; Investigation Network</channel>
+<channel site="tvguide.com" site_id="9100002976#9233003805" lang="en" xmltv_id="ShowtimeShowcase.us@East">SHOWTIME SHOWCASE</channel>
+<channel site="tvguide.com" site_id="9100002976#9233005667" lang="en" xmltv_id="StarzEncoreAction.us@East">STARZ ENCORE Action</channel>
+<channel site="tvguide.com" site_id="9100002976#9233008131" lang="en" xmltv_id="StarzEncoreWesterns.us@East">STARZ ENCORE Westerns</channel>
+<channel site="tvguide.com" site_id="9100002976#9233008160" lang="en" xmltv_id="HBOSignature.us@East">HBO Signature</channel>
+<channel site="tvguide.com" site_id="9100002976#9233008357" lang="en" xmltv_id="StarzCinema.us@East">STARZ Cinema</channel>
+<channel site="tvguide.com" site_id="9100002976#9233009866" lang="en" xmltv_id="HBOZone.us@East">HBO Zone</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011247" lang="en" xmltv_id="StarzEdge.us@East">STARZ Edge</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011910" lang="en" xmltv_id="IONTV.us@East">ION</channel>
+<channel site="tvguide.com" site_id="9100002976#9233011931" lang="en" xmltv_id="5StarMax.us@East">5StarMax</channel>
+<channel site="tvguide.com" site_id="9100002976#9233013251" lang="en" xmltv_id="NewsNation.us@SD">NewsNation</channel>
+<channel site="tvguide.com" site_id="9100002976#9233013634" lang="en" xmltv_id="MGMPlusHits.us@East">MGM+ Hits HD</channel>
+<channel site="tvguide.com" site_id="9100002976#9233013809" lang="en" xmltv_id="Starz.us@East">STARZ</channel>
+<channel site="tvguide.com" site_id="9100002976#9233015766" lang="en" xmltv_id="MoreMax.us@East">MoreMax</channel>
+<channel site="tvguide.com" site_id="9100002976#9233015768" lang="en" xmltv_id="AmericanHeroesChannel.us@SD">American Heroes</channel>
 </site>
