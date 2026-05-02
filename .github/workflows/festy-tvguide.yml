@@ -31,6 +31,11 @@ jobs:
           COUNT=$(grep -c "<channel " guides/festy.channels.xml || true)
           echo "Curated channel count: $COUNT"
 
+          if [ "$COUNT" -lt 1 ]; then
+            echo "No channels found in curated list."
+            exit 1
+          fi
+
           if [ "$COUNT" -gt 350 ]; then
             echo "Too many channels. This looks like the raw list, not your curated list."
             exit 1
@@ -45,16 +50,6 @@ jobs:
           const branch = process.env.GITHUB_REF_NAME || "main";
           const channelFile = "guides/festy.channels.xml";
           const logoDir = "logos";
-
-          if (!fs.existsSync(channelFile)) {
-            console.error(`Missing ${channelFile}`);
-            process.exit(1);
-          }
-
-          if (!fs.existsSync(logoDir)) {
-            console.error(`Missing ${logoDir} folder`);
-            process.exit(1);
-          }
 
           function decodeXml(s) {
             return s
@@ -81,13 +76,12 @@ jobs:
             return `https://raw.githubusercontent.com/${repo}/${branch}/logos/${encodeURIComponent(file)}`;
           }
 
-          const logos = fs.readdirSync(logoDir)
-            .filter(f => /\.(png|jpg|jpeg|webp|svg)$/i.test(f));
+          const logos = fs.existsSync(logoDir)
+            ? fs.readdirSync(logoDir).filter(f => /\.(png|jpg|jpeg|webp|svg)$/i.test(f))
+            : [];
 
           const logoMap = new Map();
-          for (const logo of logos) {
-            logoMap.set(normalize(logo), logo);
-          }
+          for (const logo of logos) logoMap.set(normalize(logo), logo);
 
           const aliases = {
             msnbc: "MS NOW HD",
@@ -106,7 +100,6 @@ jobs:
             fxmovie: "FX Movie HD",
             gameshownetwork: "Game Show Network HD",
             foodnetwork: "Food Network HD",
-            cbssportsnetwork: "CBS Sports Network HD",
             espnnews: "ESPN News HD",
             nhlnetwork: "NHL Network HD",
             mlbnetwork: "MLB Network HD",
@@ -117,7 +110,6 @@ jobs:
             fs2: "FOX Sports 2",
             hallmarkchannel: "Hallmark",
             hallmarkmystery: "Hallmark Mystery HD",
-            hallmarkfamily: "Hallmark Family",
             weatherchannel: "The Weather",
             theweatherchannel: "The Weather",
             comedycentral: "Comedy Central",
@@ -159,20 +151,16 @@ jobs:
             attrs = attrs.replace(/\slogo="[^"]*"/g, "");
 
             if (!logoFile) {
-              console.log(`NO LOGO MATCH: ${cleanName}`);
               missed++;
               return `<channel${attrs}>${name}</channel>`;
             }
 
             matched++;
-            console.log(`MATCHED: ${cleanName} -> ${logoFile}`);
             return `<channel${attrs} logo="${logoUrl(logoFile)}">${name}</channel>`;
           });
 
           fs.writeFileSync(channelFile, xml);
 
-          console.log("");
-          console.log(`Updated ${channelFile}`);
           console.log(`Matched logos: ${matched}`);
           console.log(`No logo match: ${missed}`);
           EOF
@@ -186,16 +174,88 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy ONLY curated list into EPG engine
+      - name: Convert curated list for current EPG engine
         run: |
           mkdir -p epg/sites/tvguide.com
-          cp guides/festy.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
+
+          node <<'EOF'
+          const fs = require("fs");
+
+          const input = "guides/festy.channels.xml";
+          const output = "epg/sites/tvguide.com/tvguide.com.channels.xml";
+
+          let xml = fs.readFileSync(input, "utf8");
+
+          const channels = [...xml.matchAll(/<channel([^>]*)>([\s\S]*?)<\/channel>/g)];
+
+          if (!channels.length) {
+            console.error("No channels found in guides/festy.channels.xml");
+            process.exit(1);
+          }
+
+          let out = '<?xml version="1.0" encoding="UTF-8"?>\n';
+          out += '<channels>\n';
+
+          for (const match of channels) {
+            const attrs = match[1];
+            const name = match[2].trim();
+
+            const siteIdMatch = attrs.match(/\ssite_id="([^"]*)"/);
+            const langMatch = attrs.match(/\slang="([^"]*)"/);
+            const xmltvMatch = attrs.match(/\sxmltv_id="([^"]*)"/);
+            const logoMatch = attrs.match(/\slogo="([^"]*)"/);
+
+            const siteId = siteIdMatch ? siteIdMatch[1] : "";
+            const lang = langMatch ? langMatch[1] : "en";
+            let xmltvId = xmltvMatch ? xmltvMatch[1] : "";
+
+            if (!siteId) continue;
+
+            if (!xmltvId) {
+              xmltvId = name
+                .replace(/&amp;/g, "and")
+                .replace(/[^A-Za-z0-9]+/g, "")
+                .replace(/^$/, "Channel") + ".us";
+            }
+
+            let line = `  <channel site="tvguide.com" lang="${lang}" xmltv_id="${xmltvId}" site_id="${siteId}"`;
+
+            if (logoMatch) {
+              line += ` logo="${logoMatch[1]}"`;
+            }
+
+            line += `>${name}</channel>\n`;
+            out += line;
+          }
+
+          out += '</channels>\n';
+
+          fs.writeFileSync(output, out);
+
+          console.log(`Converted ${channels.length} curated channels for EPG engine`);
+          EOF
+
+          echo "Converted file preview:"
+          head -20 epg/sites/tvguide.com/tvguide.com.channels.xml
 
       - name: Build TVGuide XML - curated list only - 2 days
         run: |
           mkdir -p guides
           cd epg
           npm run grab -- --channels=sites/tvguide.com/tvguide.com.channels.xml --output=../guides/tvguide.xml --days=2
+
+      - name: Verify guide was created
+        run: |
+          if [ ! -f "guides/tvguide.xml" ]; then
+            echo "Guide was not created."
+            exit 1
+          fi
+
+          CHANNELS=$(grep -c "<channel " guides/tvguide.xml || true)
+          PROGRAMS=$(grep -c "<programme " guides/tvguide.xml || true)
+
+          echo "Output channels: $CHANNELS"
+          echo "Output programs: $PROGRAMS"
 
       - name: Commit updated guide and curated list
         run: |
