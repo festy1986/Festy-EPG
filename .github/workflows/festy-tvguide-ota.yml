@@ -1,0 +1,64 @@
+name: Festy TVGuide OTA
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-tvguide-ota:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Clone EPG engine
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          cd epg
+          npm install
+
+      - name: Create OTA channel file
+        run: |
+          mkdir -p epg/sites/tvguide.com
+
+          cat > epg/sites/tvguide.com/tvguide.ota.channels.xml << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <channels>
+            <channel site="tvguide.com" lang="en" xmltv_id="OTA.us" site_id="9100000664">OTA</channel>
+          </channels>
+          EOF
+
+      - name: Grab OTA channels
+        run: |
+          cd epg
+          npx epg:channels --site=tvguide.com --channels=sites/tvguide.com/tvguide.ota.channels.xml --output=tvguide-ota.xml
+
+      - name: Move output
+        run: |
+          mkdir -p guides
+          mv epg/tvguide-ota.xml guides/tvguide-ota.xml
+
+      - name: Commit OTA file
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguide-ota.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Add OTA TVGuide lineup (9100000664)"
+            git push
+          fi
