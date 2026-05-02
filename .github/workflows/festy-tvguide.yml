@@ -34,7 +34,23 @@ jobs:
       - name: Copy Festy TVGuide channels and custom config
         run: |
           mkdir -p epg/sites/tvguide.com
-          cp guides/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
+
+          node <<'EOF'
+          const fs = require('fs')
+
+          const input = fs.readFileSync('guides/festy.channels.xml', 'utf8')
+          const channels = [...input.matchAll(/<channel\b[^>]*>[\s\S]*?<\/channel>/g)].map(m => m[0])
+
+          if (!channels.length) {
+            console.error('No channels found in guides/festy.channels.xml')
+            process.exit(1)
+          }
+
+          const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
+          fs.writeFileSync('epg/sites/tvguide.com/festy.channels.xml', output)
+
+          console.log(`Wrote ${channels.length} channels for grabber`)
+          EOF
 
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
           const axios = require('axios')
