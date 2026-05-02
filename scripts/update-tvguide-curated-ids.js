@@ -1,7 +1,7 @@
 const fs = require('fs')
 
-const NEW_RAW_FILE = 'guides/tvguide.xml'
-const OLD_CURATED_FILE = 'guides/festy.channels.xml'
+const RAW_FILE = 'guides/tvguide.xml'
+const CURATED_FILE = 'guides/festy.channels.xml'
 const OUTPUT_FILE = 'guides/festy.channels.xml'
 
 function read(file) {
@@ -12,243 +12,213 @@ function read(file) {
   return fs.readFileSync(file, 'utf8')
 }
 
-function escAttr(value) {
-  return String(value ?? '')
+function getAttr(attrs, name) {
+  const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+  return m ? m[1] : ''
+}
+
+function parse(xml) {
+  const channels = []
+  const re = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
+  let m
+
+  while ((m = re.exec(xml))) {
+    channels.push({
+      full: m[0],
+      attrs: m[1],
+      name: m[2].trim(),
+      site_id: getAttr(m[1], 'site_id'),
+      xmltv_id: getAttr(m[1], 'xmltv_id'),
+      logo: getAttr(m[1], 'logo'),
+      lang: getAttr(m[1], 'lang') || 'en'
+    })
+  }
+
+  return channels
+}
+
+function escapeAttr(v) {
+  return String(v || '')
     .replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
 }
 
-function norm(value) {
-  return String(value || '')
+function suffix(siteId) {
+  return String(siteId || '').split('#').pop()
+}
+
+function norm(s) {
+  return String(s || '')
     .toUpperCase()
     .replace(/&AMP;/g, '&')
+    .replace(/&/g, 'AND')
     .replace(/\bHD\b/g, '')
     .replace(/\bSD\b/g, '')
     .replace(/[^A-Z0-9]+/g, '')
 }
 
-function parseChannels(xml) {
-  const out = []
-  const re = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
-  let m
+const raw = parse(read(RAW_FILE))
+const curated = parse(read(CURATED_FILE))
 
-  while ((m = re.exec(xml))) {
-    const attrs = m[1]
-    const name = m[2].trim()
-
-    const get = attr => {
-      const x = attrs.match(new RegExp(`${attr}="([^"]*)"`, 'i'))
-      return x ? x[1] : ''
-    }
-
-    out.push({
-      full: m[0],
-      attrs,
-      name,
-      site_id: get('site_id'),
-      xmltv_id: get('xmltv_id'),
-      logo: get('logo'),
-      lang: get('lang') || 'en',
-      site: get('site') || 'tvguide.com'
-    })
-  }
-
-  return out
-}
-
-const aliases = {
-  COMET: ['COMET', 'WPFO-DT3'],
-  LAFF: ['LAFF', 'WMTW-DT3'],
-  FOXPORTLAND: ['WPFO', 'WPFO-DT'],
-  NBCPORTLAND: ['WCSH', 'WCSH-DT'],
-  ABCPORTLAND: ['WMTW', 'WMTW-DT'],
-  CBSPORTLAND: ['WGME', 'WGME-DT'],
-  NEWENGLANDCABLENEWS: ['NECN'],
-  METV: ['WMTW-DT2'],
-  INSP: ['INSP', 'INSPHD'],
-  FETV: ['FETV'],
-  GRIT: ['GRIT'],
-  GAMESHOWNETWORK: ['GSNHD', 'GSN'],
-  HEROESICONS: ['H&I', 'H&amp;I'],
-  TCM: ['TCMHD', 'TCM'],
-  OWN: ['OWNHD', 'OWN'],
-  BET: ['BETHD', 'BET'],
-  DISCOVERYCHANNEL: ['TDC-HD', 'TDC-E'],
-  FREEFORM: ['FREEFRMHD', 'FREEFRM'],
-  USANETWORK: ['USAHD', 'USA-E'],
-  NESN: ['NESNHD', 'NESN'],
-  NBCSPORTSBOSTON: ['NBCBOSHD', 'NBCBOS'],
-  NESNPLUS: ['NESNPLUSHD'],
-  ESPN: ['ESPNHD', 'ESPN'],
-  ESPN2HD: ['ESPN2D', 'ESPN2'],
-  WE: ['WE-HD', 'WE'],
-  OXYGEN: ['OXYGENHD', 'OXGN-E'],
-  DISNEYCHANNEL: ['DISNEYHD', 'DIS-E'],
-  CARTOONNETWORK: ['TOONHD', 'TOON-E'],
-  NICKELODEON: ['NICKHD', 'NIC-E'],
-  MSNBC: ['MSNOW', 'MSNBCHD'],
-  MSNOWNOW: ['MSNOW', 'MSNBCHD'],
-  CNN: ['CNNHD', 'CNN'],
-  HLN: ['HLNHD', 'HLN'],
-  CNBC: ['CNBCHD', 'CNBC'],
-  FOXNEWS: ['FNCHD', 'FOXNEW'],
-  TNT: ['TNTHD', 'TNT'],
-  LIFETIME: ['LIFEHD', 'LIF-E'],
-  LMN: ['LMNHD', 'LMN'],
-  TLC: ['TLCHD', 'TLC'],
-  AMC: ['AMCHD', 'AMCALL'],
-  HGTV: ['HGTVHD', 'HGTV'],
-  TRAVELCHANNEL: ['TRAVELHD', 'TRAVEL'],
-  AE: ['A&E-HD', 'A&amp;E-HD', 'A&E', 'A&amp;E'],
-  FOODNETWORK: ['FOODHD', 'FOODTV'],
-  BRAVO: ['BRAVOHD', 'BRAVO'],
-  TRUTV: ['TRUTVHD', 'TRUTV'],
-  NATIONALGEOGRAPHIC: ['NGCHD', 'NGC-E'],
-  HALLMARKCHANNEL: ['HALLMARKHD', 'HALMRK'],
-  SYFY: ['SyFyHD', 'SyFy'],
-  ANIMALPLANET: ['ANIMALHD', 'ANIMAL'],
-  HISTORYCHANNEL: ['THCHD', 'THC'],
-  THEWEATHERCHANNEL: ['WEATHHD', 'WEATH'],
-  PARAMOUNTNETWORK: ['PARMT', 'SPIKEHD'],
-  COMEDYCENTRAL: ['COMEDYHD', 'CMDY-E'],
-  FX: ['FXHD', 'FX-E'],
-  FXX: ['FXXHD'],
-  EENTERTAINMENT: ['ETV-HD', 'ETV-E'],
-  FXM: ['FXMHD', 'FXM'],
-  AXS: ['AXSTV'],
-  TVLAND: ['TVLANDHD', 'TVLAND'],
-  TBS: ['TBSHD', 'TBS'],
-  VH1: ['VH1HD', 'VH-1E'],
-  MTV: ['MTVHD', 'MTV-E'],
-  CMT: ['CMTHD', 'CMTV'],
-  DESTINATIONAMERICA: ['DESTAMERHD', 'DESTAMER'],
-  MAGNOLIA: ['MAGNHD', 'MAGN'],
-  DISCOVERYLIFE: ['DLIF'],
-  NATGEOWILD: ['NGEOWILDHD', 'NGEOWILD'],
-  SMITHSONIANCHANNEL: ['SMITHSONHD'],
-  BBCAMERICA: ['BBCAMHD', 'BBCAME'],
-  HALLMARKMYSTERY: ['HMMHD', 'HALLMYS'],
-  HALLMARKDRAMA: ['HALLDRMHD'],
-  POP: ['POPHD', 'POP'],
-  CRIMEANDINVESTIGATION: ['CRIMEINVHD'],
-  VICE: ['VICEHD'],
-  INVESTIGATIONDISCOVERY: ['INVSTDSCHD', 'ID'],
-  REELZ: ['REELZHD'],
-  DISCOVERYFAMILY: ['DFCHHD'],
-  DISCOVERYSCIENCE: ['SCIENCEHD', 'SCIENCE'],
-  AMERICANHEROESCHANNEL: ['AHCHD', 'AHC'],
-  FUSE: ['FUSEHD'],
-  MTV2: ['MTV2HD'],
-  IFC: ['IFCHD'],
-  FYI: ['FYIHD'],
-  COOKINGCHANNEL: ['COOKINGHD'],
-  LOGO: ['LOGO'],
-  FOXSPORTS2: ['FS2'],
-  FOXSPORTS1: ['FS1HD', 'FS1'],
-  NFLNETWORK: ['NFLHD', 'NFLNET'],
-  NHLNETWORK: ['NHLTVHD'],
-  MLBNETWORK: ['MLBHD'],
-  NBATV: ['NBAHD'],
-  CBSSPORTSNETWORK: ['CBSSPTHD'],
-  ESPNNEWS: ['ESPNNEWHD'],
-  OVATION: ['OVATHD'],
-  UPTV: ['UPTVHD'],
-  OUTDOORCHANNEL: ['OUTHDE'],
-  ASPIRE: ['ASPIRE'],
-  GREATAMERICANFAMILY: ['GACFAM']
-}
-
-const rawXml = read(NEW_RAW_FILE)
-const curatedXml = read(OLD_CURATED_FILE)
-
-const raw = parseChannels(rawXml)
-const curated = parseChannels(curatedXml)
-
-const rawByNorm = new Map()
+const rawBySuffix = new Map()
+const rawByName = new Map()
 
 for (const ch of raw) {
+  rawBySuffix.set(suffix(ch.site_id), ch)
+
   const keys = [
     norm(ch.name),
     norm(ch.xmltv_id.replace(/\.us$/i, ''))
   ]
 
   for (const key of keys) {
-    if (!key) continue
-    if (!rawByNorm.has(key)) rawByNorm.set(key, ch)
+    if (key && !rawByName.has(key)) rawByName.set(key, ch)
   }
 }
 
-function findNewChannel(old) {
-  const oldNameNorm = norm(old.name)
+const aliases = {
+  ROAR: ['WPFO'],
+  NBC: ['WCSH'],
+  ABC: ['WMTW'],
+  CBS: ['WGME'],
+  PBS: ['WCBB-DT', 'WCBB'],
+  CW: ['WPXT'],
+  FOX: ['WGME-DT2', 'WPFO'],
+  METV: ['WMTW-DT2'],
 
-  const possible = [
-    oldNameNorm,
-    oldNameNorm.replace(/NETWORK/g, ''),
-    oldNameNorm.replace(/CHANNEL/g, ''),
-    oldNameNorm.replace(/HD/g, '')
-  ]
+  'ION MYSTERY': ['WPXT-DT3'],
+  'THE NEST': ['WGME-DT3'],
+  'TRUE CRIME NETWORK': ['WCSH-DT2'],
+  QUEST: ['WCSH-DT3'],
+  'PBS KIDS': ['WCBB-DT4'],
+  CHARGE: ['WPFO-DT2'],
 
-  if (aliases[oldNameNorm]) {
-    possible.unshift(...aliases[oldNameNorm].map(norm))
-  }
+  'CRIME AND INVESTIGATION NETWORK': ['CRIMEINVHD'],
+  'UP ENTERTAINMENT': ['UPTVHD'],
+  'HALLMARK FAMILY': ['HALLDRMHD'],
+  COURTTV: ['COURTTV'],
+  GRIT: ['GRIT'],
+  IONPLUS: ['IONPLUS'],
+  ANTENNATV: ['ANTENNA'],
+  COZITV: ['COZI'],
 
-  for (const key of possible) {
-    if (rawByNorm.has(key)) return rawByNorm.get(key)
-  }
+  HBO: ['HBOHD'],
+  HBO2: ['HBO2HD'],
+  HBOSIGNATURE: ['HBOSIGHD'],
+  HBOCOMEDY: ['HBOCOMHD'],
+  HBOZONE: ['HBOZONHD'],
+  HBOLATINO: ['HBOLATHD'],
+  HBOFAMILY: ['HBOFAM'],
+  HBOHITS: ['HBOHITS'],
+  HBOMOVIES: ['HBOMOVIES'],
+  HBODRAMA: ['HBOSIGHD'],
 
-  for (const [aliasKey, values] of Object.entries(aliases)) {
-    if (oldNameNorm.includes(aliasKey) || aliasKey.includes(oldNameNorm)) {
-      for (const value of values) {
-        const key = norm(value)
-        if (rawByNorm.has(key)) return rawByNorm.get(key)
+  CINEMAX: ['MAXHD'],
+  MOREMAX: ['MOREMAXHD'],
+  ACTIONMAX: ['ACTMAXHD'],
+  THRILLERMAX: ['THRMAX'],
+  OUTERMAX: ['OUTERMAX'],
+  MOVIEMAX: ['MOVIEMAX'],
+  '5STARMAX': ['5STARMAXHD'],
+
+  PARAMOUNTSHOWTIME: ['SHOHD'],
+  PARAMOUNTWITHSHOWTIME: ['SHOHD'],
+  SHOWTIME: ['SHOHD'],
+  SHOWTIME2: ['SHO2XEHD'],
+  SHOWTIMENEXT: ['SHOWNEXT'],
+  SHOWTIMEWOMEN: ['SHOWWOM'],
+  SHOWTIMEFAMILYZONE: ['SHOWFAM'],
+  SHOWTIMEEXTREME: ['SHOWEXHD'],
+  SHOWTIMESHOWCASE: ['SHWCASEHD'],
+
+  STARZ: ['STARZHD'],
+  STARZEDGE: ['STARZEDHD'],
+  STARZCINEMA: ['STARZCINHD'],
+  STARZCOMEDY: ['STARZCOMHD'],
+  STARZENCORE: ['ENCOREHD'],
+  STARZENCOREACTION: ['ENCRACTHD'],
+  STARZENCOREBLACK: ['ENCRBLHD'],
+  STARZENCORECLASSIC: ['ENCRCLHD'],
+  STARZENCOREFAMILY: ['ENCORFM'],
+  STARZENCORESUSPENSE: ['ENCORSHD'],
+  STARZKIDSANDFAMILY: ['STARZFAMHD'],
+  STARZINBLACK: ['STARZBLKHD'],
+
+  MGM: ['MGM+'],
+  MGMPLUS: ['MGM+'],
+  MGMHITS: ['MGM+HIT'],
+  MGMPLUSHits: ['MGM+HIT'],
+  MGMMARQUEE: ['MGM+MAR'],
+  MGMPLUSMARQUEE: ['MGM+MAR'],
+  MGMDRIVEIN: ['MGM+DRV'],
+  MGMPLUSDRIVEIN: ['MGM+DRV'],
+
+  MOVIEPLEX: ['PLEXHD'],
+  ENCOREMOVIEPLEX: ['PLEXHD'],
+  INDIEPLEX: ['INDIPX'],
+  RETROPLEX: ['RETRPLEXHD'],
+  FLIX: ['FLIX-E']
+}
+
+let updatedBySuffix = 0
+let updatedByName = 0
+let unchanged = []
+let out = `<?xml version="1.0" encoding="UTF-8"?>\n<site site="tvguide.com">\n`
+
+for (const old of curated) {
+  let found = null
+
+  const oldSuffix = suffix(old.site_id)
+
+  if (rawBySuffix.has(oldSuffix)) {
+    found = rawBySuffix.get(oldSuffix)
+    updatedBySuffix++
+  } else {
+    const cleanOldName = norm(old.name)
+    const keys = [cleanOldName]
+
+    for (const [alias, rawNames] of Object.entries(aliases)) {
+      if (cleanOldName.includes(norm(alias))) {
+        keys.push(...rawNames.map(norm))
+      }
+    }
+
+    for (const key of keys) {
+      if (rawByName.has(key)) {
+        found = rawByName.get(key)
+        updatedByName++
+        break
       }
     }
   }
 
-  return null
-}
+  const newSiteId = found ? found.site_id : old.site_id
 
-let updated = 0
-let unchanged = 0
-let missing = []
-
-let output = `<?xml version="1.0" encoding="UTF-8"?>\n<site site="tvguide.com">\n`
-
-for (const old of curated) {
-  const found = findNewChannel(old)
-
-  let siteId = old.site_id
-
-  if (found) {
-    siteId = found.site_id
-    updated++
-  } else {
-    unchanged++
-    missing.push(old.name)
-  }
+  if (!found) unchanged.push(old.name)
 
   const attrs = [
     `site="tvguide.com"`,
-    `site_id="${escAttr(siteId)}"`,
-    `lang="${escAttr(old.lang)}"`,
-    `xmltv_id="${escAttr(old.xmltv_id)}"`
+    `site_id="${escapeAttr(newSiteId)}"`,
+    `lang="${escapeAttr(old.lang)}"`,
+    `xmltv_id="${escapeAttr(old.xmltv_id)}"`
   ]
 
-  if (old.logo) attrs.push(`logo="${escAttr(old.logo)}"`)
+  if (old.logo) attrs.push(`logo="${escapeAttr(old.logo)}"`)
 
-  output += `<channel ${attrs.join(' ')}>${old.name}</channel>\n`
+  out += `<channel ${attrs.join(' ')}>${old.name}</channel>\n`
 }
 
-output += `</site>\n`
+out += `</site>\n`
 
-fs.writeFileSync(OUTPUT_FILE, output)
+fs.writeFileSync(OUTPUT_FILE, out)
 
-console.log(`Updated IDs: ${updated}`)
-console.log(`Left unchanged: ${unchanged}`)
+console.log(`Updated by old station ID suffix: ${updatedBySuffix}`)
+console.log(`Updated by name fallback: ${updatedByName}`)
+console.log(`Left unchanged: ${unchanged.length}`)
 
-if (missing.length) {
-  console.log('\nCould not confidently match:')
-  for (const name of missing) console.log(`- ${name}`)
+if (unchanged.length) {
+  console.log('\nStill not matched:')
+  for (const name of unchanged) console.log(`- ${name}`)
 }
