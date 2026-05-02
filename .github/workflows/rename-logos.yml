@@ -1,4 +1,4 @@
-name: Rename Logos
+name: Fix Logo Names
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Rename logo files
+      - name: Fix ALL logo names
         run: |
           node <<'EOF'
           const fs = require('fs')
@@ -22,24 +22,14 @@ jobs:
 
           const dir = './logos'
 
-          if (!fs.existsSync(dir)) {
-            console.error('Missing logos folder')
-            process.exit(1)
-          }
-
-          const map = {
+          const exactMap = {
             "grit": "Grit.png",
-            "ionplus": "ION Plus.png",
             "ion plus": "ION Plus.png",
             "court tv": "Court TV.png",
-            "courttv": "Court TV.png",
-            "antenna": "Antenna TV.png",
             "antenna tv": "Antenna TV.png",
-            "cozi": "Cozi TV.png",
             "cozi tv": "Cozi TV.png",
-            "hallmark drama": "Hallmark Family.png",
             "hallmark family": "Hallmark Family.png",
-            "msnbc": "MS NOW HD.png"
+            "ms now hd": "MS NOW HD.png"
           }
 
           function normalize(name) {
@@ -47,37 +37,24 @@ jobs:
           }
 
           for (const file of fs.readdirSync(dir)) {
-            const ext = path.extname(file).toLowerCase()
-            if (!['.png', '.jpg', '.jpeg', '.webp'].includes(ext)) continue
-
+            const ext = path.extname(file)
             const base = path.basename(file, ext)
             const norm = normalize(base)
 
-            for (const key in map) {
-              if (norm.includes(key)) {
-                const newName = map[key]
-                const oldPath = path.join(dir, file)
-                const newPath = path.join(dir, newName)
+            if (exactMap[norm]) {
+              const newName = exactMap[norm]
+              const oldPath = path.join(dir, file)
+              const newPath = path.join(dir, newName)
 
-                if (oldPath === newPath) {
-                  console.log(`Already correct: ${file}`)
-                  break
-                }
-
-                if (fs.existsSync(newPath)) {
-                  console.log(`Target exists, skipping: ${file} -> ${newName}`)
-                  break
-                }
-
+              if (oldPath !== newPath) {
                 fs.renameSync(oldPath, newPath)
-                console.log(`Renamed: ${file} -> ${newName}`)
-                break
+                console.log(`Fixed case: ${file} -> ${newName}`)
               }
             }
           }
           EOF
 
-      - name: Commit renamed logos
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -85,8 +62,8 @@ jobs:
           git add logos/
 
           if git diff --cached --quiet; then
-            echo "No logo changes to commit."
+            echo "No changes"
           else
-            git commit -m "Rename logos to match channels"
+            git commit -m "Fix logo casing to match channels"
             git push
           fi
