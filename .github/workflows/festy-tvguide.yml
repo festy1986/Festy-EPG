@@ -31,102 +31,122 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy Festy TVGuide curated channels
+      - name: Copy Festy TVGuide channels and custom config
         run: |
           mkdir -p epg/sites/tvguide.com
           cp guides/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
 
-      - name: Grab TVGuide guide - 2 days
-        run: |
-          cd epg
-          npx tsx scripts/commands/epg/grab.ts --channels=sites/tvguide.com/festy.channels.xml --output=guide.xml --days=2
+          cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
+          const axios = require('axios')
+          const dayjs = require('dayjs')
+          const utc = require('dayjs/plugin/utc')
+          const timezone = require('dayjs/plugin/timezone')
 
-      - name: Find and move guide to repo root
-        run: |
-          echo "Looking for generated XML files..."
-          find epg -type f -name "*.xml" | sort
+          dayjs.extend(utc)
+          dayjs.extend(timezone)
 
-          if [ -f epg/guide.xml ]; then
-            mv epg/guide.xml ./guide.xml
-          elif [ -f epg/output/guide.xml ]; then
-            mv epg/output/guide.xml ./guide.xml
-          elif [ -f epg/guides/tvguide.com.xml ]; then
-            mv epg/guides/tvguide.com.xml ./guide.xml
-          else
-            echo "Could not find generated guide.xml"
-            echo "Listing recent files:"
-            find epg -type f -printf "%T@ %p\n" | sort -nr | head -50
-            exit 1
-          fi
+          module.exports = {
+            site: 'tvguide.com',
+            delay: 3000,
+            days: 2,
 
-          echo "Moved guide to ./guide.xml"
-          ls -lh guide.xml
+            url({ date, channel }) {
+              const [providerId, sourceId] = String(channel.site_id).split('#')
+              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=10240&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+            },
 
-      - name: Apply Festy metadata formatting
-        run: |
-          node <<'EOF'
-          const fs = require('fs')
+            request: {
+              method: 'GET',
+              timeout: 10000,
+              cache: { ttl: 60 * 60 * 1000 },
+              headers() {
+                return {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              }
+            },
 
-          const guideFile = 'guide.xml'
-          const curatedFile = 'guides/festy.channels.xml'
+            async parser({ content }) {
+              const programs = []
+              const items = parseItems(content)
 
-          if (!fs.existsSync(guideFile)) {
-            console.error('Missing guide.xml')
-            process.exit(1)
+              for (const item of items) {
+                const details = await loadProgramDetails(item)
+
+                const title = cleanTitle(item.title || details.title || '')
+                const episodeTitle = cleanSpaces(details.episodeTitle || '')
+                const description = fixBrokenDescription(details.description || item.description || '')
+                const seasonNumber = details.seasonNumber || ''
+                const episodeNumber = details.episodeNumber || ''
+                const releaseYear = details.releaseYear || ''
+                const episodeAirDate = details.episodeAirDate || ''
+                const type = String(details.type || item.type || '').toLowerCase()
+
+                const episodeCode =
+                  seasonNumber && episodeNumber
+                    ? `S${String(seasonNumber).padStart(2, '0')}E${String(episodeNumber).padStart(2, '0')}`
+                    : ''
+
+                const airDate = formatTVGuideDate(episodeAirDate) || formatUnixDate(item.startTime)
+
+                let finalDescription = ''
+
+                if (type === 'movie') {
+                  finalDescription = description
+                  if (releaseYear) finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
+                } else {
+                  let prefix = ''
+
+                  if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
+                  else if (episodeTitle) prefix = episodeTitle
+                  else if (episodeCode) prefix = episodeCode
+
+                  if (prefix && description) finalDescription = `${prefix}. ${description}`
+                  else if (prefix) finalDescription = `${prefix}.`
+                  else finalDescription = description
+
+                  if (airDate) finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
+                }
+
+                programs.push({
+                  title,
+                  description: cleanSpaces(finalDescription),
+                  start: dayjs.unix(item.startTime),
+                  stop: dayjs.unix(item.endTime)
+                })
+              }
+
+              return programs
+            }
           }
 
-          if (!fs.existsSync(curatedFile)) {
-            console.error('Missing guides/festy.channels.xml')
-            process.exit(1)
+          async function loadProgramDetails(item) {
+            if (!item.programDetails) return {}
+
+            const url = item.programDetails.includes('?')
+              ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+              : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+
+            return axios
+              .get(url, {
+                timeout: 10000,
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              })
+              .then(r => r.data?.data?.item || {})
+              .catch(() => ({}))
           }
 
-          let guide = fs.readFileSync(guideFile, 'utf8')
-          const curated = fs.readFileSync(curatedFile, 'utf8')
-
-          function getAttr(attrs, name) {
-            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? m[1] : ''
+          function parseItems(content) {
+            const data = JSON.parse(content)
+            return data?.data?.items?.[0]?.programSchedules || []
           }
 
-          function decodeXml(s) {
-            return String(s || '')
-              .replace(/&amp;/g, '&')
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
-              .replace(/&quot;/g, '"')
-              .replace(/&apos;/g, "'")
-          }
-
-          function escText(s) {
-            return String(s || '')
-              .replace(/&/g, '&amp;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
-
-          function escAttr(s) {
-            return String(s || '')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
-
-          function textOf(block, tag) {
-            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
-            return m ? decodeXml(m[1]).trim() : ''
-          }
-
-          function allTextOf(block, tag) {
-            const out = []
-            const re = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi')
-            let m
-            while ((m = re.exec(block))) out.push(decodeXml(m[1]).trim())
-            return out.filter(Boolean)
-          }
-
-          function cleanTitle(s) {
-            return String(s || '')
+          function cleanTitle(value) {
+            return String(value || '')
               .replace(/\s+/g, ' ')
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
@@ -134,16 +154,16 @@ jobs:
               .trim()
           }
 
-          function cleanSpaces(s) {
-            return String(s || '')
+          function cleanSpaces(value) {
+            return String(value || '')
               .replace(/\s+/g, ' ')
               .replace(/\s+([.,!?;:])/g, '$1')
               .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
               .trim()
           }
 
-          function fixBrokenDescription(s) {
-            let d = cleanSpaces(s)
+          function fixBrokenDescription(value) {
+            let d = cleanSpaces(value)
             if (!d) return ''
 
             d = d.replace(/\.\.\.$/, '').trim()
@@ -151,6 +171,7 @@ jobs:
 
             const words = d.split(/\s+/)
             const last = words[words.length - 1] || ''
+            const stripped = last.toLowerCase().replace(/[^a-z]/g, '')
 
             const badEndings = [
               'stor', 'storie', 'experienc', 'becaus', 'includ', 'discover',
@@ -158,154 +179,47 @@ jobs:
               'meanwhil', 'continu', 'return', 'learn', 'realiz'
             ]
 
-            const stripped = last.toLowerCase().replace(/[^a-z]/g, '')
-
             if (badEndings.includes(stripped) && words.length > 1) {
               words.pop()
               d = words.join(' ').trim()
             }
 
-            const lastFullSentence = d.match(/^([\s\S]*[.!?])\s+[^.!?]*$/)
-            if (lastFullSentence && lastFullSentence[1].length >= 25) {
-              d = lastFullSentence[1].trim()
-            }
-
             if (!/[.!?]$/.test(d)) d += '.'
-
             return d
           }
 
-          function formatDateFromStart(start) {
-            const m = String(start || '').match(/^(\d{4})(\d{2})(\d{2})/)
-            if (!m) return ''
-            return `${m[2]}/${m[3]}/${m[1]}`
+          function formatTVGuideDate(value) {
+            const match = String(value || '').match(/\/Date\((\d+)\)\//)
+            if (!match) return ''
+            const date = new Date(Number(match[1]))
+            return date.toLocaleDateString('en-US', {
+              month: '2-digit',
+              day: '2-digit',
+              year: 'numeric'
+            })
           }
 
-          function formatYear(dateText) {
-            const m = String(dateText || '').match(/(\d{4})/)
-            return m ? m[1] : ''
+          function formatUnixDate(value) {
+            if (!value) return ''
+            return dayjs.unix(value).format('MM/DD/YYYY')
           }
-
-          function formatEpisodeNum(block) {
-            const nums = allTextOf(block, 'episode-num')
-
-            for (const n of nums) {
-              let m = n.match(/S\s*(\d{1,2})\s*E\s*(\d{1,2})/i)
-              if (m) return `S${m[1].padStart(2, '0')}E${m[2].padStart(2, '0')}`
-
-              m = n.match(/(\d{1,2})\s*[x.]\s*(\d{1,2})/i)
-              if (m) return `S${m[1].padStart(2, '0')}E${m[2].padStart(2, '0')}`
-            }
-
-            return ''
-          }
-
-          function isMovie(block) {
-            const cats = allTextOf(block, 'category').map(c => c.toLowerCase())
-            return cats.some(c => c.includes('movie') || c.includes('film'))
-          }
-
-          const curatedChannels = []
-          const curatedBySiteId = new Map()
-          const curatedRe = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
-          let cm
-
-          while ((cm = curatedRe.exec(curated))) {
-            const attrs = cm[1]
-            const name = decodeXml(cm[2]).trim()
-            const siteId = getAttr(attrs, 'site_id')
-            const xmltvId = getAttr(attrs, 'xmltv_id')
-            const logo = getAttr(attrs, 'logo')
-            const id = xmltvId || name
-
-            if (!id) continue
-
-            const ch = { id, name, logo, siteId }
-            curatedChannels.push(ch)
-
-            if (siteId) {
-              curatedBySiteId.set(siteId, ch)
-              curatedBySiteId.set(siteId.split('#').pop(), ch)
-            }
-          }
-
-          const channelHeader = curatedChannels.map(ch => {
-            let out = `  <channel id="${escAttr(ch.id)}">\n`
-            out += `    <display-name>${escText(ch.name)}</display-name>\n`
-            if (ch.logo) out += `    <icon src="${escAttr(ch.logo)}"/>\n`
-            out += `  </channel>`
-            return out
-          }).join('\n')
-
-          guide = guide.replace(/<channel[\s\S]*?<\/channel>\n?/g, '')
-          guide = guide.replace(/<tv([^>]*)>/, `<tv$1>\n${channelHeader}\n`)
-
-          guide = guide.replace(/<programme\b([^>]*)>([\s\S]*?)<\/programme>/g, (whole, attrs, body) => {
-            const oldChannel = getAttr(attrs, 'channel')
-            const mapped = curatedBySiteId.get(oldChannel) || curatedBySiteId.get(oldChannel.split('#').pop())
-            const newChannel = mapped ? mapped.id : oldChannel
-
-            attrs = attrs.replace(/channel="[^"]*"/i, `channel="${escAttr(newChannel)}"`)
-
-            const title = cleanTitle(textOf(body, 'title'))
-            const subTitle = cleanSpaces(textOf(body, 'sub-title'))
-            const descRaw = textOf(body, 'desc')
-            const desc = fixBrokenDescription(descRaw)
-            const dateText = textOf(body, 'date')
-            const airDate = formatDateFromStart(getAttr(attrs, 'start'))
-            const year = formatYear(dateText)
-            const ep = formatEpisodeNum(body)
-            const movie = isMovie(body)
-
-            let finalDesc = ''
-
-            if (movie) {
-              const y = year || formatYear(getAttr(attrs, 'start'))
-              finalDesc = desc
-              if (y) finalDesc = finalDesc ? `${finalDesc} (${y})` : `(${y})`
-            } else {
-              let prefix = ''
-
-              if (subTitle && ep) prefix = `${subTitle} - ${ep}`
-              else if (subTitle) prefix = subTitle
-              else if (ep) prefix = ep
-
-              if (prefix && desc) finalDesc = `${prefix}. ${desc}`
-              else if (prefix) finalDesc = `${prefix}.`
-              else finalDesc = desc
-
-              if (airDate) finalDesc = finalDesc ? `${finalDesc} (${airDate})` : `(${airDate})`
-            }
-
-            finalDesc = cleanSpaces(finalDesc)
-
-            let newBody = body
-
-            if (/<title\b/i.test(newBody)) {
-              newBody = newBody.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i, `<title lang="en">${escText(title)}</title>`)
-            } else {
-              newBody = `\n    <title lang="en">${escText(title)}</title>${newBody}`
-            }
-
-            if (/<desc\b/i.test(newBody)) {
-              newBody = newBody.replace(/<desc\b[^>]*>[\s\S]*?<\/desc>/i, `<desc lang="en">${escText(finalDesc)}</desc>`)
-            } else {
-              newBody = `\n    <desc lang="en">${escText(finalDesc)}</desc>${newBody}`
-            }
-
-            newBody = newBody
-              .replace(/\s*<new\s*\/>\s*/gi, '\n')
-              .replace(/\s*<previously-shown\b[^>]*\/>\s*/gi, '\n')
-              .replace(/\s*<previously-shown\b[^>]*>[\s\S]*?<\/previously-shown>\s*/gi, '\n')
-
-            return `<programme${attrs}>${newBody}</programme>`
-          })
-
-          fs.writeFileSync(guideFile, guide)
-
-          console.log(`Applied Festy metadata formatting`)
-          console.log(`Curated channels written: ${curatedChannels.length}`)
           EOF
+
+      - name: Grab TVGuide guide - 2 days
+        run: |
+          cd epg
+          npx tsx scripts/commands/epg/grab.ts \
+            --channels=sites/tvguide.com/festy.channels.xml \
+            --output=../guide.xml \
+            --days=2
+
+          cd ..
+          if [ ! -s guide.xml ]; then
+            echo "guide.xml was not created or is empty"
+            exit 1
+          fi
+
+          ls -lh guide.xml
 
       - name: Commit guide
         run: |
