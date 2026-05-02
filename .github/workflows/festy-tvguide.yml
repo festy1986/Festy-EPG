@@ -1,0 +1,193 @@
+name: Festy TVGuide
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build-tvguide:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v4
+
+      - name: Clone IPTV-org EPG engine
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install EPG dependencies
+        run: |
+          cd epg
+          npm install
+
+      - name: Copy Festy TVGuide files into engine
+        run: |
+          mkdir -p epg/sites/tvguide-test.com
+          cp sites/tvguide-test.com/tvguide-test.com.config.js epg/sites/tvguide-test.com/tvguide-test.com.config.js
+          cp sites/tvguide-test.com/tvguide-test.com.channels.xml epg/sites/tvguide-test.com/tvguide-test.com.channels.xml
+
+      - name: Apply final safe channel fixes
+        run: |
+          cat > /tmp/fix-tvguide-final-missing.js <<'EOF'
+          const fs = require('fs')
+
+          const file = 'epg/sites/tvguide-test.com/tvguide-test.com.channels.xml'
+
+          if (!fs.existsSync(file)) {
+            console.error(`Missing file: ${file}`)
+            process.exit(1)
+          }
+
+          let xml = fs.readFileSync(file, 'utf8')
+
+          const forcedAdds = [
+            {
+              match: ['HALLMARK DRAMA', 'HALLMARK FAMILY'],
+              site_id: '9233010939',
+              xmltv_id: 'HallmarkFamily.us',
+              name: 'Hallmark Family'
+            }
+          ]
+
+          const rescueAliases = [
+            {
+              match: ['GRIT'],
+              aliases: ['GRIT', 'Grit', 'Grit TV'],
+              xmltv_id: 'Grit.us',
+              name: 'Grit'
+            },
+            {
+              match: ['ION PLUS', 'IONPLUS'],
+              aliases: ['ION PLUS', 'IONPlus', 'Ion Plus'],
+              xmltv_id: 'IONPlus.us',
+              name: 'ION Plus'
+            },
+            {
+              match: ['COURT TV', 'COURTTV'],
+              aliases: ['COURT TV', 'CourtTV', 'Court TV'],
+              xmltv_id: 'CourtTV.us',
+              name: 'Court TV'
+            },
+            {
+              match: ['ANTENNA TV', 'ANTENNA'],
+              aliases: ['ANTENNA TV', 'Antenna', 'Antenna TV'],
+              xmltv_id: 'AntennaTV.us',
+              name: 'Antenna TV'
+            },
+            {
+              match: ['COZI TV', 'COZI'],
+              aliases: ['COZI TV', 'Cozi', 'Cozi TV'],
+              xmltv_id: 'CoziTV.us',
+              name: 'Cozi TV'
+            }
+          ]
+
+          function norm(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .toUpperCase()
+          }
+
+          function parseChannels(text) {
+            const re = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
+            const out = []
+            let m
+
+            while ((m = re.exec(text))) {
+              const attrs = m[1]
+              out.push({
+                full: m[0],
+                site_id: (attrs.match(/site_id="([^"]*)"/) || [])[1] || '',
+                xmltv_id: (attrs.match(/xmltv_id="([^"]*)"/) || [])[1] || '',
+                lang: (attrs.match(/lang="([^"]*)"/) || [])[1] || 'en',
+                name: m[2].trim()
+              })
+            }
+
+            return out
+          }
+
+          function channelLine(site_id, xmltv_id, name, lang = 'en') {
+            return `  <channel site="tvguide.com" site_id="${site_id}" lang="${lang}" xmltv_id="${xmltv_id}">${name}</channel>`
+          }
+
+          function upsertChannel(matchNames, site_id, xmltv_id, name, lang = 'en') {
+            let channels = parseChannels(xml)
+            const target = channels.find(ch =>
+              matchNames.map(norm).includes(norm(ch.name)) ||
+              matchNames.map(norm).includes(norm(ch.xmltv_id))
+            )
+
+            const line = channelLine(site_id, xmltv_id, name, lang)
+
+            if (target) {
+              xml = xml.replace(target.full, line)
+              console.log(`FIXED: ${target.name} -> ${name} | ${site_id}`)
+            } else {
+              xml = xml.replace('</channels>', `${line}\n</channels>`)
+              console.log(`ADDED: ${name} | ${site_id}`)
+            }
+          }
+
+          for (const fix of forcedAdds) {
+            upsertChannel(fix.match, fix.site_id, fix.xmltv_id, fix.name)
+          }
+
+          for (const fix of rescueAliases) {
+            const channels = parseChannels(xml)
+            const source = channels.find(ch =>
+              ch.site_id &&
+              fix.aliases.some(alias =>
+                norm(ch.name) === norm(alias) ||
+                norm(ch.xmltv_id) === norm(alias) ||
+                norm(ch.name).includes(norm(alias))
+              )
+            )
+
+            if (!source) {
+              console.log(`MISS: ${fix.name} not found in current TVGuide lineup`)
+              continue
+            }
+
+            upsertChannel(fix.match, source.site_id, fix.xmltv_id, fix.name, source.lang)
+          }
+
+          fs.writeFileSync(file, xml)
+          EOF
+
+          node /tmp/fix-tvguide-final-missing.js
+
+      - name: Build TVGuide
+        run: |
+          cd epg
+          npm run grab -- \
+            --site=tvguide-test.com \
+            --channels=sites/tvguide-test.com/tvguide-test.com.channels.xml \
+            --output=../guides/tvguide.xml \
+            --days=3
+
+      - name: Commit guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguide.xml
+
+          if git diff --cached --quiet; then
+            echo "No TVGuide changes to commit."
+          else
+            git commit -m "Update Festy TVGuide"
+            git push
+          fi
