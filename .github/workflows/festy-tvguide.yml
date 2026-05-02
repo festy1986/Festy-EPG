@@ -31,25 +31,67 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy Festy TVGuide channels and custom config
+      - name: Copy TiViMate channels and custom config
         run: |
           mkdir -p epg/sites/tvguide.com
 
           node <<'EOF'
           const fs = require('fs')
 
-          const input = fs.readFileSync('guides/festy.channels.xml', 'utf8')
-          const channels = [...input.matchAll(/<channel\b[^>]*>[\s\S]*?<\/channel>/g)].map(m => m[0])
+          const inputPath = 'guides/tvguidetivimate.xml'
 
-          if (!channels.length) {
-            console.error('No channels found in guides/festy.channels.xml')
+          if (!fs.existsSync(inputPath)) {
+            console.error(`Missing ${inputPath}`)
             process.exit(1)
           }
 
+          const input = fs.readFileSync(inputPath, 'utf8')
+
+          const matches = [...input.matchAll(/<channel\b[^>]*\bid="([^"]+)"[^>]*>[\s\S]*?<display-name[^>]*>([\s\S]*?)<\/display-name>[\s\S]*?<\/channel>/g)]
+
+          if (!matches.length) {
+            console.error(`No <channel id=""> entries found in ${inputPath}`)
+            process.exit(1)
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function xmltvId(name) {
+            return decodeXml(name)
+              .toUpperCase()
+              .replace(/&/g, 'AND')
+              .replace(/\+/g, 'PLUS')
+              .replace(/[^A-Z0-9]+/g, '.')
+              .replace(/^\.+|\.+$/g, '') + '.us'
+          }
+
+          const channels = matches.map(match => {
+            const id = match[1]
+            const name = decodeXml(match[2]).trim()
+
+            return `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId(name))}" site_id="9100002976#${escapeXml(id)}">${escapeXml(name)}</channel>`
+          })
+
           const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
+
           fs.writeFileSync('epg/sites/tvguide.com/festy.channels.xml', output)
 
-          console.log(`Wrote ${channels.length} channels for grabber`)
+          console.log(`Wrote ${channels.length} channels for TVGuide grabber from ${inputPath}`)
           EOF
 
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
@@ -203,18 +245,6 @@ jobs:
 
               stats.detailSuccess++
 
-              const hasUsefulMeta =
-                detail.episodeTitle ||
-                detail.seasonNumber ||
-                detail.episodeNumber ||
-                detail.releaseYear ||
-                detail.episodeAirDate ||
-                detail.description
-
-              if (!hasUsefulMeta) {
-                console.log(`[DETAIL BASIC ONLY] ${channel.name} | ${item.title || detail.title || 'Unknown title'}`)
-              }
-
               return detail
             } catch (err) {
               stats.detailFailed++
@@ -250,19 +280,6 @@ jobs:
               const count = Array.isArray(item.programSchedules) ? item.programSchedules.length : 0
               console.log(`[CANDIDATE] ${channel.name} | #${index + 1} | id=${id} | name=${callsign} | programs=${count}`)
             })
-
-            const best = items
-              .map(item => ({
-                item,
-                count: Array.isArray(item.programSchedules) ? item.programSchedules.length : 0
-              }))
-              .filter(x => x.count > 0)
-              .sort((a, b) => b.count - a.count)[0]
-
-            if (best) {
-              console.log(`[FALLBACK] ${channel.name} | using best returned item | programs=${best.count}`)
-              return best.item.programSchedules
-            }
 
             return []
           }
@@ -300,21 +317,6 @@ jobs:
 
             d = d.replace(/\.\.\.$/, '').trim()
             d = d.replace(/[,:;–—-]\s*$/, '').trim()
-
-            const words = d.split(/\s+/)
-            const last = words[words.length - 1] || ''
-            const stripped = last.toLowerCase().replace(/[^a-z]/g, '')
-
-            const badEndings = [
-              'stor', 'storie', 'experienc', 'becaus', 'includ', 'discover',
-              'investigat', 'myster', 'famil', 'friend', 'someth', 'everyth',
-              'meanwhil', 'continu', 'return', 'learn', 'realiz'
-            ]
-
-            if (badEndings.includes(stripped) && words.length > 1) {
-              words.pop()
-              d = words.join(' ').trim()
-            }
 
             if (!/[.!?]$/.test(d)) d += '.'
             return d
@@ -355,32 +357,32 @@ jobs:
           }
           EOF
 
-      - name: Grab TVGuide guide - 1 days
+      - name: Grab TVGuide guide - 1 day
         run: |
           cd epg
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy.channels.xml \
-            --output=../guide.xml \
+            --output=../guides/tvguidetivimate.xml \
             --days=1
 
           cd ..
-          if [ ! -s guide.xml ]; then
-            echo "guide.xml was not created or is empty"
+          if [ ! -s guides/tvguidetivimate.xml ]; then
+            echo "guides/tvguidetivimate.xml was not created or is empty"
             exit 1
           fi
 
-          ls -lh guide.xml
+          ls -lh guides/tvguidetivimate.xml
 
-      - name: Commit guide
+      - name: Commit TiViMate guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guide.xml
+          git add guides/tvguidetivimate.xml
 
           if git diff --cached --quiet; then
             echo "No guide changes to commit"
           else
-            git commit -m "Update Festy TVGuide guide"
+            git commit -m "Update Festy TVGuide TiViMate guide"
             git push
           fi
