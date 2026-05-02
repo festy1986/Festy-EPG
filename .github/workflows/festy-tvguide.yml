@@ -3,102 +3,16 @@ name: Festy TVGuide
 on:
   workflow_dispatch:
   push:
-    paths:
-      - ".github/workflows/festy-tvguide.yml"
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
-  build-tvguide:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout your repo
-        uses: actions/checkout@v4
-
-      - name: Clone EPG engine
-        run: |
-          git clone --depth 1 https://github.com/iptv-org/epg.git
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: |
-          cd epg
-          npm install
-
-      # 🔑 THIS IS YOUR CONTROL — ONLY YOUR CHANNELS
-      - name: Create Festy channel list
-        run: |
-          mkdir -p epg/sites/tvguide.com
-
-          cat > epg/sites/tvguide.com/festy.channels.xml <<'EOF'
-<?xml version="1.0" encoding="UTF-8"?>
-<channels>
-  <channel site="tvguide.com" site_id="9200006937" lang="en" xmltv_id="ESPN.us">ESPN</channel>
-  <channel site="tvguide.com" site_id="9200012351" lang="en" xmltv_id="ESPN2.us">ESPN 2</channel>
-  <channel site="tvguide.com" site_id="9200002736" lang="en" xmltv_id="OWN.us">OWN</channel>
-  <channel site="tvguide.com" site_id="9200004949" lang="en" xmltv_id="Oxygen.us">OXYGEN</channel>
-  <channel site="tvguide.com" site_id="9200004848" lang="en" xmltv_id="CartoonNetwork.us">CARTOON NETWORK</channel>
-  <channel site="tvguide.com" site_id="9200004889" lang="en" xmltv_id="AandE.us">A&amp;E</channel>
-  <channel site="tvguide.com" site_id="9200002886" lang="en" xmltv_id="Bravo.us">BRAVO</channel>
-  <channel site="tvguide.com" site_id="9200006932" lang="en" xmltv_id="FX.us">FX</channel>
-  <channel site="tvguide.com" site_id="9200012343" lang="en" xmltv_id="E.us">E!</channel>
-  <channel site="tvguide.com" site_id="9200012085" lang="en" xmltv_id="CMT.us">CMT</channel>
-
-  <!-- FIXED (NO HD / NO @EAST) -->
-  <channel site="tvguide.com" site_id="9200006942" lang="en" xmltv_id="Freeform.us">FREEFORM</channel>
-  <channel site="tvguide.com" site_id="9200009133" lang="en" xmltv_id="USANetwork.us">USA NETWORK</channel>
-  <channel site="tvguide.com" site_id="9200011893" lang="en" xmltv_id="DisneyChannel.us">DISNEY CHANNEL</channel>
-  <channel site="tvguide.com" site_id="9200009413" lang="en" xmltv_id="CNBC.us">CNBC</channel>
-  <channel site="tvguide.com" site_id="9200008879" lang="en" xmltv_id="TNT.us">TNT</channel>
-  <channel site="tvguide.com" site_id="9200000502" lang="en" xmltv_id="Lifetime.us">LIFETIME</channel>
-  <channel site="tvguide.com" site_id="9200016249" lang="en" xmltv_id="TLC.us">TLC</channel>
-  <channel site="tvguide.com" site_id="9200004467" lang="en" xmltv_id="HGTV.us">HGTV</channel>
-  <channel site="tvguide.com" site_id="9200004316" lang="en" xmltv_id="Syfy.us">SYFY</channel>
-  <channel site="tvguide.com" site_id="9200014439" lang="en" xmltv_id="History.us">HISTORY</channel>
-  <channel site="tvguide.com" site_id="9200016034" lang="en" xmltv_id="HallmarkChannel.us">HALLMARK</channel>
-  <channel site="tvguide.com" site_id="9200014910" lang="en" xmltv_id="FXX.us">FXX</channel>
-  <channel site="tvguide.com" site_id="9200012415" lang="en" xmltv_id="MagnoliaNetwork.us">MAGNOLIA</channel>
-  <channel site="tvguide.com" site_id="9200014701" lang="en" xmltv_id="BBCAmerica.us">BBC AMERICA</channel>
-  <channel site="tvguide.com" site_id="9200009294" lang="en" xmltv_id="MSNOW.us">MS NOW</channel>
-</channels>
-EOF
-
-      - name: Run TVGuide (1 day)
-        run: |
-          cd epg
-          npm run grab -- \
-            --site=tvguide.com \
-            --channels=sites/tvguide.com/festy.channels.xml \
-            --output=guide.xml \
-            --days=1
-
-      - name: Copy guide to repo
-        run: |
-          mkdir -p guides
-          cp epg/guide.xml guides/tvguide.xml
-
-      - name: Show results
-        run: |
-          cd epg
-          echo "Programs:"
-          grep -c "<programme " guide.xml || true
-
-      - name: Commit guide
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add guides/tvguide.xml
-
-          if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "Update Festy TVGuide (1 day test)"
-            git push
-          fi
+      - name: Confirm workflow appears
+        run: echo "Festy TVGuide workflow is working"
