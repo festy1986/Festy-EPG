@@ -1,47 +1,55 @@
-name: Build TVGuide Tivimate Curated
+name: Festy TVGuide Tivimate
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  build-curated:
+  build-tvguidetivimate:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Verify raw input exists
+      - name: Make folders
+        run: |
+          mkdir -p guides
+          mkdir -p scripts
+
+      - name: Verify raw TVGuide channel file exists
         run: |
           if [ ! -s guides/tvguide.xml ]; then
-            echo "Missing or empty guides/tvguide.xml"
+            echo "ERROR: guides/tvguide.xml is missing or empty."
+            echo "Run your raw TVGuide Spectrum channel dump workflow first."
             exit 1
           fi
 
           echo "Raw file preview:"
-          head -20 guides/tvguide.xml
+          head -40 guides/tvguide.xml
 
-      - name: Run curated builder
+      - name: Build curated Tivimate channel list
         run: |
           node scripts/build-tvguidetivimate-curated.js
 
-      - name: Verify output
+      - name: Verify curated output
         run: |
           if [ ! -s guides/tvguidetivimate.xml ]; then
-            echo "tvguidetivimate.xml was not created"
+            echo "ERROR: guides/tvguidetivimate.xml was not created."
             exit 1
           fi
 
           echo "Curated output preview:"
-          head -40 guides/tvguidetivimate.xml
+          head -60 guides/tvguidetivimate.xml
 
           echo "Channel count:"
-          grep -c "<channel" guides/tvguidetivimate.xml || true
+          grep -c "<channel " guides/tvguidetivimate.xml
 
-      - name: Commit curated list
+      - name: Commit curated channel file
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -49,7 +57,7 @@ jobs:
           git add guides/tvguidetivimate.xml
 
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No changes to commit."
           else
             git commit -m "Build curated TVGuide Tivimate channel list"
             git push
