@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build OTA raw and curated guides
+      - name: Build OTA raw master and curated guides
         run: |
           mkdir -p guides scripts
           node scripts/grab-tvguide-ota.js
@@ -37,5 +37,5 @@ jobs:
           git config user.email "actions@github.com"
 
           git add guides/OTALocalsguide.raw.xml guides/OTALocalsguide.xml
-          git commit -m "Update OTA raw and curated guides" || echo "No changes to commit"
+          git commit -m "Update OTA raw master and curated guides" || echo "No changes to commit"
           git push
