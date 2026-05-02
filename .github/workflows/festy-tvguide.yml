@@ -68,7 +68,10 @@ jobs:
 
             url({ date, channel }) {
               const [providerId, sourceId] = String(channel.site_id).split('#')
-              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=10240&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+
+              console.log(`[CHANNEL] ${channel.name} | site_id=${channel.site_id} | sourceId=${sourceId} | ${date.format('YYYY-MM-DD')}`)
+
+              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
             },
 
             request: {
@@ -83,9 +86,9 @@ jobs:
               }
             },
 
-            async parser({ content }) {
+            async parser({ content, channel }) {
               const programs = []
-              const items = parseItems(content)
+              const items = parseItems(content, channel)
 
               for (const item of items) {
                 const details = await loadProgramDetails(item)
@@ -156,9 +159,28 @@ jobs:
               .catch(() => ({}))
           }
 
-          function parseItems(content) {
+          function parseItems(content, channel) {
             const data = JSON.parse(content)
-            return data?.data?.items?.[0]?.programSchedules || []
+            const items = data?.data?.items || []
+            const sourceId = String(channel.site_id).split('#').pop()
+
+            const matched = items.find(item => {
+              return String(item.sourceId || item.channelSourceId || item.id || '') === sourceId
+            })
+
+            if (matched?.programSchedules?.length) {
+              console.log(`[MATCH] ${channel.name} | sourceId=${sourceId} | programs=${matched.programSchedules.length}`)
+              return matched.programSchedules
+            }
+
+            console.log(`[WARN] No exact schedule match for ${channel.name} | sourceId=${sourceId} | returned items=${items.length}`)
+
+            if (items.length === 1 && items[0]?.programSchedules?.length) {
+              console.log(`[FALLBACK] ${channel.name} | using only returned item | programs=${items[0].programSchedules.length}`)
+              return items[0].programSchedules
+            }
+
+            return []
           }
 
           function cleanTitle(value) {
