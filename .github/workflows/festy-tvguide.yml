@@ -16,8 +16,10 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
-      - name: Clone EPG engine
-        run: git clone --depth 1 https://github.com/iptv-org/epg.git
+      - name: Clone EPG engine (clean)
+        run: |
+          rm -rf epg
+          git clone --depth 1 https://github.com/iptv-org/epg.git
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -29,7 +31,7 @@ jobs:
           cd epg
           npm install
 
-      # 🔴 THIS IS THE IMPORTANT PART
+      # 🔴 FORCE YOUR LOCAL LINEUP HERE
       - name: Force Cumberland County lineup ID
         run: |
           cd epg
