@@ -16,126 +16,183 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
-      - name: Clone IPTV-org EPG engine
-        run: |
-          git clone --depth 1 https://github.com/iptv-org/epg.git
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Add logos to your personal TVGuide channel list
+        run: |
+          node <<'EOF'
+          const fs = require("fs");
+
+          const repo = process.env.GITHUB_REPOSITORY;
+          const branch = process.env.GITHUB_REF_NAME || "main";
+          const channelFile = "guides/tvguide.channels.xml";
+          const logoDir = "logos";
+
+          if (!fs.existsSync(channelFile)) {
+            console.error(`Missing ${channelFile}`);
+            process.exit(1);
+          }
+
+          if (!fs.existsSync(logoDir)) {
+            console.error(`Missing ${logoDir} folder`);
+            process.exit(1);
+          }
+
+          function decodeXml(s) {
+            return s
+              .replace(/&amp;/g, "&")
+              .replace(/&apos;/g, "'")
+              .replace(/&quot;/g, '"');
+          }
+
+          function normalize(s) {
+            return decodeXml(s)
+              .toLowerCase()
+              .replace(/\.(png|jpg|jpeg|webp|svg)$/i, "")
+              .replace(/\bhd\b/g, "")
+              .replace(/\bsd\b/g, "")
+              .replace(/\beast\b/g, "")
+              .replace(/\bwest\b/g, "")
+              .replace(/\(.*?\)/g, "")
+              .replace(/&/g, "and")
+              .replace(/\+/g, "plus")
+              .replace(/[^a-z0-9]+/g, "");
+          }
+
+          function logoUrl(file) {
+            return `https://raw.githubusercontent.com/${repo}/${branch}/logos/${encodeURIComponent(file)}`;
+          }
+
+          const logos = fs.readdirSync(logoDir)
+            .filter(f => /\.(png|jpg|jpeg|webp|svg)$/i.test(f));
+
+          const logoMap = new Map();
+          for (const logo of logos) {
+            logoMap.set(normalize(logo), logo);
+          }
+
+          const aliases = {
+            msnbc: "MS NOW HD",
+            msnow: "MS NOW HD",
+            usa: "usa network",
+            usanetwork: "usa network",
+            ae: "A&E",
+            aande: "A&E",
+            lmn: "lifetime movie network",
+            lifetimemovienetwork: "lifetime movie network",
+            nesn: "New England Sports Network",
+            nesnplus: "New England Sports Network Plus HD",
+            science: "Science HD",
+            discoverychannel: "discovery",
+            fxm: "FX Movie HD",
+            fxmovie: "FX Movie HD",
+            gameshownetwork: "Game Show Network HD",
+            foodnetwork: "Food Network HD",
+            cbssportsnetwork: "CBS Sports Network HD",
+            espnnews: "ESPN News HD",
+            nhlnetwork: "NHL Network HD",
+            mlbnetwork: "MLB Network HD",
+            nbatv: "NBA TV HD",
+            foxsports1: "FOX Sports 1 HD",
+            fs1: "FOX Sports 1 HD",
+            foxsports2: "FOX Sports 2",
+            fs2: "FOX Sports 2",
+            hallmarkchannel: "Hallmark",
+            hallmarkmystery: "Hallmark Mystery HD",
+            hallmarkfamily: "Hallmark Family",
+            weatherchannel: "The Weather",
+            theweatherchannel: "The Weather",
+            comedycentral: "Comedy Central",
+            cartoonnetwork: "Cartoon Network",
+            nationalgeographic: "National Geographic",
+            natgeo: "National Geographic",
+            nationalgeographicwild: "National Geographic Wild",
+            natgeowild: "National Geographic Wild",
+            paramountnetwork: "Paramount Network HD",
+            uptv: "Up Entertainment HD",
+            up: "Up Entertainment HD",
+            heroesandicons: "Heroes & Icons Network",
+            metv: "MeTV"
+          };
+
+          let xml = fs.readFileSync(channelFile, "utf8");
+
+          let matched = 0;
+          let missed = 0;
+
+          xml = xml.replace(/<channel([^>]*)>([\s\S]*?)<\/channel>/g, (full, attrs, name) => {
+            const cleanName = decodeXml(name.trim());
+            const key = normalize(cleanName);
+
+            let logoFile = logoMap.get(key);
+
+            if (!logoFile && aliases[key]) {
+              logoFile = logoMap.get(normalize(aliases[key]));
+            }
+
+            if (!logoFile) {
+              for (const [logoKey, file] of logoMap.entries()) {
+                if (logoKey && key && (logoKey.includes(key) || key.includes(logoKey))) {
+                  logoFile = file;
+                  break;
+                }
+              }
+            }
+
+            attrs = attrs.replace(/\slogo="[^"]*"/g, "");
+
+            if (!logoFile) {
+              console.log(`NO LOGO MATCH: ${cleanName}`);
+              missed++;
+              return `<channel${attrs}>${name}</channel>`;
+            }
+
+            matched++;
+            console.log(`MATCHED: ${cleanName} -> ${logoFile}`);
+            return `<channel${attrs} logo="${logoUrl(logoFile)}">${name}</channel>`;
+          });
+
+          fs.writeFileSync(channelFile, xml);
+
+          console.log("");
+          console.log(`Updated ${channelFile}`);
+          console.log(`Matched logos: ${matched}`);
+          console.log(`No logo match: ${missed}`);
+          EOF
+
+      - name: Clone EPG engine
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git epg
 
       - name: Install EPG dependencies
         run: |
           cd epg
           npm install
 
-      - name: Copy Festy TVGuide channel list into engine
+      - name: Copy your patched TVGuide channel list into EPG engine
         run: |
-          cp sites/tvguide.com/tvguide.com.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
+          mkdir -p epg/sites/tvguide.com
+          cp guides/tvguide.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
 
-      - name: Apply final safe channel fixes
+      - name: Build TVGuide XML - 2 days
         run: |
-          cat > /tmp/fix-tvguide-final-missing.js <<'EOF'
-          const fs = require('fs')
-
-          const file = 'epg/sites/tvguide.com/tvguide.com.channels.xml'
-
-          if (!fs.existsSync(file)) {
-            console.error(`Missing file: ${file}`)
-            process.exit(1)
-          }
-
-          let xml = fs.readFileSync(file, 'utf8')
-
-          const forcedAdds = [
-            {
-              match: ['HALLMARK DRAMA', 'HALLMARK FAMILY'],
-              site_id: '9233010939',
-              xmltv_id: 'HallmarkFamily.us',
-              name: 'Hallmark Family'
-            }
-          ]
-
-          function norm(s) {
-            return String(s || '')
-              .replace(/&amp;/g, '&')
-              .replace(/\s+/g, ' ')
-              .trim()
-              .toUpperCase()
-          }
-
-          function parseChannels(text) {
-            const re = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
-            const out = []
-            let m
-
-            while ((m = re.exec(text))) {
-              const attrs = m[1]
-              out.push({
-                full: m[0],
-                site_id: (attrs.match(/site_id="([^"]*)"/) || [])[1] || '',
-                xmltv_id: (attrs.match(/xmltv_id="([^"]*)"/) || [])[1] || '',
-                lang: (attrs.match(/lang="([^"]*)"/) || [])[1] || 'en',
-                name: m[2].trim()
-              })
-            }
-
-            return out
-          }
-
-          function channelLine(site_id, xmltv_id, name, lang = 'en') {
-            return `  <channel site="tvguide.com" site_id="${site_id}" lang="${lang}" xmltv_id="${xmltv_id}">${name}</channel>`
-          }
-
-          function upsertChannel(matchNames, site_id, xmltv_id, name, lang = 'en') {
-            const channels = parseChannels(xml)
-            const matches = matchNames.map(norm)
-
-            const target = channels.find(ch =>
-              matches.includes(norm(ch.name)) ||
-              matches.includes(norm(ch.xmltv_id))
-            )
-
-            const line = channelLine(site_id, xmltv_id, name, lang)
-
-            if (target) {
-              xml = xml.replace(target.full, line)
-              console.log(`FIXED: ${target.name} -> ${name} | site_id=${site_id}`)
-            } else {
-              xml = xml.replace('</channels>', `${line}\n</channels>`)
-              console.log(`ADDED: ${name} | site_id=${site_id}`)
-            }
-          }
-
-          for (const fix of forcedAdds) {
-            upsertChannel(fix.match, fix.site_id, fix.xmltv_id, fix.name)
-          }
-
-          fs.writeFileSync(file, xml)
-          EOF
-
-          node /tmp/fix-tvguide-final-missing.js
-
-      - name: Build TVGuide
-        run: |
+          mkdir -p guides
           cd epg
-          npm run grab -- \
-            --site=tvguide.com \
-            --channels=sites/tvguide.com/tvguide.com.channels.xml \
-            --output=../guides/tvguide.xml \
-            --days=3
+          npm run grab -- --site=tvguide.com --channels=sites/tvguide.com/tvguide.com.channels.xml --output=../guides/tvguide.xml --days=2
 
-      - name: Commit guide
+      - name: Commit updated guide and patched channel list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.xml
+          git add guides/tvguide.xml guides/tvguide.channels.xml
 
           if git diff --cached --quiet; then
-            echo "No TVGuide changes to commit."
+            echo "No guide changes to commit"
           else
-            git commit -m "Update Festy TVGuide"
+            git commit -m "Update TVGuide guide with logos"
             git push
           fi
