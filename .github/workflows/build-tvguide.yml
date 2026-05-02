@@ -1,0 +1,57 @@
+name: Build TVGuide
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build-tvguide:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Clone EPG engine
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git engine
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install EPG dependencies
+        run: |
+          cd engine
+          npm install
+
+      - name: Copy custom TVGuide channels
+        run: |
+          cp tvguide.channels.xml engine/sites/tvguide.com/tvguide.channels.xml
+
+      - name: Build TVGuide
+        run: |
+          cd engine
+          npm run grab --- \
+            --channels=sites/tvguide.com/tvguide.channels.xml \
+            --output=../tvguide.xml \
+            --days=1
+
+      - name: Commit guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add tvguide.xml
+
+          if git diff --cached --quiet; then
+            echo "No TVGuide changes."
+          else
+            git commit -m "Update TVGuide"
+            git push
+          fi
