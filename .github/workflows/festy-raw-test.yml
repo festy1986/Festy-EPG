@@ -1,0 +1,55 @@
+name: Festy TVGuide Raw ID Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-raw-ids:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v4
+
+      - name: Clone EPG engine
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: |
+          cd epg
+          npm ci
+
+      - name: Create RAW test channel file
+        run: |
+          mkdir -p epg/sites/tvguide.com
+
+          cat << 'EOF' > epg/sites/tvguide.com/festy-raw-test.channels.xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <site site="tvguide.com">
+            <channels>
+
+              <channel site="tvguide.com" site_id="9233004106" lang="en" xmltv_id="USA.raw">
+                USA
+              </channel>
+
+              <channel site="tvguide.com" site_id="9233011830" lang="en" xmltv_id="TNT.raw">
+                TNT
+              </channel>
+
+            </channels>
+          </site>
+          EOF
+
+      - name: Run TVGuide grab (RAW test)
+        run: |
+          cd epg
+          npm run grab -- --channels=sites/tvguide.com/festy-raw-test.channels.xml --output=guide.xml --days=1
