@@ -1,0 +1,38 @@
+name: Update TVGuide Curated IDs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-curated-ids:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Update curated TVGuide IDs from raw lineup
+        run: |
+          node scripts/update-tvguide-curated-ids.js
+
+      - name: Commit updated curated list
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/festy.channels.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update curated TVGuide channel IDs"
+            git push
+          fi
