@@ -1,4 +1,4 @@
-name: Build TVGuide Channel List
+name: Build TVGuide Channels
 
 on:
   workflow_dispatch:
@@ -28,43 +28,291 @@ jobs:
           cd engine
           npm install
 
-      - name: Switch TVGuide to Portland Maine local lineup
+      - name: Build Festy TVGuide channel list from raw local lineup
         run: |
+          mkdir -p channels
+
           node <<'NODE'
           const fs = require("fs");
 
-          const configPath = "engine/sites/tvguide.com/tvguide.com.config.js";
-          const PORTLAND_MAINE_TVGUIDE_ID = "9100002976";
+          const rawPath = "guides/tvguide.channels.xml";
+          const outPath = "channels/tvguide.festy.channels.xml";
 
-          let config = fs.readFileSync(configPath, "utf8");
+          const wanted = [
+            "COMET",
+            "LAFF",
+            "FOX BOSTON",
+            "FOX PORTLAND",
+            "NBC BOSTON",
+            "NBC PORTLAND",
+            "ABC BOSTON",
+            "ABC PORTLAND",
+            "NEW ENGLAND CABLE NEWS",
+            "PBS",
+            "CW BOSTON",
+            "CBS BOSTON",
+            "CBS PORTLAND",
+            "ION BOSTON",
+            "METV",
+            "INSP",
+            "FETV",
+            "GRIT",
+            "GAME SHOW NETWORK",
+            "HEROES & ICONS",
+            "TCM",
+            "OWN",
+            "BET",
+            "DISCOVERY CHANNEL",
+            "FREEFORM",
+            "USA NETWORK",
+            "NESN",
+            "NBC SPORTS BOSTON",
+            "NESN PLUS",
+            "ESPN",
+            "ESPN 2 HD",
+            "WE",
+            "OXYGEN",
+            "DISNEY CHANNEL",
+            "CARTOON NETWORK",
+            "NICKELODEON",
+            "MSNBC",
+            "CNN",
+            "HLN",
+            "CNBC",
+            "FOX NEWS",
+            "ION PLUS",
+            "TNT",
+            "LIFETIME",
+            "LMN",
+            "TLC",
+            "AMC",
+            "HGTV",
+            "TRAVEL CHANNEL",
+            "A&E",
+            "FOOD NETWORK",
+            "BRAVO",
+            "TRU TV",
+            "NAT GEO MUNDO",
+            "HALLMARK CHANNEL",
+            "SYFY",
+            "ANIMAL PLANET",
+            "HISTORY CHANNEL",
+            "THE WEATHER CHANNEL",
+            "PARAMOUNT NETWORK",
+            "COMEDY CENTRAL",
+            "FX",
+            "FXX",
+            "E! ENTERTAINMENT",
+            "FXM",
+            "AXS",
+            "TV LAND",
+            "TBS",
+            "VH1",
+            "MTV",
+            "CMT",
+            "DESTINATION AMERICA",
+            "MAGNOLIA",
+            "DISCOVERY LIFE",
+            "NAT GEO WILD",
+            "SMITHSONIAN CHANNEL",
+            "BBC AMERICA",
+            "HALLMARK MYSTERY",
+            "HALLMARK DRAMA",
+            "POP",
+            "CRIME AND INVESTIGATION",
+            "VICE",
+            "INVESTIGATION DISCOVERY",
+            "REELZ",
+            "DISCOVERY FAMILY",
+            "DISCOVERY SCIENCE",
+            "AMERICAN HEROES CHANNEL",
+            "AMC PLUS",
+            "FUSE",
+            "MTV 2",
+            "IFC",
+            "ADULT SWIM",
+            "FYI",
+            "COOKING CHANNEL",
+            "LOGO",
+            "COURT TV",
+            "ANTENNA TV",
+            "ION MYSTERY",
+            "FOX SPORTS 2",
+            "FOX SPORTS 1",
+            "NFL NETWORK",
+            "NHL NETWORK",
+            "MLB NETWORK",
+            "NBA TV",
+            "CBS SPORTS NETWORK",
+            "CBS SPORTS HQ",
+            "ESPN NEWS",
+            "OVATION",
+            "UP TV",
+            "COZI TV",
+            "OUTDOOR CHANNEL",
+            "ASPIRE",
+            "AWE",
+            "GREAT AMERICAN FAMILY",
+            "HBO",
+            "HBO HITS",
+            "HBO 2",
+            "HBO COMEDY",
+            "HBO ZONE",
+            "HBO SIGNATURE",
+            "HBO WEST",
+            "CINEMAX",
+            "CINEMAX ACTION",
+            "CINEMAX HITS",
+            "CINEMAX CLASSICS",
+            "OUTERMAX",
+            "MOREMAX",
+            "SHOWTIME PARAMOUNT",
+            "SHOWTIME 2",
+            "SHOWTIME BET",
+            "SHOWTIME HD",
+            "SHOWTIME EXTREME",
+            "SHOWTIME FAMILY ZONE",
+            "SHOWTIME WOMEN",
+            "SHOWTIME NEXT",
+            "SHOWCASE",
+            "SHOWTIME",
+            "SHOWTIME EXTREME HD",
+            "USI SHOWTIME",
+            "STARZ CINEMA",
+            "STARZ",
+            "STARZ EDGE",
+            "STARZ COMEDY",
+            "STARZ ENCORE",
+            "STARZ ENCORE BLACK",
+            "STARZ ENCORE CLASSIC",
+            "STARZ ENCORE FAMILY",
+            "STARZ ENCORE ACTION",
+            "STARZ IN BLACK",
+            "STARZ ENCORE SUSPENSE",
+            "STARZ KIDS & FAMILY",
+            "MOVIE PLEX",
+            "RETRO PLEX",
+            "INDIE PLEX",
+            "MGM",
+            "MGM MARQUEE",
+            "MGM DRIVE-IN",
+            "MGM HITS",
+            "MGM HORROR",
+            "SCREENPIX",
+            "SCREENPIX ACTION",
+            "SCREENPIX VOICES",
+            "SCREENPIX WESTERNS",
+            "SONY MOVIES",
+            "SCREAMBOX"
+          ];
 
-          config = config.replace(
-            /const providerId = ['"][^'"]+['"]/,
-            `const providerId = '${PORTLAND_MAINE_TVGUIDE_ID}'`
-          );
+          function norm(s) {
+            return String(s || "")
+              .toUpperCase()
+              .replace(/&AMP;/g, "&")
+              .replace(/\bHD\b/g, "")
+              .replace(/\./g, "")
+              .replace(/\+/g, " PLUS")
+              .replace(/\s+/g, " ")
+              .trim();
+          }
 
-          fs.writeFileSync(configPath, config);
-          console.log(`TVGuide providerId set to ${PORTLAND_MAINE_TVGUIDE_ID}`);
+          const aliases = {
+            "A&E": ["A&E", "A AND E", "A E"],
+            "TRU TV": ["TRUTV", "TRU TV"],
+            "METV": ["ME TV", "METV"],
+            "HEROES & ICONS": ["HEROES & ICONS", "H&I", "HEROES AND ICONS"],
+            "GAME SHOW NETWORK": ["GAME SHOW NETWORK", "GSN"],
+            "THE WEATHER CHANNEL": ["THE WEATHER CHANNEL", "WEATHER CHANNEL"],
+            "E! ENTERTAINMENT": ["E!", "E ENTERTAINMENT"],
+            "MTV 2": ["MTV2", "MTV 2"],
+            "ESPN 2 HD": ["ESPN2", "ESPN 2"],
+            "ESPN NEWS": ["ESPNEWS", "ESPN NEWS"],
+            "NBC SPORTS BOSTON": ["NBC SPORTS BOSTON", "NBCSB"],
+            "NESN PLUS": ["NESN PLUS", "NESN+"],
+            "HALLMARK MYSTERY": ["HALLMARK MYSTERY", "HALLMARK MOVIES & MYSTERIES"],
+            "AMC PLUS": ["AMC PLUS", "AMC+"],
+            "MGM": ["MGM", "MGM+"],
+            "MGM MARQUEE": ["MGM MARQUEE", "MGM+ MARQUEE"],
+            "MGM DRIVE-IN": ["MGM DRIVE-IN", "MGM+ DRIVE-IN"],
+            "MGM HITS": ["MGM HITS", "MGM+ HITS"],
+            "MGM HORROR": ["MGM HORROR", "MGM+ HORROR"],
+            "SHOWTIME PARAMOUNT": ["PARAMOUNT+ WITH SHOWTIME", "SHOWTIME PARAMOUNT"],
+            "SHOWTIME HD": ["SHOWTIME", "SHOWTIME HD"],
+            "STARZ IN BLACK": ["STARZ IN BLACK", "STARZ ENCORE BLACK"]
+          };
+
+          const xml = fs.readFileSync(rawPath, "utf8");
+
+          const channelRegex = /<channel[\s\S]*?<\/channel>/g;
+          const channels = xml.match(channelRegex) || [];
+
+          function getAttr(block, name) {
+            const m = block.match(new RegExp(name + '="([^"]*)"', "i"));
+            return m ? m[1] : "";
+          }
+
+          function getName(block) {
+            const m = block.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i);
+            return m ? m[1].replace(/<[^>]+>/g, "").trim() : "";
+          }
+
+          const matched = [];
+          const missing = [];
+
+          for (const wantedName of wanted) {
+            const searchNames = [wantedName, ...(aliases[wantedName] || [])].map(norm);
+
+            const hit = channels.find(block => {
+              const id = norm(getAttr(block, "xmltv_id"));
+              const name = norm(getName(block));
+              const siteId = norm(getAttr(block, "site_id"));
+
+              return searchNames.some(s =>
+                id === s ||
+                name === s ||
+                id.includes(s) ||
+                name.includes(s) ||
+                siteId.includes(s)
+              );
+            });
+
+            if (hit) {
+              matched.push(hit);
+            } else {
+              missing.push(wantedName);
+            }
+          }
+
+          const output = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<site site="tvguide.com">',
+            ...matched,
+            '</site>',
+            ''
+          ].join("\n");
+
+          fs.writeFileSync(outPath, output);
+
+          console.log(`Matched channels: ${matched.length}`);
+          console.log(`Missing channels: ${missing.length}`);
+
+          if (missing.length) {
+            console.log("Missing:");
+            for (const name of missing) console.log(`- ${name}`);
+          }
           NODE
 
-      - name: Generate full Portland Maine TVGuide channel list only
-        run: |
-          cd engine
-          mkdir -p ../guides
-          npm run channels:parse --- \
-            --config=sites/tvguide.com/tvguide.com.config.js \
-            --output=../guides/tvguide.channels.xml
-
-      - name: Commit TVGuide channel list
+      - name: Commit filtered TVGuide channel list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.channels.xml
+          git add channels/tvguide.festy.channels.xml
 
           if git diff --cached --quiet; then
-            echo "No TVGuide channel list changes."
+            echo "No filtered channel changes."
           else
-            git commit -m "Update TVGuide Portland ME channel list"
+            git commit -m "Update Festy TVGuide channel list"
             git push
           fi
