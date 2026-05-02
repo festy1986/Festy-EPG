@@ -25,7 +25,6 @@ jobs:
         run: |
           if [ ! -f "guides/festy.channels.xml" ]; then
             echo "Missing guides/festy.channels.xml"
-            echo "This workflow is only allowed to use your curated personal list."
             exit 1
           fi
 
@@ -46,6 +45,16 @@ jobs:
           const branch = process.env.GITHUB_REF_NAME || "main";
           const channelFile = "guides/festy.channels.xml";
           const logoDir = "logos";
+
+          if (!fs.existsSync(channelFile)) {
+            console.error(`Missing ${channelFile}`);
+            process.exit(1);
+          }
+
+          if (!fs.existsSync(logoDir)) {
+            console.error(`Missing ${logoDir} folder`);
+            process.exit(1);
+          }
 
           function decodeXml(s) {
             return s
@@ -76,7 +85,9 @@ jobs:
             .filter(f => /\.(png|jpg|jpeg|webp|svg)$/i.test(f));
 
           const logoMap = new Map();
-          for (const logo of logos) logoMap.set(normalize(logo), logo);
+          for (const logo of logos) {
+            logoMap.set(normalize(logo), logo);
+          }
 
           const aliases = {
             msnbc: "MS NOW HD",
@@ -86,13 +97,16 @@ jobs:
             ae: "A&E",
             aande: "A&E",
             lmn: "lifetime movie network",
+            lifetimemovienetwork: "lifetime movie network",
             nesn: "New England Sports Network",
             nesnplus: "New England Sports Network Plus HD",
             science: "Science HD",
             discoverychannel: "discovery",
             fxm: "FX Movie HD",
+            fxmovie: "FX Movie HD",
             gameshownetwork: "Game Show Network HD",
             foodnetwork: "Food Network HD",
+            cbssportsnetwork: "CBS Sports Network HD",
             espnnews: "ESPN News HD",
             nhlnetwork: "NHL Network HD",
             mlbnetwork: "MLB Network HD",
@@ -103,7 +117,9 @@ jobs:
             fs2: "FOX Sports 2",
             hallmarkchannel: "Hallmark",
             hallmarkmystery: "Hallmark Mystery HD",
+            hallmarkfamily: "Hallmark Family",
             weatherchannel: "The Weather",
+            theweatherchannel: "The Weather",
             comedycentral: "Comedy Central",
             cartoonnetwork: "Cartoon Network",
             nationalgeographic: "National Geographic",
@@ -155,6 +171,8 @@ jobs:
 
           fs.writeFileSync(channelFile, xml);
 
+          console.log("");
+          console.log(`Updated ${channelFile}`);
           console.log(`Matched logos: ${matched}`);
           console.log(`No logo match: ${missed}`);
           EOF
