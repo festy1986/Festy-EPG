@@ -7,98 +7,98 @@ const OUTPUT = 'guides/tvguidetivimate.xml'
 const MASTER = [
   ['NEW ENGLAND CABLE NEWS', ['NECN', 'NEW ENGLAND CABLE NEWS']],
   ['NESN', ['NESN', 'NEW ENGLAND SPORTS NETWORK']],
-  ['NESN PLUS', ['NESN PLUS', 'NESN+', 'NEW ENGLAND SPORTS NETWORK PLUS']],
-  ['NBC SPORTS BOSTON', ['NBC SPORTS BOSTON', 'BOSTON SPORTS']],
+  ['NESN PLUS', ['NESNPLUSHD', 'NESN PLUS', 'NESN+', 'NEW ENGLAND SPORTS NETWORK PLUS']],
+  ['NBC SPORTS BOSTON', ['NBC SPORTS BOSTON', 'NBCBOSHD']],
 
   ['ESPN', ['ESPN']],
   ['ESPN 2', ['ESPN2', 'ESPN 2']],
-  ['ESPN NEWS', ['ESPNEWS', 'ESPN NEWS']],
-  ['FOX SPORTS 1', ['FOX SPORTS 1', 'FS1']],
-  ['FOX SPORTS 2', ['FOX SPORTS 2', 'FS2']],
-  ['NFL NETWORK', ['NFL NETWORK']],
-  ['NHL NETWORK', ['NHL NETWORK']],
-  ['MLB NETWORK', ['MLB NETWORK']],
-  ['NBA TV', ['NBA TV', 'NBAHD']],
+  ['ESPN NEWS', ['ESPNNEWHD', 'ESPNEWS', 'ESPN NEWS']],
+  ['FOX SPORTS 1', ['FS1HD', 'FS1', 'FOX SPORTS 1']],
+  ['FOX SPORTS 2', ['FS2', 'FOX SPORTS 2']],
+  ['NFL NETWORK', ['NFLHD', 'NFLNET', 'NFL NETWORK']],
+  ['NHL NETWORK', ['NHLTVHD', 'NHL NETWORK']],
+  ['MLB NETWORK', ['MLBHD', 'MLB NETWORK']],
+  ['NBA TV', ['NBAHD', 'NBA TV']],
   ['CBS SPORTS NETWORK', ['CBS SPORTS NETWORK', 'CBSSN']],
 
-  ['USA NETWORK', ['USA NETWORK', 'USA']],
+  ['USA NETWORK', ['USA', 'USA NETWORK']],
   ['TNT', ['TNT']],
   ['TBS', ['TBS']],
-  ['TRU TV', ['TRU TV', 'TRUTV']],
+  ['TRU TV', ['TRUTV', 'TRU TV']],
 
-  ['A&E', ['A&E', 'A AND E']],
+  ['A&E', ['A&E']],
   ['AMC', ['AMC']],
   ['FX', ['FX']],
   ['FXX', ['FXX']],
   ['FXM', ['FXM', 'FX MOVIE CHANNEL']],
   ['SYFY', ['SYFY']],
-  ['FREEFORM', ['FREEFORM']],
-  ['PARAMOUNT NETWORK', ['PARAMOUNT NETWORK']],
-  ['COMEDY CENTRAL', ['COMEDY CENTRAL']],
-  ['TV LAND', ['TV LAND']],
-  ['BBC AMERICA', ['BBC AMERICA']],
-  ['IFC', ['IFC']],
+  ['FREEFORM', ['FREEFRMHD', 'FREEFRM', 'FREEFORM']],
+  ['PARAMOUNT NETWORK', ['PARMT', 'PARAMOUNT NETWORK']],
+  ['COMEDY CENTRAL', ['COMEDYHD', 'COMEDY', 'COMEDY CENTRAL']],
+  ['TV LAND', ['TVLAND', 'TV LAND']],
+  ['BBC AMERICA', ['BBC AMERICA', 'BBC']],
+  ['IFC', ['IFCHD', 'IFC']],
 
   ['HGTV', ['HGTV']],
-  ['FOOD NETWORK', ['FOOD NETWORK']],
-  ['TRAVEL CHANNEL', ['TRAVEL CHANNEL']],
+  ['FOOD NETWORK', ['FOOD', 'FOOD NETWORK']],
+  ['TRAVEL CHANNEL', ['TRAVEL CHANNEL', 'TRVL']],
   ['TLC', ['TLC']],
-  ['DISCOVERY CHANNEL', ['DISCOVERY CHANNEL', 'DISCOVERY']],
-  ['DISCOVERY FAMILY', ['DISCOVERY FAMILY', 'DISCOVERY FAMILY CHANNEL']],
-  ['DISCOVERY SCIENCE', ['DISCOVERY SCIENCE', 'SCIENCE CHANNEL', 'SCIENCE']],
-  ['DISCOVERY LIFE', ['DISCOVERY LIFE', 'DISCOVERY LIFE CHANNEL']],
-  ['INVESTIGATION DISCOVERY', ['INVESTIGATION DISCOVERY', 'ID']],
-  ['DESTINATION AMERICA', ['DESTINATION AMERICA']],
-  ['MAGNOLIA', ['MAGNOLIA', 'MAGNOLIA NETWORK']],
+  ['DISCOVERY CHANNEL', ['DSC', 'DISCOVERY CHANNEL']],
+  ['DISCOVERY FAMILY', ['DFCHHD', 'DFAM', 'DISCOVERY FAMILY']],
+  ['DISCOVERY SCIENCE', ['SCIENCEHD', 'SCIENCE', 'DISCOVERY SCIENCE']],
+  ['DISCOVERY LIFE', ['DLIF', 'DISCOVERY LIFE']],
+  ['INVESTIGATION DISCOVERY', ['ID', 'INVESTIGATION DISCOVERY']],
+  ['DESTINATION AMERICA', ['DESTAMERHD', 'DESTAMER', 'DESTINATION AMERICA']],
+  ['MAGNOLIA', ['MAGNHD', 'MAGN', 'MAGNOLIA']],
 
-  ['ANIMAL PLANET', ['ANIMAL PLANET', 'ANIMAL']],
-  ['NATIONAL GEOGRAPHIC', ['NATIONAL GEOGRAPHIC', 'NATIONAL GEOGRAPHIC CHANNEL', 'NGC']],
-  ['NAT GEO WILD', ['NAT GEO WILD', 'NATIONAL GEOGRAPHIC WILD']],
-  ['SMITHSONIAN CHANNEL', ['SMITHSONIAN CHANNEL', 'SMITHSONIAN']],
+  ['ANIMAL PLANET', ['ANIMALHD', 'ANIMAL', 'ANIMAL PLANET']],
+  ['NATIONAL GEOGRAPHIC', ['NGCHD', 'NGC-E', 'NATIONAL GEOGRAPHIC']],
+  ['NAT GEO WILD', ['NGEOWILDHD', 'NGEOWILD', 'NAT GEO WILD']],
+  ['SMITHSONIAN CHANNEL', ['SMITHSONHD', 'SMITHSONIAN']],
 
-  ['THE WEATHER CHANNEL', ['THE WEATHER CHANNEL', 'WEATHER CHANNEL']],
+  ['THE WEATHER CHANNEL', ['WEATHER CHANNEL', 'THE WEATHER CHANNEL']],
 
   ['BRAVO', ['BRAVO']],
   ['E! ENTERTAINMENT', ['E!', 'E ENTERTAINMENT']],
   ['MTV', ['MTV']],
   ['MTV 2', ['MTV2', 'MTV 2']],
   ['VH1', ['VH1']],
-  ['CMT', ['CMT']],
+  ['CMT', ['CMTHD', 'CMT']],
   ['BET', ['BET']],
   ['OWN', ['OWN']],
-  ['WE', ['WE TV', 'WETV', 'WE']],
-  ['OXYGEN', ['OXYGEN']],
-  ['LIFETIME', ['LIFETIME']],
+  ['WE', ['WE', 'WE TV']],
+  ['OXYGEN', ['OXYGENHD', 'OXYGEN']],
+  ['LIFETIME', ['LIFE', 'LIFETIME']],
   ['LMN', ['LMN', 'LIFETIME MOVIE NETWORK']],
-  ['POP', ['POP']],
-  ['VICE', ['VICE']],
-  ['REELZ', ['REELZ']],
-  ['FYI', ['FYI']],
+  ['POP', ['POPHD', 'POP']],
+  ['VICE', ['VICEHD', 'VICE']],
+  ['REELZ', ['REELZHD', 'REELZ']],
+  ['FYI', ['FYIHD', 'FYI']],
   ['LOGO', ['LOGO']],
-  ['FUSE', ['FUSE']],
-  ['OVATION', ['OVATION']],
+  ['FUSE', ['FUSEHD', 'FUSE']],
+  ['OVATION', ['OVATHD', 'OVATION']],
   ['ASPIRE', ['ASPIRE']],
-  ['UP TV', ['UP TV', 'UPTV']],
-  ['GREAT AMERICAN FAMILY', ['GREAT AMERICAN FAMILY', 'GAC FAMILY']],
+  ['UP TV', ['UPTVHD', 'UP TV', 'UPTV']],
+  ['GREAT AMERICAN FAMILY', ['GACFAM', 'GREAT AMERICAN FAMILY']],
 
-  ['DISNEY CHANNEL', ['DISNEY CHANNEL']],
-  ['CARTOON NETWORK', ['CARTOON NETWORK']],
-  ['NICKELODEON', ['NICKELODEON', 'NICK']],
+  ['DISNEY CHANNEL', ['DISNEYHD', 'DISNEY CHANNEL']],
+  ['CARTOON NETWORK', ['CARTOON NETWORK', 'TOON']],
+  ['NICKELODEON', ['NICKHD', 'NICK', 'NICKELODEON']],
 
-  ['HALLMARK CHANNEL', ['HALLMARK CHANNEL']],
-  ['HALLMARK MYSTERY', ['HALLMARK MYSTERY', 'HALLMARK MOVIES & MYSTERIES']],
-  ['HALLMARK DRAMA', ['HALLMARK DRAMA']],
+  ['HALLMARK CHANNEL', ['HALLMARKHD', 'HALMRK', 'HALLMARK CHANNEL']],
+  ['HALLMARK MYSTERY', ['HMMHD', 'HALLMYS', 'HALLMARK MYSTERY']],
+  ['HALLMARK DRAMA', ['HALLDRMHD', 'HALLMARK DRAMA']],
 
-  ['GAME SHOW NETWORK', ['GAME SHOW NETWORK', 'GSN']],
-  ['INSP', ['INSP']],
+  ['GAME SHOW NETWORK', ['GSNHD', 'GAME SHOW NETWORK']],
+  ['INSP', ['INSPHD', 'INSP']],
   ['FETV', ['FETV']],
-  ['TCM', ['TCM', 'TURNER CLASSIC MOVIES']],
-  ['COOKING CHANNEL', ['COOKING CHANNEL']],
-  ['AMERICAN HEROES CHANNEL', ['AMERICAN HEROES CHANNEL', 'AHC']],
-  ['CRIME AND INVESTIGATION', ['CRIME AND INVESTIGATION', 'CRIME & INVESTIGATION']],
+  ['TCM', ['TCMHD', 'TCM']],
+  ['COOKING CHANNEL', ['COOKINGHD', 'COOKING CHANNEL']],
+  ['AMERICAN HEROES CHANNEL', ['AHCHD', 'AHC', 'AMERICAN HEROES CHANNEL']],
+  ['CRIME AND INVESTIGATION', ['CRIMEINVHD', 'CRIME AND INVESTIGATION']],
 
   ['ION PLUS', ['ION PLUS', 'ION+']],
-  ['OUTDOOR CHANNEL', ['OUTDOOR CHANNEL']],
+  ['OUTDOOR CHANNEL', ['OUTHDE', 'OUTDOOR CHANNEL']],
   ['AWE', ['AWE', 'A WEALTH OF ENTERTAINMENT']],
 
   ['HBO', ['HBO']],
@@ -111,7 +111,7 @@ const MASTER = [
   ['CINEMAX ACTION', ['CINEMAX ACTION']],
   ['CINEMAX CLASSICS', ['CINEMAX CLASSICS']],
 
-  ['PARAMOUNT+ WITH SHOWTIME', ['PARAMOUNT+ WITH SHOWTIME', 'PARAMOUNT PLUS WITH SHOWTIME']],
+  ['PARAMOUNT+ WITH SHOWTIME', ['PARAMOUNT+ WITH SHOWTIME']],
   ['SHOWTIME 2', ['SHOWTIME 2']],
   ['SHOWTIME EXTREME', ['SHOWTIME EXTREME']],
   ['SHOWTIME FAMILY ZONE', ['SHOWTIME FAMILY ZONE']],
@@ -121,29 +121,29 @@ const MASTER = [
 
   ['THE MOVIE CHANNEL', ['THE MOVIE CHANNEL']],
   ['TMC XTRA', ['TMC XTRA', 'THE MOVIE CHANNEL XTRA']],
-  ['FLIX', ['FLIX']],
+  ['FLIX', ['FLIX-E', 'FLIX']],
 
-  ['STARZ', ['STARZ']],
+  ['STARZ', ['STARZ HD', 'STARZ']],
   ['STARZ EDGE', ['STARZ EDGE']],
   ['STARZ CINEMA', ['STARZ CINEMA']],
   ['STARZ COMEDY', ['STARZ COMEDY']],
-  ['STARZ ENCORE', ['STARZ ENCORE']],
+  ['STARZ ENCORE', ['STARZ ENCORE HD', 'STARZ ENCORE']],
   ['STARZ ENCORE ACTION', ['STARZ ENCORE ACTION']],
   ['STARZ ENCORE BLACK', ['STARZ ENCORE BLACK']],
   ['STARZ ENCORE CLASSIC', ['STARZ ENCORE CLASSIC']],
   ['STARZ ENCORE SUSPENSE', ['STARZ ENCORE SUSPENSE']],
   ['STARZ ENCORE WESTERNS', ['STARZ ENCORE WESTERNS']],
   ['STARZ ENCORE FAMILY', ['STARZ ENCORE FAMILY']],
-  ['STARZ KIDS & FAMILY', ['STARZ KIDS & FAMILY', 'STARZ KIDS AND FAMILY']],
+  ['STARZ KIDS & FAMILY', ['STARZ KIDS & FAMILY']],
   ['STARZ INBLACK', ['STARZ INBLACK', 'STARZ IN BLACK']],
 
-  ['MGM+', ['MGM+', 'MGM PLUS']],
-  ['MGM+ HITS', ['MGM+ HITS', 'MGM PLUS HITS']],
-  ['MGM+ MARQUEE', ['MGM+ MARQUEE', 'MGM PLUS MARQUEE']],
-  ['MGM+ DRIVE-IN', ['MGM+ DRIVE-IN', 'MGM PLUS DRIVE-IN']],
+  ['MGM+', ['MGM+']],
+  ['MGM+ HITS', ['MGM+ HITS']],
+  ['MGM+ MARQUEE', ['MGM+ MARQUEE']],
+  ['MGM+ DRIVE-IN', ['MGM+ DRIVE-IN']],
 
-  ['MOVIEPLEX', ['MOVIEPLEX']],
-  ['INDIEPLEX', ['INDIEPLEX']]
+  ['MOVIEPLEX', ['MOVIEPLEX', 'PLEXHD']],
+  ['INDIEPLEX', ['INDIEPLEX', 'INDIPX']]
 ]
 
 function decodeXml(s) {
@@ -169,152 +169,111 @@ function norm(s) {
     .replace(/\+/g, ' PLUS ')
     .replace(/&/g, ' AND ')
     .replace(/[^A-Z0-9]+/g, ' ')
-    .replace(/\bHD\b/g, '')
-    .replace(/\bSD\b/g, '')
-    .replace(/\bEAST\b/g, '')
-    .replace(/\bWEST\b/g, '')
     .replace(/\s+/g, ' ')
     .trim()
 }
 
-function matchScore(rawName, aliases) {
-  const n = norm(rawName)
-  let best = 0
-
-  for (const alias of aliases) {
-    const a = norm(alias)
-
-    if (n === a) best = Math.max(best, 100)
-    else if (n.includes(a)) best = Math.max(best, 85)
-    else if (a.includes(n)) best = Math.max(best, 70)
-  }
-
-  return best
-}
-
 function parseChannels(xml) {
   const channels = []
-
-  const xmltvRe = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
+  const re = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
   let m
 
-  while ((m = xmltvRe.exec(xml))) {
+  while ((m = re.exec(xml))) {
     const attrs = m[1]
     const body = m[2]
+    const id = (attrs.match(/\bid="([^"]+)"/) || [])[1]
+    if (!id) continue
 
-    const idMatch = attrs.match(/\bid="([^"]+)"/)
-    const siteIdMatch = attrs.match(/\bsite_id="([^"]+)"/)
-    const nameMatch = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/) || body.match(/<channel[^>]*>([\s\S]*?)<\/channel>/)
+    const display = (body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/) || [])[1]
+    if (!display) continue
 
-    let id = idMatch ? idMatch[1] : null
-    const siteId = siteIdMatch ? siteIdMatch[1] : null
-
-    if (!id && siteId) {
-      id = siteId.includes('#') ? siteId.split('#').pop() : siteId
-    }
-
-    let name = ''
-    const textOnly = body.replace(/<[^>]+>/g, '').trim()
-    if (nameMatch) name = decodeXml(nameMatch[1]).trim()
-    else if (textOnly) name = decodeXml(textOnly).trim()
-
-    if (id && name) {
-      channels.push({
-        id,
-        siteId,
-        name,
-        original: m[0]
-      })
-    }
+    channels.push({
+      id,
+      name: decodeXml(display).trim(),
+      normName: norm(display)
+    })
   }
 
   return channels
 }
 
-function chooseBestChannels(channels) {
-  const chosen = []
-  const usedIds = new Set()
+function findChannel(channels, aliases, usedIds) {
+  const normalizedAliases = aliases.map(norm)
 
-  for (const [wantedName, aliases] of MASTER) {
-    const candidates = channels
-      .map(ch => ({ ch, score: matchScore(ch.name, aliases) }))
-      .filter(x => x.score >= 85)
-      .sort((a, b) => b.score - a.score)
-
-    const best = candidates.find(x => !usedIds.has(x.ch.id))
-
-    if (best) {
-      usedIds.add(best.ch.id)
-      chosen.push({
-        wantedName,
-        id: best.ch.id,
-        sourceName: best.ch.name,
-        score: best.score
-      })
-    } else {
-      console.log(`[missing] ${wantedName}`)
-    }
+  for (const alias of normalizedAliases) {
+    let exact = channels.find(ch => !usedIds.has(ch.id) && ch.normName === alias)
+    if (exact) return exact
   }
 
-  return chosen
-}
-
-function buildOutputXml(inputXml, chosen) {
-  const chosenIds = new Set(chosen.map(c => c.id))
-
-  const programmes = []
-  const progRe = /<programme\b([^>]*)>[\s\S]*?<\/programme>/g
-  let m
-
-  while ((m = progRe.exec(inputXml))) {
-    const attrs = m[1]
-    const channelMatch = attrs.match(/\bchannel="([^"]+)"/)
-    if (channelMatch && chosenIds.has(channelMatch[1])) {
-      programmes.push(m[0])
-    }
+  for (const alias of normalizedAliases) {
+    let contains = channels.find(ch => !usedIds.has(ch.id) && ch.normName.includes(alias))
+    if (contains) return contains
   }
 
-  const channelXml = chosen.map(c => {
-    return `  <channel id="${escapeXml(c.id)}">\n    <display-name>${escapeXml(c.wantedName)}</display-name>\n  </channel>`
-  })
+  for (const alias of normalizedAliases) {
+    let reverse = channels.find(ch => !usedIds.has(ch.id) && alias.includes(ch.normName))
+    if (reverse) return reverse
+  }
 
-  return [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    '<tv>',
-    ...channelXml,
-    ...programmes.map(p => p.replace(/^/gm, '  ')),
-    '</tv>',
-    ''
-  ].join('\n')
+  return null
 }
 
 if (!fs.existsSync(INPUT)) {
-  console.error(`Missing input file: ${INPUT}`)
+  console.error(`Missing input: ${INPUT}`)
   process.exit(1)
 }
 
-const inputXml = fs.readFileSync(INPUT, 'utf8')
-const channels = parseChannels(inputXml)
+const xml = fs.readFileSync(INPUT, 'utf8')
+const channels = parseChannels(xml)
 
-if (!channels.length) {
-  console.error(`No channels found in ${INPUT}`)
-  process.exit(1)
+const usedIds = new Set()
+const selected = []
+
+for (const [wantedName, aliases] of MASTER) {
+  const found = findChannel(channels, aliases, usedIds)
+
+  if (!found) {
+    console.log(`[missing] ${wantedName}`)
+    continue
+  }
+
+  usedIds.add(found.id)
+  selected.push({
+    id: found.id,
+    displayName: wantedName,
+    sourceName: found.name
+  })
+
+  console.log(`[match] ${wantedName} <= ${found.name} (${found.id})`)
 }
 
-const chosen = chooseBestChannels(channels)
+const selectedIds = new Set(selected.map(x => x.id))
 
-if (!chosen.length) {
-  console.error('No master-list channels matched.')
-  process.exit(1)
+const keptProgrammes = []
+const programmeRe = /<programme\b([^>]*)>[\s\S]*?<\/programme>/g
+let pm
+
+while ((pm = programmeRe.exec(xml))) {
+  const channelId = (pm[1].match(/\bchannel="([^"]+)"/) || [])[1]
+  if (channelId && selectedIds.has(channelId)) {
+    keptProgrammes.push(pm[0])
+  }
 }
+
+const output = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<tv>',
+  ...selected.map(ch =>
+    `  <channel id="${escapeXml(ch.id)}">\n    <display-name>${escapeXml(ch.displayName)}</display-name>\n  </channel>`
+  ),
+  ...keptProgrammes.map(p => p.replace(/^/gm, '  ')),
+  '</tv>',
+  ''
+].join('\n')
 
 fs.mkdirSync(path.dirname(OUTPUT), { recursive: true })
+fs.writeFileSync(OUTPUT, output)
 
-const outputXml = buildOutputXml(inputXml, chosen)
-fs.writeFileSync(OUTPUT, outputXml)
-
-console.log(`Matched ${chosen.length}/${MASTER.length} channels.`)
+console.log(`Matched ${selected.length}/${MASTER.length} channels.`)
+console.log(`Copied ${keptProgrammes.length} programme entries.`)
 console.log(`Wrote ${OUTPUT}`)
-for (const c of chosen) {
-  console.log(`[match] ${c.wantedName} <= ${c.sourceName} (${c.id})`)
-}
