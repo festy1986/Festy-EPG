@@ -65,16 +65,21 @@ const NAME_BY_SOURCE_ID = {
 const CURATED_NAMES = new Set([
   'ABC PORTLAND',
   'CBS PORTLAND',
-  'COMET',
-  'COURT TV',
-  'CW BOSTON',
   'FOX PORTLAND',
-  'GRIT',
-  'HEROES & ICONS',
-  'ION MYSTERY',
+  'NBC PORTLAND',
+  'CW BOSTON',
+
+  'COMET',
   'LAFF',
   'METV',
-  'NBC PORTLAND'
+  'GRIT',
+  'HEROES & ICONS',
+  'COURT TV',
+  'ION MYSTERY',
+
+  'ION PLUS',
+  'ANTENNA TV',
+  'PBS'
 ])
 
 function xmlEscape(value = '') {
@@ -89,6 +94,7 @@ function xmlEscape(value = '') {
 function xmltvTime(unix) {
   const d = new Date(unix * 1000)
   const pad = n => String(n).padStart(2, '0')
+
   return (
     d.getUTCFullYear() +
     pad(d.getUTCMonth() + 1) +
@@ -102,19 +108,24 @@ function xmltvTime(unix) {
 
 function startOfTodayEpoch() {
   const now = new Date()
-  return Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000)
+  return Math.floor(
+    new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000
+  )
 }
 
 function getItems(json) {
   return json?.data?.items || []
 }
 
-function cleanFallbackName(channel) {
+function fallbackName(channel) {
   const full = channel.fullName || ''
   const network = channel.networkName || ''
+
   if (network) return network.toUpperCase()
+
   const match = full.match(/\((.*?)\)/)
   if (match) return match[1].toUpperCase()
+
   return (full || channel.name || String(channel.sourceId)).toUpperCase()
 }
 
@@ -148,9 +159,11 @@ function buildXml(channels, programmes, generatorName) {
   for (const ch of [...channels.values()].sort((a, b) => a.sort.localeCompare(b.sort))) {
     lines.push(`  <channel id="${xmlEscape(ch.id)}">`)
     lines.push(`    <display-name>${xmlEscape(ch.name)}</display-name>`)
+
     if (ch.rawName && ch.rawName !== ch.name) {
       lines.push(`    <display-name>${xmlEscape(ch.rawName)}</display-name>`)
     }
+
     lines.push('  </channel>')
   }
 
@@ -161,15 +174,27 @@ function buildXml(channels, programmes, generatorName) {
     lines.push(
       `  <programme start="${xmltvTime(p.start)}" stop="${xmltvTime(p.stop)}" channel="${xmlEscape(p.channelId)}">`
     )
+
     lines.push(`    <title lang="en">${xmlEscape(p.title)}</title>`)
-    if (p.subTitle) lines.push(`    <sub-title lang="en">${xmlEscape(p.subTitle)}</sub-title>`)
-    if (p.desc) lines.push(`    <desc lang="en">${xmlEscape(p.desc)}</desc>`)
-    if (p.category) lines.push(`    <category lang="en">${xmlEscape(p.category)}</category>`)
+
+    if (p.subTitle) {
+      lines.push(`    <sub-title lang="en">${xmlEscape(p.subTitle)}</sub-title>`)
+    }
+
+    if (p.desc) {
+      lines.push(`    <desc lang="en">${xmlEscape(p.desc)}</desc>`)
+    }
+
+    if (p.category) {
+      lines.push(`    <category lang="en">${xmlEscape(p.category)}</category>`)
+    }
+
     if (p.rating) {
       lines.push('    <rating>')
       lines.push(`      <value>${xmlEscape(p.rating)}</value>`)
       lines.push('    </rating>')
     }
+
     lines.push('  </programme>')
   }
 
@@ -209,11 +234,9 @@ async function main() {
       if (!channel?.sourceId) continue
 
       const sourceId = String(channel.sourceId)
-      const friendlyName = NAME_BY_SOURCE_ID[sourceId] || cleanFallbackName(channel)
+      const friendlyName = NAME_BY_SOURCE_ID[sourceId] || fallbackName(channel)
       const rawName = channel.fullName || channel.name || friendlyName
 
-      // RAW MASTER:
-      // channel id is the actual TVGuide sourceId
       rawChannels.set(sourceId, {
         id: sourceId,
         name: friendlyName,
@@ -221,8 +244,6 @@ async function main() {
         sort: friendlyName
       })
 
-      // CURATED:
-      // channel id is the friendly Tivimate name
       if (CURATED_NAMES.has(friendlyName)) {
         curatedChannels.set(friendlyName, {
           id: friendlyName,
@@ -252,6 +273,7 @@ async function main() {
         }
 
         const rawKey = `${sourceId}|${p.startTime}|${p.endTime}|${p.programId || ''}|${p.title || ''}`
+
         rawDay.set(rawKey, {
           ...baseProgramme,
           channelId: sourceId
@@ -259,6 +281,7 @@ async function main() {
 
         if (CURATED_NAMES.has(friendlyName)) {
           const curatedKey = `${friendlyName}|${p.startTime}|${p.endTime}|${p.programId || ''}|${p.title || ''}`
+
           curatedDay.set(curatedKey, {
             ...baseProgramme,
             channelId: friendlyName
