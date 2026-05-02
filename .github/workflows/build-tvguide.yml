@@ -1,15 +1,13 @@
-name: Build TVGuide
+name: Build TVGuide Channel List
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  build-tvguide:
+  build-tvguide-channels:
     runs-on: ubuntu-latest
 
     steps:
@@ -49,7 +47,7 @@ jobs:
           console.log(`TVGuide providerId set to ${PORTLAND_MAINE_TVGUIDE_ID}`);
           NODE
 
-      - name: Generate full Portland Maine TVGuide channel list
+      - name: Generate full Portland Maine TVGuide channel list only
         run: |
           cd engine
           mkdir -p ../guides
@@ -57,24 +55,16 @@ jobs:
             --config=sites/tvguide.com/tvguide.com.config.js \
             --output=../guides/tvguide.channels.xml
 
-      - name: Build TVGuide XML (1 day test)
-        run: |
-          cd engine
-          npm run grab --- \
-            --channels=../guides/tvguide.channels.xml \
-            --output=../guides/tvguide.xml \
-            --days=1
-
-      - name: Commit TVGuide files
+      - name: Commit TVGuide channel list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.channels.xml guides/tvguide.xml
+          git add guides/tvguide.channels.xml
 
           if git diff --cached --quiet; then
-            echo "No TVGuide changes."
+            echo "No TVGuide channel list changes."
           else
-            git commit -m "Update TVGuide (Portland ME full lineup)"
+            git commit -m "Update TVGuide Portland ME channel list"
             git push
           fi
