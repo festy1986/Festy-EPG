@@ -8,15 +8,6 @@ const reportsDir = "reports";
 fs.mkdirSync("channels", { recursive: true });
 fs.mkdirSync(reportsDir, { recursive: true });
 
-const skipMaster = new Set([
-  "FOX BOSTON",
-  "NBC BOSTON",
-  "ABC BOSTON",
-  "CBS BOSTON",
-  "CW BOSTON",
-  "ION BOSTON"
-]);
-
 const masterList = [
   "COMET","LAFF","FOX PORTLAND","NBC PORTLAND","ABC PORTLAND",
   "NEW ENGLAND CABLE NEWS","PBS","CBS PORTLAND","METV","INSP","FETV","GRIT",
@@ -25,82 +16,84 @@ const masterList = [
   "ESPN 2 HD","WE","OXYGEN","DISNEY CHANNEL","CARTOON NETWORK","NICKELODEON",
   "MS NOW","CNN","HLN","CNBC","FOX NEWS","ION PLUS","TNT","LIFETIME","LMN",
   "TLC","AMC","HGTV","TRAVEL CHANNEL","A&E","FOOD NETWORK","BRAVO","TRU TV",
-  "NAT GEO MUNDO","HALLMARK CHANNEL","SYFY","ANIMAL PLANET","HISTORY CHANNEL",
+  "NATIONAL GEOGRAPHIC","HALLMARK CHANNEL","SYFY","ANIMAL PLANET","HISTORY",
   "THE WEATHER CHANNEL","PARAMOUNT NETWORK","COMEDY CENTRAL","FX","FXX",
   "E! ENTERTAINMENT","FXM","AXS","TV LAND","TBS","VH1","MTV","CMT",
   "DESTINATION AMERICA","MAGNOLIA","DISCOVERY LIFE","NAT GEO WILD",
   "SMITHSONIAN CHANNEL","BBC AMERICA","HALLMARK MYSTERY","HALLMARK DRAMA",
   "POP","CRIME AND INVESTIGATION","VICE","INVESTIGATION DISCOVERY","REELZ",
-  "DISCOVERY FAMILY","DISCOVERY SCIENCE","AMERICAN HEROES CHANNEL","AMC PLUS",
+  "DISCOVERY FAMILY","SCIENCE","AMERICAN HEROES CHANNEL","AMC PLUS",
   "FUSE","MTV 2","IFC","ADULT SWIM","FYI","COOKING CHANNEL","LOGO","COURT TV",
   "ANTENNA TV","ION MYSTERY","FOX SPORTS 2","FOX SPORTS 1","NFL NETWORK",
-  "NHL NETWORK","MLB NETWORK","NBA TV","CBS SPORTS NETWORK","CBS SPORTS HQ",
-  "ESPN NEWS","OVATION","UP TV","COZI TV","OUTDOOR CHANNEL","ASPIRE","AWE",
+  "NHL NETWORK","MLB NETWORK","NBA TV","CBS SPORTS NETWORK","ESPN NEWS",
+  "OVATION","UP TV","COZI TV","OUTDOOR CHANNEL","ASPIRE","AWE",
   "GREAT AMERICAN FAMILY"
 ];
 
 const aliases = {
-  "FOX PORTLAND": ["WPFO"],
-  "NBC PORTLAND": ["WCSH"],
-  "ABC PORTLAND": ["WMTW"],
-  "CBS PORTLAND": ["WGME"],
+  "FOX PORTLAND": ["WPFO", "FOX 23", "WPFO FOX"],
+  "NBC PORTLAND": ["WCSH", "NEWS CENTER MAINE", "NBC 6"],
+  "ABC PORTLAND": ["WMTW", "ABC 8"],
+  "CBS PORTLAND": ["WGME", "CBS 13"],
 
+  "NEW ENGLAND CABLE NEWS": ["NECN"],
   "MS NOW": ["MSNBC", "MS NOW", "MSNOW"],
+
+  "NATIONAL GEOGRAPHIC": ["NATIONAL GEOGRAPHIC", "NAT GEO", "NATIONALGEOGRAPHIC"],
+  "HISTORY": ["HISTORY", "HISTORY CHANNEL"],
+  "SCIENCE": ["SCIENCE", "SCIENCE CHANNEL", "DISCOVERY SCIENCE"],
+  "NESN": ["NESN", "NEW ENGLAND SPORTS NETWORK"],
+  "NESN PLUS": ["NESN PLUS", "NESN+", "NEW ENGLAND SPORTS NETWORK PLUS"],
+  "NBC SPORTS BOSTON": ["NBC SPORTS BOSTON", "BOSTON SPORTS", "NBCSB"],
+
+  "A&E": ["A&E", "AETV", "A AND E"],
+  "LMN": ["LMN", "LIFETIME MOVIE NETWORK"],
+  "UP TV": ["UP", "UPTV", "UP TV"],
+  "AWE": ["AWE", "A WEALTH OF ENTERTAINMENT"],
+  "ASPIRE": ["ASPIRE", "ASPIRETV"],
+
+  "METV": ["METV", "ME TV"],
+  "COZI TV": ["COZI", "COZI TV"],
+  "ION PLUS": ["ION PLUS", "IONPLUS"],
+  "ION MYSTERY": ["ION MYSTERY", "IONMYSTERY"],
+  "ANTENNA TV": ["ANTENNA TV", "ANTENNATV"],
+  "COURT TV": ["COURT TV", "COURTTV"],
+  "HEROES & ICONS": ["HEROES & ICONS", "HEROES AND ICONS", "H&I"],
+  "GAME SHOW NETWORK": ["GAME SHOW NETWORK", "GSN"],
+
   "ESPN 2 HD": ["ESPN2", "ESPN 2"],
   "ESPN NEWS": ["ESPNEWS", "ESPN NEWS"],
   "WE": ["WETV", "WE TV"],
   "TRU TV": ["TRUTV", "TRU TV"],
-  "A&E": ["A&E", "A AND E"],
-  "E! ENTERTAINMENT": ["E", "E ENTERTAINMENT"],
-  "FXM": ["FXMOVIECHANNEL", "FX MOVIE CHANNEL"],
-  "NAT GEO WILD": ["NATIONALGEOGRAPHICWILD", "NATIONAL GEOGRAPHIC WILD", "NAT GEO WILD"],
-  "NAT GEO MUNDO": ["NATGEOMUNDO", "NAT GEO MUNDO", "NATIONAL GEOGRAPHIC MUNDO"],
+  "E! ENTERTAINMENT": ["E!", "E ENTERTAINMENT"],
+  "FXM": ["FX MOVIE CHANNEL", "FXMOVIECHANNEL"],
+  "NAT GEO WILD": ["NATIONAL GEOGRAPHIC WILD", "NAT GEO WILD"],
   "HALLMARK MYSTERY": ["HALLMARK MYSTERY", "HALLMARK MOVIES MYSTERIES"],
-  "CRIME AND INVESTIGATION": ["CRIMEPLUSINVESTIGATION", "CRIME PLUS INVESTIGATION", "CRIME INVESTIGATION"],
-  "INVESTIGATION DISCOVERY": ["INVESTIGATIONDISCOVERY", "INVESTIGATION DISCOVERY"],
-  "AMERICAN HEROES CHANNEL": ["AMERICANHEROESCHANNEL", "AMERICAN HEROES CHANNEL"],
-  "AMC PLUS": ["AMCPLUS", "AMC PLUS", "AMC+"],
-  "ION PLUS": ["IONPLUS", "ION PLUS"],
-  "ION MYSTERY": ["IONMYSTERY", "ION MYSTERY"],
-  "COZI TV": ["COZI", "COZI TV"],
-  "METV": ["METV", "ME TV"],
-  "HEROES & ICONS": ["HEROESICONS", "HEROES ICONS", "H&I"],
-  "GAME SHOW NETWORK": ["GAMESHOWNETWORK", "GAME SHOW NETWORK", "GSN"]
+  "CRIME AND INVESTIGATION": ["CRIME PLUS INVESTIGATION", "CRIME INVESTIGATION"],
+  "INVESTIGATION DISCOVERY": ["INVESTIGATION DISCOVERY"],
+  "AMERICAN HEROES CHANNEL": ["AMERICAN HEROES CHANNEL"],
+  "AMC PLUS": ["AMC PLUS", "AMC+"],
+  "MTV 2": ["MTV2", "MTV 2"]
 };
 
 const rejectContains = {
   "BET": ["BETHER"],
   "MTV": ["MTV2", "MTVLIVE", "MTVCLASSIC"],
   "HBO": ["HBOFAMILY", "HBOCOMEDY", "HBOZONE", "HBOSIGNATURE", "HBO2"],
-  "CINEMAX": ["ACTIONMAX", "THRILLERMAX", "MOVIEMAX", "MOREMAX", "OUTERMAX", "5STARMAX"],
   "SHOWTIME": ["SHOWTIMEFAMILYZONE", "SHOWTIMEWOMEN", "SHOWTIMENEXT", "SHOWTIMEEXTREME", "SHOWTIME2", "SHOWTIMESHOWCASE"],
   "STARZ": ["STARZENCORE", "STARZEDGE", "STARZCOMEDY", "STARZCINEMA", "STARZKIDSFAMILY", "STARZINBLACK"],
   "MGM": ["MGMPLUSDRIVEIN", "MGMPLUSMARQUEE", "MGMPLUSHITS", "MGMPLUSHORROR"]
 };
 
 const premiumKeywords = [
-  "HBO", "CINEMAX", "ACTIONMAX", "THRILLERMAX", "MOVIEMAX", "MOREMAX", "OUTERMAX", "5STARMAX",
-  "SHOWTIME", "PARAMOUNT PLUS WITH SHOWTIME",
-  "STARZ", "ENCORE",
-  "MGM", "MGM PLUS",
-  "SCREENPIX",
-  "MOVIEPLEX", "MOVIE PLEX",
-  "RETROPLEX", "RETRO PLEX",
-  "INDIEPLEX", "INDIE PLEX",
-  "THE MOVIE CHANNEL",
-  "FLIX",
-  "SONY MOVIES",
-  "SCREAMBOX"
+  "HBO","CINEMAX","ACTIONMAX","THRILLERMAX","MOVIEMAX","MOREMAX","OUTERMAX","5STARMAX",
+  "SHOWTIME","PARAMOUNT PLUS WITH SHOWTIME","STARZ","ENCORE","MGM","MGM PLUS",
+  "SCREENPIX","MOVIEPLEX","RETROPLEX","INDIEPLEX","THE MOVIE CHANNEL","FLIX",
+  "SONY MOVIES","SCREAMBOX"
 ];
 
 const portlandCallSigns = [
-  "WGME",
-  "WCSH",
-  "WMTW",
-  "WPFO",
-  "WMEA",
-  "WPXT",
-  "WPME"
+  "WGME","WCSH","WMTW","WPFO","WMEA","WPXT","WPME","WCBB"
 ];
 
 function norm(s) {
@@ -123,10 +116,6 @@ function compact(s) {
   return norm(s).replace(/\s+/g, "");
 }
 
-function readIfExists(path) {
-  return fs.existsSync(path) ? fs.readFileSync(path, "utf8") : "";
-}
-
 function extractChannels(xml) {
   const blocks = [];
   for (const m of xml.matchAll(/<channel\b[\s\S]*?<\/channel>/gi)) blocks.push(m[0]);
@@ -143,6 +132,9 @@ function getName(block) {
   const display = block.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i);
   if (display) return display[1].replace(/<[^>]+>/g, "").trim();
 
+  const inner = block.match(/<channel\b[^>]*>([\s\S]*?)<\/channel>/i);
+  if (inner) return inner[1].replace(/<[^>]+>/g, "").trim();
+
   return getAttr(block, "xmltv_id") || getAttr(block, "name") || getAttr(block, "site_id") || "";
 }
 
@@ -155,9 +147,11 @@ function haystack(block) {
   ].join(" ");
 }
 
-const upstreamChannels = extractChannels(readIfExists(upstreamPath));
-const rawChannels = extractChannels(readIfExists(rawPath));
-const allChannels = [...upstreamChannels, ...rawChannels];
+const upstreamChannels = extractChannels(fs.readFileSync(upstreamPath, "utf8"));
+const rawChannels = extractChannels(fs.readFileSync(rawPath, "utf8"));
+
+// RAW FIRST now — locals/subchannels come from your Portland dump.
+const allChannels = [...rawChannels, ...upstreamChannels];
 
 console.log(`Upstream channels parsed: ${upstreamChannels.length}`);
 console.log(`Raw local channels parsed: ${rawChannels.length}`);
@@ -167,12 +161,8 @@ const matchedKeys = new Set();
 const matchedReport = [];
 const missing = [];
 
-function keyFor(block) {
-  return `${getAttr(block, "site_id")}|${getAttr(block, "xmltv_id")}|${getName(block)}`;
-}
-
 function add(block, reason) {
-  const key = keyFor(block);
+  const key = `${getAttr(block, "site_id")}|${getAttr(block, "xmltv_id")}|${getName(block)}`;
   if (matchedKeys.has(key)) return;
 
   matchedKeys.add(key);
@@ -187,18 +177,18 @@ function isRejected(wanted, block) {
 }
 
 function findBest(wanted) {
-  const searchTerms = [wanted, ...(aliases[wanted] || [])];
-  const wantedCompacts = searchTerms.map(compact);
+  const terms = [wanted, ...(aliases[wanted] || [])].map(compact);
 
   const candidates = allChannels.filter(block => {
     if (isRejected(wanted, block)) return false;
 
     const h = compact(haystack(block));
 
-    return wantedCompacts.some(term => {
-      if (!term) return false;
-      return h === term || h.startsWith(term) || h.includes(term);
-    });
+    return terms.some(t =>
+      h === t ||
+      h.startsWith(t) ||
+      h.includes(t)
+    );
   });
 
   if (!candidates.length) return null;
@@ -206,10 +196,10 @@ function findBest(wanted) {
   candidates.sort((a, b) => {
     const aName = compact(getName(a));
     const bName = compact(getName(b));
-    const main = compact(wanted);
+    const wantedMain = compact(wanted);
 
-    const aExact = aName === main ? 0 : 1;
-    const bExact = bName === main ? 0 : 1;
+    const aExact = aName === wantedMain ? 0 : 1;
+    const bExact = bName === wantedMain ? 0 : 1;
 
     return aExact - bExact || aName.length - bName.length;
   });
@@ -218,38 +208,35 @@ function findBest(wanted) {
 }
 
 for (const wanted of masterList) {
-  if (skipMaster.has(wanted)) continue;
-
   const hit = findBest(wanted);
   if (hit) add(hit, `master list: ${wanted}`);
   else missing.push(wanted);
 }
 
+// Premium sweep from both raw + upstream.
 for (const block of allChannels) {
   const h = norm(haystack(block));
-
   if (premiumKeywords.some(k => h.includes(norm(k)))) {
     add(block, "premium movie sweep");
   }
 }
 
+// Portland OTA sweep from raw local lineup only.
 for (const block of rawChannels) {
   const h = norm(haystack(block));
-
   if (portlandCallSigns.some(call => h.includes(call))) {
     add(block, "Portland OTA call-sign sweep");
   }
 }
 
-const output = [
+fs.writeFileSync(outPath, [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<site site="tvguide.com">',
   ...matched,
   '</site>',
   ''
-].join("\n");
+].join("\n"));
 
-fs.writeFileSync(outPath, output);
 fs.writeFileSync(`${reportsDir}/tvguide.matched.txt`, matchedReport.join("\n") + "\n");
 fs.writeFileSync(`${reportsDir}/tvguide.missing.txt`, missing.join("\n") + "\n");
 
