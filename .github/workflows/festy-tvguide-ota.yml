@@ -2,6 +2,8 @@ name: Festy TVGuide OTA
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
@@ -14,145 +16,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Build OTA raw channel file from TVGuide backend
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run TVGuide OTA grabber
         run: |
           mkdir -p guides scripts
 
-          cat > scripts/grab-tvguide-ota.js <<'EOF'
-          const fs = require('fs')
-
-          const PROVIDER_ID = '9100000664'
-          const OUT = 'guides/tvguide-ota.xml'
-
-          const now = Math.floor(Date.now() / 1000)
-          const url = `https://backend.tvguide.com/tvschedules/tvguide/${PROVIDER_ID}/web?start=${now}&duration=120`
-
-          function escapeXml(s) {
-            return String(s ?? '')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
-
-          function normId(s) {
-            return String(s || '')
-              .trim()
-              .replace(/\s+/g, '')
-              .replace(/[^A-Za-z0-9.+_-]/g, '')
-          }
-
-          function walk(value, found = []) {
-            if (!value || typeof value !== 'object') return found
-
-            if (Array.isArray(value)) {
-              for (const item of value) walk(item, found)
-              return found
-            }
-
-            const station =
-              value.station ||
-              value.channel ||
-              value.callSign ||
-              value.callsign ||
-              value.name ||
-              value.title
-
-            const id =
-              value.stationId ||
-              value.stationID ||
-              value.channelId ||
-              value.channelID ||
-              value.id
-
-            if (station && id) {
-              found.push({
-                name: String(station).trim(),
-                stationId: String(id).trim()
-              })
-            }
-
-            for (const v of Object.values(value)) walk(v, found)
-            return found
-          }
-
-          ;(async () => {
-            console.log(`Fetching ${url}`)
-
-            const res = await fetch(url, {
-              headers: {
-                accept: 'application/json',
-                origin: 'https://www.tvguide.com',
-                referer: 'https://www.tvguide.com/'
-              }
-            })
-
-            if (!res.ok) {
-              throw new Error(`TVGuide backend failed: ${res.status} ${res.statusText}`)
-            }
-
-            const json = await res.json()
-            const raw = walk(json)
-
-            const seen = new Set()
-            const channels = []
-
-            for (const ch of raw) {
-              const name = normId(ch.name)
-              const stationId = ch.stationId
-
-              if (!name || !stationId) continue
-
-              const key = `${PROVIDER_ID}#${stationId}`
-              if (seen.has(key)) continue
-              seen.add(key)
-
-              channels.push({
-                name,
-                siteId: key,
-                xmltvId: `${name}.us`
-              })
-            }
-
-            channels.sort((a, b) => a.name.localeCompare(b.name))
-
-            if (!channels.length) {
-              console.log(JSON.stringify(json, null, 2).slice(0, 3000))
-              throw new Error('No channels found in TVGuide backend response')
-            }
-
-            const xml = [
-              '<?xml version="1.0" encoding="UTF-8"?>',
-              '<channels>',
-              ...channels.map(ch =>
-                `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(ch.xmltvId)}" site_id="${escapeXml(ch.siteId)}">${escapeXml(ch.name)}</channel>`
-              ),
-              '</channels>',
-              ''
-            ].join('\n')
-
-            fs.writeFileSync(OUT, xml)
-
-            console.log(`Wrote ${channels.length} OTA channels to ${OUT}`)
-            console.log(xml.split('\n').slice(0, 80).join('\n'))
-          })().catch(err => {
-            console.error(err)
-            process.exit(1)
-          })
-          EOF
-
           node scripts/grab-tvguide-ota.js
+        env:
+          TVGUIDE_PROVIDER_ID: 9100000664
+          DAYS: 1
+          OUTPUT: guides/tvguide.xml
 
-      - name: Commit OTA raw file
+      - name: Commit guide
         run: |
           git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.email "actions@github.com"
 
-          git add guides/tvguide-ota.xml scripts/grab-tvguide-ota.js
-
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-          else
-            git commit -m "Build TVGuide OTA raw channel list"
-            git push
-          fi
+          git add guides/tvguide.xml
+          git commit -m "Update TVGuide OTA" || echo "No changes"
+          git push
