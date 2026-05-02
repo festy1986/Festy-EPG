@@ -1,93 +1,71 @@
-name: Festy TVGuide
+name: Festy Raw TVGuide
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  build-tvguide:
+  raw-tvguide:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Clone EPG engine clean
+      - name: Dump raw Spectrum Cumberland TVGuide channels
         run: |
-          rm -rf epg
-          git clone --depth 1 https://github.com/iptv-org/epg.git
+          mkdir -p guides
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install EPG dependencies
-        run: |
-          cd epg
-          npm install
-
-      - name: Copy Festy curated channels
-        run: |
-          mkdir -p epg/sites/tvguide.com
-          cp guides/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
-
-      - name: Normalize Festy channel IDs to local Spectrum lineup
-        run: |
           node <<'EOF'
           const fs = require('fs')
 
-          const file = 'epg/sites/tvguide.com/festy.channels.xml'
-          const LOCAL_ID = '9100002976'
+          const LINEUP_ID = '9100002976'
+          const start = new Date().toISOString().slice(0, 10) + 'T00:00:00.000Z'
+          const url = `https://backend.tvguide.com/tvschedules/tvguide/${LINEUP_ID}/web?start=${encodeURIComponent(start)}`
 
-          let xml = fs.readFileSync(file, 'utf8')
+          async function main() {
+            console.log('Fetching raw TVGuide lineup:', url)
 
-          xml = xml.replace(/site_id="([^"]+)"/g, (match, id) => {
-            if (!id) return match
-            if (id.includes('#')) return match
-            return `site_id="${LOCAL_ID}#${id}"`
+            const res = await fetch(url, {
+              headers: {
+                'user-agent': 'Mozilla/5.0',
+                'accept': 'application/json,text/plain,*/*',
+                'referer': 'https://www.tvguide.com/listings/'
+              }
+            })
+
+            const text = await res.text()
+
+            // raw dump goes here
+            fs.writeFileSync('guides/tvguide.xml', text)
+
+            if (!res.ok) {
+              console.error('TVGuide returned status:', res.status)
+              console.error(text.slice(0, 1000))
+              process.exit(1)
+            }
+
+            console.log('Raw Spectrum Cumberland lineup saved to guides/tvguide.xml')
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
           })
-
-          fs.writeFileSync(file, xml)
-          console.log('Prepared temporary TVGuide channel file using local lineup ' + LOCAL_ID)
           EOF
 
-      - name: Run TVGuide grab
-        run: |
-          cd epg
-          npm run grab -- \
-            --channels=sites/tvguide.com/festy.channels.xml \
-            --output=guide.xml \
-            --days=1
-
-      - name: Move guide to repo root if created
-        run: |
-          if [ -f epg/guide.xml ]; then
-            mv epg/guide.xml ./guide.xml
-            echo "guide.xml created and moved."
-          else
-            echo "guide.xml was not created."
-            echo "Creating empty placeholder so commit step does not crash."
-            cat > guide.xml <<'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <tv></tv>
-          EOF
-          fi
-
-      - name: Commit guide
+      - name: Commit raw dump
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guide.xml
+          git add guides/tvguide.xml
 
           if git diff --cached --quiet; then
-            echo "No guide changes to commit."
+            echo "No changes."
           else
-            git commit -m "Update Festy TVGuide"
+            git commit -m "Dump raw TVGuide Spectrum Cumberland lineup"
             git push
           fi
