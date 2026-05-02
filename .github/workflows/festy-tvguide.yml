@@ -1,9 +1,7 @@
-name: Festy TVGuide
+name: Festy TVGuide 1 Day Test
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
@@ -16,257 +14,283 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
+      - name: Clone EPG engine
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Verify curated channel list
-        run: |
-          if [ ! -f "guides/festy.channels.xml" ]; then
-            echo "Missing guides/festy.channels.xml"
-            exit 1
-          fi
-
-          COUNT=$(grep -c "<channel " guides/festy.channels.xml || true)
-          echo "Curated channel count: $COUNT"
-
-          if [ "$COUNT" -lt 1 ]; then
-            echo "No channels found in curated list."
-            exit 1
-          fi
-
-          if [ "$COUNT" -gt 350 ]; then
-            echo "Too many channels. This looks like the raw list, not your curated list."
-            exit 1
-          fi
-
-      - name: Add logos to curated channel list
-        run: |
-          node <<'EOF'
-          const fs = require("fs");
-
-          const repo = process.env.GITHUB_REPOSITORY;
-          const branch = process.env.GITHUB_REF_NAME || "main";
-          const channelFile = "guides/festy.channels.xml";
-          const logoDir = "logos";
-
-          function decodeXml(s) {
-            return s
-              .replace(/&amp;/g, "&")
-              .replace(/&apos;/g, "'")
-              .replace(/&quot;/g, '"');
-          }
-
-          function normalize(s) {
-            return decodeXml(s)
-              .toLowerCase()
-              .replace(/\.(png|jpg|jpeg|webp|svg)$/i, "")
-              .replace(/\bhd\b/g, "")
-              .replace(/\bsd\b/g, "")
-              .replace(/\beast\b/g, "")
-              .replace(/\bwest\b/g, "")
-              .replace(/\(.*?\)/g, "")
-              .replace(/&/g, "and")
-              .replace(/\+/g, "plus")
-              .replace(/[^a-z0-9]+/g, "");
-          }
-
-          function logoUrl(file) {
-            return `https://raw.githubusercontent.com/${repo}/${branch}/logos/${encodeURIComponent(file)}`;
-          }
-
-          const logos = fs.existsSync(logoDir)
-            ? fs.readdirSync(logoDir).filter(f => /\.(png|jpg|jpeg|webp|svg)$/i.test(f))
-            : [];
-
-          const logoMap = new Map();
-          for (const logo of logos) logoMap.set(normalize(logo), logo);
-
-          const aliases = {
-            msnbc: "MS NOW HD",
-            msnow: "MS NOW HD",
-            usa: "usa network",
-            usanetwork: "usa network",
-            ae: "A&E",
-            aande: "A&E",
-            lmn: "lifetime movie network",
-            lifetimemovienetwork: "lifetime movie network",
-            nesn: "New England Sports Network",
-            nesnplus: "New England Sports Network Plus HD",
-            science: "Science HD",
-            discoverychannel: "discovery",
-            fxm: "FX Movie HD",
-            fxmovie: "FX Movie HD",
-            gameshownetwork: "Game Show Network HD",
-            foodnetwork: "Food Network HD",
-            espnnews: "ESPN News HD",
-            nhlnetwork: "NHL Network HD",
-            mlbnetwork: "MLB Network HD",
-            nbatv: "NBA TV HD",
-            foxsports1: "FOX Sports 1 HD",
-            fs1: "FOX Sports 1 HD",
-            foxsports2: "FOX Sports 2",
-            fs2: "FOX Sports 2",
-            hallmarkchannel: "Hallmark",
-            hallmarkmystery: "Hallmark Mystery HD",
-            weatherchannel: "The Weather",
-            theweatherchannel: "The Weather",
-            comedycentral: "Comedy Central",
-            cartoonnetwork: "Cartoon Network",
-            nationalgeographic: "National Geographic",
-            natgeo: "National Geographic",
-            nationalgeographicwild: "National Geographic Wild",
-            natgeowild: "National Geographic Wild",
-            paramountnetwork: "Paramount Network HD",
-            uptv: "Up Entertainment HD",
-            up: "Up Entertainment HD",
-            heroesandicons: "Heroes & Icons Network",
-            metv: "MeTV"
-          };
-
-          let xml = fs.readFileSync(channelFile, "utf8");
-          let matched = 0;
-          let missed = 0;
-
-          xml = xml.replace(/<channel([^>]*)>([\s\S]*?)<\/channel>/g, (full, attrs, name) => {
-            const cleanName = decodeXml(name.trim());
-            const key = normalize(cleanName);
-
-            let logoFile = logoMap.get(key);
-
-            if (!logoFile && aliases[key]) {
-              logoFile = logoMap.get(normalize(aliases[key]));
-            }
-
-            if (!logoFile) {
-              for (const [logoKey, file] of logoMap.entries()) {
-                if (logoKey && key && (logoKey.includes(key) || key.includes(logoKey))) {
-                  logoFile = file;
-                  break;
-                }
-              }
-            }
-
-            attrs = attrs.replace(/\slogo="[^"]*"/g, "");
-
-            if (!logoFile) {
-              missed++;
-              return `<channel${attrs}>${name}</channel>`;
-            }
-
-            matched++;
-            return `<channel${attrs} logo="${logoUrl(logoFile)}">${name}</channel>`;
-          });
-
-          fs.writeFileSync(channelFile, xml);
-
-          console.log(`Matched logos: ${matched}`);
-          console.log(`No logo match: ${missed}`);
-          EOF
-
-      - name: Clone EPG engine
-        run: |
-          git clone --depth 1 https://github.com/iptv-org/epg.git epg
 
       - name: Install EPG dependencies
         run: |
           cd epg
           npm install
 
-      - name: Convert curated list for current EPG engine
+      - name: Create TVGuide repair script
         run: |
-          mkdir -p epg/sites/tvguide.com
+          mkdir -p scripts
 
-          node <<'EOF'
-          const fs = require("fs");
+          cat > scripts/repair-tvguide-curated.js <<'EOF'
+          const fs = require('fs')
+          const path = require('path')
 
-          const input = "guides/festy.channels.xml";
-          const output = "epg/sites/tvguide.com/tvguide.com.channels.xml";
+          const CURATED = 'sites/tvguide.com/festy.channels.xml'
 
-          let xml = fs.readFileSync(input, "utf8");
-
-          const channels = [...xml.matchAll(/<channel([^>]*)>([\s\S]*?)<\/channel>/g)];
-
-          if (!channels.length) {
-            console.error("No channels found in guides/festy.channels.xml");
-            process.exit(1);
+          if (!fs.existsSync(CURATED)) {
+            console.error(`Missing curated list: ${CURATED}`)
+            process.exit(1)
           }
 
-          let out = '<?xml version="1.0" encoding="UTF-8"?>\n';
-          out += '<channels>\n';
+          let xml = fs.readFileSync(CURATED, 'utf8')
 
-          for (const match of channels) {
-            const attrs = match[1];
-            const name = match[2].trim();
+          const logoBase = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos'
 
-            const siteIdMatch = attrs.match(/\ssite_id="([^"]*)"/);
-            const langMatch = attrs.match(/\slang="([^"]*)"/);
-            const xmltvMatch = attrs.match(/\sxmltv_id="([^"]*)"/);
-            const logoMatch = attrs.match(/\slogo="([^"]*)"/);
-
-            const siteId = siteIdMatch ? siteIdMatch[1] : "";
-            const lang = langMatch ? langMatch[1] : "en";
-            let xmltvId = xmltvMatch ? xmltvMatch[1] : "";
-
-            if (!siteId) continue;
-
-            if (!xmltvId) {
-              xmltvId = name
-                .replace(/&amp;/g, "and")
-                .replace(/[^A-Za-z0-9]+/g, "")
-                .replace(/^$/, "Channel") + ".us";
+          /*
+            These are the repairs based on the pattern from the failed run:
+            prefer plain/base TVGuide IDs over HD, @East, @SD, West, or duplicate alternates.
+            This does NOT drop channels.
+          */
+          const replacements = {
+            'FreeformHD.us': {
+              xmltv_id: 'Freeform.us',
+              name: 'Freeform',
+              site_id: '9200006942',
+              logo: `${logoBase}/freeform.png`
+            },
+            'SyfyHD.us': {
+              xmltv_id: 'Syfy.us',
+              name: 'Syfy',
+              site_id: '9200004316',
+              logo: `${logoBase}/Syfy%20HD.png`
+            },
+            'CNBCHD.us': {
+              xmltv_id: 'CNBC.us',
+              name: 'CNBC',
+              site_id: '9200009413',
+              logo: `${logoBase}/CNBC%20HD.png`
+            },
+            'BBCAmericaHD.us': {
+              xmltv_id: 'BBCAmerica.us',
+              name: 'BBC America',
+              site_id: '9200014701',
+              logo: `${logoBase}/BBC%20America%20HD.png`
+            },
+            'MAGNOLIANetworkHD.us': {
+              xmltv_id: 'MagnoliaNetwork.us',
+              name: 'Magnolia Network',
+              site_id: '9200012415',
+              logo: `${logoBase}/MAGNOLIA%20Network%20HD.png`
+            },
+            'HallmarkChannel.us@East': {
+              xmltv_id: 'HallmarkChannel.us',
+              name: 'Hallmark Channel',
+              site_id: '9200016034',
+              logo: `${logoBase}/Hallmark.png`
+            },
+            'DisneyChannel.us@East': {
+              xmltv_id: 'DisneyChannel.us',
+              name: 'Disney Channel',
+              site_id: '9200011893',
+              logo: `${logoBase}/Disney%20Channel.png`
+            },
+            'USANetwork.us@East': {
+              xmltv_id: 'USANetwork.us',
+              name: 'USA Network',
+              site_id: '9200009133',
+              logo: `${logoBase}/USA%20Network.png`
+            },
+            'FXXHD.us': {
+              xmltv_id: 'FXX.us',
+              name: 'FXX',
+              site_id: '9200014910',
+              logo: `${logoBase}/FXX%20HD.png`
+            },
+            'MTV2HD.us': {
+              xmltv_id: 'MTV2.us',
+              name: 'MTV2',
+              site_id: '9200012265',
+              logo: `${logoBase}/MTV2%20HD.png`
+            },
+            'UpEntertainmentHD.us': {
+              xmltv_id: 'UPtv.us',
+              name: 'UPtv',
+              site_id: '9200007166',
+              logo: `${logoBase}/Up%20Entertainment%20HD.png`
+            },
+            'ScienceHD.us': {
+              xmltv_id: 'Science.us',
+              name: 'Science',
+              site_id: '9200000462',
+              logo: `${logoBase}/Science%20HD.png`
+            },
+            'HistoryHD.us': {
+              xmltv_id: 'History.us',
+              name: 'History',
+              site_id: '9200014439',
+              logo: `${logoBase}/History%20HD.png`
+            },
+            'TNTHD.us': {
+              xmltv_id: 'TNT.us',
+              name: 'TNT',
+              site_id: '9200008879',
+              logo: `${logoBase}/tnt.png`
+            },
+            'TLCHD.us': {
+              xmltv_id: 'TLC.us',
+              name: 'TLC',
+              site_id: '9200016249',
+              logo: `${logoBase}/tlc.png`
+            },
+            'HGTVHD.us': {
+              xmltv_id: 'HGTV.us',
+              name: 'HGTV',
+              site_id: '9200004467',
+              logo: `${logoBase}/HGTV%20HD.png`
+            },
+            'LifetimeHD.us': {
+              xmltv_id: 'Lifetime.us',
+              name: 'Lifetime',
+              site_id: '9200000502',
+              logo: `${logoBase}/lifetime.png`
+            },
+            'MSNOWHD.us': {
+              xmltv_id: 'MSNOW.us',
+              name: 'MS NOW',
+              site_id: '9200009294',
+              logo: `${logoBase}/MS%20NOW%20HD.png`
+            },
+            'ESPNNewsHD.us': {
+              xmltv_id: 'ESPNNews.us',
+              name: 'ESPN News',
+              site_id: '9200006523',
+              logo: `${logoBase}/ESPN%20News%20HD.png`
+            },
+            'FOXSports1HD.us': {
+              xmltv_id: 'FOXSports1.us',
+              name: 'FOX Sports 1',
+              site_id: '9200017760',
+              logo: `${logoBase}/FOX%20Sports%201.png`
+            },
+            'NHLNetworkHD.us': {
+              xmltv_id: 'NHLNetwork.us',
+              name: 'NHL Network',
+              site_id: '9200016261',
+              logo: `${logoBase}/NHL%20Network%20HD.png`
+            },
+            'MLBNetworkHD.us': {
+              xmltv_id: 'MLBNetwork.us',
+              name: 'MLB Network',
+              site_id: '9200002579',
+              logo: `${logoBase}/MLB%20Network%20HD.png`
+            },
+            'CBSSportsNetworkHD.us': {
+              xmltv_id: 'CBSSportsNetwork.us',
+              name: 'CBS Sports Network',
+              site_id: '9200019260',
+              logo: `${logoBase}/CBS%20Sports%20Network.png`
+            },
+            'AXSTV.us': {
+              xmltv_id: 'AXSTV.us',
+              name: 'AXS TV',
+              site_id: '9200002987',
+              logo: `${logoBase}/AXS%20TV.png`
             }
-
-            let line = `  <channel site="tvguide.com" lang="${lang}" xmltv_id="${xmltvId}" site_id="${siteId}"`;
-
-            if (logoMatch) {
-              line += ` logo="${logoMatch[1]}"`;
-            }
-
-            line += `>${name}</channel>\n`;
-            out += line;
           }
 
-          out += '</channels>\n';
+          function escRegex(s) {
+            return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+          }
 
-          fs.writeFileSync(output, out);
+          function buildChannel(row) {
+            const logoAttr = row.logo ? ` logo="${row.logo}"` : ''
+            return `  <channel site="tvguide.com" site_id="${row.site_id}" lang="en" xmltv_id="${row.xmltv_id}"${logoAttr}>${row.name}</channel>`
+          }
 
-          console.log(`Converted ${channels.length} curated channels for EPG engine`);
+          let changed = 0
+
+          for (const [oldXmltv, fixed] of Object.entries(replacements)) {
+            const re = new RegExp(
+              `\\s*<channel\\b[^>]*xmltv_id="${escRegex(oldXmltv)}"[^>]*>[\\s\\S]*?<\\/channel>`,
+              'g'
+            )
+
+            xml = xml.replace(re, () => {
+              changed++
+              return '\n' + buildChannel(fixed)
+            })
+          }
+
+          /*
+            Also normalize obvious @East/@SD/@HD xmltv_id labels even if a row was not in the map.
+            This keeps TiviMate cleaner without deleting channels.
+          */
+          xml = xml.replace(/xmltv_id="([^"]+?)\.us@East"/g, 'xmltv_id="$1.us"')
+          xml = xml.replace(/xmltv_id="([^"]+?)\.us@SD"/g, 'xmltv_id="$1.us"')
+          xml = xml.replace(/xmltv_id="([^"]+?)HD\.us"/g, 'xmltv_id="$1.us"')
+
+          fs.writeFileSync(CURATED, xml)
+
+          console.log(`Repaired curated TVGuide rows: ${changed}`)
+          console.log(`Saved: ${CURATED}`)
           EOF
 
-          echo "Converted file preview:"
-          head -20 epg/sites/tvguide.com/tvguide.com.channels.xml
-
-      - name: Build TVGuide XML - curated list only - 2 days
+      - name: Repair curated TVGuide list before grabbing
         run: |
-          mkdir -p guides
-          cd epg
-          npm run grab -- --channels=sites/tvguide.com/tvguide.com.channels.xml --output=../guides/tvguide.xml --days=2
+          node scripts/repair-tvguide-curated.js
 
-      - name: Verify guide was created
+      - name: Copy repaired TVGuide files into EPG engine
         run: |
-          if [ ! -f "guides/tvguide.xml" ]; then
-            echo "Guide was not created."
-            exit 1
+          mkdir -p epg/sites/tvguide.com
+          cp sites/tvguide.com/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
+
+          if [ -f "sites/tvguide.com/tvguide.com.config.js" ]; then
+            cp sites/tvguide.com/tvguide.com.config.js epg/sites/tvguide.com/tvguide.com.config.js
           fi
 
-          CHANNELS=$(grep -c "<channel " guides/tvguide.xml || true)
-          PROGRAMS=$(grep -c "<programme " guides/tvguide.xml || true)
+      - name: Grab TVGuide 1 day test
+        run: |
+          cd epg
+          npm run grab -- \
+            --site=tvguide.com \
+            --channels=sites/tvguide.com/festy.channels.xml \
+            --output=guide.xml \
+            --days=1
 
-          echo "Output channels: $CHANNELS"
-          echo "Output programs: $PROGRAMS"
+      - name: Copy guide output back to repo
+        run: |
+          mkdir -p guides
+          cp epg/guide.xml guides/tvguide.xml
 
-      - name: Commit updated guide and curated list
+      - name: Print program summary
+        run: |
+          cd epg
+
+          echo "Total programs:"
+          grep -c "<programme " guide.xml || true
+
+          echo ""
+          echo "Channels in output:"
+          grep -c "<channel " guide.xml || true
+
+          echo ""
+          echo "Channels with programs:"
+          grep '<programme ' guide.xml \
+            | sed -n 's/.*channel="\([^"]*\)".*/\1/p' \
+            | sort -u \
+            | wc -l || true
+
+      - name: Commit repaired curated list and 1 day guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.xml guides/festy.channels.xml
+          git add sites/tvguide.com/festy.channels.xml guides/tvguide.xml scripts/repair-tvguide-curated.js
 
           if git diff --cached --quiet; then
-            echo "No guide changes to commit"
+            echo "No changes to commit."
           else
-            git commit -m "Update curated TVGuide guide"
+            git commit -m "Repair TVGuide IDs and build 1 day test guide"
             git push
           fi
