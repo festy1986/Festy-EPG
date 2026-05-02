@@ -1,0 +1,38 @@
+name: Build TVGuide Tivimate Curated
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-curated:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run TVGuide Tivimate curated builder
+        run: |
+          node scripts/build-tvguidetivimate-curated.js
+
+      - name: Verify curated file exists
+        run: |
+          test -s guides/tvguidetivimate.xml
+          head -40 guides/tvguidetivimate.xml
+
+      - name: Commit curated TVGuide Tivimate list
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguidetivimate.xml guides/tvguidetivimate.raw.xml
+
+          if git diff --cached --quiet; then
+            echo "No curated changes to commit"
+          else
+            git commit -m "Build curated TVGuide Tivimate channel list"
+            git push
+          fi
