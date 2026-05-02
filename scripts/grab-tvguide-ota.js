@@ -6,32 +6,12 @@ const DAYS = Number(process.env.DAYS || 14)
 
 const BASE = 'https://backend.tvguide.com/tvschedules/tvguide'
 
-// Curated OTA list only.
-// Boston locals are skipped.
-const CHANNEL_MAP = {
-  '9233006796': 'NBC PORTLAND',
-  '9200014312': 'ABC PORTLAND',
-  '9233001666': 'CBS PORTLAND',
-  '9233003676': 'FOX PORTLAND',
-
-  '9200006484': 'CW BOSTON',
-
-  '9200005724': 'COMET',
-  '9266073627': 'LAFF',
-  '9200016252': 'METV',
-  '9233003377': 'GRIT',
-  '9200020338': 'HEROES & ICONS',
-  '9233005846': 'COURT TV',
-  '9200017556': 'ION MYSTERY'
-}
-
-function xmlEscape(value = '') {
-  return String(value)
+function xmlEscape(v = '') {
+  return String(v)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
 }
 
 function xmltvTime(unix) {
@@ -56,32 +36,48 @@ function startOfTodayEpoch() {
   )
 }
 
+/* 🔥 AUTO NAME CLEANER */
+function cleanName(channel) {
+  const full = channel.fullName || ''
+  const network = channel.networkName || ''
+
+  // If network exists → use it (best case)
+  if (network && network.length > 1) {
+    if (network === 'NBC') return 'NBC PORTLAND'
+    if (network === 'ABC') return 'ABC PORTLAND'
+    if (network === 'CBS') return 'CBS PORTLAND'
+    if (network === 'FOX') return 'FOX PORTLAND'
+    if (network === 'CW') return 'CW BOSTON'
+    return network.toUpperCase()
+  }
+
+  // fallback: extract from parentheses
+  const match = full.match(/\((.*?)\)/)
+  if (match) return match[1].toUpperCase()
+
+  return full.toUpperCase()
+}
+
 async function fetchDay(startEpoch) {
-  const date = new Date(startEpoch * 1000).toISOString().slice(0, 10)
   const url = `${BASE}/${PROVIDER_ID}/web?start=${startEpoch}&duration=1440`
 
-  console.log(`[fetch-day] ${date}`)
+  console.log(`[fetch-day] ${new Date(startEpoch * 1000).toISOString().slice(0,10)}`)
 
   const res = await fetch(url, {
     headers: {
       accept: 'application/json',
       referer: 'https://www.tvguide.com/',
-      'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36'
+      'user-agent': 'Mozilla/5.0'
     }
   })
 
-  if (!res.ok) {
-    throw new Error(`TVGuide request failed: ${res.status} ${res.statusText}`)
-  }
+  if (!res.ok) throw new Error(`TVGuide request failed`)
 
   return res.json()
 }
 
 function getItems(json) {
-  if (Array.isArray(json?.data?.items)) return json.data.items
-  if (Array.isArray(json?.items)) return json.items
-  return []
+  return json?.data?.items || []
 }
 
 async function main() {
@@ -91,144 +87,77 @@ async function main() {
   const channels = new Map()
   const allProgrammes = []
 
-  console.log('[info] starting curated OTA locals guide')
-  console.log(`[info] provider ID: ${PROVIDER_ID}`)
-  console.log(`[info] days: ${DAYS}`)
-  console.log(`[info] output: ${OUTPUT}`)
-
   for (let d = 0; d < DAYS; d++) {
     const dayStart = baseStart + d * 86400
     const dayEnd = dayStart + 86400
-    const date = new Date(dayStart * 1000).toISOString().slice(0, 10)
 
     const json = await fetchDay(dayStart)
     const items = getItems(json)
-    const dayProgrammes = new Map()
+
+    const programmes = new Map()
 
     for (const item of items) {
-      const rawChannel = item.channel
-      if (!rawChannel?.sourceId) continue
+      const ch = item.channel
+      if (!ch?.sourceId) continue
 
-      const rawId = String(rawChannel.sourceId)
-      const mappedId = CHANNEL_MAP[rawId]
+      const id = String(ch.sourceId)
+      const name = cleanName(ch)
 
-      if (!mappedId) continue
+      channels.set(name, { id: name, name })
 
-      channels.set(mappedId, {
-        id: mappedId,
-        name: mappedId
-      })
-
-      const schedules = Array.isArray(item.programSchedules)
-        ? item.programSchedules
-        : []
-
-      for (const p of schedules) {
+      for (const p of item.programSchedules || []) {
         if (!p.startTime || !p.endTime) continue
-
         if (p.endTime <= dayStart) continue
         if (p.startTime >= dayEnd) continue
 
-        const start = Math.max(p.startTime, dayStart)
-        const stop = Math.min(p.endTime, dayEnd)
+        const key = `${name}|${p.startTime}|${p.endTime}`
 
-        if (stop <= start) continue
-
-        const key = [
-          mappedId,
-          p.startTime,
-          p.endTime,
-          p.programId || '',
-          p.title || ''
-        ].join('|')
-
-        dayProgrammes.set(key, {
-          channelId: mappedId,
-          start,
-          stop,
-          title: p.title || 'Unknown',
-          subTitle: p.episodeTitle || p.subtitle || '',
-          desc: p.description || p.shortDescription || '',
-          category: p.catName || '',
-          rating: p.rating || ''
+        programmes.set(key, {
+          channelId: name,
+          start: Math.max(p.startTime, dayStart),
+          stop: Math.min(p.endTime, dayEnd),
+          title: p.title || 'Unknown'
         })
       }
     }
 
-    console.log(`\n=== ${date} curated OTA totals ===`)
+    console.log(`\n=== ${new Date(dayStart * 1000).toISOString().slice(0,10)} ===`)
 
     const counts = {}
-    for (const p of dayProgrammes.values()) {
+    for (const p of programmes.values()) {
       counts[p.channelId] = (counts[p.channelId] || 0) + 1
     }
 
-    for (const channelName of Object.values(CHANNEL_MAP)) {
-      if (counts[channelName]) {
-        console.log(`${channelName} → ${counts[channelName]}`)
-      }
+    for (const [ch, count] of Object.entries(counts)) {
+      console.log(`${ch} → ${count}`)
     }
 
-    allProgrammes.push(...dayProgrammes.values())
+    allProgrammes.push(...programmes.values())
   }
-
-  if (!channels.size) {
-    throw new Error('No curated OTA channels found')
-  }
-
-  const sortedChannels = [...channels.values()].sort((a, b) =>
-    a.id.localeCompare(b.id)
-  )
-
-  const sortedProgrammes = allProgrammes.sort((a, b) => {
-    if (a.start !== b.start) return a.start - b.start
-    return a.channelId.localeCompare(b.channelId)
-  })
 
   const lines = []
-
   lines.push('<?xml version="1.0" encoding="UTF-8"?>')
-  lines.push('<tv generator-info-name="festy1986 OTA Locals">')
+  lines.push('<tv>')
 
-  for (const ch of sortedChannels) {
+  for (const ch of channels.values()) {
     lines.push(`  <channel id="${xmlEscape(ch.id)}">`)
     lines.push(`    <display-name>${xmlEscape(ch.name)}</display-name>`)
     lines.push('  </channel>')
   }
 
-  for (const p of sortedProgrammes) {
+  for (const p of allProgrammes.sort((a,b)=>a.start-b.start)) {
     lines.push(
-      `  <programme start="${xmltvTime(p.start)}" stop="${xmltvTime(p.stop)}" channel="${xmlEscape(p.channelId)}">`
+      `  <programme start="${xmltvTime(p.start)}" stop="${xmltvTime(p.stop)}" channel="${p.channelId}">`
     )
-    lines.push(`    <title lang="en">${xmlEscape(p.title)}</title>`)
-
-    if (p.subTitle) {
-      lines.push(`    <sub-title lang="en">${xmlEscape(p.subTitle)}</sub-title>`)
-    }
-
-    if (p.desc) {
-      lines.push(`    <desc lang="en">${xmlEscape(p.desc)}</desc>`)
-    }
-
-    if (p.category) {
-      lines.push(`    <category lang="en">${xmlEscape(p.category)}</category>`)
-    }
-
-    if (p.rating) {
-      lines.push('    <rating>')
-      lines.push(`      <value>${xmlEscape(p.rating)}</value>`)
-      lines.push('    </rating>')
-    }
-
+    lines.push(`    <title>${xmlEscape(p.title)}</title>`)
     lines.push('  </programme>')
   }
 
   lines.push('</tv>')
 
-  fs.writeFileSync(OUTPUT, lines.join('\n') + '\n')
+  fs.writeFileSync(OUTPUT, lines.join('\n'))
 
-  console.log(`\n[info] curated OTA channels: ${channels.size}`)
-  console.log(`[info] curated OTA programmes: ${sortedProgrammes.length}`)
-  console.log(`[done] wrote ${OUTPUT}`)
+  console.log(`\n[done] wrote ${OUTPUT}`)
 }
 
 main().catch(err => {
