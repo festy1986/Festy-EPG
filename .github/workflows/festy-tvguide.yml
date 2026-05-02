@@ -1,7 +1,10 @@
-name: Festy TVGuide 1 Day Test
+name: Festy TVGuide
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/festy-tvguide.yml"
 
 permissions:
   contents: write
@@ -18,45 +21,36 @@ jobs:
         run: |
           git clone --depth 1 https://github.com/iptv-org/epg.git
 
-      - name: Set up Node
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install EPG dependencies
+      - name: Install dependencies
         run: |
           cd epg
           npm install
 
-      - name: Create Festy-only TVGuide channel list
+      # 🔑 THIS IS YOUR CONTROL — ONLY YOUR CHANNELS
+      - name: Create Festy channel list
         run: |
           mkdir -p epg/sites/tvguide.com
 
           cat > epg/sites/tvguide.com/festy.channels.xml <<'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <channels>
-  <channel site="tvguide.com" site_id="9200005724" lang="en" xmltv_id="WPFODT3WatervilleMaineComet.us">COMET</channel>
-  <channel site="tvguide.com" site_id="9200004423" lang="en" xmltv_id="WPFODTWatervilleMaineROAR.us">ROAR</channel>
-  <channel site="tvguide.com" site_id="9200014312" lang="en" xmltv_id="WMTWDTPolandSpringMaineABC.us">ABC PORTLAND</channel>
-  <channel site="tvguide.com" site_id="9200016252" lang="en" xmltv_id="WMTWDT2PolandSpringMaineMeTV.us">METV</channel>
-
-  <channel site="tvguide.com" site_id="9200002736" lang="en" xmltv_id="OWN.us">OWN</channel>
   <channel site="tvguide.com" site_id="9200006937" lang="en" xmltv_id="ESPN.us">ESPN</channel>
   <channel site="tvguide.com" site_id="9200012351" lang="en" xmltv_id="ESPN2.us">ESPN 2</channel>
+  <channel site="tvguide.com" site_id="9200002736" lang="en" xmltv_id="OWN.us">OWN</channel>
   <channel site="tvguide.com" site_id="9200004949" lang="en" xmltv_id="Oxygen.us">OXYGEN</channel>
   <channel site="tvguide.com" site_id="9200004848" lang="en" xmltv_id="CartoonNetwork.us">CARTOON NETWORK</channel>
-  <channel site="tvguide.com" site_id="9200006939" lang="en" xmltv_id="Nickelodeon.us">NICKELODEON</channel>
-  <channel site="tvguide.com" site_id="9200004889" lang="en" xmltv_id="AandE.us">A&E</channel>
+  <channel site="tvguide.com" site_id="9200004889" lang="en" xmltv_id="AandE.us">A&amp;E</channel>
   <channel site="tvguide.com" site_id="9200002886" lang="en" xmltv_id="Bravo.us">BRAVO</channel>
-  <channel site="tvguide.com" site_id="9200009547" lang="en" xmltv_id="truTV.us">TRU TV</channel>
   <channel site="tvguide.com" site_id="9200006932" lang="en" xmltv_id="FX.us">FX</channel>
-  <channel site="tvguide.com" site_id="9200012343" lang="en" xmltv_id="E.us">E! ENTERTAINMENT</channel>
+  <channel site="tvguide.com" site_id="9200012343" lang="en" xmltv_id="E.us">E!</channel>
   <channel site="tvguide.com" site_id="9200012085" lang="en" xmltv_id="CMT.us">CMT</channel>
-  <channel site="tvguide.com" site_id="9200009245" lang="en" xmltv_id="DestinationAmerica.us">DESTINATION AMERICA</channel>
-  <channel site="tvguide.com" site_id="9200002243" lang="en" xmltv_id="InvestigationDiscovery.us">INVESTIGATION DISCOVERY</channel>
-  <channel site="tvguide.com" site_id="9200009884" lang="en" xmltv_id="FOXSports2.us">FOX SPORTS 2</channel>
-  <channel site="tvguide.com" site_id="9200004330" lang="en" xmltv_id="NFLNetwork.us">NFL NETWORK</channel>
 
+  <!-- FIXED (NO HD / NO @EAST) -->
   <channel site="tvguide.com" site_id="9200006942" lang="en" xmltv_id="Freeform.us">FREEFORM</channel>
   <channel site="tvguide.com" site_id="9200009133" lang="en" xmltv_id="USANetwork.us">USA NETWORK</channel>
   <channel site="tvguide.com" site_id="9200011893" lang="en" xmltv_id="DisneyChannel.us">DISNEY CHANNEL</channel>
@@ -67,18 +61,15 @@ jobs:
   <channel site="tvguide.com" site_id="9200004467" lang="en" xmltv_id="HGTV.us">HGTV</channel>
   <channel site="tvguide.com" site_id="9200004316" lang="en" xmltv_id="Syfy.us">SYFY</channel>
   <channel site="tvguide.com" site_id="9200014439" lang="en" xmltv_id="History.us">HISTORY</channel>
-  <channel site="tvguide.com" site_id="9200016034" lang="en" xmltv_id="HallmarkChannel.us">HALLMARK CHANNEL</channel>
+  <channel site="tvguide.com" site_id="9200016034" lang="en" xmltv_id="HallmarkChannel.us">HALLMARK</channel>
   <channel site="tvguide.com" site_id="9200014910" lang="en" xmltv_id="FXX.us">FXX</channel>
   <channel site="tvguide.com" site_id="9200012415" lang="en" xmltv_id="MagnoliaNetwork.us">MAGNOLIA</channel>
   <channel site="tvguide.com" site_id="9200014701" lang="en" xmltv_id="BBCAmerica.us">BBC AMERICA</channel>
   <channel site="tvguide.com" site_id="9200009294" lang="en" xmltv_id="MSNOW.us">MS NOW</channel>
-  <channel site="tvguide.com" site_id="9200010020" lang="en" xmltv_id="FETV.us">FETV</channel>
-  <channel site="tvguide.com" site_id="9200005182" lang="en" xmltv_id="HeroesandIconsNetwork.us">HEROES & ICONS</channel>
-  <channel site="tvguide.com" site_id="9200004312" lang="en" xmltv_id="NewEnglandSportsNetwork.us">NESN</channel>
 </channels>
 EOF
 
-      - name: Grab TVGuide 1 day test
+      - name: Run TVGuide (1 day)
         run: |
           cd epg
           npm run grab -- \
@@ -87,28 +78,27 @@ EOF
             --output=guide.xml \
             --days=1
 
-      - name: Copy guide output back to repo
+      - name: Copy guide to repo
         run: |
-          mkdir -p guides sites/tvguide.com
+          mkdir -p guides
           cp epg/guide.xml guides/tvguide.xml
-          cp epg/sites/tvguide.com/festy.channels.xml sites/tvguide.com/festy.channels.xml
 
-      - name: Print program summary
+      - name: Show results
         run: |
           cd epg
           echo "Programs:"
           grep -c "<programme " guide.xml || true
 
-      - name: Commit guide and curated list
+      - name: Commit guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.xml sites/tvguide.com/festy.channels.xml
+          git add guides/tvguide.xml
 
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "No changes"
           else
-            git commit -m "Build Festy-only TVGuide test guide"
+            git commit -m "Update Festy TVGuide (1 day test)"
             git push
           fi
