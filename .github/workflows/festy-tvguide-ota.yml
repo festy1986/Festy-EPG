@@ -27,7 +27,7 @@ jobs:
           node scripts/grab-tvguide-ota.js
         env:
           TVGUIDE_PROVIDER_ID: 9100000664
-          DAYS: 1
+          DAYS: 14
           OUTPUT: guides/tvguide.xml
           CHUNK_MINUTES: 120
 
