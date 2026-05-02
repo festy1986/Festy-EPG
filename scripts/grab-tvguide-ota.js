@@ -41,7 +41,7 @@ function startOfTodayEpoch() {
 async function fetchChunk(startEpoch, durationMinutes) {
   const url = `${BASE}/${PROVIDER_ID}/web?start=${startEpoch}&duration=${durationMinutes}`
 
-  console.log(`Fetching ${url}`)
+  console.log(`[fetch] ${url}`)
 
   const res = await fetch(url, {
     headers: {
@@ -76,11 +76,10 @@ async function main() {
 
   const dayStart = startOfTodayEpoch()
   const dayEnd = dayStart + DAYS * 24 * 60 * 60
+  const totalMinutes = DAYS * 24 * 60
 
   const channels = new Map()
   const programmes = new Map()
-
-  const totalMinutes = DAYS * 24 * 60
 
   console.log('[info] starting TVGuide OTA grab')
   console.log(`[info] provider ID: ${PROVIDER_ID}`)
@@ -94,13 +93,12 @@ async function main() {
     const items = getItems(json)
 
     if (!items.length) {
-      console.log(`[warn] no items found for chunk starting ${chunkStart}`)
+      console.log(`[warn] no items found for chunk ${chunkStart}`)
       continue
     }
 
     for (const item of items) {
       const channel = item.channel
-
       if (!channel || !channel.sourceId) continue
 
       const channelId = String(channel.sourceId)
@@ -124,27 +122,24 @@ async function main() {
         ? item.programSchedules
         : []
 
-      console.log(
-        `[channel] ${fullName} | ${channel.number || 'no-number'} | ${channelId} | ${schedules.length} program(s)`
-      )
-
       for (const p of schedules) {
         if (!p.startTime || !p.endTime) continue
 
-        // Strict window clamp.
-        // This prevents yesterday/tomorrow bleed from TVGuide chunk overlap.
         if (p.endTime <= dayStart) continue
         if (p.startTime >= dayEnd) continue
 
-        const startTime = Math.max(p.startTime, dayStart)
-        const endTime = Math.min(p.endTime, dayEnd)
+        const originalStart = p.startTime
+        const originalEnd = p.endTime
+
+        const startTime = Math.max(originalStart, dayStart)
+        const endTime = Math.min(originalEnd, dayEnd)
 
         if (endTime <= startTime) continue
 
         const key = [
           channelId,
-          startTime,
-          endTime,
+          originalStart,
+          originalEnd,
           p.programId || '',
           p.title || ''
         ].join('|')
@@ -167,14 +162,6 @@ async function main() {
     throw new Error('No channels found in TVGuide backend response')
   }
 
-  console.log(`[info] found ${channels.size} channel(s)`)
-  console.log(`[info] found ${programmes.size} programme(s)`)
-
-  const lines = []
-
-  lines.push('<?xml version="1.0" encoding="UTF-8"?>')
-  lines.push('<tv generator-info-name="festy1986 TVGuide OTA">')
-
   const sortedChannels = [...channels.values()].sort((a, b) => {
     const an = parseFloat(a.number)
     const bn = parseFloat(b.number)
@@ -185,6 +172,32 @@ async function main() {
 
     return a.fullName.localeCompare(b.fullName)
   })
+
+  const countsByChannel = new Map()
+
+  for (const p of programmes.values()) {
+    countsByChannel.set(p.channelId, (countsByChannel.get(p.channelId) || 0) + 1)
+  }
+
+  console.log('')
+  console.log('[info] FINAL FULL-DAY PROGRAM TOTALS PER CHANNEL')
+  console.log('')
+
+  for (const ch of sortedChannels) {
+    console.log(
+      `[day-total] ${ch.fullName} | ${ch.number || 'no-number'} | ${ch.id} | ${countsByChannel.get(ch.id) || 0} programme(s)`
+    )
+  }
+
+  console.log('')
+  console.log(`[info] found ${channels.size} channel(s)`)
+  console.log(`[info] found ${programmes.size} programme(s) total`)
+  console.log('')
+
+  const lines = []
+
+  lines.push('<?xml version="1.0" encoding="UTF-8"?>')
+  lines.push('<tv generator-info-name="festy1986 TVGuide OTA">')
 
   for (const ch of sortedChannels) {
     lines.push(`  <channel id="${xmlEscape(ch.id)}">`)
@@ -210,8 +223,8 @@ async function main() {
   }
 
   const sortedProgrammes = [...programmes.values()].sort((a, b) => {
-    if (a.start !== b.start) return a.start - b.start
-    return a.channelId.localeCompare(b.channelId)
+    if (a.channelId !== b.channelId) return a.channelId.localeCompare(b.channelId)
+    return a.start - b.start
   })
 
   for (const p of sortedProgrammes) {
