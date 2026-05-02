@@ -1,4 +1,4 @@
-name: Festy OTA Locals Guide
+name: Festy OTA Guides
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-ota-locals-guide:
+  build-ota-guides:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,20 +21,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build OTA locals guide
+      - name: Build OTA raw and curated guides
         run: |
           mkdir -p guides scripts
           node scripts/grab-tvguide-ota.js
         env:
           TVGUIDE_PROVIDER_ID: 9100000664
           DAYS: 14
-          OUTPUT: guides/OTALocalsguide.xml
+          RAW_OUTPUT: guides/OTALocalsguide.raw.xml
+          CURATED_OUTPUT: guides/OTALocalsguide.xml
 
-      - name: Commit OTA locals guide
+      - name: Commit OTA guides
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git add guides/OTALocalsguide.xml
-          git commit -m "Update OTA locals guide" || echo "No changes to commit"
+          git add guides/OTALocalsguide.raw.xml guides/OTALocalsguide.xml
+          git commit -m "Update OTA raw and curated guides" || echo "No changes to commit"
           git push
