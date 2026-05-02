@@ -50,7 +50,7 @@ jobs:
 
           mv epg/guide.xml ./guide.xml
 
-      - name: Keep custom channel metadata and logos
+      - name: Apply Festy metadata formatting
         run: |
           node <<'EOF'
           const fs = require('fs')
@@ -68,56 +68,235 @@ jobs:
             process.exit(1)
           }
 
-          const guide = fs.readFileSync(guideFile, 'utf8')
+          let guide = fs.readFileSync(guideFile, 'utf8')
           const curated = fs.readFileSync(curatedFile, 'utf8')
 
-          const curatedChannels = []
-          const channelRe = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
-          let m
-
           function getAttr(attrs, name) {
-            const match = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return match ? match[1] : ''
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? m[1] : ''
           }
 
-          function escapeXml(value) {
-            return String(value || '')
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+          }
+
+          function escText(s) {
+            return String(s || '')
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
           }
 
-          while ((m = channelRe.exec(curated))) {
-            const attrs = m[1]
-            const name = m[2].trim()
+          function escAttr(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function textOf(block, tag) {
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function allTextOf(block, tag) {
+            const out = []
+            const re = new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi')
+            let m
+            while ((m = re.exec(block))) out.push(decodeXml(m[1]).trim())
+            return out.filter(Boolean)
+          }
+
+          function hasTag(block, tag) {
+            return new RegExp(`<${tag}\\b`, 'i').test(block)
+          }
+
+          function cleanTitle(s) {
+            return String(s || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function cleanSpaces(s) {
+            return String(s || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
+          }
+
+          function fixBrokenDescription(s) {
+            let d = cleanSpaces(s)
+            if (!d) return ''
+
+            d = d.replace(/\.\.\.$/, '').trim()
+            d = d.replace(/[,:;–—-]\s*$/, '').trim()
+
+            const words = d.split(/\s+/)
+            const last = words[words.length - 1] || ''
+
+            const badEndings = [
+              'stor', 'storie', 'experienc', 'becaus', 'includ', 'discover',
+              'investigat', 'myster', 'famil', 'friend', 'someth', 'everyth',
+              'meanwhil', 'continu', 'return', 'learn', 'realiz'
+            ]
+
+            const stripped = last.toLowerCase().replace(/[^a-z]/g, '')
+
+            if (badEndings.includes(stripped) && words.length > 1) {
+              words.pop()
+              d = words.join(' ').trim()
+            }
+
+            const lastFullSentence = d.match(/^([\s\S]*[.!?])\s+[^.!?]*$/)
+            if (lastFullSentence && lastFullSentence[1].length >= 25) {
+              d = lastFullSentence[1].trim()
+            }
+
+            if (!/[.!?]$/.test(d)) d += '.'
+
+            return d
+          }
+
+          function formatDateFromStart(start) {
+            const m = String(start || '').match(/^(\d{4})(\d{2})(\d{2})/)
+            if (!m) return ''
+            return `${m[2]}/${m[3]}/${m[1]}`
+          }
+
+          function formatYear(dateText) {
+            const m = String(dateText || '').match(/(\d{4})/)
+            return m ? m[1] : ''
+          }
+
+          function formatEpisodeNum(block) {
+            const nums = allTextOf(block, 'episode-num')
+
+            for (const n of nums) {
+              let m = n.match(/S\s*(\d{1,2})\s*E\s*(\d{1,2})/i)
+              if (m) return `S${m[1].padStart(2, '0')}E${m[2].padStart(2, '0')}`
+
+              m = n.match(/(\d{1,2})\s*[x.]\s*(\d{1,2})/i)
+              if (m) return `S${m[1].padStart(2, '0')}E${m[2].padStart(2, '0')}`
+            }
+
+            return ''
+          }
+
+          function isMovie(block) {
+            const cats = allTextOf(block, 'category').map(c => c.toLowerCase())
+            return cats.some(c => c.includes('movie') || c.includes('film'))
+          }
+
+          const curatedChannels = []
+          const curatedBySiteId = new Map()
+          const curatedRe = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
+          let cm
+
+          while ((cm = curatedRe.exec(curated))) {
+            const attrs = cm[1]
+            const name = decodeXml(cm[2]).trim()
             const siteId = getAttr(attrs, 'site_id')
             const xmltvId = getAttr(attrs, 'xmltv_id')
             const logo = getAttr(attrs, 'logo')
-
             const id = xmltvId || name
+
             if (!id) continue
 
-            curatedChannels.push({
-              id,
-              name,
-              logo
-            })
+            const ch = { id, name, logo, siteId }
+            curatedChannels.push(ch)
+
+            if (siteId) {
+              curatedBySiteId.set(siteId, ch)
+              curatedBySiteId.set(siteId.split('#').pop(), ch)
+            }
           }
 
-          const channelBlock = curatedChannels.map(ch => {
-            let out = `  <channel id="${ch.id}">\n`
-            out += `    <display-name>${escapeXml(ch.name)}</display-name>\n`
-            if (ch.logo) out += `    <icon src="${ch.logo}"/>\n`
+          const channelHeader = curatedChannels.map(ch => {
+            let out = `  <channel id="${escAttr(ch.id)}">\n`
+            out += `    <display-name>${escText(ch.name)}</display-name>\n`
+            if (ch.logo) out += `    <icon src="${escAttr(ch.logo)}"/>\n`
             out += `  </channel>`
             return out
           }).join('\n')
 
-          let updated = guide.replace(/<channel[\s\S]*?<\/channel>\n?/g, '')
-          updated = updated.replace(/<tv([^>]*)>/, `<tv$1>\n${channelBlock}\n`)
+          guide = guide.replace(/<channel[\s\S]*?<\/channel>\n?/g, '')
+          guide = guide.replace(/<tv([^>]*)>/, `<tv$1>\n${channelHeader}\n`)
 
-          fs.writeFileSync(guideFile, updated)
+          guide = guide.replace(/<programme\b([^>]*)>([\s\S]*?)<\/programme>/g, (whole, attrs, body) => {
+            const oldChannel = getAttr(attrs, 'channel')
+            const mapped = curatedBySiteId.get(oldChannel) || curatedBySiteId.get(oldChannel.split('#').pop())
+            const newChannel = mapped ? mapped.id : oldChannel
 
-          console.log(`Rebuilt XMLTV channel metadata for ${curatedChannels.length} curated channels`)
+            attrs = attrs.replace(/channel="[^"]*"/i, `channel="${escAttr(newChannel)}"`)
+
+            let title = cleanTitle(textOf(body, 'title'))
+            const subTitle = cleanSpaces(textOf(body, 'sub-title'))
+            const descRaw = textOf(body, 'desc')
+            const desc = fixBrokenDescription(descRaw)
+            const dateText = textOf(body, 'date')
+            const airDate = formatDateFromStart(getAttr(attrs, 'start'))
+            const year = formatYear(dateText)
+            const ep = formatEpisodeNum(body)
+            const movie = isMovie(body)
+
+            let finalDesc = ''
+
+            if (movie) {
+              const y = year || formatYear(getAttr(attrs, 'start'))
+              finalDesc = desc
+              if (y) finalDesc = finalDesc ? `${finalDesc} (${y})` : `(${y})`
+            } else {
+              const prefixParts = []
+
+              if (subTitle && ep) prefixParts.push(`${subTitle} - ${ep}`)
+              else if (subTitle) prefixParts.push(subTitle)
+              else if (ep) prefixParts.push(ep)
+
+              if (prefixParts.length && desc) {
+                finalDesc = `${prefixParts.join(' ')}. ${desc}`
+              } else if (prefixParts.length) {
+                finalDesc = `${prefixParts.join(' ')}.`
+              } else {
+                finalDesc = desc
+              }
+
+              if (airDate) finalDesc = finalDesc ? `${finalDesc} (${airDate})` : `(${airDate})`
+            }
+
+            finalDesc = cleanSpaces(finalDesc)
+
+            let newBody = body
+
+            newBody = newBody.replace(/<title\b[^>]*>[\s\S]*?<\/title>/i, `<title lang="en">${escText(title)}</title>`)
+
+            if (/<desc\b/i.test(newBody)) {
+              newBody = newBody.replace(/<desc\b[^>]*>[\s\S]*?<\/desc>/i, `<desc lang="en">${escText(finalDesc)}</desc>`)
+            } else {
+              newBody = `\n    <desc lang="en">${escText(finalDesc)}</desc>${newBody}`
+            }
+
+            newBody = newBody
+              .replace(/\s*<new\s*\/>\s*/gi, '\n')
+              .replace(/\s*<previously-shown\b[^>]*\/>\s*/gi, '\n')
+              .replace(/\s*<previously-shown\b[^>]*>[\s\S]*?<\/previously-shown>\s*/gi, '\n')
+
+            return `<programme${attrs}>${newBody}</programme>`
+          })
+
+          fs.writeFileSync(guideFile, guide)
+
+          console.log(`Applied Festy metadata formatting`)
+          console.log(`Curated channels written: ${curatedChannels.length}`)
           EOF
 
       - name: Commit guide
