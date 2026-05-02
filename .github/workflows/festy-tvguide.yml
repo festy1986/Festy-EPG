@@ -28,242 +28,55 @@ jobs:
           cd epg
           npm install
 
-      - name: Locate/create TVGuide curated list
-        run: |
-          mkdir -p sites/tvguide.com
-
-          if [ -f "sites/tvguide.com/festy.channels.xml" ]; then
-            echo "Using sites/tvguide.com/festy.channels.xml"
-          elif [ -f "sites/tvguide.com/tvguide.com.channels.xml" ]; then
-            echo "Found tvguide.com.channels.xml, copying to festy.channels.xml"
-            cp sites/tvguide.com/tvguide.com.channels.xml sites/tvguide.com/festy.channels.xml
-          elif [ -f "sites/tvguide.com/tvguide.channels.xml" ]; then
-            echo "Found tvguide.channels.xml, copying to festy.channels.xml"
-            cp sites/tvguide.com/tvguide.channels.xml sites/tvguide.com/festy.channels.xml
-          elif [ -f "festy.channels.xml" ]; then
-            echo "Found root festy.channels.xml, copying to sites/tvguide.com/"
-            cp festy.channels.xml sites/tvguide.com/festy.channels.xml
-          else
-            echo "Could not find any TVGuide channel file."
-            echo "Repo files:"
-            find . -maxdepth 5 -type f | sort
-            exit 1
-          fi
-
-      - name: Create TVGuide repair script
-        run: |
-          mkdir -p scripts
-
-          cat > scripts/repair-tvguide-curated.js <<'EOF'
-          const fs = require('fs')
-
-          const CURATED = 'sites/tvguide.com/festy.channels.xml'
-
-          if (!fs.existsSync(CURATED)) {
-            console.error(`Missing curated list: ${CURATED}`)
-            process.exit(1)
-          }
-
-          let xml = fs.readFileSync(CURATED, 'utf8')
-          const logoBase = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos'
-
-          const replacements = {
-            'FreeformHD.us': {
-              xmltv_id: 'Freeform.us',
-              name: 'Freeform',
-              site_id: '9200006942',
-              logo: `${logoBase}/freeform.png`
-            },
-            'SyfyHD.us': {
-              xmltv_id: 'Syfy.us',
-              name: 'Syfy',
-              site_id: '9200004316',
-              logo: `${logoBase}/Syfy%20HD.png`
-            },
-            'CNBCHD.us': {
-              xmltv_id: 'CNBC.us',
-              name: 'CNBC',
-              site_id: '9200009413',
-              logo: `${logoBase}/CNBC%20HD.png`
-            },
-            'BBCAmericaHD.us': {
-              xmltv_id: 'BBCAmerica.us',
-              name: 'BBC America',
-              site_id: '9200014701',
-              logo: `${logoBase}/BBC%20America%20HD.png`
-            },
-            'MAGNOLIANetworkHD.us': {
-              xmltv_id: 'MagnoliaNetwork.us',
-              name: 'Magnolia Network',
-              site_id: '9200012415',
-              logo: `${logoBase}/MAGNOLIA%20Network%20HD.png`
-            },
-            'HallmarkChannel.us@East': {
-              xmltv_id: 'HallmarkChannel.us',
-              name: 'Hallmark Channel',
-              site_id: '9200016034',
-              logo: `${logoBase}/Hallmark.png`
-            },
-            'DisneyChannel.us@East': {
-              xmltv_id: 'DisneyChannel.us',
-              name: 'Disney Channel',
-              site_id: '9200011893',
-              logo: `${logoBase}/Disney%20Channel.png`
-            },
-            'USANetwork.us@East': {
-              xmltv_id: 'USANetwork.us',
-              name: 'USA Network',
-              site_id: '9200009133',
-              logo: `${logoBase}/USA%20Network.png`
-            },
-            'FXXHD.us': {
-              xmltv_id: 'FXX.us',
-              name: 'FXX',
-              site_id: '9200014910',
-              logo: `${logoBase}/FXX%20HD.png`
-            },
-            'MTV2HD.us': {
-              xmltv_id: 'MTV2.us',
-              name: 'MTV2',
-              site_id: '9200012265',
-              logo: `${logoBase}/MTV2%20HD.png`
-            },
-            'UpEntertainmentHD.us': {
-              xmltv_id: 'UPtv.us',
-              name: 'UPtv',
-              site_id: '9200007166',
-              logo: `${logoBase}/Up%20Entertainment%20HD.png`
-            },
-            'ScienceHD.us': {
-              xmltv_id: 'Science.us',
-              name: 'Science',
-              site_id: '9200000462',
-              logo: `${logoBase}/Science%20HD.png`
-            },
-            'HistoryHD.us': {
-              xmltv_id: 'History.us',
-              name: 'History',
-              site_id: '9200014439',
-              logo: `${logoBase}/History%20HD.png`
-            },
-            'TNTHD.us': {
-              xmltv_id: 'TNT.us',
-              name: 'TNT',
-              site_id: '9200008879',
-              logo: `${logoBase}/tnt.png`
-            },
-            'TLCHD.us': {
-              xmltv_id: 'TLC.us',
-              name: 'TLC',
-              site_id: '9200016249',
-              logo: `${logoBase}/tlc.png`
-            },
-            'HGTVHD.us': {
-              xmltv_id: 'HGTV.us',
-              name: 'HGTV',
-              site_id: '9200004467',
-              logo: `${logoBase}/HGTV%20HD.png`
-            },
-            'LifetimeHD.us': {
-              xmltv_id: 'Lifetime.us',
-              name: 'Lifetime',
-              site_id: '9200000502',
-              logo: `${logoBase}/lifetime.png`
-            },
-            'MSNOWHD.us': {
-              xmltv_id: 'MSNOW.us',
-              name: 'MS NOW',
-              site_id: '9200009294',
-              logo: `${logoBase}/MS%20NOW%20HD.png`
-            },
-            'ESPNNewsHD.us': {
-              xmltv_id: 'ESPNNews.us',
-              name: 'ESPN News',
-              site_id: '9200006523',
-              logo: `${logoBase}/ESPN%20News%20HD.png`
-            },
-            'NHLNetworkHD.us': {
-              xmltv_id: 'NHLNetwork.us',
-              name: 'NHL Network',
-              site_id: '9200016261',
-              logo: `${logoBase}/NHL%20Network%20HD.png`
-            },
-            'MLBNetworkHD.us': {
-              xmltv_id: 'MLBNetwork.us',
-              name: 'MLB Network',
-              site_id: '9200002579',
-              logo: `${logoBase}/MLB%20Network%20HD.png`
-            },
-            'AXSTV.us': {
-              xmltv_id: 'AXSTV.us',
-              name: 'AXS TV',
-              site_id: '9200002987',
-              logo: `${logoBase}/AXS%20TV.png`
-            },
-            'FETV.us': {
-              xmltv_id: 'FETV.us',
-              name: 'FETV',
-              site_id: '9200010020',
-              logo: `${logoBase}/fetv.png`
-            },
-            'HeroesandIconsNetwork.us': {
-              xmltv_id: 'HeroesandIconsNetwork.us',
-              name: 'Heroes & Icons Network',
-              site_id: '9200005182',
-              logo: `${logoBase}/Heroes%20%26%20Icons%20Network.png`
-            },
-            'NewEnglandSportsNetwork.us': {
-              xmltv_id: 'NewEnglandSportsNetwork.us',
-              name: 'New England Sports Network',
-              site_id: '9200004312',
-              logo: `${logoBase}/New%20England%20Sports%20Network.png`
-            }
-          }
-
-          function escRegex(s) {
-            return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-          }
-
-          function buildChannel(row) {
-            const logoAttr = row.logo ? ` logo="${row.logo}"` : ''
-            return `  <channel site="tvguide.com" site_id="${row.site_id}" lang="en" xmltv_id="${row.xmltv_id}"${logoAttr}>${row.name}</channel>`
-          }
-
-          let changed = 0
-
-          for (const [oldXmltv, fixed] of Object.entries(replacements)) {
-            const re = new RegExp(
-              `\\s*<channel\\b[^>]*xmltv_id="${escRegex(oldXmltv)}"[^>]*>[\\s\\S]*?<\\/channel>`,
-              'g'
-            )
-
-            xml = xml.replace(re, () => {
-              changed++
-              return '\n' + buildChannel(fixed)
-            })
-          }
-
-          xml = xml.replace(/xmltv_id="([^"]+?)\.us@East"/g, 'xmltv_id="$1.us"')
-          xml = xml.replace(/xmltv_id="([^"]+?)\.us@SD"/g, 'xmltv_id="$1.us"')
-
-          fs.writeFileSync(CURATED, xml)
-
-          console.log(`Repaired curated TVGuide rows: ${changed}`)
-          console.log(`Saved: ${CURATED}`)
-          EOF
-
-      - name: Repair curated TVGuide list before grabbing
-        run: |
-          node scripts/repair-tvguide-curated.js
-
-      - name: Copy repaired TVGuide files into EPG engine
+      - name: Create Festy-only TVGuide channel list
         run: |
           mkdir -p epg/sites/tvguide.com
-          cp sites/tvguide.com/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
 
-          if [ -f "sites/tvguide.com/tvguide.com.config.js" ]; then
-            cp sites/tvguide.com/tvguide.com.config.js epg/sites/tvguide.com/tvguide.com.config.js
-          fi
+          cat > epg/sites/tvguide.com/festy.channels.xml <<'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="tvguide.com" site_id="9200005724" lang="en" xmltv_id="WPFODT3WatervilleMaineComet.us">COMET</channel>
+  <channel site="tvguide.com" site_id="9200004423" lang="en" xmltv_id="WPFODTWatervilleMaineROAR.us">ROAR</channel>
+  <channel site="tvguide.com" site_id="9200014312" lang="en" xmltv_id="WMTWDTPolandSpringMaineABC.us">ABC PORTLAND</channel>
+  <channel site="tvguide.com" site_id="9200016252" lang="en" xmltv_id="WMTWDT2PolandSpringMaineMeTV.us">METV</channel>
+
+  <channel site="tvguide.com" site_id="9200002736" lang="en" xmltv_id="OWN.us">OWN</channel>
+  <channel site="tvguide.com" site_id="9200006937" lang="en" xmltv_id="ESPN.us">ESPN</channel>
+  <channel site="tvguide.com" site_id="9200012351" lang="en" xmltv_id="ESPN2.us">ESPN 2</channel>
+  <channel site="tvguide.com" site_id="9200004949" lang="en" xmltv_id="Oxygen.us">OXYGEN</channel>
+  <channel site="tvguide.com" site_id="9200004848" lang="en" xmltv_id="CartoonNetwork.us">CARTOON NETWORK</channel>
+  <channel site="tvguide.com" site_id="9200006939" lang="en" xmltv_id="Nickelodeon.us">NICKELODEON</channel>
+  <channel site="tvguide.com" site_id="9200004889" lang="en" xmltv_id="AandE.us">A&E</channel>
+  <channel site="tvguide.com" site_id="9200002886" lang="en" xmltv_id="Bravo.us">BRAVO</channel>
+  <channel site="tvguide.com" site_id="9200009547" lang="en" xmltv_id="truTV.us">TRU TV</channel>
+  <channel site="tvguide.com" site_id="9200006932" lang="en" xmltv_id="FX.us">FX</channel>
+  <channel site="tvguide.com" site_id="9200012343" lang="en" xmltv_id="E.us">E! ENTERTAINMENT</channel>
+  <channel site="tvguide.com" site_id="9200012085" lang="en" xmltv_id="CMT.us">CMT</channel>
+  <channel site="tvguide.com" site_id="9200009245" lang="en" xmltv_id="DestinationAmerica.us">DESTINATION AMERICA</channel>
+  <channel site="tvguide.com" site_id="9200002243" lang="en" xmltv_id="InvestigationDiscovery.us">INVESTIGATION DISCOVERY</channel>
+  <channel site="tvguide.com" site_id="9200009884" lang="en" xmltv_id="FOXSports2.us">FOX SPORTS 2</channel>
+  <channel site="tvguide.com" site_id="9200004330" lang="en" xmltv_id="NFLNetwork.us">NFL NETWORK</channel>
+
+  <channel site="tvguide.com" site_id="9200006942" lang="en" xmltv_id="Freeform.us">FREEFORM</channel>
+  <channel site="tvguide.com" site_id="9200009133" lang="en" xmltv_id="USANetwork.us">USA NETWORK</channel>
+  <channel site="tvguide.com" site_id="9200011893" lang="en" xmltv_id="DisneyChannel.us">DISNEY CHANNEL</channel>
+  <channel site="tvguide.com" site_id="9200009413" lang="en" xmltv_id="CNBC.us">CNBC</channel>
+  <channel site="tvguide.com" site_id="9200008879" lang="en" xmltv_id="TNT.us">TNT</channel>
+  <channel site="tvguide.com" site_id="9200000502" lang="en" xmltv_id="Lifetime.us">LIFETIME</channel>
+  <channel site="tvguide.com" site_id="9200016249" lang="en" xmltv_id="TLC.us">TLC</channel>
+  <channel site="tvguide.com" site_id="9200004467" lang="en" xmltv_id="HGTV.us">HGTV</channel>
+  <channel site="tvguide.com" site_id="9200004316" lang="en" xmltv_id="Syfy.us">SYFY</channel>
+  <channel site="tvguide.com" site_id="9200014439" lang="en" xmltv_id="History.us">HISTORY</channel>
+  <channel site="tvguide.com" site_id="9200016034" lang="en" xmltv_id="HallmarkChannel.us">HALLMARK CHANNEL</channel>
+  <channel site="tvguide.com" site_id="9200014910" lang="en" xmltv_id="FXX.us">FXX</channel>
+  <channel site="tvguide.com" site_id="9200012415" lang="en" xmltv_id="MagnoliaNetwork.us">MAGNOLIA</channel>
+  <channel site="tvguide.com" site_id="9200014701" lang="en" xmltv_id="BBCAmerica.us">BBC AMERICA</channel>
+  <channel site="tvguide.com" site_id="9200009294" lang="en" xmltv_id="MSNOW.us">MS NOW</channel>
+  <channel site="tvguide.com" site_id="9200010020" lang="en" xmltv_id="FETV.us">FETV</channel>
+  <channel site="tvguide.com" site_id="9200005182" lang="en" xmltv_id="HeroesandIconsNetwork.us">HEROES & ICONS</channel>
+  <channel site="tvguide.com" site_id="9200004312" lang="en" xmltv_id="NewEnglandSportsNetwork.us">NESN</channel>
+</channels>
+EOF
 
       - name: Grab TVGuide 1 day test
         run: |
@@ -276,37 +89,26 @@ jobs:
 
       - name: Copy guide output back to repo
         run: |
-          mkdir -p guides
+          mkdir -p guides sites/tvguide.com
           cp epg/guide.xml guides/tvguide.xml
+          cp epg/sites/tvguide.com/festy.channels.xml sites/tvguide.com/festy.channels.xml
 
       - name: Print program summary
         run: |
           cd epg
-
-          echo "Total programs:"
+          echo "Programs:"
           grep -c "<programme " guide.xml || true
 
-          echo ""
-          echo "Channels in output:"
-          grep -c "<channel " guide.xml || true
-
-          echo ""
-          echo "Channels with programs:"
-          grep '<programme ' guide.xml \
-            | sed -n 's/.*channel="\([^"]*\)".*/\1/p' \
-            | sort -u \
-            | wc -l || true
-
-      - name: Commit repaired curated list and 1 day guide
+      - name: Commit guide and curated list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add sites/tvguide.com/festy.channels.xml guides/tvguide.xml scripts/repair-tvguide-curated.js
+          git add guides/tvguide.xml sites/tvguide.com/festy.channels.xml
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Repair TVGuide IDs and build 1 day test guide"
+            git commit -m "Build Festy-only TVGuide test guide"
             git push
           fi
