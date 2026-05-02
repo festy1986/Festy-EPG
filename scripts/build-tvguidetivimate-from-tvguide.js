@@ -123,19 +123,19 @@ const MASTER = [
   ['TMC XTRA', ['TMC XTRA', 'THE MOVIE CHANNEL XTRA']],
   ['FLIX', ['FLIX-E', 'FLIX']],
 
-  ['STARZ', ['STARZ HD', 'STARZ']],
+  ['STARZ', ['STARZ', 'STARZHD']],
   ['STARZ EDGE', ['STARZ EDGE']],
   ['STARZ CINEMA', ['STARZ CINEMA']],
   ['STARZ COMEDY', ['STARZ COMEDY']],
-  ['STARZ ENCORE', ['STARZ ENCORE HD', 'STARZ ENCORE']],
-  ['STARZ ENCORE ACTION', ['STARZ ENCORE ACTION']],
-  ['STARZ ENCORE BLACK', ['STARZ ENCORE BLACK']],
-  ['STARZ ENCORE CLASSIC', ['STARZ ENCORE CLASSIC']],
-  ['STARZ ENCORE SUSPENSE', ['STARZ ENCORE SUSPENSE']],
-  ['STARZ ENCORE WESTERNS', ['STARZ ENCORE WESTERNS']],
-  ['STARZ ENCORE FAMILY', ['STARZ ENCORE FAMILY']],
-  ['STARZ KIDS & FAMILY', ['STARZ KIDS & FAMILY']],
-  ['STARZ INBLACK', ['STARZ INBLACK', 'STARZ IN BLACK']],
+  ['STARZ ENCORE', ['STARZ ENCORE', 'ENCOREHD']],
+  ['STARZ ENCORE ACTION', ['STARZ ENCORE ACTION', 'ENCRACTHD']],
+  ['STARZ ENCORE BLACK', ['STARZ ENCORE BLACK', 'ENCRBLHD']],
+  ['STARZ ENCORE CLASSIC', ['STARZ ENCORE CLASSIC', 'ENCRCLHD']],
+  ['STARZ ENCORE SUSPENSE', ['STARZ ENCORE SUSPENSE', 'ENCORSHD']],
+  ['STARZ ENCORE WESTERNS', ['STARZ ENCORE WESTERNS', 'ENCRWST']],
+  ['STARZ ENCORE FAMILY', ['STARZ ENCORE FAMILY', 'ENCORFM']],
+  ['STARZ KIDS & FAMILY', ['STARZ KIDS & FAMILY', 'STARZ KIDS AND FAMILY']],
+  ['STARZ INBLACK', ['STARZ INBLACK', 'STARZ IN BLACK', 'STARZBLKHD']],
 
   ['MGM+', ['MGM+']],
   ['MGM+ HITS', ['MGM+ HITS']],
@@ -169,8 +169,15 @@ function norm(s) {
     .replace(/\+/g, ' PLUS ')
     .replace(/&/g, ' AND ')
     .replace(/[^A-Z0-9]+/g, ' ')
+    .replace(/\bHD\b/g, '')
+    .replace(/\bSD\b/g, '')
     .replace(/\s+/g, ' ')
     .trim()
+}
+
+function getAttr(attrs, name) {
+  const m = attrs.match(new RegExp(`\\b${name}="([^"]+)"`))
+  return m ? m[1] : ''
 }
 
 function parseChannels(xml) {
@@ -181,16 +188,29 @@ function parseChannels(xml) {
   while ((m = re.exec(xml))) {
     const attrs = m[1]
     const body = m[2]
-    const id = (attrs.match(/\bid="([^"]+)"/) || [])[1]
-    if (!id) continue
 
-    const display = (body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/) || [])[1]
-    if (!display) continue
+    let id = getAttr(attrs, 'id')
+    const siteId = getAttr(attrs, 'site_id')
+
+    if (!id && siteId) {
+      id = siteId.includes('#') ? siteId.split('#').pop() : siteId
+    }
+
+    let name = ''
+
+    const displayMatch = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/)
+    if (displayMatch) {
+      name = decodeXml(displayMatch[1]).trim()
+    } else {
+      name = decodeXml(body.replace(/<[^>]+>/g, '').trim())
+    }
+
+    if (!id || !name) continue
 
     channels.push({
       id,
-      name: decodeXml(display).trim(),
-      normName: norm(display)
+      name,
+      normName: norm(name)
     })
   }
 
@@ -201,18 +221,13 @@ function findChannel(channels, aliases, usedIds) {
   const normalizedAliases = aliases.map(norm)
 
   for (const alias of normalizedAliases) {
-    let exact = channels.find(ch => !usedIds.has(ch.id) && ch.normName === alias)
+    const exact = channels.find(ch => !usedIds.has(ch.id) && ch.normName === alias)
     if (exact) return exact
   }
 
   for (const alias of normalizedAliases) {
-    let contains = channels.find(ch => !usedIds.has(ch.id) && ch.normName.includes(alias))
+    const contains = channels.find(ch => !usedIds.has(ch.id) && ch.normName.includes(alias))
     if (contains) return contains
-  }
-
-  for (const alias of normalizedAliases) {
-    let reverse = channels.find(ch => !usedIds.has(ch.id) && alias.includes(ch.normName))
-    if (reverse) return reverse
   }
 
   return null
@@ -225,6 +240,8 @@ if (!fs.existsSync(INPUT)) {
 
 const xml = fs.readFileSync(INPUT, 'utf8')
 const channels = parseChannels(xml)
+
+console.log(`Found ${channels.length} raw channels in ${INPUT}`)
 
 const usedIds = new Set()
 const selected = []
