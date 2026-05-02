@@ -2,9 +2,33 @@ const fs = require('fs')
 
 const PROVIDER_ID = process.env.TVGUIDE_PROVIDER_ID || '9100000664'
 const OUTPUT = process.env.OUTPUT || 'guides/tvguide.xml'
-const DAYS = Number(process.env.DAYS || 1)
+const DAYS = Number(process.env.DAYS || 14)
 
 const BASE = 'https://backend.tvguide.com/tvschedules/tvguide'
+
+/*
+  ONLY channels you actually want from your master list
+  Boston locals intentionally excluded
+*/
+const CHANNEL_MAP = {
+  // Portland locals
+  '9233006796': 'NBC PORTLAND',
+  '9200014312': 'ABC PORTLAND',
+  '9233001666': 'CBS PORTLAND',
+  '9233003676': 'FOX PORTLAND',
+
+  // CW (only one you actually need)
+  '9200006484': 'CW BOSTON',
+
+  // OTA channels that exist in your master list
+  '9200005724': 'COMET',
+  '9266073627': 'LAFF',
+  '9200016252': 'METV',
+  '9233003377': 'GRIT',
+  '9200020338': 'HEROES & ICONS',
+  '9233005846': 'COURT TV',
+  '9200017556': 'ION MYSTERY'
+}
 
 function xmlEscape(v = '') {
   return String(v)
@@ -49,9 +73,7 @@ async function fetchDay(startEpoch) {
     }
   })
 
-  if (!res.ok) {
-    throw new Error(`TVGuide request failed`)
-  }
+  if (!res.ok) throw new Error(`TVGuide request failed`)
 
   return res.json()
 }
@@ -66,7 +88,7 @@ async function main() {
   const baseStart = startOfTodayEpoch()
 
   const channels = new Map()
-  const programmesByDay = []
+  const allProgrammes = []
 
   for (let d = 0; d < DAYS; d++) {
     const dayStart = baseStart + d * 86400
@@ -81,11 +103,16 @@ async function main() {
       const ch = item.channel
       if (!ch?.sourceId) continue
 
-      const id = String(ch.sourceId)
+      const rawId = String(ch.sourceId)
 
-      channels.set(id, {
-        id,
-        name: ch.fullName || ch.name || id
+      // 🔥 FILTER — ONLY KEEP CHANNELS IN YOUR MAP
+      if (!CHANNEL_MAP[rawId]) continue
+
+      const mappedId = CHANNEL_MAP[rawId]
+
+      channels.set(mappedId, {
+        id: mappedId,
+        name: mappedId
       })
 
       for (const p of item.programSchedules || []) {
@@ -94,10 +121,10 @@ async function main() {
         if (p.endTime <= dayStart) continue
         if (p.startTime >= dayEnd) continue
 
-        const key = `${id}|${p.startTime}|${p.endTime}|${p.programId || ''}`
+        const key = `${mappedId}|${p.startTime}|${p.endTime}|${p.programId || ''}`
 
         programmes.set(key, {
-          channelId: id,
+          channelId: mappedId,
           start: Math.max(p.startTime, dayStart),
           stop: Math.min(p.endTime, dayEnd),
           title: p.title || 'Unknown'
@@ -105,36 +132,22 @@ async function main() {
       }
     }
 
-    programmesByDay.push({ dayStart, programmes })
-  }
-
-  // 🔥 LOG PER DAY (this is what you wanted)
-  console.log('\n[INFO] PER-DAY TOTALS\n')
-
-  for (const day of programmesByDay) {
-    const date = new Date(day.dayStart * 1000).toISOString().slice(0,10)
+    // Logging per day
+    console.log(`\n=== ${new Date(dayStart * 1000).toISOString().slice(0,10)} ===`)
 
     const counts = {}
-
-    for (const p of day.programmes.values()) {
+    for (const p of programmes.values()) {
       counts[p.channelId] = (counts[p.channelId] || 0) + 1
     }
 
-    console.log(`\n=== ${date} ===`)
-
-    for (const [id, count] of Object.entries(counts)) {
-      console.log(`${channels.get(id)?.name} → ${count}`)
+    for (const [ch, count] of Object.entries(counts)) {
+      console.log(`${ch} → ${count}`)
     }
+
+    allProgrammes.push(...programmes.values())
   }
 
-  // flatten for XML
-  const allProgrammes = []
-
-  for (const day of programmesByDay) {
-    allProgrammes.push(...day.programmes.values())
-  }
-
-  // XML
+  // Build XML
   const lines = []
   lines.push('<?xml version="1.0" encoding="UTF-8"?>')
   lines.push('<tv>')
