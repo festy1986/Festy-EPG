@@ -1,13 +1,15 @@
-name: Festy TVGuide Failed Channels Test
+name: Festy TVGuide (Local Cumberland)
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  test-failed-tvguide-channels:
+  build-tvguide:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,151 +17,39 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Clone EPG engine
-        run: |
-          git clone --depth 1 https://github.com/iptv-org/epg.git
+        run: git clone --depth 1 https://github.com/iptv-org/epg.git
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install EPG dependencies
+      - name: Install dependencies
         run: |
           cd epg
-          npm ci
+          npm install
 
-      - name: Build failed-channel-only test list
-        run: |
-          mkdir -p epg/sites/tvguide.com
-
-          node <<'EOF'
-          const fs = require('fs')
-          const path = require('path')
-
-          const PROVIDER = '9100002976'
-
-          const failedGroups = [
-            { key: 'USA', aliases: ['usa', 'usa network', 'usa hd', 'usanetwork'] },
-            { key: 'DISNEY', aliases: ['disney channel', 'disney hd', 'disneychannel'] },
-            { key: 'TNT', aliases: ['tnt', 'turner network television'] },
-            { key: 'LIFETIME', aliases: ['lifetime', 'lifetime hd'] },
-            { key: 'TLC', aliases: ['tlc', 'the learning channel'] },
-            { key: 'HGTV', aliases: ['hgtv', 'home garden television'] },
-            { key: 'HISTORY', aliases: ['history', 'history channel', 'history hd'] },
-            { key: 'FETV', aliases: ['fetv', 'family entertainment television'] },
-            { key: 'HNI', aliases: ['heroes and icons', 'heroesandicons', 'h&i', 'hni'] },
-            { key: 'NESN', aliases: ['nesn', 'new england sports network'] }
-          ]
-
-          const fallbackCandidates = [
-            { key: 'USA', site_id: '9100002976#9233004106', name: 'USA old failing candidate' },
-            { key: 'USA', site_id: '9100002976#9200009133', name: 'USA HD alternate candidate' }
-          ]
-
-          function walk(dir) {
-            let files = []
-            if (!fs.existsSync(dir)) return files
-            for (const item of fs.readdirSync(dir)) {
-              const full = path.join(dir, item)
-              const stat = fs.statSync(full)
-              if (stat.isDirectory()) files = files.concat(walk(full))
-              else if (full.endsWith('.xml')) files.push(full)
-            }
-            return files
-          }
-
-          function attr(tag, name) {
-            const m = tag.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? m[1] : ''
-          }
-
-          function inner(tag) {
-            const m = tag.match(/>([^<]*)<\/channel>/i)
-            return m ? m[1].trim() : ''
-          }
-
-          const candidates = []
-          const xmlFiles = walk('.').filter(f => !f.startsWith('epg/'))
-
-          for (const file of xmlFiles) {
-            const text = fs.readFileSync(file, 'utf8')
-            const tags = text.match(/<channel\b[^>]*site="tvguide\.com"[^>]*>.*?<\/channel>/gis) || []
-
-            for (const tag of tags) {
-              const site_id_raw = attr(tag, 'site_id')
-              const xmltv_id = attr(tag, 'xmltv_id')
-              const logo = attr(tag, 'logo')
-              const name = inner(tag)
-
-              const haystack = `${name} ${xmltv_id} ${site_id_raw}`.toLowerCase()
-
-              for (const group of failedGroups) {
-                if (group.aliases.some(a => haystack.includes(a))) {
-                  let site_id = site_id_raw
-
-                  if (/^\d+$/.test(site_id)) {
-                    site_id = `${PROVIDER}#${site_id}`
-                  }
-
-                  candidates.push({
-                    key: group.key,
-                    site_id,
-                    name,
-                    logo
-                  })
-                }
-              }
-            }
-          }
-
-          for (const c of fallbackCandidates) candidates.push(c)
-
-          const seen = new Set()
-          const final = []
-
-          for (const c of candidates) {
-            if (!c.site_id) continue
-            const unique = `${c.key}|${c.site_id}`
-            if (seen.has(unique)) continue
-            seen.add(unique)
-            final.push(c)
-          }
-
-          if (!final.length) {
-            throw new Error('No failed-channel candidates found in repo XML files.')
-          }
-
-          const lines = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<site site="tvguide.com">',
-            '  <channels>'
-          ]
-
-          for (const c of final) {
-            const safeName = (c.name || c.key).replace(/&/g, '&amp;')
-            const xmltv = `${c.key}.${c.site_id.replace(/[^0-9]/g, '_')}.test`
-            const logo = c.logo ? ` logo="${c.logo}"` : ''
-            lines.push(`    <channel site="tvguide.com" site_id="${c.site_id}" lang="en" xmltv_id="${xmltv}"${logo}>${safeName}</channel>`)
-          }
-
-          lines.push('  </channels>')
-          lines.push('</site>')
-
-          fs.writeFileSync('epg/sites/tvguide.com/festy-failed.channels.xml', lines.join('\n'))
-
-          console.log('Testing these failed-channel candidates only:')
-          for (const c of final) {
-            console.log(`${c.key} | ${c.site_id} | ${c.name}`)
-          }
-          EOF
-
-      - name: Run TVGuide failed-channel test
+      # 🔴 THIS IS THE IMPORTANT PART
+      - name: Force Cumberland County lineup ID
         run: |
           cd epg
-          npm run grab -- --channels=sites/tvguide.com/festy-failed.channels.xml --output=guide-failed.xml --days=1
+          sed -i 's/910000113/9100002976/g' sites/tvguide.com/tvguide.com.config.js
 
-      - name: Upload failed-channel guide result
-        uses: actions/upload-artifact@v4
-        with:
-          name: guide-failed
-          path: epg/guide-failed.xml
+      - name: Run TVGuide grab
+        run: |
+          cd epg
+          npx tsx scripts/commands/epg/grab.ts \
+            --site=tvguide.com \
+            --output=guide.xml \
+            --days=1
+
+      - name: Move output
+        run: mv epg/guide.xml ./guide.xml
+
+      - name: Commit guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add guide.xml
+          git commit -m "Update TVGuide (Cumberland local)" || echo "No changes"
+          git push
