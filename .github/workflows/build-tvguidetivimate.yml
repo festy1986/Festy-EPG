@@ -1,1 +1,38 @@
+name: Build TVGuide TiViMate
 
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-tvguidetivimate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build guides/tvguidetivimate.xml from guides/tvguide.xml
+        run: |
+          node scripts/build-tvguidetivimate-from-tvguide.js
+
+      - name: Commit updated TiViMate guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguidetivimate.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Build TVGuide TiViMate guide"
+            git push
+          fi
