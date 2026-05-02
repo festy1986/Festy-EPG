@@ -32,16 +32,16 @@ jobs:
 
       - name: Copy Festy TVGuide files into engine
         run: |
-          mkdir -p epg/sites/tvguide-test.com
-          cp sites/tvguide-test.com/tvguide-test.com.config.js epg/sites/tvguide-test.com/tvguide-test.com.config.js
-          cp sites/tvguide-test.com/tvguide-test.com.channels.xml epg/sites/tvguide-test.com/tvguide-test.com.channels.xml
+          mkdir -p epg/sites/tvguide.com
+          cp sites/tvguide.com/tvguide.com.config.js epg/sites/tvguide.com/tvguide.com.config.js
+          cp sites/tvguide.com/tvguide.com.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
 
       - name: Apply final safe channel fixes
         run: |
           cat > /tmp/fix-tvguide-final-missing.js <<'EOF'
           const fs = require('fs')
 
-          const file = 'epg/sites/tvguide-test.com/tvguide-test.com.channels.xml'
+          const file = 'epg/sites/tvguide.com/tvguide.com.channels.xml'
 
           if (!fs.existsSync(file)) {
             console.error(`Missing file: ${file}`)
@@ -124,20 +124,22 @@ jobs:
           }
 
           function upsertChannel(matchNames, site_id, xmltv_id, name, lang = 'en') {
-            let channels = parseChannels(xml)
+            const channels = parseChannels(xml)
+            const normalizedMatches = matchNames.map(norm)
+
             const target = channels.find(ch =>
-              matchNames.map(norm).includes(norm(ch.name)) ||
-              matchNames.map(norm).includes(norm(ch.xmltv_id))
+              normalizedMatches.includes(norm(ch.name)) ||
+              normalizedMatches.includes(norm(ch.xmltv_id))
             )
 
             const line = channelLine(site_id, xmltv_id, name, lang)
 
             if (target) {
               xml = xml.replace(target.full, line)
-              console.log(`FIXED: ${target.name} -> ${name} | ${site_id}`)
+              console.log(`FIXED: ${target.name} -> ${name} | site_id=${site_id}`)
             } else {
               xml = xml.replace('</channels>', `${line}\n</channels>`)
-              console.log(`ADDED: ${name} | ${site_id}`)
+              console.log(`ADDED: ${name} | site_id=${site_id}`)
             }
           }
 
@@ -147,12 +149,14 @@ jobs:
 
           for (const fix of rescueAliases) {
             const channels = parseChannels(xml)
+
             const source = channels.find(ch =>
               ch.site_id &&
               fix.aliases.some(alias =>
                 norm(ch.name) === norm(alias) ||
                 norm(ch.xmltv_id) === norm(alias) ||
-                norm(ch.name).includes(norm(alias))
+                norm(ch.name).includes(norm(alias)) ||
+                norm(ch.xmltv_id).includes(norm(alias))
               )
             )
 
@@ -173,8 +177,8 @@ jobs:
         run: |
           cd epg
           npm run grab -- \
-            --site=tvguide-test.com \
-            --channels=sites/tvguide-test.com/tvguide-test.com.channels.xml \
+            --site=tvguide.com \
+            --channels=sites/tvguide.com/tvguide.com.channels.xml \
             --output=../guides/tvguide.xml \
             --days=3
 
