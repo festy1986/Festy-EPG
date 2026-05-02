@@ -16,7 +16,7 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
-      - name: Clone EPG engine (clean)
+      - name: Clone EPG engine clean
         run: |
           rm -rf epg
           git clone --depth 1 https://github.com/iptv-org/epg.git
@@ -26,32 +26,38 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install EPG dependencies
         run: |
           cd epg
           npm install
 
-      # 🔴 FORCE YOUR LOCAL LINEUP HERE
       - name: Force Cumberland County lineup ID
         run: |
           cd epg
           sed -i 's/910000113/9100002976/g' sites/tvguide.com/tvguide.com.config.js
 
-      - name: Run TVGuide grab
+      - name: Build TVGuide guide
         run: |
           cd epg
-          npx tsx scripts/commands/epg/grab.ts \
-            --site=tvguide.com \
+          npm run grab -- \
+            --channels=sites/tvguide.com/tvguide.com.channels.xml \
             --output=guide.xml \
             --days=1
 
-      - name: Move output
-        run: mv epg/guide.xml ./guide.xml
+      - name: Move guide to repo root
+        run: |
+          mv epg/guide.xml ./guide.xml
 
       - name: Commit guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+
           git add guide.xml
-          git commit -m "Update TVGuide (Cumberland local)" || echo "No changes"
-          git push
+
+          if git diff --cached --quiet; then
+            echo "No guide changes to commit."
+          else
+            git commit -m "Update TVGuide Cumberland local guide"
+            git push
+          fi
