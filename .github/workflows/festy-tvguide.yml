@@ -1,126 +1,135 @@
-name: TVGuide Raw Spectrum Dump
+name: Festy TVGuide
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  dump-tvguide-raw:
+  build-festy-tvguide:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout your repo
         uses: actions/checkout@v4
+
+      - name: Clone IPTV-org EPG engine
+        run: |
+          rm -rf epg
+          git clone --depth 1 https://github.com/iptv-org/epg.git epg
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Dump raw TVGuide lineup to guides/tvguide.xml
+      - name: Install EPG dependencies
         run: |
-          mkdir -p guides
+          cd epg
+          npm install
 
+      - name: Copy Festy TVGuide curated channels
+        run: |
+          mkdir -p epg/sites/tvguide.com
+          cp guides/festy.channels.xml epg/sites/tvguide.com/festy.channels.xml
+
+      - name: Grab TVGuide guide - 2 days
+        run: |
+          cd epg
+          npm run grab -- --channels=sites/tvguide.com/festy.channels.xml --output=guide.xml --days=2
+
+      - name: Move guide to repo root
+        run: |
+          if [ ! -f epg/guide.xml ]; then
+            echo "Missing epg/guide.xml"
+            exit 1
+          fi
+
+          mv epg/guide.xml ./guide.xml
+
+      - name: Keep custom channel metadata and logos
+        run: |
           node <<'EOF'
           const fs = require('fs')
 
-          const lineupId = '9100002976'
-          const start = Math.floor(Date.now() / 1000)
+          const guideFile = 'guide.xml'
+          const curatedFile = 'guides/festy.channels.xml'
 
-          const url = `https://backend.tvguide.com/tvschedules/tvguide/${lineupId}/web?start=${start}`
+          if (!fs.existsSync(guideFile)) {
+            console.error('Missing guide.xml')
+            process.exit(1)
+          }
 
-          console.log(`Fetching raw TVGuide lineup: ${url}`)
+          if (!fs.existsSync(curatedFile)) {
+            console.error('Missing guides/festy.channels.xml')
+            process.exit(1)
+          }
 
-          fetch(url, {
-            headers: {
-              'accept': 'application/json',
-              'user-agent': 'Mozilla/5.0'
-            }
-          })
-            .then(async res => {
-              const text = await res.text()
-              console.log(`TVGuide returned status: ${res.status}`)
+          const guide = fs.readFileSync(guideFile, 'utf8')
+          const curated = fs.readFileSync(curatedFile, 'utf8')
 
-              if (!res.ok) {
-                console.log(text)
-                process.exit(1)
-              }
+          const curatedChannels = []
+          const channelRe = /<channel\b([^>]*)>([\s\S]*?)<\/channel>/g
+          let m
 
-              const data = JSON.parse(text)
+          function getAttr(attrs, name) {
+            const match = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return match ? match[1] : ''
+          }
 
-              const channels = []
+          function escapeXml(value) {
+            return String(value || '')
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
 
-              function walk(obj) {
-                if (!obj || typeof obj !== 'object') return
+          while ((m = channelRe.exec(curated))) {
+            const attrs = m[1]
+            const name = m[2].trim()
+            const siteId = getAttr(attrs, 'site_id')
+            const xmltvId = getAttr(attrs, 'xmltv_id')
+            const logo = getAttr(attrs, 'logo')
 
-                if (obj.sourceId || obj.stationId || obj.channelNo || obj.callSign || obj.name) {
-                  const id = obj.sourceId || obj.stationId || obj.id || ''
-                  const number = obj.channelNo || obj.channelNumber || ''
-                  const name = obj.callSign || obj.name || obj.fullName || obj.title || ''
+            const id = xmltvId || name
+            if (!id) continue
 
-                  if (id && name) {
-                    channels.push({ id, number, name })
-                  }
-                }
-
-                for (const value of Object.values(obj)) {
-                  if (Array.isArray(value)) value.forEach(walk)
-                  else walk(value)
-                }
-              }
-
-              walk(data)
-
-              const seen = new Set()
-              const unique = channels.filter(ch => {
-                const key = `${ch.id}|${ch.name}|${ch.number}`
-                if (seen.has(key)) return false
-                seen.add(key)
-                return true
-              })
-
-              unique.sort((a, b) => {
-                const an = parseInt(a.number || '999999', 10)
-                const bn = parseInt(b.number || '999999', 10)
-                return an - bn
-              })
-
-              let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n`
-
-              for (const ch of unique) {
-                const safeName = String(ch.name).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                const safeId = String(ch.id).replace(/&/g, '&amp;')
-                const safeNum = String(ch.number).replace(/&/g, '&amp;')
-
-                xml += `  <channel site="tvguide.com" lang="en" xmltv_id="${safeName}.us" site_id="${lineupId}#${safeId}">${safeName}</channel>`
-                if (safeNum) xml += ` <!-- ${safeNum} -->`
-                xml += `\n`
-              }
-
-              xml += `</channels>\n`
-
-              fs.writeFileSync('guides/tvguide.xml', xml)
-
-              console.log(`Wrote ${unique.length} raw TVGuide channels to guides/tvguide.xml`)
+            curatedChannels.push({
+              id,
+              name,
+              logo
             })
-            .catch(err => {
-              console.error(err)
-              process.exit(1)
-            })
+          }
+
+          const channelBlock = curatedChannels.map(ch => {
+            let out = `  <channel id="${ch.id}">\n`
+            out += `    <display-name>${escapeXml(ch.name)}</display-name>\n`
+            if (ch.logo) out += `    <icon src="${ch.logo}"/>\n`
+            out += `  </channel>`
+            return out
+          }).join('\n')
+
+          let updated = guide.replace(/<channel[\s\S]*?<\/channel>\n?/g, '')
+          updated = updated.replace(/<tv([^>]*)>/, `<tv$1>\n${channelBlock}\n`)
+
+          fs.writeFileSync(guideFile, updated)
+
+          console.log(`Rebuilt XMLTV channel metadata for ${curatedChannels.length} curated channels`)
           EOF
 
-      - name: Commit raw TVGuide lineup
+      - name: Commit guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.xml
+          git add guide.xml
 
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No guide changes to commit"
           else
-            git commit -m "Dump raw TVGuide Spectrum lineup"
+            git commit -m "Update Festy TVGuide guide"
             git push
           fi
