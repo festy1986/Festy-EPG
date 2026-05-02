@@ -1,274 +1,277 @@
-name: Festy TVGuide
+const axios = require('axios')
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 */12 * * *"
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
-permissions:
-  contents: write
+module.exports = {
+  site: 'tvguide.com',
+  days: 2,
 
-jobs:
-  build-festy-tvguide:
-    runs-on: ubuntu-latest
+  async url({ channel, date }) {
+    const { providerId, sourceId } = splitSiteId(channel.site_id)
 
-    steps:
-      - name: Checkout your repo
-        uses: actions/checkout@v4
+    const start = dayjs(date).format('YYYY-MM-DDT00:00:00')
+    const end = dayjs(date).add(1, 'day').format('YYYY-MM-DDT00:00:00')
 
-      - name: Clone IPTV-org EPG engine
-        run: |
-          rm -rf epg
-          git clone --depth 1 https://github.com/iptv-org/epg.git epg
+    return `https://fandom-prod.apigee.net/v1/xapi/tvschedules/tvguide/${providerId}/web?start=${encodeURIComponent(
+      start
+    )}&end=${encodeURIComponent(end)}&channels=${sourceId}`
+  },
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+  request: {
+    headers: {
+      Accept: 'application/json',
+      Origin: 'https://www.tvguide.com',
+      Referer: 'https://www.tvguide.com/',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36'
+    }
+  },
 
-      - name: Install EPG dependencies
-        run: |
-          cd epg
-          npm install
+  parser({ content, channel, date }) {
+    const programs = []
+    const { sourceId } = splitSiteId(channel.site_id)
+    const channelName = channel.name || channel.xmltv_id || channel.site_id
+    const dateLabel = dayjs(date).format('YYYY-MM-DD')
 
-      - name: Copy Festy TVGuide channels and custom config
-        run: |
-          mkdir -p epg/sites/tvguide.com
+    console.log(
+      `[CHANNEL] ${channelName} | site_id=${channel.site_id} | sourceId=${sourceId} | ${dateLabel}`
+    )
 
-          node <<'EOF'
-          const fs = require('fs')
+    let data
+    try {
+      data = JSON.parse(content)
+    } catch (err) {
+      console.log(`[WARN] Bad JSON for ${channelName}`)
+      return programs
+    }
 
-          const input = fs.readFileSync('guides/festy.channels.xml', 'utf8')
-          const channels = [...input.matchAll(/<channel\b[^>]*>[\s\S]*?<\/channel>/g)].map(m => m[0])
+    const scheduleItems = getScheduleItems(data)
 
-          if (!channels.length) {
-            console.error('No channels found in guides/festy.channels.xml')
-            process.exit(1)
-          }
+    if (!scheduleItems.length) {
+      console.log(`[WARN] No schedule items for ${channelName}`)
+      return programs
+    }
 
-          const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
-          fs.writeFileSync('epg/sites/tvguide.com/festy.channels.xml', output)
+    let selected = findExactSchedule(scheduleItems, sourceId)
 
-          console.log(`Wrote ${channels.length} channels for grabber`)
-          EOF
+    if (!selected) {
+      console.log(
+        `[WARN] No exact schedule match for ${channelName} | sourceId=${sourceId} | returned items=${scheduleItems.length}`
+      )
 
-          cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
-          const axios = require('axios')
-          const dayjs = require('dayjs')
-          const utc = require('dayjs/plugin/utc')
-          const timezone = require('dayjs/plugin/timezone')
+      selected = findBestScheduleWithPrograms(scheduleItems)
 
-          dayjs.extend(utc)
-          dayjs.extend(timezone)
+      if (selected) {
+        const count = getRawPrograms(selected).length
+        console.log(
+          `[FALLBACK] ${channelName} | using best returned item | programs=${count}`
+        )
+      }
+    }
 
-          module.exports = {
-            site: 'tvguide.com',
-            delay: 3000,
-            days: 2,
+    if (!selected) {
+      console.log(`[WARN] No usable schedule object for ${channelName}`)
+      return programs
+    }
 
-            url({ date, channel }) {
-              const [providerId, sourceId] = String(channel.site_id).split('#')
+    const rawPrograms = getRawPrograms(selected)
 
-              console.log(`[CHANNEL] ${channel.name} | site_id=${channel.site_id} | sourceId=${sourceId} | ${date.format('YYYY-MM-DD')}`)
+    for (const item of rawPrograms) {
+      const program = parseProgram(item, date)
 
-              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
-            },
+      if (program) {
+        programs.push(program)
+      }
+    }
 
-            request: {
-              method: 'GET',
-              timeout: 10000,
-              cache: { ttl: 60 * 60 * 1000 },
-              headers() {
-                return {
-                  Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                }
-              }
-            },
+    return programs
+  }
+}
 
-            async parser({ content, channel }) {
-              const programs = []
-              const items = parseItems(content, channel)
+function splitSiteId(siteId) {
+  const parts = String(siteId || '').split('#')
 
-              for (const item of items) {
-                const details = await loadProgramDetails(item)
+  return {
+    providerId: parts[0],
+    sourceId: parts[1] || parts[0]
+  }
+}
 
-                const title = cleanTitle(item.title || details.title || '')
-                const episodeTitle = cleanSpaces(details.episodeTitle || '')
-                const description = fixBrokenDescription(details.description || item.description || '')
-                const seasonNumber = details.seasonNumber || ''
-                const episodeNumber = details.episodeNumber || ''
-                const releaseYear = details.releaseYear || ''
-                const episodeAirDate = details.episodeAirDate || ''
-                const type = String(details.type || item.type || '').toLowerCase()
+function getScheduleItems(data) {
+  if (Array.isArray(data)) return data
 
-                const episodeCode =
-                  seasonNumber && episodeNumber
-                    ? `S${String(seasonNumber).padStart(2, '0')}E${String(episodeNumber).padStart(2, '0')}`
-                    : ''
+  if (Array.isArray(data.items)) return data.items
+  if (Array.isArray(data.data)) return data.data
+  if (Array.isArray(data.channels)) return data.channels
+  if (Array.isArray(data.schedules)) return data.schedules
+  if (Array.isArray(data.schedule)) return data.schedule
+  if (Array.isArray(data.tvSchedules)) return data.tvSchedules
 
-                const airDate = formatTVGuideDate(episodeAirDate) || formatUnixDate(item.startTime)
+  if (data.data) return getScheduleItems(data.data)
+  if (data.response) return getScheduleItems(data.response)
+  if (data.result) return getScheduleItems(data.result)
 
-                let finalDescription = ''
+  return []
+}
 
-                if (type === 'movie') {
-                  finalDescription = description
-                  if (releaseYear) finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
-                } else {
-                  let prefix = ''
+function findExactSchedule(items, sourceId) {
+  return items.find(item => {
+    const ids = [
+      item.sourceId,
+      item.source_id,
+      item.stationId,
+      item.station_id,
+      item.channelId,
+      item.channel_id,
+      item.id,
+      item.callSign,
+      item.callsign
+    ]
+      .filter(Boolean)
+      .map(String)
 
-                  if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
-                  else if (episodeTitle) prefix = episodeTitle
-                  else if (episodeCode) prefix = episodeCode
+    return ids.includes(String(sourceId))
+  })
+}
 
-                  if (prefix && description) finalDescription = `${prefix}. ${description}`
-                  else if (prefix) finalDescription = `${prefix}.`
-                  else finalDescription = description
+function findBestScheduleWithPrograms(items) {
+  const scored = items
+    .map(item => {
+      const programs = getRawPrograms(item)
 
-                  if (airDate) finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
-                }
+      return {
+        item,
+        count: programs.length
+      }
+    })
+    .filter(x => x.count > 0)
+    .sort((a, b) => b.count - a.count)
 
-                programs.push({
-                  title,
-                  description: cleanSpaces(finalDescription),
-                  start: dayjs.unix(item.startTime),
-                  stop: dayjs.unix(item.endTime)
-                })
-              }
+  return scored.length ? scored[0].item : null
+}
 
-              return programs
-            }
-          }
+function getRawPrograms(item) {
+  if (!item) return []
 
-          async function loadProgramDetails(item) {
-            if (!item.programDetails) return {}
+  if (Array.isArray(item.programs)) return item.programs
+  if (Array.isArray(item.programSchedules)) return item.programSchedules
+  if (Array.isArray(item.schedule)) return item.schedule
+  if (Array.isArray(item.schedules)) return item.schedules
+  if (Array.isArray(item.listings)) return item.listings
+  if (Array.isArray(item.airings)) return item.airings
 
-            const url = item.programDetails.includes('?')
-              ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
-              : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+  if (item.programSchedules && Array.isArray(item.programSchedules.items)) {
+    return item.programSchedules.items
+  }
 
-            return axios
-              .get(url, {
-                timeout: 10000,
-                headers: {
-                  Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                }
-              })
-              .then(r => r.data?.data?.item || {})
-              .catch(() => ({}))
-          }
+  if (item.schedule && Array.isArray(item.schedule.items)) {
+    return item.schedule.items
+  }
 
-          function parseItems(content, channel) {
-            const data = JSON.parse(content)
-            const items = data?.data?.items || []
-            const sourceId = String(channel.site_id).split('#').pop()
+  return []
+}
 
-            const matched = items.find(item => {
-              return String(item.sourceId || item.channelSourceId || item.id || '') === sourceId
-            })
+function parseProgram(item, date) {
+  const title =
+    item.title ||
+    item.name ||
+    item.programTitle ||
+    item.program?.title ||
+    item.program?.name ||
+    item.show?.title ||
+    item.show?.name
 
-            if (matched?.programSchedules?.length) {
-              console.log(`[MATCH] ${channel.name} | sourceId=${sourceId} | programs=${matched.programSchedules.length}`)
-              return matched.programSchedules
-            }
+  if (!title) return null
 
-            console.log(`[WARN] No exact schedule match for ${channel.name} | sourceId=${sourceId} | returned items=${items.length}`)
+  const startRaw =
+    item.startTime ||
+    item.start ||
+    item.startDateTime ||
+    item.airDateTime ||
+    item.airingStartTime ||
+    item.listDateTime
 
-            if (items.length === 1 && items[0]?.programSchedules?.length) {
-              console.log(`[FALLBACK] ${channel.name} | using only returned item | programs=${items[0].programSchedules.length}`)
-              return items[0].programSchedules
-            }
+  const stopRaw =
+    item.endTime ||
+    item.stop ||
+    item.end ||
+    item.endDateTime ||
+    item.airingEndTime
 
-            return []
-          }
+  const start = parseTime(startRaw, date)
+  let stop = parseTime(stopRaw, date)
 
-          function cleanTitle(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
-              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
-              .trim()
-          }
+  if (!start) return null
 
-          function cleanSpaces(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/\s+([.,!?;:])/g, '$1')
-              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
-              .trim()
-          }
+  if (!stop) {
+    const duration =
+      item.duration ||
+      item.durationMinutes ||
+      item.length ||
+      item.runtime ||
+      item.program?.duration
 
-          function fixBrokenDescription(value) {
-            let d = cleanSpaces(value)
-            if (!d) return ''
+    if (duration) {
+      const minutes = Number(duration) > 300 ? Number(duration) / 60 : Number(duration)
+      stop = start.add(minutes, 'minute')
+    }
+  }
 
-            d = d.replace(/\.\.\.$/, '').trim()
-            d = d.replace(/[,:;–—-]\s*$/, '').trim()
+  if (!stop) {
+    stop = start.add(30, 'minute')
+  }
 
-            const words = d.split(/\s+/)
-            const last = words[words.length - 1] || ''
-            const stripped = last.toLowerCase().replace(/[^a-z]/g, '')
+  const description =
+    item.description ||
+    item.shortDescription ||
+    item.longDescription ||
+    item.program?.description ||
+    item.show?.description ||
+    null
 
-            const badEndings = [
-              'stor', 'storie', 'experienc', 'becaus', 'includ', 'discover',
-              'investigat', 'myster', 'famil', 'friend', 'someth', 'everyth',
-              'meanwhil', 'continu', 'return', 'learn', 'realiz'
-            ]
+  const category =
+    item.category ||
+    item.genre ||
+    item.genres?.[0] ||
+    item.program?.category ||
+    item.program?.genres?.[0] ||
+    null
 
-            if (badEndings.includes(stripped) && words.length > 1) {
-              words.pop()
-              d = words.join(' ').trim()
-            }
+  return {
+    title,
+    description,
+    category,
+    start: start.toDate(),
+    stop: stop.toDate()
+  }
+}
 
-            if (!/[.!?]$/.test(d)) d += '.'
-            return d
-          }
+function parseTime(value, date) {
+  if (!value) return null
 
-          function formatTVGuideDate(value) {
-            const match = String(value || '').match(/\/Date\((\d+)\)\//)
-            if (!match) return ''
-            const date = new Date(Number(match[1]))
-            return date.toLocaleDateString('en-US', {
-              month: '2-digit',
-              day: '2-digit',
-              year: 'numeric'
-            })
-          }
+  if (typeof value === 'number') {
+    return dayjs(value > 10000000000 ? value : value * 1000)
+  }
 
-          function formatUnixDate(value) {
-            if (!value) return ''
-            return dayjs.unix(value).format('MM/DD/YYYY')
-          }
-          EOF
+  const str = String(value)
 
-      - name: Grab TVGuide guide - 2 days
-        run: |
-          cd epg
-          npx tsx scripts/commands/epg/grab.ts \
-            --channels=sites/tvguide.com/festy.channels.xml \
-            --output=../guide.xml \
-            --days=2
+  if (/^\d+$/.test(str)) {
+    const num = Number(str)
+    return dayjs(num > 10000000000 ? num : num * 1000)
+  }
 
-          cd ..
-          if [ ! -s guide.xml ]; then
-            echo "guide.xml was not created or is empty"
-            exit 1
-          fi
+  const parsed = dayjs(str)
 
-          ls -lh guide.xml
+  if (parsed.isValid()) {
+    return parsed
+  }
 
-      - name: Commit guide
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+  const dateOnly = dayjs(date).format('YYYY-MM-DD')
+  const withDate = dayjs(`${dateOnly} ${str}`)
 
-          git add guide.xml
-
-          if git diff --cached --quiet; then
-            echo "No guide changes to commit"
-          else
-            git commit -m "Update Festy TVGuide guide"
-            git push
-          fi
+  return withDate.isValid() ? withDate : null
+}
