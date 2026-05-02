@@ -205,7 +205,10 @@ jobs:
       - name: Grab TVGuide 1 day
         run: |
           cd epg
-          npm run grab -- --site=tvguide.com --channels=sites/tvguide.com/festy.channels.xml --output=guide.xml --days=1
+          npm run grab -- \
+            --channels=sites/tvguide.com/festy.channels.xml \
+            --output=guide.xml \
+            --days=1
 
       - name: Copy output back to repo
         run: |
