@@ -181,7 +181,7 @@ jobs:
         run: |
           mkdir -p guides
           cd epg
-          npm run grab -- --site=tvguide.com --channels=sites/tvguide.com/tvguide.com.channels.xml --output=../guides/tvguide.xml --days=2
+          npm run grab -- --channels=sites/tvguide.com/tvguide.com.channels.xml --output=../guides/tvguide.xml --days=2
 
       - name: Commit updated guide and patched channel list
         run: |
@@ -193,6 +193,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No guide changes to commit"
           else
-            git commit -m "Update TVGuide guide with logos"
+            git commit -m "Update TVGuide guide with logos (2 days)"
             git push
           fi
