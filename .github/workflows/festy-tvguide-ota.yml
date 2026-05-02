@@ -21,7 +21,7 @@ jobs:
           rm -rf epg
           git clone --depth 1 https://github.com/iptv-org/epg.git epg
 
-      - name: Setup Node
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -31,28 +31,28 @@ jobs:
           cd epg
           npm install
 
-      - name: Create OTA channels and TVGuide metadata config
+      - name: Create OTA channel list and metadata config
         run: |
           mkdir -p epg/sites/tvguide.com
 
           cat > epg/sites/tvguide.com/festy-ota.channels.xml <<'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <channels>
-            <channel site="tvguide.com" lang="en" xmltv_id="ABC.PORTLAND.us" site_id="9100002976#9200014312">ABC PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA.TV.us" site_id="9100002976#9233011099">ANTENNA TV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="CBS.PORTLAND.us" site_id="9100002976#9233001666">CBS PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="COMET.us" site_id="9100002976#9200005724">COMET</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="COURT.TV.us" site_id="9100002976#9233005846">COURT TV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="CW.BOSTON.us" site_id="9100002976#9200006484">CW BOSTON</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="FOX.PORTLAND.us" site_id="9100002976#9233003676">FOX PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="GRIT.us" site_id="9100002976#9233003377">GRIT</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="HEROES.AND.ICONS.us" site_id="9100002976#9200020338">HEROES &amp; ICONS</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ION.MYSTERY.us" site_id="9100002976#9200017556">ION MYSTERY</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ION.PLUS.us" site_id="9100002976#9200008618">ION PLUS</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="LAFF.us" site_id="9100002976#9266073627">LAFF</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="METV.us" site_id="9100002976#9200016252">METV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="NBC.PORTLAND.us" site_id="9100002976#9233006796">NBC PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="PBS.us" site_id="9100002976#9233009254">PBS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ABC PORTLAND" site_id="9100002976#9200014312">ABC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA TV" site_id="9100002976#9233011099">ANTENNA TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CBS PORTLAND" site_id="9100002976#9233001666">CBS PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COMET" site_id="9100002976#9200005724">COMET</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COURT TV" site_id="9100002976#9233005846">COURT TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CW BOSTON" site_id="9100002976#9200006484">CW BOSTON</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="FOX PORTLAND" site_id="9100002976#9233003676">FOX PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="GRIT" site_id="9100002976#9233003377">GRIT</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="HEROES &amp; ICONS" site_id="9100002976#9200020338">HEROES &amp; ICONS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION MYSTERY" site_id="9100002976#9200017556">ION MYSTERY</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION PLUS" site_id="9100002976#9200008618">ION PLUS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="LAFF" site_id="9100002976#9266073627">LAFF</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="METV" site_id="9100002976#9200016252">METV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="NBC PORTLAND" site_id="9100002976#9233006796">NBC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="PBS" site_id="9100002976#9233009254">PBS</channel>
           </channels>
           EOF
 
@@ -82,7 +82,7 @@ jobs:
           module.exports = {
             site: 'tvguide.com',
             delay: 3000,
-            days: 1,
+            days: 14,
 
             url({ date, channel }) {
               const [providerId, sourceId] = String(channel.site_id).split('#')
@@ -214,6 +214,7 @@ jobs:
               stats.detailStatus[status] = (stats.detailStatus[status] || 0) + 1
 
               console.log(`[DETAIL FAIL] ${channel.name} | ${item.title || 'Unknown title'} | ${status}`)
+
               return {}
             }
           }
@@ -345,13 +346,13 @@ jobs:
           }
           EOF
 
-      - name: Grab OTA locals guide
+      - name: Grab OTA locals guide - 14 days
         run: |
           cd epg
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy-ota.channels.xml \
             --output=../guides/OTALocalsguide.xml \
-            --days=1
+            --days=14
 
           cd ..
           if [ ! -s guides/OTALocalsguide.xml ]; then
@@ -371,6 +372,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No OTA locals guide changes to commit"
           else
-            git commit -m "Update OTA locals guide with metadata"
+            git commit -m "Update OTA locals guide"
             git push
           fi
