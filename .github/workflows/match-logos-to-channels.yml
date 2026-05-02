@@ -14,45 +14,100 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Prepare folders
+        run: |
+          mkdir -p logos
+
       - name: Add logo URLs to channel list
         run: |
           node <<'EOF'
           const fs = require('fs')
           const path = require('path')
 
-          const channelFile = 'festy.channels.xml'
           const logosDir = 'logos'
           const baseUrl = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/'
-
-          if (!fs.existsSync(channelFile)) {
-            console.error(`Missing channel file: ${channelFile}`)
-            process.exit(1)
-          }
-
-          if (!fs.existsSync(logosDir)) {
-            console.error(`Missing logos folder: ${logosDir}`)
-            process.exit(1)
-          }
 
           function normalize(s) {
             return String(s || '')
               .replace(/&amp;/g, '&')
+              .replace(/\+/g, ' plus ')
               .replace(/[^a-z0-9]+/gi, ' ')
               .replace(/\s+/g, ' ')
               .trim()
               .toLowerCase()
           }
 
-          function logoUrl(filename) {
-            return baseUrl + encodeURIComponent(filename).replace(/%2F/g, '/')
+          function findChannelFile() {
+            const preferred = [
+              'festy.channels.xml',
+              'tvguide.festy.channels.xml',
+              'tvguide.channels.xml',
+              'sites/tvguide.com/festy.channels.xml',
+              'sites/tvguide.com/tvguide.festy.channels.xml',
+              'sites/tvguide.com/tvguide.channels.xml'
+            ]
+
+            for (const file of preferred) {
+              if (fs.existsSync(file)) return file
+            }
+
+            const found = []
+
+            function walk(dir) {
+              if (!fs.existsSync(dir)) return
+
+              for (const item of fs.readdirSync(dir)) {
+                const full = path.join(dir, item)
+
+                if (full.includes(`${path.sep}.git${path.sep}`)) continue
+                if (full.includes(`${path.sep}node_modules${path.sep}`)) continue
+                if (full.includes(`${path.sep}epg${path.sep}`)) continue
+                if (full.includes(`${path.sep}logos${path.sep}`)) continue
+
+                const stat = fs.statSync(full)
+
+                if (stat.isDirectory()) {
+                  walk(full)
+                } else if (full.endsWith('.xml')) {
+                  const txt = fs.readFileSync(full, 'utf8')
+                  const count = (txt.match(/<channel\b/g) || []).length
+
+                  if (count > 20) {
+                    found.push({ file: full, count })
+                  }
+                }
+              }
+            }
+
+            walk('.')
+
+            found.sort((a, b) => b.count - a.count)
+
+            return found[0]?.file || null
           }
 
-          const logos = fs.readdirSync(logosDir)
+          function logoUrl(filename) {
+            return baseUrl + filename.split('/').map(encodeURIComponent).join('/')
+          }
+
+          const channelFile = findChannelFile()
+
+          if (!channelFile) {
+            console.error('Could not find your channel XML file.')
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(logosDir)) {
+            console.error('Missing logos folder.')
+            process.exit(1)
+          }
+
+          const logoFiles = fs.readdirSync(logosDir)
             .filter(f => /\.(png|jpg|jpeg|webp)$/i.test(f))
 
           const logoMap = new Map()
 
-          for (const file of logos) {
+          for (const file of logoFiles) {
             const base = path.basename(file, path.extname(file))
             logoMap.set(normalize(base), file)
           }
@@ -193,6 +248,8 @@ jobs:
 
           let xml = fs.readFileSync(channelFile, 'utf8')
 
+          console.log(`Using channel file: ${channelFile}`)
+
           xml = xml.replace(/<channel\b([^>]*)>([^<]+)<\/channel>/g, (full, attrs, name) => {
             const cleanAttrs = attrs.replace(/\slogo="[^"]*"/g, '')
             const key = normalize(name)
@@ -222,7 +279,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add festy.channels.xml
+          git add .
 
           if git diff --cached --quiet; then
             echo "No logo match changes to commit."
