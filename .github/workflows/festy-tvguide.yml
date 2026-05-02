@@ -1,24 +1,24 @@
-name: Festy TVGuide
+name: Festy TVGuide Failed Channels Test
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  build-tvguide:
+  test-failed-tvguide-channels:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout your repo
         uses: actions/checkout@v4
 
       - name: Clone EPG engine
         run: |
           git clone --depth 1 https://github.com/iptv-org/epg.git
 
-      - name: Setup Node
+      - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -26,210 +26,140 @@ jobs:
       - name: Install EPG dependencies
         run: |
           cd epg
-          npm install
+          npm ci
 
-      - name: Write custom TVGuide config
+      - name: Build failed-channel-only test list
         run: |
           mkdir -p epg/sites/tvguide.com
 
-          cat > epg/sites/tvguide.com/tvguide.com.config.js <<'CONFIG_JS'
-          const axios = require('axios')
-          const dayjs = require('dayjs')
-          const utc = require('dayjs/plugin/utc')
-          const timezone = require('dayjs/plugin/timezone')
-          const debug = require('debug')('site:tvguide.com')
+          node <<'EOF'
+          const fs = require('fs')
+          const path = require('path')
 
-          dayjs.extend(utc)
-          dayjs.extend(timezone)
+          const PROVIDER = '9100002976'
 
-          const providerId = '9100001138'
-          const maxDuration = 240
-          const segments = 1440 / maxDuration
+          const failedGroups = [
+            { key: 'USA', aliases: ['usa', 'usa network', 'usa hd', 'usanetwork'] },
+            { key: 'DISNEY', aliases: ['disney channel', 'disney hd', 'disneychannel'] },
+            { key: 'TNT', aliases: ['tnt', 'turner network television'] },
+            { key: 'LIFETIME', aliases: ['lifetime', 'lifetime hd'] },
+            { key: 'TLC', aliases: ['tlc', 'the learning channel'] },
+            { key: 'HGTV', aliases: ['hgtv', 'home garden television'] },
+            { key: 'HISTORY', aliases: ['history', 'history channel', 'history hd'] },
+            { key: 'FETV', aliases: ['fetv', 'family entertainment television'] },
+            { key: 'HNI', aliases: ['heroes and icons', 'heroesandicons', 'h&i', 'hni'] },
+            { key: 'NESN', aliases: ['nesn', 'new england sports network'] }
+          ]
 
-          const headers = {
-            referer: 'https://www.tvguide.com/',
-            'User-Agent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36'
+          const fallbackCandidates = [
+            { key: 'USA', site_id: '9100002976#9233004106', name: 'USA old failing candidate' },
+            { key: 'USA', site_id: '9100002976#9200009133', name: 'USA HD alternate candidate' }
+          ]
+
+          function walk(dir) {
+            let files = []
+            if (!fs.existsSync(dir)) return files
+            for (const item of fs.readdirSync(dir)) {
+              const full = path.join(dir, item)
+              const stat = fs.statSync(full)
+              if (stat.isDirectory()) files = files.concat(walk(full))
+              else if (full.endsWith('.xml')) files.push(full)
+            }
+            return files
           }
 
-          module.exports = {
-            site: 'tvguide.com',
-            days: 1,
-            request: {
-              headers() {
-                return headers
-              },
-              responseType: 'application/json',
-              decompress: true,
-              cache: {
-                ttl: 24 * 60 * 60 * 1000
-              }
-            },
-            async url({ date, segment = 1 }) {
-              const params = []
+          function attr(tag, name) {
+            const m = tag.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? m[1] : ''
+          }
 
-              if (date) {
-                if (segment > 1) {
-                  date = date.add((segment - 1) * maxDuration, 'm')
-                }
+          function inner(tag) {
+            const m = tag.match(/>([^<]*)<\/channel>/i)
+            return m ? m[1].trim() : ''
+          }
 
-                params.push(`start=${date.unix()}`, `duration=${maxDuration}`)
-              }
+          const candidates = []
+          const xmlFiles = walk('.').filter(f => !f.startsWith('epg/'))
 
-              return date
-                ? `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?${params.join('&')}`
-                : `https://backend.tvguide.com/tvschedules/tvguide/serviceprovider/${providerId}/sources/web`
-            },
-            async parser({ content, date, channel, fetchSegments = true }) {
-              const programs = []
+          for (const file of xmlFiles) {
+            const text = fs.readFileSync(file, 'utf8')
+            const tags = text.match(/<channel\b[^>]*site="tvguide\.com"[^>]*>.*?<\/channel>/gis) || []
 
-              const collect = data => {
-                const result = []
+            for (const tag of tags) {
+              const site_id_raw = attr(tag, 'site_id')
+              const xmltv_id = attr(tag, 'xmltv_id')
+              const logo = attr(tag, 'logo')
+              const name = inner(tag)
 
-                if (typeof data === 'string') {
-                  data = JSON.parse(data)
-                }
+              const haystack = `${name} ${xmltv_id} ${site_id_raw}`.toLowerCase()
 
-                if (data && Array.isArray(data?.data?.items)) {
-                  data.data.items
-                    .filter(i => i.channel.sourceId.toString() === channel.site_id.toString())
-                    .forEach(i => {
-                      result.push(
-                        ...i.programSchedules.map(p => {
-                          return {
-                            schedule: p,
-                            url: p.programDetails
-                          }
-                        })
-                      )
-                    })
-                }
+              for (const group of failedGroups) {
+                if (group.aliases.some(a => haystack.includes(a))) {
+                  let site_id = site_id_raw
 
-                return result
-              }
-
-              const queues = collect(content)
-
-              if (queues.length && fetchSegments) {
-                for (let segment = 2; segment <= segments; segment++) {
-                  const segmentUrl = await module.exports.url({ date, segment })
-                  debug(`fetch segment ${segment}: ${segmentUrl}`)
-
-                  try {
-                    const res = await axios.get(segmentUrl, { headers })
-                    queues.push(...collect(res.data))
-                  } catch (err) {
-                    debug(`Failed to fetch segment ${segment}: ${err.message}`)
+                  if (/^\d+$/.test(site_id)) {
+                    site_id = `${PROVIDER}#${site_id}`
                   }
+
+                  candidates.push({
+                    key: group.key,
+                    site_id,
+                    name,
+                    logo
+                  })
                 }
               }
-
-              for (const queue of queues) {
-                try {
-                  const res = await axios.get(queue.url, { headers })
-                  const item = res.data?.data?.item || queue.schedule
-
-                  programs.push({
-                    title: item.title || queue.schedule.title,
-                    sub_title: item.episodeNumber ? item.episodeTitle : null,
-                    description: item.description,
-                    season: item.seasonNumber,
-                    episode: item.episodeNumber,
-                    rating: item.rating ? { system: 'MPA', value: item.rating } : null,
-                    categories: Array.isArray(item.genres) ? item.genres.map(g => g.name) : null,
-                    start: dayjs.unix(item.startTime || queue.schedule.startTime),
-                    stop: dayjs.unix(item.endTime || queue.schedule.endTime)
-                  })
-                } catch (err) {
-                  debug(`Failed to fetch program details ${queue.url}: ${err.message}`)
-                }
-              }
-
-              return programs
-            },
-            async channels() {
-              const channels = []
-
-              try {
-                const data = await axios.get(await this.url({}), { headers }).then(r => r.data)
-
-                data.data.items.forEach(item => {
-                  const name = item.fullName.replace(/Channel|Schedule/g, '').trim()
-
-                  channels.push({
-                    lang: 'en',
-                    site_id: item.sourceId,
-                    name
-                  })
-                })
-              } catch (err) {
-                console.error('Failed to fetch channels:', err.message)
-              }
-
-              return channels
             }
           }
-          CONFIG_JS
 
-      - name: Write Festy TVGuide channels
-        run: |
-          cat > epg/sites/tvguide.com/festy.channels.xml <<'CHANNELS_XML'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <channels>
-            <channel site="tvguide.com" site_id="9200006937" lang="en" xmltv_id="ESPN.us">ESPN</channel>
-            <channel site="tvguide.com" site_id="9200012351" lang="en" xmltv_id="ESPN2.us">ESPN2</channel>
-            <channel site="tvguide.com" site_id="9200002736" lang="en" xmltv_id="OWN.us">OWN</channel>
-            <channel site="tvguide.com" site_id="9200004949" lang="en" xmltv_id="Oxygen.us">Oxygen</channel>
-            <channel site="tvguide.com" site_id="9200004848" lang="en" xmltv_id="CartoonNetwork.us">Cartoon Network</channel>
-            <channel site="tvguide.com" site_id="9200006939" lang="en" xmltv_id="Nickelodeon.us">Nickelodeon</channel>
-            <channel site="tvguide.com" site_id="9200004889" lang="en" xmltv_id="AandE.us">A&amp;E</channel>
-            <channel site="tvguide.com" site_id="9200002886" lang="en" xmltv_id="Bravo.us">Bravo</channel>
-            <channel site="tvguide.com" site_id="9200009547" lang="en" xmltv_id="truTV.us">truTV</channel>
-            <channel site="tvguide.com" site_id="9200006932" lang="en" xmltv_id="FX.us">FX</channel>
-            <channel site="tvguide.com" site_id="9200012085" lang="en" xmltv_id="CMT.us">CMT</channel>
-            <channel site="tvguide.com" site_id="9200006942" lang="en" xmltv_id="Freeform.us">Freeform</channel>
-            <channel site="tvguide.com" site_id="9200009133" lang="en" xmltv_id="USANetwork.us">USA Network</channel>
-            <channel site="tvguide.com" site_id="9200011893" lang="en" xmltv_id="DisneyChannel.us">Disney Channel</channel>
-            <channel site="tvguide.com" site_id="9200008879" lang="en" xmltv_id="TNT.us">TNT</channel>
-            <channel site="tvguide.com" site_id="9200000502" lang="en" xmltv_id="Lifetime.us">Lifetime</channel>
-            <channel site="tvguide.com" site_id="9200016249" lang="en" xmltv_id="TLC.us">TLC</channel>
-            <channel site="tvguide.com" site_id="9200004467" lang="en" xmltv_id="HGTV.us">HGTV</channel>
-            <channel site="tvguide.com" site_id="9200004316" lang="en" xmltv_id="Syfy.us">Syfy</channel>
-            <channel site="tvguide.com" site_id="9200014439" lang="en" xmltv_id="History.us">History</channel>
-            <channel site="tvguide.com" site_id="9200010020" lang="en" xmltv_id="FETV.us">FETV</channel>
-            <channel site="tvguide.com" site_id="9200005182" lang="en" xmltv_id="HeroesandIconsNetwork.us">Heroes &amp; Icons</channel>
-            <channel site="tvguide.com" site_id="9200004312" lang="en" xmltv_id="NewEnglandSportsNetwork.us">NESN</channel>
-          </channels>
-          CHANNELS_XML
+          for (const c of fallbackCandidates) candidates.push(c)
 
-      - name: Grab TVGuide 1 day
-        run: |
-          cd epg
-          npm run grab -- \
-            --channels=sites/tvguide.com/festy.channels.xml \
-            --output=guide.xml \
-            --days=1
+          const seen = new Set()
+          const final = []
 
-      - name: Copy output back to repo
-        run: |
-          mkdir -p guides sites/tvguide.com
-          cp epg/guide.xml guides/tvguide.xml
-          cp epg/sites/tvguide.com/festy.channels.xml sites/tvguide.com/festy.channels.xml
+          for (const c of candidates) {
+            if (!c.site_id) continue
+            const unique = `${c.key}|${c.site_id}`
+            if (seen.has(unique)) continue
+            seen.add(unique)
+            final.push(c)
+          }
 
-      - name: Show result counts
+          if (!final.length) {
+            throw new Error('No failed-channel candidates found in repo XML files.')
+          }
+
+          const lines = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<site site="tvguide.com">',
+            '  <channels>'
+          ]
+
+          for (const c of final) {
+            const safeName = (c.name || c.key).replace(/&/g, '&amp;')
+            const xmltv = `${c.key}.${c.site_id.replace(/[^0-9]/g, '_')}.test`
+            const logo = c.logo ? ` logo="${c.logo}"` : ''
+            lines.push(`    <channel site="tvguide.com" site_id="${c.site_id}" lang="en" xmltv_id="${xmltv}"${logo}>${safeName}</channel>`)
+          }
+
+          lines.push('  </channels>')
+          lines.push('</site>')
+
+          fs.writeFileSync('epg/sites/tvguide.com/festy-failed.channels.xml', lines.join('\n'))
+
+          console.log('Testing these failed-channel candidates only:')
+          for (const c of final) {
+            console.log(`${c.key} | ${c.site_id} | ${c.name}`)
+          }
+          EOF
+
+      - name: Run TVGuide failed-channel test
         run: |
           cd epg
-          echo "Channels:"
-          grep -c "<channel " guide.xml || true
-          echo "Programs:"
-          grep -c "<programme " guide.xml || true
+          npm run grab -- --channels=sites/tvguide.com/festy-failed.channels.xml --output=guide-failed.xml --days=1
 
-      - name: Commit output
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add guides/tvguide.xml sites/tvguide.com/festy.channels.xml
-
-          git commit -m "Update Festy TVGuide" || echo "No changes to commit"
-          git push || echo "Nothing to push"
+      - name: Upload failed-channel guide result
+        uses: actions/upload-artifact@v4
+        with:
+          name: guide-failed
+          path: epg/guide-failed.xml
