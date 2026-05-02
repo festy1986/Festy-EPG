@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-ota-guides:
+  build-ota-and-clean-spectrum:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,11 +31,22 @@ jobs:
           RAW_OUTPUT: guides/OTALocalsguide.raw.xml
           CURATED_OUTPUT: guides/OTALocalsguide.xml
 
-      - name: Commit OTA guides
+      - name: Remove OTA channels from Spectrum guide
+        run: |
+          if [ -f guides/tvguide.xml ]; then
+            node scripts/remove-ota-from-spectrum.js
+          else
+            echo "guides/tvguide.xml not found, skipping Spectrum cleanup"
+          fi
+        env:
+          INPUT: guides/tvguide.xml
+          OUTPUT: guides/tvguide.xml
+
+      - name: Commit updated guides
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git add guides/OTALocalsguide.raw.xml guides/OTALocalsguide.xml
-          git commit -m "Update OTA raw master and curated guides" || echo "No changes to commit"
+          git add guides/OTALocalsguide.raw.xml guides/OTALocalsguide.xml guides/tvguide.xml
+          git commit -m "Update OTA guides and clean Spectrum guide" || echo "No changes to commit"
           git push
