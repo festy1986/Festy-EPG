@@ -21,25 +21,31 @@ jobs:
         with:
           node-version: 20
 
-      - name: Add logos to your personal TVGuide channel list
+      - name: Verify curated channel list
+        run: |
+          if [ ! -f "guides/festy.channels.xml" ]; then
+            echo "Missing guides/festy.channels.xml"
+            echo "This workflow is only allowed to use your curated personal list."
+            exit 1
+          fi
+
+          COUNT=$(grep -c "<channel " guides/festy.channels.xml || true)
+          echo "Curated channel count: $COUNT"
+
+          if [ "$COUNT" -gt 350 ]; then
+            echo "Too many channels. This looks like the raw list, not your curated list."
+            exit 1
+          fi
+
+      - name: Add logos to curated channel list
         run: |
           node <<'EOF'
           const fs = require("fs");
 
           const repo = process.env.GITHUB_REPOSITORY;
           const branch = process.env.GITHUB_REF_NAME || "main";
-          const channelFile = "guides/tvguide.channels.xml";
+          const channelFile = "guides/festy.channels.xml";
           const logoDir = "logos";
-
-          if (!fs.existsSync(channelFile)) {
-            console.error(`Missing ${channelFile}`);
-            process.exit(1);
-          }
-
-          if (!fs.existsSync(logoDir)) {
-            console.error(`Missing ${logoDir} folder`);
-            process.exit(1);
-          }
 
           function decodeXml(s) {
             return s
@@ -70,9 +76,7 @@ jobs:
             .filter(f => /\.(png|jpg|jpeg|webp|svg)$/i.test(f));
 
           const logoMap = new Map();
-          for (const logo of logos) {
-            logoMap.set(normalize(logo), logo);
-          }
+          for (const logo of logos) logoMap.set(normalize(logo), logo);
 
           const aliases = {
             msnbc: "MS NOW HD",
@@ -82,16 +86,13 @@ jobs:
             ae: "A&E",
             aande: "A&E",
             lmn: "lifetime movie network",
-            lifetimemovienetwork: "lifetime movie network",
             nesn: "New England Sports Network",
             nesnplus: "New England Sports Network Plus HD",
             science: "Science HD",
             discoverychannel: "discovery",
             fxm: "FX Movie HD",
-            fxmovie: "FX Movie HD",
             gameshownetwork: "Game Show Network HD",
             foodnetwork: "Food Network HD",
-            cbssportsnetwork: "CBS Sports Network HD",
             espnnews: "ESPN News HD",
             nhlnetwork: "NHL Network HD",
             mlbnetwork: "MLB Network HD",
@@ -102,9 +103,7 @@ jobs:
             fs2: "FOX Sports 2",
             hallmarkchannel: "Hallmark",
             hallmarkmystery: "Hallmark Mystery HD",
-            hallmarkfamily: "Hallmark Family",
             weatherchannel: "The Weather",
-            theweatherchannel: "The Weather",
             comedycentral: "Comedy Central",
             cartoonnetwork: "Cartoon Network",
             nationalgeographic: "National Geographic",
@@ -119,7 +118,6 @@ jobs:
           };
 
           let xml = fs.readFileSync(channelFile, "utf8");
-
           let matched = 0;
           let missed = 0;
 
@@ -157,8 +155,6 @@ jobs:
 
           fs.writeFileSync(channelFile, xml);
 
-          console.log("");
-          console.log(`Updated ${channelFile}`);
           console.log(`Matched logos: ${matched}`);
           console.log(`No logo match: ${missed}`);
           EOF
@@ -172,27 +168,27 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy your patched TVGuide channel list into EPG engine
+      - name: Copy ONLY curated list into EPG engine
         run: |
           mkdir -p epg/sites/tvguide.com
-          cp guides/tvguide.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
+          cp guides/festy.channels.xml epg/sites/tvguide.com/tvguide.com.channels.xml
 
-      - name: Build TVGuide XML - 2 days
+      - name: Build TVGuide XML - curated list only - 2 days
         run: |
           mkdir -p guides
           cd epg
           npm run grab -- --channels=sites/tvguide.com/tvguide.com.channels.xml --output=../guides/tvguide.xml --days=2
 
-      - name: Commit updated guide and patched channel list
+      - name: Commit updated guide and curated list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.xml guides/tvguide.channels.xml
+          git add guides/tvguide.xml guides/festy.channels.xml
 
           if git diff --cached --quiet; then
             echo "No guide changes to commit"
           else
-            git commit -m "Update TVGuide guide with logos (2 days)"
+            git commit -m "Update curated TVGuide guide"
             git push
           fi
