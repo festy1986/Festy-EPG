@@ -30,9 +30,35 @@ jobs:
           cd engine
           npm install
 
-      - name: Copy custom TVGuide channels
+      - name: Build full Portland Maine TVGuide channel list
         run: |
-          cp tvguide.channels.xml engine/sites/tvguide.com/tvguide.channels.xml
+          mkdir -p generated
+
+          node <<'NODE'
+          const fs = require("fs");
+
+          const LOCAL_TVGUIDE_ID = "9100002976";
+
+          const input = "engine/sites/tvguide.com/tvguide.com.channels.xml";
+          const output = "generated/tvguide.channels.xml";
+
+          let xml = fs.readFileSync(input, "utf8");
+
+          xml = xml.replace(
+            /site_id="([^"]+)"/g,
+            (match, id) => {
+              if (id.includes("#")) return match;
+              return `site_id="${LOCAL_TVGUIDE_ID}#${id}"`;
+            }
+          );
+
+          fs.writeFileSync(output, xml);
+          console.log(`Wrote ${output} using local TVGuide ID ${LOCAL_TVGUIDE_ID}`);
+          NODE
+
+      - name: Copy generated TVGuide channels into engine
+        run: |
+          cp generated/tvguide.channels.xml engine/sites/tvguide.com/tvguide.channels.xml
 
       - name: Build TVGuide
         run: |
@@ -42,12 +68,12 @@ jobs:
             --output=../tvguide.xml \
             --days=1
 
-      - name: Commit guide
+      - name: Commit guide and generated channel list
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add tvguide.xml
+          git add tvguide.xml generated/tvguide.channels.xml
 
           if git diff --cached --quiet; then
             echo "No TVGuide changes."
