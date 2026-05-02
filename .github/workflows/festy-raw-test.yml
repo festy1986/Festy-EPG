@@ -14,8 +14,9 @@ jobs:
       - name: Checkout your repo
         uses: actions/checkout@v4
 
-      - name: Clone EPG engine
+      - name: Clone EPG engine (clean)
         run: |
+          rm -rf epg
           git clone --depth 1 https://github.com/iptv-org/epg.git
 
       - name: Set up Node
