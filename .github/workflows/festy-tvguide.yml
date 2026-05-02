@@ -28,13 +28,34 @@ jobs:
           cd epg
           npm install
 
+      - name: Locate/create TVGuide curated list
+        run: |
+          mkdir -p sites/tvguide.com
+
+          if [ -f "sites/tvguide.com/festy.channels.xml" ]; then
+            echo "Using sites/tvguide.com/festy.channels.xml"
+          elif [ -f "sites/tvguide.com/tvguide.com.channels.xml" ]; then
+            echo "Found tvguide.com.channels.xml, copying to festy.channels.xml"
+            cp sites/tvguide.com/tvguide.com.channels.xml sites/tvguide.com/festy.channels.xml
+          elif [ -f "sites/tvguide.com/tvguide.channels.xml" ]; then
+            echo "Found tvguide.channels.xml, copying to festy.channels.xml"
+            cp sites/tvguide.com/tvguide.channels.xml sites/tvguide.com/festy.channels.xml
+          elif [ -f "festy.channels.xml" ]; then
+            echo "Found root festy.channels.xml, copying to sites/tvguide.com/"
+            cp festy.channels.xml sites/tvguide.com/festy.channels.xml
+          else
+            echo "Could not find any TVGuide channel file."
+            echo "Repo files:"
+            find . -maxdepth 5 -type f | sort
+            exit 1
+          fi
+
       - name: Create TVGuide repair script
         run: |
           mkdir -p scripts
 
           cat > scripts/repair-tvguide-curated.js <<'EOF'
           const fs = require('fs')
-          const path = require('path')
 
           const CURATED = 'sites/tvguide.com/festy.channels.xml'
 
@@ -44,14 +65,8 @@ jobs:
           }
 
           let xml = fs.readFileSync(CURATED, 'utf8')
-
           const logoBase = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos'
 
-          /*
-            These are the repairs based on the pattern from the failed run:
-            prefer plain/base TVGuide IDs over HD, @East, @SD, West, or duplicate alternates.
-            This does NOT drop channels.
-          */
           const replacements = {
             'FreeformHD.us': {
               xmltv_id: 'Freeform.us',
@@ -167,12 +182,6 @@ jobs:
               site_id: '9200006523',
               logo: `${logoBase}/ESPN%20News%20HD.png`
             },
-            'FOXSports1HD.us': {
-              xmltv_id: 'FOXSports1.us',
-              name: 'FOX Sports 1',
-              site_id: '9200017760',
-              logo: `${logoBase}/FOX%20Sports%201.png`
-            },
             'NHLNetworkHD.us': {
               xmltv_id: 'NHLNetwork.us',
               name: 'NHL Network',
@@ -185,17 +194,29 @@ jobs:
               site_id: '9200002579',
               logo: `${logoBase}/MLB%20Network%20HD.png`
             },
-            'CBSSportsNetworkHD.us': {
-              xmltv_id: 'CBSSportsNetwork.us',
-              name: 'CBS Sports Network',
-              site_id: '9200019260',
-              logo: `${logoBase}/CBS%20Sports%20Network.png`
-            },
             'AXSTV.us': {
               xmltv_id: 'AXSTV.us',
               name: 'AXS TV',
               site_id: '9200002987',
               logo: `${logoBase}/AXS%20TV.png`
+            },
+            'FETV.us': {
+              xmltv_id: 'FETV.us',
+              name: 'FETV',
+              site_id: '9200010020',
+              logo: `${logoBase}/fetv.png`
+            },
+            'HeroesandIconsNetwork.us': {
+              xmltv_id: 'HeroesandIconsNetwork.us',
+              name: 'Heroes & Icons Network',
+              site_id: '9200005182',
+              logo: `${logoBase}/Heroes%20%26%20Icons%20Network.png`
+            },
+            'NewEnglandSportsNetwork.us': {
+              xmltv_id: 'NewEnglandSportsNetwork.us',
+              name: 'New England Sports Network',
+              site_id: '9200004312',
+              logo: `${logoBase}/New%20England%20Sports%20Network.png`
             }
           }
 
@@ -222,13 +243,8 @@ jobs:
             })
           }
 
-          /*
-            Also normalize obvious @East/@SD/@HD xmltv_id labels even if a row was not in the map.
-            This keeps TiviMate cleaner without deleting channels.
-          */
           xml = xml.replace(/xmltv_id="([^"]+?)\.us@East"/g, 'xmltv_id="$1.us"')
           xml = xml.replace(/xmltv_id="([^"]+?)\.us@SD"/g, 'xmltv_id="$1.us"')
-          xml = xml.replace(/xmltv_id="([^"]+?)HD\.us"/g, 'xmltv_id="$1.us"')
 
           fs.writeFileSync(CURATED, xml)
 
