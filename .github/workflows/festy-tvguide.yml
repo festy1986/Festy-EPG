@@ -38,7 +38,7 @@ jobs:
           node <<'EOF'
           const fs = require('fs')
 
-          const inputPath = 'guides/tvguidetivimate.xml'
+          const inputPath = 'guides/tvguide.xml'
           const outputPath = 'epg/sites/tvguide.com/festy.channels.xml'
 
           if (!fs.existsSync(inputPath)) {
@@ -49,11 +49,11 @@ jobs:
           const input = fs.readFileSync(inputPath, 'utf8')
 
           const matches = [...input.matchAll(
-            /<channel\b[^>]*site_id="([^"]+)"[^>]*>([\s\S]*?)<\/channel>/g
+            /<channel\b[^>]*(?:site_id|id)="([^"]+)"[^>]*>([\s\S]*?)<\/channel>/g
           )]
 
           if (!matches.length) {
-            console.error(`No <channel site_id=""> entries found in ${inputPath}`)
+            console.error(`No <channel site_id=""> or <channel id=""> entries found in ${inputPath}`)
             process.exit(1)
           }
 
