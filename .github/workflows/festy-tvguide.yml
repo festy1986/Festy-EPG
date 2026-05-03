@@ -31,23 +31,69 @@ jobs:
           cd epg
           npm install
 
-      - name: Build TiviMate channel source (STRICT)
+      - name: Build TiviMate channel source from guide plus raw IDs
         run: |
           mkdir -p epg/sites/tvguide.com
 
           node <<'EOF'
           const fs = require('fs')
 
-          const inputPath = 'guides/tvguidetivimate.xml'
+          const sourcePath = 'guides/tvguidetivimate.xml'
+          const rawPath = 'guides/tvguide.xml'
           const outputPath = 'epg/sites/tvguide.com/festy-tivimate.channels.xml'
 
-          if (!fs.existsSync(inputPath)) {
-            console.error(`Missing ${inputPath}`)
-            process.exit(1)
+          const aliases = {
+            'MS.NOW.us': ['MSNBC.us'],
+            'ESPN.NEWS.us': ['ESPN.NEWS.us', 'ESPNEWS.us'],
+            'CBS.SPORTS.NETWORK.us': ['CBS.SPORTS.NETWORK.us', 'CBSSN.us'],
+            'USA.NETWORK.us': ['USA.NETWORK.us', 'USA.us'],
+            'PARAMOUNT.NETWORK.us': ['PARAMOUNT.NETWORK.us'],
+            'COMEDY.CENTRAL.us': ['COMEDY.CENTRAL.us'],
+            'BBC.AMERICA.us': ['BBC.AMERICA.us'],
+            'FOOD.NETWORK.us': ['FOOD.NETWORK.us'],
+            'TRAVEL.CHANNEL.us': ['TRAVEL.CHANNEL.us'],
+            'DISCOVERY.LIFE.us': ['DISCOVERY.LIFE.us'],
+            'DISCOVERY.FAMILY.us': ['DISCOVERY.FAMILY.us'],
+            'DISCOVERY.SCIENCE.us': ['DISCOVERY.SCIENCE.us'],
+            'INVESTIGATION.DISCOVERY.us': ['INVESTIGATION.DISCOVERY.us'],
+            'ANIMAL.PLANET.us': ['ANIMAL.PLANET.us'],
+            'NATIONAL.GEOGRAPHIC.us': ['NATIONAL.GEOGRAPHIC.us'],
+            'NAT.GEO.WILD.us': ['NAT.GEO.WILD.us'],
+            'SMITHSONIAN.CHANNEL.us': ['SMITHSONIAN.CHANNEL.us'],
+            'THE.WEATHER.CHANNEL.us': ['THE.WEATHER.CHANNEL.us'],
+            'GREAT.AMERICAN.FAMILY.us': ['GREAT.AMERICAN.FAMILY.us'],
+            'DISNEY.CHANNEL.us': ['DISNEY.CHANNEL.us'],
+            'CARTOON.NETWORK.us': ['CARTOON.NETWORK.us'],
+            'HALLMARK.CHANNEL.us': ['HALLMARK.CHANNEL.us'],
+            'HALLMARK.MYSTERY.us': ['HALLMARK.MYSTERY.us'],
+            'GAME.SHOW.NETWORK.us': ['GAME.SHOW.NETWORK.us'],
+            'COOKING.CHANNEL.us': ['COOKING.CHANNEL.us'],
+            'OUTDOOR.CHANNEL.us': ['OUTDOOR.CHANNEL.us'],
+            'AMERICAN.HEROES.CHANNEL.us': ['AMERICAN.HEROES.CHANNEL.us'],
+            'CRIME.AND.INVESTIGATION.us': ['CRIME.AND.INVESTIGATION.us'],
+            'PARAMOUNTPLUS.WITH.SHOWTIME.us': ['PARAMOUNTPLUS.WITH.SHOWTIME.us'],
+            'SHOWTIME.2.us': ['SHOWTIME.2.us'],
+            'SHOWTIME.EXTREME.us': ['SHOWTIME.EXTREME.us'],
+            'SHOWTIME.FAMILY.ZONE.us': ['SHOWTIME.FAMILY.ZONE.us'],
+            'SHOWTIME.NEXT.us': ['SHOWTIME.NEXT.us'],
+            'SHOWTIME.WOMEN.us': ['SHOWTIME.WOMEN.us'],
+            'SHOWTIME.SHOWCASE.us': ['SHOWTIME.SHOWCASE.us'],
+            'THE.MOVIE.CHANNEL.us': ['THE.MOVIE.CHANNEL.us'],
+            'TMC.XTRA.us': ['TMC.XTRA.us'],
+            'STARZ.EDGE.us': ['STARZ.EDGE.us'],
+            'STARZ.CINEMA.us': ['STARZ.CINEMA.us'],
+            'STARZ.COMEDY.us': ['STARZ.COMEDY.us'],
+            'STARZ.ENCORE.us': ['STARZ.ENCORE.us'],
+            'STARZ.ENCORE.ACTION.us': ['STARZ.ENCORE.ACTION.us'],
+            'STARZ.ENCORE.BLACK.us': ['STARZ.ENCORE.BLACK.us'],
+            'STARZ.ENCORE.CLASSIC.us': ['STARZ.ENCORE.CLASSIC.us'],
+            'STARZ.ENCORE.SUSPENSE.us': ['STARZ.ENCORE.SUSPENSE.us'],
+            'STARZ.ENCORE.FAMILY.us': ['STARZ.ENCORE.FAMILY.us'],
+            'STARZ.INBLACK.us': ['STARZ.INBLACK.us'],
+            'MGMPLUS.HITS.us': ['MGMPLUS.HITS.us'],
+            'MGMPLUS.MARQUEE.us': ['MGMPLUS.MARQUEE.us'],
+            'MGMPLUS.DRIVE.IN.us': ['MGMPLUS.DRIVE.IN.us']
           }
-
-          const xml = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
 
           function decodeXml(s) {
             return String(s || '')
@@ -58,57 +104,120 @@ jobs:
               .replace(/&gt;/g, '>')
           }
 
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
           function attr(attrs, name) {
             const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
             return m ? decodeXml(m[1]).trim() : ''
           }
 
-          function text(body) {
-            return decodeXml(body.replace(/<[^>]+>/g, '').trim())
+          function cleanBody(body) {
+            const display = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
+            return decodeXml(body.replace(/<url>[\s\S]*?<\/url>/gi, '').replace(/<[^>]+>/g, '').trim())
           }
 
-          const valid = []
+          function norm(s) {
+            return decodeXml(s)
+              .replace(/&/g, 'AND')
+              .replace(/\+/g, 'PLUS')
+              .replace(/[^A-Z0-9]+/gi, '.')
+              .replace(/^\.+|\.+$/g, '')
+              .toUpperCase()
+          }
+
+          function parseChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
+              const attrs = m[1]
+              const body = m[2]
+              return {
+                id: attr(attrs, 'id') || attr(attrs, 'xmltv_id'),
+                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'id'),
+                site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
+                name: cleanBody(body)
+              }
+            })
+          }
+
+          if (!fs.existsSync(sourcePath)) throw new Error(`Missing ${sourcePath}`)
+          if (!fs.existsSync(rawPath)) throw new Error(`Missing ${rawPath}`)
+
+          const sourceChannels = parseChannels(fs.readFileSync(sourcePath, 'utf8'))
+          const rawChannels = parseChannels(fs.readFileSync(rawPath, 'utf8'))
+
+          const rawById = new Map()
+          const rawByName = new Map()
+
+          for (const ch of rawChannels) {
+            if (ch.xmltv_id && ch.site_id) rawById.set(norm(ch.xmltv_id), ch)
+            if (ch.name && ch.site_id) rawByName.set(norm(ch.name), ch)
+          }
+
+          const out = []
           const missing = []
+          const seen = new Set()
 
-          for (const block of channelBlocks) {
-            const attrs = block[1]
-            const body = block[2]
+          for (const src of sourceChannels) {
+            const wantedId = src.id || src.xmltv_id
+            const wantedName = src.name || wantedId
 
-            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
-            const siteId = attr(attrs, 'site_id') || attr(attrs, 'site-id')
-            const name = text(body)
+            let siteId = src.site_id
+            let match = null
 
             if (!siteId) {
-              missing.push({ id, name })
+              const keys = [
+                wantedId,
+                wantedName,
+                ...(aliases[wantedId] || [])
+              ].map(x => norm(String(x).replace(/\.us$/i, '')))
+
+              for (const key of keys) {
+                match =
+                  rawById.get(key) ||
+                  rawById.get(`${key}.US`) ||
+                  rawByName.get(key)
+
+                if (match) break
+              }
+
+              if (match) siteId = match.site_id
+            }
+
+            if (!wantedId || !siteId) {
+              missing.push(`${wantedId || '(no id)'} (${wantedName})`)
               continue
             }
 
-            valid.push({ id, siteId, name })
+            const key = `${wantedId}|${siteId}`
+            if (seen.has(key)) continue
+            seen.add(key)
+
+            out.push(
+              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(wantedId)}" site_id="${escapeXml(siteId)}">${escapeXml(wantedName)}</channel>`
+            )
           }
 
-          console.log(`Total channels in source: ${channelBlocks.length}`)
-          console.log(`Channels with site_id: ${valid.length}`)
-          console.log(`Missing site_id: ${missing.length}`)
+          console.log(`Source channels: ${sourceChannels.length}`)
+          console.log(`Raw channels: ${rawChannels.length}`)
+          console.log(`Built channels: ${out.length}`)
+          console.log(`Missing site_id after raw lookup: ${missing.length}`)
 
-          if (missing.length > 0) {
-            console.log('\n❌ Missing site_id for these channels:')
-            missing.slice(0, 50).forEach(ch => {
-              console.log(`- ${ch.id} (${ch.name})`)
-            })
-
-            console.log('\nRefusing to continue — ALL channels must have site_id')
+          if (missing.length) {
+            console.log('\nMissing site_id:')
+            missing.forEach(x => console.log(`- ${x}`))
             process.exit(1)
           }
 
-          const out = valid.map(ch =>
-            `  <channel site="tvguide.com" lang="en" xmltv_id="${ch.id}" site_id="${ch.siteId}">${ch.name}</channel>`
-          )
-
-          fs.writeFileSync(outputPath,
+          fs.writeFileSync(
+            outputPath,
             `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
           )
-
-          console.log(`✅ Built ${valid.length} channels`)
           EOF
 
       - name: Verify channel count
@@ -124,7 +233,6 @@ jobs:
       - name: Write optimized TVGuide config
         run: |
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
-          const axios = require('axios')
           const dayjs = require('dayjs')
 
           module.exports = {
@@ -137,14 +245,13 @@ jobs:
               return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
             },
 
-            async parser({ content, channel, date }) {
+            parser({ content, channel, date }) {
               const data = JSON.parse(content)
               const items = data?.data?.items || []
-
               const sourceId = channel.site_id.split('#').pop()
 
               const match = items.find(i =>
-                String(i.sourceId || i.channelSourceId || '') === sourceId
+                String(i.sourceId || i.channelSourceId || i.id || i.channel?.sourceId || '') === sourceId
               )
 
               const schedules = match?.programSchedules || []
@@ -152,12 +259,16 @@ jobs:
               console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
               return schedules.map(p => ({
-                title: (p.title || '').trim(),
-                description: (p.description || '').trim(),
+                title: clean(p.title),
+                description: clean(p.description),
                 start: dayjs.unix(p.startTime),
                 stop: dayjs.unix(p.endTime)
               }))
             }
+          }
+
+          function clean(v) {
+            return String(v || '').replace(/\s+/g, ' ').trim()
           }
           EOF
 
@@ -182,6 +293,11 @@ jobs:
 
           if [ "$CH" -lt 123 ]; then
             echo "Invalid output — missing channels"
+            exit 1
+          fi
+
+          if [ "$PR" -lt 1 ]; then
+            echo "Invalid output — no programmes"
             exit 1
           fi
 
