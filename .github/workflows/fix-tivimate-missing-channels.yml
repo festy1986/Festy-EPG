@@ -14,13 +14,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Inject missing TiviMate channels from raw guide
+      - name: Inject missing TiviMate channels from raw source-id list
         run: |
           node <<'EOF'
           const fs = require('fs')
 
           const rawPath = 'guides/tvguide.xml'
           const guidePath = 'guides/tvguidetivimate.xml'
+
+          const SPECTRUM_PROVIDER_ID = '9100002976'
 
           const wanted = [
             ['NEW ENGLAND CABLE NEWS', ['NEW.ENGLAND.CABLE.NEWS.us', 'NECN.us']],
@@ -44,7 +46,7 @@ jobs:
             ['DESTINATION AMERICA', ['DESTINATION.AMERICA.us']],
             ['FOX NEWS CHANNEL', ['FOX.NEWS.CHANNEL.us', 'FOX.NEWS.us']],
             ['ADULT SWIM', ['ADULT.SWIM.us']],
-            ['E!', ['E.us', 'E!.us', 'ENTERTAINMENT.TELEVISION.us']],
+            ['E!', ['E.us', 'E!.us']],
             ['MTV2', ['MTV2.us', 'MTV.2.us']],
             ['HALLMARK DRAMA', ['HALLMARK.DRAMA.us']],
             ['UPTV', ['UPTV.us', 'UP.TV.us']],
@@ -70,6 +72,14 @@ jobs:
               .replace(/&gt;/g, '>')
           }
 
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
           function norm(s) {
             return decodeXml(s)
               .replace(/&/g, 'AND')
@@ -79,18 +89,49 @@ jobs:
               .toUpperCase()
           }
 
-          function getChannels(xml) {
-            return [...xml.matchAll(/<channel\b[^>]*>[\s\S]*?<\/channel>/gi)].map(m => m[0])
-          }
-
-          function getId(block) {
-            const m = block.match(/<channel\b[^>]*\bid="([^"]+)"/i)
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
             return m ? decodeXml(m[1]).trim() : ''
           }
 
-          function getDisplayName(block) {
-            const m = block.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
-            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '')).trim() : ''
+          function getChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => ({
+              block: m[0],
+              attrs: m[1],
+              body: m[2]
+            }))
+          }
+
+          function textOnly(body) {
+            return decodeXml(String(body || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function displayName(ch) {
+            const m = ch.body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            return m ? textOnly(m[1]) : textOnly(ch.body)
+          }
+
+          function channelId(ch) {
+            return attr(ch.attrs, 'xmltv_id') || attr(ch.attrs, 'id')
+          }
+
+          function siteId(ch) {
+            return attr(ch.attrs, 'site_id') || attr(ch.attrs, 'site-id')
+          }
+
+          function sourceIdFromSiteId(value) {
+            const parts = String(value || '').split('#')
+            return parts.length > 1 ? parts.pop() : value
+          }
+
+          if (!fs.existsSync(rawPath)) {
+            console.error(`Missing raw file: ${rawPath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing guide file: ${guidePath}`)
+            process.exit(1)
           }
 
           const rawXml = fs.readFileSync(rawPath, 'utf8')
@@ -99,55 +140,99 @@ jobs:
           const rawChannels = getChannels(rawXml)
           const guideChannels = getChannels(guideXml)
 
-          const existingIds = new Set(guideChannels.map(getId).filter(Boolean))
+          const existingIds = new Set(guideChannels.map(channelId).filter(Boolean))
+          const existingSiteIds = new Set(guideChannels.map(siteId).filter(Boolean))
+
+          console.log(`Raw channels found: ${rawChannels.length}`)
+          console.log(`Existing TiviMate channels: ${guideChannels.length}`)
+
           const toAdd = []
 
           for (const [wantedName, aliases] of wanted) {
-            const keys = new Set([norm(wantedName), ...aliases.map(a => norm(a.replace(/\.us$/i, '')))])
+            const keys = new Set([
+              norm(wantedName),
+              ...aliases.map(a => norm(a.replace(/\.us$/i, '')))
+            ])
 
-            const block = rawChannels.find(ch => {
-              const id = getId(ch).replace(/\.us$/i, '')
-              const name = getDisplayName(ch)
-              return keys.has(norm(id)) || keys.has(norm(name))
+            const matches = rawChannels.filter(ch => {
+              const xmltvId = channelId(ch)
+              const name = displayName(ch)
+
+              return (
+                keys.has(norm(name)) ||
+                keys.has(norm(xmltvId.replace(/\.us$/i, '')))
+              )
             })
 
-            if (!block) {
+            if (!matches.length) {
               console.log(`[NOT FOUND] ${wantedName}`)
               continue
             }
 
-            const id = getId(block)
+            let picked = null
 
-            if (existingIds.has(id)) {
-              console.log(`[SKIP EXISTS] ${wantedName} | ${id}`)
+            for (const ch of matches) {
+              const xmltvId = channelId(ch)
+              const rawSiteId = siteId(ch)
+              const sourceId = sourceIdFromSiteId(rawSiteId)
+              const fixedSiteId = `${SPECTRUM_PROVIDER_ID}#${sourceId}`
+
+              if (!existingIds.has(xmltvId) && !existingSiteIds.has(fixedSiteId)) {
+                picked = { ch, xmltvId, rawSiteId, sourceId, fixedSiteId }
+                break
+              }
+            }
+
+            if (!picked) {
+              const first = matches[0]
+              console.log(`[SKIP EXISTS] ${wantedName} | ${channelId(first)} | ${siteId(first)}`)
               continue
             }
 
-            console.log(`[ADD] ${wantedName} | ${id}`)
-            toAdd.push(block)
-            existingIds.add(id)
+            const name = displayName(picked.ch) || wantedName
+
+            const newBlock =
+              `<channel id="${escapeXml(picked.xmltvId)}" site_id="${escapeXml(picked.fixedSiteId)}">` +
+              `<display-name>${escapeXml(name)}</display-name>` +
+              `<url>https://tvguide.com</url>` +
+              `</channel>`
+
+            console.log(`[ADD] ${wantedName} | ${picked.xmltvId} | ${picked.fixedSiteId}`)
+
+            toAdd.push(newBlock)
+            existingIds.add(picked.xmltvId)
+            existingSiteIds.add(picked.fixedSiteId)
           }
 
-          if (toAdd.length) {
-            guideXml = guideXml.replace(
-              /<\/tv>\s*$/i,
-              `${toAdd.map(block => '\n' + block).join('')}\n</tv>\n`
-            )
-            fs.writeFileSync(guidePath, guideXml)
+          if (!toAdd.length) {
+            console.log('Added 0 channel(s)')
+            process.exit(0)
           }
+
+          guideXml = guideXml.replace(
+            /<\/tv>\s*$/i,
+            `${toAdd.map(block => '\n' + block).join('')}\n</tv>\n`
+          )
+
+          fs.writeFileSync(guidePath, guideXml)
 
           console.log(`Added ${toAdd.length} channel(s)`)
+          console.log(`Before: ${guideChannels.length}`)
+          console.log(`After: ${guideChannels.length + toAdd.length}`)
           EOF
 
       - name: Show channel count
         run: |
+          echo "TiviMate channel count:"
           grep -c '<channel ' guides/tvguidetivimate.xml || true
 
       - name: Commit fixed TiviMate guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+
           git add guides/tvguidetivimate.xml
+
           if git diff --cached --quiet; then
             echo "No TiviMate channel changes to commit"
           else
