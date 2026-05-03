@@ -263,7 +263,7 @@ jobs:
 
             request: {
               method: 'GET',
-              timeout: 15000,
+              timeout: 3000,
               cache: { ttl: 60 * 60 * 1000 },
               headers() {
                 return {
@@ -342,7 +342,7 @@ jobs:
 
             try {
               const response = await axios.get(url, {
-                timeout: 15000,
+                timeout: 5000,
                 headers: {
                   Referer: 'https://www.tvguide.com/',
                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
