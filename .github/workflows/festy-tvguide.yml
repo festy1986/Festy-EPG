@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: epg-guide-writes-main
+  cancel-in-progress: false
+
 jobs:
   build-tvguide-tivimate:
     runs-on: ubuntu-latest
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Clone IPTV-org EPG engine
         run: |
@@ -120,11 +126,18 @@ jobs:
           function cleanBody(body) {
             const display = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
             if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
-            return decodeXml(body.replace(/<url>[\s\S]*?<\/url>/gi, '').replace(/<[^>]+>/g, '').trim())
+
+            return decodeXml(
+              body
+                .replace(/<url>[\s\S]*?<\/url>/gi, '')
+                .replace(/<[^>]+>/g, '')
+                .trim()
+            )
           }
 
           function norm(s) {
             return decodeXml(s)
+              .replace(/\.us$/i, '')
               .replace(/&/g, 'AND')
               .replace(/\+/g, 'PLUS')
               .replace(/[^A-Z0-9]+/gi, '.')
@@ -136,6 +149,7 @@ jobs:
             return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
               const attrs = m[1]
               const body = m[2]
+
               return {
                 id: attr(attrs, 'id') || attr(attrs, 'xmltv_id'),
                 xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'id'),
@@ -145,8 +159,15 @@ jobs:
             })
           }
 
-          if (!fs.existsSync(sourcePath)) throw new Error(`Missing ${sourcePath}`)
-          if (!fs.existsSync(rawPath)) throw new Error(`Missing ${rawPath}`)
+          if (!fs.existsSync(sourcePath)) {
+            console.error(`Missing ${sourcePath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(rawPath)) {
+            console.error(`Missing ${rawPath}`)
+            process.exit(1)
+          }
 
           const sourceChannels = parseChannels(fs.readFileSync(sourcePath, 'utf8'))
           const rawChannels = parseChannels(fs.readFileSync(rawPath, 'utf8'))
@@ -175,12 +196,11 @@ jobs:
                 wantedId,
                 wantedName,
                 ...(aliases[wantedId] || [])
-              ].map(x => norm(String(x).replace(/\.us$/i, '')))
+              ].map(norm)
 
               for (const key of keys) {
                 match =
                   rawById.get(key) ||
-                  rawById.get(`${key}.US`) ||
                   rawByName.get(key)
 
                 if (match) break
@@ -214,21 +234,16 @@ jobs:
             process.exit(1)
           }
 
+          if (out.length < 123) {
+            console.error(`Refusing to run: expected at least 123 channels, built ${out.length}`)
+            process.exit(1)
+          }
+
           fs.writeFileSync(
             outputPath,
             `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
           )
           EOF
-
-      - name: Verify channel count
-        run: |
-          COUNT=$(grep -c '<channel ' epg/sites/tvguide.com/festy-tivimate.channels.xml || true)
-          echo "Channel count: $COUNT"
-
-          if [ "$COUNT" -lt 123 ]; then
-            echo "Refusing to run: expected at least 123 channels"
-            exit 1
-          fi
 
       - name: Write optimized TVGuide config
         run: |
@@ -241,38 +256,64 @@ jobs:
             days: 14,
 
             url({ date, channel }) {
-              const [providerId, sourceId] = channel.site_id.split('#')
+              const [providerId, sourceId] = String(channel.site_id).split('#')
+
               return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+            },
+
+            request: {
+              method: 'GET',
+              timeout: 15000,
+              cache: { ttl: 60 * 60 * 1000 },
+              headers() {
+                return {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              }
             },
 
             parser({ content, channel, date }) {
               const data = JSON.parse(content)
               const items = data?.data?.items || []
-              const sourceId = channel.site_id.split('#').pop()
+              const sourceId = String(channel.site_id).split('#').pop()
 
-              const match = items.find(i =>
-                String(i.sourceId || i.channelSourceId || i.id || i.channel?.sourceId || '') === sourceId
+              const match = items.find(item =>
+                String(item.sourceId || item.channelSourceId || item.id || item.channel?.sourceId || '') === sourceId
               )
 
               const schedules = match?.programSchedules || []
 
               console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
-              return schedules.map(p => ({
-                title: clean(p.title),
-                description: clean(p.description),
-                start: dayjs.unix(p.startTime),
-                stop: dayjs.unix(p.endTime)
+              return schedules.map(item => ({
+                title: cleanTitle(item.title),
+                description: cleanSpaces(item.description),
+                start: dayjs.unix(item.startTime),
+                stop: dayjs.unix(item.endTime)
               }))
             }
           }
 
-          function clean(v) {
-            return String(v || '').replace(/\s+/g, ' ').trim()
+          function cleanTitle(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
           }
           EOF
 
-      - name: Grab TiviMate Guide
+      - name: Grab TiviMate guide
         run: |
           cd epg
 
@@ -283,29 +324,29 @@ jobs:
 
           cd ..
 
-      - name: Validate output
+      - name: Validate TiviMate output
         run: |
           CH=$(grep -c '<channel ' guides/tvguidetivimateguide.xml || true)
           PR=$(grep -c '<programme ' guides/tvguidetivimateguide.xml || true)
 
-          echo "Channels: $CH"
-          echo "Programs: $PR"
+          echo "TiviMate channels: $CH"
+          echo "TiviMate programmes: $PR"
 
           if [ "$CH" -lt 123 ]; then
-            echo "Invalid output — missing channels"
+            echo "Invalid TiviMate output — expected at least 123 channels"
             exit 1
           fi
 
           if [ "$PR" -lt 1 ]; then
-            echo "Invalid output — no programmes"
+            echo "Invalid TiviMate output — no programmes"
             exit 1
           fi
 
-      - name: Apply logos
+      - name: Apply custom logos to TiviMate guide
         run: |
           node scripts/apply-custom-logos.cjs guides/tvguidetivimateguide.xml
 
-      - name: Commit guide
+      - name: Commit and push TiviMate guide safely
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -313,8 +354,26 @@ jobs:
           git add guides/tvguidetivimateguide.xml
 
           if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "Update TiviMate guide"
-            git push
+            echo "No TiviMate guide changes to commit"
+            exit 0
           fi
+
+          git commit -m "Update TiviMate guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            git fetch origin main
+            git rebase origin/main
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, retrying after rebase..."
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
