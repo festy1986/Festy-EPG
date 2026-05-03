@@ -42,32 +42,24 @@ jobs:
           const outputPath = 'epg/sites/tvguide.com/festy-ota.channels.xml'
           const OTA_PROVIDER_ID = '9100000664'
 
-          const wanted = new Set([
-            'COMET',
-            'LAFF',
-            'FOX BOSTON',
-            'FOX PORTLAND',
-            'NBC BOSTON',
-            'NBC PORTLAND',
-            'ABC BOSTON',
-            'ABC PORTLAND',
-            'PBS',
-            'CW BOSTON',
-            'CBS BOSTON',
-            'CBS PORTLAND',
-            'ION BOSTON',
-            'METV',
-            'GRIT',
-            'HEROES & ICONS'
-          ])
-
-          if (!fs.existsSync(inputPath)) {
-            console.error(`Missing ${inputPath}`)
-            process.exit(1)
-          }
-
-          const xml = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
+          const wanted = [
+            { name: 'COMET', aliases: ['COMET'] },
+            { name: 'LAFF', aliases: ['LAFF'] },
+            { name: 'FOX BOSTON', aliases: ['FOX BOSTON', 'WFXT', 'WFXTDT', 'WFXT-DT'] },
+            { name: 'FOX PORTLAND', aliases: ['FOX PORTLAND', 'WPFO', 'WGME2', 'WGME-DT2', 'WGME DT2', 'WGME 13.2'] },
+            { name: 'NBC BOSTON', aliases: ['NBC BOSTON', 'WBTS', 'WBTSCD', 'WBTS-CD', 'NBC10 BOSTON'] },
+            { name: 'NBC PORTLAND', aliases: ['NBC PORTLAND', 'WCSH', 'WCSHDT', 'WCSH-DT'] },
+            { name: 'ABC BOSTON', aliases: ['ABC BOSTON', 'WCVB', 'WCVBDT', 'WCVB-DT'] },
+            { name: 'ABC PORTLAND', aliases: ['ABC PORTLAND', 'WMTW', 'WMTWDT', 'WMTW-DT'] },
+            { name: 'PBS', aliases: ['PBS', 'WGBH', 'WGBHDT', 'WGBH-DT', 'WMEA', 'WCBB'] },
+            { name: 'CW BOSTON', aliases: ['CW BOSTON', 'WLVI', 'WLVH', 'CW56'] },
+            { name: 'CBS BOSTON', aliases: ['CBS BOSTON', 'WBZ', 'WBZDT', 'WBZ-DT'] },
+            { name: 'CBS PORTLAND', aliases: ['CBS PORTLAND', 'WGME', 'WGMEDT', 'WGME-DT'] },
+            { name: 'ION BOSTON', aliases: ['ION BOSTON', 'WBPX', 'WBPXDT', 'WBPX-DT'] },
+            { name: 'METV', aliases: ['METV', 'ME TV', 'MeTV'] },
+            { name: 'GRIT', aliases: ['GRIT'] },
+            { name: 'HEROES & ICONS', aliases: ['HEROES & ICONS', 'HEROES AND ICONS', 'H&I', 'H I'] }
+          ]
 
           function decodeXml(s) {
             return String(s || '')
@@ -105,57 +97,74 @@ jobs:
             return decodeXml(s)
               .replace(/&/g, 'AND')
               .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/gi, ' ')
-              .replace(/\s+/g, ' ')
-              .trim()
+              .replace(/[^A-Z0-9]+/gi, '')
               .toUpperCase()
           }
 
           function xmltvId(name) {
-            return norm(name)
-              .replace(/ /g, '.')
-              .replace(/^\.|\.$/g, '') + '.us'
+            return String(name)
+              .toUpperCase()
+              .replace(/&/g, 'AND')
+              .replace(/\+/g, 'PLUS')
+              .replace(/[^A-Z0-9]+/g, '.')
+              .replace(/^\.+|\.+$/g, '') + '.us'
           }
 
-          const wantedNorm = new Set([...wanted].map(norm))
-          const seen = new Set()
-          const channels = []
-          const found = new Set()
+          if (!fs.existsSync(inputPath)) {
+            console.error(`Missing ${inputPath}`)
+            process.exit(1)
+          }
 
-          for (const block of channelBlocks) {
+          const xml = fs.readFileSync(inputPath, 'utf8')
+          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
+
+          const parsed = channelBlocks.map(block => {
             const attrs = block[1]
             const body = block[2]
-
-            let siteId = attr(attrs, 'site_id') || attr(attrs, 'site-id') || attr(attrs, 'id')
+            const rawId = attr(attrs, 'site_id') || attr(attrs, 'site-id') || attr(attrs, 'id')
             const name = cleanBody(body)
+            return { rawId, name, normName: norm(name), block: block[0] }
+          }).filter(ch => ch.rawId && ch.name)
 
-            if (!siteId || !name) continue
+          const channels = []
+          const seenSiteIds = new Set()
+          const found = new Set()
 
-            if (!wantedNorm.has(norm(name))) continue
+          for (const target of wanted) {
+            const aliasKeys = target.aliases.map(norm)
 
-            if (!siteId.includes('#')) {
-              siteId = `${OTA_PROVIDER_ID}#${siteId}`
-            } else {
-              const sourceId = siteId.split('#').pop()
-              siteId = `${OTA_PROVIDER_ID}#${sourceId}`
+            const match = parsed.find(ch =>
+              aliasKeys.some(alias => ch.normName.includes(alias) || alias.includes(ch.normName))
+            )
+
+            if (!match) {
+              console.log(`[MISSING] ${target.name}`)
+              continue
             }
 
-            const id = xmltvId(name)
-            const key = `${id}|${siteId}`
+            let siteId = match.rawId
+            const sourceId = String(siteId).split('#').pop()
+            siteId = `${OTA_PROVIDER_ID}#${sourceId}`
 
-            if (seen.has(key)) continue
-            seen.add(key)
-            found.add(norm(name))
+            if (seenSiteIds.has(siteId)) {
+              console.log(`[SKIP DUPLICATE] ${target.name} | ${siteId}`)
+              continue
+            }
+
+            seenSiteIds.add(siteId)
+            found.add(target.name)
 
             channels.push(
-              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(id)}" site_id="${escapeXml(siteId)}">${escapeXml(name)}</channel>`
+              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId(target.name))}" site_id="${escapeXml(siteId)}">${escapeXml(target.name)}</channel>`
             )
+
+            console.log(`[ADD] ${target.name} <= ${match.name} | ${siteId}`)
           }
 
           console.log(`Raw OTA channels: ${channelBlocks.length}`)
           console.log(`Built OTA channels: ${channels.length}`)
 
-          const missing = [...wantedNorm].filter(name => !found.has(name))
+          const missing = wanted.filter(x => !found.has(x.name)).map(x => x.name)
           if (missing.length) {
             console.log('\nMissing wanted OTA channels:')
             missing.forEach(name => console.log(`- ${name}`))
