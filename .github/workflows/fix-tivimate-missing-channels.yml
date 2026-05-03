@@ -1,0 +1,175 @@
+name: Fix TiviMate Missing Channels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-tivimate-missing-channels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Inject missing TiviMate channels from raw guide
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const rawPath = 'guides/tvguidetivimate.raw.xml'
+          const guidePath = 'guides/tvguidetivimate.xml'
+
+          const wanted = new Set([
+            'NEW ENGLAND CABLE NEWS',
+            'NESN PLUS',
+            'NBC SPORTS BOSTON',
+            'ESPN2',
+            'CBS SPORTS HQ',
+            'FOX SPORTS 1',
+            'FOX SPORTS 2',
+            'NFL NETWORK',
+            'NHL NETWORK',
+            'MLB NETWORK',
+            'NBA TV',
+            'TRUTV',
+            'A&E',
+            'FX MOVIE CHANNEL',
+            'SYFY',
+            'TV LAND',
+            'DISCOVERY CHANNEL',
+            'MAGNOLIA NETWORK',
+            'DESTINATION AMERICA',
+            'FOX NEWS CHANNEL',
+            'ADULT SWIM',
+            'E!',
+            'MTV2',
+            'HALLMARK DRAMA',
+            'UPTV',
+            'AWE',
+            'AXS TV',
+            'HBO HITS',
+            'HBO DRAMA',
+            'CINEMAX HITS',
+            'CINEMAX ACTION',
+            'CINEMAX CLASSICS',
+            'SHOXBET',
+            'FLIX',
+            'STARZ KIDS & FAMILY',
+            'MGM+'
+          ])
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function norm(s) {
+            return decodeXml(s)
+              .replace(/\s+/g, ' ')
+              .trim()
+              .toUpperCase()
+          }
+
+          function getChannels(xml) {
+            return [...xml.matchAll(/<channel\b[^>]*>[\s\S]*?<\/channel>/gi)].map(m => m[0])
+          }
+
+          function getId(block) {
+            const m = block.match(/<channel\b[^>]*\bid="([^"]+)"/i)
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function getDisplayName(block) {
+            const m = block.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            return m ? norm(m[1].replace(/<[^>]+>/g, '')) : ''
+          }
+
+          if (!fs.existsSync(rawPath)) {
+            console.error(`Missing raw file: ${rawPath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing guide file: ${guidePath}`)
+            process.exit(1)
+          }
+
+          const rawXml = fs.readFileSync(rawPath, 'utf8')
+          let guideXml = fs.readFileSync(guidePath, 'utf8')
+
+          const rawChannels = getChannels(rawXml)
+          const guideChannels = getChannels(guideXml)
+
+          const existingIds = new Set(guideChannels.map(getId).filter(Boolean))
+          const existingNames = new Set(guideChannels.map(getDisplayName).filter(Boolean))
+
+          const toAdd = []
+          const foundWanted = new Set()
+
+          for (const block of rawChannels) {
+            const id = getId(block)
+            const name = getDisplayName(block)
+
+            if (!wanted.has(name)) continue
+
+            foundWanted.add(name)
+
+            if (existingIds.has(id) || existingNames.has(name)) {
+              console.log(`[SKIP EXISTS] ${name} | ${id}`)
+              continue
+            }
+
+            console.log(`[ADD] ${name} | ${id}`)
+            toAdd.push(block)
+            existingIds.add(id)
+            existingNames.add(name)
+          }
+
+          const missingFromRaw = [...wanted].filter(name => !foundWanted.has(name))
+
+          if (missingFromRaw.length) {
+            console.log('\nMissing from raw file:')
+            for (const name of missingFromRaw) console.log(`- ${name}`)
+          }
+
+          if (!toAdd.length) {
+            console.log('\nNo new channels added.')
+          } else {
+            guideXml = guideXml.replace(
+              /<\/tv>\s*$/i,
+              `${toAdd.map(block => '\n' + block).join('')}\n</tv>\n`
+            )
+
+            fs.writeFileSync(guidePath, guideXml)
+
+            console.log(`\nAdded ${toAdd.length} channel(s) to ${guidePath}`)
+            console.log(`Before: ${guideChannels.length}`)
+            console.log(`After: ${guideChannels.length + toAdd.length}`)
+          }
+          EOF
+
+      - name: Show channel count
+        run: |
+          echo "TiviMate channel count:"
+          grep -c '<channel ' guides/tvguidetivimate.xml || true
+
+      - name: Commit fixed TiviMate guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguidetivimate.xml
+
+          if git diff --cached --quiet; then
+            echo "No TiviMate channel changes to commit"
+          else
+            git commit -m "Add missing TiviMate channels"
+            git push
+          fi
