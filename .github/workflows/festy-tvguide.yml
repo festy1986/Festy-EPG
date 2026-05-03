@@ -326,17 +326,9 @@ jobs:
                       category: buildCategories(programType)
                     }
 
-                    if (episodeTitle) program.sub_title = episodeTitle
-
-                    if (seasonNumber && episodeNumber) {
-                      program.season = Number(seasonNumber)
-                      program.episode = Number(episodeNumber)
-                    }
-
-                    if (airDate) {
-                      const normalizedDate = normalizeXmltvDate(airDate)
-                      if (normalizedDate) program.date = normalizedDate
-                    }
+                    // Keep TiviMate display clean: title-only row, all episode/date metadata packed in <desc>.
+                    // Do not emit separate sub-title, episode-num, or date fields here, because TiviMate
+                    // may use them to rebuild/duplicate display text outside the packed description.
 
                     return program
                   })
