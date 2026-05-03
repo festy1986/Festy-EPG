@@ -541,31 +541,33 @@ jobs:
             const parts = []
 
             let prefix = ''
-            if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
-            else if (episodeTitle) prefix = episodeTitle
-            else if (episodeCode) prefix = episodeCode
+            if (programType === 'series' || programType === 'miniseries') {
+              if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
+              else if (episodeTitle) prefix = episodeTitle
+              else if (episodeCode) prefix = episodeCode
+            }
 
             if (prefix) parts.push(prefix)
             if (description) parts.push(description)
 
-            let finalDescription = parts.join('. ')
+            let finalDescription = cleanPackedDescription(parts.join('. '))
 
             if (programType === 'movie') {
-              if (releaseYear) {
+              if (releaseYear && !descriptionIncludesDisplayDate(finalDescription, releaseYear)) {
                 finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
               }
               return finalDescription
             }
 
             if (programType === 'series' || programType === 'miniseries') {
-              if (airDate && !descriptionIncludesAirDate(finalDescription, airDate)) {
-                finalDescription = finalDescription ? `${finalDescription} Aired ${airDate}.` : `Aired ${airDate}.`
+              if (airDate && !descriptionIncludesDisplayDate(finalDescription, airDate)) {
+                finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
               }
               return finalDescription
             }
 
             const dateOrYear = airDate || releaseYear
-            if (dateOrYear) {
+            if (dateOrYear && !descriptionIncludesDisplayDate(finalDescription, dateOrYear)) {
               finalDescription = finalDescription
                 ? `${finalDescription} (${dateOrYear})`
                 : `(${dateOrYear})`
@@ -574,9 +576,17 @@ jobs:
             return finalDescription
           }
 
-          function descriptionIncludesAirDate(description, airDate) {
-            if (!description || !airDate) return false
-            return description.includes(airDate)
+          function cleanPackedDescription(value) {
+            return cleanSpaces(value)
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function descriptionIncludesDisplayDate(description, dateOrYear) {
+            if (!description || !dateOrYear) return false
+            const escaped = String(dateOrYear).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            return new RegExp(`\\(${escaped}\\)\\s*$`).test(description) || description.includes(String(dateOrYear))
           }
 
           function buildEpisodeCode(seasonNumber, episodeNumber) {
@@ -904,11 +914,20 @@ jobs:
           }
 
           function needsTvmaze(block) {
-            if (!hasTag(block, 'desc')) return true
-            if (!hasTag(block, 'sub-title')) return true
-            if (!hasTag(block, 'episode-num')) return true
-            if (!hasTag(block, 'date')) return true
             if (!hasAnyCategory(block)) return true
+            if (!hasTag(block, 'desc')) return true
+
+            // TVMaze must respect the packed display format already written by TVGuide.
+            // If TVGuide already packed "Episode Title - SxxExx. Description. (MM/DD/YYYY)" into <desc>,
+            // TVMaze must not add duplicate <sub-title>, <episode-num>, or <date> tags just because
+            // that metadata is not in separate XMLTV fields.
+            const desc = getTag(block, 'desc')
+            const hasPackedEpisodeCode = /\bS\d+E\d+\b/i.test(desc)
+            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+
+            if (!hasPackedEpisodeCode && !hasTag(block, 'episode-num')) return true
+            if (!hasPackedDisplayDate && !hasTag(block, 'date')) return true
+
             return false
           }
 
@@ -1067,6 +1086,86 @@ jobs:
               .trim())
           }
 
+          function formatDateDisplay(date) {
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
+            return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`
+          }
+
+          function buildTvmazeEpisodeCode(season, episode) {
+            const s = Number(season)
+            const e = Number(episode)
+            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
+            return `S${s}E${e}`
+          }
+
+          function descHasEpisodeName(desc, episodeName) {
+            if (!desc || !episodeName) return false
+            const descNorm = normalize(desc)
+            const nameNorm = normalize(episodeName)
+            return Boolean(nameNorm && descNorm.includes(nameNorm))
+          }
+
+          function descHasEpisodeCode(desc, season, episode) {
+            const code = buildTvmazeEpisodeCode(season, episode)
+            if (!desc || !code) return false
+            return new RegExp(`\\b${code}\\b`, 'i').test(desc)
+          }
+
+          function descHasDisplayDate(desc, airdate) {
+            const displayDate = formatDateDisplay(airdate)
+            if (!desc || !displayDate) return false
+            return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
+          }
+
+          function cleanPackedTvmazeDescription(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function buildTvmazePackedDescription(existingDesc, show, episode) {
+            const body = cleanPackedTvmazeDescription(existingDesc || cleanTvmazeSummary(episode?.summary || '') || cleanTvmazeSummary(show?.summary || ''))
+            const prefixParts = []
+            const episodeName = cleanTvmazeSummary(episode?.name || '')
+            const episodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
+
+            if (episodeName && !descHasEpisodeName(body, episodeName)) {
+              if (episodeCode && !descHasEpisodeCode(body, episode?.season, episode?.number)) {
+                prefixParts.push(`${episodeName} - ${episodeCode}`)
+              } else {
+                prefixParts.push(episodeName)
+              }
+            } else if (episodeCode && !descHasEpisodeCode(body, episode?.season, episode?.number)) {
+              prefixParts.push(episodeCode)
+            }
+
+            const parts = [...prefixParts]
+            if (body) parts.push(body)
+
+            let desc = cleanPackedTvmazeDescription(parts.join('. '))
+            const displayDate = formatDateDisplay(episode?.airdate)
+            if (displayDate && !descHasDisplayDate(desc, episode?.airdate)) {
+              desc = desc ? `${desc} (${displayDate})` : `(${displayDate})`
+            }
+
+            return cleanPackedTvmazeDescription(desc)
+          }
+
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
+            const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
+
+            if (hasTag(block, tag)) {
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
+            }
+
+            return insertBeforeProgrammeEnd(block, tagXml)
+          }
+
           function insertBeforeProgrammeEnd(block, tagXml) {
             return block.replace(/<\/programme>\s*$/i, `${tagXml}\n</programme>`)
           }
@@ -1082,40 +1181,17 @@ jobs:
               stats.addedCategories++
             }
 
-            if (!hasTag(updated, 'sub-title') && episode?.name) {
-              updated = insertBeforeProgrammeEnd(updated, `  <sub-title lang="en">${escapeXml(episode.name)}</sub-title>`)
+            // TVMaze follows the same display rule as TVGuide:
+            // title stays title-only, and episode title/code/date are packed into <desc>.
+            // It does not add duplicate <sub-title>, <episode-num>, or <date> when that information
+            // is already present in the packed description.
+            const existingDesc = getTag(updated, 'desc')
+            const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode)
+
+            if (packedDesc && packedDesc !== existingDesc) {
+              updated = replaceTag(updated, 'desc', packedDesc)
               changed = true
-              stats.addedSubtitles++
-            }
-
-            if (!hasTag(updated, 'episode-num') && episode?.season && episode?.number) {
-              const ns = xmltvNs(episode.season, episode.number)
-              if (ns) {
-                updated = insertBeforeProgrammeEnd(updated, `  <episode-num system="xmltv_ns">${escapeXml(ns)}</episode-num>`)
-                changed = true
-                stats.addedEpisodeNums++
-              }
-            }
-
-            if (!hasTag(updated, 'date') && episode?.airdate) {
-              const date = formatDateXmltv(episode.airdate)
-              if (date) {
-                updated = insertBeforeProgrammeEnd(updated, `  <date>${date}</date>`)
-                changed = true
-                stats.addedDates++
-              }
-            }
-
-            if (!hasTag(updated, 'desc')) {
-              const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
-              const showSummary = cleanTvmazeSummary(show?.summary || '')
-              const desc = episodeSummary || showSummary
-
-              if (desc) {
-                updated = insertBeforeProgrammeEnd(updated, `  <desc lang="en">${escapeXml(desc)}</desc>`)
-                changed = true
-                stats.addedDescriptions++
-              }
+              stats.addedDescriptions++
             }
 
             if (changed) stats.enriched++
