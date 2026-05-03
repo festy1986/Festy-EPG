@@ -231,13 +231,23 @@ jobs:
                       releaseYear
                     })
 
+                    const suppressDisplayDate = shouldSuppressDisplayDate({
+                      title,
+                      description,
+                      programType,
+                      item,
+                      details,
+                      airDate
+                    })
+
                     const finalDescription = buildPackedDescription({
                       programType,
                       episodeTitle,
                       episodeCode,
                       description,
                       airDate,
-                      releaseYear
+                      releaseYear,
+                      suppressDisplayDate
                     })
 
                     const program = {
@@ -450,7 +460,52 @@ jobs:
             return ['Program']
           }
 
-          function buildPackedDescription({ programType, episodeTitle, episodeCode, description, airDate, releaseYear }) {
+          function shouldSuppressDisplayDate({ title, description, programType, item, details, airDate }) {
+            if (!airDate) return false
+
+            const haystack = [
+              title,
+              description,
+              item?.title,
+              item?.type,
+              item?.programType,
+              item?.entityType,
+              item?.category,
+              item?.subcategory,
+              item?.genres,
+              details?.type,
+              details?.programType,
+              details?.entityType,
+              details?.category,
+              details?.subcategory,
+              details?.genres
+            ]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const liveOrCurrent = /\b(live|news|newscast|weather|sports|game|match|tournament|football|basketball|baseball|hockey|soccer|golf|tennis|racing|wwe|ufc|mma|boxing|pregame|postgame|post-game|pre-game)\b/.test(haystack)
+            if (!liveOrCurrent) return false
+
+            const scheduleDate = item?.startTime ? dayjs.unix(Number(item.startTime)) : null
+            const parsedAirDate = parseDisplayDate(airDate)
+
+            if (!scheduleDate || !scheduleDate.isValid() || !parsedAirDate || !parsedAirDate.isValid()) return true
+
+            // For live/current news and sports, the original air date is usually just the broadcast date.
+            // Suppress it when it is close to the scheduled airing. Keep it when it is genuinely old.
+            return Math.abs(scheduleDate.diff(parsedAirDate, 'day')) <= 45
+          }
+
+          function parseDisplayDate(value) {
+            const raw = String(value || '').trim()
+            const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+            if (!m) return dayjs(raw)
+            return dayjs(`${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`)
+          }
+
+          function buildPackedDescription({ programType, episodeTitle, episodeCode, description, airDate, releaseYear, suppressDisplayDate }) {
             const parts = []
 
             let prefix = ''
@@ -473,13 +528,13 @@ jobs:
             }
 
             if (programType === 'series' || programType === 'miniseries') {
-              if (airDate && !descriptionIncludesDisplayDate(finalDescription, airDate)) {
+              if (airDate && !suppressDisplayDate && !descriptionIncludesDisplayDate(finalDescription, airDate)) {
                 finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
               }
               return finalDescription
             }
 
-            const dateOrYear = airDate || releaseYear
+            const dateOrYear = suppressDisplayDate ? releaseYear : (airDate || releaseYear)
             if (dateOrYear && !descriptionIncludesDisplayDate(finalDescription, dateOrYear)) {
               finalDescription = finalDescription
                 ? `${finalDescription} (${dateOrYear})`
@@ -955,17 +1010,6 @@ jobs:
             const subtitle = getTag(block, 'sub-title')
             const desc = getTag(block, 'desc')
 
-            if (scheduleDate) {
-              const exact = episodes.find(ep => ep.airdate === scheduleDate)
-              if (exact) return exact
-            }
-
-            if (subtitle) {
-              const subNorm = normalize(subtitle)
-              const byName = episodes.find(ep => normalize(ep.name) === subNorm)
-              if (byName) return byName
-            }
-
             const codeMatch = desc.match(/\bS(\d+)E(\d+)\b/i)
             if (codeMatch) {
               const season = Number(codeMatch[1])
@@ -974,7 +1018,45 @@ jobs:
               if (byCode) return byCode
             }
 
+            if (subtitle) {
+              const subNorm = normalize(subtitle)
+              const byName = episodes.find(ep => normalize(ep.name) === subNorm)
+              if (byName) return byName
+            }
+
+            const packedTitle = getPackedEpisodeTitleFromDesc(desc)
+            if (packedTitle) {
+              const packedNorm = normalize(packedTitle)
+              const byPackedTitle = episodes.find(ep => normalize(ep.name) === packedNorm)
+              if (byPackedTitle) return byPackedTitle
+            }
+
+            // Last fallback only. The schedule date is the current rerun date, so it is usually
+            // not the original TVMaze airdate for syndicated/retro channels.
+            if (scheduleDate) {
+              const exact = episodes.find(ep => ep.airdate === scheduleDate)
+              if (exact) return exact
+            }
+
             return null
+          }
+
+          function getPackedEpisodeTitleFromDesc(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+              .replace(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/, '')
+              .trim()
+            if (!cleaned) return ''
+
+            const firstSentence = cleaned.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            if (!first) return ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) return prefixMatch[1].trim()
+
+            if (/^S\d+E\d+$/i.test(first)) return ''
+            if (first.length > 80) return ''
+            return first
           }
 
           function xmltvNs(season, episode) {
@@ -1102,6 +1184,16 @@ jobs:
             let codePart = parsed.episodeCode
             let bodyPart = parsed.body
             let datePart = parsed.dateText
+
+            // If TVGuide packed the episode title as the first sentence, e.g.
+            // "Thanksgiving. The Taylor family...", recognize it as the episode title
+            // instead of treating it as synopsis text.
+            const packedTitle = getPackedEpisodeTitleFromDesc(existing)
+            if (!titlePart && episodeName && packedTitle && normalize(packedTitle) === normalize(episodeName)) {
+              titlePart = packedTitle
+              const firstSentence = bodyPart.match(/^(.+?)(?:\.\s+|$)/)
+              if (firstSentence) bodyPart = bodyPart.slice(firstSentence[0].length).trim()
+            }
 
             // If TVGuide already put the episode title in the desc, leave it.
             // If it is missing and TVMaze has it, add only that missing title.
