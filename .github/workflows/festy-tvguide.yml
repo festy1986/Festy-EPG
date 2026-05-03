@@ -123,7 +123,7 @@ jobs:
           module.exports = {
             site: 'tvguide.com',
             delay: 3000,
-            days: 1,
+            days: 14,
 
             url({ date, channel }) {
               const [providerId, sourceId] = String(channel.site_id).split('#')
@@ -366,7 +366,7 @@ jobs:
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy.channels.xml \
             --output=../guides/tvguidetivimate.xml \
-            --days=1
+            --days=14
 
           cd ..
 
