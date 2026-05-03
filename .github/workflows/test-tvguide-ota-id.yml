@@ -1,0 +1,87 @@
+name: Test TVGuide OTA ID
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-tvguide-ota-id:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test OTA provider ID against TVGuide API
+        run: |
+          node <<'EOF'
+          const https = require('https')
+
+          const providerId = '910000113'
+          const channels = [
+            ['ABC PORTLAND', '9200014312'],
+            ['ANTENNA TV', '9233011099'],
+            ['CBS PORTLAND', '9233001666'],
+            ['COMET', '9200005724'],
+            ['NBC PORTLAND', '9233006796']
+          ]
+
+          const start = Math.floor(new Date('2026-05-02T00:00:00Z').getTime() / 1000)
+
+          function fetchUrl(url) {
+            return new Promise((resolve, reject) => {
+              https.get(url, {
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              }, res => {
+                let body = ''
+                res.on('data', chunk => body += chunk)
+                res.on('end', () => resolve({ status: res.statusCode, body }))
+              }).on('error', reject)
+            })
+          }
+
+          ;(async () => {
+            for (const [name, sourceId] of channels) {
+              const url = `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${start}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+
+              console.log('')
+              console.log(`========== ${name} ==========` )
+              console.log(`providerId=${providerId}`)
+              console.log(`sourceId=${sourceId}`)
+              console.log(url)
+
+              try {
+                const res = await fetchUrl(url)
+                console.log(`STATUS: ${res.status}`)
+
+                if (res.status !== 200) {
+                  console.log(res.body.slice(0, 1000))
+                  continue
+                }
+
+                const json = JSON.parse(res.body)
+                const items = json?.data?.items || []
+
+                console.log(`items.length=${items.length}`)
+
+                items.forEach((item, i) => {
+                  const count = Array.isArray(item.programSchedules) ? item.programSchedules.length : 0
+                  console.log(`#${i + 1}: sourceId=${item.sourceId || item.channelSourceId || item.id || 'no-id'} name=${item.callSign || item.callsign || item.name || item.channelName || 'no-name'} programs=${count}`)
+                })
+
+                const totalPrograms = items.reduce((sum, item) => {
+                  return sum + (Array.isArray(item.programSchedules) ? item.programSchedules.length : 0)
+                }, 0)
+
+                console.log(`TOTAL PROGRAMS: ${totalPrograms}`)
+
+                if (items[0]?.programSchedules?.[0]) {
+                  const p = items[0].programSchedules[0]
+                  console.log(`FIRST PROGRAM: ${p.title || 'no-title'} | ${p.startTime} - ${p.endTime}`)
+                  console.log(`DETAIL URL: ${p.programDetails || 'none'}`)
+                }
+              } catch (err) {
+                console.log(`ERROR: ${err.message}`)
+              }
+            }
+          })()
+          EOF
