@@ -74,22 +74,13 @@ jobs:
             return match ? decodeXml(match[1]).trim() : ''
           }
 
-          function getDisplayName(body) {
-            const match = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
-            if (match) return decodeXml(match[1].replace(/<[^>]+>/g, '').trim())
+          function getName(body) {
+            const display = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
             return decodeXml(body.replace(/<[^>]+>/g, '').trim())
           }
 
-          function xmltvId(name) {
-            return decodeXml(name)
-              .toUpperCase()
-              .replace(/&/g, 'AND')
-              .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/g, '.')
-              .replace(/^\.+|\.+$/g, '') + '.us'
-          }
-
-          function parseWantedChannels(xml) {
+          function parseWanted(xml) {
             const channels = []
             const matches = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
 
@@ -98,7 +89,7 @@ jobs:
               const body = match[2] || ''
 
               const id = getAttr(attrs, 'id')
-              const name = getDisplayName(body)
+              const name = getName(body)
 
               if (!id || !name) continue
 
@@ -108,7 +99,7 @@ jobs:
             return channels
           }
 
-          function parseRawChannels(xml) {
+          function parseRaw(xml) {
             const channels = []
             const matches = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
 
@@ -116,18 +107,21 @@ jobs:
               const attrs = match[1] || ''
               const body = match[2] || ''
 
+              const xmltvId =
+                getAttr(attrs, 'xmltv_id') ||
+                getAttr(attrs, 'id')
+
               const siteId =
                 getAttr(attrs, 'site_id') ||
                 getAttr(attrs, 'site-id') ||
                 getAttr(attrs, 'siteId')
 
-              const name = getDisplayName(body)
-              const generatedId = xmltvId(name)
+              const name = getName(body)
 
-              if (!siteId || !name) continue
+              if (!xmltvId || !siteId || !name) continue
 
               channels.push({
-                id: generatedId,
+                xmltvId,
                 siteId,
                 name
               })
@@ -139,8 +133,8 @@ jobs:
           const wantedXml = fs.readFileSync(wantedPath, 'utf8')
           const rawXml = fs.readFileSync(rawPath, 'utf8')
 
-          const wantedChannels = parseWantedChannels(wantedXml)
-          const rawChannels = parseRawChannels(rawXml)
+          const wantedChannels = parseWanted(wantedXml)
+          const rawChannels = parseRaw(rawXml)
 
           if (!wantedChannels.length) {
             console.error(`No wanted <channel id=""> entries found in ${wantedPath}`)
@@ -148,15 +142,15 @@ jobs:
           }
 
           if (!rawChannels.length) {
-            console.error(`No raw <channel site_id=""> entries found in ${rawPath}`)
+            console.error(`No raw channels with xmltv_id/id and site_id found in ${rawPath}`)
             process.exit(1)
           }
 
-          const rawByGeneratedId = new Map()
+          const rawByXmltvId = new Map()
 
           for (const raw of rawChannels) {
-            if (!rawByGeneratedId.has(raw.id)) {
-              rawByGeneratedId.set(raw.id, raw)
+            if (!rawByXmltvId.has(raw.xmltvId)) {
+              rawByXmltvId.set(raw.xmltvId, raw)
             }
           }
 
@@ -168,7 +162,7 @@ jobs:
             if (seen.has(wanted.id)) continue
             seen.add(wanted.id)
 
-            const raw = rawByGeneratedId.get(wanted.id)
+            const raw = rawByXmltvId.get(wanted.id)
 
             if (!raw) {
               missing.push(`${wanted.id} | ${wanted.name}`)
@@ -181,7 +175,7 @@ jobs:
           }
 
           if (!outputChannels.length) {
-            console.error(`No wanted channels from ${wantedPath} matched usable raw TVGuide site_ids in ${rawPath}`)
+            console.error(`No wanted channel IDs from ${wantedPath} matched xmltv_id/id values in ${rawPath}`)
             process.exit(1)
           }
 
@@ -191,11 +185,11 @@ jobs:
 
           console.log(`Wanted channels from ${wantedPath}: ${wantedChannels.length}`)
           console.log(`Unique wanted channel IDs: ${seen.size}`)
-          console.log(`Raw channels with site_id from ${rawPath}: ${rawChannels.length}`)
+          console.log(`Raw usable TVGuide channels from ${rawPath}: ${rawChannels.length}`)
           console.log(`Matched channels written: ${outputChannels.length}`)
 
           if (missing.length) {
-            console.log(`Missing wanted IDs not found in raw TVGuide dump: ${missing.length}`)
+            console.log(`Missing wanted channel IDs not found in raw TVGuide file: ${missing.length}`)
             for (const item of missing) console.log(`[MISSING] ${item}`)
           }
 
