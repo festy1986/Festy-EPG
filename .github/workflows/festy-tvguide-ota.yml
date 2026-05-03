@@ -34,25 +34,26 @@ jobs:
       - name: Create OTA channel list and metadata config
         run: |
           mkdir -p epg/sites/tvguide.com
+          mkdir -p guides
 
           cat > epg/sites/tvguide.com/festy-ota.channels.xml <<'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <channels>
-            <channel site="tvguide.com" lang="en" xmltv_id="ABC PORTLAND" site_id="910000113#9200014312">ABC PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA TV" site_id="910000113#9233011099">ANTENNA TV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="CBS PORTLAND" site_id="910000113#9233001666">CBS PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="COMET" site_id="910000113#9200005724">COMET</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="COURT TV" site_id="910000113#9233005846">COURT TV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="CW BOSTON" site_id="910000113#9200006484">CW BOSTON</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="FOX PORTLAND" site_id="910000113#9233003676">FOX PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="GRIT" site_id="910000113#9233003377">GRIT</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="HEROES &amp; ICONS" site_id="910000113#9200020338">HEROES &amp; ICONS</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ION MYSTERY" site_id="910000113#9200017556">ION MYSTERY</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="ION PLUS" site_id="910000113#9200008618">ION PLUS</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="LAFF" site_id="910000113#9266073627">LAFF</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="METV" site_id="910000113#9200016252">METV</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="NBC PORTLAND" site_id="910000113#9233006796">NBC PORTLAND</channel>
-            <channel site="tvguide.com" lang="en" xmltv_id="PBS" site_id="910000113#9233009254">PBS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ABC PORTLAND" site_id="9100000664#9200014312">ABC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ANTENNA TV" site_id="9100000664#9233011099">ANTENNA TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CBS PORTLAND" site_id="9100000664#9233001666">CBS PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COMET" site_id="9100000664#9200005724">COMET</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="COURT TV" site_id="9100000664#9233005846">COURT TV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="CW BOSTON" site_id="9100000664#9200006484">CW BOSTON</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="FOX PORTLAND" site_id="9100000664#9233003676">FOX PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="GRIT" site_id="9100000664#9233003377">GRIT</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="HEROES &amp; ICONS" site_id="9100000664#9200020338">HEROES &amp; ICONS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION MYSTERY" site_id="9100000664#9200017556">ION MYSTERY</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="ION PLUS" site_id="9100000664#9200008618">ION PLUS</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="LAFF" site_id="9100000664#9266073627">LAFF</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="METV" site_id="9100000664#9200016252">METV</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="NBC PORTLAND" site_id="9100000664#9233006796">NBC PORTLAND</channel>
+            <channel site="tvguide.com" lang="en" xmltv_id="PBS" site_id="9100000664#9233009254">PBS</channel>
           </channels>
           EOF
 
@@ -176,7 +177,13 @@ jobs:
             const sourceId = String(channel.site_id).split('#').pop()
 
             const matched = items.find(item => {
-              return String(item.sourceId || item.channelSourceId || item.id || '') === sourceId
+              const itemSourceId =
+                item?.channel?.sourceId ||
+                item?.sourceId ||
+                item?.channelSourceId ||
+                item?.id ||
+                ''
+              return String(itemSourceId) === sourceId
             })
 
             if (matched?.programSchedules?.length) {
