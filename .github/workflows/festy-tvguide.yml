@@ -31,11 +31,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: epg/package-lock.json
 
       - name: Install EPG dependencies
         run: |
           cd epg
-          npm install
+          npm ci
 
       - name: Build TiviMate channel source from guide plus raw IDs
         run: |
@@ -199,10 +201,7 @@ jobs:
               ].map(norm)
 
               for (const key of keys) {
-                match =
-                  rawById.get(key) ||
-                  rawByName.get(key)
-
+                match = rawById.get(key) || rawByName.get(key)
                 if (match) break
               }
 
@@ -245,14 +244,15 @@ jobs:
           )
           EOF
 
-      - name: Write optimized TVGuide config
+      - name: Write enriched TVGuide config
         run: |
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
+          const axios = require('axios')
           const dayjs = require('dayjs')
 
           module.exports = {
             site: 'tvguide.com',
-            delay: 800,
+            delay: 200,
             days: 14,
 
             url({ date, channel }) {
@@ -273,7 +273,7 @@ jobs:
               }
             },
 
-            parser({ content, channel, date }) {
+            async parser({ content, channel, date }) {
               const data = JSON.parse(content)
               const items = data?.data?.items || []
               const sourceId = String(channel.site_id).split('#').pop()
@@ -286,13 +286,108 @@ jobs:
 
               console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
-              return schedules.map(item => ({
-                title: cleanTitle(item.title),
-                description: cleanSpaces(item.description),
-                start: dayjs.unix(item.startTime),
-                stop: dayjs.unix(item.endTime)
-              }))
+              const programs = []
+              const batchSize = 5
+
+              for (let i = 0; i < schedules.length; i += batchSize) {
+                const batch = schedules.slice(i, i + batchSize)
+
+                const results = await Promise.all(
+                  batch.map(async item => {
+                    const details = await loadProgramDetails(item, channel)
+
+                    const title = cleanTitle(item.title || details.title || '')
+                    const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
+                    const description = cleanSpaces(details.description || item.description || '')
+
+                    const seasonNumber = details.seasonNumber || details.season || ''
+                    const episodeNumber = details.episodeNumber || details.episode || ''
+                    const episodeCode = buildEpisodeCode(seasonNumber, episodeNumber)
+
+                    const releaseYear = details.releaseYear || details.year || ''
+                    const airDate =
+                      formatTVGuideDate(details.originalAirDate || details.airDate || details.episodeAirDate) ||
+                      formatUnixDate(details.originalAirTime || details.firstAired)
+
+                    const finalDescription = buildPackedDescription({
+                      episodeTitle,
+                      episodeCode,
+                      description,
+                      airDate,
+                      releaseYear
+                    })
+
+                    return {
+                      title,
+                      description: finalDescription,
+                      start: dayjs.unix(item.startTime),
+                      stop: dayjs.unix(item.endTime)
+                    }
+                  })
+                )
+
+                programs.push(...results)
+              }
+
+              return programs
             }
+          }
+
+          async function loadProgramDetails(item, channel) {
+            if (!item.programDetails) return {}
+
+            const url = item.programDetails.includes('?')
+              ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+              : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+
+            try {
+              const response = await axios.get(url, {
+                timeout: 15000,
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              })
+
+              return response.data?.data?.item || {}
+            } catch (err) {
+              const status = err.response?.status || err.code || err.message || 'unknown'
+              console.log(`[DETAIL FAIL] ${channel.name} | ${item.title || 'Unknown title'} | ${status}`)
+              return {}
+            }
+          }
+
+          function buildPackedDescription({ episodeTitle, episodeCode, description, airDate, releaseYear }) {
+            const parts = []
+
+            let prefix = ''
+            if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
+            else if (episodeTitle) prefix = episodeTitle
+            else if (episodeCode) prefix = episodeCode
+
+            if (prefix) parts.push(prefix)
+            if (description) parts.push(description)
+
+            let finalDescription = parts.join('. ')
+
+            const dateOrYear = airDate || releaseYear
+            if (dateOrYear) {
+              finalDescription = finalDescription
+                ? `${finalDescription} (${dateOrYear})`
+                : `(${dateOrYear})`
+            }
+
+            return finalDescription
+          }
+
+          function buildEpisodeCode(seasonNumber, episodeNumber) {
+            const s = String(seasonNumber || '').trim()
+            const e = String(episodeNumber || '').trim()
+
+            if (!s && !e) return ''
+            if (s && e) return `S${s}E${e}`
+            if (e) return `E${e}`
+            return `S${s}`
           }
 
           function cleanTitle(value) {
@@ -311,6 +406,27 @@ jobs:
               .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
               .trim()
           }
+
+          function formatTVGuideDate(value) {
+            const raw = String(value || '').trim()
+            if (!raw) return ''
+
+            const tvMatch = raw.match(/\/Date\((\d+)\)\//)
+            if (tvMatch) {
+              return dayjs(Number(tvMatch[1])).format('MM/DD/YYYY')
+            }
+
+            const parsed = dayjs(raw)
+            if (parsed.isValid()) return parsed.format('MM/DD/YYYY')
+
+            return ''
+          }
+
+          function formatUnixDate(value) {
+            if (!value) return ''
+            const parsed = dayjs.unix(Number(value))
+            return parsed.isValid() ? parsed.format('MM/DD/YYYY') : ''
+          }
           EOF
 
       - name: Grab TiviMate guide
@@ -328,17 +444,24 @@ jobs:
         run: |
           CH=$(grep -c '<channel ' guides/tvguidetivimateguide.xml || true)
           PR=$(grep -c '<programme ' guides/tvguidetivimateguide.xml || true)
+          DESC=$(grep -c '<desc ' guides/tvguidetivimateguide.xml || true)
 
           echo "TiviMate channels: $CH"
           echo "TiviMate programmes: $PR"
+          echo "TiviMate descriptions: $DESC"
 
           if [ "$CH" -lt 123 ]; then
-            echo "Invalid TiviMate output — expected at least 123 channels"
+            echo "Invalid TiviMate output - expected at least 123 channels"
             exit 1
           fi
 
           if [ "$PR" -lt 1 ]; then
-            echo "Invalid TiviMate output — no programmes"
+            echo "Invalid TiviMate output - no programmes"
+            exit 1
+          fi
+
+          if [ "$DESC" -lt 1 ]; then
+            echo "Invalid TiviMate output - no descriptions"
             exit 1
           fi
 
