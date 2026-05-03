@@ -161,6 +161,8 @@ jobs:
           const axios = require('axios')
           const dayjs = require('dayjs')
 
+          const SCHEDULE_TIMEOUT = Number(process.env.TVGUIDE_SCHEDULE_TIMEOUT || 8000)
+
           module.exports = {
             site: 'tvguide.com',
             delay: 200,
@@ -173,7 +175,7 @@ jobs:
 
             request: {
               method: 'GET',
-              timeout: 8000,
+              timeout: SCHEDULE_TIMEOUT,
               cache: { ttl: 60 * 60 * 1000 },
               headers() {
                 return {
@@ -259,6 +261,74 @@ jobs:
             return false
           }
 
+          async function fetchProgramDetailsOnce(url, title, timeout, label, attempt, attempts) {
+            try {
+              const response = await axios.get(url, {
+                timeout,
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              })
+
+              if (attempt > 1 || label.includes('MICRO')) {
+                console.log(`[${label} OK] ${title} | attempt=${attempt}/${attempts}`)
+              }
+
+              return {
+                ok: true,
+                value: response.data?.data?.item || {}
+              }
+            } catch (err) {
+              const status = err.response?.status || err.code || err.message || 'unknown'
+
+              if (err.response?.status === 404) {
+                console.log(`[${label} MISSING] ${title} | 404`)
+                return {
+                  ok: true,
+                  value: {}
+                }
+              }
+
+              return {
+                ok: false,
+                retryable: isRetryableDetailError(err),
+                status
+              }
+            }
+          }
+
+          async function tryProgramDetails(url, title, options) {
+            const {
+              label,
+              attempts,
+              timeout,
+              baseDelay,
+              maxDelay
+            } = options
+
+            for (let attempt = 1; attempt <= attempts; attempt++) {
+              const result = await fetchProgramDetailsOnce(url, title, timeout, label, attempt, attempts)
+
+              if (result.ok) return result.value
+
+              if (!result.retryable) {
+                console.log(`[${label} FAIL] ${title} | ${result.status}`)
+                return null
+              }
+
+              if (attempt < attempts) {
+                const delay = Math.min(maxDelay, baseDelay * Math.pow(2, attempt - 1)) + Math.floor(Math.random() * 500)
+                console.log(`[${label} RETRY] ${title} | ${result.status} | attempt=${attempt}/${attempts} | wait=${delay}ms`)
+                await sleep(delay)
+              } else {
+                console.log(`[${label} EXHAUSTED] ${title} | ${result.status} | attempts=${attempts}`)
+              }
+            }
+
+            return null
+          }
+
           async function loadProgramDetails(item) {
             if (!item.programDetails) return {}
 
@@ -266,49 +336,41 @@ jobs:
               ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
               : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
 
-            const maxAttempts = 6
-            let lastStatus = 'unknown'
+            const title = item.title || 'Unknown title'
 
-            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-              try {
-                const response = await axios.get(url, {
-                  timeout: 8000,
-                  headers: {
-                    Referer: 'https://www.tvguide.com/',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                  }
-                })
+            const fastResult = await tryProgramDetails(url, title, {
+              label: 'DETAIL FAST',
+              attempts: 1,
+              timeout: 8000,
+              baseDelay: 0,
+              maxDelay: 0
+            })
 
-                if (attempt > 1) {
-                  console.log(`[DETAIL RETRY OK] ${item.title || 'Unknown title'} | attempt=${attempt}`)
-                }
+            if (fastResult) return fastResult
 
-                return response.data?.data?.item || {}
-              } catch (err) {
-                lastStatus = err.response?.status || err.code || err.message || 'unknown'
+            const retryResult = await tryProgramDetails(url, title, {
+              label: 'DETAIL BACKUP',
+              attempts: 5,
+              timeout: 8000,
+              baseDelay: 750,
+              maxDelay: 30000
+            })
 
-                if (err.response?.status === 404) {
-                  console.log(`[DETAIL MISSING] ${item.title || 'Unknown title'} | 404`)
-                  return {}
-                }
+            if (retryResult) return retryResult
 
-                if (!isRetryableDetailError(err)) {
-                  console.log(`[DETAIL FAIL] ${item.title || 'Unknown title'} | ${lastStatus}`)
-                  return {}
-                }
+            console.log(`[DETAIL MICRO PASS] ${title} | starting slow cleanup pass`)
 
-                if (attempt < maxAttempts) {
-                  const delay = Math.min(30000, 750 * Math.pow(2, attempt - 1)) + Math.floor(Math.random() * 500)
-                  console.log(`[DETAIL RETRY] ${item.title || 'Unknown title'} | ${lastStatus} | attempt=${attempt}/${maxAttempts} | wait=${delay}ms`)
-                  await sleep(delay)
-                  continue
-                }
+            const microResult = await tryProgramDetails(url, title, {
+              label: 'DETAIL MICRO',
+              attempts: 4,
+              timeout: 20000,
+              baseDelay: 5000,
+              maxDelay: 60000
+            })
 
-                console.log(`[DETAIL FAIL] ${item.title || 'Unknown title'} | ${lastStatus} | attempts=${maxAttempts}`)
-                return {}
-              }
-            }
+            if (microResult) return microResult
 
+            console.log(`[DETAIL FINAL MISS] ${title} | no details after fast + backup + micro`)
             return {}
           }
 
@@ -384,26 +446,141 @@ jobs:
           }
           EOF
 
-      - name: Grab TVGuide OTA guide
+      - name: Grab TVGuide OTA guide with schedule recovery
         run: |
           cd epg
 
-          for attempt in 1 2 3; do
-            echo "Guide grab attempt $attempt"
+          rm -f ../guides/OTALocalsguide.xml
+          rm -f ../guides/OTALocalsguide.pass*.xml
+          rm -f ../guides/OTALocalsguide.pass*.log
 
+          run_pass() {
+            PASS_NAME="$1"
+            MAX_CONNECTIONS="$2"
+            SCHEDULE_TIMEOUT="$3"
+
+            echo ""
+            echo "============================================================"
+            echo "Starting $PASS_NAME"
+            echo "maxConnections=$MAX_CONNECTIONS"
+            echo "TVGUIDE_SCHEDULE_TIMEOUT=$SCHEDULE_TIMEOUT"
+            echo "============================================================"
+
+            export TVGUIDE_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
+
+            set +e
             npx tsx scripts/commands/epg/grab.ts \
               --channels=sites/tvguide.com/festy-ota.channels.xml \
-              --output=../guides/OTALocalsguide.xml \
+              --output="../guides/OTALocalsguide.${PASS_NAME}.xml" \
               --days=14 \
-              --maxConnections=10 && break
+              --maxConnections="$MAX_CONNECTIONS" \
+              2>&1 | tee "../guides/OTALocalsguide.${PASS_NAME}.log"
 
-            if [ "$attempt" -eq 3 ]; then
-              echo "Guide grab failed after retries"
-              exit 1
+            STATUS=${PIPESTATUS[0]}
+            set -e
+
+            if [ "$STATUS" -ne 0 ]; then
+              echo "$PASS_NAME exited with status $STATUS"
             fi
 
-            echo "Guide grab failed, retrying..."
-            sleep 20
+            if [ ! -f "../guides/OTALocalsguide.${PASS_NAME}.xml" ]; then
+              echo "$PASS_NAME did not create an XML file"
+              echo "0" > "../guides/OTALocalsguide.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/OTALocalsguide.${PASS_NAME}.descriptions.count"
+              echo "1" > "../guides/OTALocalsguide.${PASS_NAME}.schedule_issues.count"
+              return 0
+            fi
+
+            PR=$(grep -c '<programme ' "../guides/OTALocalsguide.${PASS_NAME}.xml" || true)
+            DESC=$(grep -c '<desc ' "../guides/OTALocalsguide.${PASS_NAME}.xml" || true)
+
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 429 | 500 | 502 | 503 | 504 ' "../guides/OTALocalsguide.${PASS_NAME}.log" || true)
+
+            echo "$PR" > "../guides/OTALocalsguide.${PASS_NAME}.programmes.count"
+            echo "$DESC" > "../guides/OTALocalsguide.${PASS_NAME}.descriptions.count"
+            echo "$ISSUE_COUNT" > "../guides/OTALocalsguide.${PASS_NAME}.schedule_issues.count"
+
+            echo "$PASS_NAME programmes: $PR"
+            echo "$PASS_NAME descriptions: $DESC"
+            echo "$PASS_NAME possible schedule/detail issues: $ISSUE_COUNT"
+          }
+
+          run_pass "pass1-fast" 10 8000
+
+          PASS1_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
+          PASS1_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
+
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
+            echo ""
+            echo "Fast pass had possible issues, running backup schedule pass..."
+            run_pass "pass2-backup" 5 15000
+          else
+            echo ""
+            echo "Fast pass had no obvious schedule issues. Skipping backup pass."
+          fi
+
+          BEST_PASS="pass1-fast"
+          BEST_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
+
+          if [ -f ../guides/OTALocalsguide.pass2-backup.programmes.count ]; then
+            PASS2_PR=$(cat ../guides/OTALocalsguide.pass2-backup.programmes.count)
+            if [ "$PASS2_PR" -gt "$BEST_PR" ]; then
+              BEST_PASS="pass2-backup"
+              BEST_PR="$PASS2_PR"
+            fi
+          fi
+
+          BEST_ISSUES_FILE="../guides/OTALocalsguide.${BEST_PASS}.schedule_issues.count"
+          BEST_ISSUES=$(cat "$BEST_ISSUES_FILE")
+
+          if [ "$BEST_ISSUES" -gt 0 ]; then
+            echo ""
+            echo "Best pass still had possible issues, running slow micro schedule pass..."
+            run_pass "pass3-micro" 2 30000
+          else
+            echo ""
+            echo "Best pass has no obvious schedule issues. Skipping micro schedule pass."
+          fi
+
+          BEST_PASS="pass1-fast"
+          BEST_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/OTALocalsguide.pass1-fast.descriptions.count)
+
+          for PASS in pass2-backup pass3-micro; do
+            if [ -f "../guides/OTALocalsguide.${PASS}.programmes.count" ]; then
+              CANDIDATE_PR=$(cat "../guides/OTALocalsguide.${PASS}.programmes.count")
+              CANDIDATE_DESC=$(cat "../guides/OTALocalsguide.${PASS}.descriptions.count")
+
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+              fi
+            fi
+          done
+
+          echo ""
+          echo "============================================================"
+          echo "Selected best schedule pass: $BEST_PASS"
+          echo "Best programmes: $BEST_PR"
+          echo "Best descriptions: $BEST_DESC"
+          echo "============================================================"
+
+          cp "../guides/OTALocalsguide.${BEST_PASS}.xml" "../guides/OTALocalsguide.xml"
+
+          echo ""
+          echo "Pass summary:"
+          for PASS in pass1-fast pass2-backup pass3-micro; do
+            if [ -f "../guides/OTALocalsguide.${PASS}.programmes.count" ]; then
+              echo "$PASS:"
+              echo "  programmes:   $(cat ../guides/OTALocalsguide.${PASS}.programmes.count)"
+              echo "  descriptions: $(cat ../guides/OTALocalsguide.${PASS}.descriptions.count)"
+              echo "  issues:       $(cat ../guides/OTALocalsguide.${PASS}.schedule_issues.count)"
+            fi
           done
 
           cd ..
