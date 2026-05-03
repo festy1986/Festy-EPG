@@ -1,0 +1,94 @@
+name: Fix OTA Raw IDs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-ota-raw-ids:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fix 44 OTA raw source IDs to provider 9100000664
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const file = 'guides/OTALocalsguide.raw.xml'
+          const providerId = '9100000664'
+
+          if (!fs.existsSync(file)) {
+            console.error(`Missing file: ${file}`)
+            process.exit(1)
+          }
+
+          let xml = fs.readFileSync(file, 'utf8')
+
+          const beforeChannels = [...xml.matchAll(/<channel id="([^"]+)">/g)].map(m => m[1])
+          const beforeProgrammes = [...xml.matchAll(/<programme\b[^>]* channel="([^"]+)"/g)].map(m => m[1])
+
+          console.log(`[before] channels: ${beforeChannels.length}`)
+          console.log(`[before] unique programme channel refs: ${new Set(beforeProgrammes).size}`)
+
+          // Fix channel IDs:
+          // <channel id="9200014312">
+          // becomes:
+          // <channel id="9100000664#9200014312">
+          xml = xml.replace(
+            /<channel id="(?!9100000664#)(\d+)">/g,
+            `<channel id="${providerId}#$1">`
+          )
+
+          // Fix programme refs:
+          // channel="9200014312"
+          // becomes:
+          // channel="9100000664#9200014312"
+          xml = xml.replace(
+            /(<programme\b[^>]* channel=")(?!9100000664#)(\d+)(")/g,
+            `$1${providerId}#$2$3`
+          )
+
+          xml = xml.replace(
+            /generator-info-name="[^"]*"/,
+            `generator-info-name="festy1986 OTA Raw Master - TVGuide provider ${providerId} Source IDs"`
+          )
+
+          fs.writeFileSync(file, xml)
+
+          const after = fs.readFileSync(file, 'utf8')
+          const afterChannels = [...after.matchAll(/<channel id="([^"]+)">/g)].map(m => m[1])
+          const afterProgrammes = [...after.matchAll(/<programme\b[^>]* channel="([^"]+)"/g)].map(m => m[1])
+
+          console.log(`[after] channels: ${afterChannels.length}`)
+          console.log(`[after] unique programme channel refs: ${new Set(afterProgrammes).size}`)
+
+          const badChannelIds = afterChannels.filter(id => !id.startsWith(`${providerId}#`))
+          const badProgrammeRefs = afterProgrammes.filter(id => !id.startsWith(`${providerId}#`))
+
+          if (badChannelIds.length || badProgrammeRefs.length) {
+            console.error(`[fail] bad channel IDs left: ${badChannelIds.length}`)
+            console.error(`[fail] bad programme refs left: ${badProgrammeRefs.length}`)
+            process.exit(1)
+          }
+
+          console.log(`[done] fixed ${file}`)
+          EOF
+
+      - name: Commit fixed raw OTA guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/OTALocalsguide.raw.xml
+
+          if git diff --cached --quiet; then
+            echo "No RAW ID changes to commit"
+          else
+            git commit -m "Fix OTA raw guide IDs to provider 9100000664"
+            git push
+          fi
