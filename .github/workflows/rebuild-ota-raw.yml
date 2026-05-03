@@ -1,0 +1,163 @@
+name: Rebuild OTA Raw Master
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild-ota-raw:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Rebuild OTA raw master from TVGuide provider
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const OTA_PROVIDER_ID = '9100000664'
+          const outputPath = 'guides/OTALocalsguide.raw.xml'
+          const apiKey = 'DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc'
+          const start = Math.floor(Date.now() / 1000)
+
+          const url =
+            `https://backend.tvguide.com/tvschedules/tvguide/${OTA_PROVIDER_ID}/web` +
+            `?start=${start}&duration=1440&apiKey=${apiKey}`
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function pickName(item) {
+            return (
+              item.fullName ||
+              item.channelName ||
+              item.name ||
+              item.callSign ||
+              item.callsign ||
+              item.channel?.fullName ||
+              item.channel?.name ||
+              item.channel?.callSign ||
+              ''
+            ).trim()
+          }
+
+          function pickShortName(item) {
+            return (
+              item.name ||
+              item.callSign ||
+              item.callsign ||
+              item.channel?.callSign ||
+              item.channel?.name ||
+              pickName(item)
+            ).trim()
+          }
+
+          function pickSourceId(item) {
+            return String(
+              item.sourceId ||
+              item.channelSourceId ||
+              item.id ||
+              item.channel?.sourceId ||
+              ''
+            ).trim()
+          }
+
+          async function main() {
+            console.log(`Fetching OTA raw provider: ${OTA_PROVIDER_ID}`)
+            console.log(url)
+
+            const res = await fetch(url, {
+              headers: {
+                Referer: 'https://www.tvguide.com/',
+                'User-Agent': 'Mozilla/5.0'
+              }
+            })
+
+            if (!res.ok) {
+              throw new Error(`TVGuide request failed: ${res.status} ${res.statusText}`)
+            }
+
+            const json = await res.json()
+            const items = json?.data?.items || []
+
+            const seen = new Set()
+            const channels = []
+
+            for (const item of items) {
+              const sourceId = pickSourceId(item)
+              const shortName = pickShortName(item)
+              const fullName = pickName(item)
+
+              if (!sourceId || !shortName) continue
+
+              const siteId = `${OTA_PROVIDER_ID}#${sourceId}`
+
+              if (seen.has(siteId)) continue
+              seen.add(siteId)
+
+              channels.push({
+                siteId,
+                shortName,
+                fullName
+              })
+            }
+
+            channels.sort((a, b) => a.shortName.localeCompare(b.shortName))
+
+            console.log(`Found OTA raw channels: ${channels.length}`)
+
+            if (channels.length < 20) {
+              console.log('Refusing to write raw file because channel count is suspiciously low.')
+              process.exit(1)
+            }
+
+            const xml =
+              `<?xml version="1.0" encoding="UTF-8"?>\n` +
+              `<tv generator-info-name="festy1986 OTA Raw Master - TVGuide provider ${OTA_PROVIDER_ID} Source IDs">\n` +
+              channels.map(ch => {
+                const secondName = ch.fullName && ch.fullName !== ch.shortName
+                  ? `\n    <display-name>${escapeXml(ch.fullName)}</display-name>`
+                  : ''
+
+                return (
+                  `  <channel id="${escapeXml(ch.siteId)}">\n` +
+                  `    <display-name>${escapeXml(ch.shortName)}</display-name>` +
+                  secondName +
+                  `\n  </channel>`
+                )
+              }).join('\n') +
+              `\n</tv>\n`
+
+            fs.writeFileSync(outputPath, xml)
+
+            console.log(`Wrote ${channels.length} channels to ${outputPath}`)
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
+
+      - name: Commit OTA raw master
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/OTALocalsguide.raw.xml
+
+          if git diff --cached --quiet; then
+            echo "No raw OTA changes to commit"
+          else
+            git commit -m "Rebuild OTA raw master"
+            git push
+          fi
