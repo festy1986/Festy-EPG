@@ -17,8 +17,7 @@
   <channel site="tvguide.com" lang="en" xmltv_id="TRUTV.us" site_id="9100002976#9200009547">TRUTV</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="AAndE.us" site_id="9100002976#9200004889">A&amp;E</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="AMC.us" site_id="9100002976#9233011832">AMC</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="FX.us" site_id="9100002976#9200006932">FX</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="SYFY.us" site_id="9100002976#9200004316">SYFY</channel>
+<channel site="tvguide.com" lang="en" xmltv_id="SYFY.us" site_id="9100002976#9200004316">SYFY</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="COMEDY.CENTRAL.us" site_id="9100002976#9233009509">COMEDY CENTRAL</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="TV.LAND.us" site_id="9100002976#9233005468">TV LAND</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="POP.us" site_id="9100002976#9200020464">POP</channel>
@@ -124,4 +123,5 @@
   <channel site="tvguide.com" lang="en" xmltv_id="SHOWTIME.SHOWCASE.us" site_id="9100002976#9233017279">SHOWTIME SHOWCASE</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="TMC.XTRA.us" site_id="9100002976#9200006825">TMC XTRA</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="PARAMOUNT.NETWORK.us" site_id="9100002976#9233013810">PARAMOUNT NETWORK</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="FX.us" site_id="9100002976#9233006959">FX</channel>
 </channels>
