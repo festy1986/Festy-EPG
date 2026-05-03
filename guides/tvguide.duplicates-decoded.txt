@@ -1,0 +1,3014 @@
+TVGuide full duplicate decode
+Report: guides/tvguide.channel-id-report.txt
+Rows: 501
+Generated: 2026-05-03T01:23:37.240Z
+
+============================================================
+GROUP RAW DISPLAY: 5STARMAXHD
+COUNT: 1
+
+SITE ID:      9100002976#9233006977
+RAW DISPLAY:  5STARMAXHD
+RAW XMLTV:    5STARMAXHD.us
+API NAME:     5STARMAXHD
+DECODED:      CINEMAX CLASSICS
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 22:51 Walk the Line
+- 01:07 My Big Fat Greek Wedding
+- 02:42 Sweet Dreams
+- 04:38 The Devil's Rejects
+- 04:54 Stephen King's It
+
+============================================================
+GROUP RAW DISPLAY: ACTMAXHD
+COUNT: 1
+
+SITE ID:      9100002976#9233006971
+RAW DISPLAY:  ACTMAXHD
+RAW XMLTV:    ACTMAXHD.us
+API NAME:     ACTMAXHD
+DECODED:      CINEMAX ACTION
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 21:55 Red Sparrow
+- 02:25 Heretic
+- 04:17 The Watchers
+- 05:59 Intruders
+- 07:30 Aquaman and the Lost Kingdom
+
+============================================================
+GROUP RAW DISPLAY: A&E
+COUNT: 2
+
+SITE ID:      9100002976#9200004889
+RAW DISPLAY:  A&E
+RAW XMLTV:    A&E.us
+API NAME:     A&E
+DECODED:      A&E
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Storage Wars: Back to the Locker
+- 01:00 Storage Wars
+- 02:01 Duck Dynasty: The Revival
+- 03:04 Storage Wars
+- 04:03 Storage Wars: Back to the Locker
+
+SITE ID:      9100002976#9200009045
+RAW DISPLAY:  A&E
+RAW XMLTV:    A&E.us
+API NAME:     A&E-HD
+DECODED:      A&E
+FLAGS:        HD
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Storage Wars: Back to the Locker
+- 01:00 Storage Wars
+- 02:01 Duck Dynasty: The Revival
+- 03:04 Storage Wars
+- 04:03 Storage Wars: Back to the Locker
+
+============================================================
+GROUP RAW DISPLAY: AHC
+COUNT: 1
+
+SITE ID:      9100002976#9233015768
+RAW DISPLAY:  AHC
+RAW XMLTV:    AHC.us
+API NAME:     AHC
+DECODED:      AMERICAN HEROES CHANNEL
+FLAGS:        RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 What History Forgot
+- 01:00 What History Forgot
+- 02:00 Alcatraz: Beyond the Rock
+- 03:00 Coast Guard at War
+- 04:00 What History Forgot
+
+============================================================
+GROUP RAW DISPLAY: AHCHD
+COUNT: 1
+
+SITE ID:      9100002976#9233004224
+RAW DISPLAY:  AHCHD
+RAW XMLTV:    AHCHD.us
+API NAME:     AHCHD
+DECODED:      AMERICAN HEROES CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 What History Forgot
+- 01:00 What History Forgot
+- 02:00 Alcatraz: Beyond the Rock
+- 03:00 Coast Guard at War
+- 04:00 What History Forgot
+
+============================================================
+GROUP RAW DISPLAY: AMC
+COUNT: 2
+
+SITE ID:      9100002976#9233011832
+RAW DISPLAY:  AMC
+RAW XMLTV:    AMC.us
+API NAME:     AMCALL
+DECODED:      AMC
+FLAGS:        
+PROGRAMS:     10
+SAMPLES:
+- 00:00 The Bourne Identity
+- 02:30 Taken
+- 04:30 Escape Plan
+- 07:00 The Bourne Ultimatum
+- 09:30 The Bourne Supremacy
+
+SITE ID:      9100002976#9200020107
+RAW DISPLAY:  AMC
+RAW XMLTV:    AMC.us
+API NAME:     AMCHD
+DECODED:      AMC
+FLAGS:        HD
+PROGRAMS:     10
+SAMPLES:
+- 00:00 The Bourne Identity
+- 02:30 Taken
+- 04:30 Escape Plan
+- 07:00 The Bourne Ultimatum
+- 09:30 The Bourne Supremacy
+
+============================================================
+GROUP RAW DISPLAY: ANIMALHD
+COUNT: 1
+
+SITE ID:      9100002976#9233013462
+RAW DISPLAY:  ANIMALHD
+RAW XMLTV:    ANIMALHD.us
+API NAME:     ANIMALHD
+DECODED:      ANIMAL PLANET
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Dr. Jeff: Rocky Mountain Vet
+- 01:00 Dr. Jeff: Rocky Mountain Vet
+- 02:00 Dr. Dee: Alaska Vet
+- 03:00 Dr. Dee: Alaska Vet
+- 04:00 Dr. Jeff: Rocky Mountain Vet
+
+============================================================
+GROUP RAW DISPLAY: AXSTV
+COUNT: 1
+
+SITE ID:      9100002976#9200002987
+RAW DISPLAY:  AXSTV
+RAW XMLTV:    AXSTV.us
+API NAME:     AXSTV
+DECODED:      AXS TV
+FLAGS:        RENAME
+PROGRAMS:     36
+SAMPLES:
+- 00:00 The Top Ten Revealed
+- 00:30 The Top Ten Revealed
+- 01:00 The Top Ten Revealed
+- 01:30 The Top Ten Revealed
+- 02:00 Rock and Roll Road Trip with Sammy Hagar
+
+============================================================
+GROUP RAW DISPLAY: BBC
+COUNT: 3
+
+SITE ID:      9100002976#9200014701
+RAW DISPLAY:  BBC
+RAW XMLTV:    BBC.us
+API NAME:     BBCAME
+DECODED:      BBC AMERICA
+FLAGS:        RENAME
+PROGRAMS:     18
+SAMPLES:
+- 22:00 The Abyss
+- 01:00 The Fifth Element
+- 04:00 Snowpiercer
+- 05:06 Snowpiercer
+- 06:09 Snowpiercer
+
+SITE ID:      9100002976#9200009303
+RAW DISPLAY:  BBC
+RAW XMLTV:    BBC.us
+API NAME:     BBCAMHD
+DECODED:      BBC AMERICA
+FLAGS:        HD, RENAME
+PROGRAMS:     18
+SAMPLES:
+- 22:00 The Abyss
+- 01:00 The Fifth Element
+- 04:00 Snowpiercer
+- 05:06 Snowpiercer
+- 06:09 Snowpiercer
+
+SITE ID:      9100002976#9233000381
+RAW DISPLAY:  BBC
+RAW XMLTV:    BBC.us
+API NAME:     BBCWORLDHD
+DECODED:      BBC WORLD NEWS
+FLAGS:        HD, RENAME
+PROGRAMS:     45
+SAMPLES:
+- 00:00 BBC News
+- 00:30 TechXplore
+- 01:00 BBC News
+- 01:30 Unspun World with John Simpson
+- 02:00 BBC News
+
+============================================================
+GROUP RAW DISPLAY: BET
+COUNT: 4
+
+SITE ID:      9100002976#9233005931
+RAW DISPLAY:  BET
+RAW XMLTV:    BET.us
+API NAME:     BET
+DECODED:      BET
+FLAGS:        
+PROGRAMS:     29
+SAMPLES:
+- 00:00 The Equalizer
+- 01:00 The Equalizer
+- 02:00 Temptation: Confessions of a Marriage Counselor
+- 04:58 Boo! A Madea Halloween
+- 07:30 Tyler Perry's House of Payne
+
+SITE ID:      9100002976#9233000226
+RAW DISPLAY:  BET
+RAW XMLTV:    BET.us
+API NAME:     BETHD
+DECODED:      BET
+FLAGS:        HD
+PROGRAMS:     29
+SAMPLES:
+- 00:00 The Equalizer
+- 01:00 The Equalizer
+- 02:00 Temptation: Confessions of a Marriage Counselor
+- 04:58 Boo! A Madea Halloween
+- 07:30 Tyler Perry's House of Payne
+
+SITE ID:      9100002976#9233002233
+RAW DISPLAY:  BET
+RAW XMLTV:    BET.us
+API NAME:     BETJAMS
+DECODED:      BET
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Jams Mixtape
+- 01:00 Music Playlist
+- 02:00 Squad Mix
+- 03:00 Music Playlist
+- 04:00 Music Playlist
+
+SITE ID:      9100002976#9233015779
+RAW DISPLAY:  BET
+RAW XMLTV:    BET.us
+API NAME:     BETSOUL
+DECODED:      BET
+FLAGS:        
+PROGRAMS:     18
+SAMPLES:
+- 23:00 Chronicled
+- 01:00 #WORLDwide
+- 02:00 In Rotation
+- 04:00 The Calming
+- 05:00 Hit List: LOADING...
+
+============================================================
+GROUP RAW DISPLAY: BRAVO
+COUNT: 2
+
+SITE ID:      9100002976#9200002886
+RAW DISPLAY:  BRAVO
+RAW XMLTV:    BRAVO.us
+API NAME:     BRAVO
+DECODED:      BRAVO
+FLAGS:        
+PROGRAMS:     22
+SAMPLES:
+- 22:30 Next Friday
+- 00:30 Friday After Next
+- 02:30 Night School
+- 05:00 The Valley
+- 06:00 The Valley
+
+SITE ID:      9100002976#9200020094
+RAW DISPLAY:  BRAVO
+RAW XMLTV:    BRAVO.us
+API NAME:     BRAVOHD
+DECODED:      BRAVO
+FLAGS:        HD
+PROGRAMS:     22
+SAMPLES:
+- 22:30 Next Friday
+- 00:30 Friday After Next
+- 02:30 Night School
+- 05:00 The Valley
+- 06:00 The Valley
+
+============================================================
+GROUP RAW DISPLAY: CBS
+COUNT: 3
+
+SITE ID:      9100002976#9233001666
+RAW DISPLAY:  CBS
+RAW XMLTV:    CBS.us
+API NAME:     WGME
+DECODED:      CBS
+FLAGS:        
+PROGRAMS:     30
+SAMPLES:
+- 00:00 NCIS
+- 01:00 NCIS: Origins
+- 02:00 48 Hours
+- 03:00 CBS 13 News at 11
+- 03:30 The National Desk
+
+SITE ID:      9100002976#9233015468
+RAW DISPLAY:  CBS
+RAW XMLTV:    CBS.us
+API NAME:     CBSSPTHD
+DECODED:      CBS SPORTS NETWORK
+FLAGS:        HD, RENAME
+PROGRAMS:     19
+SAMPLES:
+- 00:00 Mexican Liga MX Soccer
+- 02:00 PokerGO Cup
+- 03:00 PokerGO Cup
+- 04:00 PokerGO Cup
+- 05:00 PokerGO Cup
+
+SITE ID:      9100002976#9233003517
+RAW DISPLAY:  CBS
+RAW XMLTV:    CBS.us
+API NAME:     WABI-DT
+DECODED:      CBS
+FLAGS:        
+PROGRAMS:     27
+SAMPLES:
+- 00:00 NCIS
+- 01:00 NCIS: Origins
+- 02:00 48 Hours
+- 03:00 WABI TV5 Weekend News 11PM
+- 03:30 The Nite Show with Danny Cashman
+
+============================================================
+GROUP RAW DISPLAY: CMTHD
+COUNT: 1
+
+SITE ID:      9100002976#9233000169
+RAW DISPLAY:  CMTHD
+RAW XMLTV:    CMTHD.us
+API NAME:     CMTHD
+DECODED:      CMT
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 22:30 National Lampoon's European Vacation
+- 00:45 Son in Law
+- 03:00 Encino Man
+- 05:00 The Golden Girls
+- 05:30 The Golden Girls
+
+============================================================
+GROUP RAW DISPLAY: CNBC
+COUNT: 2
+
+SITE ID:      9100002976#9200009413
+RAW DISPLAY:  CNBC
+RAW XMLTV:    CNBC.us
+API NAME:     CNBC
+DECODED:      CNBC
+FLAGS:        
+PROGRAMS:     31
+SAMPLES:
+- 00:00 American Greed: Scams, Scoundrels and Scandals
+- 01:00 American Greed: Scams, Scoundrels and Scandals
+- 02:00 American Greed: Scams, Scoundrels and Scandals
+- 03:00 American Greed: Scams, Scoundrels and Scandals
+- 04:00 American Greed: Scams, Scoundrels and Scandals
+
+SITE ID:      9100002976#9200009145
+RAW DISPLAY:  CNBC
+RAW XMLTV:    CNBC.us
+API NAME:     CNBCHD
+DECODED:      CNBC
+FLAGS:        HD
+PROGRAMS:     31
+SAMPLES:
+- 00:00 American Greed: Scams, Scoundrels and Scandals
+- 01:00 American Greed: Scams, Scoundrels and Scandals
+- 02:00 American Greed: Scams, Scoundrels and Scandals
+- 03:00 American Greed: Scams, Scoundrels and Scandals
+- 04:00 American Greed: Scams, Scoundrels and Scandals
+
+============================================================
+GROUP RAW DISPLAY: CNN
+COUNT: 4
+
+SITE ID:      9100002976#9233013812
+RAW DISPLAY:  CNN
+RAW XMLTV:    CNN.us
+API NAME:     CNN
+DECODED:      CNN
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Real Time with Bill Maher
+- 01:00 Kara Swisher Wants to Live Forever
+- 02:00 Real Time with Bill Maher
+- 03:00 Kara Swisher Wants to Live Forever
+- 04:00 CNN Special Programming
+
+SITE ID:      9100002976#9233008130
+RAW DISPLAY:  CNN
+RAW XMLTV:    CNN.us
+API NAME:     CNNHD
+DECODED:      CNN
+FLAGS:        HD
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Real Time with Bill Maher
+- 01:00 Kara Swisher Wants to Live Forever
+- 02:00 Real Time with Bill Maher
+- 03:00 Kara Swisher Wants to Live Forever
+- 04:00 CNN Special Programming
+
+SITE ID:      9100002976#9233009512
+RAW DISPLAY:  CNN
+RAW XMLTV:    CNN.us
+API NAME:     CNNIDM
+DECODED:      CNN
+FLAGS:        
+PROGRAMS:     37
+SAMPLES:
+- 00:00 Smerconish
+- 01:00 World Sport
+- 01:30 African Voices: Changemakers
+- 02:00 Inside Africa
+- 02:30 African Voices: Changemakers
+
+SITE ID:      9100002976#9233009828
+RAW DISPLAY:  CNN
+RAW XMLTV:    CNN.us
+API NAME:     CNNESP
+DECODED:      CNN
+FLAGS:        
+PROGRAMS:     30
+SAMPLES:
+- 00:00 La historia completa con Anderson Cooper
+- 01:00 CNN Docufilms con Maria Celeste Arrarás
+- 02:00 Destinos
+- 02:30 Globo economía
+- 03:00 Mirador mundial
+
+============================================================
+GROUP RAW DISPLAY: COMEDYHD
+COUNT: 1
+
+SITE ID:      9100002976#9233009509
+RAW DISPLAY:  COMEDYHD
+RAW XMLTV:    COMEDYHD.us
+API NAME:     COMEDYHD
+DECODED:      COMEDY CENTRAL
+FLAGS:        HD, RENAME
+PROGRAMS:     41
+SAMPLES:
+- 22:30 Grown Ups
+- 00:45 50 First Dates
+- 02:45 Grown Ups
+- 05:00 South Park
+- 05:30 South Park
+
+============================================================
+GROUP RAW DISPLAY: COOKINGHD
+COUNT: 1
+
+SITE ID:      9100002976#9233015616
+RAW DISPLAY:  COOKINGHD
+RAW XMLTV:    COOKINGHD.us
+API NAME:     COOKINGHD
+DECODED:      COOKING CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     40
+SAMPLES:
+- 00:00 Iron Chef America
+- 01:00 Iron Chef America
+- 02:00 Iron Chef America
+- 03:00 Iron Chef America
+- 04:00 Iron Chef America
+
+============================================================
+GROUP RAW DISPLAY: CRIMEINVHD
+COUNT: 1
+
+SITE ID:      9100002976#9200009215
+RAW DISPLAY:  CRIMEINVHD
+RAW XMLTV:    CRIMEINVHD.us
+API NAME:     CRIMEINVHD
+DECODED:      CRIME AND INVESTIGATION
+FLAGS:        HD, RENAME
+PROGRAMS:     28
+SAMPLES:
+- 00:00 The Killing Season
+- 01:00 The Killing Season
+- 02:00 The Killing Season
+- 03:00 The Killing Season
+- 04:00 The Killing Season
+
+============================================================
+GROUP RAW DISPLAY: DESTAMERHD
+COUNT: 1
+
+SITE ID:      9100002976#9200014472
+RAW DISPLAY:  DESTAMERHD
+RAW XMLTV:    DESTAMERHD.us
+API NAME:     DESTAMERHD
+DECODED:      DESTINATION AMERICA
+FLAGS:        HD, RENAME
+PROGRAMS:     40
+SAMPLES:
+- 00:00 Food Paradise
+- 01:00 Food Paradise
+- 02:00 Carnival Eats
+- 02:30 Carnival Eats
+- 03:00 Carnival Eats
+
+============================================================
+GROUP RAW DISPLAY: DFCHHD
+COUNT: 1
+
+SITE ID:      9100002976#9233015612
+RAW DISPLAY:  DFCHHD
+RAW XMLTV:    DFCHHD.us
+API NAME:     DFCHHD
+DECODED:      DISCOVERY FAMILY
+FLAGS:        HD, RENAME
+PROGRAMS:     45
+SAMPLES:
+- 00:00 My Lottery Dream Home
+- 00:30 My Lottery Dream Home
+- 01:00 My Lottery Dream Home
+- 01:30 My Lottery Dream Home
+- 02:00 My Lottery Dream Home
+
+============================================================
+GROUP RAW DISPLAY: DISNEY
+COUNT: 2
+
+SITE ID:      9100002976#9200018475
+RAW DISPLAY:  DISNEY
+RAW XMLTV:    DISNEY.us
+API NAME:     DIS-E
+DECODED:      DISNEY
+FLAGS:        
+PROGRAMS:     43
+SAMPLES:
+- 23:00 Raya and the Last Dragon
+- 00:50 Kiff
+- 01:15 Kiff
+- 01:40 Kiff
+- 02:05 Phineas and Ferb
+
+SITE ID:      9100002976#9200014573
+RAW DISPLAY:  DISNEY
+RAW XMLTV:    DISNEY.us
+API NAME:     DIS-W
+DECODED:      DISNEY
+FLAGS:        WEST/ALT
+PROGRAMS:     42
+SAMPLES:
+- 00:00 Big City Greens
+- 00:30 Big City Greens
+- 01:00 Big City Greens
+- 01:25 Big City Greens
+- 02:00 Raya and the Last Dragon
+
+============================================================
+GROUP RAW DISPLAY: DISNEYHD
+COUNT: 1
+
+SITE ID:      9100002976#9200011893
+RAW DISPLAY:  DISNEYHD
+RAW XMLTV:    DISNEYHD.us
+API NAME:     DISNEYHD
+DECODED:      DISNEY CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     43
+SAMPLES:
+- 23:00 Raya and the Last Dragon
+- 00:50 Kiff
+- 01:15 Kiff
+- 01:40 Kiff
+- 02:05 Phineas and Ferb
+
+============================================================
+GROUP RAW DISPLAY: DLIF
+COUNT: 1
+
+SITE ID:      9100002976#9233013857
+RAW DISPLAY:  DLIF
+RAW XMLTV:    DLIF.us
+API NAME:     DLIF
+DECODED:      DISCOVERY LIFE
+FLAGS:        RENAME
+PROGRAMS:     18
+SAMPLES:
+- 00:00 Botched Bariatrics
+- 01:00 Botched Bariatrics
+- 02:00 Botched Bariatrics
+- 03:00 Dr. Pimple Popper
+- 04:00 Botched Bariatrics
+
+============================================================
+GROUP RAW DISPLAY: DSC
+COUNT: 3
+
+SITE ID:      9100002976#9233004102
+RAW DISPLAY:  DSC
+RAW XMLTV:    DSC.us
+API NAME:     TDC-E
+DECODED:      DSC
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Conspiracies & Coverups
+- 01:00 Conspiracies & Coverups
+- 02:00 Conspiracies & Coverups
+- 03:00 Conspiracies & Coverups
+- 04:00 Conspiracies & Coverups
+
+SITE ID:      9100002976#9233001914
+RAW DISPLAY:  DSC
+RAW XMLTV:    DSC.us
+API NAME:     TDC-HD
+DECODED:      DSC
+FLAGS:        HD
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Conspiracies & Coverups
+- 01:00 Conspiracies & Coverups
+- 02:00 Conspiracies & Coverups
+- 03:00 Conspiracies & Coverups
+- 04:00 Conspiracies & Coverups
+
+SITE ID:      9100002976#9200016595
+RAW DISPLAY:  DSC
+RAW XMLTV:    DSC.us
+API NAME:     DSCESP
+DECODED:      DSC
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Revista People investiga
+- 01:00 Desaparecidos: Chicago
+- 02:00 Desaparecidos: Chicago
+- 03:00 Desaparecidos: Chicago
+- 04:00 Desaparecidos: Chicago
+
+============================================================
+GROUP RAW DISPLAY: E!
+COUNT: 2
+
+SITE ID:      9100002976#9200012343
+RAW DISPLAY:  E!
+RAW XMLTV:    E!.us
+API NAME:     ETV-E
+DECODED:      E!
+FLAGS:        
+PROGRAMS:     16
+SAMPLES:
+- 00:00 Mrs. Doubtfire
+- 03:00 A League of Their Own
+- 06:00 Joe Dirt
+- 07:48 Chrisley Knows Best
+- 08:21 Chrisley Knows Best
+
+SITE ID:      9100002976#9233003794
+RAW DISPLAY:  E!
+RAW XMLTV:    E!.us
+API NAME:     ETV-HD
+DECODED:      E!
+FLAGS:        HD
+PROGRAMS:     16
+SAMPLES:
+- 00:00 Mrs. Doubtfire
+- 03:00 A League of Their Own
+- 06:00 Joe Dirt
+- 07:48 Chrisley Knows Best
+- 08:21 Chrisley Knows Best
+
+============================================================
+GROUP RAW DISPLAY: ENCOREHD
+COUNT: 1
+
+SITE ID:      9100002976#9233008017
+RAW DISPLAY:  ENCOREHD
+RAW XMLTV:    ENCOREHD.us
+API NAME:     ENCOREHD
+DECODED:      STARZ ENCORE
+FLAGS:        HD, RENAME
+PROGRAMS:     12
+SAMPLES:
+- 00:00 Pretty Woman
+- 02:03 She's All That
+- 03:42 Beautiful
+- 05:38 Oblivion
+- 07:46 Camp Pleasant Lake
+
+============================================================
+GROUP RAW DISPLAY: ENCORFM
+COUNT: 1
+
+SITE ID:      9100002976#9200011867
+RAW DISPLAY:  ENCORFM
+RAW XMLTV:    ENCORFM.us
+API NAME:     ENCORFM
+DECODED:      STARZ ENCORE FAMILY
+FLAGS:        RENAME
+PROGRAMS:     16
+SAMPLES:
+- 23:15 Amazonia
+- 00:39 The Best Christmas Pageant Ever
+- 02:19 Unexpected Christmas
+- 04:04 Centurion: The Dancing Stallion
+- 05:43 Monster Zone
+
+============================================================
+GROUP RAW DISPLAY: ENCORSHD
+COUNT: 1
+
+SITE ID:      9100002976#9233015964
+RAW DISPLAY:  ENCORSHD
+RAW XMLTV:    ENCORSHD.us
+API NAME:     ENCORSHD
+DECODED:      STARZ ENCORE SUSPENSE
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 23:29 The Art of the Steal
+- 01:00 Daylight
+- 02:55 1992
+- 04:33 The Shortcut
+- 05:59 The Strangers: Chapter 2
+
+============================================================
+GROUP RAW DISPLAY: ENCRACTHD
+COUNT: 1
+
+SITE ID:      9100002976#9200009486
+RAW DISPLAY:  ENCRACTHD
+RAW XMLTV:    ENCRACTHD.us
+API NAME:     ENCRACTHD
+DECODED:      STARZ ENCORE ACTION
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 00:00 Jaws
+- 02:06 Jaws 2
+- 04:06 Van Helsing
+- 06:20 Cooties
+- 07:50 The Informer
+
+============================================================
+GROUP RAW DISPLAY: ENCRBLHD
+COUNT: 1
+
+SITE ID:      9100002976#9233004320
+RAW DISPLAY:  ENCRBLHD
+RAW XMLTV:    ENCRBLHD.us
+API NAME:     ENCRBLHD
+DECODED:      STARZ ENCORE BLACK
+FLAGS:        HD, RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:56 The Fighting Temptations
+- 02:00 Big Momma's House
+- 03:40 Judgment Day
+- 05:11 Anaconda
+- 06:41 The Fighting Temptations
+
+============================================================
+GROUP RAW DISPLAY: ENCRCLHD
+COUNT: 1
+
+SITE ID:      9100002976#9233004290
+RAW DISPLAY:  ENCRCLHD
+RAW XMLTV:    ENCRCLHD.us
+API NAME:     ENCRCLHD
+DECODED:      STARZ ENCORE CLASSIC
+FLAGS:        HD, RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:10 Friends with Benefits
+- 01:00 Carlito's Way
+- 03:25 Juice
+- 05:01 The Rules of Attraction
+- 06:53 Lowriders
+
+============================================================
+GROUP RAW DISPLAY: ESPN
+COUNT: 5
+
+SITE ID:      9100002976#9200006937
+RAW DISPLAY:  ESPN
+RAW XMLTV:    ESPN.us
+API NAME:     ESPN
+DECODED:      ESPN
+FLAGS:        
+PROGRAMS:     18
+SAMPLES:
+- 23:00 2026 Stanley Cup Playoffs
+- 01:30 ESPN Films
+- 04:00 SportsCenter
+- 05:00 SportsCenter
+- 06:00 SportsCenter
+
+SITE ID:      9100002976#9200012351
+RAW DISPLAY:  ESPN
+RAW XMLTV:    ESPN.us
+API NAME:     ESPN2
+DECODED:      ESPN2
+FLAGS:        RENAME
+PROGRAMS:     15
+SAMPLES:
+- 00:00 Banana Ball
+- 02:00 Professional Fighters League
+- 04:00 Banana Ball
+- 06:00 2026 Stanley Cup Playoffs
+- 08:00 SportsCenter
+
+SITE ID:      9100002976#9233007996
+RAW DISPLAY:  ESPN
+RAW XMLTV:    ESPN.us
+API NAME:     ESPNHD
+DECODED:      ESPN
+FLAGS:        HD
+PROGRAMS:     18
+SAMPLES:
+- 23:00 2026 Stanley Cup Playoffs
+- 01:30 ESPN Films
+- 04:00 SportsCenter
+- 05:00 SportsCenter
+- 06:00 SportsCenter
+
+SITE ID:      9100002976#9200016131
+RAW DISPLAY:  ESPN
+RAW XMLTV:    ESPN.us
+API NAME:     ESPN2D
+DECODED:      ESPN2
+FLAGS:        RENAME
+PROGRAMS:     15
+SAMPLES:
+- 00:00 Banana Ball
+- 02:00 Professional Fighters League
+- 04:00 Banana Ball
+- 06:00 2026 Stanley Cup Playoffs
+- 08:00 SportsCenter
+
+SITE ID:      9100002976#9233009496
+RAW DISPLAY:  ESPN
+RAW XMLTV:    ESPN.us
+API NAME:     ESPNUHD
+DECODED:      ESPNU
+FLAGS:        HD, RENAME
+PROGRAMS:     18
+SAMPLES:
+- 23:30 College Baseball
+- 02:30 SEC Inside
+- 03:00 SEC Inside
+- 03:30 SEC Inside
+- 04:00 College Softball
+
+============================================================
+GROUP RAW DISPLAY: ESPNNEWHD
+COUNT: 1
+
+SITE ID:      9100002976#9200006523
+RAW DISPLAY:  ESPNNEWHD
+RAW XMLTV:    ESPNNEWHD.us
+API NAME:     ESPNNEWHD
+DECODED:      ESPN NEWS
+FLAGS:        HD, RENAME
+PROGRAMS:     34
+SAMPLES:
+- 23:30 2023 Wisconsin Auctioneers Championships
+- 00:30 2023 Microsoft Excel Esports
+- 01:00 Great American Events
+- 01:30 Corgi Races
+- 02:00 Great American Events
+
+============================================================
+GROUP RAW DISPLAY: FNCHD
+COUNT: 1
+
+SITE ID:      9100002976#9233006969
+RAW DISPLAY:  FNCHD
+RAW XMLTV:    FNCHD.us
+API NAME:     FNCHD
+DECODED:      FOX NEWS CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     17
+SAMPLES:
+- 00:00 Life, Liberty & Levin
+- 01:00 My View with Lara Trump
+- 02:00 Fox News Saturday Night
+- 03:00 Gutfeld!
+- 04:00 Life, Liberty & Levin
+
+============================================================
+GROUP RAW DISPLAY: FOOD
+COUNT: 2
+
+SITE ID:      9100002976#9233009448
+RAW DISPLAY:  FOOD
+RAW XMLTV:    FOOD.us
+API NAME:     FOODTV
+DECODED:      FOOD
+FLAGS:        
+PROGRAMS:     39
+SAMPLES:
+- 00:00 Diners, Drive-Ins and Dives: Triple D Nation
+- 00:30 Diners, Drive-Ins, and Dives
+- 01:00 Diners, Drive-Ins, and Dives
+- 01:30 Diners, Drive-Ins, and Dives
+- 02:00 Diners, Drive-Ins, and Dives
+
+SITE ID:      9100002976#9233005598
+RAW DISPLAY:  FOOD
+RAW XMLTV:    FOOD.us
+API NAME:     FOODHD
+DECODED:      FOOD NETWORK
+FLAGS:        HD, RENAME
+PROGRAMS:     39
+SAMPLES:
+- 00:00 Diners, Drive-Ins and Dives: Triple D Nation
+- 00:30 Diners, Drive-Ins, and Dives
+- 01:00 Diners, Drive-Ins, and Dives
+- 01:30 Diners, Drive-Ins, and Dives
+- 02:00 Diners, Drive-Ins, and Dives
+
+============================================================
+GROUP RAW DISPLAY: FUSEHD
+COUNT: 1
+
+SITE ID:      9100002976#9233011488
+RAW DISPLAY:  FUSEHD
+RAW XMLTV:    FUSEHD.us
+API NAME:     FUSEHD
+DECODED:      FUSE
+FLAGS:        HD, RENAME
+PROGRAMS:     22
+SAMPLES:
+- 22:30 Shoot the Hero!
+- 00:30 Better Criminal
+- 02:30 The Extraordinary Journey of the Fakir
+- 04:30 TallBoyz
+- 05:00 TallBoyz
+
+============================================================
+GROUP RAW DISPLAY: FX
+COUNT: 6
+
+SITE ID:      9100002976#9200006932
+RAW DISPLAY:  FX
+RAW XMLTV:    FX.us
+API NAME:     FX-E
+DECODED:      FX
+FLAGS:        
+PROGRAMS:     14
+SAMPLES:
+- 23:00 The Devil Wears Prada
+- 01:30 The Devil Wears Prada
+- 04:00 Anyone But You
+- 06:00 There's Something About Mary
+- 08:30 According to Jim
+
+SITE ID:      9100002976#9233013967
+RAW DISPLAY:  FX
+RAW XMLTV:    FX.us
+API NAME:     FXM
+DECODED:      FX MOVIE CHANNEL
+FLAGS:        RENAME
+PROGRAMS:     13
+SAMPLES:
+- 23:05 Predator 2
+- 01:20 Predators
+- 03:30 The Predator
+- 05:25 Monster Hunter
+- 07:20 The Flight of the Phoenix
+
+SITE ID:      9100002976#9233006959
+RAW DISPLAY:  FX
+RAW XMLTV:    FX.us
+API NAME:     FXHD
+DECODED:      FX
+FLAGS:        HD
+PROGRAMS:     14
+SAMPLES:
+- 23:00 The Devil Wears Prada
+- 01:30 The Devil Wears Prada
+- 04:00 Anyone But You
+- 06:00 There's Something About Mary
+- 08:30 According to Jim
+
+SITE ID:      9100002976#9200014910
+RAW DISPLAY:  FX
+RAW XMLTV:    FX.us
+API NAME:     FXXHD
+DECODED:      FXX
+FLAGS:        HD, RENAME
+PROGRAMS:     48
+SAMPLES:
+- 00:00 Family Guy
+- 00:30 Family Guy
+- 01:00 Family Guy
+- 01:30 Family Guy
+- 02:00 Family Guy
+
+SITE ID:      9100002976#9233009721
+RAW DISPLAY:  FX
+RAW XMLTV:    FX.us
+API NAME:     FOXDEPORHD
+DECODED:      FX
+FLAGS:        HD
+PROGRAMS:     21
+SAMPLES:
+- 23:00 Fútbol MLS
+- 01:30 La Previa - Liga MX
+- 02:00 Fútbol Liga MX
+- 04:00 Punto Final
+- 05:00 Total Sports 360
+
+SITE ID:      9100002976#9200001026
+RAW DISPLAY:  FX
+RAW XMLTV:    FX.us
+API NAME:     FXMHD
+DECODED:      FX MOVIE CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 23:05 Predator 2
+- 01:20 Predators
+- 03:30 The Predator
+- 05:25 Monster Hunter
+- 07:20 The Flight of the Phoenix
+
+============================================================
+GROUP RAW DISPLAY: GACFAM
+COUNT: 1
+
+SITE ID:      9100002976#9200009636
+RAW DISPLAY:  GACFAM
+RAW XMLTV:    GACFAM.us
+API NAME:     GACFAM
+DECODED:      GREAT AMERICAN FAMILY
+FLAGS:        RENAME
+PROGRAMS:     12
+SAMPLES:
+- 00:00 A Harvest Homecoming
+- 02:00 Blessings in Disguise
+- 04:00 Swing Into Romance
+- 06:00 A Harvest Homecoming
+- 08:00 Blessings in Disguise
+
+============================================================
+GROUP RAW DISPLAY: GSNHD
+COUNT: 1
+
+SITE ID:      9100002976#9233003944
+RAW DISPLAY:  GSNHD
+RAW XMLTV:    GSNHD.us
+API NAME:     GSNHD
+DECODED:      GAME SHOW NETWORK
+FLAGS:        HD, RENAME
+PROGRAMS:     45
+SAMPLES:
+- 00:00 The Wall
+- 01:00 Family Feud
+- 01:30 Family Feud
+- 02:00 Family Feud
+- 02:30 Family Feud
+
+============================================================
+GROUP RAW DISPLAY: HALLDRMHD
+COUNT: 1
+
+SITE ID:      9100002976#9233012938
+RAW DISPLAY:  HALLDRMHD
+RAW XMLTV:    HALLDRMHD.us
+API NAME:     HALLDRMHD
+DECODED:      HALLMARK DRAMA
+FLAGS:        HD, RENAME
+PROGRAMS:     19
+SAMPLES:
+- 00:00 Good Witch
+- 01:00 Good Witch
+- 02:00 Little House on the Prairie
+- 03:00 Little House on the Prairie
+- 04:00 Little House on the Prairie
+
+============================================================
+GROUP RAW DISPLAY: HALLMARKHD
+COUNT: 1
+
+SITE ID:      9100002976#9233015586
+RAW DISPLAY:  HALLMARKHD
+RAW XMLTV:    HALLMARKHD.us
+API NAME:     HALLMARKHD
+DECODED:      HALLMARK CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     23
+SAMPLES:
+- 00:00 Kentucky Roses
+- 02:00 To Philly with Love
+- 04:00 The Golden Girls
+- 04:30 The Golden Girls
+- 05:00 The Golden Girls
+
+============================================================
+GROUP RAW DISPLAY: HBO
+COUNT: 12
+
+SITE ID:      9100002976#9200008780
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOHD
+DECODED:      HBO
+FLAGS:        HD
+PROGRAMS:     20
+SAMPLES:
+- 00:00 Wuthering Heights
+- 02:21 Euphoria
+- 03:25 Crazy Rich Asians
+- 05:28 Rooster
+- 06:01 The Comeback
+
+SITE ID:      9100002976#9233013492
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBO2HD
+DECODED:      HBO HITS
+FLAGS:        HD, RENAME
+PROGRAMS:     18
+SAMPLES:
+- 23:04 Euphoria
+- 00:07 The Dark Wizard
+- 01:06 Half Man
+- 02:09 Friendship
+- 03:51 Euphoria
+
+SITE ID:      9100002976#9200002532
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOSIGHD
+DECODED:      HBO DRAMA
+FLAGS:        HD, RENAME
+PROGRAMS:     16
+SAMPLES:
+- 22:55 Bring Her Back
+- 00:39 Euphoria
+- 01:44 Insidious: The Last Key
+- 03:28 Insidious
+- 05:11 Dust Bunny
+
+SITE ID:      9100002976#9233003785
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOCOMHD
+DECODED:      HBO COMEDY
+FLAGS:        HD, RENAME
+PROGRAMS:     20
+SAMPLES:
+- 23:51 Crashing
+- 00:20 Crashing
+- 00:53 Crashing
+- 01:22 Crashing
+- 01:51 Table 19
+
+SITE ID:      9100002976#9233009491
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOZONHD
+DECODED:      HBO
+FLAGS:        HD
+PROGRAMS:     14
+SAMPLES:
+- 23:42 One Battle After Another
+- 02:24 The Mummy
+- 04:29 The Mummy Returns
+- 06:39 The Mummy: Tomb of the Dragon Emperor
+- 08:31 The Mummy
+
+SITE ID:      9100002976#9233001970
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOLATHD
+DECODED:      HBO
+FLAGS:        HD
+PROGRAMS:     16
+SAMPLES:
+- 00:00 Por anunciar
+- 02:11 Por anunciar
+- 03:15 Película
+- 05:16 Película
+- 07:13 Película
+
+SITE ID:      9100002976#9200000652
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOWAL
+DECODED:      HBO
+FLAGS:        
+PROGRAMS:     19
+SAMPLES:
+- 23:39 Half Man
+- 00:45 Saltburn
+- 03:00 Wuthering Heights
+- 05:21 Euphoria
+- 06:25 Crazy Rich Asians
+
+SITE ID:      9100002976#9233011831
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBO2W
+DECODED:      HBO
+FLAGS:        
+PROGRAMS:     17
+SAMPLES:
+- 23:42 Spider-Man: Across the Spider-Verse
+- 02:04 Euphoria
+- 03:07 The Dark Wizard
+- 04:06 Half Man
+- 05:09 Friendship
+
+SITE ID:      9100002976#9233000263
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOSW
+DECODED:      HBO
+FLAGS:        
+PROGRAMS:     16
+SAMPLES:
+- 22:52 From the World of John Wick: Ballerina
+- 00:57 The Dark Wizard
+- 01:55 Bring Her Back
+- 03:39 Euphoria
+- 04:44 Insidious: The Last Key
+
+SITE ID:      9100002976#9200009688
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOC-W
+DECODED:      HBO
+FLAGS:        WEST/ALT
+PROGRAMS:     24
+SAMPLES:
+- 23:50 Crashing
+- 00:22 Crashing
+- 00:52 Crashing
+- 01:21 Crashing
+- 01:49 Crashing
+
+SITE ID:      9100002976#9200016631
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOZ-W
+DECODED:      HBO
+FLAGS:        WEST/ALT
+PROGRAMS:     14
+SAMPLES:
+- 22:05 Life of Pi
+- 00:13 Eddington
+- 02:42 One Battle After Another
+- 05:24 The Mummy
+- 07:29 The Mummy Returns
+
+SITE ID:      9100002976#9233009922
+RAW DISPLAY:  HBO
+RAW XMLTV:    HBO.us
+API NAME:     HBOL-W
+DECODED:      HBO
+FLAGS:        WEST/ALT
+PROGRAMS:     15
+SAMPLES:
+- 22:08 Película
+- 00:40 Película
+- 03:00 Por anunciar
+- 05:11 Por anunciar
+- 06:15 Película
+
+============================================================
+GROUP RAW DISPLAY: HGTV
+COUNT: 2
+
+SITE ID:      9100002976#9233004104
+RAW DISPLAY:  HGTV
+RAW XMLTV:    HGTV.us
+API NAME:     HGTV
+DECODED:      HGTV
+FLAGS:        
+PROGRAMS:     39
+SAMPLES:
+- 00:00 House Hunters
+- 00:30 House Hunters
+- 01:00 House Hunters
+- 01:30 House Hunters
+- 02:00 House Hunters
+
+SITE ID:      9100002976#9200004467
+RAW DISPLAY:  HGTV
+RAW XMLTV:    HGTV.us
+API NAME:     HGTVHD
+DECODED:      HGTV
+FLAGS:        HD
+PROGRAMS:     39
+SAMPLES:
+- 00:00 House Hunters
+- 00:30 House Hunters
+- 01:00 House Hunters
+- 01:30 House Hunters
+- 02:00 House Hunters
+
+============================================================
+GROUP RAW DISPLAY: HIST
+COUNT: 2
+
+SITE ID:      9100002976#9233008002
+RAW DISPLAY:  HIST
+RAW XMLTV:    HIST.us
+API NAME:     THC
+DECODED:      HIST
+FLAGS:        
+PROGRAMS:     20
+SAMPLES:
+- 00:00 The Curse of Oak Island
+- 01:02 The Curse of Oak Island
+- 02:05 The Curse of Oak Island
+- 03:05 The Curse of Oak Island
+- 04:03 The Curse of Oak Island
+
+SITE ID:      9100002976#9200019964
+RAW DISPLAY:  HIST
+RAW XMLTV:    HIST.us
+API NAME:     THCSP
+DECODED:      HIST
+FLAGS:        
+PROGRAMS:     26
+SAMPLES:
+- 00:00 Grandes misterios de la historia con Laurence Fishburne
+- 01:00 Casos insólitos de la historia
+- 02:00 Extraterrestres de la antigüedad
+- 03:00 Extraterrestres de la antigüedad
+- 04:00 Grandes misterios de la historia con Laurence Fishburne
+
+============================================================
+GROUP RAW DISPLAY: HMMHD
+COUNT: 1
+
+SITE ID:      9100002976#9200020115
+RAW DISPLAY:  HMMHD
+RAW XMLTV:    HMMHD.us
+API NAME:     HMMHD
+DECODED:      HALLMARK MYSTERY
+FLAGS:        HD, RENAME
+PROGRAMS:     18
+SAMPLES:
+- 00:00 Tipline Mysteries: Dial 1 for Murder
+- 02:00 Murder, She Wrote
+- 03:00 Murder, She Wrote
+- 04:00 Murder, She Wrote
+- 05:00 Murder, She Wrote
+
+============================================================
+GROUP RAW DISPLAY: ID
+COUNT: 2
+
+SITE ID:      9100002976#9200002243
+RAW DISPLAY:  ID
+RAW XMLTV:    ID.us
+API NAME:     ID
+DECODED:      INVESTIGATION DISCOVERY
+FLAGS:        RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Vengeance: Killer Coworkers
+- 01:00 Devil of a Boss
+- 02:00 Vengeance: Killer Coworkers
+- 03:00 Vengeance: Killer Coworkers
+- 04:00 Devil of a Boss
+
+SITE ID:      9100002976#9200006654
+RAW DISPLAY:  ID
+RAW XMLTV:    ID.us
+API NAME:     INVSTDSCHD
+DECODED:      ID
+FLAGS:        HD
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Vengeance: Killer Coworkers
+- 01:00 Devil of a Boss
+- 02:00 Vengeance: Killer Coworkers
+- 03:00 Vengeance: Killer Coworkers
+- 04:00 Devil of a Boss
+
+============================================================
+GROUP RAW DISPLAY: IFCHD
+COUNT: 1
+
+SITE ID:      9100002976#9233006961
+RAW DISPLAY:  IFCHD
+RAW XMLTV:    IFCHD.us
+API NAME:     IFCHD
+DECODED:      IFC
+FLAGS:        HD, RENAME
+PROGRAMS:     18
+SAMPLES:
+- 22:00 Brewster's Millions
+- 00:15 Uncle Buck
+- 02:30 Spaceballs
+- 04:30 The Great Outdoors
+- 06:30 Uncle Buck
+
+============================================================
+GROUP RAW DISPLAY: INDIPX
+COUNT: 1
+
+SITE ID:      9100002976#9233009319
+RAW DISPLAY:  INDIPX
+RAW XMLTV:    INDIPX.us
+API NAME:     INDIPX
+DECODED:      INDIEPLEX
+FLAGS:        RENAME
+PROGRAMS:     13
+SAMPLES:
+- 00:00 I'm Not There
+- 02:17 Across the River and Into the Trees
+- 04:05 Leprechaun: Origins
+- 05:36 The Curse of Downer's Grove
+- 07:06 The Dangerous Lives of Altar Boys
+
+============================================================
+GROUP RAW DISPLAY: INSPHD
+COUNT: 1
+
+SITE ID:      9100002976#9200009887
+RAW DISPLAY:  INSPHD
+RAW XMLTV:    INSPHD.us
+API NAME:     INSPHD
+DECODED:      INSP
+FLAGS:        HD, RENAME
+PROGRAMS:     23
+SAMPLES:
+- 00:00 Gunsmoke
+- 00:30 Gunsmoke
+- 01:00 Gunsmoke
+- 02:00 The Guns of Fort Petticoat
+- 03:46 Yuma
+
+============================================================
+GROUP RAW DISPLAY: ION
+COUNT: 2
+
+SITE ID:      9100002976#9233005684
+RAW DISPLAY:  ION
+RAW XMLTV:    ION.us
+API NAME:     WPME
+DECODED:      ION
+FLAGS:        
+PROGRAMS:     27
+SAMPLES:
+- 22:30 NWSL Soccer
+- 00:30 NWSL On ION: Match Break Show
+- 00:45 NWSL Soccer
+- 02:45 NWSL on ION: Post Match Show
+- 03:00 NCIS
+
+SITE ID:      9100002976#9233011910
+RAW DISPLAY:  ION
+RAW XMLTV:    ION.us
+API NAME:     ION-E
+DECODED:      ION
+FLAGS:        
+PROGRAMS:     27
+SAMPLES:
+- 22:30 NWSL Soccer
+- 00:30 NWSL On ION: Match Break Show
+- 00:45 NWSL Soccer
+- 02:45 NWSL on ION: Post Match Show
+- 03:00 NCIS
+
+============================================================
+GROUP RAW DISPLAY: LIFE
+COUNT: 4
+
+SITE ID:      9100002976#9200020452
+RAW DISPLAY:  LIFE
+RAW XMLTV:    LIFE.us
+API NAME:     LIF-E
+DECODED:      LIFETIME
+FLAGS:        RENAME
+PROGRAMS:     22
+SAMPLES:
+- 00:00 Kidnapped in Her Own Home: The Martha Carelli Story
+- 02:03 Abducted by My Teacher: The Elizabeth Thomas Story
+- 04:01 Kidnapped in Her Own Home: The Martha Carelli Story
+- 06:04 Abducted by My Teacher: The Elizabeth Thomas Story
+- 08:02 Natural Blood Pressure Management
+
+SITE ID:      9100002976#9233009825
+RAW DISPLAY:  LIFE
+RAW XMLTV:    LIFE.us
+API NAME:     LMN
+DECODED:      LMN
+FLAGS:        RENAME
+PROGRAMS:     15
+SAMPLES:
+- 00:00 The Little Boy Who Went Missing
+- 02:00 My Daughter Was Taken
+- 04:01 The Little Boy Who Went Missing
+- 06:01 My Daughter Was Taken
+- 08:02 Have Thinning Hair? Keranique Can Help Regrow Beautiful, Thicker Hair!
+
+SITE ID:      9100002976#9200000502
+RAW DISPLAY:  LIFE
+RAW XMLTV:    LIFE.us
+API NAME:     LIFEHD
+DECODED:      LIFETIME
+FLAGS:        HD, RENAME
+PROGRAMS:     22
+SAMPLES:
+- 00:00 Kidnapped in Her Own Home: The Martha Carelli Story
+- 02:03 Abducted by My Teacher: The Elizabeth Thomas Story
+- 04:01 Kidnapped in Her Own Home: The Martha Carelli Story
+- 06:04 Abducted by My Teacher: The Elizabeth Thomas Story
+- 08:02 Natural Blood Pressure Management
+
+SITE ID:      9100002976#9233009429
+RAW DISPLAY:  LIFE
+RAW XMLTV:    LIFE.us
+API NAME:     LMNHD
+DECODED:      LMN
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 00:00 The Little Boy Who Went Missing
+- 02:00 My Daughter Was Taken
+- 04:01 The Little Boy Who Went Missing
+- 06:01 My Daughter Was Taken
+- 08:02 Have Thinning Hair? Keranique Can Help Regrow Beautiful, Thicker Hair!
+
+============================================================
+GROUP RAW DISPLAY: LOCAL
+COUNT: 2
+
+SITE ID:      9100002976#9200016617
+RAW DISPLAY:  LOCAL
+RAW XMLTV:    LOCAL.us
+API NAME:     LOCAL
+DECODED:      LOCAL
+FLAGS:        
+PROGRAMS:     23
+SAMPLES:
+- 00:00 Local Programming
+- 01:00 Local Programming
+- 02:00 Local Programming
+- 03:00 Local Programming
+- 04:00 Local Programming
+
+SITE ID:      9100002976#9266077503
+RAW DISPLAY:  LOCAL
+RAW XMLTV:    LOCAL.us
+API NAME:     LOCAL
+DECODED:      LOCAL
+FLAGS:        
+PROGRAMS:     35
+SAMPLES:
+- 00:00 Diary of an Elephant Orphan
+- 01:45 Heart of the Osa & Kalu: Growing Up Wild
+- 02:15 The Gateway Bug
+- 04:00 Diary of an Elephant Orphan
+- 05:45 Heart of the Osa & Kalu: Growing Up Wild
+
+============================================================
+GROUP RAW DISPLAY: MAGNHD
+COUNT: 1
+
+SITE ID:      9100002976#9200000664
+RAW DISPLAY:  MAGNHD
+RAW XMLTV:    MAGNHD.us
+API NAME:     MAGNHD
+DECODED:      MAGNOLIA NETWORK
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Lakefront Bargain Hunt Renovation
+- 01:00 Lakefront Bargain Hunt Renovation
+- 02:00 Lakefront Bargain Hunt Renovation
+- 03:00 Lakefront Bargain Hunt Renovation
+- 04:00 Lakefront Bargain Hunt Renovation
+
+============================================================
+GROUP RAW DISPLAY: MAX
+COUNT: 3
+
+SITE ID:      9100002976#9200000143
+RAW DISPLAY:  MAX
+RAW XMLTV:    MAX.us
+API NAME:     MAXHD
+DECODED:      CINEMAX
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 22:54 Won't Back Down
+- 00:56 Wonka
+- 02:53 Blue Beetle
+- 05:01 Companion
+- 06:39 Get Out
+
+SITE ID:      9100002976#9200005035
+RAW DISPLAY:  MAX
+RAW XMLTV:    MAX.us
+API NAME:     MAXLATHD
+DECODED:      MAX
+FLAGS:        HD
+PROGRAMS:     15
+SAMPLES:
+- 22:54 No nos moverán
+- 00:56 Wonka
+- 02:53 Blue Beetle
+- 05:01 Compañera perfecta
+- 06:39 ¡Huye!
+
+SITE ID:      9100002976#9233009621
+RAW DISPLAY:  MAX
+RAW XMLTV:    MAX.us
+API NAME:     MAXWAL
+DECODED:      MAX
+FLAGS:        
+PROGRAMS:     15
+SAMPLES:
+- 22:30 Lady Bird
+- 00:04 Love, Simon
+- 01:54 Won't Back Down
+- 03:56 Wonka
+- 05:53 Blue Beetle
+
+============================================================
+GROUP RAW DISPLAY: MGM+DRV
+COUNT: 1
+
+SITE ID:      9100002976#9200006851
+RAW DISPLAY:  MGM+DRV
+RAW XMLTV:    MGM+DRV.us
+API NAME:     MGM+DRV
+DECODED:      MGM+ DRIVE-IN
+FLAGS:        RENAME
+PROGRAMS:     14
+SAMPLES:
+- 00:00 Footloose
+- 01:50 Flashdance
+- 03:25 Fame
+- 05:15 Ferris Bueller's Day Off
+- 07:00 Cadillac Man
+
+============================================================
+GROUP RAW DISPLAY: MGM+HIT
+COUNT: 1
+
+SITE ID:      9100002976#9233013634
+RAW DISPLAY:  MGM+HIT
+RAW XMLTV:    MGM+HIT.us
+API NAME:     MGM+HIT
+DECODED:      MGM+ HITS
+FLAGS:        RENAME
+PROGRAMS:     14
+SAMPLES:
+- 00:00 The Silence of the Lambs
+- 02:00 Hannibal
+- 04:15 Pet Sematary
+- 06:00 From
+- 06:55 Transformers One
+
+============================================================
+GROUP RAW DISPLAY: MGM+MAR
+COUNT: 1
+
+SITE ID:      9100002976#9200020594
+RAW DISPLAY:  MGM+MAR
+RAW XMLTV:    MGM+MAR.us
+API NAME:     MGM+MAR
+DECODED:      MGM+ MARQUEE
+FLAGS:        RENAME
+PROGRAMS:     12
+SAMPLES:
+- 00:00 Gladiator II
+- 02:30 Jack Reacher: Never Go Back
+- 04:30 Days of Thunder
+- 06:20 In the Land of Saints and Sinners
+- 08:10 Marathon Man
+
+============================================================
+GROUP RAW DISPLAY: MOREMAXHD
+COUNT: 1
+
+SITE ID:      9100002976#9200006529
+RAW DISPLAY:  MOREMAXHD
+RAW XMLTV:    MOREMAXHD.us
+API NAME:     MOREMAXHD
+DECODED:      CINEMAX HITS
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 22:19 Knox Goes Away
+- 00:14 Mickey 17
+- 02:31 Papillon
+- 04:44 Trap
+- 06:30 A Nightmare on Elm Street
+
+============================================================
+GROUP RAW DISPLAY: MSNBC
+COUNT: 2
+
+SITE ID:      9100002976#9233006803
+RAW DISPLAY:  MSNBC
+RAW XMLTV:    MSNBC.us
+API NAME:     MSNOW
+DECODED:      MSNBC
+FLAGS:        
+PROGRAMS:     23
+SAMPLES:
+- 00:00 The Weekend: Primetime
+- 01:00 Crooked on MS NOW
+- 02:00 The Rachel Maddow Show
+- 03:00 The 11th Hour
+- 04:00 The Beat: Weekend
+
+SITE ID:      9100002976#9200009294
+RAW DISPLAY:  MSNBC
+RAW XMLTV:    MSNBC.us
+API NAME:     MSNBCHD
+DECODED:      MS NOW
+FLAGS:        HD, RENAME
+PROGRAMS:     23
+SAMPLES:
+- 00:00 The Weekend: Primetime
+- 01:00 Crooked on MS NOW
+- 02:00 The Rachel Maddow Show
+- 03:00 The 11th Hour
+- 04:00 The Beat: Weekend
+
+============================================================
+GROUP RAW DISPLAY: MTV
+COUNT: 5
+
+SITE ID:      9100002976#9200014754
+RAW DISPLAY:  MTV
+RAW XMLTV:    MTV.us
+API NAME:     MTV-E
+DECODED:      MTV
+FLAGS:        
+PROGRAMS:     47
+SAMPLES:
+- 00:00 The Office
+- 00:30 The Office
+- 01:00 The Office
+- 01:30 The Office
+- 02:00 The Office
+
+SITE ID:      9100002976#9233015501
+RAW DISPLAY:  MTV
+RAW XMLTV:    MTV.us
+API NAME:     MTVHD
+DECODED:      MTV
+FLAGS:        HD
+PROGRAMS:     47
+SAMPLES:
+- 00:00 The Office
+- 00:30 The Office
+- 01:00 The Office
+- 01:30 The Office
+- 02:00 The Office
+
+SITE ID:      9100002976#9200012265
+RAW DISPLAY:  MTV
+RAW XMLTV:    MTV.us
+API NAME:     MTV2HD
+DECODED:      MTV2
+FLAGS:        HD, RENAME
+PROGRAMS:     37
+SAMPLES:
+- 00:00 The Jamie Foxx Show
+- 00:30 The Jamie Foxx Show
+- 01:00 The Jamie Foxx Show
+- 01:30 The Jamie Foxx Show
+- 02:00 The Jamie Foxx Show
+
+SITE ID:      9100002976#9233015816
+RAW DISPLAY:  MTV
+RAW XMLTV:    MTV.us
+API NAME:     MTVCL
+DECODED:      MTV
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 90s Nation
+- 01:00 Metal Mayhem
+- 02:00 Metal Mayhem
+- 03:00 Metal Mayhem
+- 04:00 120 Minutes
+
+SITE ID:      9100002976#9233011380
+RAW DISPLAY:  MTV
+RAW XMLTV:    MTV.us
+API NAME:     MTVLIVE
+DECODED:      MTV
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Epic.Awesome.Videos
+- 01:00 Epic.Awesome.Videos
+- 02:00 Metal Thrashing Madness
+- 03:00 Metal Thrashing Madness
+- 04:00 Epic.Awesome.Videos
+
+============================================================
+GROUP RAW DISPLAY: NBC
+COUNT: 2
+
+SITE ID:      9100002976#9233006796
+RAW DISPLAY:  NBC
+RAW XMLTV:    NBC.us
+API NAME:     WCSH
+DECODED:      NBC
+FLAGS:        
+PROGRAMS:     32
+SAMPLES:
+- 23:30 2026 NBA Playoffs
+- 02:00 Saturday Night Live
+- 03:00 NEWS CENTER Maine at 11:00 - Sat
+- 03:30 Saturday Night Live
+- 05:03 LX.TV: 1st Look
+
+SITE ID:      9100002976#9233005909
+RAW DISPLAY:  NBC
+RAW XMLTV:    NBC.us
+API NAME:     NBCBOS
+DECODED:      NBC
+FLAGS:        
+PROGRAMS:     29
+SAMPLES:
+- 00:00 United Fight Alliance
+- 01:00 United Fight Alliance
+- 02:00 Poker Night in America
+- 03:00 World Poker Tour
+- 04:00 World Poker Tour
+
+============================================================
+GROUP RAW DISPLAY: NGCHD
+COUNT: 1
+
+SITE ID:      9100002976#9233009337
+RAW DISPLAY:  NGCHD
+RAW XMLTV:    NGCHD.us
+API NAME:     NGCHD
+DECODED:      NATIONAL GEOGRAPHIC
+FLAGS:        HD, RENAME
+PROGRAMS:     27
+SAMPLES:
+- 00:00 To Catch a Smuggler
+- 01:00 Amsterdam Narcos
+- 02:00 To Catch a Smuggler
+- 03:00 To Catch a Smuggler
+- 04:00 Amsterdam Narcos
+
+============================================================
+GROUP RAW DISPLAY: NGEOWILDHD
+COUNT: 2
+
+SITE ID:      9100002976#9233002054
+RAW DISPLAY:  NGEOWILDHD
+RAW XMLTV:    NGEOWILDHD.us
+API NAME:     NGEOWILDHD
+DECODED:      NAT GEO WILD
+FLAGS:        HD, RENAME
+PROGRAMS:     28
+SAMPLES:
+- 00:00 The Incredible Dr. Pol
+- 01:00 The Incredible Dr. Pol
+- 02:00 To Be Announced
+- 03:00 The Incredible Dr. Pol
+- 04:00 The Incredible Dr. Pol
+
+SITE ID:      9100002976#9200020638
+RAW DISPLAY:  NGEOWILDHD
+RAW XMLTV:    NGEOWILDHD.us
+API NAME:     NGEOWILDHD
+DECODED:      NAT GEO WILD
+FLAGS:        HD, RENAME
+PROGRAMS:     41
+SAMPLES:
+- 00:00 Behind the Gates
+- 00:30 Travel Thru History
+- 01:00 Dream Cruises
+- 02:00 Selling Mega Mansions
+- 02:30 Find Me a Luxury Home
+
+============================================================
+GROUP RAW DISPLAY: NICKHD
+COUNT: 1
+
+SITE ID:      9100002976#9233011497
+RAW DISPLAY:  NICKHD
+RAW XMLTV:    NICKHD.us
+API NAME:     NICKHD
+DECODED:      NICKELODEON
+FLAGS:        HD, RENAME
+PROGRAMS:     40
+SAMPLES:
+- 23:00 The SpongeBob Movie: Sponge Out of Water
+- 01:01 Friends
+- 01:31 Friends
+- 02:01 The Big Bang Theory
+- 02:38 The Big Bang Theory
+
+============================================================
+GROUP RAW DISPLAY: OUTHDE
+COUNT: 1
+
+SITE ID:      9100002976#9200006358
+RAW DISPLAY:  OUTHDE
+RAW XMLTV:    OUTHDE.us
+API NAME:     OUTHDE
+DECODED:      OUTDOOR CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     38
+SAMPLES:
+- 00:00 Life on the Edge
+- 01:00 Fishing the Wild with Mike Robinson
+- 01:30 Wildfed
+- 02:00 MeatEater
+- 02:30 Dead Meat
+
+============================================================
+GROUP RAW DISPLAY: OVATHD
+COUNT: 1
+
+SITE ID:      9100002976#9233005811
+RAW DISPLAY:  OVATHD
+RAW XMLTV:    OVATHD.us
+API NAME:     OVATHD
+DECODED:      OVATION
+FLAGS:        HD, RENAME
+PROGRAMS:     28
+SAMPLES:
+- 00:00 Inspector George Gently
+- 02:00 The Sunshine Murders
+- 03:00 Whitstable Pearl
+- 04:00 Hudson & Rex
+- 05:00 Hudson & Rex
+
+============================================================
+GROUP RAW DISPLAY: OWN
+COUNT: 2
+
+SITE ID:      9100002976#9200002736
+RAW DISPLAY:  OWN
+RAW XMLTV:    OWN.us
+API NAME:     OWN
+DECODED:      OWN
+FLAGS:        
+PROGRAMS:     29
+SAMPLES:
+- 00:00 Love & Marriage: Huntsville
+- 01:00 Belle Collective: Birmingham
+- 02:00 Belle Collective: Birmingham
+- 03:00 Love & Marriage: Huntsville
+- 04:00 Belle Collective: Birmingham
+
+SITE ID:      9100002976#9200004740
+RAW DISPLAY:  OWN
+RAW XMLTV:    OWN.us
+API NAME:     OWNHD
+DECODED:      OWN
+FLAGS:        HD
+PROGRAMS:     29
+SAMPLES:
+- 00:00 Love & Marriage: Huntsville
+- 01:00 Belle Collective: Birmingham
+- 02:00 Belle Collective: Birmingham
+- 03:00 Love & Marriage: Huntsville
+- 04:00 Belle Collective: Birmingham
+
+============================================================
+GROUP RAW DISPLAY: OXYGENHD
+COUNT: 1
+
+SITE ID:      9100002976#9200012145
+RAW DISPLAY:  OXYGENHD
+RAW XMLTV:    OXYGENHD.us
+API NAME:     OXYGENHD
+DECODED:      OXYGEN
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Philly Homicide
+- 01:00 Dateline: Secrets Uncovered
+- 02:00 Dateline: Secrets Uncovered
+- 03:00 Philly Homicide
+- 04:00 New York Homicide
+
+============================================================
+GROUP RAW DISPLAY: PARMT
+COUNT: 1
+
+SITE ID:      9100002976#9233013810
+RAW DISPLAY:  PARMT
+RAW XMLTV:    PARMT.us
+API NAME:     PARMT
+DECODED:      PARAMOUNT NETWORK
+FLAGS:        RENAME
+PROGRAMS:     20
+SAMPLES:
+- 23:30 The Hangover
+- 02:00 The Hangover Part II
+- 04:30 The Hangover Part III
+- 07:00 Bar Rescue
+- 08:00 Bar Rescue
+
+============================================================
+GROUP RAW DISPLAY: PBS
+COUNT: 3
+
+SITE ID:      9100002976#9233005477
+RAW DISPLAY:  PBS
+RAW XMLTV:    PBS.us
+API NAME:     WCBB-DT
+DECODED:      PBS
+FLAGS:        
+PROGRAMS:     30
+SAMPLES:
+- 00:00 Death in Paradise
+- 01:00 Father Brown
+- 02:00 The Puzzle Lady
+- 03:00 Austin City Limits
+- 04:00 Stage
+
+SITE ID:      9100002976#9233015433
+RAW DISPLAY:  PBS
+RAW XMLTV:    PBS.us
+API NAME:     WENH-DT
+DECODED:      PBS
+FLAGS:        
+PROGRAMS:     30
+SAMPLES:
+- 22:30 Reconnecting Roots
+- 03:30 Stories from the Stage
+- 04:00 NOVA
+- 05:00 Nature
+- 06:00 Shared Planet
+
+SITE ID:      9100002976#9200014885
+RAW DISPLAY:  PBS
+RAW XMLTV:    PBS.us
+API NAME:     WCBB-DT4
+DECODED:      PBS
+FLAGS:        
+PROGRAMS:     45
+SAMPLES:
+- 23:30 Brambletown
+- 01:00 Cyberchase
+- 01:30 Ready Jet Go!
+- 02:00 Super Why!
+- 02:30 Xavier Riddle and the Secret Museum
+
+============================================================
+GROUP RAW DISPLAY: PLEXHD
+COUNT: 1
+
+SITE ID:      9100002976#9200020633
+RAW DISPLAY:  PLEXHD
+RAW XMLTV:    PLEXHD.us
+API NAME:     PLEXHD
+DECODED:      MOVIEPLEX
+FLAGS:        HD, RENAME
+PROGRAMS:     17
+SAMPLES:
+- 23:20 Death Defying Acts
+- 01:00 Collide
+- 02:40 The Dog Who Saved Summer
+- 04:10 A Mouse Tale
+- 05:43 The Barkers: Mind the Cats!
+
+============================================================
+GROUP RAW DISPLAY: POPHD
+COUNT: 1
+
+SITE ID:      9100002976#9200018304
+RAW DISPLAY:  POPHD
+RAW XMLTV:    POPHD.us
+API NAME:     POPHD
+DECODED:      POP
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 NCIS: New Orleans
+- 01:00 NCIS: New Orleans
+- 02:00 NCIS: New Orleans
+- 03:00 NCIS: New Orleans
+- 04:00 NCIS: New Orleans
+
+============================================================
+GROUP RAW DISPLAY: QVC
+COUNT: 2
+
+SITE ID:      9100002976#9200002533
+RAW DISPLAY:  QVC
+RAW XMLTV:    QVC.us
+API NAME:     QVCHD
+DECODED:      QVC
+FLAGS:        HD
+PROGRAMS:     16
+SAMPLES:
+- 23:00 Belle by Kim Gravel - Fashion
+- 02:00 Celebrate Summer Style Sale
+- 04:00 Celebrate Summer Style Sale
+- 05:00 Lug - Bags & Accessories
+- 06:00 Miz Mooz Shoes
+
+SITE ID:      9100002976#9233002386
+RAW DISPLAY:  QVC
+RAW XMLTV:    QVC.us
+API NAME:     QVC2
+DECODED:      QVC
+FLAGS:        
+PROGRAMS:     17
+SAMPLES:
+- 00:00 Toni Brattin Hair Fabulous - Wigs & Hairpieces
+- 01:00 Keep It Clean
+- 02:00 Arlo Pro Smart Security
+- 03:00 Organized Options®
+- 04:00 Patricia Nash Handbags
+
+============================================================
+GROUP RAW DISPLAY: REELZHD
+COUNT: 1
+
+SITE ID:      9100002976#9233015619
+RAW DISPLAY:  REELZHD
+RAW XMLTV:    REELZHD.us
+API NAME:     REELZHD
+DECODED:      REELZ
+FLAGS:        HD, RENAME
+PROGRAMS:     20
+SAMPLES:
+- 00:00 On Patrol: First Shift
+- 01:00 On Patrol: Live
+- 04:00 On Patrol: Live
+- 07:00 Paid Program
+- 07:30 Freedom to Leave the House! Inogen Portable Oxygen
+
+============================================================
+GROUP RAW DISPLAY: SCIENCEHD
+COUNT: 1
+
+SITE ID:      9100002976#9200000462
+RAW DISPLAY:  SCIENCEHD
+RAW XMLTV:    SCIENCEHD.us
+API NAME:     SCIENCEHD
+DECODED:      DISCOVERY SCIENCE
+FLAGS:        HD, RENAME
+PROGRAMS:     30
+SAMPLES:
+- 00:00 Strange Evidence
+- 01:00 Strange Evidence
+- 02:00 Strange Evidence
+- 03:00 Strange Evidence
+- 04:00 Strange Evidence
+
+============================================================
+GROUP RAW DISPLAY: SHO
+COUNT: 17
+
+SITE ID:      9100002976#9233005766
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOPLC
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 Super Saturday Jewelry Deals
+- 01:00 Super Saturday Jewelry Deals
+- 02:00 Super Saturday Jewelry Deals
+- 03:00 Super Saturday Jewelry Deals
+- 04:00 Super Saturday Jewelry Deals
+
+SITE ID:      9100002976#9233011188
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOHD
+DECODED:      PARAMOUNT+ WITH SHOWTIME
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 23:15 The Edge of Seventeen
+- 01:00 Doin' It
+- 02:45 Harold and Kumar Go to White Castle
+- 04:15 Almost Famous
+- 06:20 Vanilla Sky
+
+SITE ID:      9100002976#9200014450
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHO2XEHD
+DECODED:      SHOWTIME 2
+FLAGS:        HD, RENAME
+PROGRAMS:     12
+SAMPLES:
+- 00:00 The Hurricane
+- 02:30 Ali
+- 05:15 Gasoline Alley
+- 07:00 Good Kill
+- 08:45 Hotel Artemis
+
+SITE ID:      9100002976#9233017279
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHWCASEHD
+DECODED:      SHOWTIME SHOWCASE
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 00:00 Things We Lost in the Fire
+- 02:00 Losing Isaiah
+- 03:50 Django Unchained
+- 06:35 The Chi
+- 07:30 Sound of Violence
+
+SITE ID:      9100002976#9233015495
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOWEXHD
+DECODED:      SHOWTIME EXTREME
+FLAGS:        HD, RENAME
+PROGRAMS:     13
+SAMPLES:
+- 00:00 Cheech and Chong's Last Movie
+- 02:00 Grudge Match
+- 04:00 Jackass Presents: Bad Grandpa
+- 05:35 Jackass: The Movie
+- 07:00 Jackass Number Two
+
+SITE ID:      9100002976#9233003805
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOCSE
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     11
+SAMPLES:
+- 00:00 Seven Psychopaths
+- 02:00 Terminator: Dark Fate
+- 04:10 The Corrupted
+- 06:00 Jackass Presents: Bad Grandpa .5
+- 07:30 The Dictator
+
+SITE ID:      9100002976#9200016686
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOWNEXT
+DECODED:      SHOWTIME NEXT
+FLAGS:        RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:00 Dinner for Schmucks
+- 01:00 Jeff Who Lives at Home
+- 02:30 Strange Wilderness
+- 04:00 The Road
+- 06:00 American Son
+
+SITE ID:      9100002976#9200002975
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOWWOM
+DECODED:      SHOWTIME WOMEN
+FLAGS:        RENAME
+PROGRAMS:     13
+SAMPLES:
+- 00:00 Scream 2
+- 02:00 Scream 3
+- 04:00 Scream 4
+- 06:00 Asking for It
+- 07:45 Backcountry
+
+SITE ID:      9100002976#9200000968
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOWFAM
+DECODED:      SHOWTIME FAMILY ZONE
+FLAGS:        RENAME
+PROGRAMS:     13
+SAMPLES:
+- 00:00 Holes
+- 02:00 The Last Airbender
+- 03:45 Sahara
+- 05:50 Wayne's World
+- 07:30 Blue Chips
+
+SITE ID:      9100002976#9233015599
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOWAL
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     13
+SAMPLES:
+- 22:55 The Guilt Trip
+- 00:30 A Bad Moms Christmas
+- 02:15 The Edge of Seventeen
+- 04:00 Doin' It
+- 05:45 Harold and Kumar Go to White Castle
+
+SITE ID:      9100002976#9200002670
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHO2XW
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     12
+SAMPLES:
+- 22:45 Lara Croft Tomb Raider: The Cradle of Life
+- 00:45 Million Dollar Baby
+- 03:00 The Hurricane
+- 05:30 Ali
+- 08:15 Gasoline Alley
+
+SITE ID:      9100002976#9200022063
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOBETW
+DECODED:      SHOXBET
+FLAGS:        RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:30 Seaside
+- 01:05 Flight of the Intruder
+- 03:00 Things We Lost in the Fire
+- 05:00 Losing Isaiah
+- 06:50 Django Unchained
+
+SITE ID:      9100002976#9200000854
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOX-W
+DECODED:      SHO
+FLAGS:        WEST/ALT
+PROGRAMS:     14
+SAMPLES:
+- 23:50 V for Vengeance
+- 01:15 The Contractor
+- 03:00 Cheech and Chong's Last Movie
+- 05:00 Grudge Match
+- 07:00 Jackass Presents: Bad Grandpa
+
+SITE ID:      9100002976#9200004693
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOCSEW
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     12
+SAMPLES:
+- 22:30 Terminator 2: Judgment Day
+- 00:55 No Country for Old Men
+- 03:00 Seven Psychopaths
+- 05:00 Terminator: Dark Fate
+- 07:10 The Corrupted
+
+SITE ID:      9100002976#9233005988
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHNXTW
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     15
+SAMPLES:
+- 22:35 Jenny's Wedding
+- 00:15 Election
+- 02:00 Dinner for Schmucks
+- 04:00 Jeff Who Lives at Home
+- 05:30 Strange Wilderness
+
+SITE ID:      9100002976#9233009930
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOWMW
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     14
+SAMPLES:
+- 23:30 The Woman in Black
+- 01:05 Scream
+- 03:00 Scream 2
+- 05:00 Scream 3
+- 07:00 Scream 4
+
+SITE ID:      9100002976#9200012474
+RAW DISPLAY:  SHO
+RAW XMLTV:    SHO.us
+API NAME:     SHOFMW
+DECODED:      SHO
+FLAGS:        
+PROGRAMS:     14
+SAMPLES:
+- 22:30 Top Gun: Maverick
+- 00:40 Seabiscuit
+- 03:00 Holes
+- 05:00 The Last Airbender
+- 06:45 Sahara
+
+============================================================
+GROUP RAW DISPLAY: SMITHSONHD
+COUNT: 1
+
+SITE ID:      9100002976#9233001924
+RAW DISPLAY:  SMITHSONHD
+RAW XMLTV:    SMITHSONHD.us
+API NAME:     SMITHSONHD
+DECODED:      SMITHSONIAN CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     24
+SAMPLES:
+- 00:00 WWII's Most Daring Raids
+- 01:00 WWII's Most Daring Raids
+- 02:00 WWII's Most Daring Raids
+- 03:00 WWII's Most Daring Raids
+- 04:00 WWII's Most Daring Raids
+
+============================================================
+GROUP RAW DISPLAY: STARZBLKHD
+COUNT: 1
+
+SITE ID:      9100002976#9200012058
+RAW DISPLAY:  STARZBLKHD
+RAW XMLTV:    STARZBLKHD.us
+API NAME:     STARZBLKHD
+DECODED:      STARZ INBLACK
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 22:31 Shaft
+- 00:13 The Kingdom
+- 02:06 Takers
+- 03:56 Belly 2: Millionaire Boyz Club
+- 05:15 Pain & Gain
+
+============================================================
+GROUP RAW DISPLAY: STARZCINHD
+COUNT: 1
+
+SITE ID:      9100002976#9200009352
+RAW DISPLAY:  STARZCINHD
+RAW XMLTV:    STARZCINHD.us
+API NAME:     STARZCINHD
+DECODED:      STARZ CINEMA
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 22:28 Things Never Said
+- 00:21 Quartet
+- 02:00 All Is Lost
+- 03:47 The Brothers Bloom
+- 05:42 Zigs
+
+============================================================
+GROUP RAW DISPLAY: STARZCOMHD
+COUNT: 1
+
+SITE ID:      9100002976#9233001912
+RAW DISPLAY:  STARZCOMHD
+RAW XMLTV:    STARZCOMHD.us
+API NAME:     STARZCOMHD
+DECODED:      STARZ COMEDY
+FLAGS:        HD, RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:54 Good Fortune
+- 01:33 Trading Places
+- 03:31 The Family Fang
+- 05:19 Mean Girls
+- 06:58 Mean Girls 2
+
+============================================================
+GROUP RAW DISPLAY: STARZEDHD
+COUNT: 1
+
+SITE ID:      9100002976#9233003754
+RAW DISPLAY:  STARZEDHD
+RAW XMLTV:    STARZEDHD.us
+API NAME:     STARZEDHD
+DECODED:      STARZ EDGE
+FLAGS:        HD, RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:19 This Means War
+- 01:00 This Is 40
+- 03:17 Pain & Gain
+- 05:30 Turbulence
+- 07:08 Black Snake Moan
+
+============================================================
+GROUP RAW DISPLAY: STARZFAMHD
+COUNT: 1
+
+SITE ID:      9100002976#9200020089
+RAW DISPLAY:  STARZFAMHD
+RAW XMLTV:    STARZFAMHD.us
+API NAME:     STARZFAMHD
+DECODED:      STARZ KIDS & FAMILY
+FLAGS:        HD, RENAME
+PROGRAMS:     16
+SAMPLES:
+- 23:59 Time Freak
+- 01:45 Tracks
+- 03:26 The Moon and Back
+- 04:41 The Quest for Tom Sawyer's Gold
+- 06:10 Dakota
+
+============================================================
+GROUP RAW DISPLAY: STARZHD
+COUNT: 1
+
+SITE ID:      9100002976#9233005475
+RAW DISPLAY:  STARZHD
+RAW XMLTV:    STARZHD.us
+API NAME:     STARZHD
+DECODED:      STARZ
+FLAGS:        HD, RENAME
+PROGRAMS:     14
+SAMPLES:
+- 23:20 Step Brothers
+- 01:00 Knocked Up
+- 03:12 Superbad
+- 05:10 Booty Call
+- 06:30 The Housemaid
+
+============================================================
+GROUP RAW DISPLAY: TBS
+COUNT: 2
+
+SITE ID:      9100002976#9233000403
+RAW DISPLAY:  TBS
+RAW XMLTV:    TBS.us
+API NAME:     TBS
+DECODED:      TBS
+FLAGS:        
+PROGRAMS:     31
+SAMPLES:
+- 00:00 The Big Bang Theory
+- 00:30 The Big Bang Theory
+- 01:00 The Big Bang Theory
+- 01:30 The Big Bang Theory
+- 02:00 The Big Bang Theory
+
+SITE ID:      9100002976#9233011348
+RAW DISPLAY:  TBS
+RAW XMLTV:    TBS.us
+API NAME:     TBSHD
+DECODED:      TBS
+FLAGS:        HD
+PROGRAMS:     31
+SAMPLES:
+- 00:00 The Big Bang Theory
+- 00:30 The Big Bang Theory
+- 01:00 The Big Bang Theory
+- 01:30 The Big Bang Theory
+- 02:00 The Big Bang Theory
+
+============================================================
+GROUP RAW DISPLAY: TCMHD
+COUNT: 1
+
+SITE ID:      9100002976#9233003866
+RAW DISPLAY:  TCMHD
+RAW XMLTV:    TCMHD.us
+API NAME:     TCMHD
+DECODED:      TCM
+FLAGS:        HD, RENAME
+PROGRAMS:     12
+SAMPLES:
+- 00:00 Fat City
+- 02:00 Inside Moves
+- 04:00 Drunken Angel
+- 06:00 Crossing Delancey
+- 08:00 Metropolitan
+
+============================================================
+GROUP RAW DISPLAY: TLC
+COUNT: 2
+
+SITE ID:      9100002976#9233004112
+RAW DISPLAY:  TLC
+RAW XMLTV:    TLC.us
+API NAME:     TLC
+DECODED:      TLC
+FLAGS:        
+PROGRAMS:     23
+SAMPLES:
+- 00:00 90 Day Fiancé: Before the 90 Days
+- 01:00 90 Day Fiancé: Before the 90 Days
+- 02:00 90 Day Fiancé: Before the 90 Days
+- 03:00 90 Day Fiancé: Before the 90 Days
+- 04:00 90 Day Fiancé: Before the 90 Days
+
+SITE ID:      9100002976#9200016249
+RAW DISPLAY:  TLC
+RAW XMLTV:    TLC.us
+API NAME:     TLCHD
+DECODED:      TLC
+FLAGS:        HD
+PROGRAMS:     23
+SAMPLES:
+- 00:00 90 Day Fiancé: Before the 90 Days
+- 01:00 90 Day Fiancé: Before the 90 Days
+- 02:00 90 Day Fiancé: Before the 90 Days
+- 03:00 90 Day Fiancé: Before the 90 Days
+- 04:00 90 Day Fiancé: Before the 90 Days
+
+============================================================
+GROUP RAW DISPLAY: TMC
+COUNT: 4
+
+SITE ID:      9100002976#9233013260
+RAW DISPLAY:  TMC
+RAW XMLTV:    TMC.us
+API NAME:     TMCHD
+DECODED:      THE MOVIE CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     14
+SAMPLES:
+- 00:00 Baby Driver
+- 02:00 The Foreigner
+- 04:00 Black Lotus
+- 05:35 Face/Off
+- 08:00 3 Days to Kill
+
+SITE ID:      9100002976#9200009198
+RAW DISPLAY:  TMC
+RAW XMLTV:    TMC.us
+API NAME:     TMCXTRAHD
+DECODED:      TMC XTRA
+FLAGS:        HD, RENAME
+PROGRAMS:     15
+SAMPLES:
+- 23:25 Guns Up
+- 01:00 Ida Red
+- 02:55 Wrong Turn
+- 04:50 The Warrior
+- 06:20 The Comeback Trail
+
+SITE ID:      9100002976#9200006689
+RAW DISPLAY:  TMC
+RAW XMLTV:    TMC.us
+API NAME:     TMCWAL
+DECODED:      TMC
+FLAGS:        
+PROGRAMS:     15
+SAMPLES:
+- 23:15 Bang Bang
+- 01:00 3 Days to Kill
+- 03:00 Baby Driver
+- 05:00 The Foreigner
+- 07:00 Black Lotus
+
+SITE ID:      9100002976#9233015600
+RAW DISPLAY:  TMC
+RAW XMLTV:    TMC.us
+API NAME:     TMC2XW
+DECODED:      TMC
+FLAGS:        
+PROGRAMS:     15
+SAMPLES:
+- 23:20 Vindicta
+- 00:50 The Survivalist
+- 02:25 Guns Up
+- 04:00 Ida Red
+- 05:55 Wrong Turn
+
+============================================================
+GROUP RAW DISPLAY: TNT
+COUNT: 2
+
+SITE ID:      9100002976#9233011830
+RAW DISPLAY:  TNT
+RAW XMLTV:    TNT.us
+API NAME:     TNT
+DECODED:      TNT
+FLAGS:        
+PROGRAMS:     18
+SAMPLES:
+- 00:00 All Elite Wrestling: Collision
+- 02:00 John Wick: Chapter 3 - Parabellum
+- 04:30 Godzilla vs. Kong
+- 07:00 FBI
+- 08:00 FBI
+
+SITE ID:      9100002976#9200008879
+RAW DISPLAY:  TNT
+RAW XMLTV:    TNT.us
+API NAME:     TNTHD
+DECODED:      TNT
+FLAGS:        HD
+PROGRAMS:     18
+SAMPLES:
+- 00:00 All Elite Wrestling: Collision
+- 02:00 John Wick: Chapter 3 - Parabellum
+- 04:30 Godzilla vs. Kong
+- 07:00 FBI
+- 08:00 FBI
+
+============================================================
+GROUP RAW DISPLAY: TOON
+COUNT: 2
+
+SITE ID:      9100002976#9200004848
+RAW DISPLAY:  TOON
+RAW XMLTV:    TOON.us
+API NAME:     TOON-E
+DECODED:      TOON
+FLAGS:        
+PROGRAMS:     50
+SAMPLES:
+- 00:00 Family Guy
+- 00:30 Family Guy
+- 01:00 Family Guy
+- 01:30 Family Guy
+- 02:00 Family Guy
+
+SITE ID:      9100002976#9233001926
+RAW DISPLAY:  TOON
+RAW XMLTV:    TOON.us
+API NAME:     TOONHD
+DECODED:      CARTOON NETWORK
+FLAGS:        HD, RENAME
+PROGRAMS:     50
+SAMPLES:
+- 00:00 Family Guy
+- 00:30 Family Guy
+- 01:00 Family Guy
+- 01:30 Family Guy
+- 02:00 Family Guy
+
+============================================================
+GROUP RAW DISPLAY: TRAVELHD
+COUNT: 1
+
+SITE ID:      9100002976#9233008142
+RAW DISPLAY:  TRAVELHD
+RAW XMLTV:    TRAVELHD.us
+API NAME:     TRAVELHD
+DECODED:      TRAVEL CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     26
+SAMPLES:
+- 00:00 Ghost Adventures
+- 01:00 Ghost Adventures
+- 02:00 Ghost Adventures
+- 03:00 Ghost Adventures
+- 04:00 Ghost Adventures
+
+============================================================
+GROUP RAW DISPLAY: TRUTVHD
+COUNT: 1
+
+SITE ID:      9100002976#9233015561
+RAW DISPLAY:  TRUTVHD
+RAW XMLTV:    TRUTVHD.us
+API NAME:     TRUTVHD
+DECODED:      TRUTV
+FLAGS:        HD, RENAME
+PROGRAMS:     25
+SAMPLES:
+- 23:30 Central Intelligence
+- 01:45 Dumb and Dumber
+- 04:00 Impractical Jokers
+- 04:30 Impractical Jokers
+- 05:00 Impractical Jokers
+
+============================================================
+GROUP RAW DISPLAY: TVLAND
+COUNT: 2
+
+SITE ID:      9100002976#9233005468
+RAW DISPLAY:  TVLAND
+RAW XMLTV:    TVLAND.us
+API NAME:     TVLAND
+DECODED:      TVLAND
+FLAGS:        
+PROGRAMS:     46
+SAMPLES:
+- 00:00 Seinfeld
+- 00:30 Seinfeld
+- 01:00 Seinfeld
+- 01:30 Seinfeld
+- 02:00 Seinfeld
+
+SITE ID:      9100002976#9233015721
+RAW DISPLAY:  TVLAND
+RAW XMLTV:    TVLAND.us
+API NAME:     TVLANDHD
+DECODED:      TVLAND
+FLAGS:        HD
+PROGRAMS:     46
+SAMPLES:
+- 00:00 Seinfeld
+- 00:30 Seinfeld
+- 01:00 Seinfeld
+- 01:30 Seinfeld
+- 02:00 Seinfeld
+
+============================================================
+GROUP RAW DISPLAY: UPTVHD
+COUNT: 1
+
+SITE ID:      9100002976#9200007166
+RAW DISPLAY:  UPTVHD
+RAW XMLTV:    UPTVHD.us
+API NAME:     UPTVHD
+DECODED:      UPTV
+FLAGS:        HD, RENAME
+PROGRAMS:     29
+SAMPLES:
+- 00:00 The Rookie
+- 01:00 The Rookie
+- 02:00 The Rookie
+- 03:00 Blue Bloods
+- 04:00 Blue Bloods
+
+============================================================
+GROUP RAW DISPLAY: USA
+COUNT: 2
+
+SITE ID:      9100002976#9233004106
+RAW DISPLAY:  USA
+RAW XMLTV:    USA.us
+API NAME:     USA-E
+DECODED:      USA NETWORK
+FLAGS:        RENAME
+PROGRAMS:     25
+SAMPLES:
+- 00:00 9-1-1
+- 01:00 9-1-1
+- 02:00 9-1-1
+- 03:00 9-1-1
+- 04:00 9-1-1
+
+SITE ID:      9100002976#9200009133
+RAW DISPLAY:  USA
+RAW XMLTV:    USA.us
+API NAME:     USAHD
+DECODED:      USA NETWORK
+FLAGS:        HD, RENAME
+PROGRAMS:     25
+SAMPLES:
+- 00:00 9-1-1
+- 01:00 9-1-1
+- 02:00 9-1-1
+- 03:00 9-1-1
+- 04:00 9-1-1
+
+============================================================
+GROUP RAW DISPLAY: VH1
+COUNT: 2
+
+SITE ID:      9100002976#9233000037
+RAW DISPLAY:  VH1
+RAW XMLTV:    VH1.us
+API NAME:     VH-1E
+DECODED:      VH1
+FLAGS:        
+PROGRAMS:     38
+SAMPLES:
+- 00:00 Paul Blart: Mall Cop
+- 02:00 Paul Blart: Mall Cop 2
+- 04:30 Nick Cannon Presents: Wild 'N Out
+- 05:00 Nick Cannon Presents: Wild 'N Out
+- 05:30 Nick Cannon Presents: Wild 'N Out
+
+SITE ID:      9100002976#9233011530
+RAW DISPLAY:  VH1
+RAW XMLTV:    VH1.us
+API NAME:     VH1HD
+DECODED:      VH1
+FLAGS:        HD
+PROGRAMS:     38
+SAMPLES:
+- 00:00 Paul Blart: Mall Cop
+- 02:00 Paul Blart: Mall Cop 2
+- 04:30 Nick Cannon Presents: Wild 'N Out
+- 05:00 Nick Cannon Presents: Wild 'N Out
+- 05:30 Nick Cannon Presents: Wild 'N Out
+
+============================================================
+GROUP RAW DISPLAY: VICEHD
+COUNT: 1
+
+SITE ID:      9100002976#9200000630
+RAW DISPLAY:  VICEHD
+RAW XMLTV:    VICEHD.us
+API NAME:     VICEHD
+DECODED:      VICE
+FLAGS:        HD, RENAME
+PROGRAMS:     25
+SAMPLES:
+- 22:00 Arena Football One
+- 01:00 Dark Side of the 90s
+- 02:00 Dark Side of the 90s
+- 03:00 Dark Side of the 90s
+- 04:00 High Stakes Poker
+
+============================================================
+GROUP RAW DISPLAY: WE
+COUNT: 3
+
+SITE ID:      9100002976#9200018188
+RAW DISPLAY:  WE
+RAW XMLTV:    WE.us
+API NAME:     WE
+DECODED:      WE
+FLAGS:        
+PROGRAMS:     27
+SAMPLES:
+- 00:00 NCIS
+- 01:00 NCIS
+- 02:00 NCIS
+- 03:00 NCIS
+- 04:00 NCIS
+
+SITE ID:      9100002976#9233003770
+RAW DISPLAY:  WE
+RAW XMLTV:    WE.us
+API NAME:     WE-HD
+DECODED:      WE
+FLAGS:        HD
+PROGRAMS:     27
+SAMPLES:
+- 00:00 NCIS
+- 01:00 NCIS
+- 02:00 NCIS
+- 03:00 NCIS
+- 04:00 NCIS
+
+SITE ID:      9100002976#9200016258
+RAW DISPLAY:  WE
+RAW XMLTV:    WE.us
+API NAME:     WEATHHD
+DECODED:      THE WEATHER CHANNEL
+FLAGS:        HD, RENAME
+PROGRAMS:     19
+SAMPLES:
+- 00:00 Deadline to Disaster
+- 01:00 Heavy Rescue: 401
+- 02:00 Heavy Rescue: 401
+- 03:00 Heavy Rescue: 401
+- 04:00 World's Deadliest Weather: Caught on Camera
+
+============================================================
+GROUP RAW DISPLAY: WGN
+COUNT: 2
+
+SITE ID:      9100002976#9233013251
+RAW DISPLAY:  WGN
+RAW XMLTV:    WGN.us
+API NAME:     NEWSNAT
+DECODED:      WGN
+FLAGS:        
+PROGRAMS:     24
+SAMPLES:
+- 00:00 NewsNation Prime
+- 01:00 NewsNation Prime
+- 02:00 NewsNation Prime
+- 03:00 Batya
+- 04:00 NewsNation Prime
+
+SITE ID:      9100002976#9233001934
+RAW DISPLAY:  WGN
+RAW XMLTV:    WGN.us
+API NAME:     WGNAMERHD
+DECODED:      WGN
+FLAGS:        HD
+PROGRAMS:     24
+SAMPLES:
+- 00:00 NewsNation Prime
+- 01:00 NewsNation Prime
+- 02:00 NewsNation Prime
+- 03:00 Batya
+- 04:00 NewsNation Prime
