@@ -31,24 +31,18 @@ jobs:
           cd epg
           npm install
 
-      - name: Build curated TVGuide channel file and custom config
+      - name: Build TVGuide channels only from current TiViMate guide
         run: |
           mkdir -p epg/sites/tvguide.com
 
           node <<'EOF'
           const fs = require('fs')
 
-          const wantedPath = 'guides/tvguidetivimate.xml'
-          const rawPath = 'guides/tvguide.xml'
+          const inputPath = 'guides/tvguidetivimate.xml'
           const outputPath = 'epg/sites/tvguide.com/festy.channels.xml'
 
-          if (!fs.existsSync(wantedPath)) {
-            console.error(`Missing ${wantedPath}`)
-            process.exit(1)
-          }
-
-          if (!fs.existsSync(rawPath)) {
-            console.error(`Missing ${rawPath}`)
+          if (!fs.existsSync(inputPath)) {
+            console.error(`Missing ${inputPath}`)
             process.exit(1)
           }
 
@@ -80,117 +74,52 @@ jobs:
             return decodeXml(body.replace(/<[^>]+>/g, '').trim())
           }
 
-          function parseWanted(xml) {
-            const channels = []
-            const matches = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
+          const xml = fs.readFileSync(inputPath, 'utf8')
+          const matches = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
 
-            for (const match of matches) {
-              const attrs = match[1] || ''
-              const body = match[2] || ''
-
-              const id = getAttr(attrs, 'id')
-              const name = getName(body)
-
-              if (!id || !name) continue
-
-              channels.push({ id, name })
-            }
-
-            return channels
-          }
-
-          function parseRaw(xml) {
-            const channels = []
-            const matches = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
-
-            for (const match of matches) {
-              const attrs = match[1] || ''
-              const body = match[2] || ''
-
-              const xmltvId =
-                getAttr(attrs, 'xmltv_id') ||
-                getAttr(attrs, 'id')
-
-              const siteId =
-                getAttr(attrs, 'site_id') ||
-                getAttr(attrs, 'site-id') ||
-                getAttr(attrs, 'siteId')
-
-              const name = getName(body)
-
-              if (!xmltvId || !siteId || !name) continue
-
-              channels.push({
-                xmltvId,
-                siteId,
-                name
-              })
-            }
-
-            return channels
-          }
-
-          const wantedXml = fs.readFileSync(wantedPath, 'utf8')
-          const rawXml = fs.readFileSync(rawPath, 'utf8')
-
-          const wantedChannels = parseWanted(wantedXml)
-          const rawChannels = parseRaw(rawXml)
-
-          if (!wantedChannels.length) {
-            console.error(`No wanted <channel id=""> entries found in ${wantedPath}`)
-            process.exit(1)
-          }
-
-          if (!rawChannels.length) {
-            console.error(`No raw channels with xmltv_id/id and site_id found in ${rawPath}`)
-            process.exit(1)
-          }
-
-          const rawByXmltvId = new Map()
-
-          for (const raw of rawChannels) {
-            if (!rawByXmltvId.has(raw.xmltvId)) {
-              rawByXmltvId.set(raw.xmltvId, raw)
-            }
-          }
-
-          const outputChannels = []
-          const missing = []
+          const channels = []
           const seen = new Set()
+          const missingSiteId = []
 
-          for (const wanted of wantedChannels) {
-            if (seen.has(wanted.id)) continue
-            seen.add(wanted.id)
+          for (const match of matches) {
+            const attrs = match[1] || ''
+            const body = match[2] || ''
 
-            const raw = rawByXmltvId.get(wanted.id)
+            const xmltvId = getAttr(attrs, 'xmltv_id') || getAttr(attrs, 'id')
+            const siteId = getAttr(attrs, 'site_id')
+            const name = getName(body)
 
-            if (!raw) {
-              missing.push(`${wanted.id} | ${wanted.name}`)
+            if (!xmltvId || !name) continue
+
+            if (!siteId) {
+              missingSiteId.push(`${xmltvId} | ${name}`)
               continue
             }
 
-            outputChannels.push(
-              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(wanted.id)}" site_id="${escapeXml(raw.siteId)}">${escapeXml(wanted.name)}</channel>`
+            if (seen.has(xmltvId)) continue
+            seen.add(xmltvId)
+
+            channels.push(
+              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId)}" site_id="${escapeXml(siteId)}">${escapeXml(name)}</channel>`
             )
           }
 
-          if (!outputChannels.length) {
-            console.error(`No wanted channel IDs from ${wantedPath} matched xmltv_id/id values in ${rawPath}`)
+          if (!channels.length) {
+            console.error(`No usable TVGuide channels found in ${inputPath}`)
+            console.error(`The file must contain channel entries with site_id="provider#source"`)
             process.exit(1)
           }
 
-          const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${outputChannels.join('\n')}\n</channels>\n`
+          const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
 
           fs.writeFileSync(outputPath, output)
 
-          console.log(`Wanted channels from ${wantedPath}: ${wantedChannels.length}`)
-          console.log(`Unique wanted channel IDs: ${seen.size}`)
-          console.log(`Raw usable TVGuide channels from ${rawPath}: ${rawChannels.length}`)
-          console.log(`Matched channels written: ${outputChannels.length}`)
+          console.log(`Read channel entries from ${inputPath}: ${matches.length}`)
+          console.log(`Usable channels written: ${channels.length}`)
 
-          if (missing.length) {
-            console.log(`Missing wanted channel IDs not found in raw TVGuide file: ${missing.length}`)
-            for (const item of missing) console.log(`[MISSING] ${item}`)
+          if (missingSiteId.length) {
+            console.log(`Skipped channels missing site_id: ${missingSiteId.length}`)
+            for (const item of missingSiteId) console.log(`[MISSING SITE_ID] ${item}`)
           }
 
           console.log(`Wrote ${outputPath}`)
@@ -206,18 +135,6 @@ jobs:
           dayjs.extend(timezone)
 
           const DETAIL_DELAY_MS = 350
-
-          const stats = {
-            detailAttempts: 0,
-            detailSuccess: 0,
-            detailMissingUrl: 0,
-            detailEmpty: 0,
-            detailFailed: 0,
-            detailStatus: {},
-            programsWithEpisodeMeta: 0,
-            programsWithMovieYear: 0,
-            programsWithOnlyBasicMeta: 0
-          }
 
           module.exports = {
             site: 'tvguide.com',
@@ -277,7 +194,6 @@ jobs:
                   finalDescription = description
 
                   if (releaseYear) {
-                    stats.programsWithMovieYear++
                     finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
                   }
                 } else {
@@ -286,12 +202,6 @@ jobs:
                   if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
                   else if (episodeTitle) prefix = episodeTitle
                   else if (episodeCode) prefix = episodeCode
-
-                  if (episodeTitle || episodeCode || episodeAirDate) {
-                    stats.programsWithEpisodeMeta++
-                  } else {
-                    stats.programsWithOnlyBasicMeta++
-                  }
 
                   if (prefix && description) finalDescription = `${prefix}. ${description}`
                   else if (prefix) finalDescription = `${prefix}.`
@@ -309,20 +219,15 @@ jobs:
               }
 
               console.log(`[DONE] ${channel.name} | output programs=${programs.length}`)
-              printStatsBrief(channel.name)
-
               return programs
             }
           }
 
           async function loadProgramDetails(item, channel) {
             if (!item.programDetails) {
-              stats.detailMissingUrl++
               console.log(`[DETAIL MISSING URL] ${channel.name} | ${item.title || 'Unknown title'}`)
               return {}
             }
-
-            stats.detailAttempts++
 
             const url = item.programDetails.includes('?')
               ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
@@ -337,25 +242,10 @@ jobs:
                 }
               })
 
-              const detail = response.data?.data?.item || {}
-
-              if (!Object.keys(detail).length) {
-                stats.detailEmpty++
-                console.log(`[DETAIL EMPTY] ${channel.name} | ${item.title || 'Unknown title'} | status=${response.status}`)
-                return {}
-              }
-
-              stats.detailSuccess++
-
-              return detail
+              return response.data?.data?.item || {}
             } catch (err) {
-              stats.detailFailed++
-
               const status = err.response?.status || err.code || err.message || 'unknown'
-              stats.detailStatus[status] = (stats.detailStatus[status] || 0) + 1
-
               console.log(`[DETAIL FAIL] ${channel.name} | ${item.title || 'Unknown title'} | ${status}`)
-
               return {}
             }
           }
@@ -427,7 +317,9 @@ jobs:
           function formatTVGuideDate(value) {
             const match = String(value || '').match(/\/Date\((\d+)\)\//)
             if (!match) return ''
+
             const date = new Date(Number(match[1]))
+
             return date.toLocaleDateString('en-US', {
               month: '2-digit',
               day: '2-digit',
@@ -442,20 +334,6 @@ jobs:
 
           function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms))
-          }
-
-          function printStatsBrief(channelName) {
-            console.log(
-              `[STATS] ${channelName} | detail attempts=${stats.detailAttempts} success=${stats.detailSuccess} missingUrl=${stats.detailMissingUrl} empty=${stats.detailEmpty} failed=${stats.detailFailed} episodeMeta=${stats.programsWithEpisodeMeta} movieYears=${stats.programsWithMovieYear} basicOnly=${stats.programsWithOnlyBasicMeta}`
-            )
-
-            const statuses = Object.entries(stats.detailStatus)
-              .map(([key, value]) => `${key}:${value}`)
-              .join(', ')
-
-            if (statuses) {
-              console.log(`[DETAIL STATUS] ${statuses}`)
-            }
           }
           EOF
 
