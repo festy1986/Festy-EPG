@@ -22,44 +22,44 @@ jobs:
           const rawPath = 'guides/tvguide.xml'
           const guidePath = 'guides/tvguidetivimate.xml'
 
-          const wanted = new Set([
-            'NEW ENGLAND CABLE NEWS',
-            'NESN PLUS',
-            'NBC SPORTS BOSTON',
-            'ESPN2',
-            'CBS SPORTS HQ',
-            'FOX SPORTS 1',
-            'FOX SPORTS 2',
-            'NFL NETWORK',
-            'NHL NETWORK',
-            'MLB NETWORK',
-            'NBA TV',
-            'TRUTV',
-            'A&E',
-            'FX MOVIE CHANNEL',
-            'SYFY',
-            'TV LAND',
-            'DISCOVERY CHANNEL',
-            'MAGNOLIA NETWORK',
-            'DESTINATION AMERICA',
-            'FOX NEWS CHANNEL',
-            'ADULT SWIM',
-            'E!',
-            'MTV2',
-            'HALLMARK DRAMA',
-            'UPTV',
-            'AWE',
-            'AXS TV',
-            'HBO HITS',
-            'HBO DRAMA',
-            'CINEMAX HITS',
-            'CINEMAX ACTION',
-            'CINEMAX CLASSICS',
-            'SHOXBET',
-            'FLIX',
-            'STARZ KIDS & FAMILY',
-            'MGM+'
-          ])
+          const wanted = [
+            ['NEW ENGLAND CABLE NEWS', ['NEW.ENGLAND.CABLE.NEWS.us', 'NECN.us']],
+            ['NESN PLUS', ['NESN.PLUS.us', 'NESNPLUS.us']],
+            ['NBC SPORTS BOSTON', ['NBC.SPORTS.BOSTON.us', 'NBCSB.us']],
+            ['ESPN2', ['ESPN2.us', 'ESPN.2.us']],
+            ['CBS SPORTS HQ', ['CBS.SPORTS.HQ.us']],
+            ['FOX SPORTS 1', ['FOX.SPORTS.1.us', 'FS1.us']],
+            ['FOX SPORTS 2', ['FOX.SPORTS.2.us', 'FS2.us']],
+            ['NFL NETWORK', ['NFL.NETWORK.us']],
+            ['NHL NETWORK', ['NHL.NETWORK.us']],
+            ['MLB NETWORK', ['MLB.NETWORK.us']],
+            ['NBA TV', ['NBA.TV.us', 'NBATV.us']],
+            ['TRUTV', ['TRUTV.us', 'TRU.TV.us']],
+            ['A&E', ['A.AND.E.us', 'A&E.us', 'AE.us']],
+            ['FX MOVIE CHANNEL', ['FX.MOVIE.CHANNEL.us', 'FXM.us']],
+            ['SYFY', ['SYFY.us']],
+            ['TV LAND', ['TV.LAND.us']],
+            ['DISCOVERY CHANNEL', ['DISCOVERY.CHANNEL.us', 'DISCOVERY.us']],
+            ['MAGNOLIA NETWORK', ['MAGNOLIA.NETWORK.us']],
+            ['DESTINATION AMERICA', ['DESTINATION.AMERICA.us']],
+            ['FOX NEWS CHANNEL', ['FOX.NEWS.CHANNEL.us', 'FOX.NEWS.us']],
+            ['ADULT SWIM', ['ADULT.SWIM.us']],
+            ['E!', ['E.us', 'E!.us', 'ENTERTAINMENT.TELEVISION.us']],
+            ['MTV2', ['MTV2.us', 'MTV.2.us']],
+            ['HALLMARK DRAMA', ['HALLMARK.DRAMA.us']],
+            ['UPTV', ['UPTV.us', 'UP.TV.us']],
+            ['AWE', ['AWE.us']],
+            ['AXS TV', ['AXS.TV.us']],
+            ['HBO HITS', ['HBO.HITS.us']],
+            ['HBO DRAMA', ['HBO.DRAMA.us']],
+            ['CINEMAX HITS', ['CINEMAX.HITS.us', 'MOREMAX.us']],
+            ['CINEMAX ACTION', ['CINEMAX.ACTION.us', 'ACTIONMAX.us']],
+            ['CINEMAX CLASSICS', ['CINEMAX.CLASSICS.us', '5STARMAX.us']],
+            ['SHOXBET', ['SHOXBET.us', 'SHO.X.BET.us']],
+            ['FLIX', ['FLIX.us']],
+            ['STARZ KIDS & FAMILY', ['STARZ.KIDS.AND.FAMILY.us', 'STARZ.KIDS.FAMILY.us']],
+            ['MGM+', ['MGMPLUS.us', 'MGM.PLUS.us', 'MGM+.us']]
+          ]
 
           function decodeXml(s) {
             return String(s || '')
@@ -72,8 +72,10 @@ jobs:
 
           function norm(s) {
             return decodeXml(s)
-              .replace(/\s+/g, ' ')
-              .trim()
+              .replace(/&/g, 'AND')
+              .replace(/\+/g, 'PLUS')
+              .replace(/[^A-Z0-9]+/gi, '.')
+              .replace(/^\.+|\.+$/g, '')
               .toUpperCase()
           }
 
@@ -88,17 +90,7 @@ jobs:
 
           function getDisplayName(block) {
             const m = block.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
-            return m ? norm(m[1].replace(/<[^>]+>/g, '')) : ''
-          }
-
-          if (!fs.existsSync(rawPath)) {
-            console.error(`Missing raw file: ${rawPath}`)
-            process.exit(1)
-          }
-
-          if (!fs.existsSync(guidePath)) {
-            console.error(`Missing guide file: ${guidePath}`)
-            process.exit(1)
+            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '')).trim() : ''
           }
 
           const rawXml = fs.readFileSync(rawPath, 'utf8')
@@ -108,65 +100,54 @@ jobs:
           const guideChannels = getChannels(guideXml)
 
           const existingIds = new Set(guideChannels.map(getId).filter(Boolean))
-          const existingNames = new Set(guideChannels.map(getDisplayName).filter(Boolean))
-
           const toAdd = []
-          const foundWanted = new Set()
 
-          for (const block of rawChannels) {
-            const id = getId(block)
-            const name = getDisplayName(block)
+          for (const [wantedName, aliases] of wanted) {
+            const keys = new Set([norm(wantedName), ...aliases.map(a => norm(a.replace(/\.us$/i, '')))])
 
-            if (!wanted.has(name)) continue
+            const block = rawChannels.find(ch => {
+              const id = getId(ch).replace(/\.us$/i, '')
+              const name = getDisplayName(ch)
+              return keys.has(norm(id)) || keys.has(norm(name))
+            })
 
-            foundWanted.add(name)
-
-            if (existingIds.has(id) || existingNames.has(name)) {
-              console.log(`[SKIP EXISTS] ${name} | ${id}`)
+            if (!block) {
+              console.log(`[NOT FOUND] ${wantedName}`)
               continue
             }
 
-            console.log(`[ADD] ${name} | ${id}`)
+            const id = getId(block)
+
+            if (existingIds.has(id)) {
+              console.log(`[SKIP EXISTS] ${wantedName} | ${id}`)
+              continue
+            }
+
+            console.log(`[ADD] ${wantedName} | ${id}`)
             toAdd.push(block)
             existingIds.add(id)
-            existingNames.add(name)
           }
 
-          const missingFromRaw = [...wanted].filter(name => !foundWanted.has(name))
-
-          if (missingFromRaw.length) {
-            console.log('\nMissing from raw file:')
-            for (const name of missingFromRaw) console.log(`- ${name}`)
-          }
-
-          if (!toAdd.length) {
-            console.log('\nNo new channels added.')
-          } else {
+          if (toAdd.length) {
             guideXml = guideXml.replace(
               /<\/tv>\s*$/i,
               `${toAdd.map(block => '\n' + block).join('')}\n</tv>\n`
             )
-
             fs.writeFileSync(guidePath, guideXml)
-
-            console.log(`\nAdded ${toAdd.length} channel(s) to ${guidePath}`)
-            console.log(`Before: ${guideChannels.length}`)
-            console.log(`After: ${guideChannels.length + toAdd.length}`)
           }
+
+          console.log(`Added ${toAdd.length} channel(s)`)
           EOF
 
       - name: Show channel count
         run: |
-          echo "TiviMate channel count:"
           grep -c '<channel ' guides/tvguidetivimate.xml || true
 
       - name: Commit fixed TiviMate guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
           git add guides/tvguidetivimate.xml
-
           if git diff --cached --quiet; then
             echo "No TiviMate channel changes to commit"
           else
