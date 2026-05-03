@@ -843,7 +843,7 @@ jobs:
             // TVMaze should not add duplicate <sub-title>, <episode-num>, or <date> tags just because
             // that metadata is not in those separate XMLTV fields.
             const desc = getTag(block, 'desc')
-            const hasPackedEpisodeCode = /S\d+E\d+/i.test(desc)
+            const hasPackedEpisodeCode = /\bS\d+E\d+\b/i.test(desc)
             const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
 
             if (!hasPackedEpisodeCode && !hasTag(block, 'episode-num')) return true
