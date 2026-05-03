@@ -1,4 +1,4 @@
-name: Festy TVGuide TiviMate
+name: TVguide-Tivimate
 
 on:
   workflow_dispatch:
@@ -9,11 +9,11 @@ permissions:
   contents: write
 
 jobs:
-  build-festy-tvguide-tivimate:
+  build-tvguide-tivimate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout your repo
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Clone IPTV-org EPG engine
@@ -31,7 +31,7 @@ jobs:
           cd epg
           npm install
 
-      - name: Build TiviMate channels and custom TVGuide config
+      - name: Build TiviMate channel source (STRICT)
         run: |
           mkdir -p epg/sites/tvguide.com
 
@@ -46,13 +46,8 @@ jobs:
             process.exit(1)
           }
 
-          const input = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...input.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/g)]
-
-          if (!channelBlocks.length) {
-            console.error(`No <channel> entries found in ${inputPath}`)
-            process.exit(1)
-          }
+          const xml = fs.readFileSync(inputPath, 'utf8')
+          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
 
           function decodeXml(s) {
             return String(s || '')
@@ -63,286 +58,147 @@ jobs:
               .replace(/&gt;/g, '>')
           }
 
-          function escapeXml(s) {
-            return String(s || '')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
-
           function attr(attrs, name) {
             const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
             return m ? decodeXml(m[1]).trim() : ''
           }
 
-          function textBetween(body, tag) {
-            const m = body.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
-            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
+          function text(body) {
+            return decodeXml(body.replace(/<[^>]+>/g, '').trim())
           }
 
-          const seen = new Set()
-          const channels = []
+          const valid = []
+          const missing = []
 
           for (const block of channelBlocks) {
             const attrs = block[1]
             const body = block[2]
 
-            const xmltvId = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
             const siteId = attr(attrs, 'site_id') || attr(attrs, 'site-id')
-            const name =
-              textBetween(body, 'display-name') ||
-              decodeXml(body.replace(/<[^>]+>/g, '').trim()) ||
-              xmltvId
+            const name = text(body)
 
-            if (!xmltvId || !siteId || !name) {
-              console.log(`[SKIP] missing xmltvId/siteId/name | id=${xmltvId} site_id=${siteId} name=${name}`)
+            if (!siteId) {
+              missing.push({ id, name })
               continue
             }
 
-            const key = `${xmltvId}|${siteId}`
-            if (seen.has(key)) continue
-            seen.add(key)
-
-            channels.push(
-              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId)}" site_id="${escapeXml(siteId)}">${escapeXml(name)}</channel>`
-            )
+            valid.push({ id, siteId, name })
           }
 
-          const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
-          fs.writeFileSync(outputPath, output)
+          console.log(`Total channels in source: ${channelBlocks.length}`)
+          console.log(`Channels with site_id: ${valid.length}`)
+          console.log(`Missing site_id: ${missing.length}`)
 
-          console.log(`Wrote ${channels.length} TiviMate channels for TVGuide grabber from ${inputPath}`)
+          if (missing.length > 0) {
+            console.log('\n❌ Missing site_id for these channels:')
+            missing.slice(0, 50).forEach(ch => {
+              console.log(`- ${ch.id} (${ch.name})`)
+            })
+
+            console.log('\nRefusing to continue — ALL channels must have site_id')
+            process.exit(1)
+          }
+
+          const out = valid.map(ch =>
+            `  <channel site="tvguide.com" lang="en" xmltv_id="${ch.id}" site_id="${ch.siteId}">${ch.name}</channel>`
+          )
+
+          fs.writeFileSync(outputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
+
+          console.log(`✅ Built ${valid.length} channels`)
           EOF
 
+      - name: Verify channel count
+        run: |
+          COUNT=$(grep -c '<channel ' epg/sites/tvguide.com/festy-tivimate.channels.xml || true)
+          echo "Channel count: $COUNT"
+
+          if [ "$COUNT" -lt 123 ]; then
+            echo "Refusing to run: expected at least 123 channels"
+            exit 1
+          fi
+
+      - name: Write optimized TVGuide config
+        run: |
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
           const axios = require('axios')
           const dayjs = require('dayjs')
-          const utc = require('dayjs/plugin/utc')
-          const timezone = require('dayjs/plugin/timezone')
-
-          dayjs.extend(utc)
-          dayjs.extend(timezone)
-
-          const DETAIL_CONCURRENCY = 8
 
           module.exports = {
             site: 'tvguide.com',
-            delay: 1000,
+            delay: 800,
             days: 14,
 
             url({ date, channel }) {
-              const [providerId, sourceId] = String(channel.site_id).split('#')
-
+              const [providerId, sourceId] = channel.site_id.split('#')
               return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
             },
 
-            request: {
-              method: 'GET',
-              timeout: 15000,
-              cache: { ttl: 60 * 60 * 1000 },
-              headers() {
-                return {
-                  Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                }
-              }
-            },
-
             async parser({ content, channel, date }) {
-              const items = parseItems(content, channel)
-              const programs = []
+              const data = JSON.parse(content)
+              const items = data?.data?.items || []
 
-              console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${items.length}`)
+              const sourceId = channel.site_id.split('#').pop()
 
-              const detailsList = await mapLimit(items, DETAIL_CONCURRENCY, item => loadProgramDetails(item))
+              const match = items.find(i =>
+                String(i.sourceId || i.channelSourceId || '') === sourceId
+              )
 
-              for (let i = 0; i < items.length; i++) {
-                const item = items[i]
-                const details = detailsList[i] || {}
+              const schedules = match?.programSchedules || []
 
-                const title = cleanTitle(item.title || details.title || '')
-                const episodeTitle = cleanSpaces(details.episodeTitle || '')
-                const description = pickBetterDescription(details.description, item.description)
-                const seasonNumber = details.seasonNumber || ''
-                const episodeNumber = details.episodeNumber || ''
-                const releaseYear = details.releaseYear || ''
-                const episodeAirDate = details.episodeAirDate || ''
-                const type = String(details.type || item.type || '').toLowerCase()
+              console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
-                const episodeCode =
-                  seasonNumber && episodeNumber
-                    ? `S${String(seasonNumber).padStart(2, '0')}E${String(episodeNumber).padStart(2, '0')}`
-                    : ''
-
-                const airDate = formatTVGuideDate(episodeAirDate) || formatUnixDate(item.startTime)
-
-                let finalDescription = ''
-
-                if (type === 'movie') {
-                  finalDescription = cleanSpaces(description)
-
-                  if (releaseYear) {
-                    finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
-                  }
-                } else {
-                  let prefix = ''
-
-                  if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
-                  else if (episodeTitle) prefix = episodeTitle
-                  else if (episodeCode) prefix = episodeCode
-
-                  if (prefix && description) finalDescription = `${prefix}. ${description}`
-                  else if (prefix) finalDescription = prefix
-                  else finalDescription = description
-
-                  if (airDate) finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
-                }
-
-                programs.push({
-                  title,
-                  description: cleanSpaces(finalDescription),
-                  start: dayjs.unix(item.startTime),
-                  stop: dayjs.unix(item.endTime)
-                })
-              }
-
-              return programs
+              return schedules.map(p => ({
+                title: (p.title || '').trim(),
+                description: (p.description || '').trim(),
+                start: dayjs.unix(p.startTime),
+                stop: dayjs.unix(p.endTime)
+              }))
             }
-          }
-
-          function parseItems(content, channel) {
-            const data = JSON.parse(content)
-            const items = data?.data?.items || []
-            const sourceId = String(channel.site_id).split('#').pop()
-
-            const matched = items.find(item => {
-              return String(item.sourceId || item.channelSourceId || item.id || item.channel?.sourceId || '') === sourceId
-            })
-
-            return matched?.programSchedules?.length ? matched.programSchedules : []
-          }
-
-          async function loadProgramDetails(item) {
-            if (!item.programDetails) return {}
-
-            const url = item.programDetails.includes('?')
-              ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
-              : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
-
-            try {
-              const response = await axios.get(url, {
-                timeout: 15000,
-                headers: {
-                  Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                }
-              })
-
-              return response.data?.data?.item || {}
-            } catch {
-              return {}
-            }
-          }
-
-          async function mapLimit(items, limit, fn) {
-            const results = new Array(items.length)
-            let nextIndex = 0
-
-            async function worker() {
-              while (nextIndex < items.length) {
-                const index = nextIndex++
-                results[index] = await fn(items[index], index)
-              }
-            }
-
-            const workers = Array.from({ length: Math.min(limit, items.length) }, worker)
-            await Promise.all(workers)
-            return results
-          }
-
-          function pickBetterDescription(detailDescription, itemDescription) {
-            const detail = cleanSpaces(detailDescription || '')
-            const basic = cleanSpaces(itemDescription || '')
-
-            if (!detail) return basic
-            if (!basic) return detail
-
-            return detail.length >= basic.length ? detail : basic
-          }
-
-          function cleanTitle(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
-              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
-              .trim()
-          }
-
-          function cleanSpaces(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/\s+([.,!?;:])/g, '$1')
-              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
-              .trim()
-          }
-
-          function formatTVGuideDate(value) {
-            const match = String(value || '').match(/\/Date\((\d+)\)\//)
-            if (!match) return ''
-            const date = new Date(Number(match[1]))
-            return date.toLocaleDateString('en-US', {
-              month: '2-digit',
-              day: '2-digit',
-              year: 'numeric'
-            })
-          }
-
-          function formatUnixDate(value) {
-            if (!value) return ''
-            return dayjs.unix(value).format('MM/DD/YYYY')
           }
           EOF
 
-      - name: Grab TVGuide TiviMate guide - 14 days
+      - name: Grab TiviMate Guide
         run: |
           cd epg
+
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy-tivimate.channels.xml \
-            --output=../guides/tvguidetivimate.xml \
+            --output=../guides/tvguidetivimateguide.xml \
             --days=14
 
           cd ..
 
-          if [ ! -s guides/tvguidetivimate.xml ]; then
-            echo "guides/tvguidetivimate.xml was not created or is empty"
+      - name: Validate output
+        run: |
+          CH=$(grep -c '<channel ' guides/tvguidetivimateguide.xml || true)
+          PR=$(grep -c '<programme ' guides/tvguidetivimateguide.xml || true)
+
+          echo "Channels: $CH"
+          echo "Programs: $PR"
+
+          if [ "$CH" -lt 123 ]; then
+            echo "Invalid output — missing channels"
             exit 1
           fi
 
-          echo "Final TiviMate guide size:"
-          ls -lh guides/tvguidetivimate.xml
-
-          echo "TiviMate channel count:"
-          grep -c '<channel ' guides/tvguidetivimate.xml || true
-
-          echo "TiviMate programme count:"
-          grep -c '<programme ' guides/tvguidetivimate.xml || true
-
-      - name: Apply custom logos
+      - name: Apply logos
         run: |
-          node scripts/apply-custom-logos.cjs guides/tvguidetivimate.xml
+          node scripts/apply-custom-logos.cjs guides/tvguidetivimateguide.xml
 
-      - name: Commit TiviMate guide
+      - name: Commit guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguidetivimate.xml
+          git add guides/tvguidetivimateguide.xml
 
           if git diff --cached --quiet; then
-            echo "No TiviMate guide changes to commit"
+            echo "No changes"
           else
-            git commit -m "Update enriched TiviMate guide"
+            git commit -m "Update TiviMate guide"
             git push
           fi
