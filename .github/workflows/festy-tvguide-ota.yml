@@ -243,6 +243,22 @@ jobs:
             }
           }
 
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function isRetryableDetailError(err) {
+            const status = err.response?.status
+            const code = err.code
+            const message = String(err.message || '')
+
+            if ([408, 429, 500, 502, 503, 504].includes(status)) return true
+            if (['ECONNABORTED', 'ETIMEDOUT', 'ECONNRESET', 'ENOTFOUND', 'EAI_AGAIN'].includes(code)) return true
+            if (/timeout|aborted|network|socket|reset/i.test(message)) return true
+
+            return false
+          }
+
           async function loadProgramDetails(item) {
             if (!item.programDetails) return {}
 
@@ -250,21 +266,50 @@ jobs:
               ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
               : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
 
-            try {
-              const response = await axios.get(url, {
-                timeout: 8000,
-                headers: {
-                  Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                }
-              })
+            const maxAttempts = 6
+            let lastStatus = 'unknown'
 
-              return response.data?.data?.item || {}
-            } catch (err) {
-              const status = err.response?.status || err.code || err.message || 'unknown'
-              console.log(`[DETAIL FAIL] ${item.title || 'Unknown title'} | ${status}`)
-              return {}
+            for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+              try {
+                const response = await axios.get(url, {
+                  timeout: 8000,
+                  headers: {
+                    Referer: 'https://www.tvguide.com/',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                  }
+                })
+
+                if (attempt > 1) {
+                  console.log(`[DETAIL RETRY OK] ${item.title || 'Unknown title'} | attempt=${attempt}`)
+                }
+
+                return response.data?.data?.item || {}
+              } catch (err) {
+                lastStatus = err.response?.status || err.code || err.message || 'unknown'
+
+                if (err.response?.status === 404) {
+                  console.log(`[DETAIL MISSING] ${item.title || 'Unknown title'} | 404`)
+                  return {}
+                }
+
+                if (!isRetryableDetailError(err)) {
+                  console.log(`[DETAIL FAIL] ${item.title || 'Unknown title'} | ${lastStatus}`)
+                  return {}
+                }
+
+                if (attempt < maxAttempts) {
+                  const delay = Math.min(30000, 750 * Math.pow(2, attempt - 1)) + Math.floor(Math.random() * 500)
+                  console.log(`[DETAIL RETRY] ${item.title || 'Unknown title'} | ${lastStatus} | attempt=${attempt}/${maxAttempts} | wait=${delay}ms`)
+                  await sleep(delay)
+                  continue
+                }
+
+                console.log(`[DETAIL FAIL] ${item.title || 'Unknown title'} | ${lastStatus} | attempts=${maxAttempts}`)
+                return {}
+              }
             }
+
+            return {}
           }
 
           function buildPackedDescription({ episodeTitle, episodeCode, description, airDate, releaseYear }) {
@@ -343,11 +388,23 @@ jobs:
         run: |
           cd epg
 
-          npx tsx scripts/commands/epg/grab.ts \
-            --channels=sites/tvguide.com/festy-ota.channels.xml \
-            --output=../guides/OTALocalsguide.xml \
-            --days=14 \
-            --maxConnections=10
+          for attempt in 1 2 3; do
+            echo "Guide grab attempt $attempt"
+
+            npx tsx scripts/commands/epg/grab.ts \
+              --channels=sites/tvguide.com/festy-ota.channels.xml \
+              --output=../guides/OTALocalsguide.xml \
+              --days=14 \
+              --maxConnections=10 && break
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "Guide grab failed after retries"
+              exit 1
+            fi
+
+            echo "Guide grab failed, retrying..."
+            sleep 20
+          done
 
           cd ..
 
