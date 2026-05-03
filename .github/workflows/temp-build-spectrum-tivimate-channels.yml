@@ -1,4 +1,4 @@
-name: Temp Build Spectrum Tivimate Channels
+name: Temp Copy Spectrum Master Channels
 
 on:
   workflow_dispatch:
@@ -7,18 +7,18 @@ permissions:
   contents: write
 
 jobs:
-  build-spectrum-tivimate-channels:
+  copy-spectrum-master-channels:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Build Tivimate channel list from Spectrum raw
+      - name: Build simple Spectrum Tivimate channel file
         run: |
           mkdir -p scripts guides
 
-          cat > scripts/temp-build-spectrum-tivimate-channels.js <<'EOF'
+          cat > scripts/temp-copy-spectrum-master-channels.js <<'EOF'
           const fs = require('fs')
 
           const inputFile = 'guides/tvguide.xml'
@@ -158,74 +158,73 @@ jobs:
             'INDIEPLEX'
           ]
 
-          const ALIASES = {
+          const DIRECT_ALIASES = {
             'NEW ENGLAND CABLE NEWS': ['NECN', 'NECNHD'],
+            'NESN PLUS': ['NESNPLUSHD', 'NESNPLUS'],
             'NBC SPORTS BOSTON': ['NBCBOSHD', 'NBCBOS'],
-            'NESN PLUS': ['NESNPLUSHD', 'NESNPLUS', 'NESN+'],
             'ESPN2': ['ESPN2', 'ESPN2HD'],
-            'ESPN NEWS': ['ESPNNEWHD', 'ESPNEWS', 'ESPN NEWS'],
-            'CBS SPORTS NETWORK': ['CBSSPTHD', 'CBS SPORTS', 'CBS SPORTS NETWORK'],
+            'ESPN NEWS': ['ESPNNEWHD', 'ESPNEWS'],
+            'CBS SPORTS NETWORK': ['CBSSPTHD'],
             'FOX SPORTS 1': ['FS1HD', 'FS1'],
             'FOX SPORTS 2': ['FS2HD', 'FS2'],
             'NFL NETWORK': ['NFLHD', 'NFLNET'],
-            'NHL NETWORK': ['NHLTVHD', 'NHL NETWORK'],
-            'MLB NETWORK': ['MLBHD', 'MLB NETWORK'],
-            'NBA TV': ['NBAHD', 'NBA TV'],
-            'TRUTV': ['TRUTVHD', 'TRUTV', 'TRU TV'],
-            'FX MOVIE CHANNEL': ['FXMHD', 'FXM', 'FX MOVIE'],
+            'NHL NETWORK': ['NHLTVHD'],
+            'MLB NETWORK': ['MLBHD'],
+            'NBA TV': ['NBAHD'],
+            'TRUTV': ['TRUTVHD', 'TRUTV'],
+            'FX MOVIE CHANNEL': ['FXMHD', 'FXM'],
             'COMEDY CENTRAL': ['COMEDYHD', 'COMEDY'],
-            'BBC AMERICA': ['BBCAMHD', 'BBC AMERICA'],
+            'BBC AMERICA': ['BBCAMHD'],
             'FOOD NETWORK': ['FOODHD', 'FOOD'],
-            'COOKING CHANNEL': ['COOKINGHD', 'COOKING'],
-            'DISCOVERY CHANNEL': ['TDC-HD', 'DSC', 'DISCOVERY'],
-            'DISCOVERY LIFE': ['DLIF', 'DISCOVERY LIFE'],
+            'COOKING CHANNEL': ['COOKINGHD'],
+            'DISCOVERY CHANNEL': ['TDC-HD', 'DSC'],
+            'DISCOVERY LIFE': ['DLIF'],
             'DISCOVERY FAMILY': ['DFCHHD', 'DFAM'],
             'DISCOVERY SCIENCE': ['SCIENCEHD', 'SCIENCE'],
             'INVESTIGATION DISCOVERY': ['INVSTDSCHD', 'ID'],
             'ANIMAL PLANET': ['ANIMALHD', 'ANIMAL'],
             'NAT GEO WILD': ['NGEOWILDHD', 'NGEOWILD'],
             'NATIONAL GEOGRAPHIC': ['NGCHD', 'NGC-E'],
-            'SMITHSONIAN CHANNEL': ['SMITHSONHD', 'SMITHSONIAN'],
+            'SMITHSONIAN CHANNEL': ['SMITHSONHD'],
             'MAGNOLIA NETWORK': ['MAGNHD', 'MAGN'],
             'DESTINATION AMERICA': ['DESTAMERHD', 'DESTAMER'],
             'AMERICAN HEROES CHANNEL': ['AHCHD', 'AHC'],
-            'FOX NEWS CHANNEL': ['FNCHD', 'FOXNEW', 'FOX NEWS'],
-            'MS NOW': ['MSNBCHD', 'MSNBC', 'MSNOW'],
-            'THE WEATHER CHANNEL': ['WEATHHD', 'WEATHER'],
+            'FOX NEWS CHANNEL': ['FNCHD', 'FOXNEW'],
+            'MS NOW': ['MSNBC', 'MSNBCHD', 'MSNOW'],
+            'THE WEATHER CHANNEL': ['WEATHHD'],
             'DISNEY CHANNEL': ['DISNEYHD', 'DISNEY'],
             'CARTOON NETWORK': ['TOONHD', 'TOON'],
             'NICKELODEON': ['NICKHD', 'NICK', 'NIC-E'],
-            'ADULT SWIM': ['ADULT SWIM', 'TOONHD', 'TOON'],
             'WE TV': ['WE-HD', 'WE'],
             'OXYGEN': ['OXYGENHD', 'OXGN-E'],
-            'E!': ['ETV-HD', 'E!'],
             'MTV2': ['MTV2HD', 'MTV2'],
             'HALLMARK CHANNEL': ['HALLMARKHD', 'HALMRK'],
             'HALLMARK MYSTERY': ['HMMHD', 'HALLMYS'],
             'HALLMARK DRAMA': ['HALLDRMHD'],
             'GREAT AMERICAN FAMILY': ['GACFAM'],
-            'UPTV': ['UPTVHD', 'UP TV'],
+            'UPTV': ['UPTVHD'],
             'GAME SHOW NETWORK': ['GSNHD', 'GSN'],
             'AXS TV': ['AXSTV'],
-            'CRIME AND INVESTIGATION': ['CRIMEINVHD', 'CRIMEINV'],
+            'CRIME AND INVESTIGATION': ['CRIMEINVHD'],
             'HBO': ['HBOHD', 'HBO'],
-            'HBO HITS': ['HBO2HD', 'HBO HITS'],
-            'HBO DRAMA': ['HBOSIGHD', 'HBO DRAMA'],
-            'HBO COMEDY': ['HBOCOMHD', 'HBO COMEDY'],
+            'HBO HITS': ['HBO2HD'],
+            'HBO DRAMA': ['HBOSIGHD'],
+            'HBO COMEDY': ['HBOCOMHD'],
             'CINEMAX': ['MAXHD', 'MAX'],
-            'CINEMAX HITS': ['MOREMAXHD', 'MOREMAX', 'CINEMAX HITS'],
-            'CINEMAX ACTION': ['ACTMAXHD', 'ACTMAX', 'CINEMAX ACTION'],
-            'CINEMAX CLASSICS': ['5STARMAXHD', '5STARMAX', 'CINEMAX CLASSICS'],
-            'PARAMOUNT+ WITH SHOWTIME': ['SHOHD', 'SHO'],
-            'SHOXBET': ['SHOXBET', 'SHOBET', 'SHOWTIME BET'],
-            'SHOWTIME 2': ['SHO2XEHD', 'SHO2', 'SHOWTIME 2'],
-            'SHOWTIME EXTREME': ['SHOWEXHD', 'SHOX', 'SHOWTIME EXTREME'],
-            'SHOWTIME FAMILY ZONE': ['SHOWFAM', 'SHOWTIME FAMILY'],
+            'CINEMAX HITS': ['MOREMAXHD'],
+            'CINEMAX ACTION': ['ACTMAXHD'],
+            'CINEMAX CLASSICS': ['5STARMAXHD'],
+            'PARAMOUNT+ WITH SHOWTIME': ['SHOHD'],
+            'SHOXBET': ['SHOXBET'],
+            'SHOWTIME 2': ['SHO2XEHD'],
+            'SHOWTIME EXTREME': ['SHOWEXHD'],
+            'SHOWTIME FAMILY ZONE': ['SHOWFAM'],
             'SHOWTIME NEXT': ['SHOWNEXT'],
             'SHOWTIME WOMEN': ['SHOWWOM'],
-            'SHOWTIME SHOWCASE': ['SHWCASEHD', 'SHOWCASE'],
+            'SHOWTIME SHOWCASE': ['SHWCASEHD'],
             'THE MOVIE CHANNEL': ['TMCHD', 'TMC'],
-            'TMC XTRA': ['TMCXTRAHD', 'TMCXTRA'],
+            'TMC XTRA': ['TMCXTRAHD'],
+            'FLIX': ['FLIX-E'],
             'STARZ': ['STARZHD', 'STARZ'],
             'STARZ EDGE': ['STARZEDHD'],
             'STARZ CINEMA': ['STARZCINHD'],
@@ -238,7 +237,6 @@ jobs:
             'STARZ ENCORE FAMILY': ['ENCORFM'],
             'STARZ KIDS & FAMILY': ['STARZFAMHD'],
             'STARZ INBLACK': ['STARZBLKHD'],
-            'MGM+': ['MGM+'],
             'MGM+ HITS': ['MGM+HIT'],
             'MGM+ MARQUEE': ['MGM+MAR'],
             'MGM+ DRIVE-IN': ['MGM+DRV'],
@@ -252,84 +250,84 @@ jobs:
           }
 
           const raw = fs.readFileSync(inputFile, 'utf8')
+
           const rawChannels = [...raw.matchAll(/<channel\s+([^>]+)>([\s\S]*?)<\/channel>/g)].map(m => {
             const attrs = m[1]
             const body = m[2]
             const siteId = attr(attrs, 'site_id')
-            const xmltvId = attr(attrs, 'xmltv_id')
-            const names = [body.replace(/<[^>]+>/g, '').trim(), xmltvId.replace(/\.us$/i, '')].filter(Boolean)
-            return { siteId, xmltvId, display: names[0], haystack: names.join(' ') }
+            const xmltvId = decodeXml(attr(attrs, 'xmltv_id')).replace(/\.us$/i, '')
+            const display = decodeXml(body.replace(/<[^>]+>/g, '').trim())
+            return { siteId, xmltvId, display }
           })
 
-          console.log(`Loaded ${rawChannels.length} raw channels from ${inputFile}`)
+          const byExact = new Map()
+          for (const ch of rawChannels) {
+            for (const key of [ch.display, ch.xmltvId]) {
+              const n = norm(key)
+              if (!byExact.has(n)) byExact.set(n, [])
+              byExact.get(n).push(ch)
+            }
+          }
 
           const used = new Set()
-          const output = []
-          const missing = []
+          const out = []
+          const miss = []
 
           for (const target of MASTER) {
-            const hit = findBest(target, rawChannels, used)
+            const names = [target, ...(DIRECT_ALIASES[target] || [])]
+            let hit = null
+
+            for (const name of names) {
+              const list = byExact.get(norm(name)) || []
+              hit = pickBest(list.filter(ch => !used.has(ch.siteId)))
+              if (hit) break
+            }
+
             if (!hit) {
               console.log(`[MISS] ${target}`)
-              missing.push(target)
+              miss.push(target)
               continue
             }
 
             used.add(hit.siteId)
-            const xmltv = `${safeXmltv(target)}.us`
-            output.push(`  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltv)}" site_id="${escapeXml(hit.siteId)}">${escapeXml(target)}</channel>`)
+
+            out.push(
+              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(safeXmltv(target) + '.us')}" site_id="${escapeXml(hit.siteId)}">${escapeXml(target)}</channel>`
+            )
+
             console.log(`[ADD] ${target} | ${hit.siteId} | raw=${hit.xmltvId} | display=${hit.display}`)
           }
 
-          const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${output.join('\n')}\n</channels>\n`
-          fs.writeFileSync(outputFile, xml)
+          fs.writeFileSync(
+            outputFile,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
 
-          console.log(`\nWrote ${output.length} channels to ${outputFile}`)
-          console.log(`Missing ${missing.length} channel(s).`)
-          if (missing.length) {
-            console.log('Missing list:')
-            for (const m of missing) console.log(`- ${m}`)
+          console.log(`\nWrote ${out.length} channel(s) to ${outputFile}`)
+          console.log(`Missing ${miss.length} channel(s).`)
+          if (miss.length) {
+            console.log('Missing:')
+            for (const m of miss) console.log(`- ${m}`)
           }
 
-          function findBest(target, channels, used) {
-            const aliases = [target, ...(ALIASES[target] || [])]
-            const normalizedAliases = aliases.map(norm)
+          function pickBest(list) {
+            if (!list.length) return null
+            return [...list].sort((a, b) => score(b) - score(a))[0]
+          }
 
-            const candidates = channels
-              .filter(ch => ch.siteId && !used.has(ch.siteId))
-              .map(ch => {
-                const hay = norm(ch.haystack)
-                let score = 0
-
-                for (const a of normalizedAliases) {
-                  if (!a) continue
-                  if (hay === a) score = Math.max(score, 100)
-                  if (hay.includes(a)) score = Math.max(score, 85)
-                  if (a.includes(hay) && hay.length >= 3) score = Math.max(score, 70)
-                }
-
-                // Prefer HD-style matches when duplicates exist.
-                if (/HD/i.test(ch.xmltvId) || /HD/i.test(ch.display)) score += 8
-
-                // Avoid obvious west/feed duplicates unless target asks for them.
-                if (/\bW\b|WEST/i.test(ch.xmltvId) && !/WEST/i.test(target)) score -= 20
-
-                return { ch, score }
-              })
-              .filter(x => x.score > 0)
-              .sort((a, b) => b.score - a.score)
-
-            return candidates[0]?.ch || null
+          function score(ch) {
+            let s = 0
+            if (/HD$/i.test(ch.xmltvId) || /HD$/i.test(ch.display)) s += 10
+            if (/-W$/i.test(ch.xmltvId) || /WEST/i.test(ch.display)) s -= 20
+            return s
           }
 
           function norm(s) {
             return String(s || '')
               .toUpperCase()
               .replace(/&AMP;/g, '&')
-              .replace(/\bAND\b/g, '&')
               .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/g, '')
-              .replace(/HIGHDEFINITION|HD$/g, 'HD')
+              .replace(/[^A-Z0-9]/g, '')
           }
 
           function safeXmltv(s) {
@@ -344,7 +342,7 @@ jobs:
 
           function attr(attrs, name) {
             const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? decodeXml(m[1]) : ''
+            return m ? m[1] : ''
           }
 
           function decodeXml(s) {
@@ -365,26 +363,26 @@ jobs:
           }
           EOF
 
-          node scripts/temp-build-spectrum-tivimate-channels.js
+          node scripts/temp-copy-spectrum-master-channels.js
 
       - name: Preview output
         run: |
           echo "Output preview:"
-          sed -n '1,80p' guides/tvguidetivimate.xml
+          sed -n '1,120p' guides/tvguidetivimate.xml
           echo
           echo "Channel count:"
           grep -c '<channel ' guides/tvguidetivimate.xml || true
 
-      - name: Commit Tivimate channel list
+      - name: Commit output
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguidetivimate.xml scripts/temp-build-spectrum-tivimate-channels.js
+          git add guides/tvguidetivimate.xml scripts/temp-copy-spectrum-master-channels.js
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Build Spectrum Tivimate channel list"
+            git commit -m "Copy Spectrum master channels to Tivimate list"
             git push
           fi
