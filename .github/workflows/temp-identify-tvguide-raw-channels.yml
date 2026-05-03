@@ -18,7 +18,7 @@ jobs:
         run: |
           mkdir -p scripts guides
 
-          cat > scripts/temp-identify-tvguide-raw-channels.js <<'EOF'
+          cat > scripts/temp-identify-tvguide-raw-channels.cjs <<'EOF'
           const fs = require('fs')
           const https = require('https')
 
@@ -33,40 +33,30 @@ jobs:
 
           const xml = fs.readFileSync(inputFile, 'utf8')
 
-          const channels = [...xml.matchAll(/<channel\s+([^>]+)>([\s\S]*?)<\/channel>/g)].map(m => {
-            const attrs = m[1]
-            const body = m[2]
-            return {
-              siteId: attr(attrs, 'site_id'),
-              xmltvId: decodeXml(attr(attrs, 'xmltv_id')),
-              display: decodeXml(body.replace(/<[^>]+>/g, '').trim())
-            }
-          }).filter(ch => ch.siteId.includes('#'))
+          const channels = [...xml.matchAll(/<channel\s+([^>]+)>([\s\S]*?)<\/channel>/g)]
+            .map(m => {
+              const attrs = m[1]
+              const body = m[2]
+              return {
+                siteId: attr(attrs, 'site_id'),
+                xmltvId: decodeXml(attr(attrs, 'xmltv_id')),
+                display: decodeXml(body.replace(/<[^>]+>/g, '').trim())
+              }
+            })
+            .filter(ch => ch.siteId.includes('#'))
 
-          const groups = new Map()
-          for (const ch of channels) {
-            const key = `${ch.xmltvId} | ${ch.display}`
-            if (!groups.has(key)) groups.set(key, [])
-            groups.get(key).push(ch)
-          }
-
-          const duplicates = [...groups.entries()]
-            .filter(([_, list]) => list.length > 1)
-            .flatMap(([_, list]) => list)
-
-          const targets = duplicates.length ? duplicates : channels
+          // Full raw guide scan.
+          const targets = channels
 
           console.log(`Raw channels: ${channels.length}`)
-          console.log(`Duplicate-name channels to inspect: ${duplicates.length}`)
-          console.log(`Inspecting: ${targets.length}`)
+          console.log(`Inspecting all raw channels: ${targets.length}`)
 
           const start = Math.floor(Date.now() / 86400000) * 86400
           const report = []
 
-          report.push(`TVGuide channel ID inspection`)
+          report.push('TVGuide full raw channel ID inspection')
           report.push(`Input: ${inputFile}`)
           report.push(`Raw channels: ${channels.length}`)
-          report.push(`Duplicate-name channels inspected: ${duplicates.length}`)
           report.push(`Generated: ${new Date().toISOString()}`)
           report.push('')
 
@@ -80,7 +70,7 @@ jobs:
             const res = await get(url)
             const info = summarize(res.body, sourceId)
 
-            report.push(`============================================================`)
+            report.push('============================================================')
             report.push(`RAW DISPLAY: ${ch.display}`)
             report.push(`RAW XMLTV:   ${ch.xmltvId}`)
             report.push(`SITE ID:     ${ch.siteId}`)
@@ -89,7 +79,7 @@ jobs:
             report.push(`API CALL:    ${info.apiCallSign || ''}`)
             report.push(`API SOURCE:  ${info.apiSourceId || ''}`)
             report.push(`PROGRAMS:    ${info.count}`)
-            report.push(`SAMPLES:`)
+            report.push('SAMPLES:')
 
             for (const title of info.samples) {
               report.push(`- ${title}`)
@@ -97,7 +87,7 @@ jobs:
 
             report.push('')
 
-            await sleep(250)
+            await sleep(200)
           }
 
           fs.writeFileSync(outputFile, report.join('\n'))
@@ -108,7 +98,7 @@ jobs:
               const json = JSON.parse(body)
               const items = json?.data?.items || []
 
-              let item =
+              const item =
                 items.find(x => String(x?.channel?.sourceId || x?.sourceId || '') === String(wantedSourceId)) ||
                 items[0] ||
                 {}
@@ -120,7 +110,7 @@ jobs:
                 apiCallSign: item?.channel?.callSign || '',
                 apiSourceId: item?.channel?.sourceId || '',
                 count: schedules.length,
-                samples: schedules.slice(0, 12).map(p => {
+                samples: schedules.slice(0, 10).map(p => {
                   const title = p.title || p.program?.title || ''
                   const sub = p.episodeTitle || p.program?.episodeTitle || ''
                   const start = p.startTime ? new Date(p.startTime * 1000).toISOString().slice(11, 16) : ''
@@ -128,7 +118,13 @@ jobs:
                 }).filter(Boolean)
               }
             } catch (e) {
-              return { count: 0, samples: [`PARSE ERROR: ${String(e.message || e)}`] }
+              return {
+                apiName: '',
+                apiCallSign: '',
+                apiSourceId: '',
+                count: 0,
+                samples: [`PARSE ERROR: ${String(e.message || e)}`]
+              }
             }
           }
 
@@ -137,7 +133,7 @@ jobs:
               https.get(url, {
                 headers: {
                   Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0'
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
                 }
               }, res => {
                 let body = ''
@@ -166,18 +162,18 @@ jobs:
           }
           EOF
 
-          node scripts/temp-identify-tvguide-raw-channels.js
+          node scripts/temp-identify-tvguide-raw-channels.cjs
 
       - name: Preview report
         run: |
-          sed -n '1,220p' guides/tvguide.channel-id-report.txt
+          sed -n '1,260p' guides/tvguide.channel-id-report.txt
 
       - name: Commit report
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguide.channel-id-report.txt scripts/temp-identify-tvguide-raw-channels.js
+          git add guides/tvguide.channel-id-report.txt scripts/temp-identify-tvguide-raw-channels.cjs
 
           if git diff --cached --quiet; then
             echo "No changes to commit"
