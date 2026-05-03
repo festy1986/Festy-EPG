@@ -19,7 +19,7 @@ jobs:
           node <<'EOF'
           const fs = require('fs')
 
-          const rawPath = 'guides/tvguidetivimate.raw.xml'
+          const rawPath = 'guides/tvguide.xml'
           const guidePath = 'guides/tvguidetivimate.xml'
 
           const wanted = new Set([
