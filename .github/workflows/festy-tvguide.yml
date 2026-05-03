@@ -384,12 +384,16 @@ jobs:
           echo "Programme count:"
           grep -c '<programme ' guides/tvguidetivimate.xml || true
 
+      - name: Apply custom logos to both guides
+        run: |
+          node scripts/apply-custom-logos.cjs guides/tvguidetivimate.xml guides/OTALocalsguide.xml
+
       - name: Commit TiViMate guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/tvguidetivimate.xml
+          git add guides/tvguidetivimate.xml guides/OTALocalsguide.xml
 
           if git diff --cached --quiet; then
             echo "No guide changes to commit"
