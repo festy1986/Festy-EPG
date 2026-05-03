@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Add resolved missing channels to Tivimate file
+      - name: Add resolved channels and replace FX with FXHD
         run: |
           node <<'EOF'
           const fs = require('fs')
@@ -65,6 +65,23 @@ jobs:
 
           let xml = fs.readFileSync(file, 'utf8')
 
+          // Remove old FX SD entry
+          xml = xml.replace(
+            /\s*<channel\b[^>]*site_id="9100002976#9200006932"[^>]*>FX<\/channel>\s*/g,
+            '\n'
+          )
+
+          // Add correct FXHD entry if missing
+          if (!xml.includes('site_id="9100002976#9233006959"')) {
+            xml = xml.replace(
+              /\s*<\/channels>\s*$/i,
+              `\n  <channel site="tvguide.com" lang="en" xmltv_id="FX.us" site_id="9100002976#9233006959">FX</channel>\n</channels>\n`
+            )
+            console.log('[FIX] Replaced FX SD with FXHD')
+          } else {
+            console.log('[SKIP] FXHD already exists')
+          }
+
           const existing = new Set(
             [...xml.matchAll(/<channel\b[^>]*>([\s\S]*?)<\/channel>/g)]
               .map(m => decode(m[1].replace(/<[^>]+>/g, '').trim()))
@@ -84,13 +101,14 @@ jobs:
             console.log(`[ADD] ${name} | ${siteId}`)
           }
 
-          if (!lines.length) {
-            console.log('No channels to add.')
-          } else {
+          if (lines.length) {
             xml = xml.replace(/\s*<\/channels>\s*$/i, `\n${lines.join('\n')}\n</channels>\n`)
-            fs.writeFileSync(file, xml)
-            console.log(`[done] added ${lines.length} channel(s) to ${file}`)
+            console.log(`[done] added ${lines.length} channel(s)`)
+          } else {
+            console.log('[done] no missing resolved channels to add')
           }
+
+          fs.writeFileSync(file, xml)
 
           function norm(s) {
             return String(s || '').toUpperCase().replace(/\+/g, 'PLUS').replace(/[^A-Z0-9]/g, '')
@@ -124,10 +142,19 @@ jobs:
           }
           EOF
 
-      - name: Preview count
+      - name: Preview FX and count
         run: |
-          grep -c '<channel ' guides/tvguidetivimate.xml
-          grep -E 'ESPN2|CBS SPORTS NETWORK|USA NETWORK|FXX|FX MOVIE CHANNEL|HBO HITS|HBO DRAMA|HBO COMEDY|SHOWTIME|SHOXBET|TMC XTRA' guides/tvguidetivimate.xml || true
+          echo "Channel count:"
+          grep -c '<channel ' guides/tvguidetivimate.xml || true
+          echo
+          echo "FX entries:"
+          grep '>FX<' guides/tvguidetivimate.xml || true
+          echo
+          echo "Old FX SD check:"
+          grep '9100002976#9200006932' guides/tvguidetivimate.xml || true
+          echo
+          echo "New FXHD check:"
+          grep '9100002976#9233006959' guides/tvguidetivimate.xml || true
 
       - name: Commit updated Tivimate guide
         run: |
@@ -139,6 +166,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Add resolved Spectrum Tivimate channels"
+            git commit -m "Add resolved Spectrum channels and fix FX feed"
             git push
           fi
