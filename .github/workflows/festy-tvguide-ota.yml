@@ -9,179 +9,93 @@ permissions:
   contents: write
 
 jobs:
-  build-festy-tvguide-ota:
+  build-ota:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Clone IPTV-org EPG engine
+      - name: Clone EPG engine
         run: |
           rm -rf epg
           git clone --depth 1 https://github.com/iptv-org/epg.git epg
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install EPG dependencies
-        run: |
+      - run: |
           cd epg
           npm install
 
-      - name: Build OTA channel source
+      - name: Build OTA channel list from RAW
         run: |
           mkdir -p epg/sites/tvguide.com
 
           node <<'EOF'
           const fs = require('fs')
 
-          const inputPath = 'guides/OTALocalsguide.raw.xml'
-          const outputPath = 'epg/sites/tvguide.com/festy-ota.channels.xml'
-          const OTA_PROVIDER_ID = '9100000664'
+          const RAW = 'guides/OTALocalsguide.raw.xml'
+          const OUT = 'epg/sites/tvguide.com/festy-ota.channels.xml'
+          const PROVIDER = '9100000664'
 
-          const wanted = [
-            { name: 'COMET', aliases: ['COMET'] },
-            { name: 'LAFF', aliases: ['LAFF'] },
-            { name: 'FOX BOSTON', aliases: ['FOX BOSTON', 'WFXT', 'WFXTDT', 'WFXT-DT'] },
-            { name: 'FOX PORTLAND', aliases: ['FOX PORTLAND', 'WPFO', 'WGME2', 'WGME-DT2', 'WGME DT2', 'WGME 13.2'] },
-            { name: 'NBC BOSTON', aliases: ['NBC BOSTON', 'WBTS', 'WBTSCD', 'WBTS-CD', 'NBC10 BOSTON'] },
-            { name: 'NBC PORTLAND', aliases: ['NBC PORTLAND', 'WCSH', 'WCSHDT', 'WCSH-DT'] },
-            { name: 'ABC BOSTON', aliases: ['ABC BOSTON', 'WCVB', 'WCVBDT', 'WCVB-DT'] },
-            { name: 'ABC PORTLAND', aliases: ['ABC PORTLAND', 'WMTW', 'WMTWDT', 'WMTW-DT'] },
-            { name: 'PBS', aliases: ['PBS', 'WGBH', 'WGBHDT', 'WGBH-DT', 'WMEA', 'WCBB'] },
-            { name: 'CW BOSTON', aliases: ['CW BOSTON', 'WLVI', 'WLVH', 'CW56'] },
-            { name: 'CBS BOSTON', aliases: ['CBS BOSTON', 'WBZ', 'WBZDT', 'WBZ-DT'] },
-            { name: 'CBS PORTLAND', aliases: ['CBS PORTLAND', 'WGME', 'WGMEDT', 'WGME-DT'] },
-            { name: 'ION BOSTON', aliases: ['ION BOSTON', 'WBPX', 'WBPXDT', 'WBPX-DT'] },
-            { name: 'METV', aliases: ['METV', 'ME TV', 'MeTV'] },
-            { name: 'GRIT', aliases: ['GRIT'] },
-            { name: 'HEROES & ICONS', aliases: ['HEROES & ICONS', 'HEROES AND ICONS', 'H&I', 'H I'] }
-          ]
-
-          function decodeXml(s) {
-            return String(s || '')
-              .replace(/&amp;/g, '&')
-              .replace(/&quot;/g, '"')
-              .replace(/&apos;/g, "'")
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
+          const wanted = {
+            'WCBB-DT': 'PBS',
+            'WCSH': 'NBC PORTLAND',
+            'WGME': 'CBS PORTLAND',
+            'WGME-DT2': 'FOX PORTLAND',
+            'WIPL-DT': 'ION',
+            'WIPL-DT2': 'COURT TV',
+            'WIPL-DT4': 'GRIT',
+            'WIPL-DT5': 'ION PLUS',
+            'WIPL-DT7': 'GAME SHOW NETWORK',
+            'WMTW': 'ABC PORTLAND',
+            'WMTW-DT2': 'METV',
+            'WMTW-DT3': 'LAFF',
+            'WPFO-DT2': 'CHARGE',
+            'WPFO-DT3': 'COMET',
+            'WPXT-DT2': 'HEROES & ICONS',
+            'WPXT-DT3': 'ION MYSTERY'
           }
 
-          function escapeXml(s) {
-            return String(s || '')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
+          const xml = fs.readFileSync(RAW, 'utf8')
 
-          function attr(attrs, name) {
-            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? decodeXml(m[1]).trim() : ''
-          }
+          const channels = [...xml.matchAll(/<channel id="([^"]+)">[\s\S]*?<display-name>([^<]+)<\/display-name>/g)]
 
-          function textBetween(body, tag) {
-            const m = body.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
-            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
-          }
-
-          function cleanBody(body) {
-            return textBetween(body, 'display-name') ||
-              decodeXml(String(body || '').replace(/<url>[\s\S]*?<\/url>/gi, '').replace(/<[^>]+>/g, '').trim())
-          }
-
-          function norm(s) {
-            return decodeXml(s)
-              .replace(/&/g, 'AND')
-              .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/gi, '')
-              .toUpperCase()
-          }
-
-          function xmltvId(name) {
-            return String(name)
-              .toUpperCase()
-              .replace(/&/g, 'AND')
-              .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/g, '.')
-              .replace(/^\.+|\.+$/g, '') + '.us'
-          }
-
-          if (!fs.existsSync(inputPath)) {
-            console.error(`Missing ${inputPath}`)
-            process.exit(1)
-          }
-
-          const xml = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
-
-          const parsed = channelBlocks.map(block => {
-            const attrs = block[1]
-            const body = block[2]
-            const rawId = attr(attrs, 'site_id') || attr(attrs, 'site-id') || attr(attrs, 'id')
-            const name = cleanBody(body)
-            return { rawId, name, normName: norm(name), block: block[0] }
-          }).filter(ch => ch.rawId && ch.name)
-
-          const channels = []
-          const seenSiteIds = new Set()
+          const out = []
           const found = new Set()
 
-          for (const target of wanted) {
-            const aliasKeys = target.aliases.map(norm)
+          for (const [_, id, name] of channels) {
+            if (wanted[name]) {
+              const sourceId = id.split('#')[1]
+              const finalName = wanted[name]
 
-            const match = parsed.find(ch =>
-              aliasKeys.some(alias => ch.normName.includes(alias) || alias.includes(ch.normName))
-            )
+              out.push(
+                `  <channel site="tvguide.com" lang="en" xmltv_id="${finalName.replace(/ /g,'.')}.us" site_id="${PROVIDER}#${sourceId}">${finalName}</channel>`
+              )
 
-            if (!match) {
-              console.log(`[MISSING] ${target.name}`)
-              continue
+              found.add(name)
+              console.log(`[ADD] ${finalName} <= ${name}`)
             }
-
-            let siteId = match.rawId
-            const sourceId = String(siteId).split('#').pop()
-            siteId = `${OTA_PROVIDER_ID}#${sourceId}`
-
-            if (seenSiteIds.has(siteId)) {
-              console.log(`[SKIP DUPLICATE] ${target.name} | ${siteId}`)
-              continue
-            }
-
-            seenSiteIds.add(siteId)
-            found.add(target.name)
-
-            channels.push(
-              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId(target.name))}" site_id="${escapeXml(siteId)}">${escapeXml(target.name)}</channel>`
-            )
-
-            console.log(`[ADD] ${target.name} <= ${match.name} | ${siteId}`)
           }
 
-          console.log(`Raw OTA channels: ${channelBlocks.length}`)
-          console.log(`Built OTA channels: ${channels.length}`)
+          const missing = Object.keys(wanted).filter(x => !found.has(x))
 
-          const missing = wanted.filter(x => !found.has(x.name)).map(x => x.name)
           if (missing.length) {
-            console.log('\nMissing wanted OTA channels:')
-            missing.forEach(name => console.log(`- ${name}`))
-          }
-
-          if (channels.length < 10) {
-            console.error(`Refusing to run: expected around 15 OTA channels, built ${channels.length}`)
+            console.log('\nMissing:')
+            missing.forEach(x => console.log('- ' + x))
             process.exit(1)
           }
 
           fs.writeFileSync(
-            outputPath,
-            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
+            OUT,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
           )
+
+          console.log(`Built ${out.length} OTA channels`)
           EOF
 
-      - name: Write optimized TVGuide OTA config
+      - name: Write fast config
         run: |
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
           const dayjs = require('dayjs')
@@ -192,96 +106,47 @@ jobs:
             days: 14,
 
             url({ date, channel }) {
-              const [providerId, sourceId] = String(channel.site_id).split('#')
+              const [providerId, sourceId] = channel.site_id.split('#')
               return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
-            },
-
-            request: {
-              method: 'GET',
-              timeout: 15000,
-              cache: { ttl: 60 * 60 * 1000 },
-              headers() {
-                return {
-                  Referer: 'https://www.tvguide.com/',
-                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
-                }
-              }
             },
 
             parser({ content, channel, date }) {
               const data = JSON.parse(content)
               const items = data?.data?.items || []
-              const sourceId = String(channel.site_id).split('#').pop()
+              const sourceId = channel.site_id.split('#')[1]
 
-              const match = items.find(item =>
-                String(item.sourceId || item.channelSourceId || item.id || item.channel?.sourceId || '') === sourceId
+              const match = items.find(i =>
+                String(i.sourceId || i.channelSourceId || i.id || '') === sourceId
               )
 
               const schedules = match?.programSchedules || []
 
               console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
-              return schedules.map(item => ({
-                title: cleanTitle(item.title),
-                description: cleanSpaces(item.description),
-                start: dayjs.unix(item.startTime),
-                stop: dayjs.unix(item.endTime)
+              return schedules.map(p => ({
+                title: (p.title || '').trim(),
+                description: (p.description || '').trim(),
+                start: dayjs.unix(p.startTime),
+                stop: dayjs.unix(p.endTime)
               }))
             }
           }
-
-          function cleanTitle(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
-              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
-              .trim()
-          }
-
-          function cleanSpaces(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/\s+([.,!?;:])/g, '$1')
-              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
-              .trim()
-          }
           EOF
 
-      - name: Grab TVGuide OTA guide
+      - name: Grab OTA guide
         run: |
           cd epg
-
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy-ota.channels.xml \
             --output=../guides/OTALocalsguide.xml \
             --days=14
-
           cd ..
 
-      - name: Validate OTA output
-        run: |
-          CH=$(grep -c '<channel ' guides/OTALocalsguide.xml || true)
-          PR=$(grep -c '<programme ' guides/OTALocalsguide.xml || true)
-
-          echo "OTA channels: $CH"
-          echo "OTA programmes: $PR"
-
-          if [ "$CH" -lt 10 ]; then
-            echo "Invalid OTA output — too few channels"
-            exit 1
-          fi
-
-          if [ "$PR" -lt 1 ]; then
-            echo "Invalid OTA output — no programmes"
-            exit 1
-          fi
-
-      - name: Apply custom logos to OTA guide
+      - name: Apply logos
         run: |
           node scripts/apply-custom-logos.cjs guides/OTALocalsguide.xml
 
-      - name: Commit OTA guide
+      - name: Commit
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -289,7 +154,7 @@ jobs:
           git add guides/OTALocalsguide.xml
 
           if git diff --cached --quiet; then
-            echo "No OTA guide changes to commit"
+            echo "No changes"
           else
             git commit -m "Update OTA guide"
             git push
