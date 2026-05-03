@@ -31,7 +31,7 @@ jobs:
           cd epg
           npm install
 
-      - name: Copy TiViMate channels and custom config
+      - name: Copy TiViMate channels and custom TVGuide config
         run: |
           mkdir -p epg/sites/tvguide.com
 
@@ -39,6 +39,7 @@ jobs:
           const fs = require('fs')
 
           const inputPath = 'guides/tvguidetivimate.xml'
+          const outputPath = 'epg/sites/tvguide.com/festy.channels.xml'
 
           if (!fs.existsSync(inputPath)) {
             console.error(`Missing ${inputPath}`)
@@ -47,10 +48,12 @@ jobs:
 
           const input = fs.readFileSync(inputPath, 'utf8')
 
-          const matches = [...input.matchAll(/<channel\b[^>]*\bid="([^"]+)"[^>]*>[\s\S]*?<display-name[^>]*>([\s\S]*?)<\/display-name>[\s\S]*?<\/channel>/g)]
+          const matches = [...input.matchAll(
+            /<channel\b[^>]*site_id="([^"]+)"[^>]*>([\s\S]*?)<\/channel>/g
+          )]
 
           if (!matches.length) {
-            console.error(`No <channel id=""> entries found in ${inputPath}`)
+            console.error(`No <channel site_id=""> entries found in ${inputPath}`)
             process.exit(1)
           }
 
@@ -81,15 +84,15 @@ jobs:
           }
 
           const channels = matches.map(match => {
-            const id = match[1]
-            const name = decodeXml(match[2]).trim()
+            const siteId = decodeXml(match[1]).trim()
+            const name = decodeXml(match[2].replace(/<[^>]+>/g, '').trim())
 
-            return `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId(name))}" site_id="9100002976#${escapeXml(id)}">${escapeXml(name)}</channel>`
+            return `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId(name))}" site_id="${escapeXml(siteId)}">${escapeXml(name)}</channel>`
           })
 
           const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
 
-          fs.writeFileSync('epg/sites/tvguide.com/festy.channels.xml', output)
+          fs.writeFileSync(outputPath, output)
 
           console.log(`Wrote ${channels.length} channels for TVGuide grabber from ${inputPath}`)
           EOF
@@ -264,7 +267,7 @@ jobs:
             const sourceId = String(channel.site_id).split('#').pop()
 
             const matched = items.find(item => {
-              return String(item.sourceId || item.channelSourceId || item.id || '') === sourceId
+              return String(item.sourceId || item.channelSourceId || item.id || item.channel?.sourceId || '') === sourceId
             })
 
             if (matched?.programSchedules?.length) {
@@ -275,8 +278,8 @@ jobs:
             console.log(`[WARN] No exact schedule match for ${channel.name} | sourceId=${sourceId} | returned items=${items.length}`)
 
             items.forEach((item, index) => {
-              const id = item.sourceId || item.channelSourceId || item.id || 'no-id'
-              const callsign = item.callSign || item.callsign || item.name || item.channelName || 'no-name'
+              const id = item.sourceId || item.channelSourceId || item.id || item.channel?.sourceId || 'no-id'
+              const callsign = item.callSign || item.callsign || item.name || item.channelName || item.channel?.callSign || item.channel?.name || 'no-name'
               const count = Array.isArray(item.programSchedules) ? item.programSchedules.length : 0
               console.log(`[CANDIDATE] ${channel.name} | #${index + 1} | id=${id} | name=${callsign} | programs=${count}`)
             })
@@ -357,7 +360,7 @@ jobs:
           }
           EOF
 
-      - name: Grab TVGuide guide - 1 day
+      - name: Grab TVGuide TiViMate guide - 1 day
         run: |
           cd epg
           npx tsx scripts/commands/epg/grab.ts \
@@ -366,12 +369,20 @@ jobs:
             --days=1
 
           cd ..
+
           if [ ! -s guides/tvguidetivimate.xml ]; then
             echo "guides/tvguidetivimate.xml was not created or is empty"
             exit 1
           fi
 
+          echo "Final guide size:"
           ls -lh guides/tvguidetivimate.xml
+
+          echo "Channel count:"
+          grep -c '<channel ' guides/tvguidetivimate.xml || true
+
+          echo "Programme count:"
+          grep -c '<programme ' guides/tvguidetivimate.xml || true
 
       - name: Commit TiViMate guide
         run: |
