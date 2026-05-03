@@ -1,0 +1,204 @@
+name: TVguide-Tivimate
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build-tvguide-tivimate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Clone IPTV-org EPG engine
+        run: |
+          rm -rf epg
+          git clone --depth 1 https://github.com/iptv-org/epg.git epg
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install EPG dependencies
+        run: |
+          cd epg
+          npm install
+
+      - name: Build TiviMate channel source (STRICT)
+        run: |
+          mkdir -p epg/sites/tvguide.com
+
+          node <<'EOF'
+          const fs = require('fs')
+
+          const inputPath = 'guides/tvguidetivimate.xml'
+          const outputPath = 'epg/sites/tvguide.com/festy-tivimate.channels.xml'
+
+          if (!fs.existsSync(inputPath)) {
+            console.error(`Missing ${inputPath}`)
+            process.exit(1)
+          }
+
+          const xml = fs.readFileSync(inputPath, 'utf8')
+          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function text(body) {
+            return decodeXml(body.replace(/<[^>]+>/g, '').trim())
+          }
+
+          const valid = []
+          const missing = []
+
+          for (const block of channelBlocks) {
+            const attrs = block[1]
+            const body = block[2]
+
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const siteId = attr(attrs, 'site_id') || attr(attrs, 'site-id')
+            const name = text(body)
+
+            if (!siteId) {
+              missing.push({ id, name })
+              continue
+            }
+
+            valid.push({ id, siteId, name })
+          }
+
+          console.log(`Total channels in source: ${channelBlocks.length}`)
+          console.log(`Channels with site_id: ${valid.length}`)
+          console.log(`Missing site_id: ${missing.length}`)
+
+          if (missing.length > 0) {
+            console.log('\n❌ Missing site_id for these channels:')
+            missing.slice(0, 50).forEach(ch => {
+              console.log(`- ${ch.id} (${ch.name})`)
+            })
+
+            console.log('\nRefusing to continue — ALL channels must have site_id')
+            process.exit(1)
+          }
+
+          const out = valid.map(ch =>
+            `  <channel site="tvguide.com" lang="en" xmltv_id="${ch.id}" site_id="${ch.siteId}">${ch.name}</channel>`
+          )
+
+          fs.writeFileSync(outputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
+
+          console.log(`✅ Built ${valid.length} channels`)
+          EOF
+
+      - name: Verify channel count
+        run: |
+          COUNT=$(grep -c '<channel ' epg/sites/tvguide.com/festy-tivimate.channels.xml || true)
+          echo "Channel count: $COUNT"
+
+          if [ "$COUNT" -lt 123 ]; then
+            echo "Refusing to run: expected at least 123 channels"
+            exit 1
+          fi
+
+      - name: Write optimized TVGuide config
+        run: |
+          cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
+          const axios = require('axios')
+          const dayjs = require('dayjs')
+
+          module.exports = {
+            site: 'tvguide.com',
+            delay: 800,
+            days: 14,
+
+            url({ date, channel }) {
+              const [providerId, sourceId] = channel.site_id.split('#')
+              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+            },
+
+            async parser({ content, channel, date }) {
+              const data = JSON.parse(content)
+              const items = data?.data?.items || []
+
+              const sourceId = channel.site_id.split('#').pop()
+
+              const match = items.find(i =>
+                String(i.sourceId || i.channelSourceId || '') === sourceId
+              )
+
+              const schedules = match?.programSchedules || []
+
+              console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
+
+              return schedules.map(p => ({
+                title: (p.title || '').trim(),
+                description: (p.description || '').trim(),
+                start: dayjs.unix(p.startTime),
+                stop: dayjs.unix(p.endTime)
+              }))
+            }
+          }
+          EOF
+
+      - name: Grab TiviMate Guide
+        run: |
+          cd epg
+
+          npx tsx scripts/commands/epg/grab.ts \
+            --channels=sites/tvguide.com/festy-tivimate.channels.xml \
+            --output=../guides/tvguidetivimateguide.xml \
+            --days=14
+
+          cd ..
+
+      - name: Validate output
+        run: |
+          CH=$(grep -c '<channel ' guides/tvguidetivimateguide.xml || true)
+          PR=$(grep -c '<programme ' guides/tvguidetivimateguide.xml || true)
+
+          echo "Channels: $CH"
+          echo "Programs: $PR"
+
+          if [ "$CH" -lt 123 ]; then
+            echo "Invalid output — missing channels"
+            exit 1
+          fi
+
+      - name: Apply logos
+        run: |
+          node scripts/apply-custom-logos.cjs guides/tvguidetivimateguide.xml
+
+      - name: Commit guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguidetivimateguide.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update TiviMate guide"
+            git push
+          fi
