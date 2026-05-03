@@ -263,7 +263,7 @@ jobs:
 
             request: {
               method: 'GET',
-              timeout: 3000,
+              timeout: 8000,
               cache: { ttl: 60 * 60 * 1000 },
               headers() {
                 return {
@@ -287,7 +287,7 @@ jobs:
               console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
               const programs = []
-              const batchSize = 5
+              const batchSize = 10
 
               for (let i = 0; i < schedules.length; i += batchSize) {
                 const batch = schedules.slice(i, i + batchSize)
@@ -342,7 +342,7 @@ jobs:
 
             try {
               const response = await axios.get(url, {
-                timeout: 5000,
+                timeout: 8000,
                 headers: {
                   Referer: 'https://www.tvguide.com/',
                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
@@ -436,7 +436,8 @@ jobs:
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy-tivimate.channels.xml \
             --output=../guides/tvguidetivimateguide.xml \
-            --days=14
+            --days=14 \
+            --maxConnections=10
 
           cd ..
 
