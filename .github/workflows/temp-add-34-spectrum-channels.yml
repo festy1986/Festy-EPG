@@ -1,0 +1,144 @@
+name: Temp Add 34 Spectrum Channels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  add-34-spectrum-channels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Add resolved missing channels to Tivimate file
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const file = 'guides/tvguidetivimate.xml'
+
+          const ADD = {
+            'ESPN2': '9100002976#9200012351',
+            'CBS SPORTS NETWORK': '9100002976#9233015468',
+            'USA NETWORK': '9100002976#9200009133',
+            'FXX': '9100002976#9200014910',
+            'FX MOVIE CHANNEL': '9100002976#9200001026',
+            'IFC': '9100002976#9233006961',
+            'BBC AMERICA': '9100002976#9200009303',
+            'VICE': '9100002976#9200000630',
+            'REELZ': '9100002976#9233015619',
+            'FUSE': '9100002976#9233011488',
+            'TRAVEL CHANNEL': '9100002976#9233000344',
+            'THE WEATHER CHANNEL': '9100002976#9233009688',
+            'LIFETIME': '9100002976#9200000502',
+            'LMN': '9100002976#9233009429',
+            'MTV2': '9100002976#9233011380',
+            'CMT': '9100002976#9233000169',
+            'AWE': '9100002976#9200008836',
+            'OVATION': '9100002976#9233005811',
+            'TCM': '9100002976#9233003866',
+            'OUTDOOR CHANNEL': '9100002976#9200006358',
+            'INSP': '9100002976#9200009887',
+            'HBO HITS': '9100002976#9233013492',
+            'HBO DRAMA': '9100002976#9200002532',
+            'HBO COMEDY': '9100002976#9233003785',
+            'PARAMOUNT+ WITH SHOWTIME': '9100002976#9233011188',
+            'SHOXBET': '9100002976#9200022063',
+            'SHOWTIME 2': '9100002976#9200014450',
+            'SHOWTIME EXTREME': '9100002976#9233015495',
+            'SHOWTIME FAMILY ZONE': '9100002976#9200000968',
+            'SHOWTIME NEXT': '9100002976#9200016686',
+            'SHOWTIME WOMEN': '9100002976#9200002975',
+            'SHOWTIME SHOWCASE': '9100002976#9233017279',
+            'TMC XTRA': '9100002976#9200006825',
+            'PARAMOUNT NETWORK': '9100002976#9233013810'
+          }
+
+          if (!fs.existsSync(file)) {
+            console.error(`Missing ${file}`)
+            process.exit(1)
+          }
+
+          let xml = fs.readFileSync(file, 'utf8')
+
+          const existing = new Set(
+            [...xml.matchAll(/<channel\b[^>]*>([\s\S]*?)<\/channel>/g)]
+              .map(m => decode(m[1].replace(/<[^>]+>/g, '').trim()))
+              .map(norm)
+          )
+
+          const lines = []
+
+          for (const [name, siteId] of Object.entries(ADD)) {
+            if (existing.has(norm(name))) {
+              console.log(`[SKIP] already exists: ${name}`)
+              continue
+            }
+
+            const xmltv = safeXmltv(name) + '.us'
+            lines.push(`  <channel site="tvguide.com" lang="en" xmltv_id="${esc(xmltv)}" site_id="${esc(siteId)}">${esc(name)}</channel>`)
+            console.log(`[ADD] ${name} | ${siteId}`)
+          }
+
+          if (!lines.length) {
+            console.log('No channels to add.')
+          } else {
+            xml = xml.replace(/\s*<\/channels>\s*$/i, `\n${lines.join('\n')}\n</channels>\n`)
+            fs.writeFileSync(file, xml)
+            console.log(`[done] added ${lines.length} channel(s) to ${file}`)
+          }
+
+          function norm(s) {
+            return String(s || '').toUpperCase().replace(/\+/g, 'PLUS').replace(/[^A-Z0-9]/g, '')
+          }
+
+          function safeXmltv(s) {
+            return String(s)
+              .replace(/&/g, 'And')
+              .replace(/\+/g, 'PLUS')
+              .replace(/!/g, '')
+              .replace(/[^A-Za-z0-9]+/g, '.')
+              .replace(/\.+/g, '.')
+              .replace(/^\.|\.$/g, '')
+          }
+
+          function esc(s) {
+            return String(s)
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function decode(s) {
+            return String(s)
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+          EOF
+
+      - name: Preview count
+        run: |
+          grep -c '<channel ' guides/tvguidetivimate.xml
+          grep -E 'ESPN2|CBS SPORTS NETWORK|USA NETWORK|FXX|FX MOVIE CHANNEL|HBO HITS|HBO DRAMA|HBO COMEDY|SHOWTIME|SHOXBET|TMC XTRA' guides/tvguidetivimate.xml || true
+
+      - name: Commit updated Tivimate guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguidetivimate.xml
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add resolved Spectrum Tivimate channels"
+            git push
+          fi
