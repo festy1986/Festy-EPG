@@ -1,93 +1,187 @@
-const fs = require('fs')
-const path = require('path')
+name: Temp Identify TVGuide Raw Channels
 
-const PROVIDER_ID = '9100002976'
-const OUT_FILE = path.join(process.cwd(), 'guides', 'tvguide.xml')
+on:
+  workflow_dispatch:
 
-async function main() {
-  const url = `https://backend.tvguide.com/tvschedules/tvguide/lineups/${PROVIDER_ID}/channels`
+permissions:
+  contents: write
 
-  console.log(`[info] fetching TVGuide raw channels for providerId=${PROVIDER_ID}`)
-  console.log(`[info] url: ${url}`)
+jobs:
+  identify-tvguide-raw-channels:
+    runs-on: ubuntu-latest
 
-  const res = await fetch(url, {
-    headers: {
-      accept: 'application/json',
-      'user-agent': 'Mozilla/5.0'
-    }
-  })
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`TVGuide request failed: ${res.status} ${res.statusText}\n${text.slice(0, 1000)}`)
-  }
+      - name: Identify raw TVGuide channels by schedule samples
+        run: |
+          mkdir -p scripts guides
 
-  const json = await res.json()
-  const channels = Array.isArray(json) ? json : json.items || json.data || json.channels || []
+          cat > scripts/temp-identify-tvguide-raw-channels.cjs <<'EOF'
+          const fs = require('fs')
+          const https = require('https')
 
-  if (!channels.length) {
-    console.log(JSON.stringify(json, null, 2).slice(0, 3000))
-    throw new Error('No channels found in TVGuide response')
-  }
+          const inputFile = 'guides/tvguide.xml'
+          const outputFile = 'guides/tvguide.channel-id-report.txt'
+          const apiKey = 'DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc'
 
-  fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true })
+          async function main() {
+            if (!fs.existsSync(inputFile)) {
+              console.error(`Missing ${inputFile}`)
+              process.exit(1)
+            }
 
-  const xml = [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    '<site site="tvguide.com">',
-    ...channels.map(ch => {
-      const sourceId =
-        ch.sourceId ||
-        ch.stationId ||
-        ch.id ||
-        ch.channelSourceId ||
-        ch.listingId ||
-        ''
+            const xml = fs.readFileSync(inputFile, 'utf8')
 
-      const name =
-        ch.fullName ||
-        ch.name ||
-        ch.channelName ||
-        ch.callSign ||
-        ch.callsign ||
-        ch.displayName ||
-        `UNKNOWN-${sourceId}`
+            const channels = [...xml.matchAll(/<channel\s+([^>]+)>([\s\S]*?)<\/channel>/g)]
+              .map(m => {
+                const attrs = m[1]
+                const body = m[2]
+                return {
+                  siteId: attr(attrs, 'site_id'),
+                  xmltvId: decodeXml(attr(attrs, 'xmltv_id')),
+                  display: decodeXml(body.replace(/<[^>]+>/g, '').trim())
+                }
+              })
+              .filter(ch => ch.siteId.includes('#'))
 
-      const number =
-        ch.number ||
-        ch.channelNumber ||
-        ch.channel ||
-        ''
+            const targets = channels
+            const start = Math.floor(Date.now() / 86400000) * 86400
+            const report = []
 
-      const logo =
-        ch.logo ||
-        ch.logoUrl ||
-        ch.thumbnail ||
-        ''
+            console.log(`Raw channels: ${channels.length}`)
+            console.log(`Inspecting all raw channels: ${targets.length}`)
 
-      const siteId = `${PROVIDER_ID}#${sourceId}`
+            report.push('TVGuide full raw channel ID inspection')
+            report.push(`Input: ${inputFile}`)
+            report.push(`Raw channels: ${channels.length}`)
+            report.push(`Generated: ${new Date().toISOString()}`)
+            report.push('')
 
-      return `  <channel lang="en" xmltv_id="${escapeXml(name)}" site_id="${escapeXml(siteId)}"${logo ? ` logo="${escapeXml(logo)}"` : ''}>${escapeXml(number ? `${name} ${number}` : name)}</channel>`
-    }),
-    '</site>',
-    ''
-  ].join('\n')
+            for (let i = 0; i < targets.length; i++) {
+              const ch = targets[i]
+              const [providerId, sourceId] = ch.siteId.split('#')
+              const url = `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${start}&duration=1440&channelSourceIds=${sourceId}&apiKey=${apiKey}`
 
-  fs.writeFileSync(OUT_FILE, xml)
+              console.log(`[${i + 1}/${targets.length}] ${ch.siteId} raw=${ch.xmltvId} display=${ch.display}`)
 
-  console.log(`[info] wrote ${channels.length} raw channel(s) to ${OUT_FILE}`)
-}
+              const res = await get(url)
+              const info = summarize(res.body, sourceId)
 
-function escapeXml(value) {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&apos;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-}
+              report.push('============================================================')
+              report.push(`RAW DISPLAY: ${ch.display}`)
+              report.push(`RAW XMLTV:   ${ch.xmltvId}`)
+              report.push(`SITE ID:     ${ch.siteId}`)
+              report.push(`HTTP:        ${res.status}`)
+              report.push(`API NAME:    ${info.apiName || ''}`)
+              report.push(`API CALL:    ${info.apiCallSign || ''}`)
+              report.push(`API SOURCE:  ${info.apiSourceId || ''}`)
+              report.push(`PROGRAMS:    ${info.count}`)
+              report.push('SAMPLES:')
 
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+              for (const title of info.samples) {
+                report.push(`- ${title}`)
+              }
+
+              report.push('')
+              await sleep(200)
+            }
+
+            fs.writeFileSync(outputFile, report.join('\n'))
+            console.log(`[done] wrote ${outputFile}`)
+          }
+
+          function summarize(body, wantedSourceId) {
+            try {
+              const json = JSON.parse(body)
+              const items = json?.data?.items || []
+
+              const item =
+                items.find(x => String(x?.channel?.sourceId || x?.sourceId || '') === String(wantedSourceId)) ||
+                items[0] ||
+                {}
+
+              const schedules = item.programSchedules || []
+
+              return {
+                apiName: item?.channel?.name || item?.channel?.fullName || item?.channel?.callSign || '',
+                apiCallSign: item?.channel?.callSign || '',
+                apiSourceId: item?.channel?.sourceId || '',
+                count: schedules.length,
+                samples: schedules.slice(0, 10).map(p => {
+                  const title = p.title || p.program?.title || ''
+                  const sub = p.episodeTitle || p.program?.episodeTitle || ''
+                  const start = p.startTime ? new Date(p.startTime * 1000).toISOString().slice(11, 16) : ''
+                  return `${start} ${title}${sub ? ' - ' + sub : ''}`.trim()
+                }).filter(Boolean)
+              }
+            } catch (e) {
+              return {
+                apiName: '',
+                apiCallSign: '',
+                apiSourceId: '',
+                count: 0,
+                samples: [`PARSE ERROR: ${String(e.message || e)}`]
+              }
+            }
+          }
+
+          function get(url) {
+            return new Promise(resolve => {
+              https.get(url, {
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              }, res => {
+                let body = ''
+                res.on('data', d => body += d)
+                res.on('end', () => resolve({ status: res.statusCode, body }))
+              }).on('error', err => resolve({ status: 'ERROR', body: String(err) }))
+            })
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? m[1] : ''
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
+
+          node scripts/temp-identify-tvguide-raw-channels.cjs
+
+      - name: Preview report
+        run: |
+          sed -n '1,260p' guides/tvguide.channel-id-report.txt
+
+      - name: Commit report
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguide.channel-id-report.txt scripts/temp-identify-tvguide-raw-channels.cjs
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Inspect TVGuide raw channel IDs"
+            git push
+          fi
