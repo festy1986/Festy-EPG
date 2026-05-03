@@ -221,7 +221,18 @@ jobs:
                       formatTVGuideDate(details.originalAirDate || details.airDate || details.episodeAirDate) ||
                       formatUnixDate(details.originalAirTime || details.firstAired)
 
+                    const programType = classifyProgramType({
+                      item,
+                      details,
+                      episodeTitle,
+                      seasonNumber,
+                      episodeNumber,
+                      airDate,
+                      releaseYear
+                    })
+
                     const finalDescription = buildPackedDescription({
+                      programType,
                       episodeTitle,
                       episodeCode,
                       description,
@@ -229,12 +240,27 @@ jobs:
                       releaseYear
                     })
 
-                    return {
+                    const program = {
                       title,
                       description: finalDescription,
                       start: dayjs.unix(item.startTime),
-                      stop: dayjs.unix(item.endTime)
+                      stop: dayjs.unix(item.endTime),
+                      category: buildCategories(programType)
                     }
+
+                    if (episodeTitle) program.sub_title = episodeTitle
+
+                    if (seasonNumber && episodeNumber) {
+                      program.season = Number(seasonNumber)
+                      program.episode = Number(episodeNumber)
+                    }
+
+                    if (airDate) {
+                      const normalizedDate = normalizeXmltvDate(airDate)
+                      if (normalizedDate) program.date = normalizedDate
+                    }
+
+                    return program
                   })
                 )
 
@@ -299,13 +325,7 @@ jobs:
           }
 
           async function tryProgramDetails(url, title, options) {
-            const {
-              label,
-              attempts,
-              timeout,
-              baseDelay,
-              maxDelay
-            } = options
+            const { label, attempts, timeout, baseDelay, maxDelay } = options
 
             for (let attempt = 1; attempt <= attempts; attempt++) {
               const result = await fetchProgramDetailsOnce(url, title, timeout, label, attempt, attempts)
@@ -374,7 +394,71 @@ jobs:
             return {}
           }
 
-          function buildPackedDescription({ episodeTitle, episodeCode, description, airDate, releaseYear }) {
+          function classifyProgramType({ item, details, episodeTitle, seasonNumber, episodeNumber, airDate, releaseYear }) {
+            const haystack = [
+              item.type,
+              item.programType,
+              item.entityType,
+              item.category,
+              item.subcategory,
+              item.genres,
+              details.type,
+              details.programType,
+              details.entityType,
+              details.category,
+              details.subcategory,
+              details.genres,
+              details.seriesId,
+              details.showId,
+              details.episodeId
+            ]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const hasEpisodeSignals = Boolean(
+              episodeTitle ||
+              seasonNumber ||
+              episodeNumber ||
+              details.episodeNumber ||
+              details.seasonNumber ||
+              details.episodeTitle ||
+              details.subtitle ||
+              details.subTitle ||
+              details.originalAirDate ||
+              details.episodeAirDate ||
+              details.seriesId ||
+              details.showId ||
+              details.episodeId
+            )
+
+            if (/mini[\s-]?series|limited series|limited-series/.test(haystack)) return 'miniseries'
+            if (/series|episode|tv show|television|scripted|reality|documentary series/.test(haystack)) return 'series'
+            if (hasEpisodeSignals) return 'series'
+            if (/movie|film|feature film|cinema/.test(haystack)) return 'movie'
+
+            const durationMinutes = getDurationMinutes(item)
+            if (durationMinutes >= 75 && releaseYear && !airDate && !hasEpisodeSignals) return 'movie'
+
+            return 'program'
+          }
+
+          function getDurationMinutes(item) {
+            const start = Number(item.startTime || 0)
+            const end = Number(item.endTime || 0)
+            if (!start || !end || end <= start) return 0
+            return Math.round((end - start) / 60)
+          }
+
+          function buildCategories(programType) {
+            if (programType === 'movie') return ['Movie']
+            if (programType === 'miniseries') return ['Miniseries', 'Series']
+            if (programType === 'series') return ['Series']
+            return ['Program']
+          }
+
+          function buildPackedDescription({ programType, episodeTitle, episodeCode, description, airDate, releaseYear }) {
             const parts = []
 
             let prefix = ''
@@ -387,6 +471,20 @@ jobs:
 
             let finalDescription = parts.join('. ')
 
+            if (programType === 'movie') {
+              if (releaseYear) {
+                finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
+              }
+              return finalDescription
+            }
+
+            if (programType === 'series' || programType === 'miniseries') {
+              if (airDate && !descriptionIncludesAirDate(finalDescription, airDate)) {
+                finalDescription = finalDescription ? `${finalDescription} Aired ${airDate}.` : `Aired ${airDate}.`
+              }
+              return finalDescription
+            }
+
             const dateOrYear = airDate || releaseYear
             if (dateOrYear) {
               finalDescription = finalDescription
@@ -395,6 +493,11 @@ jobs:
             }
 
             return finalDescription
+          }
+
+          function descriptionIncludesAirDate(description, airDate) {
+            if (!description || !airDate) return false
+            return description.includes(airDate)
           }
 
           function buildEpisodeCode(seasonNumber, episodeNumber) {
@@ -444,6 +547,12 @@ jobs:
             const parsed = dayjs.unix(Number(value))
             return parsed.isValid() ? parsed.format('MM/DD/YYYY') : ''
           }
+
+          function normalizeXmltvDate(value) {
+            const parsed = dayjs(value)
+            if (!parsed.isValid()) return ''
+            return parsed.format('YYYYMMDD')
+          }
           EOF
 
       - name: Grab TVGuide OTA guide with schedule recovery
@@ -453,6 +562,7 @@ jobs:
           rm -f ../guides/OTALocalsguide.xml
           rm -f ../guides/OTALocalsguide.pass*.xml
           rm -f ../guides/OTALocalsguide.pass*.log
+          rm -f ../guides/OTALocalsguide.pass*.count
 
           run_pass() {
             PASS_NAME="$1"
@@ -487,14 +597,14 @@ jobs:
               echo "$PASS_NAME did not create an XML file"
               echo "0" > "../guides/OTALocalsguide.${PASS_NAME}.programmes.count"
               echo "0" > "../guides/OTALocalsguide.${PASS_NAME}.descriptions.count"
-              echo "1" > "../guides/OTALocalsguide.${PASS_NAME}.schedule_issues.count"
+              echo "999999" > "../guides/OTALocalsguide.${PASS_NAME}.schedule_issues.count"
               return 0
             fi
 
             PR=$(grep -c '<programme ' "../guides/OTALocalsguide.${PASS_NAME}.xml" || true)
             DESC=$(grep -c '<desc ' "../guides/OTALocalsguide.${PASS_NAME}.xml" || true)
 
-            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 429 | 500 | 502 | 503 | 504 ' "../guides/OTALocalsguide.${PASS_NAME}.log" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/OTALocalsguide.${PASS_NAME}.log" || true)
 
             echo "$PR" > "../guides/OTALocalsguide.${PASS_NAME}.programmes.count"
             echo "$DESC" > "../guides/OTALocalsguide.${PASS_NAME}.descriptions.count"
@@ -507,7 +617,6 @@ jobs:
 
           run_pass "pass1-fast" 10 8000
 
-          PASS1_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
           PASS1_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
 
           if [ "$PASS1_ISSUES" -gt 0 ]; then
@@ -521,17 +630,31 @@ jobs:
 
           BEST_PASS="pass1-fast"
           BEST_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/OTALocalsguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
 
           if [ -f ../guides/OTALocalsguide.pass2-backup.programmes.count ]; then
             PASS2_PR=$(cat ../guides/OTALocalsguide.pass2-backup.programmes.count)
+            PASS2_DESC=$(cat ../guides/OTALocalsguide.pass2-backup.descriptions.count)
+            PASS2_ISSUES=$(cat ../guides/OTALocalsguide.pass2-backup.schedule_issues.count)
+
             if [ "$PASS2_PR" -gt "$BEST_PR" ]; then
               BEST_PASS="pass2-backup"
               BEST_PR="$PASS2_PR"
+              BEST_DESC="$PASS2_DESC"
+              BEST_ISSUES="$PASS2_ISSUES"
+            elif [ "$PASS2_PR" -eq "$BEST_PR" ] && [ "$PASS2_DESC" -gt "$BEST_DESC" ]; then
+              BEST_PASS="pass2-backup"
+              BEST_PR="$PASS2_PR"
+              BEST_DESC="$PASS2_DESC"
+              BEST_ISSUES="$PASS2_ISSUES"
+            elif [ "$PASS2_PR" -eq "$BEST_PR" ] && [ "$PASS2_DESC" -eq "$BEST_DESC" ] && [ "$PASS2_ISSUES" -lt "$BEST_ISSUES" ]; then
+              BEST_PASS="pass2-backup"
+              BEST_PR="$PASS2_PR"
+              BEST_DESC="$PASS2_DESC"
+              BEST_ISSUES="$PASS2_ISSUES"
             fi
           fi
-
-          BEST_ISSUES_FILE="../guides/OTALocalsguide.${BEST_PASS}.schedule_issues.count"
-          BEST_ISSUES=$(cat "$BEST_ISSUES_FILE")
 
           if [ "$BEST_ISSUES" -gt 0 ]; then
             echo ""
@@ -545,20 +668,29 @@ jobs:
           BEST_PASS="pass1-fast"
           BEST_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
           BEST_DESC=$(cat ../guides/OTALocalsguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
 
           for PASS in pass2-backup pass3-micro; do
             if [ -f "../guides/OTALocalsguide.${PASS}.programmes.count" ]; then
               CANDIDATE_PR=$(cat "../guides/OTALocalsguide.${PASS}.programmes.count")
               CANDIDATE_DESC=$(cat "../guides/OTALocalsguide.${PASS}.descriptions.count")
+              CANDIDATE_ISSUES=$(cat "../guides/OTALocalsguide.${PASS}.schedule_issues.count")
 
               if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
                 BEST_PASS="$PASS"
                 BEST_PR="$CANDIDATE_PR"
                 BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
               elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
                 BEST_PASS="$PASS"
                 BEST_PR="$CANDIDATE_PR"
                 BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
               fi
             fi
           done
@@ -568,6 +700,7 @@ jobs:
           echo "Selected best schedule pass: $BEST_PASS"
           echo "Best programmes: $BEST_PR"
           echo "Best descriptions: $BEST_DESC"
+          echo "Best possible issues: $BEST_ISSUES"
           echo "============================================================"
 
           cp "../guides/OTALocalsguide.${BEST_PASS}.xml" "../guides/OTALocalsguide.xml"
@@ -584,6 +717,407 @@ jobs:
           done
 
           cd ..
+
+      - name: Fill missing OTA metadata from TVMaze
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const guidePath = 'guides/OTALocalsguide.xml'
+          const cachePath = 'guides/.tvmaze-ota-cache.json'
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing ${guidePath}`)
+            process.exit(1)
+          }
+
+          const xml = fs.readFileSync(guidePath, 'utf8')
+          let cache = {}
+
+          if (fs.existsSync(cachePath)) {
+            try {
+              cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'))
+            } catch {
+              cache = {}
+            }
+          }
+
+          const stats = {
+            programmes: 0,
+            skippedMovies: 0,
+            searchedShows: 0,
+            matchedShows: 0,
+            enriched: 0,
+            addedCategories: 0,
+            addedSubtitles: 0,
+            addedEpisodeNums: 0,
+            addedDates: 0,
+            addedDescriptions: 0
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function stripTags(s) {
+            return decodeXml(String(s || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function getTag(block, tag) {
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? stripTags(m[1]) : ''
+          }
+
+          function getTags(block, tag) {
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
+              .map(m => stripTags(m[1]))
+              .filter(Boolean)
+          }
+
+          function hasTag(block, tag) {
+            return new RegExp(`<${tag}\\b`, 'i').test(block)
+          }
+
+          function hasCategory(block, category) {
+            return getTags(block, 'category').some(c => c.toLowerCase() === category.toLowerCase())
+          }
+
+          function hasAnyCategory(block) {
+            return hasTag(block, 'category')
+          }
+
+          function getStartDate(block) {
+            const m = block.match(/start="(\d{8})/i)
+            if (!m) return ''
+            return `${m[1].slice(0, 4)}-${m[1].slice(4, 6)}-${m[1].slice(6, 8)}`
+          }
+
+          function cleanTitleForSearch(title) {
+            return String(title || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function isMovie(block) {
+            if (hasCategory(block, 'Movie')) return true
+            if (hasCategory(block, 'Film')) return true
+            return false
+          }
+
+          function needsTvmaze(block) {
+            if (!hasTag(block, 'desc')) return true
+            if (!hasTag(block, 'sub-title')) return true
+            if (!hasTag(block, 'episode-num')) return true
+            if (!hasTag(block, 'date')) return true
+            if (!hasAnyCategory(block)) return true
+            return false
+          }
+
+          function tvmazeShowIsMovieLike(show) {
+            const type = String(show?.type || '').toLowerCase()
+            return type === 'movie' || type === 'film'
+          }
+
+          function tvmazeShowIsMiniseries(show) {
+            const type = String(show?.type || '').toLowerCase()
+            const name = String(show?.name || '').toLowerCase()
+            const summary = String(show?.summary || '').toLowerCase()
+
+            return (
+              type.includes('mini') ||
+              type.includes('limited') ||
+              name.includes('miniseries') ||
+              summary.includes('miniseries') ||
+              summary.includes('limited series')
+            )
+          }
+
+          function normalize(s) {
+            return String(s || '')
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function scoreShow(title, show) {
+            const a = normalize(title)
+            const b = normalize(show?.name || '')
+            if (!a || !b) return 0
+            if (a === b) return 100
+            if (a.includes(b) || b.includes(a)) return 80
+            return 0
+          }
+
+          async function tvmazeSearchShow(title) {
+            const key = `show:${normalize(title)}`
+            if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
+
+            const url = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`
+            const result = await fetchJsonWithRetries(url, `search ${title}`)
+            const candidates = Array.isArray(result) ? result.map(x => x.show).filter(Boolean) : []
+
+            let best = null
+            let bestScore = 0
+
+            for (const show of candidates) {
+              if (tvmazeShowIsMovieLike(show)) continue
+
+              const score = scoreShow(title, show)
+              if (score > bestScore) {
+                best = show
+                bestScore = score
+              }
+            }
+
+            if (bestScore < 80) best = null
+
+            cache[key] = best
+            await sleep(250)
+            return best
+          }
+
+          async function tvmazeEpisodes(showId) {
+            const key = `episodes:${showId}`
+            if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
+
+            const url = `https://api.tvmaze.com/shows/${showId}/episodes`
+            const episodes = await fetchJsonWithRetries(url, `episodes ${showId}`)
+            cache[key] = Array.isArray(episodes) ? episodes : []
+            await sleep(250)
+            return cache[key]
+          }
+
+          async function fetchJsonWithRetries(url, label) {
+            const attempts = 4
+
+            for (let attempt = 1; attempt <= attempts; attempt++) {
+              try {
+                const response = await fetch(url, {
+                  headers: {
+                    'User-Agent': 'festy-epg-tvmaze-fill-missing-only/1.0'
+                  }
+                })
+
+                if (response.status === 404) return null
+                if (response.status === 429 || response.status >= 500) {
+                  throw new Error(`HTTP ${response.status}`)
+                }
+
+                if (!response.ok) return null
+
+                return await response.json()
+              } catch (err) {
+                if (attempt === attempts) {
+                  console.log(`[TVMAZE FAIL] ${label} | ${err.message}`)
+                  return null
+                }
+
+                const delay = 1000 * attempt + Math.floor(Math.random() * 500)
+                console.log(`[TVMAZE RETRY] ${label} | ${err.message} | attempt=${attempt}/${attempts}`)
+                await sleep(delay)
+              }
+            }
+
+            return null
+          }
+
+          function findEpisodeForProgramme(episodes, block) {
+            const scheduleDate = getStartDate(block)
+            const subtitle = getTag(block, 'sub-title')
+            const desc = getTag(block, 'desc')
+
+            if (scheduleDate) {
+              const exact = episodes.find(ep => ep.airdate === scheduleDate)
+              if (exact) return exact
+            }
+
+            if (subtitle) {
+              const subNorm = normalize(subtitle)
+              const byName = episodes.find(ep => normalize(ep.name) === subNorm)
+              if (byName) return byName
+            }
+
+            const codeMatch = desc.match(/\bS(\d+)E(\d+)\b/i)
+            if (codeMatch) {
+              const season = Number(codeMatch[1])
+              const number = Number(codeMatch[2])
+              const byCode = episodes.find(ep => Number(ep.season) === season && Number(ep.number) === number)
+              if (byCode) return byCode
+            }
+
+            return null
+          }
+
+          function xmltvNs(season, episode) {
+            const s = Number(season)
+            const e = Number(episode)
+            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
+            return `${s - 1}.${e - 1}.`
+          }
+
+          function formatDateXmltv(date) {
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
+            return date.replace(/-/g, '')
+          }
+
+          function cleanTvmazeSummary(value) {
+            return decodeXml(String(value || '')
+              .replace(/<[^>]+>/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim())
+          }
+
+          function insertBeforeProgrammeEnd(block, tagXml) {
+            return block.replace(/<\/programme>\s*$/i, `${tagXml}\n</programme>`)
+          }
+
+          function enrichBlockMissingOnly(block, show, episode) {
+            let updated = block
+            let changed = false
+
+            if (!hasAnyCategory(updated)) {
+              const category = tvmazeShowIsMiniseries(show) ? 'Miniseries' : 'Series'
+              updated = insertBeforeProgrammeEnd(updated, `  <category lang="en">${category}</category>`)
+              changed = true
+              stats.addedCategories++
+            }
+
+            if (!hasTag(updated, 'sub-title') && episode?.name) {
+              updated = insertBeforeProgrammeEnd(updated, `  <sub-title lang="en">${escapeXml(episode.name)}</sub-title>`)
+              changed = true
+              stats.addedSubtitles++
+            }
+
+            if (!hasTag(updated, 'episode-num') && episode?.season && episode?.number) {
+              const ns = xmltvNs(episode.season, episode.number)
+              if (ns) {
+                updated = insertBeforeProgrammeEnd(updated, `  <episode-num system="xmltv_ns">${escapeXml(ns)}</episode-num>`)
+                changed = true
+                stats.addedEpisodeNums++
+              }
+            }
+
+            if (!hasTag(updated, 'date') && episode?.airdate) {
+              const date = formatDateXmltv(episode.airdate)
+              if (date) {
+                updated = insertBeforeProgrammeEnd(updated, `  <date>${date}</date>`)
+                changed = true
+                stats.addedDates++
+              }
+            }
+
+            if (!hasTag(updated, 'desc')) {
+              const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
+              const showSummary = cleanTvmazeSummary(show?.summary || '')
+              const desc = episodeSummary || showSummary
+
+              if (desc) {
+                updated = insertBeforeProgrammeEnd(updated, `  <desc lang="en">${escapeXml(desc)}</desc>`)
+                changed = true
+                stats.addedDescriptions++
+              }
+            }
+
+            if (changed) stats.enriched++
+            return updated
+          }
+
+          async function main() {
+            const parts = xml.split(/(<programme\b[\s\S]*?<\/programme>)/gi)
+            const out = []
+
+            for (const part of parts) {
+              if (!/^<programme\b/i.test(part)) {
+                out.push(part)
+                continue
+              }
+
+              stats.programmes++
+
+              let block = part
+              const title = cleanTitleForSearch(getTag(block, 'title'))
+
+              if (!title) {
+                out.push(block)
+                continue
+              }
+
+              if (isMovie(block)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              if (!needsTvmaze(block)) {
+                out.push(block)
+                continue
+              }
+
+              stats.searchedShows++
+              const show = await tvmazeSearchShow(title)
+
+              if (!show) {
+                out.push(block)
+                continue
+              }
+
+              if (tvmazeShowIsMovieLike(show)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              stats.matchedShows++
+
+              const episodes = await tvmazeEpisodes(show.id)
+              const episode = findEpisodeForProgramme(episodes, block)
+
+              block = enrichBlockMissingOnly(block, show, episode)
+              out.push(block)
+            }
+
+            fs.writeFileSync(guidePath, out.join(''))
+            fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2))
+
+            console.log('[TVMAZE] missing-only enrichment complete')
+            console.log(`[TVMAZE] programmes scanned: ${stats.programmes}`)
+            console.log(`[TVMAZE] movies skipped: ${stats.skippedMovies}`)
+            console.log(`[TVMAZE] shows searched: ${stats.searchedShows}`)
+            console.log(`[TVMAZE] shows matched: ${stats.matchedShows}`)
+            console.log(`[TVMAZE] programmes enriched: ${stats.enriched}`)
+            console.log(`[TVMAZE] categories added: ${stats.addedCategories}`)
+            console.log(`[TVMAZE] subtitles added: ${stats.addedSubtitles}`)
+            console.log(`[TVMAZE] episode nums added: ${stats.addedEpisodeNums}`)
+            console.log(`[TVMAZE] dates added: ${stats.addedDates}`)
+            console.log(`[TVMAZE] descriptions added: ${stats.addedDescriptions}`)
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
 
       - name: Validate OTA output
         run: |
@@ -619,7 +1153,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/OTALocalsguide.xml
+          git add guides/OTALocalsguide.xml guides/.tvmaze-ota-cache.json
 
           if git diff --cached --quiet; then
             echo "No OTA guide changes to commit"
