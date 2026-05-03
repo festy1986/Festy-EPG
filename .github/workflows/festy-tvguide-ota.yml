@@ -31,11 +31,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+          cache-dependency-path: epg/package-lock.json
 
       - name: Install EPG dependencies
         run: |
           cd epg
-          npm install
+          npm ci
 
       - name: Build OTA channel source from RAW
         run: |
@@ -161,7 +163,7 @@ jobs:
 
           module.exports = {
             site: 'tvguide.com',
-            delay: 800,
+            delay: 200,
             days: 14,
 
             url({ date, channel }) {
@@ -195,37 +197,46 @@ jobs:
               console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
 
               const programs = []
+              const batchSize = 5
 
-              for (const item of schedules) {
-                const details = await loadProgramDetails(item)
+              for (let i = 0; i < schedules.length; i += batchSize) {
+                const batch = schedules.slice(i, i + batchSize)
 
-                const title = cleanTitle(item.title || details.title || '')
-                const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
-                const description = cleanSpaces(details.description || item.description || '')
+                const results = await Promise.all(
+                  batch.map(async item => {
+                    const details = await loadProgramDetails(item)
 
-                const seasonNumber = details.seasonNumber || details.season || ''
-                const episodeNumber = details.episodeNumber || details.episode || ''
-                const episodeCode = buildEpisodeCode(seasonNumber, episodeNumber)
+                    const title = cleanTitle(item.title || details.title || '')
+                    const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
+                    const description = cleanSpaces(details.description || item.description || '')
 
-                const releaseYear = details.releaseYear || details.year || ''
-                const airDate =
-                  formatTVGuideDate(details.originalAirDate || details.airDate || details.episodeAirDate) ||
-                  formatUnixDate(details.originalAirTime || details.firstAired)
+                    const seasonNumber = details.seasonNumber || details.season || ''
+                    const episodeNumber = details.episodeNumber || details.episode || ''
+                    const episodeCode = buildEpisodeCode(seasonNumber, episodeNumber)
 
-                const finalDescription = buildPackedDescription({
-                  episodeTitle,
-                  episodeCode,
-                  description,
-                  airDate,
-                  releaseYear
-                })
+                    const releaseYear = details.releaseYear || details.year || ''
+                    const airDate =
+                      formatTVGuideDate(details.originalAirDate || details.airDate || details.episodeAirDate) ||
+                      formatUnixDate(details.originalAirTime || details.firstAired)
 
-                programs.push({
-                  title,
-                  description: finalDescription,
-                  start: dayjs.unix(item.startTime),
-                  stop: dayjs.unix(item.endTime)
-                })
+                    const finalDescription = buildPackedDescription({
+                      episodeTitle,
+                      episodeCode,
+                      description,
+                      airDate,
+                      releaseYear
+                    })
+
+                    return {
+                      title,
+                      description: finalDescription,
+                      start: dayjs.unix(item.startTime),
+                      stop: dayjs.unix(item.endTime)
+                    }
+                  })
+                )
+
+                programs.push(...results)
               }
 
               return programs
