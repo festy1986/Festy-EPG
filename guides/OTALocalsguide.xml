@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?><tv date="20260503">
 <channel id="365BLK.us"><display-name>365BLK</display-name><icon src="https://iili.io/FnQVWVj.png"/><url>https://tvguide.com</url></channel>
 <channel id="ABC.PORTLAND.us"><display-name>ABC PORTLAND</display-name><url>https://tvguide.com</url></channel>
-<channel id="ANTENNA.TV.us"><display-name>ANTENNA TV</display-name><url>https://tvguide.com</url></channel>
+<channel id="ANTENNA.TV.us"><display-name>ANTENNA TV</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Antenna%20TV.png"/><url>https://tvguide.com</url></channel>
 <channel id="BOUNCE.TV.us"><display-name>BOUNCE TV</display-name><url>https://tvguide.com</url></channel>
 <channel id="BUSTED.us"><display-name>BUSTED</display-name><url>https://tvguide.com</url></channel>
 <channel id="CBS.PORTLAND.us"><display-name>CBS PORTLAND</display-name><url>https://tvguide.com</url></channel>
-<channel id="CHARGE.us"><display-name>CHARGE</display-name><url>https://tvguide.com</url></channel>
+<channel id="CHARGE.us"><display-name>CHARGE</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png"/><url>https://tvguide.com</url></channel>
 <channel id="COMET.us"><display-name>COMET</display-name><url>https://tvguide.com</url></channel>
-<channel id="COURT.TV.us"><display-name>COURT TV</display-name><url>https://tvguide.com</url></channel>
+<channel id="COURT.TV.us"><display-name>COURT TV</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png"/><url>https://tvguide.com</url></channel>
 <channel id="CREATE.us"><display-name>CREATE</display-name><url>https://tvguide.com</url></channel>
 <channel id="CREATE.AUGUSTA.us"><display-name>CREATE AUGUSTA</display-name><url>https://tvguide.com</url></channel>
 <channel id="CW.BOSTON.us"><display-name>CW BOSTON</display-name><url>https://tvguide.com</url></channel>
@@ -20,7 +23,8 @@
 <channel id="HSN.us"><display-name>HSN</display-name><icon src="https://i.imgur.com/rnZN7rD.png"/><url>https://tvguide.com</url></channel>
 <channel id="HSN.2.us"><display-name>HSN 2</display-name><url>https://tvguide.com</url></channel>
 <channel id="ION.MYSTERY.us"><display-name>ION MYSTERY</display-name><url>https://tvguide.com</url></channel>
-<channel id="ION.PLUS.us"><display-name>ION PLUS</display-name><url>https://tvguide.com</url></channel>
+<channel id="ION.PLUS.us"><display-name>ION PLUS</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png"/><url>https://tvguide.com</url></channel>
 <channel id="ION.PORTLAND.us"><display-name>ION PORTLAND</display-name><url>https://tvguide.com</url></channel>
 <channel id="LAFF.us"><display-name>LAFF</display-name><url>https://tvguide.com</url></channel>
 <channel id="METV.us"><display-name>METV</display-name><url>https://tvguide.com</url></channel>
@@ -28,7 +32,7 @@
 <channel id="NBC.PORTLAND.us"><display-name>NBC PORTLAND</display-name><url>https://tvguide.com</url></channel>
 <channel id="NOSEY.us"><display-name>NOSEY</display-name><url>https://tvguide.com</url></channel>
 <channel id="OUTLAW.us"><display-name>OUTLAW</display-name><url>https://tvguide.com</url></channel>
-<channel id="PBS.us"><display-name>PBS</display-name><icon src="https://upload.wikimedia.org/wikipedia/commons/8/89/PBS_logo_2019.svg"/><url>https://tvguide.com</url></channel>
+<channel id="PBS.us"><display-name>PBS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png"/><url>https://tvguide.com</url></channel>
 <channel id="PBS.AUGUSTA.us"><display-name>PBS AUGUSTA</display-name><url>https://tvguide.com</url></channel>
 <channel id="PBS.KIDS.us"><display-name>PBS KIDS</display-name><url>https://tvguide.com</url></channel>
 <channel id="PBS.KIDS.AUGUSTA.us"><display-name>PBS KIDS AUGUSTA</display-name><url>https://tvguide.com</url></channel>
