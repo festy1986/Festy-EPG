@@ -907,18 +907,15 @@ jobs:
 
           function needsTvmaze(block) {
             if (!hasAnyCategory(block)) return true
-            if (!hasTag(block, 'desc')) return true
 
-            // TVMaze must respect the packed display format already written by TVGuide.
-            // If TVGuide already packed "Episode Title - SxxExx. Description. (MM/DD/YYYY)" into <desc>,
-            // TVMaze must not add duplicate <sub-title>, <episode-num>, or <date> tags just because
-            // that metadata is not in separate XMLTV fields.
             const desc = getTag(block, 'desc')
-            const hasPackedEpisodeCode = /\bS\d+E\d+\b/i.test(desc)
-            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+            if (!desc) return true
 
-            if (!hasPackedEpisodeCode && !hasTag(block, 'episode-num')) return true
-            if (!hasPackedDisplayDate && !hasTag(block, 'date')) return true
+            // Strict rule: TVMaze may only fill fields TVGuide did not find.
+            // It must not rebuild descriptions because an episode title/code is missing.
+            // The only packed-desc edit allowed after TVGuide is appending a missing airdate.
+            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+            if (!hasPackedDisplayDate) return true
 
             return false
           }
@@ -1119,31 +1116,109 @@ jobs:
               .trim()
           }
 
+          function splitTrailingDisplayDate(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+            const match = cleaned.match(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/)
+            if (!match) return { body: cleaned, dateText: '' }
+            return {
+              body: cleaned.slice(0, match.index).trim(),
+              dateText: match[1]
+            }
+          }
+
+          function parsePackedDescription(desc) {
+            const split = splitTrailingDisplayDate(desc)
+            const withoutDate = split.body
+            const firstSentence = withoutDate.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            const rest = firstSentence && firstSentence[0].length < withoutDate.length
+              ? withoutDate.slice(firstSentence[0].length).trim()
+              : ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) {
+              return {
+                episodeTitle: prefixMatch[1].trim(),
+                episodeCode: prefixMatch[2].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            const codeOnlyMatch = first.match(/^(S\d+E\d+|S\d+|E\d+)$/i)
+            if (codeOnlyMatch) {
+              return {
+                episodeTitle: '',
+                episodeCode: codeOnlyMatch[1].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            // A first sentence that exactly matches the TVMaze episode name is an existing title-only prefix.
+            return {
+              episodeTitle: '',
+              episodeCode: '',
+              body: withoutDate,
+              dateText: split.dateText,
+              hadPrefix: false
+            }
+          }
+
           function buildTvmazePackedDescription(existingDesc, show, episode) {
-            const body = cleanPackedTvmazeDescription(existingDesc || cleanTvmazeSummary(episode?.summary || '') || cleanTvmazeSummary(show?.summary || ''))
-            const prefixParts = []
+            const existing = cleanPackedTvmazeDescription(existingDesc)
+            const parsed = parsePackedDescription(existing)
+
             const episodeName = cleanTvmazeSummary(episode?.name || '')
             const episodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
+            const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
+            const showSummary = cleanTvmazeSummary(show?.summary || '')
+            const displayDate = formatDateDisplay(episode?.airdate)
 
-            if (episodeName && !descHasEpisodeName(body, episodeName)) {
-              if (episodeCode && !descHasEpisodeCode(body, episode?.season, episode?.number)) {
-                prefixParts.push(`${episodeName} - ${episodeCode}`)
-              } else {
-                prefixParts.push(episodeName)
-              }
-            } else if (episodeCode && !descHasEpisodeCode(body, episode?.season, episode?.number)) {
-              prefixParts.push(episodeCode)
+            let titlePart = parsed.episodeTitle
+            let codePart = parsed.episodeCode
+            let bodyPart = parsed.body
+            let datePart = parsed.dateText
+
+            // If TVGuide already put the episode title in the desc, leave it.
+            // If it is missing and TVMaze has it, add only that missing title.
+            if (!titlePart && episodeName && !descHasEpisodeName(existing, episodeName)) {
+              titlePart = episodeName
             }
 
-            const parts = [...prefixParts]
-            if (body) parts.push(body)
+            // If TVGuide already put SxxExx in the desc, leave it.
+            // If it is missing and TVMaze has it, add only that missing code.
+            if (!codePart && episodeCode && !descHasEpisodeCode(existing, episode?.season, episode?.number)) {
+              codePart = episodeCode
+            }
+
+            // If TVGuide already gave a real description body, leave it untouched.
+            // If the body is missing or the whole desc was only metadata, add only the missing synopsis.
+            if (!bodyPart || bodyPart === titlePart || bodyPart === codePart || bodyPart === `${titlePart} - ${codePart}`) {
+              bodyPart = episodeSummary || showSummary || ''
+            }
+
+            // If TVGuide already put the date/year at the end, leave it.
+            // If it is missing and TVMaze has an airdate, add only that missing date.
+            if (!datePart && displayDate && !descHasDisplayDate(existing, episode?.airdate)) {
+              datePart = displayDate
+            }
+
+            const parts = []
+            if (titlePart && codePart) parts.push(`${titlePart} - ${codePart}`)
+            else if (titlePart) parts.push(titlePart)
+            else if (codePart) parts.push(codePart)
+
+            if (bodyPart) {
+              const bodyNorm = normalize(bodyPart)
+              const prefixNorm = normalize(parts[0] || '')
+              if (!prefixNorm || bodyNorm !== prefixNorm) parts.push(bodyPart)
+            }
 
             let desc = cleanPackedTvmazeDescription(parts.join('. '))
-            const displayDate = formatDateDisplay(episode?.airdate)
-            if (displayDate && !descHasDisplayDate(desc, episode?.airdate)) {
-              desc = desc ? `${desc} (${displayDate})` : `(${displayDate})`
-            }
-
+            if (datePart) desc = desc ? `${desc} (${datePart})` : `(${datePart})`
             return cleanPackedTvmazeDescription(desc)
           }
 
@@ -1173,10 +1248,10 @@ jobs:
               stats.addedCategories++
             }
 
-            // TVMaze follows the same display rule as TVGuide:
-            // title stays title-only, and episode title/code/date are packed into <desc>.
-            // It does not add duplicate <sub-title>, <episode-num>, or <date> when that information
-            // is already present in the packed description.
+            // Field-level fill only:
+            // Keep every TVGuide-provided desc component that already exists.
+            // Add only missing episode title, missing SxxExx, missing synopsis, or missing airdate.
+            // Never replace TVGuide's existing synopsis just because one metadata piece is missing.
             const existingDesc = getTag(updated, 'desc')
             const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode)
 
