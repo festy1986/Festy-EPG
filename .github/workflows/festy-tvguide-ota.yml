@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: epg-guide-writes-main
+  cancel-in-progress: false
+
 jobs:
   build-festy-tvguide-ota:
     runs-on: ubuntu-latest
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Clone IPTV-org EPG engine
         run: |
@@ -112,7 +118,6 @@ jobs:
 
             const shortName = names[0]
             if (!shortName) continue
-
             if (!wanted[shortName]) continue
 
             const sourceId = siteIdRaw.split('#').pop()
@@ -248,7 +253,7 @@ jobs:
         run: |
           node scripts/apply-custom-logos.cjs guides/OTALocalsguide.xml
 
-      - name: Commit OTA guide
+      - name: Commit OTA guide safely
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -257,7 +262,25 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No OTA guide changes to commit"
-          else
-            git commit -m "Update OTA guide"
-            git push
+            exit 0
           fi
+
+          git commit -m "Update OTA guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            git fetch origin main
+            git rebase origin/main
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, retrying after rebase..."
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
