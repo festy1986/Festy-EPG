@@ -48,7 +48,6 @@ jobs:
           }
 
           const input = fs.readFileSync(inputPath, 'utf8')
-
           const channelBlocks = [...input.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/g)]
 
           if (!channelBlocks.length) {
@@ -110,7 +109,6 @@ jobs:
               siteId = `${OTA_PROVIDER_ID}#${siteId}`
             }
 
-            // Force OTA provider ID even if an older bad provider ID slipped in.
             const sourceId = siteId.split('#').pop()
             siteId = `${OTA_PROVIDER_ID}#${sourceId}`
 
@@ -124,7 +122,6 @@ jobs:
           }
 
           const output = `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${channels.join('\n')}\n</channels>\n`
-
           fs.writeFileSync(outputPath, output)
 
           console.log(`Wrote ${channels.length} OTA channels for TVGuide grabber from ${inputPath}`)
@@ -156,7 +153,7 @@ jobs:
           module.exports = {
             site: 'tvguide.com',
             delay: 3000,
-            days: 1,
+            days: 14,
 
             url({ date, channel }) {
               const [providerId, sourceId] = String(channel.site_id).split('#')
@@ -397,7 +394,7 @@ jobs:
           npx tsx scripts/commands/epg/grab.ts \
             --channels=sites/tvguide.com/festy-ota.channels.xml \
             --output=../guides/OTALocalsguide.xml \
-            --days=1
+            --days=14
 
           cd ..
 
@@ -415,12 +412,16 @@ jobs:
           echo "OTA programme count:"
           grep -c '<programme ' guides/OTALocalsguide.xml || true
 
+      - name: Apply custom logos to both guides
+        run: |
+          node scripts/apply-custom-logos.cjs guides/tvguidetivimate.xml guides/OTALocalsguide.xml
+
       - name: Commit OTA guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/OTALocalsguide.xml
+          git add guides/OTALocalsguide.xml guides/tvguidetivimate.xml
 
           if git diff --cached --quiet; then
             echo "No OTA guide changes to commit"
