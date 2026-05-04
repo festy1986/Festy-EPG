@@ -1,1 +1,24 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.HITS.TEST.us" site_id="9100002976#9233013492">HBO HITS TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.DRAMA.TEST.us" site_id="9100002976#9200002532">HBO DRAMA TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.COMEDY.TEST.us" site_id="9100002976#9233003785">HBO COMEDY TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.1.TEST.us" site_id="9100002976#9233009491">HBO RAW 1 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.2.TEST.us" site_id="9100002976#9233001970">HBO RAW 2 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.3.TEST.us" site_id="9100002976#9200000652">HBO RAW 3 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.4.TEST.us" site_id="9100002976#9233011831">HBO RAW 4 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.5.TEST.us" site_id="9100002976#9233000263">HBO RAW 5 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.6.TEST.us" site_id="9100002976#9200009688">HBO RAW 6 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.7.TEST.us" site_id="9100002976#9200016631">HBO RAW 7 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.RAW.8.TEST.us" site_id="9100002976#9233009922">HBO RAW 8 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.1.TEST.us" site_id="9100002976#9233017279">SHOWCASE RAW 1 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.2.TEST.us" site_id="9100002976#9200022063">SHOWCASE RAW 2 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.3.TEST.us" site_id="9100002976#9233003805">SHOWCASE RAW 3 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.4.TEST.us" site_id="9100002976#9233015599">SHOWCASE RAW 4 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.5.TEST.us" site_id="9100002976#9200002670">SHOWCASE RAW 5 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.6.TEST.us" site_id="9100002976#9200000854">SHOWCASE RAW 6 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.7.TEST.us" site_id="9100002976#9200004693">SHOWCASE RAW 7 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.8.TEST.us" site_id="9100002976#9233005988">SHOWCASE RAW 8 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.9.TEST.us" site_id="9100002976#9233009930">SHOWCASE RAW 9 TEST</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWCASE.RAW.10.TEST.us" site_id="9100002976#9200012474">SHOWCASE RAW 10 TEST</channel>
+</channels>
