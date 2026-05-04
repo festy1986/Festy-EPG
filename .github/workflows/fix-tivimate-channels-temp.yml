@@ -1,4 +1,4 @@
-name: Fix Tivimate Direct
+name: Fix Tivimate Channels Temp
 
 on:
   workflow_dispatch:
@@ -13,13 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Patch both Tivimate guides
+      - name: Remove bad entries and add confirmed channels in both guides
+        shell: bash
         run: |
           python3 <<'PY'
           from pathlib import Path
           import re
 
-          FILES = [
+          files = [
               Path("guides/tvguidetivimate.xml"),
               Path("guides/tvguidetivimateguide.xml"),
           ]
@@ -37,28 +38,45 @@ jobs:
               "HBO.MOVIES.us": ("9100002976#9233009866", "HBO MOVIES"),
           }
 
-          def channel_line(xmltv_id, site_id, name):
+          def confirmed_line(xmltv_id, site_id, name):
               return f'  <channel site="tvguide.com" lang="en" xmltv_id="{xmltv_id}" site_id="{site_id}">{name}</channel>'
 
-          for FILE in FILES:
-              if not FILE.exists():
-                  raise SystemExit(f"Missing required file: {FILE}")
+          def remove_entries(text, xmltv_id):
+              total = 0
 
-              text = FILE.read_text(encoding="utf-8")
+              # Remove raw tvguide-style entries:
+              # <channel site="tvguide.com" lang="en" xmltv_id="CNN.us" site_id="...">CNN</channel>
+              raw_pattern = re.compile(
+                  rf'\s*<channel\b[^>]*\bxmltv_id="{re.escape(xmltv_id)}"[^>]*>.*?</channel>',
+                  re.DOTALL,
+              )
+              text, count = raw_pattern.subn("", text)
+              total += count
 
-              print(f"\n--- Patching {FILE} ---")
+              # Remove XMLTV/Tivimate-style entries:
+              # <channel id="CNN.us"> ... </channel>
+              tivi_pattern = re.compile(
+                  rf'\s*<channel\b[^>]*\bid="{re.escape(xmltv_id)}"[^>]*>.*?</channel>',
+                  re.DOTALL,
+              )
+              text, count = tivi_pattern.subn("", text)
+              total += count
 
-              # Remove ALL old/duplicate raw-style entries for these xmltv_ids
+              return text, total
+
+          for file_path in files:
+              if not file_path.exists():
+                  raise SystemExit(f"Missing required file: {file_path}")
+
+              text = file_path.read_text(encoding="utf-8")
+              print(f"\n--- Fixing {file_path} ---")
+
               for xmltv_id in confirmed:
-                  pattern = re.compile(
-                      rf'\s*<channel\s+site="tvguide\.com"\s+lang="en"\s+xmltv_id="{re.escape(xmltv_id)}"\s+site_id="[^"]+">[^<]*</channel>',
-                      re.MULTILINE,
-                  )
-                  text, count = pattern.subn("", text)
-                  print(f"Removed {count} old raw-style entries for {xmltv_id}")
+                  text, removed = remove_entries(text, xmltv_id)
+                  print(f"Removed {removed} old entries for {xmltv_id}")
 
               block = "\n".join(
-                  channel_line(xmltv_id, site_id, name)
+                  confirmed_line(xmltv_id, site_id, name)
                   for xmltv_id, (site_id, name) in confirmed.items()
               )
 
@@ -71,23 +89,71 @@ jobs:
                   else:
                       text = text.replace("</tv>", block + "\n</tv>")
               else:
-                  raise SystemExit(f"Could not find </channels> or </tv> in {FILE}")
+                  raise SystemExit(f"Could not find </channels> or </tv> in {file_path}")
 
-              FILE.write_text(text.strip() + "\n", encoding="utf-8")
+              file_path.write_text(text.strip() + "\n", encoding="utf-8")
 
-          print("\nAdded/fixed:")
+          print("\nFinal confirmed channels added to BOTH guides:")
           for xmltv_id, (site_id, name) in confirmed.items():
               print(f"{xmltv_id} -> {site_id} -> {name}")
           PY
 
+      - name: Verify no duplicate confirmed IDs remain
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          files = [
+              Path("guides/tvguidetivimate.xml"),
+              Path("guides/tvguidetivimateguide.xml"),
+          ]
+
+          ids = [
+              "HIST.us",
+              "FYIHD.us",
+              "RETRPLEXHD.us",
+              "CNN.us",
+              "FX.us",
+              "MTV.us",
+              "SHOWTIME.SHOWCASE.us",
+              "FREEFRM.us",
+              "HBO.us",
+              "HBO.MOVIES.us",
+          ]
+
+          failed = False
+
+          for file_path in files:
+              text = file_path.read_text(encoding="utf-8")
+              print(f"\n--- Verifying {file_path} ---")
+
+              for xmltv_id in ids:
+                  raw_count = len(re.findall(rf'\bxmltv_id="{re.escape(xmltv_id)}"', text))
+                  id_count = len(re.findall(rf'\bid="{re.escape(xmltv_id)}"', text))
+                  total = raw_count + id_count
+                  print(f"{xmltv_id}: {total}")
+
+                  if total != 1:
+                      failed = True
+                      print(f"ERROR: expected exactly 1 entry for {xmltv_id}, found {total}")
+
+          if failed:
+              sys.exit(1)
+          PY
+
       - name: Show focused diff
+        shell: bash
         run: |
           git diff -- guides/tvguidetivimate.xml guides/tvguidetivimateguide.xml | grep -E 'HIST|FYIHD|RETRPLEXHD|CNN|FX|MTV|SHOWTIME|FREEFRM|HBO|^[+-]' || true
 
-      - name: Commit
+      - name: Commit changes
+        shell: bash
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add guides/tvguidetivimate.xml guides/tvguidetivimateguide.xml
-          git commit -m "Fix Tivimate confirmed channel mappings in both guides" || exit 0
+          git commit -m "Fix confirmed Tivimate channel mappings in both guides" || exit 0
           git push
