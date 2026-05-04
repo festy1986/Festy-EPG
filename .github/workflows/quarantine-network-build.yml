@@ -1,0 +1,99 @@
+name: Quarantine Network Build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build EPG from quarantined channels
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          source = Path("guides/tvguide.xml")
+          channels_file = Path("guides/quarantine-network-test.xml")
+          out = Path("guides/quarantine-network-test-output.xml")
+
+          raw = source.read_text(encoding="utf-8", errors="ignore")
+          ch_xml = channels_file.read_text(encoding="utf-8", errors="ignore")
+
+          # extract test channels
+          channel_re = re.compile(
+              r'<channel\s+site="tvguide\.com"\s+lang="en"\s+xmltv_id="([^"]+)"\s+site_id="([^"]+)">([^<]+)</channel>'
+          )
+
+          channels = channel_re.findall(ch_xml)
+
+          # build output
+          output = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              "<tv>"
+          ]
+
+          # add channels
+          for xmltv_id, site_id, name in channels:
+              output.append(
+                  f'<channel id="{xmltv_id}"><display-name>{name}</display-name></channel>'
+              )
+
+          # extract programmes per site_id (this is the key fix)
+          prog_re = re.compile(
+              r'<programme[^>]+channel="([^"]+)"[^>]*>.*?</programme>',
+              re.S
+          )
+
+          # map site_id → xmltv_id
+          site_map = {site_id: xmltv_id for xmltv_id, site_id, _ in channels}
+
+          # THIS is the important part:
+          # we match by site_id from the source channel definitions
+
+          for site_id, xmltv_id in site_map.items():
+
+              # find corresponding original xmltv_id in raw list
+              ch_match = re.search(
+                  rf'<channel\s+site="tvguide\.com"\s+lang="en"\s+xmltv_id="([^"]+)"\s+site_id="{re.escape(site_id)}">',
+                  raw
+              )
+
+              if not ch_match:
+                  continue
+
+              original_id = ch_match.group(1)
+
+              matches = re.findall(
+                  rf'<programme[^>]+channel="{re.escape(original_id)}"[^>]*>.*?</programme>',
+                  raw,
+                  re.S
+              )
+
+              for p in matches:
+                  p = re.sub(
+                      r'channel="[^"]+"',
+                      f'channel="{xmltv_id}"',
+                      p
+                  )
+                  output.append(p)
+
+          output.append("</tv>")
+          out.write_text("\n".join(output), encoding="utf-8")
+
+          print(f"Wrote {out}")
+          PY
+
+      - name: Commit output
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add guides/quarantine-network-test-output.xml
+          git commit -m "Build quarantined network EPG output" || exit 0
+          git push
