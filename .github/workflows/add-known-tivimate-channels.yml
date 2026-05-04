@@ -1,4 +1,4 @@
-name: Add known Tivimate channels
+name: Fix Tivimate Known Channels
 
 on:
   workflow_dispatch:
@@ -7,54 +7,74 @@ permissions:
   contents: write
 
 jobs:
-  patch:
+  fix-known-channels:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Patch channels
+      - name: Patch known Tivimate channels
+        shell: bash
         run: |
-          python3 << 'PY'
+          python3 <<'PY'
+          from pathlib import Path
           import re
 
-          source_file = "guides/tvguide.xml"
-          target_file = "guides/tvguidetivimateguide.xml"
+          file_path = Path("guides/tvguidetivimateguide.xml")
 
-          ids = ["HIST.us", "FYIHD.us", "RETRPLEXHD.us"]
+          text = file_path.read_text(encoding="utf-8")
 
-          with open(source_file, encoding="utf-8") as f:
-              source = f.read()
+          fixes = {
+              "HIST.us": {
+                  "site_id": "9100002976#9233008002",
+                  "display": "HISTORY",
+              },
+              "FYIHD.us": {
+                  "site_id": "9100002976#9233000161",
+                  "display": "FYI",
+              },
+              "RETRPLEXHD.us": {
+                  "site_id": "9100002976#9200006666",
+                  "display": "RETROPLEX",
+              },
+          }
 
-          try:
-              with open(target_file, encoding="utf-8") as f:
-                  target = f.read()
-          except:
-              target = "<?xml version='1.0' encoding='UTF-8'?>\n<channels>\n</channels>"
+          def channel_line(xmltv_id, site_id, display):
+              return f'  <channel site="tvguide.com" lang="en" xmltv_id="{xmltv_id}" site_id="{site_id}">{display}</channel>'
 
-          def extract(id):
-              m = re.search(rf'<channel.*xmltv_id="{id}".*?>(.*?)</channel>', source)
-              return m.group(0) if m else None
+          for xmltv_id, data in fixes.items():
+              pattern = re.compile(
+                  rf'\s*<channel\s+site="tvguide\.com"\s+lang="en"\s+xmltv_id="{re.escape(xmltv_id)}"\s+site_id="[^"]+">[^<]*</channel>',
+                  re.MULTILINE,
+              )
 
-          additions = []
+              replacement = "\n" + channel_line(xmltv_id, data["site_id"], data["display"])
 
-          for cid in ids:
-              if cid in target:
-                  continue
-              ch = extract(cid)
-              if ch:
-                  additions.append("  " + ch)
+              if pattern.search(text):
+                  text = pattern.sub(replacement, text, count=1)
+              else:
+                  if "</channels>" in text:
+                      text = text.replace("</channels>", channel_line(xmltv_id, data["site_id"], data["display"]) + "\n</channels>")
+                  elif "</tv>" in text:
+                      first_programme = text.find("<programme ")
+                      if first_programme != -1:
+                          text = text[:first_programme] + channel_line(xmltv_id, data["site_id"], data["display"]) + "\n" + text[first_programme:]
+                      else:
+                          text = text.replace("</tv>", channel_line(xmltv_id, data["site_id"], data["display"]) + "\n</tv>")
+                  else:
+                      text = text.rstrip() + "\n" + channel_line(xmltv_id, data["site_id"], data["display"]) + "\n"
 
-          target = target.replace("</channels>", "\n".join(additions) + "\n</channels>")
-
-          with open(target_file, "w", encoding="utf-8") as f:
-              f.write(target)
+          file_path.write_text(text, encoding="utf-8")
           PY
 
-      - name: Commit
+      - name: Show diff
+        run: git diff -- guides/tvguidetivimateguide.xml
+
+      - name: Commit changes
         run: |
           git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add .
-          git commit -m "Add missing Tivimate channels" || exit 0
+          git config user.email "github-actions@github.com"
+          git add guides/tvguidetivimateguide.xml
+          git commit -m "Fix known Tivimate channel display names" || exit 0
           git push
