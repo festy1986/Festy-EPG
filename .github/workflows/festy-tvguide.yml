@@ -696,27 +696,377 @@ jobs:
           cd epg
 
           rm -f ../guides/tvguidetivimateguide.xml
+          rm -f ../guides/tvguidetivimateguide.working.xml
           rm -f ../guides/tvguidetivimateguide.pass*.xml
           rm -f ../guides/tvguidetivimateguide.pass*.log
           rm -f ../guides/tvguidetivimateguide.pass*.count
+          rm -f ../guides/tvguidetivimateguide.pass*.missing.json
+          rm -f ../guides/tvguidetivimateguide.pass*.retry.channels.xml
+          rm -f ../guides/tvguidetivimateguide.tvmaze-missing.json
+
+          cat > scripts/tivimate-recovery.cjs <<'EOF'
+          const fs = require('fs')
+
+          const command = process.argv[2]
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function attr(attrs, name) {
+            const m = String(attrs || '').match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function stripTags(s) {
+            return decodeXml(String(s || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function getTag(block, tag) {
+            const m = String(block || '').match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? stripTags(m[1]) : ''
+          }
+
+          function getTags(block, tag) {
+            return [...String(block || '').matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
+              .map(m => stripTags(m[1]))
+              .filter(Boolean)
+          }
+
+          function hasTag(block, tag) {
+            return new RegExp(`<${tag}\\b`, 'i').test(String(block || ''))
+          }
+
+          function cleanBody(body) {
+            const display = String(body || '').match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return stripTags(display[1])
+            return stripTags(String(body || '').replace(/<url>[\s\S]*?<\/url>/gi, ''))
+          }
+
+          function parseChannels(xml) {
+            return [...String(xml || '').matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
+              const attrs = m[1]
+              const body = m[2]
+              const xmltvId = attr(attrs, 'xmltv_id') || attr(attrs, 'id')
+              return {
+                block: m[0],
+                id: attr(attrs, 'id') || xmltvId,
+                xmltv_id: xmltvId,
+                site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
+                name: cleanBody(body)
+              }
+            })
+          }
+
+          function parseProgrammes(xml) {
+            return [...String(xml || '').matchAll(/<programme\b[\s\S]*?<\/programme>/gi)].map(m => m[0])
+          }
+
+          function programmeKey(block) {
+            const header = String(block || '').match(/^<programme\b([^>]*)>/i)
+            const attrs = header ? header[1] : ''
+            const channel = attr(attrs, 'channel')
+            const start = attr(attrs, 'start')
+            const stop = attr(attrs, 'stop')
+            const title = getTag(block, 'title')
+            return `${channel}|${start}|${stop}|${title}`
+          }
+
+          function channelOfProgramme(block) {
+            const header = String(block || '').match(/^<programme\b([^>]*)>/i)
+            return header ? attr(header[1], 'channel') : ''
+          }
+
+          function dateOfProgramme(block) {
+            const header = String(block || '').match(/^<programme\b([^>]*)>/i)
+            const start = header ? attr(header[1], 'start') : ''
+            return start.slice(0, 8)
+          }
+
+          function isMovie(block) {
+            return getTags(block, 'category').some(c => /^(movie|film)$/i.test(c))
+          }
+
+          function isSeries(block) {
+            return getTags(block, 'category').some(c => /^(series|miniseries)$/i.test(c))
+          }
+
+          function splitDesc(desc) {
+            const cleaned = String(desc || '').replace(/\s+/g, ' ').trim()
+            const dateMatch = cleaned.match(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/)
+            const withoutDate = dateMatch ? cleaned.slice(0, dateMatch.index).trim() : cleaned
+            const firstSentence = withoutDate.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            const prefix = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            const codeOnly = first.match(/^(S\d+E\d+|S\d+|E\d+)$/i)
+
+            return {
+              raw: cleaned,
+              hasDate: Boolean(dateMatch),
+              hasEpisodeCode: /\bS\d+E\d+\b/i.test(cleaned),
+              hasEpisodeTitle: Boolean(prefix && prefix[1]) || Boolean(first && !codeOnly && first.length <= 80),
+              hasBody: Boolean(withoutDate && (!first || withoutDate.length > first.length + 2))
+            }
+          }
+
+          function missingFields(block) {
+            const missing = []
+            const title = getTag(block, 'title')
+            const desc = getTag(block, 'desc')
+            const categories = getTags(block, 'category')
+            const parts = splitDesc(desc)
+
+            if (!title) missing.push('title')
+            if (!categories.length) missing.push('category')
+            if (!desc) missing.push('description')
+
+            if (desc && isSeries(block)) {
+              if (!parts.hasEpisodeTitle) missing.push('episodeTitle')
+              if (!parts.hasEpisodeCode) missing.push('episodeCode')
+              if (!parts.hasDate) missing.push('airDate')
+            }
+
+            if (desc && isMovie(block)) {
+              if (!parts.hasDate) missing.push('releaseYear')
+            }
+
+            return [...new Set(missing)]
+          }
+
+          function completionScore(block) {
+            const missing = missingFields(block)
+            const desc = getTag(block, 'desc')
+            let score = 0
+            if (getTag(block, 'title')) score += 10
+            if (hasTag(block, 'category')) score += 10
+            if (desc) score += 20
+            if (splitDesc(desc).hasEpisodeTitle) score += 5
+            if (splitDesc(desc).hasEpisodeCode) score += 5
+            if (splitDesc(desc).hasDate) score += 5
+            score -= missing.length
+            return score
+          }
+
+          function parseZeroProgramDays(logText, channels) {
+            const out = []
+            const byName = new Map()
+            for (const ch of channels) {
+              if (ch.name) byName.set(ch.name.toLowerCase(), ch)
+            }
+
+            for (const line of String(logText || '').split(/\r?\n/)) {
+              const m = line.match(/\[PULL\]\s+(.+?)\s+\|\s+(\d{4}-\d{2}-\d{2})\s+\|\s+programs=0/i)
+              if (!m) continue
+
+              const name = m[1].trim()
+              const date = m[2].replace(/-/g, '')
+              const ch = byName.get(name.toLowerCase())
+
+              out.push({
+                channel: ch?.xmltv_id || name,
+                date,
+                missing: ['programmes'],
+                reason: 'programs=0'
+              })
+            }
+
+            return out
+          }
+
+          function writeRetryChannels(allChannelsPath, missingPath, outputPath) {
+            const channelsXml = fs.readFileSync(allChannelsPath, 'utf8')
+            const missing = JSON.parse(fs.readFileSync(missingPath, 'utf8'))
+            const channels = parseChannels(channelsXml)
+            const needed = new Set(missing.map(x => x.channel).filter(Boolean))
+            const out = channels.filter(ch => needed.has(ch.xmltv_id) || needed.has(ch.id) || needed.has(ch.name))
+
+            fs.writeFileSync(
+              outputPath,
+              `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.map(ch => `  ${ch.block.replace(/\n/g, '\n  ')}`).join('\n')}\n</channels>\n`
+            )
+
+            console.log(`[RECOVERY] retry channels written: ${out.length}`)
+          }
+
+          function analyze({ channelsPath, guidePath, logPath, missingPath, retryChannelsPath }) {
+            const channelsXml = fs.readFileSync(channelsPath, 'utf8')
+            const guideXml = fs.existsSync(guidePath) ? fs.readFileSync(guidePath, 'utf8') : ''
+            const logText = logPath && fs.existsSync(logPath) ? fs.readFileSync(logPath, 'utf8') : ''
+            const channels = parseChannels(channelsXml)
+            const programmes = parseProgrammes(guideXml)
+
+            const missing = []
+            const seenProgrammeChannels = new Set()
+
+            for (const block of programmes) {
+              const channel = channelOfProgramme(block)
+              const date = dateOfProgramme(block)
+              if (channel) seenProgrammeChannels.add(channel)
+
+              const fields = missingFields(block)
+              if (fields.length) {
+                missing.push({
+                  channel,
+                  date,
+                  title: getTag(block, 'title'),
+                  start: (String(block).match(/start="([^"]+)"/i) || [])[1] || '',
+                  stop: (String(block).match(/stop="([^"]+)"/i) || [])[1] || '',
+                  missing: fields,
+                  reason: 'metadata'
+                })
+              }
+            }
+
+            for (const ch of channels) {
+              if (ch.xmltv_id && !seenProgrammeChannels.has(ch.xmltv_id)) {
+                missing.push({
+                  channel: ch.xmltv_id,
+                  date: '',
+                  title: ch.name,
+                  start: '',
+                  stop: '',
+                  missing: ['programmes'],
+                  reason: 'no-programmes-for-channel'
+                })
+              }
+            }
+
+            missing.push(...parseZeroProgramDays(logText, channels))
+
+            const deduped = []
+            const seen = new Set()
+
+            for (const item of missing) {
+              const key = `${item.channel}|${item.date}|${item.start}|${item.stop}|${item.title}|${item.missing.join(',')}`
+              if (seen.has(key)) continue
+              seen.add(key)
+              deduped.push(item)
+            }
+
+            fs.writeFileSync(missingPath, JSON.stringify(deduped, null, 2))
+            console.log(`[RECOVERY] incomplete programme/day targets: ${deduped.length}`)
+
+            if (retryChannelsPath) {
+              writeRetryChannels(channelsPath, missingPath, retryChannelsPath)
+            }
+          }
+
+          function merge({ basePath, retryPath, outputPath }) {
+            if (!fs.existsSync(retryPath)) {
+              fs.copyFileSync(basePath, outputPath)
+              console.log('[RECOVERY] no retry file to merge')
+              return
+            }
+
+            const baseXml = fs.readFileSync(basePath, 'utf8')
+            const retryXml = fs.readFileSync(retryPath, 'utf8')
+
+            const baseProgrammes = parseProgrammes(baseXml)
+            const retryProgrammes = parseProgrammes(retryXml)
+
+            const baseByKey = new Map()
+            for (const block of baseProgrammes) {
+              baseByKey.set(programmeKey(block), block)
+            }
+
+            let improved = 0
+            let added = 0
+
+            for (const retryBlock of retryProgrammes) {
+              const key = programmeKey(retryBlock)
+              const existing = baseByKey.get(key)
+
+              if (!existing) {
+                baseByKey.set(key, retryBlock)
+                added++
+                continue
+              }
+
+              const existingScore = completionScore(existing)
+              const retryScore = completionScore(retryBlock)
+
+              if (retryScore > existingScore) {
+                baseByKey.set(key, retryBlock)
+                improved++
+              }
+            }
+
+            let mergedXml = baseXml
+
+            for (const original of baseProgrammes) {
+              const key = programmeKey(original)
+              const replacement = baseByKey.get(key)
+              if (replacement && replacement !== original) {
+                mergedXml = mergedXml.replace(original, replacement)
+              }
+            }
+
+            const originalKeys = new Set(baseProgrammes.map(programmeKey))
+            const additions = [...baseByKey.entries()]
+              .filter(([key]) => !originalKeys.has(key))
+              .map(([, block]) => block)
+
+            if (additions.length) {
+              mergedXml = mergedXml.replace(/<\/tv>\s*$/i, `${additions.join('\n')}\n</tv>\n`)
+            }
+
+            fs.writeFileSync(outputPath, mergedXml)
+            console.log(`[RECOVERY] merged retry data: improved=${improved}, added=${added}`)
+          }
+
+          if (command === 'analyze') {
+            analyze({
+              channelsPath: process.argv[3],
+              guidePath: process.argv[4],
+              logPath: process.argv[5],
+              missingPath: process.argv[6],
+              retryChannelsPath: process.argv[7]
+            })
+          } else if (command === 'merge') {
+            merge({
+              basePath: process.argv[3],
+              retryPath: process.argv[4],
+              outputPath: process.argv[5]
+            })
+          } else {
+            console.error(`Unknown command: ${command}`)
+            process.exit(1)
+          }
+          EOF
 
           run_pass() {
             PASS_NAME="$1"
             MAX_CONNECTIONS="$2"
             SCHEDULE_TIMEOUT="$3"
+            CHANNELS_FILE="$4"
 
             echo ""
             echo "============================================================"
             echo "Starting $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
             echo "TVGUIDE_SCHEDULE_TIMEOUT=$SCHEDULE_TIMEOUT"
+            echo "channels=$CHANNELS_FILE"
             echo "============================================================"
 
             export TVGUIDE_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
 
+            CHANNEL_COUNT=$(grep -c '<channel ' "$CHANNELS_FILE" || true)
+            if [ "$CHANNEL_COUNT" -lt 1 ]; then
+              echo "$PASS_NAME has no retry channels; skipping"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.descriptions.count"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.issues.count"
+              return 0
+            fi
+
             set +e
             npx tsx scripts/commands/epg/grab.ts \
-              --channels=sites/tvguide.com/festy-tivimate.channels.xml \
+              --channels="$CHANNELS_FILE" \
               --output="../guides/tvguidetivimateguide.${PASS_NAME}.xml" \
               --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
@@ -751,95 +1101,75 @@ jobs:
             echo "$PASS_NAME possible schedule/detail issues: $ISSUE_COUNT"
           }
 
-          run_pass "pass1-fast" 10 8000
+          run_pass "pass1-fast" 10 8000 "sites/tvguide.com/festy-tivimate.channels.xml"
 
-          PASS1_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
+          cp "../guides/tvguidetivimateguide.pass1-fast.xml" "../guides/tvguidetivimateguide.working.xml"
 
-          if [ "$PASS1_ISSUES" -gt 0 ]; then
+          node scripts/tivimate-recovery.cjs analyze \
+            "sites/tvguide.com/festy-tivimate.channels.xml" \
+            "../guides/tvguidetivimateguide.working.xml" \
+            "../guides/tvguidetivimateguide.pass1-fast.log" \
+            "../guides/tvguidetivimateguide.pass1-fast.missing.json" \
+            "../guides/tvguidetivimateguide.pass2-backup.retry.channels.xml"
+
+          PASS2_RETRY_CHANNELS=$(grep -c '<channel ' "../guides/tvguidetivimateguide.pass2-backup.retry.channels.xml" || true)
+
+          if [ "$PASS2_RETRY_CHANNELS" -gt 0 ]; then
             echo ""
-            echo "Fast pass had possible issues, running backup schedule pass..."
-            run_pass "pass2-backup" 5 15000
+            echo "Fast pass left incomplete metadata or missing days; running backup only for retry channels..."
+            run_pass "pass2-backup" 5 15000 "../guides/tvguidetivimateguide.pass2-backup.retry.channels.xml"
+
+            node scripts/tivimate-recovery.cjs merge \
+              "../guides/tvguidetivimateguide.working.xml" \
+              "../guides/tvguidetivimateguide.pass2-backup.xml" \
+              "../guides/tvguidetivimateguide.working.xml"
           else
             echo ""
-            echo "Fast pass had no obvious schedule issues. Skipping backup pass."
+            echo "Fast pass found no incomplete metadata or missing days. Skipping backup pass."
           fi
 
-          BEST_PASS="pass1-fast"
-          BEST_PR=$(cat ../guides/tvguidetivimateguide.pass1-fast.programmes.count)
-          BEST_DESC=$(cat ../guides/tvguidetivimateguide.pass1-fast.descriptions.count)
-          BEST_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
+          node scripts/tivimate-recovery.cjs analyze \
+            "sites/tvguide.com/festy-tivimate.channels.xml" \
+            "../guides/tvguidetivimateguide.working.xml" \
+            "../guides/tvguidetivimateguide.pass2-backup.log" \
+            "../guides/tvguidetivimateguide.pass2-backup.missing.json" \
+            "../guides/tvguidetivimateguide.pass3-micro.retry.channels.xml"
 
-          if [ -f ../guides/tvguidetivimateguide.pass2-backup.programmes.count ]; then
-            PASS2_PR=$(cat ../guides/tvguidetivimateguide.pass2-backup.programmes.count)
-            PASS2_DESC=$(cat ../guides/tvguidetivimateguide.pass2-backup.descriptions.count)
-            PASS2_ISSUES=$(cat ../guides/tvguidetivimateguide.pass2-backup.issues.count)
+          PASS3_RETRY_CHANNELS=$(grep -c '<channel ' "../guides/tvguidetivimateguide.pass3-micro.retry.channels.xml" || true)
 
-            if [ "$PASS2_PR" -gt "$BEST_PR" ]; then
-              BEST_PASS="pass2-backup"
-              BEST_PR="$PASS2_PR"
-              BEST_DESC="$PASS2_DESC"
-              BEST_ISSUES="$PASS2_ISSUES"
-            elif [ "$PASS2_PR" -eq "$BEST_PR" ] && [ "$PASS2_DESC" -gt "$BEST_DESC" ]; then
-              BEST_PASS="pass2-backup"
-              BEST_PR="$PASS2_PR"
-              BEST_DESC="$PASS2_DESC"
-              BEST_ISSUES="$PASS2_ISSUES"
-            elif [ "$PASS2_PR" -eq "$BEST_PR" ] && [ "$PASS2_DESC" -eq "$BEST_DESC" ] && [ "$PASS2_ISSUES" -lt "$BEST_ISSUES" ]; then
-              BEST_PASS="pass2-backup"
-              BEST_PR="$PASS2_PR"
-              BEST_DESC="$PASS2_DESC"
-              BEST_ISSUES="$PASS2_ISSUES"
-            fi
-          fi
-
-          if [ "$BEST_ISSUES" -gt 0 ]; then
+          if [ "$PASS3_RETRY_CHANNELS" -gt 0 ]; then
             echo ""
-            echo "Best pass still had possible issues, running slow micro schedule pass..."
-            run_pass "pass3-micro" 2 30000
+            echo "Backup pass still left incomplete metadata or missing days; running micro only for remaining retry channels..."
+            run_pass "pass3-micro" 2 30000 "../guides/tvguidetivimateguide.pass3-micro.retry.channels.xml"
+
+            node scripts/tivimate-recovery.cjs merge \
+              "../guides/tvguidetivimateguide.working.xml" \
+              "../guides/tvguidetivimateguide.pass3-micro.xml" \
+              "../guides/tvguidetivimateguide.working.xml"
           else
             echo ""
-            echo "Best pass has no obvious schedule issues. Skipping micro schedule pass."
+            echo "No remaining incomplete metadata or missing days. Skipping micro schedule pass."
           fi
 
-          BEST_PASS="pass1-fast"
-          BEST_PR=$(cat ../guides/tvguidetivimateguide.pass1-fast.programmes.count)
-          BEST_DESC=$(cat ../guides/tvguidetivimateguide.pass1-fast.descriptions.count)
-          BEST_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
+          cp "../guides/tvguidetivimateguide.working.xml" "../guides/tvguidetivimateguide.xml"
 
-          for PASS in pass2-backup pass3-micro; do
-            if [ -f "../guides/tvguidetivimateguide.${PASS}.programmes.count" ]; then
-              CANDIDATE_PR=$(cat "../guides/tvguidetivimateguide.${PASS}.programmes.count")
-              CANDIDATE_DESC=$(cat "../guides/tvguidetivimateguide.${PASS}.descriptions.count")
-              CANDIDATE_ISSUES=$(cat "../guides/tvguidetivimateguide.${PASS}.issues.count")
+          node scripts/tivimate-recovery.cjs analyze \
+            "sites/tvguide.com/festy-tivimate.channels.xml" \
+            "../guides/tvguidetivimateguide.xml" \
+            "../guides/tvguidetivimateguide.pass3-micro.log" \
+            "../guides/tvguidetivimateguide.tvmaze-missing.json"
 
-              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              fi
-            fi
-          done
+          FINAL_PR=$(grep -c '<programme ' "../guides/tvguidetivimateguide.xml" || true)
+          FINAL_DESC=$(grep -c '<desc ' "../guides/tvguidetivimateguide.xml" || true)
+          FINAL_MISSING=$(node -e "const fs=require('fs'); const p='../guides/tvguidetivimateguide.tvmaze-missing.json'; console.log(fs.existsSync(p) ? JSON.parse(fs.readFileSync(p)).length : 0)")
 
           echo ""
           echo "============================================================"
-          echo "Selected best schedule pass: $BEST_PASS"
-          echo "Best programmes: $BEST_PR"
-          echo "Best descriptions: $BEST_DESC"
-          echo "Best possible issues: $BEST_ISSUES"
+          echo "Selected final schedule: incremental merged TVGuide output"
+          echo "Final programmes: $FINAL_PR"
+          echo "Final descriptions: $FINAL_DESC"
+          echo "Final TVMaze-allowed missing targets: $FINAL_MISSING"
           echo "============================================================"
-
-          cp "../guides/tvguidetivimateguide.${BEST_PASS}.xml" "../guides/tvguidetivimateguide.xml"
 
           echo ""
           echo "Pass summary:"
@@ -875,6 +1205,17 @@ jobs:
               cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'))
             } catch {
               cache = {}
+            }
+          }
+
+          const allowedMissingPath = 'guides/tvguidetivimateguide.tvmaze-missing.json'
+          let allowedMissing = []
+
+          if (fs.existsSync(allowedMissingPath)) {
+            try {
+              allowedMissing = JSON.parse(fs.readFileSync(allowedMissingPath, 'utf8'))
+            } catch {
+              allowedMissing = []
             }
           }
 
@@ -943,6 +1284,40 @@ jobs:
             const m = block.match(/start="(\d{8})/i)
             if (!m) return ''
             return `${m[1].slice(0, 4)}-${m[1].slice(4, 6)}-${m[1].slice(6, 8)}`
+          }
+
+          function getStartRaw(block) {
+            const m = block.match(/start="([^"]+)"/i)
+            return m ? m[1] : ''
+          }
+
+          function getStopRaw(block) {
+            const m = block.match(/stop="([^"]+)"/i)
+            return m ? m[1] : ''
+          }
+
+          function getChannelRaw(block) {
+            const m = block.match(/channel="([^"]+)"/i)
+            return m ? decodeXml(m[1]) : ''
+          }
+
+          function getAllowedMissingFields(block) {
+            const channel = getChannelRaw(block)
+            const start = getStartRaw(block)
+            const stop = getStopRaw(block)
+            const date = start.slice(0, 8)
+            const title = cleanTitleForSearch(getTag(block, 'title'))
+
+            for (const item of allowedMissing) {
+              if (!item || item.channel !== channel) continue
+              if (item.start && item.start !== start) continue
+              if (item.stop && item.stop !== stop) continue
+              if (item.title && title && cleanTitleForSearch(item.title) !== title) continue
+              if (!item.start && item.date && item.date !== date) continue
+              return Array.isArray(item.missing) ? item.missing : []
+            }
+
+            return []
           }
 
           function cleanTitleForSearch(title) {
@@ -1377,13 +1752,15 @@ jobs:
                 continue
               }
 
-              if (isMovie(block)) {
-                stats.skippedMovies++
+              const allowedMissingFields = getAllowedMissingFields(block)
+
+              if (!allowedMissingFields.length) {
                 out.push(block)
                 continue
               }
 
-              if (!needsTvmaze(block)) {
+              if (isMovie(block)) {
+                stats.skippedMovies++
                 out.push(block)
                 continue
               }
@@ -1416,6 +1793,7 @@ jobs:
 
             console.log('[TVMAZE] missing-only enrichment complete')
             console.log(`[TVMAZE] programmes scanned: ${stats.programmes}`)
+            console.log(`[TVMAZE] allowed missing targets: ${allowedMissing.length}`)
             console.log(`[TVMAZE] movies skipped: ${stats.skippedMovies}`)
             console.log(`[TVMAZE] shows searched: ${stats.searchedShows}`)
             console.log(`[TVMAZE] shows matched: ${stats.matchedShows}`)
