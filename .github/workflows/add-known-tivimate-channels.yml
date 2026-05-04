@@ -1,0 +1,60 @@
+name: Add known Tivimate channels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch channels
+        run: |
+          python3 << 'PY'
+          import re
+
+          source_file = "guides/tvguide.xml"
+          target_file = "guides/tvguidetivimateguide.xml"
+
+          ids = ["HIST.us", "FYIHD.us", "RETRPLEXHD.us"]
+
+          with open(source_file, encoding="utf-8") as f:
+              source = f.read()
+
+          try:
+              with open(target_file, encoding="utf-8") as f:
+                  target = f.read()
+          except:
+              target = "<?xml version='1.0' encoding='UTF-8'?>\n<channels>\n</channels>"
+
+          def extract(id):
+              m = re.search(rf'<channel.*xmltv_id="{id}".*?>(.*?)</channel>', source)
+              return m.group(0) if m else None
+
+          additions = []
+
+          for cid in ids:
+              if cid in target:
+                  continue
+              ch = extract(cid)
+              if ch:
+                  additions.append("  " + ch)
+
+          target = target.replace("</channels>", "\n".join(additions) + "\n</channels>")
+
+          with open(target_file, "w", encoding="utf-8") as f:
+              f.write(target)
+          PY
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Add missing Tivimate channels" || exit 0
+          git push
