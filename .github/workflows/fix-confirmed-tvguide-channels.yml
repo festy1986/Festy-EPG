@@ -1,0 +1,86 @@
+name: Fix Confirmed TVGuide Channels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-confirmed-channels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Patch BOTH guides
+        shell: bash
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          import re
+
+          FILES = [
+              Path("guides/tvguide.xml"),
+              Path("guides/tvguidetivimateguide.xml"),
+          ]
+
+          confirmed = {
+              "CNN.us": ("9100002976#9233013812", "CNN"),
+              "FX.us": ("9100002976#9200006932", "FX"),
+              "MTV.us": ("9100002976#9200014754", "MTV"),
+              "SHOWTIME.SHOWCASE.us": ("9100002976#9233003805", "SHOWTIME SHOWCASE"),
+              "FREEFRM.us": ("9100002976#9200006942", "FREEFORM"),
+              "HBO.MOVIES.us": ("9100002976#9233009866", "HBO MOVIES"),
+              "HBO.us": ("9100002976#9200004886", "HBO"),
+          }
+
+          def channel_line(xmltv_id, site_id, name):
+              return f'  <channel site="tvguide.com" lang="en" xmltv_id="{xmltv_id}" site_id="{site_id}">{name}</channel>'
+
+          for FILE in FILES:
+              if not FILE.exists():
+                  print(f"Skipping missing file: {FILE}")
+                  continue
+
+              text = FILE.read_text(encoding="utf-8")
+
+              # 🔥 Remove ALL duplicate HBO.us entries first
+              hbo_pattern = re.compile(
+                  r'\s*<channel site="tvguide\.com" lang="en" xmltv_id="HBO\.us" site_id="[^"]+">[^<]*</channel>',
+                  re.MULTILINE,
+              )
+              text = hbo_pattern.sub("", text)
+
+              # Replace or add confirmed channels
+              for xmltv_id, (site_id, name) in confirmed.items():
+                  new_line = channel_line(xmltv_id, site_id, name)
+
+                  pattern = re.compile(
+                      rf'\s*<channel site="tvguide\.com" lang="en" xmltv_id="{re.escape(xmltv_id)}" site_id="[^"]+">[^<]*</channel>',
+                      re.MULTILINE,
+                  )
+
+                  if pattern.search(text):
+                      text = pattern.sub("\n" + new_line, text, count=1)
+                  else:
+                      text = text.replace("</channels>", new_line + "\n</channels>")
+
+              FILE.write_text(text.strip() + "\n", encoding="utf-8")
+              print(f"Updated: {FILE}")
+
+          print("Done.")
+          PY
+
+      - name: Show diff
+        run: |
+          git diff -- guides/tvguide.xml
+          git diff -- guides/tvguidetivimateguide.xml
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add guides/tvguide.xml guides/tvguidetivimateguide.xml
+          git commit -m "Fix confirmed channel mappings in both guides" || exit 0
+          git push
