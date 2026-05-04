@@ -23,11 +23,7 @@ jobs:
           const PROVIDER = '9100002976'
           const API_KEY = 'DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc'
 
-          const SEARCH_TERMS = [
-            'HBO',
-            'HOME BOX',
-            'MAX'
-          ]
+          const SEARCH_TERMS = ['HBO','HOME BOX','MAX']
 
           function startOfTodayUTC() {
             const d = new Date()
@@ -45,17 +41,9 @@ jobs:
             const text = await res.text()
 
             try {
-              return {
-                ok: res.ok,
-                status: res.status,
-                json: JSON.parse(text)
-              }
+              return { ok: res.ok, status: res.status, json: JSON.parse(text) }
             } catch {
-              return {
-                ok: false,
-                status: res.status,
-                text
-              }
+              return { ok: false, status: res.status, text }
             }
           }
 
@@ -86,65 +74,39 @@ jobs:
 
             console.log('QUARANTINED HBO SOURCE ID SCAN')
             console.log('Provider:', PROVIDER)
-            console.log('URL:', url)
 
             const result = await fetchJson(url)
 
-            fs.writeFileSync(
-              'quarantine-tvguide-hbo-scan/raw-provider-response.json',
-              JSON.stringify(result, null, 2)
-            )
+            fs.writeFileSync('quarantine-tvguide-hbo-scan/raw-provider-response.json', JSON.stringify(result, null, 2))
 
             const items = result.json?.data?.items || []
 
-            console.log('Total provider items returned:', items.length)
+            console.log('Total items:', items.length)
 
             const matches = items
-              .map(item => {
-                const name = extractName(item)
-                const sourceId = extractSourceId(item)
-                const schedules = Array.isArray(item.programSchedules)
-                  ? item.programSchedules.length
-                  : 0
-
-                return {
-                  sourceId,
-                  name,
-                  schedules
-                }
-              })
+              .map(item => ({
+                sourceId: extractSourceId(item),
+                name: extractName(item),
+                schedules: Array.isArray(item.programSchedules) ? item.programSchedules.length : 0
+              }))
               .filter(x => {
-                const haystack = `${x.name} ${x.sourceId}`.toUpperCase()
-                return SEARCH_TERMS.some(term => haystack.includes(term))
+                const hay = `${x.name} ${x.sourceId}`.toUpperCase()
+                return SEARCH_TERMS.some(t => hay.includes(t))
               })
 
-            fs.writeFileSync(
-              'quarantine-tvguide-hbo-scan/hbo-sourceid-matches.json',
-              JSON.stringify(matches, null, 2)
-            )
+            fs.writeFileSync('quarantine-tvguide-hbo-scan/hbo-sourceid-matches.json', JSON.stringify(matches, null, 2))
 
-            console.log('')
-            console.log('=== HBO / MAX MATCHES ===')
-
-            if (!matches.length) {
-              console.log('No HBO/MAX matches found in this provider-wide response.')
-            }
-
-            for (const m of matches) {
+            console.log('\n=== MATCHES ===')
+            matches.forEach(m => {
               console.log(`${m.sourceId} | ${m.name} | schedules=${m.schedules}`)
-            }
+            })
 
-            console.log('')
-            console.log('Wrote:')
-            console.log('quarantine-tvguide-hbo-scan/raw-provider-response.json')
-            console.log('quarantine-tvguide-hbo-scan/hbo-sourceid-matches.json')
           })()
           EOF
 
-          cd quarantine-tvguide-hbo-scan
-          node scan.cjs
+          node quarantine-tvguide-hbo-scan/scan.cjs
 
-      - name: Upload quarantined scan results
+      - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: quarantine-tvguide-hbo-scan
