@@ -181,7 +181,7 @@
   <channel site="tvguide.com" lang="en" xmltv_id="FOXNEW.us" site_id="9100002976#9233000410">FOXNEW</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="FOXSCCR+HD.us" site_id="9100002976#9200009348">FOXSCCR+HD</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="FOXWTHR.us" site_id="9100002976#9200053042">FOXWTHR</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="FREEFRM.us" site_id="9100002976#9200006942">FREEFRM</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="FREEFRM.us" site_id="9100002976#9200006942">FREEFORM</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="FREEFRMHD.us" site_id="9100002976#9200000497">FREEFRMHD</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="FS1.us" site_id="9100002976#9233008440">FS1</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="FS1HD.us" site_id="9100002976#9233000539">FS1HD</channel>
@@ -208,18 +208,9 @@
   <channel site="tvguide.com" lang="en" xmltv_id="HALLMARK.CHANNEL.us" site_id="9100002976#9233015586">HALLMARK CHANNEL</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HALLMYS.us" site_id="9100002976#9233013351">HALLMYS</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HALMRK.us" site_id="9100002976#9200016034">HALMRK</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9200008780">HBO</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HBO.HITS.us" site_id="9100002976#9233013492">HBO HITS</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HBO.DRAMA.us" site_id="9100002976#9200002532">HBO DRAMA</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HBO.COMEDY.us" site_id="9100002976#9233003785">HBO COMEDY</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9233009491">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9233001970">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9200000652">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9233011831">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9233000263">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9200009688">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9200016631">HBO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9233009922">HBO</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HDNTM.us" site_id="9100002976#9200008836">HDNTM</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HERE.us" site_id="9100002976#9266070589">HERE</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="HGTV.us" site_id="9100002976#9233004104">HGTV</channel>
@@ -385,7 +376,7 @@
   <channel site="tvguide.com" lang="en" xmltv_id="SHO.us" site_id="9100002976#9233005766">SHO</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="PARAMOUNTPLUS.WITH.SHOWTIME.us" site_id="9100002976#9233011188">PARAMOUNT+ WITH SHOWTIME</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="SHOWTIME.2.us" site_id="9100002976#9200014450">SHOWTIME 2</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="SHOWTIME.SHOWCASE.us" site_id="9100002976#9233017279">SHOWTIME SHOWCASE</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="SHOWTIME.SHOWCASE.us" site_id="9100002976#9233003805">SHOWTIME SHOWCASE</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="SHOWTIME.EXTREME.us" site_id="9100002976#9233015495">SHOWTIME EXTREME</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="SHO.us" site_id="9100002976#9233003805">SHO</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="SHOWTIME.NEXT.us" site_id="9100002976#9200016686">SHOWTIME NEXT</channel>
@@ -501,4 +492,6 @@
   <channel site="tvguide.com" lang="en" xmltv_id="YOUTOOAMER.us" site_id="9100002976#9233011777">YOUTOOAMER</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="ZEETV.us" site_id="9100002976#9200018502">ZEETV</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="ZEETVHD.us" site_id="9100002976#9266073285">ZEETVHD</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.MOVIES.us" site_id="9100002976#9233009866">HBO MOVIES</channel>
+  <channel site="tvguide.com" lang="en" xmltv_id="HBO.us" site_id="9100002976#9200004886">HBO</channel>
 </channels>
