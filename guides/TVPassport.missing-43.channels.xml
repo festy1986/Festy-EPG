@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <channels>
-  <channel site="tvpassport.com" lang="en" xmltv_id="COMET.us" site_id="comet-tv-katv2-little-rock-ar-hd/9280">COMET</channel>
-  <channel site="tvpassport.com" lang="en" xmltv_id="LAFF.us" site_id="laff--network-hd/20170">LAFF</channel>
-  <channel site="tvpassport.com" lang="en" xmltv_id="METV.us" site_id="cbs-wgme-portland-me-hd/7037">METV</channel>
+  <channel site="tvpassport.com" site_id="comet-tv-wpfo3-portland-me/17598" lang="en" xmltv_id="">Comet TV (WPFO3) Portland, ME</channel>
+  <channel site="tvpassport.com" site_id="laff-wmtw3-portland-or/32969" lang="en" xmltv_id="">Laff (WMTW3) Portland, ME</channel>
+  <channel site="tvpassport.com" site_id="metv-wmtw2-portland-me/17886" lang="en" xmltv_id="">MeTV (WMTW2) Portland, ME</channel>
   <channel site="tvpassport.com" lang="en" xmltv_id="OWN.us" site_id="oprah-winfrey-network-usa-eastern-hd/8587">OWN</channel>
   <channel site="tvpassport.com" lang="en" xmltv_id="FREEFORM.us" site_id="freeform-hd--east-feed/6110">Freeform</channel>
   <channel site="tvpassport.com" lang="en" xmltv_id="WE.TV.us" site_id="we-womens-entertainment--eastern/664">WE tv</channel>
