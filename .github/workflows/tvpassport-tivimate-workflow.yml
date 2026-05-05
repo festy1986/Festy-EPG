@@ -237,15 +237,67 @@ jobs:
             let siteId = src.site_id
             let match = null
 
-            if (!siteId) {
-              const keys = [wantedId, wantedName, ...(aliases[wantedId] || [])].map(norm)
+            function normalizeLoose(s) {
+              return decodeXml(s || '')
+                .toLowerCase()
+                .replace(/\(.*?\)/g, '')
+                .replace(/\b(hd|east|west)\b/g, '')
+                .replace(/[^a-z0-9]+/g, ' ')
+                .trim()
+            }
 
-              for (const key of keys) {
-                match = rawById.get(key) || rawByName.get(key)
-                if (match) break
+            function extractCallSign(s) {
+              const match = s.match(/\b([A-Z]{3,5})\b/)
+              return match ? match[1].toLowerCase() : ''
+            }
+
+            function scoreMatch(wanted, raw) {
+              const w = normalizeLoose(wanted)
+              const r = normalizeLoose(raw)
+
+              const wCall = extractCallSign(wanted)
+              const rCall = extractCallSign(raw)
+
+              if (wCall && rCall) {
+                if (wCall === rCall) return 100
+                return 0
               }
 
-              if (match) siteId = match.site_id
+              let score = 0
+              const words = w.split(' ')
+              for (const word of words) {
+                if (word.length > 2 && r.includes(word)) score += 10
+              }
+
+              return score
+            }
+
+            if (!siteId) {
+              let bestMatch = null
+              let bestScore = 0
+
+              const candidates = [
+                wantedName,
+                wantedId,
+                ...(aliases[wantedId] || [])
+              ]
+
+              for (const raw of rawChannels) {
+                if (!raw.site_id || !raw.name) continue
+
+                for (const candidate of candidates) {
+                  const score = scoreMatch(candidate, raw.name)
+
+                  if (score > bestScore) {
+                    bestScore = score
+                    bestMatch = raw
+                  }
+                }
+              }
+
+              if (bestMatch && bestScore >= 20) {
+                siteId = bestMatch.site_id
+              }
             }
 
             if (!wantedId || !siteId) {
