@@ -86,7 +86,7 @@ jobs:
 
           module.exports = {
             site: 'tvpassport.com',
-            days: 3,
+            days: 1,
 
             url({ channel, date }) {
               return `https://www.tvpassport.com/tv-listings/stations/${channel.site_id}/${date.format('YYYY-MM-DD')}`
@@ -382,7 +382,7 @@ jobs:
             npx tsx scripts/commands/epg/grab.ts \
               --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
               --output="../guides/TVPassport.${PASS_NAME}.xml" \
-              --days=3 \
+              --days=1 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/TVPassport.${PASS_NAME}.log"
 
@@ -1039,7 +1039,10 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/TVPassport.xml guides/.tvmaze-tvpassport-cache.json
+          rm -f guides/.tvmaze-tvpassport-cache.json
+          git rm --cached guides/.tvmaze-tvpassport-cache.json 2>/dev/null || true
+
+          git add guides/TVPassport.xml
 
           if git diff --cached --quiet; then
             echo "No TVPassport guide changes to commit"
