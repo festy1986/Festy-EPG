@@ -86,7 +86,7 @@ jobs:
 
           module.exports = {
             site: 'tvpassport.com',
-            days: 1,
+            days: 14,
 
             url({ channel, date }) {
               return `https://www.tvpassport.com/tv-listings/stations/${channel.site_id}/${date.format('YYYY-MM-DD')}`
@@ -393,7 +393,7 @@ jobs:
             npx tsx scripts/commands/epg/grab.ts \
               --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
               --output="../guides/TVPassport.${PASS_NAME}.xml" \
-              --days=1 \
+              --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/TVPassport.${PASS_NAME}.log"
 
