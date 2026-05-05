@@ -78,7 +78,7 @@
   <channel site="tvpassport.com" site_id="hollywood-suite-80s-hd/20018" lang="en" xmltv_id="HOLLYWOOD.SUITE.80S.ca">Hollywood Suite 80's</channel>
   <channel site="tvpassport.com" site_id="independent-film-channel-us-hd/6215" lang="en" xmltv_id="IFC.us">IFC</channel>
   <channel site="tvpassport.com" site_id="indieplex-hd/9026" lang="en" xmltv_id="INDIEPLEX.us">IndiePlex</channel>
-  <channel site="tvpassport.com" site_id="bein-sport-canada-hd/13247" lang="en" xmltv_id="INSP.us">INSP</channel>
+  <channel site="tvpassport.com" site_id="insp-hd/11446" lang="en" xmltv_id="">INSP HD</channel>
   <channel site="tvpassport.com" site_id="investigation-discovery-usa-hd--eastern/6997" lang="en" xmltv_id="INVESTIGATION.DISCOVERY.us">Investigation Discovery</channel>
   <channel site="tvpassport.com" site_id="laff--network-hd/20170" lang="en" xmltv_id="LAFF.us">LAFF</channel>
   <channel site="tvpassport.com" site_id="lifetime-movies-hd--east/4723" lang="en" xmltv_id="LIFETIME.us">Lifetime</channel>
@@ -91,7 +91,7 @@
   <channel site="tvpassport.com" site_id="mgm-hits-hd--east/11615" lang="en" xmltv_id="MGM.HITS.us">MGM Hits</channel>
   <channel site="tvpassport.com" site_id="mgm-hd--east/7610" lang="en" xmltv_id="MGM.HORROR.us">MGM Horror</channel>
   <channel site="tvpassport.com" site_id="mgm-marquee-hd/11616" lang="en" xmltv_id="MGM.MARQUEE.us">MGM Marquee</channel>
-  <channel site="tvpassport.com" site_id="bell-mlb-extra-innings-1-hd/20123" lang="en" xmltv_id="MLB.NETWORK.us">MLB Network</channel>
+  <channel site="tvpassport.com" site_id="mlb-network-hd/6218" lang="en" xmltv_id="MLBNetwork.us@SD">MLB Network HD</channel>
   <channel site="tvpassport.com" site_id="movietime-hd/7807" lang="en" xmltv_id="MOVIETIME.ca">MovieTime</channel>
   <channel site="tvpassport.com" site_id="movieplex-hd--eastern/11443" lang="en" xmltv_id="MOVIEPLEX.us">MoviePlex</channel>
   <channel site="tvpassport.com" site_id="msnbc-canada-hd/8430" lang="en" xmltv_id="MS.NOW.us">MS Now</channel>
@@ -99,15 +99,15 @@
   <channel site="tvpassport.com" site_id="mtv-2-east-hd/10276" lang="en" xmltv_id="MTV2.us">MTV2</channel>
   <channel site="tvpassport.com" site_id="national-geographic-us-hd--eastern/4436" lang="en" xmltv_id="NAT.GEO.us">Nat Geo</channel>
   <channel site="tvpassport.com" site_id="national-geographic-wild-hd/9579" lang="en" xmltv_id="NAT.GEO.WILD.us">Nat Geo Wild</channel>
-  <channel site="tvpassport.com" site_id="bell-nba-league-pass-hd-1/30920" lang="en" xmltv_id="NBA.TV.us">NBA TV</channel>
+  <channel site="tvpassport.com" site_id="nba-tv-usa-hd/5645" lang="en" xmltv_id="NBATV.us@SD">NBA TV USA HD</channel>
   <channel site="tvpassport.com" site_id="nbc-wbts-cd-nashua-nh-hd/30964" lang="en" xmltv_id="NBC.BOSTON.us">NBC Boston</channel>
   <channel site="tvpassport.com" site_id="nbc-wcsh-portland-me-hd/4760" lang="en" xmltv_id="NBC.PORTLAND.us">NBC Portland</channel>
   <channel site="tvpassport.com" site_id="nbc-sports-boston-hd/4534" lang="en" xmltv_id="NBC.SPORTS.BOSTON.us">NBC Sports Boston</channel>
-  <channel site="tvpassport.com" site_id="new-england-sports-network-hd/3600" lang="en" xmltv_id="NESN.us">NESN</channel>
-  <channel site="tvpassport.com" site_id="nous-tv-thetford-mines-hd/31536" lang="en" xmltv_id="NESN.PLUS.us">NESN Plus</channel>
+  <channel site="tvpassport.com" site_id="new-england-sports-network-hd/3600" lang="en" xmltv_id="">New England Sports Network HD</channel>
+  <channel site="tvpassport.com" site_id="new-england-sports-network-plus/14779" lang="en" xmltv_id="">New England Sports Network Plus</channel>
   <channel site="tvpassport.com" site_id="necn-hd/7723" lang="en" xmltv_id="NEW.ENGLAND.CABLE.NEWS.us">New England Cable News</channel>
-  <channel site="tvpassport.com" site_id="bell-nfl-sunday-ticket-1-hd/20088" lang="en" xmltv_id="NFL.NETWORK.us">NFL Network</channel>
-  <channel site="tvpassport.com" site_id="bell-nhl-centre-ice-1-hd/20101" lang="en" xmltv_id="NHL.NETWORK.us">NHL Network</channel>
+  <channel site="tvpassport.com" site_id="nfl-network-hd/3601" lang="en" xmltv_id="">NFL Network HD</channel>
+  <channel site="tvpassport.com" site_id="nhl-network-usa/14156" lang="en" xmltv_id="NHLNetwork.us@SD">NHL Network USA</channel>
   <channel site="tvpassport.com" site_id="nickelodeon-usa--east-feed-hd/6342" lang="en" xmltv_id="NICKELODEON.us">Nickelodeon</channel>
   <channel site="tvpassport.com" site_id="outdoor-channel-us-hd/4638" lang="en" xmltv_id="OUTDOOR.CHANNEL.us">Outdoor Channel</channel>
   <channel site="tvpassport.com" site_id="ovation-hd/8838" lang="en" xmltv_id="OVATION.us">Ovation</channel>
@@ -122,9 +122,9 @@
   <channel site="tvpassport.com" site_id="screenpix-action/34660" lang="en" xmltv_id="SCREENPIX.ACTION.us">ScreenPix Action</channel>
   <channel site="tvpassport.com" site_id="screenpix-voices/34662" lang="en" xmltv_id="SCREENPIX.VOICES.us">ScreenPix Voices</channel>
   <channel site="tvpassport.com" site_id="screenpix-westerns/34661" lang="en" xmltv_id="SCREENPIX.WESTERNS.us">ScreenPix Westerns</channel>
-  <channel site="tvpassport.com" site_id="game-show-network--east-hd/7055" lang="en" xmltv_id="SHOWTIME.us">Showtime</channel>
+  <channel site="tvpassport.com" site_id="paramount-with-showtime--eastern-feed/665" lang="en" xmltv_id="">Paramount+ with Showtime - Eastern Feed</channel>
   <channel site="tvpassport.com" site_id="showtime-2-hd--eastern/7111" lang="en" xmltv_id="SHOWTIME.2.us">Showtime 2</channel>
-  <channel site="tvpassport.com" site_id="bet-hd--eastern-feed/6205" lang="en" xmltv_id="SHOWTIME.BET.us">Showtime BET</channel>
+  <channel site="tvpassport.com" site_id="shoxbet--eastern/2077" lang="en" xmltv_id="">SHOXBET - Eastern</channel>
   <channel site="tvpassport.com" site_id="shoxbet-hd--eastern/7110" lang="en" xmltv_id="SHOWTIME.EXTREME.us">Showtime Extreme</channel>
   <channel site="tvpassport.com" site_id="shoxbet-hd--eastern/7110" lang="en" xmltv_id="SHOWTIME.EXTREME.HD.us">Showtime Extreme HD</channel>
   <channel site="tvpassport.com" site_id="showtime-family-zone-hd--eastern/7108" lang="en" xmltv_id="SHOWTIME.FAMILY.ZONE.us">Showtime Family Zone</channel>
@@ -167,8 +167,8 @@
   <channel site="tvpassport.com" site_id="trutv-usa--east-hd/6996" lang="en" xmltv_id="TRUTV.us">truTV</channel>
   <channel site="tvpassport.com" site_id="tv-land--eastern-hd/8815" lang="en" xmltv_id="TV.LAND.us">TV Land</channel>
   <channel site="tvpassport.com" site_id="up/5911" lang="en" xmltv_id="UP.TV.us">UP TV</channel>
-  <channel site="tvpassport.com" site_id="bravo-usa-hd--eastern-feed/6120" lang="en" xmltv_id="USA.NETWORK.us">USA Network</channel>
+  <channel site="tvpassport.com" site_id="usa-network--east-feed/640" lang="en" xmltv_id="">USA Network - East Feed</channel>
   <channel site="tvpassport.com" site_id="vh1-hd--eastern/6204" lang="en" xmltv_id="VH1.us">VH1</channel>
-  <channel site="tvpassport.com" site_id="jewish-broadcasting-service-hd/34818" lang="en" xmltv_id="VICE.us">Vice</channel>
+  <channel site="tvpassport.com" site_id="vice-hd/7300" lang="en" xmltv_id="">VICE HD</channel>
   <channel site="tvpassport.com" site_id="we-womens-entertainment--eastern/664" lang="en" xmltv_id="WE.TV.us">WE tv</channel>
 </channels>
