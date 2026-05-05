@@ -1,0 +1,363 @@
+name: TVPassport-Find-Missing-43
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: epg-guide-writes-tvpassport-missing-43
+  cancel-in-progress: false
+
+jobs:
+  find-missing-tvpassport-channels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find and build missing TVPassport channels
+        run: |
+          mkdir -p guides
+          mkdir -p epg/sites/tvpassport.com
+
+          node <<'EOFJS'
+          const fs = require('fs')
+
+          const rawPath = 'guides/TVPassportRAW.xml'
+          const outputPath = 'guides/TVPassport.missing-43.channels.xml'
+          const mergeOutputPath = 'epg/sites/tvpassport.com/festy-tvpassport.missing-43.channels.xml'
+          const reportPath = 'guides/TVPassport.missing-43.report.txt'
+
+          /*
+            These are the 43 channels that your main workflow reported missing.
+            This helper workflow searches ONLY for these against TVPassportRAW.xml.
+          */
+          const wantedChannels = [
+            { xmltv_id: 'COMET.us', name: 'COMET', aliases: ['WPFO.DT3.us', 'WPFO3', 'Comet TV', 'Comet'] },
+            { xmltv_id: 'LAFF.us', name: 'LAFF', aliases: ['WMTW.TV.DT3.us', 'WMTW.DT3.us', 'WMTW3', 'Laff TV', 'Laff'] },
+            { xmltv_id: 'METV.us', name: 'METV', aliases: ['WMTW.TV.DT2.us', 'WMTW.DT2.us', 'WMTW2', 'MeTV', 'Me TV'] },
+            { xmltv_id: 'OWN.us', name: 'OWN', aliases: ['Oprah Winfrey Network', 'OWN East', 'OWN HD'] },
+            { xmltv_id: 'FREEFORM.us', name: 'Freeform', aliases: ['Freeform East', 'Freeform HD'] },
+            { xmltv_id: 'WE.TV.us', name: 'WE tv', aliases: ['WETV', 'WE TV', 'WE tv East', 'WE tv HD'] },
+            { xmltv_id: 'OXYGEN.us', name: 'Oxygen', aliases: ['Oxygen East', 'Oxygen HD'] },
+            { xmltv_id: 'NICKELODEON.us', name: 'Nickelodeon', aliases: ['Nick', 'Nickelodeon East', 'Nickelodeon HD'] },
+            { xmltv_id: 'LIFETIME.us', name: 'Lifetime', aliases: ['Lifetime East', 'Lifetime HD'] },
+            { xmltv_id: 'LMN.us', name: 'LMN', aliases: ['Lifetime Movie Network', 'LMN East', 'LMN HD'] },
+            { xmltv_id: 'TRAVEL.CHANNEL.us', name: 'Travel Channel', aliases: ['Travel Channel East', 'Travel Channel HD', 'Travel US'] },
+            { xmltv_id: 'AANDE.us', name: 'A&E', aliases: ['A&E East', 'A&E HD', 'A and E', 'AANDE'] },
+            { xmltv_id: 'BRAVO.us', name: 'Bravo', aliases: ['Bravo East', 'Bravo HD'] },
+            { xmltv_id: 'TRUTV.us', name: 'truTV', aliases: ['TruTV', 'Tru TV', 'truTV East', 'truTV HD'] },
+            { xmltv_id: 'SYFY.us', name: 'Syfy', aliases: ['Syfy East', 'Syfy HD'] },
+            { xmltv_id: 'FX.us', name: 'FX', aliases: ['FX East', 'FX HD'] },
+            { xmltv_id: 'E.us', name: 'E!', aliases: ['E Entertainment', 'E! Entertainment', 'E East', 'E HD'] },
+            { xmltv_id: 'TV.LAND.us', name: 'TV Land', aliases: ['TVLand', 'TV Land East', 'TV Land HD'] },
+            { xmltv_id: 'VH1.us', name: 'VH1', aliases: ['VH1 East', 'VH1 HD'] },
+            { xmltv_id: 'HALLMARK.DRAMA.us', name: 'Hallmark Drama', aliases: ['Hallmark Drama HD', 'Hallmark Drama East'] },
+            { xmltv_id: 'REELZ.us', name: 'REELZ', aliases: ['Reelz Channel', 'Reelz HD'] },
+            { xmltv_id: 'IFC.us', name: 'IFC', aliases: ['IFC East', 'IFC HD'] },
+            { xmltv_id: 'OVATION.us', name: 'Ovation', aliases: ['Ovation HD', 'Ovation East'] },
+            { xmltv_id: 'UP.TV.us', name: 'UP TV', aliases: ['UP', 'UPTV', 'UP TV HD'] },
+            { xmltv_id: 'ASPIRE.us', name: 'Aspire', aliases: ['Aspire TV', 'Aspire HD'] },
+
+            { xmltv_id: 'CINEMAX.us', name: 'Cinemax', aliases: ['Cinemax - Eastern Feed', 'Cinemax - Eastern HD', 'Cinemax East', 'Cinemax HD'] },
+            { xmltv_id: 'CINEMAX.ACTION.us', name: 'Cinemax Action', aliases: ['ActionMAX', 'Action Max', 'Cinemax Action', 'ActionMAX East'] },
+            { xmltv_id: 'CINEMAX.HITS.us', name: 'Cinemax Hits', aliases: ['MoreMAX', 'More Max', 'Cinemax Hits', 'MoreMAX East'] },
+            { xmltv_id: 'CINEMAX.CLASSICS.us', name: 'Cinemax Classics', aliases: ['5StarMAX', '5 Star Max', 'Cinemax Classics', '5StarMAX East'] },
+            { xmltv_id: 'SHOWTIME.2.us', name: 'Showtime 2', aliases: ['Showtime 2', 'SHO2', 'SHO 2', 'Showtime 2 East', 'Showtime 2 HD'] },
+            { xmltv_id: 'STARZ.US.us', name: 'Starz', aliases: ['Starz East', 'Starz HD', 'Starz - Eastern'] },
+            { xmltv_id: 'STARZ.CANADA.ca', name: 'Starz Canada', aliases: ['Starz Canada', 'Starz Canada HD', 'Starz East Canada'] },
+            { xmltv_id: 'STARZ.2.CANADA.ca', name: 'Starz 2 Canada', aliases: ['Starz 2 Canada', 'Starz2 Canada', 'Starz 2 HD'] },
+
+            { xmltv_id: 'CRAVE.1.ca', name: 'Crave 1', aliases: ['Crave1 - East HD', 'Crave1 - East', 'Crave 1 East', 'Crave1 HD'] },
+            { xmltv_id: 'CRAVE.2.ca', name: 'Crave 2', aliases: ['Crave2 - East HD', 'Crave2 - East', 'Crave 2 East', 'Crave2 HD'] },
+            { xmltv_id: 'CRAVE.3.ca', name: 'Crave 3', aliases: ['Crave3 - East HD', 'Crave3 - East', 'Crave 3 East', 'Crave3 HD'] },
+            { xmltv_id: 'CRAVE.4.ca', name: 'Crave 4', aliases: ['Crave4 HD', 'Crave4', 'Crave 4 HD'] },
+
+            { xmltv_id: 'MOVIEPLEX.us', name: 'MoviePlex', aliases: ['MOVIEplex HD - Eastern', 'MOVIEplex - Eastern', 'Movieplex East', 'Movieplex HD'] },
+            { xmltv_id: 'RETROPLEX.us', name: 'RetroPlex', aliases: ['RetroPlex - Eastern', 'Retroplex East', 'RetroPlex HD'] },
+            { xmltv_id: 'INDIEPLEX.us', name: 'IndiePlex', aliases: ['IndiePlex - Eastern', 'Indieplex East', 'IndiePlex HD'] },
+            { xmltv_id: 'SCREENPIX.us', name: 'ScreenPix', aliases: ['ScreenPix East', 'ScreenPix HD'] },
+            { xmltv_id: 'SCREAMBOX.us', name: 'ScreamBox', aliases: ['ScreamBox', 'Screambox TV'] },
+            { xmltv_id: 'MOVIETIME.ca', name: 'MovieTime', aliases: ['MovieTime', 'Movie Time', 'MovieTime HD'] }
+          ]
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function cleanBody(body) {
+            const display = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
+            return decodeXml(body.replace(/<url>[\s\S]*?<\/url>/gi, '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function parseChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
+              const attrs = m[1]
+              const body = m[2]
+              return {
+                id: attr(attrs, 'id') || attr(attrs, 'xmltv_id') || attr(attrs, 'xmltv-id'),
+                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'xmltv-id') || attr(attrs, 'id'),
+                site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
+                name: cleanBody(body)
+              }
+            })
+          }
+
+          function normalizeLoose(s) {
+            return decodeXml(s || '')
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+              .replace(/&/g, ' and ')
+              .replace(/\+/g, ' plus ')
+              .replace(/\b(hd|east|eastern|west|western|pacific|feed|channel|network|tv)\b/g, ' ')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim()
+          }
+
+          function compactKey(s) {
+            return normalizeLoose(s).replace(/\s+/g, '')
+          }
+
+          function callSignForms(s) {
+            const value = String(s || '')
+            const forms = new Set()
+
+            const plain = value
+              .replace(/\.(us|ca|uk|gb)$/i, '')
+              .replace(/\.TV\./gi, '.')
+              .replace(/\.TV$/gi, '')
+              .replace(/\.CD\./gi, '.')
+              .replace(/\.CD$/gi, '')
+
+            const dt = plain.match(/\b([A-Z]{3,5})[.\s-]*(?:DT|D)[.\s-]*(\d+)\b/i)
+            if (dt) {
+              forms.add(`${dt[1]}${dt[2]}`.toLowerCase())
+              forms.add(`${dt[1]} dt${dt[2]}`.toLowerCase())
+            }
+
+            const direct = plain.match(/\b([A-Z]{3,5})(\d+)\b/i)
+            if (direct) {
+              forms.add(`${direct[1]}${direct[2]}`.toLowerCase())
+              forms.add(`${direct[1]} dt${direct[2]}`.toLowerCase())
+            }
+
+            const base = plain.match(/\b([A-Z]{3,5})\b/i)
+            if (base) forms.add(base[1].toLowerCase())
+
+            return [...forms]
+          }
+
+          function feedPreferenceScore(raw) {
+            const rawText = [
+              raw.name,
+              raw.site_id,
+              raw.xmltv_id,
+              raw.id
+            ].filter(Boolean).join(' ').toLowerCase()
+
+            let score = 0
+
+            if (/\bhd\b|[- ]hd[- /]|@hd/i.test(rawText)) score += 8
+            if (/east|eastern|@east/i.test(rawText)) score += 6
+
+            if (/pacific|western|@west/i.test(rawText)) score -= 20
+            if (/on demand|vod/i.test(rawText)) score -= 50
+            if (/chile|dth|latin|espanol|mexico|colombia|argentina|tt\b/i.test(rawText)) score -= 50
+
+            return score
+          }
+
+          function scoreMatch(candidate, raw) {
+            const rawText = [
+              raw.name,
+              raw.site_id,
+              raw.xmltv_id,
+              raw.id
+            ].filter(Boolean).join(' ')
+
+            const cNorm = normalizeLoose(candidate)
+            const rNorm = normalizeLoose(rawText)
+            const cCompact = compactKey(candidate)
+            const rCompact = compactKey(rawText)
+
+            let score = 0
+
+            if (cNorm && rNorm.includes(cNorm)) score += 100
+            if (cCompact && rCompact.includes(cCompact)) score += 100
+
+            const channelStem = normalizeLoose(String(candidate || '').replace(/\.(us|ca|uk|gb)$/i, ''))
+            const channelCompact = channelStem.replace(/\s+/g, '')
+            if (channelCompact && rCompact.includes(channelCompact)) score += 120
+
+            for (const form of callSignForms(candidate)) {
+              const fNorm = normalizeLoose(form)
+              const fCompact = compactKey(form)
+
+              if (fCompact && rCompact.includes(fCompact)) score += 140
+              else if (fNorm && rNorm.includes(fNorm)) score += 120
+            }
+
+            const words = cNorm.split(' ').filter(w => w.length > 2)
+            for (const word of words) {
+              if (rNorm.includes(word)) score += 15
+            }
+
+            if (score > 0) score += feedPreferenceScore(raw)
+
+            return score
+          }
+
+          if (!fs.existsSync(rawPath)) {
+            console.error(`Missing ${rawPath}`)
+            process.exit(1)
+          }
+
+          const rawChannels = parseChannels(fs.readFileSync(rawPath, 'utf8'))
+
+          console.log(`Raw channels: ${rawChannels.length}`)
+          console.log(`Wanted missing channels: ${wantedChannels.length}`)
+
+          const out = []
+          const report = []
+          const stillMissing = []
+
+          for (const wanted of wantedChannels) {
+            let best = null
+            let bestScore = 0
+            let bestCandidate = ''
+
+            const candidates = [
+              wanted.xmltv_id,
+              wanted.name,
+              ...(wanted.aliases || [])
+            ].filter(Boolean)
+
+            for (const raw of rawChannels) {
+              if (!raw.site_id) continue
+
+              for (const candidate of candidates) {
+                const score = scoreMatch(candidate, raw)
+
+                if (score > bestScore) {
+                  bestScore = score
+                  best = raw
+                  bestCandidate = candidate
+                }
+              }
+            }
+
+            if (!best || bestScore < 30) {
+              stillMissing.push(`${wanted.xmltv_id} (${wanted.name})`)
+              report.push(`MISS | ${wanted.xmltv_id} | ${wanted.name}`)
+              continue
+            }
+
+            out.push(
+              `  <channel site="tvpassport.com" lang="en" xmltv_id="${escapeXml(wanted.xmltv_id)}" site_id="${escapeXml(best.site_id)}">${escapeXml(wanted.name)}</channel>`
+            )
+
+            report.push(`MATCH | ${wanted.xmltv_id} | ${wanted.name} | score=${bestScore} | via="${bestCandidate}" | site_id="${best.site_id}" | raw="${best.name}" | raw_xmltv_id="${best.xmltv_id || ''}"`)
+          }
+
+          fs.writeFileSync(
+            outputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
+
+          fs.writeFileSync(
+            mergeOutputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
+
+          fs.writeFileSync(
+            reportPath,
+            [
+              `Raw channels: ${rawChannels.length}`,
+              `Wanted missing channels: ${wantedChannels.length}`,
+              `Matched: ${out.length}`,
+              `Still missing: ${stillMissing.length}`,
+              '',
+              ...report,
+              '',
+              'Still missing:',
+              ...stillMissing.map(x => `- ${x}`)
+            ].join('\n')
+          )
+
+          console.log(`Matched missing channels: ${out.length}`)
+          console.log(`Still missing: ${stillMissing.length}`)
+
+          if (stillMissing.length) {
+            console.log('\nStill missing:')
+            stillMissing.forEach(x => console.log(`- ${x}`))
+          }
+
+          console.log(`Wrote ${outputPath}`)
+          console.log(`Wrote ${mergeOutputPath}`)
+          console.log(`Wrote ${reportPath}`)
+
+          if (out.length < 20) {
+            console.error('Too few missing channels were found. Refusing to commit.')
+            process.exit(1)
+          }
+          EOFJS
+
+      - name: Commit missing channel outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/TVPassport.missing-43.channels.xml
+          git add guides/TVPassport.missing-43.report.txt
+          git add epg/sites/tvpassport.com/festy-tvpassport.missing-43.channels.xml
+
+          if git diff --cached --quiet; then
+            echo "No missing-channel output changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Find missing TVPassport channels"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            git fetch origin main
+            git rebase origin/main
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, retrying after rebase..."
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
