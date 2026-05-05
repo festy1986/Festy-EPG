@@ -1388,6 +1388,10 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
+          # Sync before committing so rebase never runs with generated unstaged changes.
+          git fetch origin main
+          git reset --soft origin/main
+
           git add guides/OTALocalsguide.xml guides/.tvmaze-ota-cache.json
 
           if git diff --cached --quiet; then
@@ -1400,15 +1404,23 @@ jobs:
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
 
-            git fetch origin main
-            git rebase origin/main
-
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed, retrying after rebase..."
+            echo "Push failed, retrying after fresh sync before recommit..."
+
+            git fetch origin main
+            git reset --soft origin/main
+            git add guides/OTALocalsguide.xml guides/.tvmaze-ota-cache.json
+
+            if git diff --cached --quiet; then
+              echo "No OTA guide changes to commit after syncing with origin/main"
+              exit 0
+            fi
+
+            git commit -m "Update OTA guide"
             sleep 5
           done
 
