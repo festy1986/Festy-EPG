@@ -1,4 +1,4 @@
-name: TVPassport-Tivimate
+name: TVPassport-TiviMate
 
 on:
   workflow_dispatch:
@@ -39,89 +39,116 @@ jobs:
           cd epg
           npm ci
 
-      - name: Build TVPassport channel source from guide plus raw IDs
+      - name: Build TVPassport channel source from wanted list plus raw IDs
         run: |
           mkdir -p epg/sites/tvpassport.com
 
           node <<'EOFJS'
           const fs = require('fs')
 
-          const sourcePath = 'guides/TVPassport.xml'
+          /*
+            REQUIRED FILES IN YOUR REPO:
+
+            guides/TVPassport.channels.xml
+              - Your wanted/master channel input.
+              - This is NOT the final guide.
+              - It only needs <channel> entries.
+
+            guides/TVPassportRAW.xml
+              - Raw TVPassport channel dump.
+              - Must contain <channel> entries with site_id values.
+
+            guides/TVPassport.xml
+              - Final generated output guide.
+              - This workflow writes this file.
+          */
+
+          const sourcePath = 'guides/TVPassport.channels.xml'
           const rawPath = 'guides/TVPassportRAW.xml'
           const outputPath = 'epg/sites/tvpassport.com/festy-tvpassport.channels.xml'
 
           const aliases = {
-            'ABC.BOSTON.us': ['WCVB.TV', 'WCVB', 'ABC WCVB', 'ABC Boston'],
-            'ABC.PORTLAND.us': ['WMTW.TV', 'WMTW', 'ABC WMTW', 'ABC Portland'],
-            'CBS.BOSTON.us': ['WBZ.TV', 'WBZ', 'CBS WBZ', 'CBS Boston'],
-            'CBS.PORTLAND.us': ['WGME.TV', 'WGME', 'CBS WGME', 'CBS Portland'],
-            'CW.BOSTON.us': ['WLVI.TV', 'WLVI', 'CW Boston'],
-            'FOX.BOSTON.us': ['WFXT', 'WFXT.TV', 'FOX Boston'],
-            'FOX.PORTLAND.us': ['WGME.TV.DT2', 'WGME.DT2', 'WGME 13.2', 'FOX Portland'],
-            'NBC.BOSTON.us': ['WBTS.CD', 'WBTS', 'NBC Boston'],
-            'NBC.PORTLAND.us': ['WCSH', 'WCSH.TV', 'NBC Portland'],
-            'COMET.us': ['WPFO.DT3', 'WPFO 23.3', 'Comet TV'],
-            'LAFF.us': ['WMTW.TV.DT3', 'WMTW.DT3', 'Laff TV'],
-            'METV.us': ['WMTW.TV.DT2', 'WMTW.DT2', 'MeTV'],
-            'GRIT.us': ['WIPL.DT4', 'WIPL 35.4', 'Grit TV'],
-            'HEROES.AND.ICONS.us': ['WPXT.DT2', 'H&I', 'Heroes and Icons'],
-            'ION.us': ['WIPL.DT1', 'ION Television'],
-            'ION.MYSTERY.us': ['WPXT.DT3', 'Ion Mystery', 'Court TV Mystery'],
-            'ION.PLUS.us': ['WIPL.DT5', 'Ion Plus'],
-            'COURT.TV.us': ['WIPL.DT2', 'Court TV'],
-            'ANTENNA.TV.us': ['WGME.TV.DT4', 'Antenna TV'],
-            'COZI.TV.us': ['WCSH.DT2', 'WCSH 6.2', 'Cozi TV'],
+            // Locals / OTA
+            'ABC.BOSTON.us': ['WCVB.TV.us', 'WCVB.us', 'ABC.Boston.us'],
+            'ABC.PORTLAND.us': ['WMTW.TV.us', 'WMTW.us', 'ABC.Portland.us'],
+            'CBS.BOSTON.us': ['WBZ.TV.us', 'WBZ.us', 'CBS.Boston.us'],
+            'CBS.PORTLAND.us': ['WGME.TV.us', 'WGME.us', 'CBS.Portland.us'],
+            'CW.BOSTON.us': ['WLVI.TV.us', 'WLVI.us', 'CW.Boston.us'],
+            'FOX.BOSTON.us': ['WFXT.us', 'WFXT.TV.us', 'FOX.Boston.us'],
+            'FOX.PORTLAND.us': ['WGME.DT2.us', 'WGME.TV.DT2.us', 'FOX.Portland.us'],
+            'NBC.BOSTON.us': ['WBTS.CD.us', 'WBTS.us', 'NBC.Boston.us'],
+            'NBC.PORTLAND.us': ['WCSH.us', 'WCSH.TV.us', 'NBC.Portland.us'],
 
-            'NEW.ENGLAND.CABLE.NEWS.us': ['NECN', 'New England Cable News'],
-            'MS.NOW.us': ['MSNBC', 'MS Now'],
-            'NESN.us': ['New England Sports Network', 'NESN'],
-            'NESN.PLUS.us': ['NESN+', 'NESN Plus', 'New England Sports Network Plus'],
-            'ESPN2.us': ['ESPN 2', 'ESPN2'],
-            'WE.TV.us': ['WE', 'WE tv'],
-            'FOX.NEWS.CHANNEL.us': ['Fox News', 'Fox News Channel'],
-            'NAT.GEO.us': ['National Geographic', 'Nat Geo'],
-            'TRUTV.us': ['truTV', 'Tru TV'],
-            'E.us': ['E!', 'E Entertainment'],
-            'AXS.TV.us': ['AXS', 'AXS TV'],
-            'MTV2.us': ['MTV 2', 'MTV2'],
-            'DISCOVERY.SCIENCE.us': ['Science Channel', 'Discovery Science'],
-            'INVESTIGATION.DISCOVERY.us': ['ID', 'Investigation Discovery'],
-            'HALLMARK.MYSTERY.us': ['Hallmark Movies & Mysteries', 'Hallmark Mystery'],
-            'CRIME.AND.INVESTIGATION.us': ['Crime+Investigation', 'Crime & Investigation', 'CI'],
-            'AMC.PLUS.us': ['AMC+', 'AMC Plus'],
-            'FOX.SPORTS.1.us': ['FS1', 'Fox Sports 1'],
-            'FOX.SPORTS.2.us': ['FS2', 'Fox Sports 2'],
-            'CBS.SPORTS.NETWORK.us': ['CBSSN', 'CBS Sports Network'],
-            'ESPN.NEWS.us': ['ESPNews', 'ESPN News'],
-            'NBA.TV.us': ['NBATV', 'NBA TV'],
-            'UP.TV.us': ['UP', 'UP TV'],
-            'AWE.us': ['A Wealth of Entertainment', 'AWE'],
-            'GREAT.AMERICAN.FAMILY.us': ['GAF', 'Great American Family'],
+            'COMET.us': ['WPFO.DT3.us', 'Comet.TV.us'],
+            'LAFF.us': ['WMTW.TV.DT3.us', 'WMTW.DT3.us', 'Laff.TV.us'],
+            'METV.us': ['WMTW.TV.DT2.us', 'WMTW.DT2.us', 'MeTV.us'],
+            'GRIT.us': ['WIPL.DT4.us', 'Grit.TV.us'],
+            'HEROES.AND.ICONS.us': ['WPXT.DT2.us', 'HEROES.ICONS.us', 'H&I.us'],
+            'ION.us': ['WIPL.DT1.us', 'ION.TELEVISION.us'],
+            'ION.MYSTERY.us': ['WPXT.DT3.us', 'COURT.TV.MYSTERY.us'],
+            'ION.PLUS.us': ['WIPL.DT5.us', 'IONPLUS.us'],
+            'COURT.TV.us': ['WIPL.DT2.us'],
+            'ANTENNA.TV.us': ['WGME.TV.DT4.us', 'WGME.DT4.us'],
+            'COZI.TV.us': ['WCSH.DT2.us', 'WCSH.TV.DT2.us'],
 
-            'HBO.US.us': ['HBO', 'HBO US', 'Home Box Office'],
-            'HBO.CANADA.ca': ['HBO Canada', 'Crave HBO'],
-            'HBO.2.CANADA.ca': ['HBO 2 Canada', 'Crave HBO2'],
-            'SHOWTIME.BET.us': ['SHOBET', 'SHOxBET', 'Showtime BET'],
-            'SHOWTIME.EXTREME.us': ['SHOX', 'Showtime Extreme'],
-            'SHOWTIME.FAMILY.ZONE.us': ['SHOFAM', 'Showtime Family Zone'],
-            'SHOWTIME.NEXT.us': ['SHONEXT', 'Showtime Next'],
-            'SHOWTIME.SHOWCASE.us': ['SHOSHOCASE', 'Showtime Showcase'],
-            'STARZ.US.us': ['STARZ', 'Starz US'],
-            'STARZ.CANADA.ca': ['Starz Canada', 'Crave Starz'],
-            'STARZ.2.CANADA.ca': ['Starz 2 Canada'],
-            'STARZ.INBLACK.us': ['Starz In Black', 'Starz inBlack'],
-            'MOVIEPLEX.us': ['MoviePlex', 'MPLEX'],
-            'RETROPLEX.us': ['RetroPlex', 'RPlex'],
-            'INDIEPLEX.us': ['IndiePlex', 'IPlex'],
-            'MGM.us': ['MGM+', 'Epix', 'MGM'],
-            'MGM.HITS.us': ['MGM+ Hits', 'MGM Hits'],
-            'MGM.MARQUEE.us': ['MGM+ Marquee', 'MGM Marquee'],
-            'MGM.DRIVE.IN.us': ['MGM Drive-In', 'MGM+ Drive-In'],
-            'SONY.MOVIES.us': ['Sony Movie Channel', 'Sony Movies'],
-            'HOLLYWOOD.SUITE.70S.ca': ['Hollywood Suite 70s', "Hollywood Suite 70's", 'HS70'],
-            'HOLLYWOOD.SUITE.80S.ca': ['Hollywood Suite 80s', "Hollywood Suite 80's", 'HS80'],
-            'HOLLYWOOD.SUITE.2000S.ca': ['Hollywood Suite 2000s', "Hollywood Suite 2000's", 'HS2000'],
-            'HOLLYWOOD.SUITE.2010S.ca': ['Hollywood Suite 2010s', "Hollywood Suite 2010's", 'HS2010']
+            // Cable and national aliases
+            'NEW.ENGLAND.CABLE.NEWS.us': ['NECN.us'],
+            'FETV.us': ['FAMILY.ENTERTAINMENT.TV.us'],
+            'GAME.SHOW.NETWORK.us': ['GSN.us'],
+            'TCM.us': ['TURNER.CLASSIC.MOVIES.us'],
+            'DISCOVERY.CHANNEL.us': ['DISCOVERY.us'],
+            'USA.NETWORK.us': ['USA.us'],
+            'NESN.us': ['NEW.ENGLAND.SPORTS.NETWORK.us'],
+            'NESN.PLUS.us': ['NESNPLUS.us', 'NESN.PLUS.us', 'NEW.ENGLAND.SPORTS.NETWORK.PLUS.us'],
+            'ESPN2.us': ['ESPN.2.us', 'ESPN2.HD.us'],
+            'WE.TV.us': ['WE.us', 'WETV.us'],
+            'MS.NOW.us': ['MSNBC.us'],
+            'FOX.NEWS.CHANNEL.us': ['FOX.NEWS.us'],
+            'NAT.GEO.us': ['NATIONAL.GEOGRAPHIC.us'],
+            'TRUTV.us': ['TRU.TV.us'],
+            'E.us': ['E.ENTERTAINMENT.us'],
+            'FXM.us': ['FX.MOVIE.CHANNEL.us'],
+            'AXS.TV.us': ['AXS.us'],
+            'TV.LAND.us': ['TVLAND.us'],
+            'NAT.GEO.WILD.us': ['NATIONAL.GEOGRAPHIC.WILD.us'],
+            'HALLMARK.MYSTERY.us': ['HALLMARK.MOVIES.AND.MYSTERIES.us'],
+            'DISCOVERY.SCIENCE.us': ['SCIENCE.CHANNEL.us'],
+            'INVESTIGATION.DISCOVERY.us': ['ID.us'],
+            'AMERICAN.HEROES.CHANNEL.us': ['AHC.us'],
+            'AMC.PLUS.us': ['AMCPLUS.us', 'AMC+.us'],
+            'MTV2.us': ['MTV.2.us'],
+            'ADULT.SWIM.us': ['ADULTSWIM.us'],
+            'FOX.SPORTS.1.us': ['FS1.us'],
+            'FOX.SPORTS.2.us': ['FS2.us'],
+            'NBA.TV.us': ['NBATV.us'],
+            'CBS.SPORTS.NETWORK.us': ['CBSSN.us'],
+            'ESPN.NEWS.us': ['ESPNEWS.us'],
+            'UP.TV.us': ['UP.us'],
+            'AWE.us': ['A.WEALTH.OF.ENTERTAINMENT.us'],
+            'GREAT.AMERICAN.FAMILY.us': ['GAF.us'],
+
+            // Premium aliases
+            'HBO.US.us': ['HBO.us'],
+            'HBO.CANADA.ca': ['HBO.ca', 'CRAVE.HBO.ca'],
+            'HBO.2.CANADA.ca': ['HBO.2.ca', 'HBO2.ca', 'CRAVE.HBO2.ca'],
+            'SHOWTIME.us': ['SHO.us', 'PARAMOUNTPLUS.WITH.SHOWTIME.us'],
+            'SHOWTIME.2.us': ['SHO2.us'],
+            'SHOWTIME.BET.us': ['SHOBET.us', 'SHOXBET.us', 'SHO.BET.us'],
+            'SHOWTIME.EXTREME.us': ['SHOX.us'],
+            'SHOWTIME.FAMILY.ZONE.us': ['SHOFAM.us'],
+            'SHOWTIME.NEXT.us': ['SHONEXT.us'],
+            'SHOWTIME.SHOWCASE.us': ['SHOSHOCASE.us'],
+            'STARZ.US.us': ['STARZ.us'],
+            'STARZ.CANADA.ca': ['STARZ.ca', 'CRAVE.STARZ.ca'],
+            'STARZ.2.CANADA.ca': ['STARZ.2.ca', 'STARZ2.ca'],
+            'STARZ.IN.BLACK.us': ['STARZ.INBLACK.us'],
+            'MOVIEPLEX.us': ['MPLEX.us'],
+            'RETROPLEX.us': ['RPLEX.us'],
+            'INDIEPLEX.us': ['IPLEX.us'],
+            'MGM.us': ['MGMPLUS.us', 'EPIX.us'],
+            'MGM.HITS.us': ['MGMPLUS.HITS.us'],
+            'MGM.MARQUEE.us': ['MGMPLUS.MARQUEE.us'],
+            'MGM.DRIVE.IN.us': ['MGMPLUS.DRIVE.IN.us']
           }
 
           function decodeXml(s) {
@@ -154,9 +181,7 @@ jobs:
 
           function norm(s) {
             return decodeXml(s)
-              .replace(/\.us$/i, '')
-              .replace(/\.ca$/i, '')
-              .replace(/\bHD\b/gi, '')
+              .replace(/\.(us|ca|uk|gb)$/i, '')
               .replace(/&/g, 'AND')
               .replace(/\+/g, 'PLUS')
               .replace(/[^A-Z0-9]+/gi, '.')
@@ -169,8 +194,8 @@ jobs:
               const attrs = m[1]
               const body = m[2]
               return {
-                id: attr(attrs, 'id') || attr(attrs, 'xmltv_id'),
-                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'id'),
+                id: attr(attrs, 'id') || attr(attrs, 'xmltv_id') || attr(attrs, 'xmltv-id'),
+                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'xmltv-id') || attr(attrs, 'id'),
                 site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
                 name: cleanBody(body)
               }
@@ -179,10 +204,13 @@ jobs:
 
           if (!fs.existsSync(sourcePath)) {
             console.error(`Missing ${sourcePath}`)
+            console.error('Create this wanted-channel input file before running.')
             process.exit(1)
           }
+
           if (!fs.existsSync(rawPath)) {
             console.error(`Missing ${rawPath}`)
+            console.error('Create this raw TVPassport channel dump before running.')
             process.exit(1)
           }
 
@@ -205,15 +233,18 @@ jobs:
           for (const src of sourceChannels) {
             const wantedId = src.id || src.xmltv_id
             const wantedName = src.name || wantedId
+
             let siteId = src.site_id
             let match = null
 
             if (!siteId) {
               const keys = [wantedId, wantedName, ...(aliases[wantedId] || [])].map(norm)
+
               for (const key of keys) {
                 match = rawById.get(key) || rawByName.get(key)
                 if (match) break
               }
+
               if (match) siteId = match.site_id
             }
 
@@ -226,7 +257,9 @@ jobs:
             if (seen.has(key)) continue
             seen.add(key)
 
-            out.push(`  <channel site="tvpassport.com" lang="en" xmltv_id="${escapeXml(wantedId)}" site_id="${escapeXml(siteId)}">${escapeXml(wantedName)}</channel>`)
+            out.push(
+              `  <channel site="tvpassport.com" lang="en" xmltv_id="${escapeXml(wantedId)}" site_id="${escapeXml(siteId)}">${escapeXml(wantedName)}</channel>`
+            )
           }
 
           console.log(`Source channels: ${sourceChannels.length}`)
@@ -245,7 +278,10 @@ jobs:
             process.exit(1)
           }
 
-          fs.writeFileSync(outputPath, `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`)
+          fs.writeFileSync(
+            outputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
           EOFJS
 
       - name: Write enriched TVPassport config
@@ -265,7 +301,6 @@ jobs:
           module.exports = {
             site: 'tvpassport.com',
             days: 1,
-            delay: 500,
 
             url({ channel, date }) {
               return `https://www.tvpassport.com/tv-listings/stations/${channel.site_id}/${date.format('YYYY-MM-DD')}`
@@ -296,14 +331,28 @@ jobs:
 
                 let title = cleanTitle(parseTitle($item))
                 let episodeTitle = cleanSpaces(parseSubTitle($item))
+                const description = cleanSpaces(parseDescription($item))
+                const image = parseImage($item)
+                const rating = parseRating($item)
+                const year = parseYear($item)
+                const categories = parseCategory($item)
+                const actors = parseActors($item)
+                const guest = parseGuest($item)
+                const director = parseDirector($item)
+
                 if (title === 'Movie' || title === 'Cinéma') {
                   title = episodeTitle
                   episodeTitle = ''
                 }
 
-                const description = cleanSpaces(parseDescription($item))
-                const releaseYear = parseYear($item)
-                const programType = classifyProgramType({ $item, title, episodeTitle, releaseYear, duration })
+                const programType = classifyProgramType({
+                  title,
+                  episodeTitle,
+                  description,
+                  year,
+                  categories,
+                  duration
+                })
 
                 const finalDescription = buildPackedDescription({
                   programType,
@@ -311,22 +360,30 @@ jobs:
                   episodeCode: '',
                   description,
                   airDate: '',
-                  releaseYear,
+                  releaseYear: year,
                   suppressDisplayDate: false
                 })
 
-                programs.push({
+                const program = {
                   title,
                   description: finalDescription,
-                  image: parseImage($item),
-                  rating: parseRating($item),
-                  actors: parseActors($item),
-                  guest: parseGuest($item),
-                  director: parseDirector($item),
                   start,
                   stop,
-                  category: buildCategories(programType, parseCategory($item))
-                })
+                  category: buildCategories(programType, categories)
+                }
+
+                if (image) program.image = image
+                if (rating) program.rating = rating
+                if (actors.length) program.actors = actors
+                if (guest.length) program.guest = guest
+                if (director.length) program.director = director
+
+                // Keep TiviMate display clean:
+                // - <title> only for row title
+                // - episode/year/date text packed into <desc>
+                // - no separate sub-title, episode-num, or date fields
+
+                programs.push(program)
               }
 
               return programs
@@ -337,135 +394,292 @@ jobs:
             const res = await axios.get('https://www.tvpassport.com/tv-listings')
             const setCookie = res.headers['set-cookie']
             if (!setCookie || setCookie.length === 0) return ''
-            return setCookie.map(cookie => cookie.split(';')[0]).join('; ')
+            const cookies = setCookie.map(cookie => cookie.split(';')[0])
+            return cookies.join('; ')
           }
 
-          function parseDescription($item) { return $item('*').data('description') || '' }
+          function parseDescription($item) {
+            return $item('*').data('description') || ''
+          }
+
           function parseImage($item) {
             const showpicture = $item('*').data('showpicture')
             if (!showpicture) return null
-            return new URL(showpicture, 'https://cdn.tvpassport.com/image/show/960x540/').href
+            try {
+              return new URL(showpicture, 'https://cdn.tvpassport.com/image/show/960x540/').href
+            } catch {
+              return null
+            }
           }
-          function parseTitle($item) { return String($item('*').data('showname') || '') }
-          function parseSubTitle($item) { return String($item('*').data('episodetitle') || '') }
-          function parseYear($item) { return String($item('*').data('year') || '') }
+
+          function parseTitle($item) {
+            return $item('*').data('showname')?.toString() || ''
+          }
+
+          function parseSubTitle($item) {
+            return $item('*').data('episodetitle')?.toString() || ''
+          }
+
+          function parseYear($item) {
+            return $item('*').data('year')?.toString() || ''
+          }
+
           function parseCategory($item) {
             const showtype = $item('*').data('showtype')
             return showtype ? String(showtype).split(', ').filter(Boolean) : []
           }
+
           function parseActors($item) {
             const cast = $item('*').data('cast')
             return cast ? String(cast).split(', ').filter(Boolean) : []
           }
+
           function parseDirector($item) {
             const director = $item('*').data('director')
             return director ? String(director).split(', ').filter(Boolean) : []
           }
+
           function parseGuest($item) {
             const guest = $item('*').data('guest')
             return guest ? String(guest).split(', ').filter(Boolean) : []
           }
+
           function parseRating($item) {
             const rating = $item('*').data('rating')
-            return rating ? { system: 'MPA', value: String(rating).replace(/^TV/, 'TV-') } : null
+            return rating
+              ? {
+                  system: 'MPA',
+                  value: String(rating).replace(/^TV/, 'TV-')
+                }
+              : null
           }
+
           function parseStart($item, currentTimezone) {
-            return dayjs.tz($item('*').data('st'), 'YYYY-MM-DD HH:mm:ss', currentTimezone)
+            const time = $item('*').data('st')
+            return dayjs.tz(time, 'YYYY-MM-DD HH:mm:ss', currentTimezone)
           }
-          function parseDuration($item) { return parseInt($item('*').data('duration') || 0) }
+
+          function parseDuration($item) {
+            const duration = $item('*').data('duration')
+            return parseInt(duration || 0, 10)
+          }
+
           function parseItems(content) {
             if (!content) return []
             const $ = cheerio.load(content)
             return $('.station-listings .list-group-item').toArray()
           }
+
           function parseCurrentTimezone(content) {
             if (!content) return 'America/New_York'
             const $ = cheerio.load(content)
             return $('#timezone_selector').val() || 'America/New_York'
           }
 
-          function classifyProgramType({ $item, title, episodeTitle, releaseYear, duration }) {
-            const haystack = [title, parseCategory($item), $item('*').data('showtype')].flat().filter(Boolean).join(' ').toLowerCase()
-            if (/movie|film|cinema/.test(haystack)) return 'movie'
-            if (episodeTitle) return 'series'
-            if (duration >= 75 && releaseYear) return 'movie'
+          function classifyProgramType({ title, episodeTitle, description, year, categories, duration }) {
+            const haystack = [title, description, categories].flat().filter(Boolean).join(' ').toLowerCase()
+
+            const hasEpisodeSignals = Boolean(episodeTitle)
+            if (/mini[\s-]?series|limited series|limited-series/.test(haystack)) return 'miniseries'
+            if (/series|episode|tv show|television|scripted|reality|documentary series/.test(haystack)) return 'series'
+            if (hasEpisodeSignals) return 'series'
+            if (/movie|film|feature film|cinema/.test(haystack)) return 'movie'
+            if (duration >= 75 && year && !hasEpisodeSignals) return 'movie'
+
             return 'program'
           }
 
-          function buildCategories(programType, tvpassportCategories) {
-            const categories = []
-            if (programType === 'movie') categories.push('Movie')
-            else if (programType === 'series') categories.push('Series')
-            else categories.push('Program')
-            for (const c of tvpassportCategories || []) {
-              if (c && !categories.some(x => x.toLowerCase() === c.toLowerCase())) categories.push(c)
-            }
-            return categories
+          function buildCategories(programType, originalCategories) {
+            const categories = Array.isArray(originalCategories) ? originalCategories.filter(Boolean) : []
+
+            if (programType === 'movie') return unique(['Movie', ...categories])
+            if (programType === 'miniseries') return unique(['Miniseries', 'Series', ...categories])
+            if (programType === 'series') return unique(['Series', ...categories])
+            return unique(categories.length ? categories : ['Program'])
           }
 
           function buildPackedDescription({ programType, episodeTitle, episodeCode, description, airDate, releaseYear, suppressDisplayDate }) {
             const parts = []
+
             let prefix = ''
-            if (programType === 'series') {
+            if (programType === 'series' || programType === 'miniseries') {
               if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
               else if (episodeTitle) prefix = episodeTitle
               else if (episodeCode) prefix = episodeCode
             }
+
             if (prefix) parts.push(prefix)
             if (description) parts.push(description)
+
             let finalDescription = cleanPackedDescription(parts.join('. '))
+
             if (programType === 'movie') {
               if (releaseYear && !descriptionIncludesDisplayDate(finalDescription, releaseYear)) {
                 finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
               }
               return finalDescription
             }
-            if (programType === 'series') {
+
+            if (programType === 'series' || programType === 'miniseries') {
               if (airDate && !suppressDisplayDate && !descriptionIncludesDisplayDate(finalDescription, airDate)) {
                 finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
               }
               return finalDescription
             }
-            const dateOrYear = suppressDisplayDate ? releaseYear : (airDate || releaseYear)
+
+            const dateOrYear = suppressDisplayDate ? releaseYear : airDate || releaseYear
             if (dateOrYear && !descriptionIncludesDisplayDate(finalDescription, dateOrYear)) {
               finalDescription = finalDescription ? `${finalDescription} (${dateOrYear})` : `(${dateOrYear})`
             }
+
             return finalDescription
           }
 
-          function cleanTitle(value) {
-            return String(value || '')
-              .replace(/\s+/g, ' ')
-              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
-              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
-              .trim()
-          }
-          function cleanSpaces(value) {
-            return String(value || '').replace(/\s+/g, ' ').replace(/\s+([.,!?;:])/g, '$1').replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2').trim()
-          }
           function cleanPackedDescription(value) {
             return cleanSpaces(value)
               .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
               .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
               .trim()
           }
+
           function descriptionIncludesDisplayDate(description, dateOrYear) {
             if (!description || !dateOrYear) return false
             const escaped = String(dateOrYear).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
             return new RegExp(`\\(${escaped}\\)\\s*$`).test(description) || description.includes(String(dateOrYear))
+          }
+
+          function cleanTitle(value) {
+            return cleanSpaces(value)
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
+          }
+
+          function unique(values) {
+            return [...new Set(values.filter(Boolean))]
           }
           EOFJS
 
       - name: Grab TVPassport guide
         run: |
           cd epg
+
           rm -f ../guides/TVPassport.xml
-          npx tsx scripts/commands/epg/grab.ts \
-            --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
-            --output="../guides/TVPassport.xml" \
-            --days=1 \
-            --maxConnections=4
+          rm -f ../guides/TVPassport.pass*.xml
+          rm -f ../guides/TVPassport.pass*.log
+          rm -f ../guides/TVPassport.pass*.count
+
+          run_pass() {
+            PASS_NAME="$1"
+            MAX_CONNECTIONS="$2"
+            SCHEDULE_TIMEOUT="$3"
+
+            echo ""
+            echo "============================================================"
+            echo "Starting $PASS_NAME"
+            echo "maxConnections=$MAX_CONNECTIONS"
+            echo "TVPASSPORT_SCHEDULE_TIMEOUT=$SCHEDULE_TIMEOUT"
+            echo "============================================================"
+
+            export TVPASSPORT_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
+
+            set +e
+            npx tsx scripts/commands/epg/grab.ts \
+              --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
+              --output="../guides/TVPassport.${PASS_NAME}.xml" \
+              --days=1 \
+              --maxConnections="$MAX_CONNECTIONS" \
+              2>&1 | tee "../guides/TVPassport.${PASS_NAME}.log"
+
+            STATUS=${PIPESTATUS[0]}
+            set -e
+
+            if [ "$STATUS" -ne 0 ]; then
+              echo "$PASS_NAME exited with status $STATUS"
+            fi
+
+            if [ ! -f "../guides/TVPassport.${PASS_NAME}.xml" ]; then
+              echo "$PASS_NAME did not create an XML file"
+              echo "0" > "../guides/TVPassport.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/TVPassport.${PASS_NAME}.descriptions.count"
+              echo "999999" > "../guides/TVPassport.${PASS_NAME}.issues.count"
+              return 0
+            fi
+
+            PR=$(grep -c '<programme ' "../guides/TVPassport.${PASS_NAME}.xml" || true)
+            DESC=$(grep -c '<desc ' "../guides/TVPassport.${PASS_NAME}.xml" || true)
+
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/TVPassport.${PASS_NAME}.log" || true)
+
+            echo "$PR" > "../guides/TVPassport.${PASS_NAME}.programmes.count"
+            echo "$DESC" > "../guides/TVPassport.${PASS_NAME}.descriptions.count"
+            echo "$ISSUE_COUNT" > "../guides/TVPassport.${PASS_NAME}.issues.count"
+
+            echo "$PASS_NAME programmes: $PR"
+            echo "$PASS_NAME descriptions: $DESC"
+            echo "$PASS_NAME possible issues: $ISSUE_COUNT"
+          }
+
+          run_pass "pass1-fast" 8 30000
+
+          PASS1_ISSUES=$(cat ../guides/TVPassport.pass1-fast.issues.count)
+
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
+            echo ""
+            echo "Fast pass had possible issues, running backup pass..."
+            run_pass "pass2-backup" 4 45000
+          else
+            echo ""
+            echo "Fast pass had no obvious issues. Skipping backup pass."
+          fi
+
+          BEST_PASS="pass1-fast"
+          BEST_PR=$(cat ../guides/TVPassport.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/TVPassport.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/TVPassport.pass1-fast.issues.count)
+
+          for PASS in pass2-backup; do
+            if [ -f "../guides/TVPassport.${PASS}.programmes.count" ]; then
+              CANDIDATE_PR=$(cat "../guides/TVPassport.${PASS}.programmes.count")
+              CANDIDATE_DESC=$(cat "../guides/TVPassport.${PASS}.descriptions.count")
+              CANDIDATE_ISSUES=$(cat "../guides/TVPassport.${PASS}.issues.count")
+
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              fi
+            fi
+          done
+
+          echo ""
+          echo "Selected best pass: $BEST_PASS"
+          echo "Best programmes: $BEST_PR"
+          echo "Best descriptions: $BEST_DESC"
+          echo "Best possible issues: $BEST_ISSUES"
+
+          cp "../guides/TVPassport.${BEST_PASS}.xml" "../guides/TVPassport.xml"
+
           cd ..
 
       - name: Fill missing TVPassport metadata from TVMaze
@@ -475,6 +689,7 @@ jobs:
 
           const guidePath = 'guides/TVPassport.xml'
           const cachePath = 'guides/.tvmaze-tvpassport-cache.json'
+
           if (!fs.existsSync(guidePath)) {
             console.error(`Missing ${guidePath}`)
             process.exit(1)
@@ -482,145 +697,447 @@ jobs:
 
           const xml = fs.readFileSync(guidePath, 'utf8')
           let cache = {}
+
           if (fs.existsSync(cachePath)) {
-            try { cache = JSON.parse(fs.readFileSync(cachePath, 'utf8')) } catch { cache = {} }
-          }
-
-          const stats = { programmes: 0, searchedShows: 0, matchedShows: 0, enriched: 0, skippedMovies: 0 }
-          const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-          function escapeXml(s) { return String(s || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
-          function decodeXml(s) { return String(s || '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>') }
-          function stripTags(s) { return decodeXml(String(s || '').replace(/<[^>]+>/g, '').trim()) }
-          function getTag(block, tag) { const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i')); return m ? stripTags(m[1]) : '' }
-          function getTags(block, tag) { return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))].map(m => stripTags(m[1])).filter(Boolean) }
-          function hasTag(block, tag) { return new RegExp(`<${tag}\\b`, 'i').test(block) }
-          function hasCategory(block, category) { return getTags(block, 'category').some(c => c.toLowerCase() === category.toLowerCase()) }
-          function hasAnyCategory(block) { return hasTag(block, 'category') }
-          function insertBeforeProgrammeEnd(block, tagXml) { return block.replace(/<\/programme>\s*$/i, `${tagXml}\n</programme>`) }
-          function replaceTag(block, tag, value) {
-            const tagXml = `  <${tag} lang="en">${escapeXml(value)}</${tag}>`
-            if (hasTag(block, tag)) return block.replace(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
-            return insertBeforeProgrammeEnd(block, tagXml)
-          }
-          function normalize(s) { return String(s || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, ' ').trim() }
-          function isMovie(block) { return hasCategory(block, 'Movie') || hasCategory(block, 'Film') }
-          function cleanTitleForSearch(title) { return String(title || '').replace(/\s+/g, ' ').replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '').replace(/\s*\((New|Live|Repeat)\)\s*$/i, '').trim() }
-          function getStartDate(block) { const m = block.match(/start="(\d{8})/i); return m ? `${m[1].slice(0,4)}-${m[1].slice(4,6)}-${m[1].slice(6,8)}` : '' }
-          function needsTvmaze(block) {
-            if (isMovie(block)) return false
-            const desc = getTag(block, 'desc')
-            if (!hasAnyCategory(block)) return true
-            if (!desc) return true
-            return !/\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
-          }
-          function scoreShow(title, show) { const a = normalize(title), b = normalize(show?.name || ''); if (!a || !b) return 0; if (a === b) return 100; if (a.includes(b) || b.includes(a)) return 80; return 0 }
-          function showIsMovieLike(show) { const type = String(show?.type || '').toLowerCase(); return type === 'movie' || type === 'film' }
-          async function fetchJsonWithRetries(url, label) {
-            for (let attempt = 1; attempt <= 4; attempt++) {
-              try {
-                const response = await fetch(url, { headers: { 'User-Agent': 'festy-epg-tvpassport-tvmaze-fill-missing-only/1.0' } })
-                if (response.status === 404) return null
-                if (response.status === 429 || response.status >= 500) throw new Error(`HTTP ${response.status}`)
-                if (!response.ok) return null
-                return await response.json()
-              } catch (err) {
-                if (attempt === 4) { console.log(`[TVMAZE FAIL] ${label} | ${err.message}`); return null }
-                await sleep(1000 * attempt + Math.floor(Math.random() * 500))
-              }
+            try {
+              cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'))
+            } catch {
+              cache = {}
             }
-            return null
           }
+
+          const stats = {
+            programmes: 0,
+            skippedMovies: 0,
+            searchedShows: 0,
+            matchedShows: 0,
+            enriched: 0,
+            addedCategories: 0,
+            addedDescriptions: 0
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function stripTags(s) {
+            return decodeXml(String(s || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function getTag(block, tag) {
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? stripTags(m[1]) : ''
+          }
+
+          function getTags(block, tag) {
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
+              .map(m => stripTags(m[1]))
+              .filter(Boolean)
+          }
+
+          function hasTag(block, tag) {
+            return new RegExp(`<${tag}\\b`, 'i').test(block)
+          }
+
+          function hasCategory(block, category) {
+            return getTags(block, 'category').some(c => c.toLowerCase() === category.toLowerCase())
+          }
+
+          function hasAnyCategory(block) {
+            return hasTag(block, 'category')
+          }
+
+          function getStartDate(block) {
+            const m = block.match(/start="(\d{8})/i)
+            if (!m) return ''
+            return `${m[1].slice(0, 4)}-${m[1].slice(4, 6)}-${m[1].slice(6, 8)}`
+          }
+
+          function cleanTitleForSearch(title) {
+            return String(title || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function isMovie(block) {
+            return hasCategory(block, 'Movie') || hasCategory(block, 'Film')
+          }
+
+          function needsTvmaze(block) {
+            if (!hasAnyCategory(block)) return true
+
+            const desc = getTag(block, 'desc')
+            if (!desc) return true
+
+            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+            if (!hasPackedDisplayDate && hasCategory(block, 'Series')) return true
+
+            return false
+          }
+
+          function tvmazeShowIsMovieLike(show) {
+            const type = String(show?.type || '').toLowerCase()
+            return type === 'movie' || type === 'film'
+          }
+
+          function tvmazeShowIsMiniseries(show) {
+            const type = String(show?.type || '').toLowerCase()
+            const name = String(show?.name || '').toLowerCase()
+            const summary = String(show?.summary || '').toLowerCase()
+
+            return (
+              type.includes('mini') ||
+              type.includes('limited') ||
+              name.includes('miniseries') ||
+              summary.includes('miniseries') ||
+              summary.includes('limited series')
+            )
+          }
+
+          function normalize(s) {
+            return String(s || '')
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function scoreShow(title, show) {
+            const a = normalize(title)
+            const b = normalize(show?.name || '')
+            if (!a || !b) return 0
+            if (a === b) return 100
+            if (a.includes(b) || b.includes(a)) return 80
+            return 0
+          }
+
           async function tvmazeSearchShow(title) {
             const key = `show:${normalize(title)}`
             if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
-            const result = await fetchJsonWithRetries(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`, `search ${title}`)
+
+            const url = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`
+            const result = await fetchJsonWithRetries(url, `search ${title}`)
             const candidates = Array.isArray(result) ? result.map(x => x.show).filter(Boolean) : []
-            let best = null, bestScore = 0
+
+            let best = null
+            let bestScore = 0
+
             for (const show of candidates) {
-              if (showIsMovieLike(show)) continue
+              if (tvmazeShowIsMovieLike(show)) continue
+
               const score = scoreShow(title, show)
-              if (score > bestScore) { best = show; bestScore = score }
+              if (score > bestScore) {
+                best = show
+                bestScore = score
+              }
             }
+
             if (bestScore < 80) best = null
+
             cache[key] = best
             await sleep(250)
             return best
           }
+
           async function tvmazeEpisodes(showId) {
             const key = `episodes:${showId}`
             if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
-            const episodes = await fetchJsonWithRetries(`https://api.tvmaze.com/shows/${showId}/episodes`, `episodes ${showId}`)
+
+            const url = `https://api.tvmaze.com/shows/${showId}/episodes`
+            const episodes = await fetchJsonWithRetries(url, `episodes ${showId}`)
             cache[key] = Array.isArray(episodes) ? episodes : []
             await sleep(250)
             return cache[key]
           }
-          function getPackedEpisodeTitleFromDesc(desc) {
-            const cleaned = cleanPackedDescription(desc).replace(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/, '').trim()
-            const firstSentence = cleaned.match(/^(.+?)(?:\.\s+|$)/)
-            const first = firstSentence ? firstSentence[1].trim() : ''
-            if (!first || first.length > 80) return ''
-            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
-            if (prefixMatch) return prefixMatch[1].trim()
-            if (/^S\d+E\d+$/i.test(first)) return ''
-            return first
-          }
-          function findEpisodeForProgramme(episodes, block) {
-            const desc = getTag(block, 'desc')
-            const subtitle = getTag(block, 'sub-title')
-            const codeMatch = desc.match(/\bS(\d+)E(\d+)\b/i)
-            if (codeMatch) {
-              const byCode = episodes.find(ep => Number(ep.season) === Number(codeMatch[1]) && Number(ep.number) === Number(codeMatch[2]))
-              if (byCode) return byCode
+
+          async function fetchJsonWithRetries(url, label) {
+            const attempts = 4
+
+            for (let attempt = 1; attempt <= attempts; attempt++) {
+              try {
+                const response = await fetch(url, {
+                  headers: {
+                    'User-Agent': 'festy-epg-tvpassport-tvmaze-fill-missing-only/1.0'
+                  }
+                })
+
+                if (response.status === 404) return null
+                if (response.status === 429 || response.status >= 500) {
+                  throw new Error(`HTTP ${response.status}`)
+                }
+
+                if (!response.ok) return null
+
+                return await response.json()
+              } catch (err) {
+                if (attempt === attempts) {
+                  console.log(`[TVMAZE FAIL] ${label} | ${err.message}`)
+                  return null
+                }
+
+                const delay = 1000 * attempt + Math.floor(Math.random() * 500)
+                console.log(`[TVMAZE RETRY] ${label} | ${err.message} | attempt=${attempt}/${attempts}`)
+                await sleep(delay)
+              }
             }
-            const titleCandidates = [subtitle, getPackedEpisodeTitleFromDesc(desc)].filter(Boolean).map(normalize)
-            for (const t of titleCandidates) {
-              const byName = episodes.find(ep => normalize(ep.name) === t)
-              if (byName) return byName
-            }
-            const scheduleDate = getStartDate(block)
-            if (scheduleDate) return episodes.find(ep => ep.airdate === scheduleDate) || null
+
             return null
           }
-          function formatDateDisplay(date) { return /^\d{4}-\d{2}-\d{2}$/.test(date || '') ? `${date.slice(5,7)}/${date.slice(8,10)}/${date.slice(0,4)}` : '' }
-          function buildEpisodeCode(season, episode) { const s = Number(season), e = Number(episode); return Number.isFinite(s) && Number.isFinite(e) && s > 0 && e > 0 ? `S${s}E${e}` : '' }
-          function cleanSummary(value) { return decodeXml(String(value || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()) }
-          function cleanPackedDescription(value) { return String(value || '').replace(/\s+/g, ' ').replace(/\s+([.,!?;:])/g, '$1').replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2').replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)').trim() }
-          function descHas(desc, value) { return Boolean(value && normalize(desc).includes(normalize(value))) }
-          function buildPackedDescription(existingDesc, show, episode) {
-            const existing = cleanPackedDescription(existingDesc)
-            if (!episode) return existing
-            const episodeName = cleanSummary(episode.name || '')
-            const episodeCode = buildEpisodeCode(episode.season, episode.number)
-            const episodeSummary = cleanSummary(episode.summary || '')
-            const showSummary = cleanSummary(show.summary || '')
-            const displayDate = formatDateDisplay(episode.airdate)
-            let desc = existing
-            const parts = []
-            if (episodeName && !descHas(desc, episodeName)) parts.push(episodeName)
-            if (episodeCode && !new RegExp(`\\b${episodeCode}\\b`, 'i').test(desc)) {
-              if (parts.length) parts[0] = `${parts[0]} - ${episodeCode}`
-              else parts.push(episodeCode)
+
+          function findEpisodeForProgramme(episodes, block) {
+            const scheduleDate = getStartDate(block)
+            const desc = getTag(block, 'desc')
+
+            const codeMatch = desc.match(/\bS(\d+)E(\d+)\b/i)
+            if (codeMatch) {
+              const season = Number(codeMatch[1])
+              const number = Number(codeMatch[2])
+              const byCode = episodes.find(ep => Number(ep.season) === season && Number(ep.number) === number)
+              if (byCode) return byCode
             }
-            if (!desc || desc === episodeName || desc === episodeCode) parts.push(episodeSummary || showSummary || '')
-            if (desc && parts.length) desc = `${parts.join('. ')}. ${desc}`
-            else if (!desc) desc = parts.join('. ')
-            if (displayDate && !desc.includes(displayDate)) desc = desc ? `${desc} (${displayDate})` : `(${displayDate})`
-            return cleanPackedDescription(desc)
+
+            const packedTitle = getPackedEpisodeTitleFromDesc(desc)
+            if (packedTitle) {
+              const packedNorm = normalize(packedTitle)
+              const byPackedTitle = episodes.find(ep => normalize(ep.name) === packedNorm)
+              if (byPackedTitle) return byPackedTitle
+            }
+
+            if (scheduleDate) {
+              const exact = episodes.find(ep => ep.airdate === scheduleDate)
+              if (exact) return exact
+            }
+
+            return null
           }
-          function enrichBlock(block, show, episode) {
+
+          function getPackedEpisodeTitleFromDesc(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+              .replace(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/, '')
+              .trim()
+            if (!cleaned) return ''
+
+            const firstSentence = cleaned.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            if (!first) return ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) return prefixMatch[1].trim()
+
+            if (/^S\d+E\d+$/i.test(first)) return ''
+            if (first.length > 80) return ''
+            return first
+          }
+
+          function cleanTvmazeSummary(value) {
+            return decodeXml(String(value || '')
+              .replace(/<[^>]+>/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim())
+          }
+
+          function formatDateDisplay(date) {
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
+            return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`
+          }
+
+          function buildTvmazeEpisodeCode(season, episode) {
+            const s = Number(season)
+            const e = Number(episode)
+            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
+            return `S${s}E${e}`
+          }
+
+          function descHasEpisodeName(desc, episodeName) {
+            if (!desc || !episodeName) return false
+            const descNorm = normalize(desc)
+            const nameNorm = normalize(episodeName)
+            return Boolean(nameNorm && descNorm.includes(nameNorm))
+          }
+
+          function descHasEpisodeCode(desc, season, episode) {
+            const code = buildTvmazeEpisodeCode(season, episode)
+            if (!desc || !code) return false
+            return new RegExp(`\\b${code}\\b`, 'i').test(desc)
+          }
+
+          function descHasDisplayDate(desc, airdate) {
+            const displayDate = formatDateDisplay(airdate)
+            if (!desc || !displayDate) return false
+            return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
+          }
+
+          function cleanPackedTvmazeDescription(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function splitTrailingDisplayDate(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+            const match = cleaned.match(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/)
+            if (!match) return { body: cleaned, dateText: '' }
+            return {
+              body: cleaned.slice(0, match.index).trim(),
+              dateText: match[1]
+            }
+          }
+
+          function parsePackedDescription(desc) {
+            const split = splitTrailingDisplayDate(desc)
+            const withoutDate = split.body
+            const firstSentence = withoutDate.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            const rest = firstSentence && firstSentence[0].length < withoutDate.length
+              ? withoutDate.slice(firstSentence[0].length).trim()
+              : ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) {
+              return {
+                episodeTitle: prefixMatch[1].trim(),
+                episodeCode: prefixMatch[2].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            const codeOnlyMatch = first.match(/^(S\d+E\d+|S\d+|E\d+)$/i)
+            if (codeOnlyMatch) {
+              return {
+                episodeTitle: '',
+                episodeCode: codeOnlyMatch[1].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            return {
+              episodeTitle: '',
+              episodeCode: '',
+              body: withoutDate,
+              dateText: split.dateText,
+              hadPrefix: false
+            }
+          }
+
+          function buildTvmazePackedDescription(existingDesc, show, episode) {
+            if (!episode) return cleanPackedTvmazeDescription(existingDesc)
+
+            const existing = cleanPackedTvmazeDescription(existingDesc)
+            const parsed = parsePackedDescription(existing)
+
+            const episodeName = cleanTvmazeSummary(episode?.name || '')
+            const episodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
+            const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
+            const showSummary = cleanTvmazeSummary(show?.summary || '')
+            const displayDate = formatDateDisplay(episode?.airdate)
+
+            let titlePart = parsed.episodeTitle
+            let codePart = parsed.episodeCode
+            let bodyPart = parsed.body
+            let datePart = parsed.dateText
+
+            const packedTitle = getPackedEpisodeTitleFromDesc(existing)
+            if (!titlePart && episodeName && packedTitle && normalize(packedTitle) === normalize(episodeName)) {
+              titlePart = packedTitle
+              const firstSentence = bodyPart.match(/^(.+?)(?:\.\s+|$)/)
+              if (firstSentence) bodyPart = bodyPart.slice(firstSentence[0].length).trim()
+            }
+
+            if (!titlePart && episodeName && !descHasEpisodeName(existing, episodeName)) {
+              titlePart = episodeName
+            }
+
+            if (!codePart && episodeCode && !descHasEpisodeCode(existing, episode?.season, episode?.number)) {
+              codePart = episodeCode
+            }
+
+            if (!bodyPart || bodyPart === titlePart || bodyPart === codePart || bodyPart === `${titlePart} - ${codePart}`) {
+              bodyPart = episodeSummary || showSummary || ''
+            }
+
+            if (!datePart && displayDate && !descHasDisplayDate(existing, episode?.airdate)) {
+              datePart = displayDate
+            }
+
+            const parts = []
+            if (titlePart && codePart) parts.push(`${titlePart} - ${codePart}`)
+            else if (titlePart) parts.push(titlePart)
+            else if (codePart) parts.push(codePart)
+
+            if (bodyPart) {
+              const bodyNorm = normalize(bodyPart)
+              const prefixNorm = normalize(parts[0] || '')
+              if (!prefixNorm || bodyNorm !== prefixNorm) parts.push(bodyPart)
+            }
+
+            let desc = cleanPackedTvmazeDescription(parts.join('. '))
+            if (datePart) desc = desc ? `${desc} (${datePart})` : `(${datePart})`
+            return cleanPackedTvmazeDescription(desc)
+          }
+
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
+            const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
+
+            if (hasTag(block, tag)) {
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
+            }
+
+            return insertBeforeProgrammeEnd(block, tagXml)
+          }
+
+          function insertBeforeProgrammeEnd(block, tagXml) {
+            return block.replace(/<\/programme>\s*$/i, `${tagXml}\n</programme>`)
+          }
+
+          function enrichBlockMissingOnly(block, show, episode) {
             let updated = block
             let changed = false
+
             if (!hasAnyCategory(updated)) {
-              updated = insertBeforeProgrammeEnd(updated, '  <category lang="en">Series</category>')
+              const category = tvmazeShowIsMiniseries(show) ? 'Miniseries' : 'Series'
+              updated = insertBeforeProgrammeEnd(updated, `  <category lang="en">${category}</category>`)
               changed = true
+              stats.addedCategories++
             }
+
             const existingDesc = getTag(updated, 'desc')
-            const packed = buildPackedDescription(existingDesc, show, episode)
-            if (packed && packed !== existingDesc) {
-              updated = replaceTag(updated, 'desc', packed)
+            const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode)
+
+            if (packedDesc && packedDesc !== existingDesc) {
+              updated = replaceTag(updated, 'desc', packedDesc)
               changed = true
+              stats.addedDescriptions++
             }
+
             if (changed) stats.enriched++
             return updated
           }
@@ -628,27 +1145,74 @@ jobs:
           async function main() {
             const parts = xml.split(/(<programme\b[\s\S]*?<\/programme>)/gi)
             const out = []
+
             for (const part of parts) {
-              if (!/^<programme\b/i.test(part)) { out.push(part); continue }
+              if (!/^<programme\b/i.test(part)) {
+                out.push(part)
+                continue
+              }
+
               stats.programmes++
+
               let block = part
               const title = cleanTitleForSearch(getTag(block, 'title'))
-              if (!title || isMovie(block) || !needsTvmaze(block)) { if (isMovie(block)) stats.skippedMovies++; out.push(block); continue }
+
+              if (!title) {
+                out.push(block)
+                continue
+              }
+
+              if (isMovie(block)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              if (!needsTvmaze(block)) {
+                out.push(block)
+                continue
+              }
+
               stats.searchedShows++
               const show = await tvmazeSearchShow(title)
-              if (!show || showIsMovieLike(show)) { out.push(block); continue }
+
+              if (!show) {
+                out.push(block)
+                continue
+              }
+
+              if (tvmazeShowIsMovieLike(show)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
               stats.matchedShows++
+
               const episodes = await tvmazeEpisodes(show.id)
               const episode = findEpisodeForProgramme(episodes, block)
-              block = enrichBlock(block, show, episode)
+
+              block = enrichBlockMissingOnly(block, show, episode)
               out.push(block)
             }
+
             fs.writeFileSync(guidePath, out.join(''))
             fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2))
+
             console.log('[TVMAZE] missing-only enrichment complete')
-            console.log(JSON.stringify(stats, null, 2))
+            console.log(`[TVMAZE] programmes scanned: ${stats.programmes}`)
+            console.log(`[TVMAZE] movies skipped: ${stats.skippedMovies}`)
+            console.log(`[TVMAZE] shows searched: ${stats.searchedShows}`)
+            console.log(`[TVMAZE] shows matched: ${stats.matchedShows}`)
+            console.log(`[TVMAZE] programmes enriched: ${stats.enriched}`)
+            console.log(`[TVMAZE] categories added: ${stats.addedCategories}`)
+            console.log(`[TVMAZE] descriptions added: ${stats.addedDescriptions}`)
           }
-          main().catch(err => { console.error(err); process.exit(1) })
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
           EOFJS
 
       - name: Validate TVPassport output
@@ -656,41 +1220,62 @@ jobs:
           CH=$(grep -c '<channel ' guides/TVPassport.xml || true)
           PR=$(grep -c '<programme ' guides/TVPassport.xml || true)
           DESC=$(grep -c '<desc ' guides/TVPassport.xml || true)
+
           echo "TVPassport channels: $CH"
           echo "TVPassport programmes: $PR"
           echo "TVPassport descriptions: $DESC"
-          if [ "$CH" -lt 100 ]; then echo "Invalid TVPassport output - expected at least 100 channels"; exit 1; fi
-          if [ "$PR" -lt 1 ]; then echo "Invalid TVPassport output - no programmes"; exit 1; fi
-          if [ "$DESC" -lt 1 ]; then echo "Invalid TVPassport output - no descriptions"; exit 1; fi
+
+          if [ "$CH" -lt 100 ]; then
+            echo "Invalid TVPassport output - expected at least 100 channels"
+            exit 1
+          fi
+
+          if [ "$PR" -lt 1 ]; then
+            echo "Invalid TVPassport output - no programmes"
+            exit 1
+          fi
+
+          if [ "$DESC" -lt 1 ]; then
+            echo "Invalid TVPassport output - no descriptions"
+            exit 1
+          fi
 
       - name: Apply custom logos to TVPassport guide
         run: |
           if [ -f scripts/apply-custom-logos.cjs ]; then
             node scripts/apply-custom-logos.cjs guides/TVPassport.xml
           else
-            echo "No custom logo script found; skipping"
+            echo "No scripts/apply-custom-logos.cjs found; skipping logo step"
           fi
 
       - name: Commit and push TVPassport guide safely
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+
           git add guides/TVPassport.xml guides/.tvmaze-tvpassport-cache.json
+
           if git diff --cached --quiet; then
             echo "No TVPassport guide changes to commit"
             exit 0
           fi
+
           git commit -m "Update TVPassport guide"
+
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
+
             git fetch origin main
             git rebase origin/main
+
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
+
             echo "Push failed, retrying after rebase..."
             sleep 5
           done
+
           echo "Push failed after retries"
           exit 1
