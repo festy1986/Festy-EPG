@@ -1046,20 +1046,30 @@ jobs:
             exit 0
           fi
 
+          # Commit generated files first so the working tree is clean before any rebase.
           git commit -m "Update TVPassport guide"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
 
             git fetch origin main
-            git rebase origin/main
+
+            if git rebase origin/main; then
+              echo "Rebase succeeded"
+            else
+              echo "Rebase failed; aborting rebase and retrying from origin/main"
+              git rebase --abort || true
+              git reset --hard HEAD
+              git fetch origin main
+              git rebase origin/main
+            fi
 
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed, retrying after rebase..."
+            echo "Push failed, retrying after fresh fetch/rebase..."
             sleep 5
           done
 
