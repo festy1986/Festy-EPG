@@ -117,7 +117,7 @@ jobs:
 
                 let title = cleanTitle(parseTitle($item))
                 let episodeTitle = cleanSpaces(parseSubTitle($item))
-                const description = cleanSpaces(parseDescription($item))
+                const description = cleanPassportDescription(cleanSpaces(parseDescription($item)))
                 const image = parseImage($item)
                 const rating = parseRating($item)
                 const year = parseYear($item)
@@ -160,8 +160,9 @@ jobs:
 
                 if (image) program.image = image
                 if (rating) program.rating = rating
-                // Do not output actors/guest/director into XML.
-                // Keep TiviMate display clean; Passport people metadata is not final display metadata.
+                if (actors.length) program.actors = actors
+                if (guest.length) program.guest = guest
+                if (director.length) program.director = director
 
                 // Keep TiviMate display clean:
                 // - <title> only for row title
@@ -318,6 +319,17 @@ jobs:
             }
 
             return finalDescription
+          }
+
+          function cleanPassportDescription(value) {
+            return cleanSpaces(value)
+              // Remove actor-name parentheticals from Passport descriptions.
+              // Example:
+              // "James Bond (Daniel Craig) must..." -> "James Bond must..."
+              // Keeps years/dates like (2012), ratings, and normal description text.
+              .replace(/\s*\(([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})(?:,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})*)\)/g, '')
+              .replace(/\s+/g, ' ')
+              .trim()
           }
 
           function cleanPackedDescription(value) {
@@ -569,10 +581,15 @@ jobs:
           }
 
           function needsTvmaze(block) {
-            // TV shows: always let TVMaze try to identify and enrich.
-            // Movies: leave Passport as final authority.
-            if (isMovie(block)) return false
-            return true
+            if (!hasAnyCategory(block)) return true
+
+            const desc = getTag(block, 'desc')
+            if (!desc) return true
+
+            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+            if (!hasPackedDisplayDate && hasCategory(block, 'Series')) return true
+
+            return false
           }
 
           function tvmazeShowIsMovieLike(show) {
@@ -828,55 +845,58 @@ jobs:
           }
 
           function buildTvmazePackedDescription(existingDesc, show, episode) {
-            // Smart merge rule:
-            // - TVMaze wins for fields it has.
-            // - Passport stays for fields TVMaze does not have.
-            // - If TVMaze cannot identify an episode, keep Passport desc intact.
             if (!episode) return cleanPackedTvmazeDescription(existingDesc)
 
             const existing = cleanPackedTvmazeDescription(existingDesc)
             const parsed = parsePackedDescription(existing)
 
-            const tvmazeEpisodeTitle = cleanTvmazeSummary(episode?.name || '')
-            const tvmazeEpisodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
-            const tvmazeSummary = cleanTvmazeSummary(episode?.summary || '')
-            const tvmazeAirdate = formatDateDisplay(episode?.airdate)
+            const episodeName = cleanTvmazeSummary(episode?.name || '')
+            const episodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
+            const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
+            const showSummary = cleanTvmazeSummary(show?.summary || '')
+            const displayDate = formatDateDisplay(episode?.airdate)
 
-            const passportEpisodeTitle = parsed.episodeTitle || getPackedEpisodeTitleFromDesc(existing)
-            const passportEpisodeCode = parsed.episodeCode || ''
-            const passportSummary = parsed.body || ''
-            const passportDate = parsed.dateText || ''
+            let titlePart = parsed.episodeTitle
+            let codePart = parsed.episodeCode
+            let bodyPart = parsed.body
+            let datePart = parsed.dateText
 
-            const finalEpisodeTitle = tvmazeEpisodeTitle || passportEpisodeTitle
-            const finalEpisodeCode = tvmazeEpisodeCode || passportEpisodeCode
-            const finalSummary = tvmazeSummary || passportSummary
-            const finalDate = tvmazeAirdate || passportDate
-
-            const parts = []
-
-            if (finalEpisodeTitle && finalEpisodeCode) {
-              parts.push(`${finalEpisodeTitle} - ${finalEpisodeCode}`)
-            } else if (finalEpisodeTitle) {
-              parts.push(finalEpisodeTitle)
-            } else if (finalEpisodeCode) {
-              parts.push(finalEpisodeCode)
+            const packedTitle = getPackedEpisodeTitleFromDesc(existing)
+            if (!titlePart && episodeName && packedTitle && normalize(packedTitle) === normalize(episodeName)) {
+              titlePart = packedTitle
+              const firstSentence = bodyPart.match(/^(.+?)(?:\.\s+|$)/)
+              if (firstSentence) bodyPart = bodyPart.slice(firstSentence[0].length).trim()
             }
 
-            if (finalSummary) {
-              const summaryNorm = normalize(finalSummary)
-              const prefixNorm = normalize(parts[0] || '')
+            if (!titlePart && episodeName && !descHasEpisodeName(existing, episodeName)) {
+              titlePart = episodeName
+            }
 
-              if (!prefixNorm || summaryNorm !== prefixNorm) {
-                parts.push(finalSummary)
-              }
+            if (!codePart && episodeCode && !descHasEpisodeCode(existing, episode?.season, episode?.number)) {
+              codePart = episodeCode
+            }
+
+            if (!bodyPart || bodyPart === titlePart || bodyPart === codePart || bodyPart === `${titlePart} - ${codePart}`) {
+              bodyPart = episodeSummary || showSummary || ''
+            }
+
+            if (!datePart && displayDate && !descHasDisplayDate(existing, episode?.airdate)) {
+              datePart = displayDate
+            }
+
+            const parts = []
+            if (titlePart && codePart) parts.push(`${titlePart} - ${codePart}`)
+            else if (titlePart) parts.push(titlePart)
+            else if (codePart) parts.push(codePart)
+
+            if (bodyPart) {
+              const bodyNorm = normalize(bodyPart)
+              const prefixNorm = normalize(parts[0] || '')
+              if (!prefixNorm || bodyNorm !== prefixNorm) parts.push(bodyPart)
             }
 
             let desc = cleanPackedTvmazeDescription(parts.join('. '))
-
-            if (finalDate) {
-              desc = desc ? `${desc} (${finalDate})` : `(${finalDate})`
-            }
-
+            if (datePart) desc = desc ? `${desc} (${datePart})` : `(${datePart})`
             return cleanPackedTvmazeDescription(desc)
           }
 
@@ -976,7 +996,7 @@ jobs:
             fs.writeFileSync(guidePath, out.join(''))
             fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2))
 
-            console.log('[TVMAZE] smart merge enrichment complete')
+            console.log('[TVMAZE] missing-only enrichment complete')
             console.log(`[TVMAZE] programmes scanned: ${stats.programmes}`)
             console.log(`[TVMAZE] movies skipped: ${stats.skippedMovies}`)
             console.log(`[TVMAZE] shows searched: ${stats.searchedShows}`)
