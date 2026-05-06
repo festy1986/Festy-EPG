@@ -208,16 +208,7 @@ jobs:
                   batch.map(async item => {
                     const details = await loadProgramDetails(item)
 
-                    const title = cleanTitle(firstNonGeneric([
-                      details.title,
-                      details.seriesTitle,
-                      details.showTitle,
-                      details.name,
-                      details.programTitle,
-                      item.title,
-                      item.programTitle,
-                      item.name
-                    ]) || item.title || details.title || '')
+                    const title = cleanTitle(item.title || details.title || '')
                     const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
                     const description = cleanSpaces(details.description || item.description || '')
 
@@ -574,17 +565,6 @@ jobs:
             if (s && e) return `S${s}E${e}`
             if (e) return `E${e}`
             return `S${s}`
-          }
-
-
-          function isGenericTitle(value) {
-            return /^(movie|program|series|sports|paid programming|tba|to be announced|cinéma)$/i.test(String(value || '').trim())
-          }
-
-          function firstNonGeneric(values) {
-            return values
-              .map(value => String(value || '').trim())
-              .find(value => value && !isGenericTitle(value))
           }
 
           function cleanTitle(value) {
