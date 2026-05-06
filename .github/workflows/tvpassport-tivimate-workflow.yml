@@ -1045,6 +1045,10 @@ jobs:
             echo "No scripts/apply-custom-logos.cjs found; skipping logo step"
           fi
 
+      - name: Compress TVPassport guide
+        run: |
+          gzip -c guides/TVPassport.xml > guides/TVPassport.xml.gz
+
       - name: Commit and push TVPassport guide safely
         run: |
           git config user.name "github-actions"
@@ -1053,7 +1057,7 @@ jobs:
           rm -f guides/.tvmaze-tvpassport-cache.json
           git rm --cached guides/.tvmaze-tvpassport-cache.json 2>/dev/null || true
 
-          git add guides/TVPassport.xml
+          git add guides/TVPassport.xml guides/TVPassport.xml.gz
 
           if git diff --cached --quiet; then
             echo "No TVPassport guide changes to commit"
