@@ -4,7 +4,7 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MS%20NOW%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="HLN.us"><display-name>HLN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HLN.png"/><url>https://tvguide.com</url></channel>
 <channel id="CNBC.us"><display-name>CNBC</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CNBC%20HD.png"/><url>https://tvguide.com</url></channel>
-<channel id="NESN.us"><display-name>NESN</display-name><icon src="https://i.imgur.com/Lv1bUG5.png"/><url>https://tvguide.com</url></channel>
+<channel id="NESN.us"><display-name>NESN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network.png"/><url>https://tvguide.com</url></channel>
 <channel id="ESPN.us"><display-name>ESPN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN.png"/><url>https://tvguide.com</url></channel>
 <channel id="ESPN.NEWS.us"><display-name>ESPN NEWS</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN%20News%20HD.png"/><url>https://tvguide.com</url></channel>
@@ -33,15 +33,15 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Discovery%20Life.png"/><url>https://tvguide.com</url></channel>
 <channel id="DISCOVERY.FAMILY.us"><display-name>DISCOVERY FAMILY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Discovery%20Family%20HD.png"/><url>https://tvguide.com</url></channel>
-<channel id="DISCOVERY.SCIENCE.us"><display-name>DISCOVERY SCIENCE</display-name><url>https://tvguide.com</url></channel>
+<channel id="DISCOVERY.SCIENCE.us"><display-name>DISCOVERY SCIENCE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Science%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="INVESTIGATION.DISCOVERY.us"><display-name>INVESTIGATION DISCOVERY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Investigation%20Discovery.png"/><url>https://tvguide.com</url></channel>
 <channel id="ANIMAL.PLANET.us"><display-name>ANIMAL PLANET</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Animal%20Planet.png"/><url>https://tvguide.com</url></channel>
 <channel id="NATIONAL.GEOGRAPHIC.us"><display-name>NATIONAL GEOGRAPHIC</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National%20Geographic.png"/><url>https://tvguide.com</url></channel>
-<channel id="NAT.GEO.WILD.us"><display-name>NAT GEO WILD</display-name><url>https://tvguide.com</url></channel>
-<channel id="SMITHSONIAN.CHANNEL.us"><display-name>SMITHSONIAN CHANNEL</display-name><url>https://tvguide.com</url></channel>
+<channel id="NAT.GEO.WILD.us"><display-name>NAT GEO WILD</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National%20Geographic%20Wild.png"/><url>https://tvguide.com</url></channel>
+<channel id="SMITHSONIAN.CHANNEL.us"><display-name>SMITHSONIAN CHANNEL</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png"/><url>https://tvguide.com</url></channel>
 <channel id="THE.WEATHER.CHANNEL.us"><display-name>THE WEATHER CHANNEL</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Weather.png"/><url>https://tvguide.com</url></channel>
 <channel id="BRAVO.us"><display-name>BRAVO</display-name>
@@ -56,9 +56,9 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Oxygen.png"/><url>https://tvguide.com</url></channel>
 <channel id="LIFETIME.us"><display-name>LIFETIME</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/lifetime.png"/><url>https://tvguide.com</url></channel>
-<channel id="LMN.us"><display-name>LMN</display-name><url>https://tvguide.com</url></channel>
-<channel id="POP.us"><display-name>POP</display-name><url>https://tvguide.com</url></channel>
-<channel id="VICE.us"><display-name>VICE</display-name><url>https://tvguide.com</url></channel>
+<channel id="LMN.us"><display-name>LMN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/lifetime%20movie%20network.png"/><url>https://tvguide.com</url></channel>
+<channel id="POP.us"><display-name>POP</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Pop%20Network%20HD.png"/><url>https://tvguide.com</url></channel>
+<channel id="VICE.us"><display-name>VICE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/vice1.png"/><url>https://tvguide.com</url></channel>
 <channel id="REELZ.us"><display-name>REELZ</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Reelz%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="LOGO.us"><display-name>LOGO</display-name>
@@ -69,7 +69,7 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Ovation%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="ASPIRE.us"><display-name>ASPIRE</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ASPiRE.png"/><url>https://tvguide.com</url></channel>
-<channel id="GREAT.AMERICAN.FAMILY.us"><display-name>GREAT AMERICAN FAMILY</display-name><url>https://tvguide.com</url></channel>
+<channel id="GREAT.AMERICAN.FAMILY.us"><display-name>GREAT AMERICAN FAMILY</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Great%20American%20Family.png"/><url>https://tvguide.com</url></channel>
 <channel id="DISNEY.CHANNEL.us"><display-name>DISNEY CHANNEL</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Disney.png"/><url>https://tvguide.com</url></channel>
 <channel id="CARTOON.NETWORK.us"><display-name>CARTOON NETWORK</display-name>
@@ -91,7 +91,7 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Outdoor.png"/><url>https://tvguide.com</url></channel>
 <channel id="AMERICAN.HEROES.CHANNEL.us"><display-name>AMERICAN HEROES CHANNEL</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/American%20Heroes.png"/><url>https://tvguide.com</url></channel>
-<channel id="CRIME.AND.INVESTIGATION.us"><display-name>CRIME AND INVESTIGATION</display-name><url>https://tvguide.com</url></channel>
+<channel id="CRIME.AND.INVESTIGATION.us"><display-name>CRIME AND INVESTIGATION</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="HBO.COMEDY.us"><display-name>HBO COMEDY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Comedy.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.us"><display-name>CINEMAX</display-name>
@@ -126,7 +126,7 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Black.png"/><url>https://tvguide.com</url></channel>
 <channel id="STARZ.ENCORE.CLASSIC.us"><display-name>STARZ ENCORE CLASSIC</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Classic.png"/><url>https://tvguide.com</url></channel>
-<channel id="STARZ.ENCORE.SUSPENSE.us"><display-name>STARZ ENCORE SUSPENSE</display-name><url>https://tvguide.com</url></channel>
+<channel id="STARZ.ENCORE.SUSPENSE.us"><display-name>STARZ ENCORE SUSPENSE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Encore%20Suspense.png"/><url>https://tvguide.com</url></channel>
 <channel id="STARZ.ENCORE.FAMILY.us"><display-name>STARZ ENCORE FAMILY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Family.png"/><url>https://tvguide.com</url></channel>
 <channel id="STARZ.INBLACK.us"><display-name>STARZ INBLACK</display-name>
@@ -136,10 +136,10 @@
 <channel id="MGMPLUS.DRIVE.IN.us"><display-name>MGM+ DRIVE-IN</display-name><url>https://tvguide.com</url></channel>
 <channel id="MOVIEPLEX.us"><display-name>MOVIEPLEX</display-name><url>https://tvguide.com</url></channel>
 <channel id="INDIEPLEX.us"><display-name>INDIEPLEX</display-name><url>https://tvguide.com</url></channel>
-<channel id="NECN.us"><display-name>NECN</display-name><icon src="https://i.imgur.com/AxLdn9b.png"/><url>https://tvguide.com</url></channel>
+<channel id="NECN.us"><display-name>NECN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Cable%20News.png"/><url>https://tvguide.com</url></channel>
 <channel id="ESPN2.us"><display-name>ESPN2</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN2.png"/><url>https://tvguide.com</url></channel>
-<channel id="FS1.us"><display-name>FS1</display-name><url>https://tvguide.com</url></channel>
-<channel id="FS2.us"><display-name>FS2</display-name><url>https://tvguide.com</url></channel>
+<channel id="FS1.us"><display-name>FS1</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%201%20HD.png"/><url>https://tvguide.com</url></channel>
+<channel id="FS2.us"><display-name>FS2</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%202.png"/><url>https://tvguide.com</url></channel>
 <channel id="TRUTV.us"><display-name>TRUTV</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/truTV.png"/><url>https://tvguide.com</url></channel>
 <channel id="A&amp;E.us"><display-name>A&amp;E</display-name>
@@ -157,21 +157,21 @@
 <channel id="E!.us"><display-name>E!</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/E!.png"/><url>https://tvguide.com</url></channel>
 <channel id="MTV2.us"><display-name>MTV2</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MTV2%20HD.png"/><url>https://tvguide.com</url></channel>
-<channel id="HALLMARK.DRAMA.us"><display-name>HALLMARK DRAMA</display-name><url>https://tvguide.com</url></channel>
-<channel id="UPTV.us"><display-name>UPTV</display-name><url>https://tvguide.com</url></channel>
+<channel id="HALLMARK.DRAMA.us"><display-name>HALLMARK DRAMA</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark%20Family.png"/><url>https://tvguide.com</url></channel>
+<channel id="UPTV.us"><display-name>UPTV</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/UPTV.png"/><url>https://tvguide.com</url></channel>
 <channel id="AXS.TV.us"><display-name>AXS TV</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/AXS%20TV.png"/><url>https://tvguide.com</url></channel>
-<channel id="HBO.HITS.us"><display-name>HBO HITS</display-name><url>https://tvguide.com</url></channel>
-<channel id="HBO.DRAMA.us"><display-name>HBO DRAMA</display-name><url>https://tvguide.com</url></channel>
-<channel id="CINEMAX.HITS.us"><display-name>CINEMAX HITS</display-name><url>https://tvguide.com</url></channel>
+<channel id="HBO.HITS.us"><display-name>HBO HITS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Hits.png"/><url>https://tvguide.com</url></channel>
+<channel id="HBO.DRAMA.us"><display-name>HBO DRAMA</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Drama.png"/><url>https://tvguide.com</url></channel>
+<channel id="CINEMAX.HITS.us"><display-name>CINEMAX HITS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax%20Hits.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.ACTION.us"><display-name>CINEMAX ACTION</display-name><url>https://tvguide.com</url></channel>
-<channel id="CINEMAX.CLASSICS.us"><display-name>CINEMAX CLASSICS</display-name><url>https://tvguide.com</url></channel>
+<channel id="CINEMAX.CLASSICS.us"><display-name>CINEMAX CLASSICS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax%20Classics.png"/><url>https://tvguide.com</url></channel>
 <channel id="SHOXBET.us"><display-name>SHOXBET</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/showtime%20bet.png"/><url>https://tvguide.com</url></channel>
 <channel id="STARZ.KIDS.And.FAMILY.us"><display-name>STARZ KIDS &amp; FAMILY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Kids%20%26%20Family.png"/><url>https://tvguide.com</url></channel>
 <channel id="MGM+.us"><display-name>MGM+</display-name><url>https://tvguide.com</url></channel>
-<channel id="NESN.PLUS.us"><display-name>NESN PLUS</display-name><url>https://tvguide.com</url></channel>
+<channel id="NESN.PLUS.us"><display-name>NESN PLUS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network%20Plus%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="NBC.SPORTS.BOSTON.us"><display-name>NBC SPORTS BOSTON</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/NBC%20Sports%20Boston.png"/><url>https://tvguide.com</url></channel>
 <channel id="NFL.NETWORK.us"><display-name>NFL NETWORK</display-name>
@@ -193,7 +193,7 @@
 <channel id="FYIHD.us"><display-name>FYI</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FYI%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="HBO.us"><display-name>HBO</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO.png"/><url>https://tvguide.com</url></channel>
-<channel id="HBO.MOVIES.us"><display-name>HBO MOVIES</display-name><url>https://tvguide.com</url></channel>
+<channel id="HBO.MOVIES.us"><display-name>HBO MOVIES</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Movies.png"/><url>https://tvguide.com</url></channel>
 <channel id="HIST.us"><display-name>HISTORY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/History%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="MTV.us"><display-name>MTV</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MTV.png"/><url>https://tvguide.com</url></channel>
