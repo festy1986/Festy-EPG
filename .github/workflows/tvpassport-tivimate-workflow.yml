@@ -115,7 +115,8 @@ jobs:
                 const duration = parseDuration($item)
                 const stop = start.add(duration, 'm')
 
-                let title = cleanTitle(parseTitle($item))
+                const rawTitle = parseTitle($item)
+                let title = cleanTitle(firstNonGeneric([rawTitle]) || rawTitle)
                 let episodeTitle = cleanSpaces(parseSubTitle($item))
                 const description = cleanPassportDescription(cleanSpaces(parseDescription($item)))
                 const image = parseImage($item)
@@ -126,7 +127,7 @@ jobs:
                 const guest = parseGuest($item)
                 const director = parseDirector($item)
 
-                if (isGenericTitle(title) && episodeTitle) {
+                if (/^(movie|cinéma)$/i.test(title) && episodeTitle) {
                   title = episodeTitle
                   episodeTitle = ''
                 }
@@ -345,9 +346,15 @@ jobs:
             return new RegExp(`\\(${escaped}\\)\\s*$`).test(description) || description.includes(String(dateOrYear))
           }
 
+
           function isGenericTitle(value) {
-            return /^(movie|program|series|sports|paid programming|tba|to be announced)$/i
-              .test(String(value || '').trim())
+            return /^(movie|program|series|sports|paid programming|tba|to be announced|cinéma)$/i.test(String(value || '').trim())
+          }
+
+          function firstNonGeneric(values) {
+            return values
+              .map(value => String(value || '').trim())
+              .find(value => value && !isGenericTitle(value))
           }
 
           function cleanTitle(value) {
