@@ -1,4 +1,4 @@
-name: One-Time Fix OTA Logos
+name: One-Time Fix ION Family and Court TV Logos
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  fix-ota-logos:
+  fix-logos:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,7 +15,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Apply fixed OTA logo mappings
+      - name: Install SVG converter
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+
+      - name: Rename old ION Plus PNG to ION and convert real ION Plus SVG
+        run: |
+          if [ -f "logos/ION Plus.png" ]; then
+            git mv "logos/ION Plus.png" "logos/ION.png"
+          fi
+
+          rsvg-convert "logos/Ion_Plus.svg" -o "logos/ION Plus.png"
+
+      - name: Apply ION, ION Plus, and Court TV logos
         run: |
           node <<'EOF'
           const fs = require('fs')
@@ -23,16 +36,9 @@ jobs:
           const guidePath = 'guides/OTALocalsguide.xml'
 
           const logos = {
-            'ABC PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png',
-            'METV': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png',
-            'LAFF': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png',
-            'COMET': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png',
-            'FOX PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png',
-            'HEROES & ICONS': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Heroes%20%26%20Icons%20Network.png',
-            'ION': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png',
-            'ION MYSTERY': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPXT-DT3%20Portland%2C%20Maine%20(ION%20Mystery).png',
-            'NBC PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png',
-            'CBS PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png'
+            'COURT TV': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png',
+            'ION': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png',
+            'ION PLUS': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png'
           }
 
           if (!fs.existsSync(guidePath)) {
@@ -55,18 +61,12 @@ jobs:
             const logo = logos[name]
             if (!logo) return full
 
-            let newBody
-            if (/<icon\b[^>]*\/>/i.test(body)) {
-              newBody = body.replace(/<icon\b[^>]*\/>/i, `<icon src="${logo}"/>`)
-            } else {
-              newBody = body.replace(
-                /(<display-name[^>]*>[\s\S]*?<\/display-name>)/i,
-                `$1<icon src="${logo}"/>`
-              )
-            }
+            const newBody = /<icon\b[^>]*\/>/i.test(body)
+              ? body.replace(/<icon\b[^>]*\/>/i, `<icon src="${logo}"/>`)
+              : body.replace(/(<display-name[^>]*>[\s\S]*?<\/display-name>)/i, `$1<icon src="${logo}"/>`)
 
             applied++
-            console.log(`[logo] ${name}`)
+            console.log(`[logo] ${name} <= ${logo}`)
             return `<channel${attrs}>${newBody}</channel>`
           })
 
@@ -84,11 +84,13 @@ jobs:
           git config user.email "github-actions@github.com"
 
           git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz
+          git add logos/ION.png "logos/ION Plus.png" logos/Ion_Plus.svg
+          git add -u logos
 
           if git diff --cached --quiet; then
-            echo "No logo changes to commit"
+            echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "One-time fix OTA logos"
+          git commit -m "One-time fix ION family and Court TV logos"
           git push
