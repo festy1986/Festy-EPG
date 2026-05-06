@@ -1392,11 +1392,14 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          # Sync before committing so rebase never runs with generated unstaged changes.
           git fetch origin main
-          git reset --soft origin/main
+
+          # Preserve compressed guides created by the other workflows.
+          # This workflow should only update its own XML/GZ output.
+          git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
+          git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "No OTA guide changes to commit"
@@ -1413,11 +1416,15 @@ jobs:
               exit 0
             fi
 
-            echo "Push failed, retrying after fresh sync before recommit..."
+            echo "Push failed, retrying after fresh fetch/rebase..."
 
             git fetch origin main
-            git reset --soft origin/main
+            git rebase origin/main
+
+            git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
             git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
+            git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
               echo "No OTA guide changes to commit after syncing with origin/main"
