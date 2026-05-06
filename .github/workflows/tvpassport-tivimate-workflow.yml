@@ -1054,33 +1054,24 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          rm -f guides/.tvmaze-tvpassport-cache.json
-          git rm --cached guides/.tvmaze-tvpassport-cache.json 2>/dev/null || true
+          git fetch origin main
+
+          # Preserve compressed guides created by the other workflows.
+          # This workflow should only update its own XML/GZ output.
+          git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           git add guides/TVPassport.xml guides/TVPassport.xml.gz
+          git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
             echo "No TVPassport guide changes to commit"
             exit 0
           fi
 
-          # Commit generated files first so the working tree is clean before any rebase.
           git commit -m "Update TVPassport guide"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
-
-            git fetch origin main
-
-            if git rebase origin/main; then
-              echo "Rebase succeeded"
-            else
-              echo "Rebase failed; aborting rebase and retrying from origin/main"
-              git rebase --abort || true
-              git reset --hard HEAD
-              git fetch origin main
-              git rebase origin/main
-            fi
 
             if git push origin HEAD:main; then
               echo "Push succeeded"
@@ -1088,6 +1079,21 @@ jobs:
             fi
 
             echo "Push failed, retrying after fresh fetch/rebase..."
+
+            git fetch origin main
+            git rebase origin/main
+
+            git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+            git add guides/TVPassport.xml guides/TVPassport.xml.gz
+            git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+            if git diff --cached --quiet; then
+              echo "No TVPassport guide changes to commit after syncing with origin/main"
+              exit 0
+            fi
+
+            git commit -m "Update TVPassport guide"
             sleep 5
           done
 
