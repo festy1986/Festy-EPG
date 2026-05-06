@@ -126,7 +126,7 @@ jobs:
                 const guest = parseGuest($item)
                 const director = parseDirector($item)
 
-                if (title === 'Movie' || title === 'Cinéma') {
+                if (isGenericTitle(title) && episodeTitle) {
                   title = episodeTitle
                   episodeTitle = ''
                 }
@@ -343,6 +343,11 @@ jobs:
             if (!description || !dateOrYear) return false
             const escaped = String(dateOrYear).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
             return new RegExp(`\\(${escaped}\\)\\s*$`).test(description) || description.includes(String(dateOrYear))
+          }
+
+          function isGenericTitle(value) {
+            return /^(movie|program|series|sports|paid programming|tba|to be announced)$/i
+              .test(String(value || '').trim())
           }
 
           function cleanTitle(value) {
