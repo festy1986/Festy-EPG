@@ -286,7 +286,16 @@ jobs:
                   batch.map(async item => {
                     const details = await loadProgramDetails(item, channel)
 
-                    const title = cleanTitle(pickBestTitle(item, details))
+                    const title = cleanTitle(firstNonGeneric([
+                      details.title,
+                      details.seriesTitle,
+                      details.showTitle,
+                      details.name,
+                      details.programTitle,
+                      item.title,
+                      item.programTitle,
+                      item.name
+                    ]) || item.title || details.title || '')
                     const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
                     const description = cleanSpaces(details.description || item.description || '')
 
@@ -646,33 +655,15 @@ jobs:
             return `S${s}`
           }
 
-          function pickBestTitle(item, details) {
-            const rawTitle = item?.title || details?.title || ''
-            const betterTitle = firstNonGeneric([
-              item?.title,
-              item?.programTitle,
-              item?.showTitle,
-              item?.seriesTitle,
-              item?.name,
-              details?.title,
-              details?.programTitle,
-              details?.showTitle,
-              details?.seriesTitle,
-              details?.name
-            ])
 
-            return betterTitle || rawTitle || ''
+          function isGenericTitle(value) {
+            return /^(movie|program|series|sports|paid programming|tba|to be announced|cinéma)$/i.test(String(value || '').trim())
           }
 
           function firstNonGeneric(values) {
             return values
               .map(value => String(value || '').trim())
-              .find(value => value && !isGenericTitle(value)) || ''
-          }
-
-          function isGenericTitle(value) {
-            return /^(movie|program|series|sports|paid programming|tba|to be announced)$/i
-              .test(String(value || '').trim())
+              .find(value => value && !isGenericTitle(value))
           }
 
           function cleanTitle(value) {
