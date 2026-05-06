@@ -1089,11 +1089,11 @@ jobs:
             git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
-              echo "No TVPassport guide changes to commit after syncing with origin/main"
-              exit 0
+              echo "No new commit needed after rebase, retrying push..."
+            else
+              git commit -m "Update TVPassport guide"
             fi
 
-            git commit -m "Update TVPassport guide"
             sleep 5
           done
 
