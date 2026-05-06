@@ -1,0 +1,94 @@
+name: One-Time Fix OTA Logos
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-ota-logos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply fixed OTA logo mappings
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const guidePath = 'guides/OTALocalsguide.xml'
+
+          const logos = {
+            'ABC PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png',
+            'METV': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png',
+            'LAFF': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png',
+            'COMET': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png',
+            'FOX PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png',
+            'HEROES & ICONS': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Heroes%20%26%20Icons%20Network.png',
+            'ION': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png',
+            'ION MYSTERY': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPXT-DT3%20Portland%2C%20Maine%20(ION%20Mystery).png',
+            'NBC PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png',
+            'CBS PORTLAND': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png'
+          }
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing ${guidePath}`)
+            process.exit(1)
+          }
+
+          let xml = fs.readFileSync(guidePath, 'utf8')
+          let applied = 0
+
+          xml = xml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/g, (full, attrs, body) => {
+            const m = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (!m) return full
+
+            const name = m[1]
+              .replace(/<[^>]+>/g, '')
+              .replace(/&amp;/g, '&')
+              .trim()
+
+            const logo = logos[name]
+            if (!logo) return full
+
+            let newBody
+            if (/<icon\b[^>]*\/>/i.test(body)) {
+              newBody = body.replace(/<icon\b[^>]*\/>/i, `<icon src="${logo}"/>`)
+            } else {
+              newBody = body.replace(
+                /(<display-name[^>]*>[\s\S]*?<\/display-name>)/i,
+                `$1<icon src="${logo}"/>`
+              )
+            }
+
+            applied++
+            console.log(`[logo] ${name}`)
+            return `<channel${attrs}>${newBody}</channel>`
+          })
+
+          fs.writeFileSync(guidePath, xml)
+          console.log(`Applied ${applied} logos`)
+          EOF
+
+      - name: Recompress OTA guide
+        run: |
+          gzip -c guides/OTALocalsguide.xml > guides/OTALocalsguide.xml.gz
+
+      - name: Commit one-time logo fix
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz
+
+          if git diff --cached --quiet; then
+            echo "No logo changes to commit"
+            exit 0
+          fi
+
+          git commit -m "One-time fix OTA logos"
+          git push
