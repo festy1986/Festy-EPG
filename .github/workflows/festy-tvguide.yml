@@ -1462,6 +1462,10 @@ jobs:
         run: |
           node scripts/apply-custom-logos.cjs guides/tvguidetivimateguide.xml
 
+      - name: Compress TiviMate guide
+        run: |
+          gzip -c guides/tvguidetivimateguide.xml > guides/tvguidetivimateguide.xml.gz
+
       - name: Commit and push TiviMate guide safely
         run: |
           git config user.name "github-actions"
@@ -1471,7 +1475,7 @@ jobs:
           git fetch origin main
           git reset --soft origin/main
 
-          git add guides/tvguidetivimateguide.xml guides/.tvmaze-tivimate-cache.json
+          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
 
           if git diff --cached --quiet; then
             echo "No TiviMate guide changes to commit"
@@ -1492,7 +1496,7 @@ jobs:
 
             git fetch origin main
             git reset --soft origin/main
-            git add guides/tvguidetivimateguide.xml guides/.tvmaze-tivimate-cache.json
+            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
 
             if git diff --cached --quiet; then
               echo "No TiviMate guide changes to commit after syncing with origin/main"
