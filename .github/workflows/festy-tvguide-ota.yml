@@ -1383,6 +1383,10 @@ jobs:
         run: |
           node scripts/apply-custom-logos.cjs guides/OTALocalsguide.xml
 
+      - name: Compress OTA guide
+        run: |
+          gzip -c guides/OTALocalsguide.xml > guides/OTALocalsguide.xml.gz
+
       - name: Commit OTA guide safely
         run: |
           git config user.name "github-actions"
@@ -1392,7 +1396,7 @@ jobs:
           git fetch origin main
           git reset --soft origin/main
 
-          git add guides/OTALocalsguide.xml guides/.tvmaze-ota-cache.json
+          git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
 
           if git diff --cached --quiet; then
             echo "No OTA guide changes to commit"
@@ -1413,7 +1417,7 @@ jobs:
 
             git fetch origin main
             git reset --soft origin/main
-            git add guides/OTALocalsguide.xml guides/.tvmaze-ota-cache.json
+            git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
 
             if git diff --cached --quiet; then
               echo "No OTA guide changes to commit after syncing with origin/main"
