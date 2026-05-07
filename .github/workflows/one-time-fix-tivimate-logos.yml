@@ -1,19 +1,17 @@
-name: TVPassport Extra Logo Patch
+name: TVPassport RAW Logo Patch
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "25 */12 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: tvpassport-extra-logo-patch
+  group: tvpassport-raw-logo-patch
   cancel-in-progress: false
 
 jobs:
-  patch-extra-tvpassport-logos:
+  patch-tvpassport-raw-logos:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,35 +20,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install SVG converter
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y librsvg2-bin
-
-      - name: Convert logo SVG files to PNG
-        run: |
-          find logos -type f -name "*.svg" -print0 | while IFS= read -r -d '' svg; do
-            png="${svg%.svg}.png"
-            echo "Converting $svg -> $png"
-            rsvg-convert "$svg" -o "$png"
-          done
-
-      - name: Decompress TVPassport gz guide
-        run: |
-          if [ -f guides/TVPassport.xml.gz ]; then
-            gunzip -c guides/TVPassport.xml.gz > guides/TVPassport.xml
-          fi
-
-      - name: Patch TVPassport logos in XML outputs
+      - name: Patch RAW TVPassport logos only
         run: |
           node <<'EOFJS'
           const fs = require('fs')
-          const zlib = require('zlib')
 
-          const files = [
-            'guides/TVPassport.xml',
-            'guides/TVPassportRAW.xml'
-          ]
+          const file = 'guides/TVPassportRAW.xml'
 
           const logoMap = {
             'CBSSportsNetworkUSA.us@SD': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CBS%20Sports%20Network%20HD.png',
@@ -70,19 +45,56 @@ jobs:
             'SHOWTIME.BET.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/showtime%20bet.png',
             'SONY.MOVIES.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Sony_Movies_2019.png',
             'UP.TV.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Up%20Entertainment%20HD.png',
-            'USA.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/usa%20network.png'
+            'USA.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/usa%20network.png',
+
+            'FOX.SPORTS.1.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%201%20HD.png',
+            'FOX.SPORTS.2.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%202.png',
+            'DISCOVERY.SCIENCE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Science%20HD.png',
+            'SMITHSONIAN.CHANNEL.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png',
+            'POP.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Pop%20Network%20HD.png',
+            'VICE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Vice_TV.webp',
+            'CRIME.AND.INVESTIGATION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png',
+            'HALLMARK.DRAMA.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark%20Family.png',
+            'CINEMAX.ACTION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Action_2025.png',
+            'NESN.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network.png',
+            'NESN.PLUS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network%20Plus%20HD.png',
+            'NEW.ENGLAND.CABLE.NEWS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Cable%20News.png',
+            'NBC.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png',
+            'CBS.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png',
+            'FOX.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png',
+            'ABC.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png',
+            'METV.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png',
+            'LAFF.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png',
+            'COMET.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png',
+            'PBS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png',
+            'COURT.TV.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png',
+            'ION.PLUS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png',
+            'GAME.SHOW.NETWORK.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png',
+            'CHARGE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png',
+            'ION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png'
           }
 
           const nameLogoMap = {
             'HBO': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO.png',
             'MTV': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MTV.png',
+            'LMN': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/lifetime%20movie%20network.png',
             'Cozi': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cozi%20TV.png',
             'Antenna': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Antenna%20TV.png'
           }
 
-          const renameMap = {
-            'SONY.MOVIES.us': 'Sony Movies'
+          if (!fs.existsSync(file)) {
+            console.error(`Missing ${file}`)
+            process.exit(1)
           }
+
+          let xml = fs.readFileSync(file, 'utf8')
+
+          if (!xml.trim()) {
+            console.error(`${file} is empty; nothing to patch`)
+            process.exit(1)
+          }
+
+          const before = xml
 
           function patchIcon(block, logo) {
             if (block.includes('<icon ')) {
@@ -100,19 +112,10 @@ jobs:
             return m ? m[1].replace(/&amp;/g, '&').trim() : ''
           }
 
-          function patchBlock(block) {
+          xml = xml.replace(/<channel\b[\s\S]*?<\/channel>/g, block => {
             for (const [id, logo] of Object.entries(logoMap)) {
               if (block.includes(`id="${id}"`) || block.includes(`channel="${id}"`)) {
-                let patched = patchIcon(block, logo)
-
-                if (renameMap[id]) {
-                  patched = patched.replace(
-                    /<display-name[^>]*>[\s\S]*?<\/display-name>/,
-                    `<display-name>${renameMap[id]}</display-name>`
-                  )
-                }
-
-                return patched
+                return patchIcon(block, logo)
               }
             }
 
@@ -122,51 +125,29 @@ jobs:
             }
 
             return block
-          }
+          })
 
-          for (const file of files) {
-            if (!fs.existsSync(file)) {
-              console.log(`Skipping missing ${file}`)
-              continue
-            }
+          fs.writeFileSync(file, xml)
 
-            let xml = fs.readFileSync(file, 'utf8')
-            if (!xml.trim()) {
-              console.log(`Skipping empty ${file}`)
-              continue
-            }
-
-            const before = xml
-
-            xml = xml.replace(/<channel\b[\s\S]*?<\/channel>/g, patchBlock)
-
-            fs.writeFileSync(file, xml)
-
-            console.log(xml !== before ? `Patched ${file}` : `No changes in ${file}`)
-          }
-
-          if (fs.existsSync('guides/TVPassport.xml')) {
-            const xml = fs.readFileSync('guides/TVPassport.xml')
-            if (xml.length > 0) {
-              fs.writeFileSync('guides/TVPassport.xml.gz', zlib.gzipSync(xml))
-              console.log('Rebuilt guides/TVPassport.xml.gz')
-            }
+          if (xml === before) {
+            console.log('No RAW logo changes found')
+          } else {
+            console.log('Patched guides/TVPassportRAW.xml')
           }
           EOFJS
 
-      - name: Commit and push extra TVPassport logo patches
+      - name: Commit and push RAW logo patch
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add logos/*.png
-          git add guides/TVPassport.xml guides/TVPassportRAW.xml guides/TVPassport.xml.gz
+          git add guides/TVPassportRAW.xml
 
           if git diff --cached --quiet; then
-            echo "No extra TVPassport logo changes to commit"
+            echo "No RAW logo changes to commit"
             exit 0
           fi
 
-          git commit -m "Patch extra TVPassport logos"
+          git commit -m "Patch TVPassport RAW logos"
           git pull --rebase origin main
           git push origin HEAD:main
