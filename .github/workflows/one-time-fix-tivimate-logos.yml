@@ -1,0 +1,113 @@
+name: One-time fix TiviMate logos
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-logos-once:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fix selected TiviMate logos once
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const guidePath = 'guides/tvguidetivimateguide.xml'
+
+          const logoBase = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/'
+
+          const fixes = {
+            'FS1.us': `${logoBase}FOX%20Sports%201%20HD.png`,
+            'FS2.us': `${logoBase}FOX%20Sports%202.png`,
+            'DISCOVERY.SCIENCE.us': `${logoBase}Science%20HD.png`,
+            'SMITHSONIAN.CHANNEL.us': `${logoBase}smithsonian%20channel%20extra.png`,
+            'LMN.us': `${logoBase}lifetime%20movie%20network.png`,
+            'POP.us': `${logoBase}Pop%20Network%20HD.png`,
+            'VICE.us': `${logoBase}Vice_TV.webp`,
+            'CRIME.AND.INVESTIGATION.us': `${logoBase}Crime%20%26%20Investigation%20Network%20HD.png`,
+            'HALLMARK.DRAMA.us': `${logoBase}Hallmark%20Family.png`,
+            'CINEMAX.ACTION.us': `${logoBase}Cinemax_Action_2025.svg`,
+            'NESN.us': `${logoBase}New%20England%20Sports%20Network.png`,
+            'NESN.PLUS.us': `${logoBase}New%20England%20Sports%20Network%20Plus%20HD.png`,
+            'NECN.us': `${logoBase}New%20England%20Cable%20News.png`
+          }
+
+          function escapeRegExp(value) {
+            return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+          }
+
+          function escapeXml(value) {
+            return String(value)
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function upsertIcon(block, logoUrl) {
+            const icon = `<icon src="${escapeXml(logoUrl)}"/>`
+
+            if (/<icon\b[^>]*\/?>/i.test(block)) {
+              return block.replace(/<icon\b[^>]*\/?>/i, icon)
+            }
+
+            return block.replace(
+              /(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i,
+              `$1${icon}`
+            )
+          }
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing ${guidePath}`)
+            process.exit(1)
+          }
+
+          let xml = fs.readFileSync(guidePath, 'utf8')
+          let fixed = 0
+
+          for (const [id, logoUrl] of Object.entries(fixes)) {
+            const re = new RegExp(
+              `<channel\\b[^>]*\\bid="${escapeRegExp(id)}"[^>]*>[\\s\\S]*?<\\/channel>`,
+              'i'
+            )
+
+            xml = xml.replace(re, block => {
+              fixed++
+              return upsertIcon(block, logoUrl)
+            })
+          }
+
+          fs.writeFileSync(guidePath, xml)
+          console.log(`Fixed logos: ${fixed}`)
+          EOF
+
+      - name: Recompress guide
+        run: |
+          gzip -c guides/tvguidetivimateguide.xml > guides/tvguidetivimateguide.xml.gz
+
+      - name: Delete this one-time workflow
+        run: |
+          rm -f .github/workflows/one-time-fix-tivimate-logos.yml
+
+      - name: Commit fixed guide and remove workflow
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
+          git add .github/workflows/one-time-fix-tivimate-logos.yml
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Fix TiviMate logos once"
+          git push
