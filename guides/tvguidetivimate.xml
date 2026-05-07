@@ -4,7 +4,8 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MS%20NOW%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="HLN.us"><display-name>HLN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HLN.png"/><url>https://tvguide.com</url></channel>
 <channel id="CNBC.us"><display-name>CNBC</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CNBC%20HD.png"/><url>https://tvguide.com</url></channel>
-<channel id="NESN.us" site_id="9100002976#9200004312"><display-name>NESN</display-name><icon src="https://i.imgur.com/Lv1bUG5.png"/><url>https://tvguide.com</url></channel><channel id="ESPN.us"><display-name>ESPN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN.png"/><url>https://tvguide.com</url></channel>
+<channel id="NESN.us" site_id="9100002976#9200004312"><display-name>NESN</display-name><icon src="https://i.imgur.com/Lv1bUG5.png"/><url>https://tvguide.com</url></channel>
+<channel id="ESPN.us"><display-name>ESPN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN.png"/><url>https://tvguide.com</url></channel>
 <channel id="ESPN.NEWS.us"><display-name>ESPN NEWS</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN%20News%20HD.png"/><url>https://tvguide.com</url></channel>
 <channel id="CBS.SPORTS.NETWORK.us"><display-name>CBS SPORTS NETWORK</display-name>
