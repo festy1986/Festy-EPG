@@ -1,13 +1,19 @@
-name: One-time fix OTA local raw logos
+name: TVPassport GitHub Logo Patch
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "10 */12 * * *"
 
 permissions:
   contents: write
 
+concurrency:
+  group: tvpassport-github-logo-patch
+  cancel-in-progress: false
+
 jobs:
-  fix-ota-local-raw-logos:
+  patch-tvpassport-logos:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,107 +22,119 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fix OTA local raw logos
+      - name: Patch TVPassport logos
         run: |
-          node <<'EOF'
+          node <<'EOFJS'
           const fs = require('fs')
+          const zlib = require('zlib')
 
-          const guidePath = 'guides/OTALocalsguide.raw.xml'
+          const files = [
+            'guides/TVPassport.xml',
+            'guides/TVPassportRAW.xml'
+          ]
 
-          const fixes = {
-            '9100000664#9233005477': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png',
-            '9100000664#9233006796': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png',
-            '9100000664#9233001666': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png',
-            '9100000664#9233003676': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png',
-            '9100000664#9233005846': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png',
-            '9100000664#9200008618': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png',
-            '9100000664#9266021286': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png',
-            '9100000664#9200014312': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png',
-            '9100000664#9200016252': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png',
-            '9100000664#9266073627': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png',
-            '9100000664#9200018453': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png',
-            '9100000664#9200005724': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png',
-            '9100000664#9233005684': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png',
-            '9100000664#9200020338': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Heroes%20%26%20Icons%20Network.png',
-            '9100000664#9200017556': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPXT-DT3%20Portland%2C%20Maine%20(ION%20Mystery).png'
+          const logoMap = {
+            'FOX.SPORTS.1.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%201%20HD.png',
+            'FOX.SPORTS.2.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%202.png',
+            'DISCOVERY.SCIENCE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Science%20HD.png',
+            'SMITHSONIAN.CHANNEL.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png',
+            'LMN.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/lifetime%20movie%20network.png',
+            'POP.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Pop%20Network%20HD.png',
+            'VICE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Vice_TV.webp',
+            'CRIME.AND.INVESTIGATION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png',
+            'HALLMARK.DRAMA.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark%20Family.png',
+            'CINEMAX.ACTION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Action_2025.svg',
+            'NESN.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network.png',
+            'NESN.PLUS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network%20Plus%20HD.png',
+            'NEW.ENGLAND.CABLE.NEWS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Cable%20News.png',
+            'NBC.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png',
+            'CBS.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png',
+            'FOX.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png',
+            'ABC.PORTLAND.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png',
+            'METV.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png',
+            'LAFF.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png',
+            'COMET.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png',
+            'PBS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png',
+            'COURT.TV.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png',
+            'ION.PLUS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png',
+            'GAME.SHOW.NETWORK.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png',
+            'CHARGE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png',
+            'ION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png'
           }
 
-          function escapeRegExp(value) {
-            return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-          }
+          function patchChannel(block, id, logo) {
+            if (!block.includes(`id="${id}"`)) return block
 
-          function escapeXml(value) {
-            return String(value)
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
-
-          function upsertIcon(block, logoUrl) {
-            const icon = `<icon src="${escapeXml(logoUrl)}"/>`
-
-            if (/<icon\b[^>]*\/?>/i.test(block)) {
-              return block.replace(/<icon\b[^>]*\/?>/i, icon)
+            if (block.includes('<icon ')) {
+              return block.replace(/<icon[^>]*\/>/, `<icon src="${logo}"/>`)
             }
 
             return block.replace(
-              /((?:\s*<display-name\b[^>]*>[\s\S]*?<\/display-name>)+)/i,
-              `$1\n    ${icon}`
+              /(<display-name[^>]*>[\s\S]*?<\/display-name>)/,
+              `$1\n    <icon src="${logo}"/>`
             )
           }
 
-          if (!fs.existsSync(guidePath)) {
-            console.error(`Missing ${guidePath}`)
-            process.exit(1)
-          }
-
-          let xml = fs.readFileSync(guidePath, 'utf8')
-          let fixed = 0
-          const missing = []
-
-          for (const [id, logoUrl] of Object.entries(fixes)) {
-            const re = new RegExp(
-              `<channel\\b[^>]*\\bid="${escapeRegExp(id)}"[^>]*>[\\s\\S]*?<\\/channel>`,
-              'i'
-            )
-
-            const match = xml.match(re)
-
-            if (!match) {
-              missing.push(id)
+          for (const file of files) {
+            if (!fs.existsSync(file)) {
+              console.log(`Skipping missing ${file}`)
               continue
             }
 
-            xml = xml.replace(match[0], upsertIcon(match[0], logoUrl))
-            fixed++
+            let xml = fs.readFileSync(file, 'utf8')
+            if (!xml.trim()) {
+              console.log(`Skipping empty ${file}`)
+              continue
+            }
+
+            const before = xml
+
+            for (const [id, logo] of Object.entries(logoMap)) {
+              xml = xml.replace(/<channel\b[\s\S]*?<\/channel>/g, block =>
+                patchChannel(block, id, logo)
+              )
+            }
+
+            fs.writeFileSync(file, xml)
+
+            if (xml !== before) {
+              console.log(`Patched ${file}`)
+            } else {
+              console.log(`No logo changes needed in ${file}`)
+            }
           }
 
-          fs.writeFileSync(guidePath, xml)
+          if (fs.existsSync('guides/TVPassport.channels.xml')) {
+            let source = fs.readFileSync('guides/TVPassport.channels.xml', 'utf8')
 
-          console.log(`Fixed OTA raw logos: ${fixed}`)
+            source = source.replace(
+              /<channel[^>]*xmltv_id="SMITHSONIAN\.CHANNEL\.us"[^>]*>[\s\S]*?<\/channel>/,
+              '<channel site="tvpassport.com" site_id="smithsonian-channel-usa-hd/6237" lang="en" xmltv_id="SMITHSONIAN.CHANNEL.us">Smithsonian Channel USA HD</channel>'
+            )
 
-          if (missing.length) {
-            console.log('\nMissing raw IDs:')
-            missing.forEach(id => console.log(`- ${id}`))
+            fs.writeFileSync('guides/TVPassport.channels.xml', source)
           }
-          EOF
 
-      - name: Delete this one-time workflow
-        run: |
-          rm -f .github/workflows/one-time-fix-ota-local-raw-logos.yml
+          if (fs.existsSync('guides/TVPassport.xml')) {
+            const xml = fs.readFileSync('guides/TVPassport.xml')
+            if (xml.length > 0) {
+              fs.writeFileSync('guides/TVPassport.xml.gz', zlib.gzipSync(xml))
+            }
+          }
+          EOFJS
 
-      - name: Commit OTA local raw logo fixes
+      - name: Commit and push patched TVPassport logos
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add -A
+          git add guides/TVPassport.xml guides/TVPassport.xml.gz guides/TVPassportRAW.xml guides/TVPassport.channels.xml
 
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "No TVPassport logo changes to commit"
             exit 0
           fi
 
-          git commit -m "Fix OTA local raw logos"
-          git push
+          git commit -m "Patch TVPassport GitHub logos"
+          git pull --rebase origin main
+          git push origin HEAD:main
