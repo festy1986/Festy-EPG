@@ -1,137 +1,187 @@
-// scripts/apply-ota-local-logos-from-source.cjs
-const fs = require('fs')
+name: One-time apply OTA local logos
 
-const sourcePath = process.argv[2] || 'guides/OTALocalsguide.xml'
-const targetPath = process.argv[3] || 'guides/OTALocalsguide.raw.xml'
+on:
+  workflow_dispatch:
+    inputs:
+      source_file:
+        description: "Source XML with correct logos"
+        required: false
+        default: "guides/OTALocalsguide.xml"
+      target_file:
+        description: "Target raw OTA XML to patch"
+        required: false
+        default: "guides/OTALocalsguide.raw.xml"
 
-if (!fs.existsSync(sourcePath)) {
-  console.error(`Missing source file: ${sourcePath}`)
-  process.exit(1)
-}
+permissions:
+  contents: write
 
-if (!fs.existsSync(targetPath)) {
-  console.error(`Missing target file: ${targetPath}`)
-  process.exit(1)
-}
+jobs:
+  apply-ota-local-logos:
+    runs-on: ubuntu-latest
 
-function escapeRegExp(value) {
-  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-function escapeXml(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-}
+      - name: Apply OTA local logos from source
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
 
-function decodeXml(value) {
-  return String(value)
-    .replace(/&amp;/g, '&')
-    .replace(/&quot;/g, '"')
-    .replace(/&apos;/g, "'")
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-}
+          const sourcePath = process.env.SOURCE_FILE || 'guides/OTALocalsguide.xml'
+          const targetPath = process.env.TARGET_FILE || 'guides/OTALocalsguide.raw.xml'
 
-function getAttr(attrs, name) {
-  const match = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-  return match ? decodeXml(match[1]).trim() : ''
-}
+          if (!fs.existsSync(sourcePath)) {
+            console.error(`Missing source file: ${sourcePath}`)
+            process.exit(1)
+          }
 
-function getDisplayName(body) {
-  const match = body.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
-  return match ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim()) : ''
-}
+          if (!fs.existsSync(targetPath)) {
+            console.error(`Missing target file: ${targetPath}`)
+            process.exit(1)
+          }
 
-function getIconSrc(body) {
-  const match = body.match(/<icon\b[^>]*\bsrc="([^"]+)"[^>]*\/?>/i)
-  return match ? decodeXml(match[1]).trim() : ''
-}
+          function escapeXml(value) {
+            return String(value)
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
 
-function normalize(value) {
-  return decodeXml(value)
-    .replace(/\.us$/i, '')
-    .replace(/&/g, 'AND')
-    .replace(/\+/g, 'PLUS')
-    .replace(/[^A-Z0-9]+/gi, '.')
-    .replace(/^\.+|\.+$/g, '')
-    .toUpperCase()
-}
+          function decodeXml(value) {
+            return String(value)
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
 
-function parseChannels(xml) {
-  return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(match => {
-    const attrs = match[1]
-    const body = match[2]
+          function getAttr(attrs, name) {
+            const match = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return match ? decodeXml(match[1]).trim() : ''
+          }
 
-    return {
-      block: match[0],
-      id: getAttr(attrs, 'id'),
-      displayName: getDisplayName(body),
-      icon: getIconSrc(body)
-    }
-  })
-}
+          function getDisplayName(body) {
+            const match = body.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            return match ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim()) : ''
+          }
 
-function upsertIcon(channelBlock, logoUrl) {
-  const icon = `<icon src="${escapeXml(logoUrl)}"/>`
+          function getIconSrc(body) {
+            const match = body.match(/<icon\b[^>]*\bsrc="([^"]+)"[^>]*\/?>/i)
+            return match ? decodeXml(match[1]).trim() : ''
+          }
 
-  if (/<icon\b[^>]*\/?>/i.test(channelBlock)) {
-    return channelBlock.replace(/<icon\b[^>]*\/?>/i, icon)
-  }
+          function normalize(value) {
+            return decodeXml(value)
+              .replace(/\.us$/i, '')
+              .replace(/&/g, 'AND')
+              .replace(/\+/g, 'PLUS')
+              .replace(/[^A-Z0-9]+/gi, '.')
+              .replace(/^\.+|\.+$/g, '')
+              .toUpperCase()
+          }
 
-  if (/<display-name\b[^>]*>[\s\S]*?<\/display-name>/i.test(channelBlock)) {
-    return channelBlock.replace(
-      /(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i,
-      `$1${icon}`
-    )
-  }
+          function parseChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(match => {
+              const attrs = match[1]
+              const body = match[2]
 
-  return channelBlock.replace(/(<channel\b[^>]*>)/i, `$1${icon}`)
-}
+              return {
+                block: match[0],
+                id: getAttr(attrs, 'id'),
+                displayName: getDisplayName(body),
+                icon: getIconSrc(body)
+              }
+            })
+          }
 
-const sourceXml = fs.readFileSync(sourcePath, 'utf8')
-let targetXml = fs.readFileSync(targetPath, 'utf8')
+          function upsertIcon(channelBlock, logoUrl) {
+            const icon = `<icon src="${escapeXml(logoUrl)}"/>`
 
-const sourceChannels = parseChannels(sourceXml)
-const targetChannels = parseChannels(targetXml)
+            if (/<icon\b[^>]*\/?>/i.test(channelBlock)) {
+              return channelBlock.replace(/<icon\b[^>]*\/?>/i, icon)
+            }
 
-const logoById = new Map()
-const logoByName = new Map()
+            if (/<display-name\b[^>]*>[\s\S]*?<\/display-name>/i.test(channelBlock)) {
+              return channelBlock.replace(
+                /(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i,
+                `$1${icon}`
+              )
+            }
 
-for (const channel of sourceChannels) {
-  if (!channel.icon) continue
-  if (!channel.icon.includes('raw.githubusercontent.com/festy1986/festy-epg/main/logos/')) continue
+            return channelBlock.replace(/(<channel\b[^>]*>)/i, `$1${icon}`)
+          }
 
-  if (channel.id) logoById.set(normalize(channel.id), channel.icon)
-  if (channel.displayName) logoByName.set(normalize(channel.displayName), channel.icon)
-}
+          const sourceXml = fs.readFileSync(sourcePath, 'utf8')
+          let targetXml = fs.readFileSync(targetPath, 'utf8')
 
-let applied = 0
-const noSourceLogo = []
+          const sourceChannels = parseChannels(sourceXml)
+          const targetChannels = parseChannels(targetXml)
 
-for (const target of targetChannels) {
-  const logo =
-    logoById.get(normalize(target.id)) ||
-    logoByName.get(normalize(target.displayName))
+          const logoById = new Map()
+          const logoByName = new Map()
 
-  if (!logo) {
-    noSourceLogo.push(`${target.id || '(no id)'} (${target.displayName || 'no name'})`)
-    continue
-  }
+          for (const channel of sourceChannels) {
+            if (!channel.icon) continue
+            if (!channel.icon.includes('raw.githubusercontent.com/festy1986/festy-epg/main/logos/')) continue
 
-  targetXml = targetXml.replace(target.block, upsertIcon(target.block, logo))
-  applied++
-}
+            if (channel.id) logoById.set(normalize(channel.id), channel.icon)
+            if (channel.displayName) logoByName.set(normalize(channel.displayName), channel.icon)
+          }
 
-fs.writeFileSync(targetPath, targetXml)
+          let applied = 0
+          const noSourceLogo = []
 
-console.log(`Source channels scanned: ${sourceChannels.length}`)
-console.log(`Target channels scanned: ${targetChannels.length}`)
-console.log(`Logos applied to ${targetPath}: ${applied}`)
+          for (const target of targetChannels) {
+            const logo =
+              logoById.get(normalize(target.id)) ||
+              logoByName.get(normalize(target.displayName))
 
-if (noSourceLogo.length) {
-  console.log('\nNo matching GitHub logo found in source:')
-  noSourceLogo.forEach(item => console.log(`- ${item}`))
-}
+            if (!logo) {
+              noSourceLogo.push(`${target.id || '(no id)'} (${target.displayName || 'no name'})`)
+              continue
+            }
+
+            targetXml = targetXml.replace(target.block, upsertIcon(target.block, logo))
+            applied++
+          }
+
+          fs.writeFileSync(targetPath, targetXml)
+
+          console.log(`Source file: ${sourcePath}`)
+          console.log(`Target file: ${targetPath}`)
+          console.log(`Source channels scanned: ${sourceChannels.length}`)
+          console.log(`Target channels scanned: ${targetChannels.length}`)
+          console.log(`Logos applied: ${applied}`)
+
+          if (noSourceLogo.length) {
+            console.log('\nNo matching GitHub logo found in source:')
+            noSourceLogo.forEach(item => console.log(`- ${item}`))
+          }
+          EOF
+        env:
+          SOURCE_FILE: ${{ github.event.inputs.source_file }}
+          TARGET_FILE: ${{ github.event.inputs.target_file }}
+
+      - name: Delete this one-time workflow
+        run: |
+          rm -f .github/workflows/one-time-apply-ota-local-logos.yml
+
+      - name: Commit OTA local logo fixes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Apply OTA local logos"
+          git push
