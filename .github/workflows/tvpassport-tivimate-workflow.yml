@@ -1125,6 +1125,8 @@ jobs:
           }
 
           let scanned = 0
+          let matched = 0
+          let alreadyCorrect = 0
           let added = 0
           let updated = 0
           let missing = 0
@@ -1145,10 +1147,18 @@ jobs:
               return block
             }
 
-            if (/<icon\b[^>]*src="/i.test(block)) {
-              const next = block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
-              if (next !== block) updated++
-              return next
+            matched++
+
+            const existingIcon = block.match(/<icon\b[^>]*src="([^"]+)"/i)
+            if (existingIcon) {
+              const existingLogo = decodeXml(existingIcon[1]).trim()
+              if (existingLogo === logo) {
+                alreadyCorrect++
+                return block
+              }
+
+              updated++
+              return block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
             }
 
             added++
@@ -1160,6 +1170,8 @@ jobs:
           console.log(`Generated TVPassport channels scanned: ${scanned}`)
           console.log(`Curated TVPassport logos available by id: ${logoById.size}`)
           console.log(`Curated TVPassport logos available by name: ${logoByName.size}`)
+          console.log(`TVPassport channels matched to curated logos: ${matched}`)
+          console.log(`TVPassport icons already correct: ${alreadyCorrect}`)
           console.log(`TVPassport icons added: ${added}`)
           console.log(`TVPassport icons updated: ${updated}`)
           console.log(`TVPassport channels still missing curated logo match: ${missing}`)
@@ -1169,8 +1181,8 @@ jobs:
             process.exit(1)
           }
 
-          if (added + updated < 100) {
-            console.error('Refusing to continue: expected at least 100 TVPassport logos to be injected')
+          if (matched < 100) {
+            console.error('Refusing to continue: expected at least 100 TVPassport channels to match curated logos')
             process.exit(1)
           }
           EOFJS
