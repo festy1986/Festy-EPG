@@ -1458,9 +1458,6 @@ jobs:
             exit 1
           fi
 
-      - name: Apply custom logos to TiviMate guide
-        run: |
-          node scripts/apply-custom-logos.cjs guides/tvguidetivimateguide.xml
 
       - name: Compress TiviMate guide
         run: |
