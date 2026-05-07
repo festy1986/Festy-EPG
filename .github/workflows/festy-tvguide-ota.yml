@@ -101,7 +101,9 @@ jobs:
           }
 
           const xml = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\\s\\S]*?)<\/channel>/gi)]
+          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
+
+          console.log(`RAW OTA channel blocks parsed: ${channelBlocks.length}`)
 
           const outputChannels = []
           const found = new Set()
@@ -114,7 +116,7 @@ jobs:
             if (!idMatch) continue
 
             const siteIdRaw = decodeXml(idMatch[1]).trim()
-            const names = [...body.matchAll(/<display-name[^>]*>([\\s\\S]*?)<\/display-name>/gi)]
+            const names = [...body.matchAll(/<display-name[^>]*>([\s\S]*?)<\/display-name>/gi)]
               .map(m => decodeXml(m[1].replace(/<[^>]+>/g, '').trim()))
               .filter(Boolean)
 
@@ -1040,7 +1042,7 @@ jobs:
             const escaped = escapeXml(value)
             const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
             if (hasTag(block, tag)) {
-              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\s\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
             }
             return insertBeforeProgrammeEnd(block, tagXml)
           }
@@ -1512,7 +1514,7 @@ jobs:
           }
 
           function channelNames(block) {
-            return [...block.matchAll(/<display-name[^>]*>([\\s\\S]*?)<\/display-name>/gi)]
+            return [...block.matchAll(/<display-name[^>]*>([\s\S]*?)<\/display-name>/gi)]
               .map(m => decodeXml(m[1].replace(/<[^>]+>/g, '').trim()))
               .filter(Boolean)
           }
