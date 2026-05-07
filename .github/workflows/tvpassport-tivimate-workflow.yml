@@ -489,6 +489,7 @@ jobs:
           const guidePath = 'guides/TVPassport.xml'
           const cachePath = 'guides/.tvmaze-tvpassport-cache.json'
           const tmdbApiKey = process.env.TMDB_API_KEY || ''
+          const tmdbUserAgent = 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0'
 
           if (!fs.existsSync(guidePath)) {
             console.error(`Missing ${guidePath}`)
@@ -798,7 +799,10 @@ jobs:
                 const response = await fetch(url, { headers })
                 if (response.status === 404) return null
                 if (response.status === 429 || response.status >= 500) throw new Error(`HTTP ${response.status}`)
-                if (!response.ok) return null
+                if (!response.ok) {
+                  console.log(`[FETCH HTTP ${response.status}] ${label}`)
+                  return null
+                }
                 return await response.json()
               } catch (err) {
                 if (attempt === attempts) {
@@ -813,9 +817,28 @@ jobs:
             return null
           }
 
+          function isTmdbBearerToken(value) {
+            return String(value || '').trim().startsWith('eyJ')
+          }
+
+          function tmdbHeaders() {
+            const headers = { 'User-Agent': tmdbUserAgent }
+            if (isTmdbBearerToken(tmdbApiKey)) {
+              headers.Authorization = `Bearer ${tmdbApiKey.trim()}`
+            }
+            return headers
+          }
+
           function tmdbUrl(path, params = {}) {
             const url = new URL(`https://api.themoviedb.org/3${path}`)
-            url.searchParams.set('api_key', tmdbApiKey)
+
+            // TMDB has two credential types:
+            // - v4 Read Access Token starts with eyJ and MUST be sent as Authorization: Bearer
+            // - v3 API key is shorter and MUST be sent as api_key=
+            if (!isTmdbBearerToken(tmdbApiKey)) {
+              url.searchParams.set('api_key', tmdbApiKey.trim())
+            }
+
             url.searchParams.set('language', 'en-US')
             for (const [key, value] of Object.entries(params)) {
               if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, value)
@@ -838,7 +861,7 @@ jobs:
               searched.add(qKey)
 
               stats.tmdbShowsSearched++
-              const data = await fetchJson(tmdbUrl('/search/tv', { query }), `tmdb search ${query}`, { 'User-Agent': 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0' })
+              const data = await fetchJson(tmdbUrl('/search/tv', { query }), `tmdb search ${query}`, tmdbHeaders())
               const results = Array.isArray(data?.results) ? data.results : []
 
               for (const show of results) {
@@ -873,7 +896,7 @@ jobs:
             if (!tmdbApiKey || !showId) return null
             const key = `details:${showId}`
             if (Object.prototype.hasOwnProperty.call(cache.tmdb, key)) return cache.tmdb[key]
-            const details = await fetchJson(tmdbUrl(`/tv/${showId}`), `tmdb details ${showId}`, { 'User-Agent': 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0' })
+            const details = await fetchJson(tmdbUrl(`/tv/${showId}`), `tmdb details ${showId}`, tmdbHeaders())
             cache.tmdb[key] = details || null
             await sleep(125)
             return cache.tmdb[key]
@@ -883,7 +906,7 @@ jobs:
             if (!tmdbApiKey || !showId || !seasonNumber) return null
             const key = `season:${showId}:${seasonNumber}`
             if (Object.prototype.hasOwnProperty.call(cache.tmdb, key)) return cache.tmdb[key]
-            const season = await fetchJson(tmdbUrl(`/tv/${showId}/season/${seasonNumber}`), `tmdb season ${showId}/${seasonNumber}`, { 'User-Agent': 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0' })
+            const season = await fetchJson(tmdbUrl(`/tv/${showId}/season/${seasonNumber}`), `tmdb season ${showId}/${seasonNumber}`, tmdbHeaders())
             cache.tmdb[key] = season || null
             await sleep(125)
             return cache.tmdb[key]
@@ -1100,6 +1123,8 @@ jobs:
           }
 
           async function main() {
+            console.log(`[TMDB] auth mode: ${tmdbApiKey ? (isTmdbBearerToken(tmdbApiKey) ? 'bearer token' : 'api key') : 'missing'}`)
+            console.log(`[TMDB] token prefix: ${tmdbApiKey ? tmdbApiKey.slice(0, 3) : 'none'}`)
             const parts = xml.split(/(<programme\b[\s\S]*?<\/programme>)/gi)
             const out = []
 
