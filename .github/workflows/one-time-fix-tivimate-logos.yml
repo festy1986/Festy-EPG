@@ -16,96 +16,29 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fix OTA local raw logos and display names
+      - name: Fix OTA local raw logos
         run: |
           node <<'EOF'
           const fs = require('fs')
 
           const guidePath = 'guides/OTALocalsguide.raw.xml'
 
-          if (!fs.existsSync(guidePath)) {
-            console.error(`Missing ${guidePath}`)
-            process.exit(1)
-          }
-
           const fixes = {
-            'PBS.us': {
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png'
-            },
-
-            'NBC.PORTLAND.us': {
-              displayName: 'WCSH-DT Portland, Maine (NBC)',
-              shortName: 'WCSH',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png'
-            },
-
-            'CBS.PORTLAND.us': {
-              displayName: 'WGME-DT Portland, Maine (CBS)',
-              shortName: 'WGME',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png'
-            },
-
-            'FOX.PORTLAND.us': {
-              displayName: 'WGME-DT2 Portland, Maine (FOX)',
-              shortName: 'WGME-DT2',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png'
-            },
-
-            'ABC.PORTLAND.us': {
-              displayName: 'WMTW-DT Poland Spring, Maine (ABC)',
-              shortName: 'WMTW',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png'
-            },
-
-            'METV.us': {
-              displayName: 'WMTW-DT2 Poland Spring, Maine (MeTV)',
-              shortName: 'WMTW-DT2',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png'
-            },
-
-            'LAFF.us': {
-              displayName: 'WMTW-DT3 Poland Spring, Maine (Laff)',
-              shortName: 'WMTW-DT3',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png'
-            },
-
-            'COMET.us': {
-              displayName: 'WPFO-DT3 Waterville, Maine. (Comet)',
-              shortName: 'WPFO-DT3',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png'
-            },
-
-            'HEROES.AND.ICONS.us': {
-              displayName: 'WPXT-DT2 Portland, Maine (MyNet/Heroes & Icons)',
-              shortName: 'WPXT-DT2',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Heroes%20%26%20Icons%20Network.png'
-            },
-
-            'ION.MYSTERY.us': {
-              displayName: 'WPXT-DT3 Portland, Maine (ION Mystery)',
-              shortName: 'WPXT-DT3',
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPXT-DT3%20Portland%2C%20Maine%20(ION%20Mystery).png'
-            },
-
-            'COURT.TV.us': {
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png'
-            },
-
-            'ION.PLUS.us': {
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png'
-            },
-
-            'GAME.SHOW.NETWORK.us': {
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png'
-            },
-
-            'CHARGE.us': {
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png'
-            },
-
-            'ION.us': {
-              logo: 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png'
-            }
+            '9100000664#9233005477': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png',
+            '9100000664#9233006796': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png',
+            '9100000664#9233001666': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png',
+            '9100000664#9233003676': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png',
+            '9100000664#9233005846': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png',
+            '9100000664#9200008618': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png',
+            '9100000664#9266021286': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png',
+            '9100000664#9200014312': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png',
+            '9100000664#9200016252': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png',
+            '9100000664#9266073627': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png',
+            '9100000664#9200018453': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png',
+            '9100000664#9200005724': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png',
+            '9100000664#9233005684': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png',
+            '9100000664#9200020338': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Heroes%20%26%20Icons%20Network.png',
+            '9100000664#9200017556': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPXT-DT3%20Portland%2C%20Maine%20(ION%20Mystery).png'
           }
 
           function escapeRegExp(value) {
@@ -120,26 +53,6 @@ jobs:
               .replace(/>/g, '&gt;')
           }
 
-          function updateDisplayNames(block, shortName, fullName) {
-            const displayMatches = [...block.matchAll(/<display-name\b[^>]*>[\s\S]*?<\/display-name>/gi)]
-
-            if (displayMatches.length >= 2) {
-              return block.replace(
-                /<display-name\b[^>]*>[\s\S]*?<\/display-name>\s*<display-name\b[^>]*>[\s\S]*?<\/display-name>/i,
-                `<display-name>${escapeXml(shortName)}</display-name>\n    <display-name>${escapeXml(fullName)}</display-name>`
-              )
-            }
-
-            if (displayMatches.length === 1) {
-              return block.replace(
-                /(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i,
-                `<display-name>${escapeXml(shortName)}</display-name>\n    <display-name>${escapeXml(fullName)}</display-name>`
-              )
-            }
-
-            return block
-          }
-
           function upsertIcon(block, logoUrl) {
             const icon = `<icon src="${escapeXml(logoUrl)}"/>`
 
@@ -147,54 +60,44 @@ jobs:
               return block.replace(/<icon\b[^>]*\/?>/i, icon)
             }
 
-            if (/<display-name\b[^>]*>[\s\S]*?<\/display-name>/i.test(block)) {
-              return block.replace(
-                /(<display-name\b[^>]*>[\s\S]*?<\/display-name>(?:\s*<display-name\b[^>]*>[\s\S]*?<\/display-name>)?)/i,
-                `$1\n    ${icon}`
-              )
-            }
+            return block.replace(
+              /((?:\s*<display-name\b[^>]*>[\s\S]*?<\/display-name>)+)/i,
+              `$1\n    ${icon}`
+            )
+          }
 
-            return block.replace(/(<channel\b[^>]*>)/i, `$1\n    ${icon}`)
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing ${guidePath}`)
+            process.exit(1)
           }
 
           let xml = fs.readFileSync(guidePath, 'utf8')
-
           let fixed = 0
           const missing = []
 
-          for (const [channelId, config] of Object.entries(fixes)) {
+          for (const [id, logoUrl] of Object.entries(fixes)) {
             const re = new RegExp(
-              `<channel\\b[^>]*\\bid="${escapeRegExp(channelId)}"[^>]*>[\\s\\S]*?<\\/channel>`,
+              `<channel\\b[^>]*\\bid="${escapeRegExp(id)}"[^>]*>[\\s\\S]*?<\\/channel>`,
               'i'
             )
 
             const match = xml.match(re)
 
             if (!match) {
-              missing.push(channelId)
+              missing.push(id)
               continue
             }
 
-            let block = match[0]
-
-            if (config.shortName && config.displayName) {
-              block = updateDisplayNames(block, config.shortName, config.displayName)
-            }
-
-            if (config.logo) {
-              block = upsertIcon(block, config.logo)
-            }
-
-            xml = xml.replace(match[0], block)
+            xml = xml.replace(match[0], upsertIcon(match[0], logoUrl))
             fixed++
           }
 
           fs.writeFileSync(guidePath, xml)
 
-          console.log(`Fixed OTA local logos/channels: ${fixed}`)
+          console.log(`Fixed OTA raw logos: ${fixed}`)
 
           if (missing.length) {
-            console.log('\nMissing channels:')
+            console.log('\nMissing raw IDs:')
             missing.forEach(id => console.log(`- ${id}`))
           }
           EOF
