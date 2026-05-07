@@ -820,6 +820,16 @@ jobs:
             tvmazeShowsMatched: 0,
             tvmazeEpisodesMatched: 0,
             tvmazeProgrammesEnriched: 0,
+            tmdbAddedCategory: 0,
+            tmdbAddedEpisodeTitle: 0,
+            tmdbAddedEpisodeCode: 0,
+            tmdbAddedDate: 0,
+            tmdbAddedDescription: 0,
+            tvmazeAddedCategory: 0,
+            tvmazeAddedEpisodeTitle: 0,
+            tvmazeAddedEpisodeCode: 0,
+            tvmazeAddedDate: 0,
+            tvmazeAddedDescription: 0,
             categoriesAdded: 0,
             descriptionsChanged: 0
           }
@@ -850,18 +860,18 @@ jobs:
           }
 
           function getTag(block, tag) {
-            const m = block.match(new RegExp(`<${tag}\b[^>]*>([\s\S]*?)<\/${tag}>`, 'i'))
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\s\S]*?)<\/${tag}>`, 'i'))
             return m ? stripTags(m[1]) : ''
           }
 
           function getTags(block, tag) {
-            return [...block.matchAll(new RegExp(`<${tag}\b[^>]*>([\s\S]*?)<\/${tag}>`, 'gi'))]
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\s\S]*?)<\/${tag}>`, 'gi'))]
               .map(m => stripTags(m[1]))
               .filter(Boolean)
           }
 
           function hasTag(block, tag) {
-            return new RegExp(`<${tag}\b`, 'i').test(block)
+            return new RegExp(`<${tag}\\b`, 'i').test(block)
           }
 
           function hasCategory(block, category) {
@@ -1030,7 +1040,7 @@ jobs:
             const escaped = escapeXml(value)
             const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
             if (hasTag(block, tag)) {
-              return block.replace(new RegExp(`<${tag}\b[^>]*>[\s\S]*?<\/${tag}>`, 'i'), tagXml.trim())
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\s\S]*?<\/${tag}>`, 'i'), tagXml.trim())
             }
             return insertBeforeProgrammeEnd(block, tagXml)
           }
@@ -1188,22 +1198,23 @@ jobs:
               const type = String(details?.type || '').toLowerCase()
               next.category = type.includes('mini') ? 'Miniseries' : 'Series'
               changed = true
+              stats.tmdbAddedCategory++
             }
 
             if (episode) {
-              if (!next.episodeTitle && episode.name) { next.episodeTitle = cleanSummary(episode.name); changed = true }
+              if (!next.episodeTitle && episode.name) { next.episodeTitle = cleanSummary(episode.name); changed = true; stats.tmdbAddedEpisodeTitle++ }
               if (!next.episodeCode) {
                 const code = buildEpisodeCode(episode.season_number, episode.episode_number)
-                if (code) { next.episodeCode = code; changed = true }
+                if (code) { next.episodeCode = code; changed = true; stats.tmdbAddedEpisodeCode++ }
               }
               if (!next.dateText && episode.air_date) {
                 const display = formatDateDisplay(episode.air_date)
-                if (display) { next.dateText = display; changed = true }
+                if (display) { next.dateText = display; changed = true; stats.tmdbAddedDate++ }
               }
-              if (!next.body && episode.overview) { next.body = cleanSummary(episode.overview); changed = true }
+              if (!next.body && episode.overview) { next.body = cleanSummary(episode.overview); changed = true; stats.tmdbAddedDescription++ }
             }
 
-            if (!next.body && details?.overview) { next.body = cleanSummary(details.overview); changed = true }
+            if (!next.body && details?.overview) { next.body = cleanSummary(details.overview); changed = true; stats.tmdbAddedDescription++ }
 
             if (changed) stats.tmdbProgrammesEnriched++
             return next
@@ -1286,17 +1297,18 @@ jobs:
               const type = String(show?.type || '').toLowerCase()
               next.category = type.includes('mini') || type.includes('limited') ? 'Miniseries' : 'Series'
               changed = true
+              stats.tvmazeAddedCategory++
             }
 
             if (episode) {
-              if (!next.episodeTitle && episode.name) { next.episodeTitle = cleanSummary(episode.name); changed = true }
+              if (!next.episodeTitle && episode.name) { next.episodeTitle = cleanSummary(episode.name); changed = true; stats.tvmazeAddedEpisodeTitle++ }
               if (!next.episodeCode) {
                 const code = buildEpisodeCode(episode.season, episode.number)
-                if (code) { next.episodeCode = code; changed = true }
+                if (code) { next.episodeCode = code; changed = true; stats.tvmazeAddedEpisodeCode++ }
               }
               if (!next.dateText && episode.airdate) {
                 const display = formatDateDisplay(episode.airdate)
-                if (display) { next.dateText = display; changed = true }
+                if (display) { next.dateText = display; changed = true; stats.tvmazeAddedDate++ }
               }
               if (!next.body && episode.summary) { next.body = cleanSummary(episode.summary); changed = true }
             }
@@ -1389,8 +1401,18 @@ jobs:
             console.log(`[TMDB+TVMAZE] tvmaze shows matched: ${stats.tvmazeShowsMatched}`)
             console.log(`[TMDB+TVMAZE] tvmaze episodes matched: ${stats.tvmazeEpisodesMatched}`)
             console.log(`[TMDB+TVMAZE] tvmaze programmes enriched: ${stats.tvmazeProgrammesEnriched}`)
-            console.log(`[TMDB+TVMAZE] categories added: ${stats.categoriesAdded}`)
-            console.log(`[TMDB+TVMAZE] descriptions changed: ${stats.descriptionsChanged}`)
+            console.log(`[TMDB FIXED] categories: ${stats.tmdbAddedCategory}`)
+            console.log(`[TMDB FIXED] episode titles: ${stats.tmdbAddedEpisodeTitle}`)
+            console.log(`[TMDB FIXED] episode codes: ${stats.tmdbAddedEpisodeCode}`)
+            console.log(`[TMDB FIXED] dates: ${stats.tmdbAddedDate}`)
+            console.log(`[TMDB FIXED] descriptions: ${stats.tmdbAddedDescription}`)
+            console.log(`[TVMAZE FIXED] categories: ${stats.tvmazeAddedCategory}`)
+            console.log(`[TVMAZE FIXED] episode titles: ${stats.tvmazeAddedEpisodeTitle}`)
+            console.log(`[TVMAZE FIXED] episode codes: ${stats.tvmazeAddedEpisodeCode}`)
+            console.log(`[TVMAZE FIXED] dates: ${stats.tvmazeAddedDate}`)
+            console.log(`[TVMAZE FIXED] descriptions: ${stats.tvmazeAddedDescription}`)
+            console.log(`[TMDB+TVMAZE] categories added to XML: ${stats.categoriesAdded}`)
+            console.log(`[TMDB+TVMAZE] descriptions changed in XML: ${stats.descriptionsChanged}`)
           }
 
           main().catch(err => {
