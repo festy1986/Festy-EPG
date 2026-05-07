@@ -516,6 +516,10 @@ jobs:
           const stats = {
             programmes: 0,
             moviesSkipped: 0,
+            skippedNews: 0,
+            skippedSports: 0,
+            skippedPaidShopping: 0,
+            skippedWeatherReligiousTba: 0,
             tmdbSkippedNoKey: 0,
             tmdbShowsSearched: 0,
             tmdbShowsMatched: 0,
@@ -590,6 +594,64 @@ jobs:
           function isMovie(block) {
             return hasCategory(block, 'Movie') || hasCategory(block, 'Film')
           }
+
+          function combinedText(block, title = '') {
+            return [
+              title,
+              getTag(block, 'title'),
+              getTag(block, 'sub-title'),
+              getTag(block, 'desc'),
+              ...getTags(block, 'category')
+            ].join(' ')
+          }
+
+          function shouldSkipEnrichment(block, title = '') {
+            const text = normalize(combinedText(block, title))
+            const rawTitle = normalize(title || getTag(block, 'title'))
+
+            const newsTerms = [
+              'news', 'local news', 'world news', 'nightly news', 'morning news',
+              'eyewitness news', 'action news', 'breaking news', 'special report',
+              'newshour', 'news hour', 'newscenter', 'news center',
+              'today', 'good morning america', 'cbs mornings', 'nbc nightly news',
+              'abc world news tonight', 'cbs evening news', 'pbs newshour',
+              'this week with george stephanopoulos', 'meet the press',
+              'face the nation', 'inside edition', 'entertainment tonight',
+              'access hollywood', 'extra', 'tmz', 'dateline'
+            ]
+
+            const sportsTerms = [
+              'sports', 'football', 'basketball', 'baseball', 'hockey', 'soccer',
+              'golf', 'tennis', 'nascar', 'racing', 'boxing', 'mma', 'ufc',
+              'wwe', 'wrestling', 'nba', 'wnba', 'nfl', 'mlb', 'nhl', 'ncaa',
+              'college football', 'college basketball', 'pga', 'lpga',
+              'championship', 'tournament', 'playoffs', 'pregame', 'pre game',
+              'postgame', 'post game', 'tip off', 'countdown', 'sportscenter',
+              'inside the nba', 'nba tip off', 'wnba countdown'
+            ]
+
+            const paidShoppingTerms = [
+              'paid programming', 'paid program', 'infomercial', 'advertisement',
+              'shopping', 'shop', 'qvc', 'hsn', 'jtv', 'paid advertisement',
+              'sponsored programming'
+            ]
+
+            const weatherReligiousTbaTerms = [
+              'weather', 'forecast', 'radar', 'religious', 'church', 'mass',
+              'worship', 'ministry', 'bible', 'evangelist', 'inspiration',
+              'to be announced', 'tba', 'programming unavailable',
+              'sign off', 'off air', 'no programming'
+            ]
+
+            const hasAny = terms => terms.some(term => text.includes(normalize(term)) || rawTitle === normalize(term))
+
+            if (hasAny(newsTerms)) return 'news'
+            if (hasAny(sportsTerms)) return 'sports'
+            if (hasAny(paidShoppingTerms)) return 'paidShopping'
+            if (hasAny(weatherReligiousTbaTerms)) return 'weatherReligiousTba'
+            return ''
+          }
+
 
           function cleanTitleForSearch(title) {
             return String(title || '')
@@ -1138,8 +1200,14 @@ jobs:
               let block = part
               const title = cleanTitleForSearch(getTag(block, 'title'))
 
-              if (!title || isMovie(block) || !needsEnrichment(block)) {
+              const skipReason = shouldSkipEnrichment(block, title)
+
+              if (!title || isMovie(block) || skipReason || !needsEnrichment(block)) {
                 if (isMovie(block)) stats.moviesSkipped++
+                if (skipReason === 'news') stats.skippedNews++
+                if (skipReason === 'sports') stats.skippedSports++
+                if (skipReason === 'paidShopping') stats.skippedPaidShopping++
+                if (skipReason === 'weatherReligiousTba') stats.skippedWeatherReligiousTba++
                 out.push(block)
                 continue
               }
@@ -1160,6 +1228,10 @@ jobs:
             console.log('[TMDB+TVMAZE] missing-only enrichment complete')
             console.log(`[TMDB+TVMAZE] programmes scanned: ${stats.programmes}`)
             console.log(`[TMDB+TVMAZE] movies skipped: ${stats.moviesSkipped}`)
+            console.log(`[TMDB+TVMAZE] skipped news/live info: ${stats.skippedNews}`)
+            console.log(`[TMDB+TVMAZE] skipped sports/live sports: ${stats.skippedSports}`)
+            console.log(`[TMDB+TVMAZE] skipped paid/shopping: ${stats.skippedPaidShopping}`)
+            console.log(`[TMDB+TVMAZE] skipped weather/religious/TBA: ${stats.skippedWeatherReligiousTba}`)
             console.log(`[TMDB+TVMAZE] tmdb skipped no key: ${stats.tmdbSkippedNoKey}`)
             console.log(`[TMDB+TVMAZE] tmdb shows searched: ${stats.tmdbShowsSearched}`)
             console.log(`[TMDB+TVMAZE] tmdb shows matched: ${stats.tmdbShowsMatched}`)
@@ -1367,6 +1439,15 @@ jobs:
       - name: Compress TVPassport guide
         run: |
           gzip -c guides/TVPassport.xml > guides/TVPassport.xml.gz
+
+      - name: Verify guide outputs and cache exclusion
+        run: |
+          echo "Guide output sanity check"
+          ls -lh guides/*.xml guides/*.gz 2>/dev/null || true
+          echo "Tracked enrichment caches:"
+          git ls-files 'guides/.*cache*.json' || true
+          echo "Working tree enrichment caches:"
+          find guides -maxdepth 1 -name '.*cache*.json' -print -exec ls -lh {} \; 2>/dev/null || true
 
       - name: Ignore enrichment cache files
         run: |
