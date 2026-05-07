@@ -3,6 +3,7 @@
   <channel id="9100000664#9233005477">
     <display-name>WCBB-DT</display-name>
     <display-name>WCBB-DT Augusta, Me. (PBS)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png"/>
   </channel>
   <channel id="9100000664#9233015238">
     <display-name>WCBB-DT2</display-name>
@@ -19,6 +20,7 @@
   <channel id="9100000664#9233006796">
     <display-name>WCSH</display-name>
     <display-name>WCSH-DT Portland, Maine (NBC)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png"/>
   </channel>
   <channel id="9100000664#9200009047">
     <display-name>WCSH-DT2</display-name>
@@ -51,10 +53,12 @@
   <channel id="9100000664#9233001666">
     <display-name>WGME</display-name>
     <display-name>WGME-DT Portland, Maine (CBS)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png"/>
   </channel>
   <channel id="9100000664#9233003676">
     <display-name>WGME-DT2</display-name>
     <display-name>WGME-DT2 Portland, Maine (FOX)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png"/>
   </channel>
   <channel id="9100000664#9200003760">
     <display-name>WGME-DT3</display-name>
@@ -63,6 +67,7 @@
   <channel id="9100000664#9233005846">
     <display-name>WIPL-DT2</display-name>
     <display-name>WIPL-DT2 Lewiston, Maine (Court TV)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Court%20TV.png"/>
   </channel>
   <channel id="9100000664#9233008792">
     <display-name>WIPL-DT3</display-name>
@@ -75,6 +80,7 @@
   <channel id="9100000664#9200008618">
     <display-name>WIPL-DT5</display-name>
     <display-name>WIPL-DT5 Lewiston, Maine (ION+)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION%20Plus.png"/>
   </channel>
   <channel id="9100000664#9233007890">
     <display-name>WIPL-DT6</display-name>
@@ -83,6 +89,7 @@
   <channel id="9100000664#9266021286">
     <display-name>WIPL-DT7</display-name>
     <display-name>WIPL-DT7 Lewiston, Maine (Game Show Central)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png"/>
   </channel>
   <channel id="9100000664#9266077100">
     <display-name>WIPL-DT8</display-name>
@@ -111,14 +118,17 @@
   <channel id="9100000664#9200014312">
     <display-name>WMTW</display-name>
     <display-name>WMTW-DT Poland Spring, Maine (ABC)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png"/>
   </channel>
   <channel id="9100000664#9200016252">
     <display-name>WMTW-DT2</display-name>
     <display-name>WMTW-DT2 Poland Spring, Maine (MeTV)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png"/>
   </channel>
   <channel id="9100000664#9266073627">
     <display-name>WMTW-DT3</display-name>
     <display-name>WMTW-DT3 Poland Spring, Maine (Laff)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png"/>
   </channel>
   <channel id="9100000664#9233085019">
     <display-name>WMTW-DT4</display-name>
@@ -139,10 +149,12 @@
   <channel id="9100000664#9200018453">
     <display-name>WPFO-DT2</display-name>
     <display-name>WPFO-DT2  Waterville, Maine. (Charge!)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/charge!.png"/>
   </channel>
   <channel id="9100000664#9200005724">
     <display-name>WPFO-DT3</display-name>
     <display-name>WPFO-DT3 Waterville, Maine. (Comet)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png"/>
   </channel>
   <channel id="9100000664#9233011099">
     <display-name>WPFO-DT4</display-name>
@@ -151,6 +163,7 @@
   <channel id="9100000664#9233005684">
     <display-name>WPME</display-name>
     <display-name>WIPL-DT Lewiston, Maine (ION)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ION.png"/>
   </channel>
   <channel id="9100000664#9200006484">
     <display-name>WPXT</display-name>
@@ -159,10 +172,12 @@
   <channel id="9100000664#9200020338">
     <display-name>WPXT-DT2</display-name>
     <display-name>WPXT-DT2 Portland, Maine (MyNet/Heroes &amp; Icons)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Heroes%20%26%20Icons%20Network.png"/>
   </channel>
   <channel id="9100000664#9200017556">
     <display-name>WPXT-DT3</display-name>
     <display-name>WPXT-DT3 Portland, Maine (ION Mystery)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPXT-DT3%20Portland%2C%20Maine%20(ION%20Mystery).png"/>
   </channel>
   <channel id="9100000664#9200066014">
     <display-name>WPXT-DT4</display-name>
