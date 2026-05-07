@@ -20,9 +20,15 @@ jobs:
         run: |
           node <<'EOF'
           const fs = require('fs')
+          const https = require('https')
+          const path = require('path')
 
           const sourcePath = 'guides/tvguidetivimateguide.xml'
           const targetPath = 'guides/tvguidetivimate.xml'
+
+          const natGeoWildSourceUrl = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National_Geographic_Wild_2018.svg'
+          const natGeoWildProperFile = 'logos/National Geographic Wild.svg'
+          const natGeoWildDisplayUrl = 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National%20Geographic%20Wild.svg'
 
           const targetIds = [
             'NAT.GEO.WILD.us',
@@ -130,69 +136,118 @@ jobs:
             return block.replace(/(<channel\b[^>]*>)/i, `$1${icon}`)
           }
 
-          if (!fs.existsSync(sourcePath)) {
-            console.error(`Missing source file: ${sourcePath}`)
-            process.exit(1)
+          function download(url, destination) {
+            return new Promise((resolve, reject) => {
+              const file = fs.createWriteStream(destination)
+
+              https.get(url, response => {
+                if (response.statusCode !== 200) {
+                  file.close()
+                  fs.rmSync(destination, { force: true })
+                  reject(new Error(`Download failed ${response.statusCode}: ${url}`))
+                  return
+                }
+
+                response.pipe(file)
+
+                file.on('finish', () => {
+                  file.close(resolve)
+                })
+              }).on('error', error => {
+                file.close()
+                fs.rmSync(destination, { force: true })
+                reject(error)
+              })
+            })
           }
 
-          if (!fs.existsSync(targetPath)) {
-            console.error(`Missing target file: ${targetPath}`)
-            process.exit(1)
-          }
-
-          const sourceXml = fs.readFileSync(sourcePath, 'utf8')
-          let targetXml = fs.readFileSync(targetPath, 'utf8')
-
-          let copied = 0
-          const missingInSource = []
-          const missingLogoInSource = []
-          const missingInTarget = []
-
-          for (const id of targetIds) {
-            const sourceBlock = findChannelBlock(sourceXml, id)
-            if (!sourceBlock) {
-              missingInSource.push(id)
-              continue
+          async function main() {
+            if (!fs.existsSync(sourcePath)) {
+              console.error(`Missing source file: ${sourcePath}`)
+              process.exit(1)
             }
 
-            const logoUrl = getIconSrc(sourceBlock)
-            if (!logoUrl || !logoUrl.includes('raw.githubusercontent.com/festy1986/festy-epg/main/logos/')) {
-              missingLogoInSource.push(id)
-              continue
+            if (!fs.existsSync(targetPath)) {
+              console.error(`Missing target file: ${targetPath}`)
+              process.exit(1)
             }
 
-            const targetBlock = findChannelBlock(targetXml, id)
-            if (!targetBlock) {
-              missingInTarget.push(id)
-              continue
+            fs.mkdirSync(path.dirname(natGeoWildProperFile), { recursive: true })
+
+            if (fs.existsSync(natGeoWildProperFile)) {
+              fs.rmSync(natGeoWildProperFile, { force: true })
+              console.log(`Deleted existing ${natGeoWildProperFile}`)
             }
 
-            targetXml = targetXml.replace(targetBlock, upsertIcon(targetBlock, logoUrl))
-            copied++
+            await download(natGeoWildSourceUrl, natGeoWildProperFile)
+            console.log(`Downloaded ${natGeoWildProperFile}`)
+
+            const sourceXml = fs.readFileSync(sourcePath, 'utf8')
+            let targetXml = fs.readFileSync(targetPath, 'utf8')
+
+            let copied = 0
+            let manualFixed = 0
+            const missingInSource = []
+            const missingLogoInSource = []
+            const missingInTarget = []
+
+            for (const id of targetIds) {
+              const targetBlock = findChannelBlock(targetXml, id)
+
+              if (!targetBlock) {
+                missingInTarget.push(id)
+                continue
+              }
+
+              if (id === 'NAT.GEO.WILD.us') {
+                targetXml = targetXml.replace(targetBlock, upsertIcon(targetBlock, natGeoWildDisplayUrl))
+                manualFixed++
+                continue
+              }
+
+              const sourceBlock = findChannelBlock(sourceXml, id)
+              if (!sourceBlock) {
+                missingInSource.push(id)
+                continue
+              }
+
+              const logoUrl = getIconSrc(sourceBlock)
+              if (!logoUrl || !logoUrl.includes('raw.githubusercontent.com/festy1986/festy-epg/main/logos/')) {
+                missingLogoInSource.push(id)
+                continue
+              }
+
+              targetXml = targetXml.replace(targetBlock, upsertIcon(targetBlock, logoUrl))
+              copied++
+            }
+
+            fs.writeFileSync(targetPath, targetXml)
+
+            console.log(`Copied GitHub logos into ${targetPath}: ${copied}`)
+            console.log(`Manual NAT GEO WILD fixes: ${manualFixed}`)
+
+            if (missingInSource.length) {
+              console.log('\nMissing channel in source guide:')
+              missingInSource.forEach(id => console.log(`- ${id}`))
+            }
+
+            if (missingLogoInSource.length) {
+              console.log('\nSource channel exists but has no GitHub logo:')
+              missingLogoInSource.forEach(id => console.log(`- ${id}`))
+            }
+
+            if (missingInTarget.length) {
+              console.log('\nMissing channel in target guide:')
+              missingInTarget.forEach(id => console.log(`- ${id}`))
+            }
+
+            console.log('\nFinished copying available logos.')
           }
 
-          fs.writeFileSync(targetPath, targetXml)
-
-          console.log(`Copied GitHub logos into ${targetPath}: ${copied}`)
-
-          if (missingInSource.length) {
-            console.log('Missing channel in source guide:')
-            missingInSource.forEach(id => console.log(`- ${id}`))
-          }
-
-          if (missingLogoInSource.length) {
-            console.log('Source channel exists but has no GitHub logo:')
-            missingLogoInSource.forEach(id => console.log(`- ${id}`))
-          }
-
-          if (missingInTarget.length) {
-            console.log('Missing channel in target guide:')
-            missingInTarget.forEach(id => console.log(`- ${id}`))
-          }
-
-          if (missingInSource.length || missingLogoInSource.length || missingInTarget.length) {
+          main().catch(error => {
+            console.error(error)
             process.exit(1)
-          }
+          })
           EOF
 
       - name: Delete this one-time workflow
