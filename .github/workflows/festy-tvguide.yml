@@ -1260,9 +1260,9 @@ jobs:
               await sleep(125)
             }
 
-            // TMDB is stricter than TVMaze for linear TV names, so allow solid fuzzy matches.
+            // TMDB is stricter than TVMaze for linear TV names, but keep matches conservative now that Bearer auth is fixed.
             // Still reject weak matches so TMDB cannot pollute provider metadata.
-            if (bestScore < 68) best = null
+            if (bestScore < 80) best = null
             if (best) stats.tmdbShowsMatched++
 
             cache.tmdb[key] = best
@@ -1735,14 +1735,14 @@ jobs:
 
       - name: Remove enrichment cache files before commit
         run: |
-          rm -f guides/.tvmaze-ota-cache.json
-          rm -f guides/.tmdb-ota-cache.json
-          rm -f guides/.tvmaze-tivimate-cache.json
-          rm -f guides/.tmdb-tivimate-cache.json
-          rm -f guides/.tvmaze-tvpassport-cache.json
-          rm -f guides/.tmdb-tvpassport-cache.json
-          rm -f guides/.tvmaze-cache.json
-          rm -f guides/.tmdb-cache.json
+          rm -f
+          rm -f
+          rm -f
+          rm -f
+          rm -f
+          rm -f
+          rm -f
+          rm -f
 
       - name: Commit and push TiviMate guide safely
         run: |
@@ -1751,11 +1751,15 @@ jobs:
 
           git fetch origin main
 
+          # Never commit enrichment caches; they can exceed GitHub's 100 MB file limit.
+          git rm --cached --ignore-unmatch guides/.tvmaze-ota-cache.json guides/.tmdb-ota-cache.json guides/.tvmaze-tivimate-cache.json guides/.tmdb-tivimate-cache.json guides/.tvmaze-tvpassport-cache.json guides/.tmdb-tvpassport-cache.json guides/.tvmaze-cache.json guides/.tmdb-cache.json 2>/dev/null || true
+
+
           # Preserve compressed guides created by the other workflows.
           # This workflow should only update its own XML/GZ output.
           git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
+          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
           git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -1778,9 +1782,13 @@ jobs:
             git fetch origin main
             git rebase origin/main
 
+            # Never commit enrichment caches; they can exceed GitHub's 100 MB file limit.
+            git rm --cached --ignore-unmatch guides/.tvmaze-ota-cache.json guides/.tmdb-ota-cache.json guides/.tvmaze-tivimate-cache.json guides/.tmdb-tivimate-cache.json guides/.tvmaze-tvpassport-cache.json guides/.tmdb-tvpassport-cache.json guides/.tvmaze-cache.json guides/.tmdb-cache.json 2>/dev/null || true
+
+
             git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
+            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
             git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
