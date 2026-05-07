@@ -971,10 +971,30 @@ jobs:
           function cleanTitleForSearch(title) {
             return String(title || '')
               .replace(/\s+/g, ' ')
-              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
-              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .replace(/^\s*(New|Live|Repeat|HD)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat|HD|Stereo|CC)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat|HD|Stereo|CC)\s*$/i, '')
+              .replace(/\s*[:\-–—]\s*(New|Live|Repeat|HD|Stereo|CC)\s*$/i, '')
+              .replace(/\s*\((?:TV\s*)?(?:PG|14|G|MA|Y7?|R|NC-17)\)\s*$/i, '')
+              .replace(/\s+With\s+/gi, ' with ')
               .trim()
+          }
+
+          function tmdbTitleVariants(title) {
+            const base = cleanTitleForSearch(title)
+            const variants = new Set([base])
+
+            variants.add(base.replace(/\bWith\b.*$/i, '').trim())
+            variants.add(base.replace(/\bStarring\b.*$/i, '').trim())
+            variants.add(base.replace(/\bPresents\b.*$/i, '').trim())
+            variants.add(base.replace(/:\s*.*$/i, '').trim())
+            variants.add(base.replace(/\s+-\s+.*$/i, '').trim())
+            variants.add(base.replace(/\bUS\b/gi, '').trim())
+            variants.add(base.replace(/\bUSA\b/gi, '').trim())
+
+            return [...variants]
+              .map(v => v.replace(/\s+/g, ' ').trim())
+              .filter(v => v && v.length >= 2)
           }
 
           function normalize(s) {
@@ -1186,21 +1206,40 @@ jobs:
             const key = `show:${normalize(title)}`
             if (Object.prototype.hasOwnProperty.call(cache.tmdb, key)) return cache.tmdb[key]
 
-            stats.tmdbShowsSearched++
-            const data = await fetchJson(tmdbUrl('/search/tv', { query: title }), `tmdb search ${title}`, { 'User-Agent': 'festy-epg-tivimate-tmdb-tvmaze-missing-only/1.0' })
-            const results = Array.isArray(data?.results) ? data.results : []
-
             let best = null
             let bestScore = 0
-            for (const show of results) {
-              const score = Math.max(scoreName(title, show.name), scoreName(title, show.original_name))
-              if (score > bestScore) {
-                best = show
-                bestScore = score
+            const searched = new Set()
+
+            for (const query of tmdbTitleVariants(title)) {
+              const qKey = normalize(query)
+              if (!qKey || searched.has(qKey)) continue
+              searched.add(qKey)
+
+              stats.tmdbShowsSearched++
+              const data = await fetchJson(tmdbUrl('/search/tv', { query }), `tmdb search ${query}`, { 'User-Agent': 'festy-epg-tivimate-tmdb-tvmaze-missing-only/1.0' })
+              const results = Array.isArray(data?.results) ? data.results : []
+
+              for (const show of results) {
+                const score = Math.max(
+                  scoreName(query, show.name),
+                  scoreName(query, show.original_name),
+                  scoreName(title, show.name),
+                  scoreName(title, show.original_name)
+                )
+
+                if (score > bestScore) {
+                  best = show
+                  bestScore = score
+                }
               }
+
+              if (bestScore >= 92) break
+              await sleep(125)
             }
 
-            if (bestScore < 80) best = null
+            // TMDB is stricter than TVMaze for linear TV names, so allow solid fuzzy matches.
+            // Still reject weak matches so TMDB cannot pollute provider metadata.
+            if (bestScore < 68) best = null
             if (best) stats.tmdbShowsMatched++
 
             cache.tmdb[key] = best
@@ -1656,6 +1695,29 @@ jobs:
       - name: Compress TiviMate guide
         run: |
           gzip -c guides/tvguidetivimateguide.xml > guides/tvguidetivimateguide.xml.gz
+
+      - name: Ignore enrichment cache files
+        run: |
+          touch .gitignore
+          grep -qxF 'guides/.tvmaze-ota-cache.json' .gitignore || echo 'guides/.tvmaze-ota-cache.json' >> .gitignore
+          grep -qxF 'guides/.tmdb-ota-cache.json' .gitignore || echo 'guides/.tmdb-ota-cache.json' >> .gitignore
+          grep -qxF 'guides/.tvmaze-tivimate-cache.json' .gitignore || echo 'guides/.tvmaze-tivimate-cache.json' >> .gitignore
+          grep -qxF 'guides/.tmdb-tivimate-cache.json' .gitignore || echo 'guides/.tmdb-tivimate-cache.json' >> .gitignore
+          grep -qxF 'guides/.tvmaze-tvpassport-cache.json' .gitignore || echo 'guides/.tvmaze-tvpassport-cache.json' >> .gitignore
+          grep -qxF 'guides/.tmdb-tvpassport-cache.json' .gitignore || echo 'guides/.tmdb-tvpassport-cache.json' >> .gitignore
+          grep -qxF 'guides/.tvmaze-cache.json' .gitignore || echo 'guides/.tvmaze-cache.json' >> .gitignore
+          grep -qxF 'guides/.tmdb-cache.json' .gitignore || echo 'guides/.tmdb-cache.json' >> .gitignore
+
+      - name: Remove enrichment cache files before commit
+        run: |
+          rm -f guides/.tvmaze-ota-cache.json
+          rm -f guides/.tmdb-ota-cache.json
+          rm -f guides/.tvmaze-tivimate-cache.json
+          rm -f guides/.tmdb-tivimate-cache.json
+          rm -f guides/.tvmaze-tvpassport-cache.json
+          rm -f guides/.tmdb-tvpassport-cache.json
+          rm -f guides/.tvmaze-cache.json
+          rm -f guides/.tmdb-cache.json
 
       - name: Commit and push TiviMate guide safely
         run: |
