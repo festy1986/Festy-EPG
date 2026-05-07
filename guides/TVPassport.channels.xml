@@ -1,135 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <channels>
-<channel site="tvpassport.com" site_id="ae-us-hd--eastern-feed/17034" lang="en" xmltv_id="AANDE.us">A&amp;E</channel>
-<channel site="tvpassport.com" site_id="abc-wcvb-boston-ma-hd/3661" lang="en" xmltv_id="ABC.BOSTON.us">ABC Boston</channel>
-<channel site="tvpassport.com" site_id="abc-wmtw-auburn-me-hd/3598" lang="en" xmltv_id="ABC.PORTLAND.us">ABC Portland</channel>
-<channel site="tvpassport.com" site_id="adult-swim--east-hd/7336" lang="en" xmltv_id="ADULT.SWIM.us">Adult Swim</channel>
-<channel site="tvpassport.com" site_id="amc--eastern-feed-hd/6219" lang="en" xmltv_id="AMC.us">AMC</channel>
-<channel site="tvpassport.com" site_id="amc/35317" lang="en" xmltv_id="AMC.PLUS.us">AMC+</channel>
-<channel site="tvpassport.com" site_id="american-heroes-channel-hd/10881" lang="en" xmltv_id="AMERICAN.HEROES.CHANNEL.us">American Heroes Channel HD</channel>
-<channel site="tvpassport.com" site_id="animal-planet-us-hd--east/4537" lang="en" xmltv_id="ANIMAL.PLANET.us">Animal Planet</channel>
-<channel site="tvpassport.com" site_id="aspire-tv-hd/10761" lang="en" xmltv_id="ASPIRE.us">Aspire</channel>
-<channel site="tvpassport.com" site_id="awe-tv-network-hd/6306" lang="en" xmltv_id="AWE.us">AWE</channel>
-<channel site="tvpassport.com" site_id="axs-tv-north-america-hd/12598" lang="en" xmltv_id="AXS.TV.us">AXS TV</channel>
-<channel site="tvpassport.com" site_id="bbc-america--east-hd/11121" lang="en" xmltv_id="BBC.AMERICA.us">BBC America</channel>
-<channel site="tvpassport.com" site_id="bet-hd--eastern-feed/6205" lang="en" xmltv_id="BET.us">BET</channel>
-<channel site="tvpassport.com" site_id="bravo-usa-hd--eastern-feed/6120" lang="en" xmltv_id="BRAVO.us">Bravo</channel>
-<channel site="tvpassport.com" site_id="cartoon-network-canada--east-hd/10331" lang="en" xmltv_id="CARTOON.NETWORK.us">Cartoon Network</channel>
-<channel site="tvpassport.com" site_id="cbs-wbz-boston-ma-hd/3653" lang="en" xmltv_id="CBS.BOSTON.us">CBS Boston</channel>
-<channel site="tvpassport.com" site_id="cbs-wgme-portland-me-hd/7037" lang="en" xmltv_id="CBS.PORTLAND.us">CBS Portland</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/A%26E.png" site="tvpassport.com" site_id="ae-us-hd--eastern-feed/17034" lang="en" xmltv_id="AANDE.us">A&amp;E</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/abc%20boston.png" site="tvpassport.com" site_id="abc-wcvb-boston-ma-hd/3661" lang="en" xmltv_id="ABC.BOSTON.us">ABC Boston</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT%20Poland%20Spring%2C%20Maine%20(ABC).png" site="tvpassport.com" site_id="abc-wmtw-auburn-me-hd/3598" lang="en" xmltv_id="ABC.PORTLAND.us">ABC Portland</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/adult%20swim.png" site="tvpassport.com" site_id="adult-swim--east-hd/7336" lang="en" xmltv_id="ADULT.SWIM.us">Adult Swim</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/AMC%20HD.png" site="tvpassport.com" site_id="amc--eastern-feed-hd/6219" lang="en" xmltv_id="AMC.us">AMC</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/amc%20plus.png" site="tvpassport.com" site_id="amc/35317" lang="en" xmltv_id="AMC.PLUS.us">AMC+</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/American%20Heroes.png" site="tvpassport.com" site_id="american-heroes-channel-hd/10881" lang="en" xmltv_id="AMERICAN.HEROES.CHANNEL.us">American Heroes Channel HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Animal%20Planet.png" site="tvpassport.com" site_id="animal-planet-us-hd--east/4537" lang="en" xmltv_id="ANIMAL.PLANET.us">Animal Planet</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ASPiRE.png" site="tvpassport.com" site_id="aspire-tv-hd/10761" lang="en" xmltv_id="ASPIRE.us">Aspire</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/awe.png" site="tvpassport.com" site_id="awe-tv-network-hd/6306" lang="en" xmltv_id="AWE.us">AWE</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/AXS%20TV.png" site="tvpassport.com" site_id="axs-tv-north-america-hd/12598" lang="en" xmltv_id="AXS.TV.us">AXS TV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/BBC%20America%20HD.png" site="tvpassport.com" site_id="bbc-america--east-hd/11121" lang="en" xmltv_id="BBC.AMERICA.us">BBC America</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/bet.png" site="tvpassport.com" site_id="bet-hd--eastern-feed/6205" lang="en" xmltv_id="BET.us">BET</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Bravo.png" site="tvpassport.com" site_id="bravo-usa-hd--eastern-feed/6120" lang="en" xmltv_id="BRAVO.us">Bravo</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cartoon%20Network.png" site="tvpassport.com" site_id="cartoon-network-canada--east-hd/10331" lang="en" xmltv_id="CARTOON.NETWORK.us">Cartoon Network</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/cbs%20boston.png" site="tvpassport.com" site_id="cbs-wbz-boston-ma-hd/3653" lang="en" xmltv_id="CBS.BOSTON.us">CBS Boston</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT%20Portland%2C%20Maine%20(CBS).png" site="tvpassport.com" site_id="cbs-wgme-portland-me-hd/7037" lang="en" xmltv_id="CBS.PORTLAND.us">CBS Portland</channel>
 <channel site="tvpassport.com" site_id="cbs-sports-network-canada-hd/10711" lang="en" xmltv_id="CBS.SPORTS.HQ.us">CBS Sports HQ</channel>
-<channel site="tvpassport.com" site_id="cbs-sports-network-usa-hd/6985" lang="en" xmltv_id="CBSSportsNetworkUSA.us@SD">CBS Sports Network USA HD</channel>
-<channel site="tvpassport.com" site_id="cinemax--eastern-hd/3567" lang="en" xmltv_id="CINEMAX.us">Cinemax</channel>
-<channel site="tvpassport.com" site_id="actionmax--eastern-hd/7094" lang="en" xmltv_id="CINEMAX.ACTION.us">Cinemax Action</channel>
-<channel site="tvpassport.com" site_id="5-star-max-hd--eastern/7093" lang="en" xmltv_id="CINEMAX.CLASSICS.us">Cinemax Classics</channel>
-<channel site="tvpassport.com" site_id="moremax--eastern-hd/7097" lang="en" xmltv_id="CINEMAX.HITS.us">Cinemax Hits</channel>
-<channel site="tvpassport.com" site_id="cmt-us--eastern-feed-hd/6344" lang="en" xmltv_id="CMT.us">CMT</channel>
-<channel site="tvpassport.com" site_id="cnbc-canada-hd/8429" lang="en" xmltv_id="CNBC.us">CNBC</channel>
-<channel site="tvpassport.com" site_id="cnn-hd/4724" lang="en" xmltv_id="CNN.us">CNN</channel>
-<channel site="tvpassport.com" site_id="comedy-central-hd--eastern-feed/6957" lang="en" xmltv_id="COMEDY.CENTRAL.us">Comedy Central</channel>
-<channel site="tvpassport.com" site_id="comet-tv-katv2-little-rock-ar-hd/9280" lang="en" xmltv_id="COMET.us">COMET</channel>
-<channel site="tvpassport.com" site_id="the-cooking-channel-hd/8113" lang="en" xmltv_id="CookingChannel.us@SD">The Cooking Channel HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CBS%20Sports%20Network%20HD.png" site="tvpassport.com" site_id="cbs-sports-network-usa-hd/6985" lang="en" xmltv_id="CBSSportsNetworkUSA.us@SD">CBS Sports Network USA HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax.png" site="tvpassport.com" site_id="cinemax--eastern-hd/3567" lang="en" xmltv_id="CINEMAX.us">Cinemax</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Action_2025.svg" site="tvpassport.com" site_id="actionmax--eastern-hd/7094" lang="en" xmltv_id="CINEMAX.ACTION.us">Cinemax Action</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Classics_2025.png" site="tvpassport.com" site_id="5-star-max-hd--eastern/7093" lang="en" xmltv_id="CINEMAX.CLASSICS.us">Cinemax Classics</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Hits_2025.png" site="tvpassport.com" site_id="moremax--eastern-hd/7097" lang="en" xmltv_id="CINEMAX.HITS.us">Cinemax Hits</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CMT.png" site="tvpassport.com" site_id="cmt-us--eastern-feed-hd/6344" lang="en" xmltv_id="CMT.us">CMT</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CNBC%20HD.png" site="tvpassport.com" site_id="cnbc-canada-hd/8429" lang="en" xmltv_id="CNBC.us">CNBC</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CNN%20HD.png" site="tvpassport.com" site_id="cnn-hd/4724" lang="en" xmltv_id="CNN.us">CNN</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Comedy%20Central.png" site="tvpassport.com" site_id="comedy-central-hd--eastern-feed/6957" lang="en" xmltv_id="COMEDY.CENTRAL.us">Comedy Central</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png" site="tvpassport.com" site_id="comet-tv-katv2-little-rock-ar-hd/9280" lang="en" xmltv_id="COMET.us">COMET</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cooking.png" site="tvpassport.com" site_id="the-cooking-channel-hd/8113" lang="en" xmltv_id="CookingChannel.us@SD">The Cooking Channel HD</channel>
 <channel site="tvpassport.com" site_id="crave1--east-hd/2820" lang="en" xmltv_id="CRAVE.1.ca">Crave 1</channel>
 <channel site="tvpassport.com" site_id="crave2--east-hd/7139" lang="en" xmltv_id="CRAVE.2.ca">Crave 2</channel>
 <channel site="tvpassport.com" site_id="crave3--east-hd/7137" lang="en" xmltv_id="CRAVE.3.ca">Crave 3</channel>
 <channel site="tvpassport.com" site_id="crave4-hd/10781" lang="en" xmltv_id="CRAVE.4.ca">Crave 4</channel>
-<channel site="tvpassport.com" site_id="crime--investigation-canada-hd/13784" lang="en" xmltv_id="CRIME.AND.INVESTIGATION.us">Crime &amp; Investigation</channel>
-<channel site="tvpassport.com" site_id="cw-wlvi-boston-ma-hd/7114" lang="en" xmltv_id="CW.BOSTON.us">CW Boston</channel>
-<channel site="tvpassport.com" site_id="destination-america-hd/5889" lang="en" xmltv_id="DESTINATION.AMERICA.us">Destination America</channel>
-<channel site="tvpassport.com" site_id="discovery-channel-us--eastern-feed/649" lang="en" xmltv_id="DiscoveryChannel.us@East">Discovery Channel (US) - Eastern Feed</channel>
-<channel site="tvpassport.com" site_id="discovery--channel-hd/8518" lang="en" xmltv_id="DISCOVERY.us">Discovery</channel>
-<channel site="tvpassport.com" site_id="discovery-life-channel-hd/16423" lang="en" xmltv_id="DISCOVERY.LIFE.us">Discovery Life</channel>
-<channel site="tvpassport.com" site_id="discovery-science-canada-hd/10769" lang="en" xmltv_id="DISCOVERY.SCIENCE.us">Discovery Science</channel>
-<channel site="tvpassport.com" site_id="disney-channel-canada-hd--east/16683" lang="en" xmltv_id="DISNEY.CHANNEL.us">Disney Channel</channel>
-<channel site="tvpassport.com" site_id="e-entertainment-usa-hd--east/6659" lang="en" xmltv_id="E.us">E!</channel>
-<channel site="tvpassport.com" site_id="espn/594" lang="en" xmltv_id="ESPN.us@SD">ESPN</channel>
-<channel site="tvpassport.com" site_id="espn-news-hd/6246" lang="en" xmltv_id="ESPN.NEWS.us">ESPN News</channel>
-<channel site="tvpassport.com" site_id="espn2-hd/3379" lang="en" xmltv_id="ESPN2.us">ESPN2</channel>
-<channel site="tvpassport.com" site_id="fetv--entertainment-television/14622" lang="en" xmltv_id="FETV.us">FETV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png" site="tvpassport.com" site_id="crime--investigation-canada-hd/13784" lang="en" xmltv_id="CRIME.AND.INVESTIGATION.us">Crime &amp; Investigation</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/cw.png" site="tvpassport.com" site_id="cw-wlvi-boston-ma-hd/7114" lang="en" xmltv_id="CW.BOSTON.us">CW Boston</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Destination%20America.png" site="tvpassport.com" site_id="destination-america-hd/5889" lang="en" xmltv_id="DESTINATION.AMERICA.us">Destination America</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/discovery.png" site="tvpassport.com" site_id="discovery-channel-us--eastern-feed/649" lang="en" xmltv_id="DiscoveryChannel.us@East">Discovery Channel (US) - Eastern Feed</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/discovery.png" site="tvpassport.com" site_id="discovery--channel-hd/8518" lang="en" xmltv_id="DISCOVERY.us">Discovery</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Discovery%20Life.png" site="tvpassport.com" site_id="discovery-life-channel-hd/16423" lang="en" xmltv_id="DISCOVERY.LIFE.us">Discovery Life</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Science%20HD.png" site="tvpassport.com" site_id="discovery-science-canada-hd/10769" lang="en" xmltv_id="DISCOVERY.SCIENCE.us">Discovery Science</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Disney.png" site="tvpassport.com" site_id="disney-channel-canada-hd--east/16683" lang="en" xmltv_id="DISNEY.CHANNEL.us">Disney Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/E!.png" site="tvpassport.com" site_id="e-entertainment-usa-hd--east/6659" lang="en" xmltv_id="E.us">E!</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN.png" site="tvpassport.com" site_id="espn/594" lang="en" xmltv_id="ESPN.us@SD">ESPN</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN%20News%20HD.png" site="tvpassport.com" site_id="espn-news-hd/6246" lang="en" xmltv_id="ESPN.NEWS.us">ESPN News</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN2.png" site="tvpassport.com" site_id="espn2-hd/3379" lang="en" xmltv_id="ESPN2.us">ESPN2</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/fetv.png" site="tvpassport.com" site_id="fetv--entertainment-television/14622" lang="en" xmltv_id="FETV.us">FETV</channel>
 <channel site="tvpassport.com" site_id="fox-wfxt-boston-ma-hd/3657" lang="en" xmltv_id="FOX.BOSTON.us">FOX Boston</channel>
-<channel site="tvpassport.com" site_id="fox-news-hd/6207" lang="en" xmltv_id="FOX.NEWS.CHANNEL.us">Fox News Channel</channel>
-<channel site="tvpassport.com" site_id="tbd-tv-wgme-tv2-portland-me/17968" lang="en" xmltv_id="FOX.PORTLAND.us">FOX Portland</channel>
-<channel site="tvpassport.com" site_id="fox-sports-1-hd/11137" lang="en" xmltv_id="FOX.SPORTS.1.us">Fox Sports 1</channel>
-<channel site="tvpassport.com" site_id="fox-sports-2-hd/10263" lang="en" xmltv_id="FOX.SPORTS.2.us">Fox Sports 2</channel>
-<channel site="tvpassport.com" site_id="freeform-hd--east-feed/6110" lang="en" xmltv_id="FREEFORM.us">Freeform</channel>
-<channel site="tvpassport.com" site_id="fuse-tv-hd--eastern/6221" lang="en" xmltv_id="FUSE.us">Fuse</channel>
-<channel site="tvpassport.com" site_id="fx-networks-east-coast-hd/6111" lang="en" xmltv_id="FX.us">FX</channel>
-<channel site="tvpassport.com" site_id="fx-movie-channel-hd/8463" lang="en" xmltv_id="FXM.us">FXM</channel>
-<channel site="tvpassport.com" site_id="fxx-usa-hd--eastern/7506" lang="en" xmltv_id="FXX.us">FXX</channel>
-<channel site="tvpassport.com" site_id="fyi-usa-hd--eastern/6211" lang="en" xmltv_id="FYI.us">FYI</channel>
-<channel site="tvpassport.com" site_id="game-show-network--east-hd/7055" lang="en" xmltv_id="GAME.SHOW.NETWORK.us">Game Show Network</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Fox%20News.png" site="tvpassport.com" site_id="fox-news-hd/6207" lang="en" xmltv_id="FOX.NEWS.CHANNEL.us">Fox News Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WGME-DT2%20Portland%2C%20Maine%20(FOX).png" site="tvpassport.com" site_id="tbd-tv-wgme-tv2-portland-me/17968" lang="en" xmltv_id="FOX.PORTLAND.us">FOX Portland</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%201%20HD.png" site="tvpassport.com" site_id="fox-sports-1-hd/11137" lang="en" xmltv_id="FOX.SPORTS.1.us">Fox Sports 1</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%202.png" site="tvpassport.com" site_id="fox-sports-2-hd/10263" lang="en" xmltv_id="FOX.SPORTS.2.us">Fox Sports 2</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/freeform.png" site="tvpassport.com" site_id="freeform-hd--east-feed/6110" lang="en" xmltv_id="FREEFORM.us">Freeform</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Fuse%20HD.png" site="tvpassport.com" site_id="fuse-tv-hd--eastern/6221" lang="en" xmltv_id="FUSE.us">Fuse</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FX.png" site="tvpassport.com" site_id="fx-networks-east-coast-hd/6111" lang="en" xmltv_id="FX.us">FX</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FX%20Movie%20HD.png" site="tvpassport.com" site_id="fx-movie-channel-hd/8463" lang="en" xmltv_id="FXM.us">FXM</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FXX%20HD.png" site="tvpassport.com" site_id="fxx-usa-hd--eastern/7506" lang="en" xmltv_id="FXX.us">FXX</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FYI%20HD.png" site="tvpassport.com" site_id="fyi-usa-hd--eastern/6211" lang="en" xmltv_id="FYI.us">FYI</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Game%20Show%20Network%20HD.png" site="tvpassport.com" site_id="game-show-network--east-hd/7055" lang="en" xmltv_id="GAME.SHOW.NETWORK.us">Game Show Network</channel>
 <channel site="tvpassport.com" site_id="great-american-faith--living-hd/16159" lang="en" xmltv_id="GREAT.AMERICAN.FAITH.AND.LIVING.us">Great American Faith &amp; Living HD</channel>
-<channel site="tvpassport.com" site_id="hallmark-channel-hd--eastern/6213" lang="en" xmltv_id="HALLMARK.CHANNEL.us">Hallmark Channel</channel>
-<channel site="tvpassport.com" site_id="ctv-drama-hd/6797" lang="en" xmltv_id="HALLMARK.DRAMA.us">Hallmark Drama</channel>
-<channel site="tvpassport.com" site_id="hallmark-movies--mysteries--pacific/11414" lang="en" xmltv_id="HALLMARK.MYSTERY.us">Hallmark Mystery</channel>
-<channel site="tvpassport.com" site_id="hbo1-hd/4230" lang="en" xmltv_id="">HBO</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark.png" site="tvpassport.com" site_id="hallmark-channel-hd--eastern/6213" lang="en" xmltv_id="HALLMARK.CHANNEL.us">Hallmark Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark%20Family.png" site="tvpassport.com" site_id="ctv-drama-hd/6797" lang="en" xmltv_id="HALLMARK.DRAMA.us">Hallmark Drama</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark%20Mystery%20HD.png" site="tvpassport.com" site_id="hallmark-movies--mysteries--pacific/11414" lang="en" xmltv_id="HALLMARK.MYSTERY.us">Hallmark Mystery</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO.png" site="tvpassport.com" site_id="hbo1-hd/4230" lang="en" xmltv_id="">HBO</channel>
 <channel site="tvpassport.com" site_id="hbo-canada-2--west/292" lang="en" xmltv_id="HBO.2.CANADA.ca">HBO 2 Canada</channel>
 <channel site="tvpassport.com" site_id="hbo-canada-east-on-demand-hd/9313" lang="en" xmltv_id="">HBO Canada</channel>
-<channel site="tvpassport.com" site_id="hbo-comedy-hd--east/7105" lang="en" xmltv_id="HBO.COMEDY.us">HBO Comedy</channel>
-<channel site="tvpassport.com" site_id="hbo-signature-hbo-3--eastern-hd/7099" lang="en" xmltv_id="HBOSignature.us@East">HBO Drama) - Eastern HD</channel>
-<channel site="tvpassport.com" site_id="hbo-2--eastern-feed-hd/6313" lang="en" xmltv_id="HBO2.us@East">HBO Hits</channel>
-<channel site="tvpassport.com" site_id="hbo-zone--east/630" lang="en" xmltv_id="HBOZone.us@East">HBO Movies</channel>
-<channel site="tvpassport.com" site_id="hgtv-usa-hd--eastern/3690" lang="en" xmltv_id="HGTV.us">HGTV</channel>
-<channel site="tvpassport.com" site_id="history-canada-hd-east/6822" lang="en" xmltv_id="HISTORY.CHANNEL.us">History Channel</channel>
-<channel site="tvpassport.com" site_id="hln-hd/6994" lang="en" xmltv_id="HLN.us">HLN</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Comedy.png" site="tvpassport.com" site_id="hbo-comedy-hd--east/7105" lang="en" xmltv_id="HBO.COMEDY.us">HBO Comedy</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Drama.png" site="tvpassport.com" site_id="hbo-signature-hbo-3--eastern-hd/7099" lang="en" xmltv_id="HBOSignature.us@East">HBO Drama) - Eastern HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Hits.png" site="tvpassport.com" site_id="hbo-2--eastern-feed-hd/6313" lang="en" xmltv_id="HBO2.us@East">HBO Hits</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Movies.png" site="tvpassport.com" site_id="hbo-zone--east/630" lang="en" xmltv_id="HBOZone.us@East">HBO Movies</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HGTV%20HD.png" site="tvpassport.com" site_id="hgtv-usa-hd--eastern/3690" lang="en" xmltv_id="HGTV.us">HGTV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/History%20HD.png" site="tvpassport.com" site_id="history-canada-hd-east/6822" lang="en" xmltv_id="HISTORY.CHANNEL.us">History Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HLN.png" site="tvpassport.com" site_id="hln-hd/6994" lang="en" xmltv_id="HLN.us">HLN</channel>
 <channel site="tvpassport.com" site_id="hollywood-suite-00s-hd/20016" lang="en" xmltv_id="HOLLYWOOD.SUITE.2000S.ca">Hollywood Suite 2000's</channel>
 <channel site="tvpassport.com" site_id="hollywood-suite-00s-hd/20016" lang="en" xmltv_id="HOLLYWOOD.SUITE.2010S.ca">Hollywood Suite 2010's</channel>
 <channel site="tvpassport.com" site_id="hollywood-suite-70s-hd/20017" lang="en" xmltv_id="HOLLYWOOD.SUITE.70S.ca">Hollywood Suite 70's</channel>
 <channel site="tvpassport.com" site_id="hollywood-suite-80s-hd/20018" lang="en" xmltv_id="HOLLYWOOD.SUITE.80S.ca">Hollywood Suite 80's</channel>
-<channel site="tvpassport.com" site_id="independent-film-channel-us-hd/6215" lang="en" xmltv_id="IFC.us">IFC</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/IFC%20HD.png" site="tvpassport.com" site_id="independent-film-channel-us-hd/6215" lang="en" xmltv_id="IFC.us">IFC</channel>
 <channel site="tvpassport.com" site_id="indieplex-hd/9026" lang="en" xmltv_id="INDIEPLEX.us">IndiePlex</channel>
-<channel site="tvpassport.com" site_id="insp-hd/11446" lang="en" xmltv_id="INSP.us">INSP HD</channel>
-<channel site="tvpassport.com" site_id="investigation-discovery-usa-hd--eastern/6997" lang="en" xmltv_id="INVESTIGATION.DISCOVERY.us">Investigation Discovery</channel>
-<channel site="tvpassport.com" site_id="laff--network-hd/20170" lang="en" xmltv_id="LAFF.us">LAFF</channel>
-<channel site="tvpassport.com" site_id="lifetime-movies-hd--east/4723" lang="en" xmltv_id="LIFETIME.us">Lifetime</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/insp.png" site="tvpassport.com" site_id="insp-hd/11446" lang="en" xmltv_id="INSP.us">INSP HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Investigation%20Discovery.png" site="tvpassport.com" site_id="investigation-discovery-usa-hd--eastern/6997" lang="en" xmltv_id="INVESTIGATION.DISCOVERY.us">Investigation Discovery</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT3%20Poland%20Spring%2C%20Maine%20(Laff).png" site="tvpassport.com" site_id="laff--network-hd/20170" lang="en" xmltv_id="LAFF.us">LAFF</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/lifetime.png" site="tvpassport.com" site_id="lifetime-movies-hd--east/4723" lang="en" xmltv_id="LIFETIME.us">Lifetime</channel>
 <channel site="tvpassport.com" site_id="lifetime-movies--east/1333" lang="en" xmltv_id="">LMN</channel>
-<channel site="tvpassport.com" site_id="logo-hd--east/32944" lang="en" xmltv_id="LOGO.us">Logo</channel>
-<channel site="tvpassport.com" site_id="magnolia-hd--east/8114" lang="en" xmltv_id="MAGNOLIA.NETWORK.us">Magnolia Network</channel>
-<channel site="tvpassport.com" site_id="metv-wmtw2-portland-me/17886" lang="en" xmltv_id="METV.us">METV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/LOGO.png" site="tvpassport.com" site_id="logo-hd--east/32944" lang="en" xmltv_id="LOGO.us">Logo</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MAGNOLIA%20Network%20HD.png" site="tvpassport.com" site_id="magnolia-hd--east/8114" lang="en" xmltv_id="MAGNOLIA.NETWORK.us">Magnolia Network</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WMTW-DT2%20Poland%20Spring%2C%20Maine%20(MeTV).png" site="tvpassport.com" site_id="metv-wmtw2-portland-me/17886" lang="en" xmltv_id="METV.us">METV</channel>
 <channel site="tvpassport.com" site_id="mgm-hd--east/7610" lang="en" xmltv_id="MGM.us">MGM</channel>
 <channel site="tvpassport.com" site_id="mgm-drive-in-hd/33934" lang="en" xmltv_id="MGM.DRIVE.IN.us">MGM Drive-In</channel>
 <channel site="tvpassport.com" site_id="mgm-hits-hd--east/11615" lang="en" xmltv_id="MGM.HITS.us">MGM Hits</channel>
 <channel site="tvpassport.com" site_id="mgm-hd--east/7610" lang="en" xmltv_id="MGM.HORROR.us">MGM Horror</channel>
 <channel site="tvpassport.com" site_id="mgm-marquee-hd/11616" lang="en" xmltv_id="MGM.MARQUEE.us">MGM Marquee</channel>
-<channel site="tvpassport.com" site_id="mlb-network-hd/6218" lang="en" xmltv_id="MLBNetwork.us@SD">MLB Network HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MLB%20Network%20HD.png" site="tvpassport.com" site_id="mlb-network-hd/6218" lang="en" xmltv_id="MLBNetwork.us@SD">MLB Network HD</channel>
 <channel site="tvpassport.com" site_id="movietime-hd/7807" lang="en" xmltv_id="MOVIETIME.ca">MovieTime</channel>
 <channel site="tvpassport.com" site_id="movieplex-hd--eastern/11443" lang="en" xmltv_id="MOVIEPLEX.us">MoviePlex</channel>
-<channel site="tvpassport.com" site_id="msnbc-usa-hd/6995" lang="en" xmltv_id="MSNBC.us@SD">MS NOW</channel>
-<channel site="tvpassport.com" site_id="mtv-usa-hd--eastern/4525" lang="en" xmltv_id="">MTV</channel>
-<channel site="tvpassport.com" site_id="mtv-2-east-hd/10276" lang="en" xmltv_id="MTV2.us">MTV2</channel>
-<channel site="tvpassport.com" site_id="national-geographic-us-hd--eastern/4436" lang="en" xmltv_id="NAT.GEO.us">Nat Geo</channel>
-<channel site="tvpassport.com" site_id="national-geographic-wild-hd/9579" lang="en" xmltv_id="NAT.GEO.WILD.us">Nat Geo Wild</channel>
-<channel site="tvpassport.com" site_id="nba-tv-usa-hd/5645" lang="en" xmltv_id="NBATV.us@SD">NBA TV USA HD</channel>
-<channel site="tvpassport.com" site_id="nbc-wbts-cd-nashua-nh-hd/30964" lang="en" xmltv_id="NBC.BOSTON.us">NBC Boston</channel>
-<channel site="tvpassport.com" site_id="nbc-wcsh-portland-me-hd/4760" lang="en" xmltv_id="NBC.PORTLAND.us">NBC Portland</channel>
-<channel site="tvpassport.com" site_id="nbc-sports-boston-hd/4534" lang="en" xmltv_id="NBC.SPORTS.BOSTON.us">NBC Sports Boston</channel>
-<channel site="tvpassport.com" site_id="new-england-sports-network-hd/3600" lang="en" xmltv_id="NESN.us">New England Sports Network HD</channel>
-<channel site="tvpassport.com" site_id="new-england-sports-network-plus/14779" lang="en" xmltv_id="NESN.PLUS.us">New England Sports Network Plus</channel>
-<channel site="tvpassport.com" site_id="necn-hd/7723" lang="en" xmltv_id="NEW.ENGLAND.CABLE.NEWS.us">New England Cable News</channel>
-<channel site="tvpassport.com" site_id="nfl-network-hd/3601" lang="en" xmltv_id="NFLNETWORK.us">NFL Network HD</channel>
-<channel site="tvpassport.com" site_id="nhl-network-usa/14156" lang="en" xmltv_id="NHLNetwork.us@SD">NHL Network USA</channel>
-<channel site="tvpassport.com" site_id="nickelodeon-usa--east-feed-hd/6342" lang="en" xmltv_id="NICKELODEON.us">Nickelodeon</channel>
-<channel site="tvpassport.com" site_id="outdoor-channel-us-hd/4638" lang="en" xmltv_id="OUTDOOR.CHANNEL.us">Outdoor Channel</channel>
-<channel site="tvpassport.com" site_id="ovation-hd/8838" lang="en" xmltv_id="OVATION.us">Ovation</channel>
-<channel site="tvpassport.com" site_id="oprah-winfrey-network-usa-eastern-hd/8587" lang="en" xmltv_id="OWN.us">OWN</channel>
-<channel site="tvpassport.com" site_id="oxygen-hd--eastern/6846" lang="en" xmltv_id="OXYGEN.us">Oxygen</channel>
-<channel site="tvpassport.com" site_id="paramount-network-usa-hd--eastern-feed/6334" lang="en" xmltv_id="PARAMOUNT.NETWORK.us">Paramount Network</channel>
-<channel site="tvpassport.com" site_id="pbs--network-hd--eastern/4259" lang="en" xmltv_id="PBS.us">PBS</channel>
-<channel site="tvpassport.com" site_id="pop-hd--east/10370" lang="en" xmltv_id="POP.us">POP</channel>
-<channel site="tvpassport.com" site_id="reelzchannel-hd/8836" lang="en" xmltv_id="REELZ.us">REELZ</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MS%20NOW%20HD.png" site="tvpassport.com" site_id="msnbc-usa-hd/6995" lang="en" xmltv_id="MSNBC.us@SD">MS NOW</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MTV.png" site="tvpassport.com" site_id="mtv-usa-hd--eastern/4525" lang="en" xmltv_id="">MTV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MTV2%20HD.png" site="tvpassport.com" site_id="mtv-2-east-hd/10276" lang="en" xmltv_id="MTV2.us">MTV2</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/nat%20geo.png" site="tvpassport.com" site_id="national-geographic-us-hd--eastern/4436" lang="en" xmltv_id="NAT.GEO.us">Nat Geo</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National%20Geographic%20Wild.png" site="tvpassport.com" site_id="national-geographic-wild-hd/9579" lang="en" xmltv_id="NAT.GEO.WILD.us">Nat Geo Wild</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/NBA%20TV%20HD.png" site="tvpassport.com" site_id="nba-tv-usa-hd/5645" lang="en" xmltv_id="NBATV.us@SD">NBA TV USA HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/nbc%20boston.png" site="tvpassport.com" site_id="nbc-wbts-cd-nashua-nh-hd/30964" lang="en" xmltv_id="NBC.BOSTON.us">NBC Boston</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WCSH-DT%20Portland%2C%20Maine%20(NBC).png" site="tvpassport.com" site_id="nbc-wcsh-portland-me-hd/4760" lang="en" xmltv_id="NBC.PORTLAND.us">NBC Portland</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/NBC%20Sports%20Boston.png" site="tvpassport.com" site_id="nbc-sports-boston-hd/4534" lang="en" xmltv_id="NBC.SPORTS.BOSTON.us">NBC Sports Boston</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network.png" site="tvpassport.com" site_id="new-england-sports-network-hd/3600" lang="en" xmltv_id="NESN.us">New England Sports Network HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network%20Plus%20HD.png" site="tvpassport.com" site_id="new-england-sports-network-plus/14779" lang="en" xmltv_id="NESN.PLUS.us">New England Sports Network Plus</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Cable%20News.png" site="tvpassport.com" site_id="necn-hd/7723" lang="en" xmltv_id="NEW.ENGLAND.CABLE.NEWS.us">New England Cable News</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/NFL%20Network.png" site="tvpassport.com" site_id="nfl-network-hd/3601" lang="en" xmltv_id="NFLNETWORK.us">NFL Network HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/NHL%20Network%20HD.png" site="tvpassport.com" site_id="nhl-network-usa/14156" lang="en" xmltv_id="NHLNetwork.us@SD">NHL Network USA</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Nickelodeon.png" site="tvpassport.com" site_id="nickelodeon-usa--east-feed-hd/6342" lang="en" xmltv_id="NICKELODEON.us">Nickelodeon</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Outdoor.png" site="tvpassport.com" site_id="outdoor-channel-us-hd/4638" lang="en" xmltv_id="OUTDOOR.CHANNEL.us">Outdoor Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Ovation%20HD.png" site="tvpassport.com" site_id="ovation-hd/8838" lang="en" xmltv_id="OVATION.us">Ovation</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/own.png" site="tvpassport.com" site_id="oprah-winfrey-network-usa-eastern-hd/8587" lang="en" xmltv_id="OWN.us">OWN</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Oxygen.png" site="tvpassport.com" site_id="oxygen-hd--eastern/6846" lang="en" xmltv_id="OXYGEN.us">Oxygen</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Paramount%20Network%20HD.png" site="tvpassport.com" site_id="paramount-network-usa-hd--eastern-feed/6334" lang="en" xmltv_id="PARAMOUNT.NETWORK.us">Paramount Network</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/PBS.png" site="tvpassport.com" site_id="pbs--network-hd--eastern/4259" lang="en" xmltv_id="PBS.us">PBS</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Pop%20Network%20HD.png" site="tvpassport.com" site_id="pop-hd--east/10370" lang="en" xmltv_id="POP.us">POP</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Reelz%20HD.png" site="tvpassport.com" site_id="reelzchannel-hd/8836" lang="en" xmltv_id="REELZ.us">REELZ</channel>
 <channel site="tvpassport.com" site_id="retroplex-hd/8837" lang="en" xmltv_id="RETROPLEX.us">RetroPlex</channel>
 <channel site="tvpassport.com" site_id="screenpix/34659" lang="en" xmltv_id="">ScreenPix</channel>
 <channel site="tvpassport.com" site_id="screenpix-action/34660" lang="en" xmltv_id="SCREENPIX.ACTION.us">ScreenPix Action</channel>
 <channel site="tvpassport.com" site_id="screenpix-voices/34662" lang="en" xmltv_id="">ScreenPix Voices</channel>
 <channel site="tvpassport.com" site_id="screenpix-westerns/34661" lang="en" xmltv_id="SCREENPIX.WESTERNS.us">ScreenPix Westerns</channel>
-<channel site="tvpassport.com" site_id="paramount-with-showtime--eastern-feed/665" lang="en" xmltv_id="PARAMOUNT.PLUS.SHOWTIME.us">Paramount+ with Showtime - Eastern Feed</channel>
-<channel site="tvpassport.com" site_id="showtime-2-hd--eastern/7111" lang="en" xmltv_id="SHOWTIME.2.us">Showtime 2</channel>
-<channel site="tvpassport.com" site_id="shoxbet--eastern/2077" lang="en" xmltv_id="SHOWTIME.BET.us">SHOXBET - Eastern</channel>
-<channel site="tvpassport.com" site_id="shoxbet-hd--eastern/7110" lang="en" xmltv_id="SHOWTIME.EXTREME.us">Showtime Extreme</channel>
-<channel site="tvpassport.com" site_id="showtime--zone-hd--eastern/7108" lang="en" xmltv_id="SHOWTIME.FAMILY.ZONE.us">Showtime Family Zone</channel>
-<channel site="tvpassport.com" site_id="showtime-next-hd--eastern/7109" lang="en" xmltv_id="SHOWTIME.NEXT.us">Showtime Next</channel>
-<channel site="tvpassport.com" site_id="showtime-showcase-hd--east/7106" lang="en" xmltv_id="SHOWTIME.SHOWCASE.us">Showtime Showcase</channel>
-<channel site="tvpassport.com" site_id="showtime-women-hd--eastern/7112" lang="en" xmltv_id="SHOWTIME.WOMEN.us">Showtime Women</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Paramount%2B%20with%20Showtime.png" site="tvpassport.com" site_id="paramount-with-showtime--eastern-feed/665" lang="en" xmltv_id="PARAMOUNT.PLUS.SHOWTIME.us">Paramount+ with Showtime - Eastern Feed</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%202.png" site="tvpassport.com" site_id="showtime-2-hd--eastern/7111" lang="en" xmltv_id="SHOWTIME.2.us">Showtime 2</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/showtime%20bet.png" site="tvpassport.com" site_id="shoxbet--eastern/2077" lang="en" xmltv_id="SHOWTIME.BET.us">SHOXBET - Eastern</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20EXTREME.png" site="tvpassport.com" site_id="shoxbet-hd--eastern/7110" lang="en" xmltv_id="SHOWTIME.EXTREME.us">Showtime Extreme</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20FAMILY%20ZONE.png" site="tvpassport.com" site_id="showtime--zone-hd--eastern/7108" lang="en" xmltv_id="SHOWTIME.FAMILY.ZONE.us">Showtime Family Zone</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20NEXT.png" site="tvpassport.com" site_id="showtime-next-hd--eastern/7109" lang="en" xmltv_id="SHOWTIME.NEXT.us">Showtime Next</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20SHOWCASE.png" site="tvpassport.com" site_id="showtime-showcase-hd--east/7106" lang="en" xmltv_id="SHOWTIME.SHOWCASE.us">Showtime Showcase</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20WOMEN.png" site="tvpassport.com" site_id="showtime-women-hd--eastern/7112" lang="en" xmltv_id="SHOWTIME.WOMEN.us">Showtime Women</channel>
 <channel site="tvpassport.com" site_id="silver-screen-classics-hd/32997" lang="en" xmltv_id="SILVER.SCREEN.CLASSICS.ca">Silver Screen Classics</channel>
 <channel site="tvpassport.com" site_id="sky-link-tv-hd/8840" lang="en" xmltv_id="SKY.ACTION.uk">Sky Action</channel>
 <channel site="tvpassport.com" site_id="sky-link-tv-hd/8840" lang="en" xmltv_id="SKY.COMEDY.uk">Sky Comedy</channel>
@@ -140,36 +140,36 @@
 <channel site="tvpassport.com" site_id="sky-link-tv-hd/8840" lang="en" xmltv_id="SKY.PREMIERE.uk">Sky Premiere</channel>
 <channel site="tvpassport.com" site_id="sky-link-tv-hd/8840" lang="en" xmltv_id="SKY.SCI.FI.uk">Sky Sci-Fi</channel>
 <channel site="tvpassport.com" site_id="sky-link-tv-hd/8840" lang="en" xmltv_id="SKY.THRILLER.uk">Sky Thriller</channel>
-<channel site="tvpassport.com" site_id="smithsonian-channel-usa-hd/6237" lang="en" xmltv_id="SMITHSONIAN.CHANNEL.us">Smithsonian Channel USA HD</channel>
-<channel site="tvpassport.com" site_id="sony-movies-hd/33741" lang="en" xmltv_id="SONY.MOVIES.us">Sony Movies</channel>
-<channel site="tvpassport.com" site_id="dsi-starz-hd--eastern/33754" lang="en" xmltv_id="STARZ.US.us">Starz</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png" site="tvpassport.com" site_id="smithsonian-channel-usa-hd/6237" lang="en" xmltv_id="SMITHSONIAN.CHANNEL.us">Smithsonian Channel USA HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Sony_Movies_2019.png" site="tvpassport.com" site_id="sony-movies-hd/33741" lang="en" xmltv_id="SONY.MOVIES.us">Sony Movies</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ.png" site="tvpassport.com" site_id="dsi-starz-hd--eastern/33754" lang="en" xmltv_id="STARZ.US.us">Starz</channel>
 <channel site="tvpassport.com" site_id="starz2--east-hd/10783" lang="en" xmltv_id="STARZ.2.CANADA.ca">Starz 2 Canada</channel>
 <channel site="tvpassport.com" site_id="dsi-starz-hd--eastern/33754" lang="en" xmltv_id="STARZ.CANADA.ca">Starz Canada</channel>
-<channel site="tvpassport.com" site_id="starz-cinema-hd--eastern/7087" lang="en" xmltv_id="STARZ.CINEMA.us">Starz Cinema</channel>
-<channel site="tvpassport.com" site_id="starz-comedy-hd--eastern/7088" lang="en" xmltv_id="STARZ.COMEDY.us">Starz Comedy</channel>
-<channel site="tvpassport.com" site_id="starz-edge-hd--eastern/7089" lang="en" xmltv_id="STARZ.EDGE.us">Starz Edge</channel>
-<channel site="tvpassport.com" site_id="starz-encore-action-hd--eastern/10812" lang="en" xmltv_id="STARZ.ENCORE.us">Starz Encore</channel>
-<channel site="tvpassport.com" site_id="starz-encore-action-hd--eastern/10812" lang="en" xmltv_id="STARZ.ENCORE.ACTION.us">Starz Encore Action</channel>
-<channel site="tvpassport.com" site_id="starz-encore-black-hd--eastern/10814" lang="en" xmltv_id="STARZ.ENCORE.BLACK.us">Starz Encore Black</channel>
-<channel site="tvpassport.com" site_id="starz-encore-classic-hd--eastern/11435" lang="en" xmltv_id="STARZ.ENCORE.CLASSIC.us">Starz Encore Classic</channel>
-<channel site="tvpassport.com" site_id="starz-encore-family-hd--eastern/11441" lang="en" xmltv_id="STARZ.ENCORE.FAMILY.us">Starz Encore Family</channel>
-<channel site="tvpassport.com" site_id="starz-encore-suspense-hd--eastern/11437" lang="en" xmltv_id="STARZ.ENCORE.SUSPENSE.us">Starz Encore Suspense</channel>
-<channel site="tvpassport.com" site_id="starz-in-black-hd--eastern/7090" lang="en" xmltv_id="STARZ.IN.BLACK.us">Starz In Black</channel>
-<channel site="tvpassport.com" site_id="starz-kids--family-hd--eastern/7091" lang="en" xmltv_id="STARZ.KIDS.AND.FAMILY.us">Starz Kids &amp; Family</channel>
-<channel site="tvpassport.com" site_id="syfy-hd--eastern-feed/5643" lang="en" xmltv_id="SYFY.us">Syfy</channel>
-<channel site="tvpassport.com" site_id="tbs--east-hd/6090" lang="en" xmltv_id="TBS.us">TBS</channel>
-<channel site="tvpassport.com" site_id="turner-classic-movies-usa/176" lang="en" xmltv_id="TCM.us">TCM</channel>
-<channel site="tvpassport.com" site_id="the-weather-channel-hd/5599" lang="en" xmltv_id="THE.WEATHER.CHANNEL.us">The Weather Channel</channel>
-<channel site="tvpassport.com" site_id="tlc-usa-hd--eastern/5004" lang="en" xmltv_id="TLC.us">TLC</channel>
-<channel site="tvpassport.com" site_id="tnt-hd--east-feed/3037" lang="en" xmltv_id="TNT.us">TNT</channel>
-<channel site="tvpassport.com" site_id="travel-us-hd--east/6150" lang="en" xmltv_id="TRAVEL.CHANNEL.us">Travel Channel</channel>
-<channel site="tvpassport.com" site_id="trutv-usa--east-hd/6996" lang="en" xmltv_id="TRUTV.us">truTV</channel>
-<channel site="tvpassport.com" site_id="tv-land--eastern-hd/8815" lang="en" xmltv_id="TV.LAND.us">TV Land</channel>
-<channel site="tvpassport.com" site_id="up/5911" lang="en" xmltv_id="UP.TV.us">UP TV</channel>
-<channel site="tvpassport.com" site_id="usa-network--east-feed/640" lang="en" xmltv_id="USA.us">USA Network - East Feed</channel>
-<channel site="tvpassport.com" site_id="vh1-hd--eastern/6204" lang="en" xmltv_id="VH1.us">VH1</channel>
-<channel site="tvpassport.com" site_id="vice-hd/7300" lang="en" xmltv_id="VICE.us">VICE HD</channel>
-<channel site="tvpassport.com" site_id="we-womens-entertainment--eastern/664" lang="en" xmltv_id="WE.TV.us">WE tv</channel>
-<channel site="tvpassport.com" site_id="cozi--network/33436" lang="en" xmltv_id="">Cozi</channel>
-<channel site="tvpassport.com" site_id="antenna--network-hd/17231" lang="en" xmltv_id="">Antenna</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Cinema.png" site="tvpassport.com" site_id="starz-cinema-hd--eastern/7087" lang="en" xmltv_id="STARZ.CINEMA.us">Starz Cinema</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Comedy.png" site="tvpassport.com" site_id="starz-comedy-hd--eastern/7088" lang="en" xmltv_id="STARZ.COMEDY.us">Starz Comedy</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Edge.png" site="tvpassport.com" site_id="starz-edge-hd--eastern/7089" lang="en" xmltv_id="STARZ.EDGE.us">Starz Edge</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE.png" site="tvpassport.com" site_id="starz-encore-action-hd--eastern/10812" lang="en" xmltv_id="STARZ.ENCORE.us">Starz Encore</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Action.png" site="tvpassport.com" site_id="starz-encore-action-hd--eastern/10812" lang="en" xmltv_id="STARZ.ENCORE.ACTION.us">Starz Encore Action</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Black.png" site="tvpassport.com" site_id="starz-encore-black-hd--eastern/10814" lang="en" xmltv_id="STARZ.ENCORE.BLACK.us">Starz Encore Black</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Classic.png" site="tvpassport.com" site_id="starz-encore-classic-hd--eastern/11435" lang="en" xmltv_id="STARZ.ENCORE.CLASSIC.us">Starz Encore Classic</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Family.png" site="tvpassport.com" site_id="starz-encore-family-hd--eastern/11441" lang="en" xmltv_id="STARZ.ENCORE.FAMILY.us">Starz Encore Family</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Encore%20Suspense.png" site="tvpassport.com" site_id="starz-encore-suspense-hd--eastern/11437" lang="en" xmltv_id="STARZ.ENCORE.SUSPENSE.us">Starz Encore Suspense</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20InBlack.png" site="tvpassport.com" site_id="starz-in-black-hd--eastern/7090" lang="en" xmltv_id="STARZ.IN.BLACK.us">Starz In Black</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20Kids%20%26%20Family.png" site="tvpassport.com" site_id="starz-kids--family-hd--eastern/7091" lang="en" xmltv_id="STARZ.KIDS.AND.FAMILY.us">Starz Kids &amp; Family</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Syfy%20HD.png" site="tvpassport.com" site_id="syfy-hd--eastern-feed/5643" lang="en" xmltv_id="SYFY.us">Syfy</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/tbs.png" site="tvpassport.com" site_id="tbs--east-hd/6090" lang="en" xmltv_id="TBS.us">TBS</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/tcm.png" site="tvpassport.com" site_id="turner-classic-movies-usa/176" lang="en" xmltv_id="TCM.us">TCM</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Weather.png" site="tvpassport.com" site_id="the-weather-channel-hd/5599" lang="en" xmltv_id="THE.WEATHER.CHANNEL.us">The Weather Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/tlc.png" site="tvpassport.com" site_id="tlc-usa-hd--eastern/5004" lang="en" xmltv_id="TLC.us">TLC</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/tnt.png" site="tvpassport.com" site_id="tnt-hd--east-feed/3037" lang="en" xmltv_id="TNT.us">TNT</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Travel.png" site="tvpassport.com" site_id="travel-us-hd--east/6150" lang="en" xmltv_id="TRAVEL.CHANNEL.us">Travel Channel</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/truTV.png" site="tvpassport.com" site_id="trutv-usa--east-hd/6996" lang="en" xmltv_id="TRUTV.us">truTV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/TV%20Land.png" site="tvpassport.com" site_id="tv-land--eastern-hd/8815" lang="en" xmltv_id="TV.LAND.us">TV Land</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Up%20Entertainment%20HD.png" site="tvpassport.com" site_id="up/5911" lang="en" xmltv_id="UP.TV.us">UP TV</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/usa%20network.png" site="tvpassport.com" site_id="usa-network--east-feed/640" lang="en" xmltv_id="USA.us">USA Network - East Feed</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/VH1.png" site="tvpassport.com" site_id="vh1-hd--eastern/6204" lang="en" xmltv_id="VH1.us">VH1</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Vice_TV.webp" site="tvpassport.com" site_id="vice-hd/7300" lang="en" xmltv_id="VICE.us">VICE HD</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WE%20tv.png" site="tvpassport.com" site_id="we-womens-entertainment--eastern/664" lang="en" xmltv_id="WE.TV.us">WE tv</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cozi%20TV.png" site="tvpassport.com" site_id="cozi--network/33436" lang="en" xmltv_id="">Cozi</channel>
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Antenna%20TV.png" site="tvpassport.com" site_id="antenna--network-hd/17231" lang="en" xmltv_id="">Antenna</channel>
 </channels>
