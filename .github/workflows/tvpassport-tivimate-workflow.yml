@@ -1037,6 +1037,144 @@ jobs:
             exit 1
           fi
 
+
+      - name: Inject curated TVPassport logos into generated guide
+        run: |
+          node <<'EOFJS'
+          const fs = require('fs')
+
+          const curatedPath = 'guides/TVPassport.channels.xml'
+          const guidePath = 'guides/TVPassport.xml'
+
+          if (!fs.existsSync(curatedPath)) {
+            console.error(`Missing curated channel list: ${curatedPath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing generated guide: ${guidePath}`)
+            process.exit(1)
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function normalize(s) {
+            return decodeXml(s)
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/\+/g, 'plus')
+              .replace(/\.us$/i, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function channelName(block) {
+            const display = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
+            return decodeXml(block.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())
+          }
+
+          function iconFromCurated(block, attrs) {
+            const iconMatch = block.match(/<icon\b[^>]*src="([^"]+)"/i)
+            if (iconMatch) return decodeXml(iconMatch[1]).trim()
+
+            const logoAttr = attr(attrs, 'logo')
+            if (logoAttr) return logoAttr
+
+            return ''
+          }
+
+          const curatedXml = fs.readFileSync(curatedPath, 'utf8')
+          let guideXml = fs.readFileSync(guidePath, 'utf8')
+
+          const logoById = new Map()
+          const logoByName = new Map()
+
+          for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
+            const attrs = match[1]
+            const block = match[0]
+            const id = attr(attrs, 'xmltv_id') || attr(attrs, 'id')
+            const name = channelName(block)
+            const logo = iconFromCurated(block, attrs)
+
+            if (!logo) continue
+
+            if (id) logoById.set(id, logo)
+            if (id) logoById.set(decodeXml(id).replace(/&amp;/g, '&'), logo)
+            if (name) logoByName.set(normalize(name), logo)
+          }
+
+          let scanned = 0
+          let added = 0
+          let updated = 0
+          let missing = 0
+
+          guideXml = guideXml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi, (block, attrs) => {
+            scanned++
+
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(block)
+
+            const logo =
+              logoById.get(id) ||
+              logoById.get(decodeXml(id).replace(/&amp;/g, '&')) ||
+              logoByName.get(normalize(name))
+
+            if (!logo) {
+              missing++
+              return block
+            }
+
+            if (/<icon\b[^>]*src="/i.test(block)) {
+              const next = block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
+              if (next !== block) updated++
+              return next
+            }
+
+            added++
+            return block.replace(/(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i, `$1<icon src="${escapeXml(logo)}"/>`)
+          })
+
+          fs.writeFileSync(guidePath, guideXml)
+
+          console.log(`Generated TVPassport channels scanned: ${scanned}`)
+          console.log(`Curated TVPassport logos available by id: ${logoById.size}`)
+          console.log(`Curated TVPassport logos available by name: ${logoByName.size}`)
+          console.log(`TVPassport icons added: ${added}`)
+          console.log(`TVPassport icons updated: ${updated}`)
+          console.log(`TVPassport channels still missing curated logo match: ${missing}`)
+
+          if (scanned < 100) {
+            console.error(`Expected at least 100 TVPassport channels, scanned ${scanned}`)
+            process.exit(1)
+          }
+
+          if (added + updated < 100) {
+            console.error('Refusing to continue: expected at least 100 TVPassport logos to be injected')
+            process.exit(1)
+          }
+          EOFJS
+
       - name: Compress TVPassport guide
         run: |
           gzip -c guides/TVPassport.xml > guides/TVPassport.xml.gz
