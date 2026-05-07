@@ -39,7 +39,7 @@ jobs:
           cd epg
           npm ci
 
-      - name: Build TiviMate channel source from guide plus raw IDs
+      - name: Build TiviMate channel source from curated list plus raw IDs
         run: |
           mkdir -p epg/sites/tvguide.com
 
@@ -1458,6 +1458,130 @@ jobs:
             exit 1
           fi
 
+
+
+      - name: Inject curated TiviMate logos into generated guide
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const curatedPath = 'guides/tvguidetivimate.xml'
+          const guidePath = 'guides/tvguidetivimateguide.xml'
+
+          if (!fs.existsSync(curatedPath)) {
+            console.error(`Missing curated channel list: ${curatedPath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing generated guide: ${guidePath}`)
+            process.exit(1)
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function normalize(s) {
+            return decodeXml(s)
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/\+/g, 'plus')
+              .replace(/\.us$/i, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function channelName(block) {
+            const m = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
+          }
+
+          const curatedXml = fs.readFileSync(curatedPath, 'utf8')
+          let guideXml = fs.readFileSync(guidePath, 'utf8')
+
+          const logoById = new Map()
+          const logoByName = new Map()
+
+          for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
+            const attrs = match[1]
+            const body = match[2]
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(match[0])
+            const iconMatch = match[0].match(/<icon\b[^>]*src="([^"]+)"/i)
+
+            if (!iconMatch) continue
+
+            const logo = decodeXml(iconMatch[1]).trim()
+            if (!logo) continue
+
+            if (id) logoById.set(id, logo)
+            if (id) logoById.set(decodeXml(id).replace(/&amp;/g, '&'), logo)
+            if (name) logoByName.set(normalize(name), logo)
+          }
+
+          let scanned = 0
+          let added = 0
+          let updated = 0
+          let missing = 0
+
+          guideXml = guideXml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi, (block, attrs) => {
+            scanned++
+
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(block)
+
+            const logo =
+              logoById.get(id) ||
+              logoById.get(decodeXml(id).replace(/&amp;/g, '&')) ||
+              logoByName.get(normalize(name))
+
+            if (!logo) {
+              missing++
+              return block
+            }
+
+            if (/<icon\b[^>]*src="/i.test(block)) {
+              const next = block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
+              if (next !== block) updated++
+              return next
+            }
+
+            added++
+            return block.replace(/(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i, `$1<icon src="${escapeXml(logo)}"/>`)
+          })
+
+          fs.writeFileSync(guidePath, guideXml)
+
+          console.log(`Generated guide channels scanned: ${scanned}`)
+          console.log(`Curated logos available: ${logoById.size}`)
+          console.log(`Icons added to generated guide: ${added}`)
+          console.log(`Icons updated in generated guide: ${updated}`)
+          console.log(`Generated guide channels still without curated logo match: ${missing}`)
+
+          if (added + updated < 100) {
+            console.error('Refusing to continue: expected at least 100 curated logos to be injected into generated guide')
+            process.exit(1)
+          }
+          EOF
 
       - name: Compress TiviMate guide
         run: |
