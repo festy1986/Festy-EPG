@@ -1037,14 +1037,6 @@ jobs:
             exit 1
           fi
 
-      - name: Apply custom logos to TVPassport guide
-        run: |
-          if [ -f scripts/apply-custom-logos.cjs ]; then
-            node scripts/apply-custom-logos.cjs guides/TVPassport.xml
-          else
-            echo "No scripts/apply-custom-logos.cjs found; skipping logo step"
-          fi
-
       - name: Compress TVPassport guide
         run: |
           gzip -c guides/TVPassport.xml > guides/TVPassport.xml.gz
