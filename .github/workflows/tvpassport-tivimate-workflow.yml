@@ -564,12 +564,12 @@ jobs:
           }
 
           function getTag(block, tag) {
-            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\s\S]*?)<\/${tag}>`, 'i'))
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
             return m ? stripTags(m[1]) : ''
           }
 
           function getTags(block, tag) {
-            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\s\S]*?)<\/${tag}>`, 'gi'))]
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
               .map(m => stripTags(m[1]))
               .filter(Boolean)
           }
@@ -744,7 +744,7 @@ jobs:
             const escaped = escapeXml(value)
             const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
             if (hasTag(block, tag)) {
-              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\s\S]*?<\/${tag}>`, 'i'), tagXml.trim())
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\s\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
             }
             return insertBeforeProgrammeEnd(block, tagXml)
           }
@@ -1202,7 +1202,7 @@ jobs:
           }
 
           function channelName(block) {
-            const display = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            const display = block.match(/<display-name\b[^>]*>([\\s\\S]*?)<\/display-name>/i)
             if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
             return decodeXml(block.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())
           }
@@ -1223,7 +1223,7 @@ jobs:
           const logoById = new Map()
           const logoByName = new Map()
 
-          for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
+          for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\\s\\S]*?)<\/channel>/gi)) {
             const attrs = match[1]
             const block = match[0]
             const id = attr(attrs, 'xmltv_id') || attr(attrs, 'id')
@@ -1244,7 +1244,7 @@ jobs:
           let updated = 0
           let missing = 0
 
-          guideXml = guideXml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi, (block, attrs) => {
+          guideXml = guideXml.replace(/<channel\b([^>]*)>([\\s\\S]*?)<\/channel>/gi, (block, attrs) => {
             scanned++
 
             const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
