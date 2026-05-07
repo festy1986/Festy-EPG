@@ -1379,9 +1379,6 @@ jobs:
             exit 1
           fi
 
-      - name: Apply custom logos to OTA guide
-        run: |
-          node scripts/apply-custom-logos.cjs guides/OTALocalsguide.xml
 
       - name: Compress OTA guide
         run: |
