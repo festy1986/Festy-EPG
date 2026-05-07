@@ -101,7 +101,7 @@ jobs:
           }
 
           const xml = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
+          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\\s\\S]*?)<\/channel>/gi)]
 
           const outputChannels = []
           const found = new Set()
@@ -114,7 +114,7 @@ jobs:
             if (!idMatch) continue
 
             const siteIdRaw = decodeXml(idMatch[1]).trim()
-            const names = [...body.matchAll(/<display-name[^>]*>([\s\S]*?)<\/display-name>/gi)]
+            const names = [...body.matchAll(/<display-name[^>]*>([\\s\\S]*?)<\/display-name>/gi)]
               .map(m => decodeXml(m[1].replace(/<[^>]+>/g, '').trim()))
               .filter(Boolean)
 
@@ -860,12 +860,12 @@ jobs:
           }
 
           function getTag(block, tag) {
-            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\s\S]*?)<\/${tag}>`, 'i'))
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
             return m ? stripTags(m[1]) : ''
           }
 
           function getTags(block, tag) {
-            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\s\S]*?)<\/${tag}>`, 'gi'))]
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
               .map(m => stripTags(m[1]))
               .filter(Boolean)
           }
@@ -1040,7 +1040,7 @@ jobs:
             const escaped = escapeXml(value)
             const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
             if (hasTag(block, tag)) {
-              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\s\S]*?<\/${tag}>`, 'i'), tagXml.trim())
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\s\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
             }
             return insertBeforeProgrammeEnd(block, tagXml)
           }
@@ -1512,7 +1512,7 @@ jobs:
           }
 
           function channelNames(block) {
-            return [...block.matchAll(/<display-name[^>]*>([\s\S]*?)<\/display-name>/gi)]
+            return [...block.matchAll(/<display-name[^>]*>([\\s\\S]*?)<\/display-name>/gi)]
               .map(m => decodeXml(m[1].replace(/<[^>]+>/g, '').trim()))
               .filter(Boolean)
           }
