@@ -1,19 +1,19 @@
-name: TVPassport-TiviMate
+name: TVguide-Tivimate
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 */12 * * *"
+    - cron: "20 */12 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: epg-guide-writes-tvpassport
+  group: epg-guide-writes-main
   cancel-in-progress: false
 
 jobs:
-  build-tvpassport-tivimate:
+  build-tvguide-tivimate:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,249 +39,552 @@ jobs:
           cd epg
           npm ci
 
-      - name: Use prepared TVPassport channel source
+      - name: Build TiviMate channel source from curated list plus raw IDs
         run: |
-          mkdir -p epg/sites/tvpassport.com
+          mkdir -p epg/sites/tvguide.com
 
-          SOURCE="guides/TVPassport.channels.xml"
-          OUTPUT="epg/sites/tvpassport.com/festy-tvpassport.channels.xml"
+          node <<'EOF'
+          const fs = require('fs')
 
-          if [ ! -s "$SOURCE" ]; then
-            echo "Missing or empty $SOURCE"
-            exit 1
-          fi
+          const sourcePath = 'guides/tvguidetivimate.xml'
+          const rawPath = 'guides/tvguide.xml'
+          const outputPath = 'epg/sites/tvguide.com/festy-tivimate.channels.xml'
 
-          CHANNELS=$(grep -c '<channel ' "$SOURCE" || true)
-          SITE_IDS=$(grep -c 'site_id="' "$SOURCE" || true)
+          const aliases = {
+            'MS.NOW.us': ['MSNBC.us'],
+            'ESPN.NEWS.us': ['ESPN.NEWS.us', 'ESPNEWS.us'],
+            'CBS.SPORTS.NETWORK.us': ['CBS.SPORTS.NETWORK.us', 'CBSSN.us'],
+            'USA.NETWORK.us': ['USA.NETWORK.us', 'USA.us'],
+            'PARAMOUNT.NETWORK.us': ['PARAMOUNT.NETWORK.us'],
+            'COMEDY.CENTRAL.us': ['COMEDY.CENTRAL.us'],
+            'BBC.AMERICA.us': ['BBC.AMERICA.us'],
+            'FOOD.NETWORK.us': ['FOOD.NETWORK.us'],
+            'TRAVEL.CHANNEL.us': ['TRAVEL.CHANNEL.us'],
+            'DISCOVERY.LIFE.us': ['DISCOVERY.LIFE.us'],
+            'DISCOVERY.FAMILY.us': ['DISCOVERY.FAMILY.us'],
+            'DISCOVERY.SCIENCE.us': ['DISCOVERY.SCIENCE.us'],
+            'INVESTIGATION.DISCOVERY.us': ['INVESTIGATION.DISCOVERY.us'],
+            'ANIMAL.PLANET.us': ['ANIMAL.PLANET.us'],
+            'NATIONAL.GEOGRAPHIC.us': ['NATIONAL.GEOGRAPHIC.us'],
+            'NAT.GEO.WILD.us': ['NAT.GEO.WILD.us'],
+            'SMITHSONIAN.CHANNEL.us': ['SMITHSONIAN.CHANNEL.us'],
+            'THE.WEATHER.CHANNEL.us': ['THE.WEATHER.CHANNEL.us'],
+            'GREAT.AMERICAN.FAMILY.us': ['GREAT.AMERICAN.FAMILY.us'],
+            'DISNEY.CHANNEL.us': ['DISNEY.CHANNEL.us'],
+            'CARTOON.NETWORK.us': ['CARTOON.NETWORK.us'],
+            'HALLMARK.CHANNEL.us': ['HALLMARK.CHANNEL.us'],
+            'HALLMARK.MYSTERY.us': ['HALLMARK.MYSTERY.us'],
+            'GAME.SHOW.NETWORK.us': ['GAME.SHOW.NETWORK.us'],
+            'COOKING.CHANNEL.us': ['COOKING.CHANNEL.us'],
+            'OUTDOOR.CHANNEL.us': ['OUTDOOR.CHANNEL.us'],
+            'AMERICAN.HEROES.CHANNEL.us': ['AMERICAN.HEROES.CHANNEL.us'],
+            'CRIME.AND.INVESTIGATION.us': ['CRIME.AND.INVESTIGATION.us'],
+            'PARAMOUNTPLUS.WITH.SHOWTIME.us': ['PARAMOUNTPLUS.WITH.SHOWTIME.us'],
+            'SHOWTIME.2.us': ['SHOWTIME.2.us'],
+            'SHOWTIME.EXTREME.us': ['SHOWTIME.EXTREME.us'],
+            'SHOWTIME.FAMILY.ZONE.us': ['SHOWTIME.FAMILY.ZONE.us'],
+            'SHOWTIME.NEXT.us': ['SHOWTIME.NEXT.us'],
+            'SHOWTIME.WOMEN.us': ['SHOWTIME.WOMEN.us'],
+            'SHOWTIME.SHOWCASE.us': ['SHOWTIME.SHOWCASE.us'],
+            'THE.MOVIE.CHANNEL.us': ['THE.MOVIE.CHANNEL.us'],
+            'TMC.XTRA.us': ['TMC.XTRA.us'],
+            'STARZ.EDGE.us': ['STARZ.EDGE.us'],
+            'STARZ.CINEMA.us': ['STARZ.CINEMA.us'],
+            'STARZ.COMEDY.us': ['STARZ.COMEDY.us'],
+            'STARZ.ENCORE.us': ['STARZ.ENCORE.us'],
+            'STARZ.ENCORE.ACTION.us': ['STARZ.ENCORE.ACTION.us'],
+            'STARZ.ENCORE.BLACK.us': ['STARZ.ENCORE.BLACK.us'],
+            'STARZ.ENCORE.CLASSIC.us': ['STARZ.ENCORE.CLASSIC.us'],
+            'STARZ.ENCORE.SUSPENSE.us': ['STARZ.ENCORE.SUSPENSE.us'],
+            'STARZ.ENCORE.FAMILY.us': ['STARZ.ENCORE.FAMILY.us'],
+            'STARZ.INBLACK.us': ['STARZ.INBLACK.us'],
+            'MGMPLUS.HITS.us': ['MGMPLUS.HITS.us'],
+            'MGMPLUS.MARQUEE.us': ['MGMPLUS.MARQUEE.us'],
+            'MGMPLUS.DRIVE.IN.us': ['MGMPLUS.DRIVE.IN.us']
+          }
 
-          echo "Prepared TVPassport channels: $CHANNELS"
-          echo "Prepared TVPassport site_ids: $SITE_IDS"
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
 
-          if [ "$CHANNELS" -lt 100 ]; then
-            echo "Invalid prepared channel source - expected at least 100 channels"
-            exit 1
-          fi
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
 
-          if [ "$SITE_IDS" -lt 100 ]; then
-            echo "Invalid prepared channel source - expected at least 100 site_id entries"
-            exit 1
-          fi
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
 
-          cp "$SOURCE" "$OUTPUT"
+          function cleanBody(body) {
+            const display = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
+            return decodeXml(body.replace(/<url>[\s\S]*?<\/url>/gi, '').replace(/<[^>]+>/g, '').trim())
+          }
 
+          function norm(s) {
+            return decodeXml(s)
+              .replace(/\.us$/i, '')
+              .replace(/&/g, 'AND')
+              .replace(/\+/g, 'PLUS')
+              .replace(/[^A-Z0-9]+/gi, '.')
+              .replace(/^\.+|\.+$/g, '')
+              .toUpperCase()
+          }
 
-      - name: Write enriched TVPassport config
+          function parseChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
+              const attrs = m[1]
+              const body = m[2]
+              return {
+                id: attr(attrs, 'id') || attr(attrs, 'xmltv_id'),
+                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'id'),
+                site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
+                name: cleanBody(body)
+              }
+            })
+          }
+
+          if (!fs.existsSync(sourcePath)) {
+            console.error(`Missing ${sourcePath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(rawPath)) {
+            console.error(`Missing ${rawPath}`)
+            process.exit(1)
+          }
+
+          const sourceChannels = parseChannels(fs.readFileSync(sourcePath, 'utf8'))
+          const rawChannels = parseChannels(fs.readFileSync(rawPath, 'utf8'))
+
+          console.log(`Curated TiviMate channel blocks parsed: ${sourceChannels.length}`)
+          console.log(`Raw TVGuide channel blocks parsed: ${rawChannels.length}`)
+
+          const rawById = new Map()
+          const rawByName = new Map()
+
+          for (const ch of rawChannels) {
+            if (ch.xmltv_id && ch.site_id) rawById.set(norm(ch.xmltv_id), ch)
+            if (ch.name && ch.site_id) rawByName.set(norm(ch.name), ch)
+          }
+
+          const out = []
+          const missing = []
+          const seen = new Set()
+
+          for (const src of sourceChannels) {
+            const wantedId = src.id || src.xmltv_id
+            const wantedName = src.name || wantedId
+
+            let siteId = src.site_id
+            let match = null
+
+            if (!siteId) {
+              const keys = [wantedId, wantedName, ...(aliases[wantedId] || [])].map(norm)
+
+              for (const key of keys) {
+                match = rawById.get(key) || rawByName.get(key)
+                if (match) break
+              }
+
+              if (match) siteId = match.site_id
+            }
+
+            if (!wantedId || !siteId) {
+              missing.push(`${wantedId || '(no id)'} (${wantedName})`)
+              continue
+            }
+
+            const key = `${wantedId}|${siteId}`
+            if (seen.has(key)) continue
+            seen.add(key)
+
+            out.push(
+              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(wantedId)}" site_id="${escapeXml(siteId)}">${escapeXml(wantedName)}</channel>`
+            )
+          }
+
+          console.log(`Source channels: ${sourceChannels.length}`)
+          console.log(`Raw channels: ${rawChannels.length}`)
+          console.log(`Built channels: ${out.length}`)
+          console.log(`Missing site_id after raw lookup: ${missing.length}`)
+
+          if (missing.length) {
+            console.log('\nMissing site_id:')
+            missing.forEach(x => console.log(`- ${x}`))
+            process.exit(1)
+          }
+
+          if (out.length < 123) {
+            console.error(`Refusing to run: expected at least 123 channels, built ${out.length}`)
+            process.exit(1)
+          }
+
+          fs.writeFileSync(
+            outputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
+          EOF
+
+      - name: Write enriched TVGuide config
         run: |
-          cat > epg/sites/tvpassport.com/tvpassport.com.config.js <<'EOFJS'
+          cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
           const axios = require('axios')
           const dayjs = require('dayjs')
-          const cheerio = require('cheerio')
-          const utc = require('dayjs/plugin/utc')
-          const timezone = require('dayjs/plugin/timezone')
-          const customParseFormat = require('dayjs/plugin/customParseFormat')
 
-          dayjs.extend(utc)
-          dayjs.extend(timezone)
-          dayjs.extend(customParseFormat)
+          const SCHEDULE_TIMEOUT = Number(process.env.TVGUIDE_SCHEDULE_TIMEOUT || 8000)
 
           module.exports = {
-            site: 'tvpassport.com',
+            site: 'tvguide.com',
+            delay: 200,
             days: 14,
 
-            url({ channel, date }) {
-              return `https://www.tvpassport.com/tv-listings/stations/${channel.site_id}/${date.format('YYYY-MM-DD')}`
+            url({ date, channel }) {
+              const [providerId, sourceId] = String(channel.site_id).split('#')
+              return `https://backend.tvguide.com/tvschedules/tvguide/${providerId}/web?start=${date.startOf('d').unix()}&duration=1440&channelSourceIds=${sourceId}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
             },
 
-            async request() {
-              return {
-                timeout: Number(process.env.TVPASSPORT_SCHEDULE_TIMEOUT || 30000),
-                headers: {
-                  Cookie: await getCookie(),
+            request: {
+              method: 'GET',
+              timeout: SCHEDULE_TIMEOUT,
+              cache: { ttl: 60 * 60 * 1000 },
+              headers() {
+                return {
+                  Referer: 'https://www.tvguide.com/',
                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
                 }
               }
             },
 
-            parser({ content, channel, date }) {
+            async parser({ content, channel, date }) {
+              const data = JSON.parse(content)
+              const items = data?.data?.items || []
+              const sourceId = String(channel.site_id).split('#').pop()
+
+              const match = items.find(item =>
+                String(item.sourceId || item.channelSourceId || item.id || item.channel?.sourceId || '') === sourceId
+              )
+
+              const schedules = match?.programSchedules || []
+
+              console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${schedules.length}`)
+
               const programs = []
-              const currentTimezone = parseCurrentTimezone(content)
-              const items = parseItems(content)
+              const batchSize = 10
 
-              console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${items.length}`)
+              for (let i = 0; i < schedules.length; i += batchSize) {
+                const batch = schedules.slice(i, i + batchSize)
 
-              for (const item of items) {
-                const $item = cheerio.load(item)
-                const start = parseStart($item, currentTimezone)
-                const duration = parseDuration($item)
-                const stop = start.add(duration, 'm')
+                const results = await Promise.all(
+                  batch.map(async item => {
+                    const details = await loadProgramDetails(item, channel)
 
-                let title = cleanTitle(parseTitle($item))
-                let episodeTitle = cleanSpaces(parseSubTitle($item))
-                const description = cleanPassportDescription(cleanSpaces(parseDescription($item)))
-                const image = parseImage($item)
-                const rating = parseRating($item)
-                const year = parseYear($item)
-                const categories = parseCategory($item)
-                const actors = parseActors($item)
-                const guest = parseGuest($item)
-                const director = parseDirector($item)
+                    const title = cleanTitle(item.title || details.title || '')
+                    const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
+                    const description = cleanSpaces(details.description || item.description || '')
 
-                if (title === 'Movie' || title === 'Cinéma') {
-                  title = episodeTitle
-                  episodeTitle = ''
-                }
+                    const seasonNumber = details.seasonNumber || details.season || ''
+                    const episodeNumber = details.episodeNumber || details.episode || ''
+                    const episodeCode = buildEpisodeCode(seasonNumber, episodeNumber)
 
-                const programType = classifyProgramType({
-                  title,
-                  episodeTitle,
-                  description,
-                  year,
-                  categories,
-                  duration
-                })
+                    const releaseYear = details.releaseYear || details.year || ''
+                    const airDate =
+                      formatTVGuideDate(details.originalAirDate || details.airDate || details.episodeAirDate) ||
+                      formatUnixDate(details.originalAirTime || details.firstAired)
 
-                const finalDescription = buildPackedDescription({
-                  programType,
-                  episodeTitle,
-                  episodeCode: '',
-                  description,
-                  airDate: '',
-                  releaseYear: year,
-                  suppressDisplayDate: false
-                })
+                    const programType = classifyProgramType({
+                      item,
+                      details,
+                      episodeTitle,
+                      seasonNumber,
+                      episodeNumber,
+                      airDate,
+                      releaseYear
+                    })
 
-                const program = {
-                  title,
-                  description: finalDescription,
-                  start,
-                  stop,
-                  category: buildCategories(programType, categories)
-                }
+                    const suppressDisplayDate = shouldSuppressDisplayDate({
+                      title,
+                      description,
+                      programType,
+                      item,
+                      details,
+                      airDate
+                    })
 
-                if (image) program.image = image
-                if (rating) program.rating = rating
-                if (actors.length) program.actors = actors
-                if (guest.length) program.guest = guest
-                if (director.length) program.director = director
+                    const finalDescription = buildPackedDescription({
+                      programType,
+                      episodeTitle,
+                      episodeCode,
+                      description,
+                      airDate,
+                      releaseYear,
+                      suppressDisplayDate
+                    })
 
-                // Keep TiviMate display clean:
-                // - <title> only for row title
-                // - episode/year/date text packed into <desc>
-                // - no separate sub-title, episode-num, or date fields
+                    const program = {
+                      title,
+                      description: finalDescription,
+                      start: dayjs.unix(item.startTime),
+                      stop: dayjs.unix(item.endTime),
+                      category: buildCategories(programType)
+                    }
 
-                programs.push(program)
+                    // Keep TiviMate display clean: title-only row, all episode/date metadata packed in <desc>.
+                    // Do not emit separate sub-title, episode-num, or date fields here, because TiviMate
+                    // may use them to rebuild/duplicate display text outside the packed description.
+
+                    return program
+                  })
+                )
+
+                programs.push(...results)
               }
 
               return programs
             }
           }
 
-          async function getCookie() {
-            const res = await axios.get('https://www.tvpassport.com/tv-listings')
-            const setCookie = res.headers['set-cookie']
-            if (!setCookie || setCookie.length === 0) return ''
-            const cookies = setCookie.map(cookie => cookie.split(';')[0])
-            return cookies.join('; ')
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
           }
 
-          function parseDescription($item) {
-            return $item('*').data('description') || ''
+          function isRetryableDetailError(err) {
+            const status = err.response?.status
+            const code = err.code
+            const message = String(err.message || '')
+
+            if ([408, 429, 500, 502, 503, 504].includes(status)) return true
+            if (['ECONNABORTED', 'ETIMEDOUT', 'ECONNRESET', 'ENOTFOUND', 'EAI_AGAIN'].includes(code)) return true
+            if (/timeout|aborted|network|socket|reset/i.test(message)) return true
+
+            return false
           }
 
-          function parseImage($item) {
-            const showpicture = $item('*').data('showpicture')
-            if (!showpicture) return null
+          async function fetchProgramDetailsOnce(url, channelName, title, timeout, label, attempt, attempts) {
             try {
-              return new URL(showpicture, 'https://cdn.tvpassport.com/image/show/960x540/').href
-            } catch {
-              return null
+              const response = await axios.get(url, {
+                timeout,
+                headers: {
+                  Referer: 'https://www.tvguide.com/',
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              })
+
+              if (attempt > 1 || label.includes('MICRO')) {
+                console.log(`[${label} OK] ${channelName} | ${title} | attempt=${attempt}/${attempts}`)
+              }
+
+              return {
+                ok: true,
+                value: response.data?.data?.item || {}
+              }
+            } catch (err) {
+              const status = err.response?.status || err.code || err.message || 'unknown'
+
+              if (err.response?.status === 404) {
+                console.log(`[${label} MISSING] ${channelName} | ${title} | 404`)
+                return {
+                  ok: true,
+                  value: {}
+                }
+              }
+
+              return {
+                ok: false,
+                retryable: isRetryableDetailError(err),
+                status
+              }
             }
           }
 
-          function parseTitle($item) {
-            return $item('*').data('showname')?.toString() || ''
+          async function tryProgramDetails(url, channelName, title, options) {
+            const { label, attempts, timeout, baseDelay, maxDelay } = options
+
+            for (let attempt = 1; attempt <= attempts; attempt++) {
+              const result = await fetchProgramDetailsOnce(url, channelName, title, timeout, label, attempt, attempts)
+
+              if (result.ok) return result.value
+
+              if (!result.retryable) {
+                console.log(`[${label} FAIL] ${channelName} | ${title} | ${result.status}`)
+                return null
+              }
+
+              if (attempt < attempts) {
+                const delay = Math.min(maxDelay, baseDelay * Math.pow(2, attempt - 1)) + Math.floor(Math.random() * 500)
+                console.log(`[${label} RETRY] ${channelName} | ${title} | ${result.status} | attempt=${attempt}/${attempts} | wait=${delay}ms`)
+                await sleep(delay)
+              } else {
+                console.log(`[${label} EXHAUSTED] ${channelName} | ${title} | ${result.status} | attempts=${attempts}`)
+              }
+            }
+
+            return null
           }
 
-          function parseSubTitle($item) {
-            return $item('*').data('episodetitle')?.toString() || ''
+          async function loadProgramDetails(item, channel) {
+            if (!item.programDetails) return {}
+
+            const url = item.programDetails.includes('?')
+              ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+              : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
+
+            const channelName = channel?.name || 'Unknown channel'
+            const title = item.title || 'Unknown title'
+
+            const fastResult = await tryProgramDetails(url, channelName, title, {
+              label: 'DETAIL FAST',
+              attempts: 1,
+              timeout: 8000,
+              baseDelay: 0,
+              maxDelay: 0
+            })
+
+            if (fastResult) return fastResult
+
+            const backupResult = await tryProgramDetails(url, channelName, title, {
+              label: 'DETAIL BACKUP',
+              attempts: 5,
+              timeout: 8000,
+              baseDelay: 750,
+              maxDelay: 30000
+            })
+
+            if (backupResult) return backupResult
+
+            console.log(`[DETAIL MICRO PASS] ${channelName} | ${title} | starting slow cleanup pass`)
+
+            const microResult = await tryProgramDetails(url, channelName, title, {
+              label: 'DETAIL MICRO',
+              attempts: 4,
+              timeout: 20000,
+              baseDelay: 5000,
+              maxDelay: 60000
+            })
+
+            if (microResult) return microResult
+
+            console.log(`[DETAIL FINAL MISS] ${channelName} | ${title} | no details after fast + backup + micro`)
+            return {}
           }
 
-          function parseYear($item) {
-            return $item('*').data('year')?.toString() || ''
-          }
+          function classifyProgramType({ item, details, episodeTitle, seasonNumber, episodeNumber, airDate, releaseYear }) {
+            const haystack = [
+              item.type,
+              item.programType,
+              item.entityType,
+              item.category,
+              item.subcategory,
+              item.genres,
+              details.type,
+              details.programType,
+              details.entityType,
+              details.category,
+              details.subcategory,
+              details.genres,
+              details.seriesId,
+              details.showId,
+              details.episodeId
+            ]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
 
-          function parseCategory($item) {
-            const showtype = $item('*').data('showtype')
-            return showtype ? String(showtype).split(', ').filter(Boolean) : []
-          }
+            const hasEpisodeSignals = Boolean(
+              episodeTitle ||
+              seasonNumber ||
+              episodeNumber ||
+              details.episodeNumber ||
+              details.seasonNumber ||
+              details.episodeTitle ||
+              details.subtitle ||
+              details.subTitle ||
+              details.originalAirDate ||
+              details.episodeAirDate ||
+              details.seriesId ||
+              details.showId ||
+              details.episodeId
+            )
 
-          function parseActors($item) {
-            const cast = $item('*').data('cast')
-            return cast ? String(cast).split(', ').filter(Boolean) : []
-          }
-
-          function parseDirector($item) {
-            const director = $item('*').data('director')
-            return director ? String(director).split(', ').filter(Boolean) : []
-          }
-
-          function parseGuest($item) {
-            const guest = $item('*').data('guest')
-            return guest ? String(guest).split(', ').filter(Boolean) : []
-          }
-
-          function parseRating($item) {
-            const rating = $item('*').data('rating')
-            return rating
-              ? {
-                  system: 'MPA',
-                  value: String(rating).replace(/^TV/, 'TV-')
-                }
-              : null
-          }
-
-          function parseStart($item, currentTimezone) {
-            const time = $item('*').data('st')
-            return dayjs.tz(time, 'YYYY-MM-DD HH:mm:ss', currentTimezone)
-          }
-
-          function parseDuration($item) {
-            const duration = $item('*').data('duration')
-            return parseInt(duration || 0, 10)
-          }
-
-          function parseItems(content) {
-            if (!content) return []
-            const $ = cheerio.load(content)
-            return $('.station-listings .list-group-item').toArray()
-          }
-
-          function parseCurrentTimezone(content) {
-            if (!content) return 'America/New_York'
-            const $ = cheerio.load(content)
-            return $('#timezone_selector').val() || 'America/New_York'
-          }
-
-          function classifyProgramType({ title, episodeTitle, description, year, categories, duration }) {
-            const haystack = [title, description, categories].flat().filter(Boolean).join(' ').toLowerCase()
-
-            const hasEpisodeSignals = Boolean(episodeTitle)
             if (/mini[\s-]?series|limited series|limited-series/.test(haystack)) return 'miniseries'
             if (/series|episode|tv show|television|scripted|reality|documentary series/.test(haystack)) return 'series'
             if (hasEpisodeSignals) return 'series'
             if (/movie|film|feature film|cinema/.test(haystack)) return 'movie'
-            if (duration >= 75 && year && !hasEpisodeSignals) return 'movie'
+
+            const durationMinutes = getDurationMinutes(item)
+            if (durationMinutes >= 75 && releaseYear && !airDate && !hasEpisodeSignals) return 'movie'
 
             return 'program'
           }
 
-          function buildCategories(programType, originalCategories) {
-            const categories = Array.isArray(originalCategories) ? originalCategories.filter(Boolean) : []
+          function getDurationMinutes(item) {
+            const start = Number(item.startTime || 0)
+            const end = Number(item.endTime || 0)
+            if (!start || !end || end <= start) return 0
+            return Math.round((end - start) / 60)
+          }
 
-            if (programType === 'movie') return unique(['Movie', ...categories])
-            if (programType === 'miniseries') return unique(['Miniseries', 'Series', ...categories])
-            if (programType === 'series') return unique(['Series', ...categories])
-            return unique(categories.length ? categories : ['Program'])
+          function buildCategories(programType) {
+            if (programType === 'movie') return ['Movie']
+            if (programType === 'miniseries') return ['Miniseries', 'Series']
+            if (programType === 'series') return ['Series']
+            return ['Program']
+          }
+
+          function shouldSuppressDisplayDate({ title, description, programType, item, details, airDate }) {
+            if (!airDate) return false
+
+            const haystack = [
+              title,
+              description,
+              item?.title,
+              item?.type,
+              item?.programType,
+              item?.entityType,
+              item?.category,
+              item?.subcategory,
+              item?.genres,
+              details?.type,
+              details?.programType,
+              details?.entityType,
+              details?.category,
+              details?.subcategory,
+              details?.genres
+            ]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const liveOrCurrent = /\b(live|news|newscast|weather|sports|game|match|tournament|football|basketball|baseball|hockey|soccer|golf|tennis|racing|wwe|ufc|mma|boxing|pregame|postgame|post-game|pre-game)\b/.test(haystack)
+            if (!liveOrCurrent) return false
+
+            const scheduleDate = item?.startTime ? dayjs.unix(Number(item.startTime)) : null
+            const parsedAirDate = parseDisplayDate(airDate)
+
+            if (!scheduleDate || !scheduleDate.isValid() || !parsedAirDate || !parsedAirDate.isValid()) return true
+
+            // For live/current news and sports, the original air date is usually just the broadcast date.
+            // Suppress it when it is close to the scheduled airing. Keep it when it is genuinely old.
+            return Math.abs(scheduleDate.diff(parsedAirDate, 'day')) <= 45
+          }
+
+          function parseDisplayDate(value) {
+            const raw = String(value || '').trim()
+            const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+            if (!m) return dayjs(raw)
+            return dayjs(`${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`)
           }
 
           function buildPackedDescription({ programType, episodeTitle, episodeCode, description, airDate, releaseYear, suppressDisplayDate }) {
@@ -313,23 +616,14 @@ jobs:
               return finalDescription
             }
 
-            const dateOrYear = suppressDisplayDate ? releaseYear : airDate || releaseYear
+            const dateOrYear = suppressDisplayDate ? releaseYear : (airDate || releaseYear)
             if (dateOrYear && !descriptionIncludesDisplayDate(finalDescription, dateOrYear)) {
-              finalDescription = finalDescription ? `${finalDescription} (${dateOrYear})` : `(${dateOrYear})`
+              finalDescription = finalDescription
+                ? `${finalDescription} (${dateOrYear})`
+                : `(${dateOrYear})`
             }
 
             return finalDescription
-          }
-
-          function cleanPassportDescription(value) {
-            return cleanSpaces(value)
-              // Remove actor-name parentheticals from Passport descriptions.
-              // Example:
-              // "James Bond (Daniel Craig) must..." -> "James Bond must..."
-              // Keeps years/dates like (2012), ratings, and normal description text.
-              .replace(/\s*\(([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})(?:,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})*\)/g, '')
-              .replace(/\s+/g, ' ')
-              .trim()
           }
 
           function cleanPackedDescription(value) {
@@ -345,8 +639,19 @@ jobs:
             return new RegExp(`\\(${escaped}\\)\\s*$`).test(description) || description.includes(String(dateOrYear))
           }
 
+          function buildEpisodeCode(seasonNumber, episodeNumber) {
+            const s = String(seasonNumber || '').trim()
+            const e = String(episodeNumber || '').trim()
+
+            if (!s && !e) return ''
+            if (s && e) return `S${s}E${e}`
+            if (e) return `E${e}`
+            return `S${s}`
+          }
+
           function cleanTitle(value) {
-            return cleanSpaces(value)
+            return String(value || '')
+              .replace(/\s+/g, ' ')
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
               .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
@@ -361,19 +666,42 @@ jobs:
               .trim()
           }
 
-          function unique(values) {
-            return [...new Set(values.filter(Boolean))]
-          }
-          EOFJS
+          function formatTVGuideDate(value) {
+            const raw = String(value || '').trim()
+            if (!raw) return ''
 
-      - name: Grab TVPassport guide
+            const tvMatch = raw.match(/\/Date\((\d+)\)\//)
+            if (tvMatch) {
+              return dayjs(Number(tvMatch[1])).format('MM/DD/YYYY')
+            }
+
+            const parsed = dayjs(raw)
+            if (parsed.isValid()) return parsed.format('MM/DD/YYYY')
+
+            return ''
+          }
+
+          function formatUnixDate(value) {
+            if (!value) return ''
+            const parsed = dayjs.unix(Number(value))
+            return parsed.isValid() ? parsed.format('MM/DD/YYYY') : ''
+          }
+
+          function normalizeXmltvDate(value) {
+            const parsed = dayjs(value)
+            if (!parsed.isValid()) return ''
+            return parsed.format('YYYYMMDD')
+          }
+          EOF
+
+      - name: Grab TiviMate guide with schedule recovery
         run: |
           cd epg
 
-          rm -f ../guides/TVPassport.xml
-          rm -f ../guides/TVPassport.pass*.xml
-          rm -f ../guides/TVPassport.pass*.log
-          rm -f ../guides/TVPassport.pass*.count
+          rm -f ../guides/tvguidetivimateguide.xml
+          rm -f ../guides/tvguidetivimateguide.pass*.xml
+          rm -f ../guides/tvguidetivimateguide.pass*.log
+          rm -f ../guides/tvguidetivimateguide.pass*.count
 
           run_pass() {
             PASS_NAME="$1"
@@ -384,18 +712,18 @@ jobs:
             echo "============================================================"
             echo "Starting $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
-            echo "TVPASSPORT_SCHEDULE_TIMEOUT=$SCHEDULE_TIMEOUT"
+            echo "TVGUIDE_SCHEDULE_TIMEOUT=$SCHEDULE_TIMEOUT"
             echo "============================================================"
 
-            export TVPASSPORT_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
+            export TVGUIDE_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
 
             set +e
             npx tsx scripts/commands/epg/grab.ts \
-              --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
-              --output="../guides/TVPassport.${PASS_NAME}.xml" \
+              --channels=sites/tvguide.com/festy-tivimate.channels.xml \
+              --output="../guides/tvguidetivimateguide.${PASS_NAME}.xml" \
               --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
-              2>&1 | tee "../guides/TVPassport.${PASS_NAME}.log"
+              2>&1 | tee "../guides/tvguidetivimateguide.${PASS_NAME}.log"
 
             STATUS=${PIPESTATUS[0]}
             set -e
@@ -404,51 +732,88 @@ jobs:
               echo "$PASS_NAME exited with status $STATUS"
             fi
 
-            if [ ! -f "../guides/TVPassport.${PASS_NAME}.xml" ]; then
+            if [ ! -f "../guides/tvguidetivimateguide.${PASS_NAME}.xml" ]; then
               echo "$PASS_NAME did not create an XML file"
-              echo "0" > "../guides/TVPassport.${PASS_NAME}.programmes.count"
-              echo "0" > "../guides/TVPassport.${PASS_NAME}.descriptions.count"
-              echo "999999" > "../guides/TVPassport.${PASS_NAME}.issues.count"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.descriptions.count"
+              echo "999999" > "../guides/tvguidetivimateguide.${PASS_NAME}.issues.count"
               return 0
             fi
 
-            PR=$(grep -c '<programme ' "../guides/TVPassport.${PASS_NAME}.xml" || true)
-            DESC=$(grep -c '<desc ' "../guides/TVPassport.${PASS_NAME}.xml" || true)
+            PR=$(grep -c '<programme ' "../guides/tvguidetivimateguide.${PASS_NAME}.xml" || true)
+            DESC=$(grep -c '<desc ' "../guides/tvguidetivimateguide.${PASS_NAME}.xml" || true)
 
-            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/TVPassport.${PASS_NAME}.log" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/tvguidetivimateguide.${PASS_NAME}.log" || true)
 
-            echo "$PR" > "../guides/TVPassport.${PASS_NAME}.programmes.count"
-            echo "$DESC" > "../guides/TVPassport.${PASS_NAME}.descriptions.count"
-            echo "$ISSUE_COUNT" > "../guides/TVPassport.${PASS_NAME}.issues.count"
+            echo "$PR" > "../guides/tvguidetivimateguide.${PASS_NAME}.programmes.count"
+            echo "$DESC" > "../guides/tvguidetivimateguide.${PASS_NAME}.descriptions.count"
+            echo "$ISSUE_COUNT" > "../guides/tvguidetivimateguide.${PASS_NAME}.issues.count"
 
             echo "$PASS_NAME programmes: $PR"
             echo "$PASS_NAME descriptions: $DESC"
-            echo "$PASS_NAME possible issues: $ISSUE_COUNT"
+            echo "$PASS_NAME possible schedule/detail issues: $ISSUE_COUNT"
           }
 
-          run_pass "pass1-fast" 8 30000
+          run_pass "pass1-fast" 10 8000
 
-          PASS1_ISSUES=$(cat ../guides/TVPassport.pass1-fast.issues.count)
+          PASS1_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
 
           if [ "$PASS1_ISSUES" -gt 0 ]; then
             echo ""
-            echo "Fast pass had possible issues, running backup pass..."
-            run_pass "pass2-backup" 4 45000
+            echo "Fast pass had possible issues, running backup schedule pass..."
+            run_pass "pass2-backup" 5 15000
           else
             echo ""
-            echo "Fast pass had no obvious issues. Skipping backup pass."
+            echo "Fast pass had no obvious schedule issues. Skipping backup pass."
           fi
 
           BEST_PASS="pass1-fast"
-          BEST_PR=$(cat ../guides/TVPassport.pass1-fast.programmes.count)
-          BEST_DESC=$(cat ../guides/TVPassport.pass1-fast.descriptions.count)
-          BEST_ISSUES=$(cat ../guides/TVPassport.pass1-fast.issues.count)
+          BEST_PR=$(cat ../guides/tvguidetivimateguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/tvguidetivimateguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
 
-          for PASS in pass2-backup; do
-            if [ -f "../guides/TVPassport.${PASS}.programmes.count" ]; then
-              CANDIDATE_PR=$(cat "../guides/TVPassport.${PASS}.programmes.count")
-              CANDIDATE_DESC=$(cat "../guides/TVPassport.${PASS}.descriptions.count")
-              CANDIDATE_ISSUES=$(cat "../guides/TVPassport.${PASS}.issues.count")
+          if [ -f ../guides/tvguidetivimateguide.pass2-backup.programmes.count ]; then
+            PASS2_PR=$(cat ../guides/tvguidetivimateguide.pass2-backup.programmes.count)
+            PASS2_DESC=$(cat ../guides/tvguidetivimateguide.pass2-backup.descriptions.count)
+            PASS2_ISSUES=$(cat ../guides/tvguidetivimateguide.pass2-backup.issues.count)
+
+            if [ "$PASS2_PR" -gt "$BEST_PR" ]; then
+              BEST_PASS="pass2-backup"
+              BEST_PR="$PASS2_PR"
+              BEST_DESC="$PASS2_DESC"
+              BEST_ISSUES="$PASS2_ISSUES"
+            elif [ "$PASS2_PR" -eq "$BEST_PR" ] && [ "$PASS2_DESC" -gt "$BEST_DESC" ]; then
+              BEST_PASS="pass2-backup"
+              BEST_PR="$PASS2_PR"
+              BEST_DESC="$PASS2_DESC"
+              BEST_ISSUES="$PASS2_ISSUES"
+            elif [ "$PASS2_PR" -eq "$BEST_PR" ] && [ "$PASS2_DESC" -eq "$BEST_DESC" ] && [ "$PASS2_ISSUES" -lt "$BEST_ISSUES" ]; then
+              BEST_PASS="pass2-backup"
+              BEST_PR="$PASS2_PR"
+              BEST_DESC="$PASS2_DESC"
+              BEST_ISSUES="$PASS2_ISSUES"
+            fi
+          fi
+
+          if [ "$BEST_ISSUES" -gt 0 ]; then
+            echo ""
+            echo "Best pass still had possible issues, running slow micro schedule pass..."
+            run_pass "pass3-micro" 2 30000
+          else
+            echo ""
+            echo "Best pass has no obvious schedule issues. Skipping micro schedule pass."
+          fi
+
+          BEST_PASS="pass1-fast"
+          BEST_PR=$(cat ../guides/tvguidetivimateguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/tvguidetivimateguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
+
+          for PASS in pass2-backup pass3-micro; do
+            if [ -f "../guides/tvguidetivimateguide.${PASS}.programmes.count" ]; then
+              CANDIDATE_PR=$(cat "../guides/tvguidetivimateguide.${PASS}.programmes.count")
+              CANDIDATE_DESC=$(cat "../guides/tvguidetivimateguide.${PASS}.descriptions.count")
+              CANDIDATE_ISSUES=$(cat "../guides/tvguidetivimateguide.${PASS}.issues.count")
 
               if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
                 BEST_PASS="$PASS"
@@ -470,26 +835,39 @@ jobs:
           done
 
           echo ""
-          echo "Selected best pass: $BEST_PASS"
+          echo "============================================================"
+          echo "Selected best schedule pass: $BEST_PASS"
           echo "Best programmes: $BEST_PR"
           echo "Best descriptions: $BEST_DESC"
           echo "Best possible issues: $BEST_ISSUES"
+          echo "============================================================"
 
-          cp "../guides/TVPassport.${BEST_PASS}.xml" "../guides/TVPassport.xml"
+          cp "../guides/tvguidetivimateguide.${BEST_PASS}.xml" "../guides/tvguidetivimateguide.xml"
+
+          echo ""
+          echo "Pass summary:"
+          for PASS in pass1-fast pass2-backup pass3-micro; do
+            if [ -f "../guides/tvguidetivimateguide.${PASS}.programmes.count" ]; then
+              echo "$PASS:"
+              echo "  programmes:   $(cat ../guides/tvguidetivimateguide.${PASS}.programmes.count)"
+              echo "  descriptions: $(cat ../guides/tvguidetivimateguide.${PASS}.descriptions.count)"
+              echo "  issues:       $(cat ../guides/tvguidetivimateguide.${PASS}.issues.count)"
+            fi
+          done
 
           cd ..
 
-      - name: Fill missing TVPassport metadata from TMDB, then TVMaze
+      - name: Fill missing TiviMate metadata from TMDB, then TVMaze
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: |
           node <<'EOFJS'
           const fs = require('fs')
 
-          const guidePath = 'guides/TVPassport.xml'
-          const cachePath = 'guides/.tvmaze-tvpassport-cache.json'
+          const guidePath = 'guides/tvguidetivimateguide.xml'
+          const cachePath = 'guides/.tvmaze-tivimate-cache.json'
           const tmdbApiKey = process.env.TMDB_API_KEY || ''
-          const tmdbUserAgent = 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0'
+          const tmdbUserAgent = 'festy-epg-tivimate-tmdb-tvmaze-missing-only/1.0'
 
           if (!fs.existsSync(guidePath)) {
             console.error(`Missing ${guidePath}`)
@@ -992,7 +1370,7 @@ jobs:
 
             stats.tvmazeShowsSearched++
             const url = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`
-            const result = await fetchJson(url, `tvmaze search ${title}`, { 'User-Agent': 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0' })
+            const result = await fetchJson(url, `tvmaze search ${title}`, { 'User-Agent': 'festy-epg-tivimate-tmdb-tvmaze-missing-only/1.0' })
             const candidates = Array.isArray(result) ? result.map(x => x.show).filter(Boolean) : []
 
             let best = null
@@ -1019,7 +1397,7 @@ jobs:
             const key = `episodes:${showId}`
             if (Object.prototype.hasOwnProperty.call(cache.tvmaze, key)) return cache.tvmaze[key]
 
-            const episodes = await fetchJson(`https://api.tvmaze.com/shows/${showId}/episodes`, `tvmaze episodes ${showId}`, { 'User-Agent': 'festy-epg-tvpassport-tmdb-tvmaze-missing-only/1.0' })
+            const episodes = await fetchJson(`https://api.tvmaze.com/shows/${showId}/episodes`, `tvmaze episodes ${showId}`, { 'User-Agent': 'festy-epg-tivimate-tmdb-tvmaze-missing-only/1.0' })
             cache.tvmaze[key] = Array.isArray(episodes) ? episodes : []
             await sleep(250)
             return cache.tvmaze[key]
@@ -1189,39 +1567,40 @@ jobs:
           })
           EOFJS
 
-      - name: Validate TVPassport output
+      - name: Validate TiviMate output
         run: |
-          CH=$(grep -c '<channel ' guides/TVPassport.xml || true)
-          PR=$(grep -c '<programme ' guides/TVPassport.xml || true)
-          DESC=$(grep -c '<desc ' guides/TVPassport.xml || true)
+          CH=$(grep -c '<channel ' guides/tvguidetivimateguide.xml || true)
+          PR=$(grep -c '<programme ' guides/tvguidetivimateguide.xml || true)
+          DESC=$(grep -c '<desc ' guides/tvguidetivimateguide.xml || true)
 
-          echo "TVPassport channels: $CH"
-          echo "TVPassport programmes: $PR"
-          echo "TVPassport descriptions: $DESC"
+          echo "TiviMate channels: $CH"
+          echo "TiviMate programmes: $PR"
+          echo "TiviMate descriptions: $DESC"
 
-          if [ "$CH" -lt 100 ]; then
-            echo "Invalid TVPassport output - expected at least 100 channels"
+          if [ "$CH" -lt 123 ]; then
+            echo "Invalid TiviMate output - expected at least 123 channels"
             exit 1
           fi
 
           if [ "$PR" -lt 1 ]; then
-            echo "Invalid TVPassport output - no programmes"
+            echo "Invalid TiviMate output - no programmes"
             exit 1
           fi
 
           if [ "$DESC" -lt 1 ]; then
-            echo "Invalid TVPassport output - no descriptions"
+            echo "Invalid TiviMate output - no descriptions"
             exit 1
           fi
 
 
-      - name: Inject curated TVPassport logos into generated guide
+
+      - name: Inject curated TiviMate logos into generated guide
         run: |
-          node <<'EOFJS'
+          node <<'EOF'
           const fs = require('fs')
 
-          const curatedPath = 'guides/TVPassport.channels.xml'
-          const guidePath = 'guides/TVPassport.xml'
+          const curatedPath = 'guides/tvguidetivimate.xml'
+          const guidePath = 'guides/tvguidetivimateguide.xml'
 
           if (!fs.existsSync(curatedPath)) {
             console.error(`Missing curated channel list: ${curatedPath}`)
@@ -1266,19 +1645,8 @@ jobs:
           }
 
           function channelName(block) {
-            const display = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
-            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
-            return decodeXml(block.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())
-          }
-
-          function iconFromCurated(block, attrs) {
-            const iconMatch = block.match(/<icon\b[^>]*src="([^"]+)"/i)
-            if (iconMatch) return decodeXml(iconMatch[1]).trim()
-
-            const logoAttr = attr(attrs, 'logo')
-            if (logoAttr) return logoAttr
-
-            return ''
+            const m = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
           }
 
           const curatedXml = fs.readFileSync(curatedPath, 'utf8')
@@ -1289,11 +1657,14 @@ jobs:
 
           for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
             const attrs = match[1]
-            const block = match[0]
-            const id = attr(attrs, 'xmltv_id') || attr(attrs, 'id')
-            const name = channelName(block)
-            const logo = iconFromCurated(block, attrs)
+            const body = match[2]
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(match[0])
+            const iconMatch = match[0].match(/<icon\b[^>]*src="([^"]+)"/i)
 
+            if (!iconMatch) continue
+
+            const logo = decodeXml(iconMatch[1]).trim()
             if (!logo) continue
 
             if (id) logoById.set(id, logo)
@@ -1302,8 +1673,6 @@ jobs:
           }
 
           let scanned = 0
-          let matched = 0
-          let alreadyCorrect = 0
           let added = 0
           let updated = 0
           let missing = 0
@@ -1324,18 +1693,10 @@ jobs:
               return block
             }
 
-            matched++
-
-            const existingIcon = block.match(/<icon\b[^>]*src="([^"]+)"/i)
-            if (existingIcon) {
-              const existingLogo = decodeXml(existingIcon[1]).trim()
-              if (existingLogo === logo) {
-                alreadyCorrect++
-                return block
-              }
-
-              updated++
-              return block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
+            if (/<icon\b[^>]*src="/i.test(block)) {
+              const next = block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
+              if (next !== block) updated++
+              return next
             }
 
             added++
@@ -1344,29 +1705,21 @@ jobs:
 
           fs.writeFileSync(guidePath, guideXml)
 
-          console.log(`Generated TVPassport channels scanned: ${scanned}`)
-          console.log(`Curated TVPassport logos available by id: ${logoById.size}`)
-          console.log(`Curated TVPassport logos available by name: ${logoByName.size}`)
-          console.log(`TVPassport channels matched to curated logos: ${matched}`)
-          console.log(`TVPassport icons already correct: ${alreadyCorrect}`)
-          console.log(`TVPassport icons added: ${added}`)
-          console.log(`TVPassport icons updated: ${updated}`)
-          console.log(`TVPassport channels still missing curated logo match: ${missing}`)
+          console.log(`Generated guide channels scanned: ${scanned}`)
+          console.log(`Curated logos available: ${logoById.size}`)
+          console.log(`Icons added to generated guide: ${added}`)
+          console.log(`Icons updated in generated guide: ${updated}`)
+          console.log(`Generated guide channels still without curated logo match: ${missing}`)
 
-          if (scanned < 100) {
-            console.error(`Expected at least 100 TVPassport channels, scanned ${scanned}`)
+          if (added + updated < 100) {
+            console.error('Refusing to continue: expected at least 100 curated logos to be injected into generated guide')
             process.exit(1)
           }
+          EOF
 
-          if (matched < 100) {
-            console.error('Refusing to continue: expected at least 100 TVPassport channels to match curated logos')
-            process.exit(1)
-          }
-          EOFJS
-
-      - name: Compress TVPassport guide
+      - name: Compress TiviMate guide
         run: |
-          gzip -c guides/TVPassport.xml > guides/TVPassport.xml.gz
+          gzip -c guides/tvguidetivimateguide.xml > guides/tvguidetivimateguide.xml.gz
 
       - name: Ignore enrichment cache files
         run: |
@@ -1391,7 +1744,7 @@ jobs:
           rm -f guides/.tvmaze-cache.json
           rm -f guides/.tmdb-cache.json
 
-      - name: Commit and push TVPassport guide safely
+      - name: Commit and push TiviMate guide safely
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -1400,17 +1753,17 @@ jobs:
 
           # Preserve compressed guides created by the other workflows.
           # This workflow should only update its own XML/GZ output.
-          git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+          git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-          git add guides/TVPassport.xml guides/TVPassport.xml.gz
-          git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
+          git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
-            echo "No TVPassport guide changes to commit"
+            echo "No TiviMate guide changes to commit"
             exit 0
           fi
 
-          git commit -m "Update TVPassport guide"
+          git commit -m "Update TiviMate guide"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
@@ -1425,15 +1778,15 @@ jobs:
             git fetch origin main
             git rebase origin/main
 
-            git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+            git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-            git add guides/TVPassport.xml guides/TVPassport.xml.gz
-            git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
+            git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
               echo "No new commit needed after rebase, retrying push..."
             else
-              git commit -m "Update TVPassport guide"
+              git commit -m "Update TiviMate guide"
             fi
 
             sleep 5
