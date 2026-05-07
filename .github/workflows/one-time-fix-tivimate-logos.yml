@@ -1,4 +1,4 @@
-name: One-time fix tvguidetivimate source logos
+name: One-time copy missing TiviMate logos
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  fix-source-logos-once:
+  copy-missing-logos-once:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,28 +16,62 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fix logos inside guides/tvguidetivimate.xml
+      - name: Copy selected logos into guides/tvguidetivimate.xml
         run: |
           node <<'EOF'
           const fs = require('fs')
 
-          const guidePath = 'guides/tvguidetivimate.xml'
+          const sourcePath = 'guides/tvguidetivimateguide.xml'
+          const targetPath = 'guides/tvguidetivimate.xml'
 
-          const fixes = {
-            'FS1.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%201%20HD.png',
-            'FS2.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%202.png',
-            'DISCOVERY.SCIENCE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Science%20HD.png',
-            'SMITHSONIAN.CHANNEL.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png',
-            'LMN.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/lifetime%20movie%20network.png',
-            'POP.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Pop%20Network%20HD.png',
-            'VICE.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Vice_TV.webp',
-            'CRIME.AND.INVESTIGATION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png',
-            'HALLMARK.DRAMA.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Hallmark%20Family.png',
-            'CINEMAX.ACTION.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Action_2025.svg',
-            'NESN.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network.png',
-            'NESN.PLUS.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Sports%20Network%20Plus%20HD.png',
-            'NECN.us': 'https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Cable%20News.png'
-          }
+          const targetIds = [
+            'NAT.GEO.WILD.us',
+            'GREAT.AMERICAN.FAMILY.us',
+            'THE.MOVIE.CHANNEL.us',
+            'TMC.XTRA.us',
+            'STARZ.ENCORE.SUSPENSE.us',
+            'MGMPLUS.HITS.us',
+            'MGMPLUS.MARQUEE.us',
+            'MGMPLUS.DRIVE.IN.us',
+            'MOVIEPLEX.us',
+            'INDIEPLEX.us',
+            'ESPN2.us',
+            'TRUTV.us',
+            'A&E.us',
+            'FX.MOVIE.CHANNEL.us',
+            'SyFy.us',
+            'MAGNOLIA.NETWORK.us',
+            'DESTINATION.AMERICA.us',
+            'FOX.NEWS.CHANNEL.us',
+            'E!.us',
+            'MTV2.us',
+            'UPTV.us',
+            'AXS.TV.us',
+            'HBO.HITS.us',
+            'HBO.DRAMA.us',
+            'CINEMAX.HITS.us',
+            'CINEMAX.CLASSICS.us',
+            'SHOXBET.us',
+            'STARZ.KIDS.And.FAMILY.us',
+            'MGM+.us',
+            'NBC.SPORTS.BOSTON.us',
+            'NFL.NETWORK.us',
+            'NHL.NETWORK.us',
+            'MLB.NETWORK.us',
+            'NBA.TV.us',
+            'TV.LAND.us',
+            'DISCOVERY.CHANNEL.us',
+            'CNN.us',
+            'FREEFRM.us',
+            'FX.us',
+            'FYIHD.us',
+            'HBO.us',
+            'HBO.MOVIES.us',
+            'HIST.us',
+            'MTV.us',
+            'RETRPLEXHD.us',
+            'SHOWTIME.SHOWCASE.us'
+          ]
 
           function escapeRegExp(value) {
             return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -51,65 +85,121 @@ jobs:
               .replace(/>/g, '&gt;')
           }
 
-          function upsertIcon(channelBlock, logoUrl) {
+          function decodeXml(value) {
+            return String(value)
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function xmlId(id) {
+            return escapeXml(id)
+          }
+
+          function findChannelBlock(xml, id) {
+            const idPattern = escapeRegExp(xmlId(id))
+            const re = new RegExp(
+              `<channel\\b[^>]*\\bid="${idPattern}"[^>]*>[\\s\\S]*?<\\/channel>`,
+              'i'
+            )
+            const match = xml.match(re)
+            return match ? match[0] : ''
+          }
+
+          function getIconSrc(block) {
+            const match = block.match(/<icon\b[^>]*\bsrc="([^"]+)"[^>]*\/?>/i)
+            return match ? decodeXml(match[1]) : ''
+          }
+
+          function upsertIcon(block, logoUrl) {
             const icon = `<icon src="${escapeXml(logoUrl)}"/>`
 
-            if (/<icon\b[^>]*\/?>/i.test(channelBlock)) {
-              return channelBlock.replace(/<icon\b[^>]*\/?>/i, icon)
+            if (/<icon\b[^>]*\/?>/i.test(block)) {
+              return block.replace(/<icon\b[^>]*\/?>/i, icon)
             }
 
-            if (/<display-name\b[^>]*>[\s\S]*?<\/display-name>/i.test(channelBlock)) {
-              return channelBlock.replace(
+            if (/<display-name\b[^>]*>[\s\S]*?<\/display-name>/i.test(block)) {
+              return block.replace(
                 /(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i,
                 `$1${icon}`
               )
             }
 
-            return channelBlock.replace(/(<channel\b[^>]*>)/i, `$1${icon}`)
+            return block.replace(/(<channel\b[^>]*>)/i, `$1${icon}`)
           }
 
-          if (!fs.existsSync(guidePath)) {
-            console.error(`Missing ${guidePath}`)
+          if (!fs.existsSync(sourcePath)) {
+            console.error(`Missing source file: ${sourcePath}`)
             process.exit(1)
           }
 
-          let xml = fs.readFileSync(guidePath, 'utf8')
-          let fixed = 0
-          const missing = []
+          if (!fs.existsSync(targetPath)) {
+            console.error(`Missing target file: ${targetPath}`)
+            process.exit(1)
+          }
 
-          for (const [id, logoUrl] of Object.entries(fixes)) {
-            const re = new RegExp(
-              `<channel\\b[^>]*\\bid="${escapeRegExp(id)}"[^>]*>[\\s\\S]*?<\\/channel>`,
-              'i'
-            )
+          const sourceXml = fs.readFileSync(sourcePath, 'utf8')
+          let targetXml = fs.readFileSync(targetPath, 'utf8')
 
-            if (!re.test(xml)) {
-              missing.push(id)
+          let copied = 0
+          const missingInSource = []
+          const missingLogoInSource = []
+          const missingInTarget = []
+
+          for (const id of targetIds) {
+            const sourceBlock = findChannelBlock(sourceXml, id)
+            if (!sourceBlock) {
+              missingInSource.push(id)
               continue
             }
 
-            xml = xml.replace(re, block => {
-              fixed++
-              return upsertIcon(block, logoUrl)
-            })
+            const logoUrl = getIconSrc(sourceBlock)
+            if (!logoUrl || !logoUrl.includes('raw.githubusercontent.com/festy1986/festy-epg/main/logos/')) {
+              missingLogoInSource.push(id)
+              continue
+            }
+
+            const targetBlock = findChannelBlock(targetXml, id)
+            if (!targetBlock) {
+              missingInTarget.push(id)
+              continue
+            }
+
+            targetXml = targetXml.replace(targetBlock, upsertIcon(targetBlock, logoUrl))
+            copied++
           }
 
-          fs.writeFileSync(guidePath, xml)
+          fs.writeFileSync(targetPath, targetXml)
 
-          console.log(`Fixed logos in ${guidePath}: ${fixed}`)
+          console.log(`Copied GitHub logos into ${targetPath}: ${copied}`)
 
-          if (missing.length) {
-            console.error('Missing target channels:')
-            missing.forEach(id => console.error(`- ${id}`))
+          if (missingInSource.length) {
+            console.log('Missing channel in source guide:')
+            missingInSource.forEach(id => console.log(`- ${id}`))
+          }
+
+          if (missingLogoInSource.length) {
+            console.log('Source channel exists but has no GitHub logo:')
+            missingLogoInSource.forEach(id => console.log(`- ${id}`))
+          }
+
+          if (missingInTarget.length) {
+            console.log('Missing channel in target guide:')
+            missingInTarget.forEach(id => console.log(`- ${id}`))
+          }
+
+          if (missingInSource.length || missingLogoInSource.length || missingInTarget.length) {
             process.exit(1)
           }
           EOF
 
       - name: Delete this one-time workflow
         run: |
-          rm -f .github/workflows/one-time-fix-tvguidetivimate-source-logos.yml
+          rm -f .github/workflows/one-time-copy-missing-tivimate-logos.yml
 
-      - name: Commit source logo fixes and remove workflow
+      - name: Commit logo copy
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -121,5 +211,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Fix source TiviMate logos"
+          git commit -m "Copy missing TiviMate logos"
           git push
