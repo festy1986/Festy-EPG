@@ -40,7 +40,9 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Animal%20Planet.png"/><url>https://tvguide.com</url></channel>
 <channel id="NATIONAL.GEOGRAPHIC.us"><display-name>NATIONAL GEOGRAPHIC</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National%20Geographic.png"/><url>https://tvguide.com</url></channel>
-<channel id="NAT.GEO.WILD.us" site_id="9100002976#9200020638"><display-name>AWE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/awe.png"/><url>https://tvguide.com</url></channel><channel id="SMITHSONIAN.CHANNEL.us"><display-name>SMITHSONIAN CHANNEL</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png"/><url>https://tvguide.com</url></channel>
+<channel id="NAT.GEO.WILD.us" site_id="9100002976#9200020638"><display-name>AWE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/awe.png"/><url>https://tvguide.com</url></channel>
+<channel id="NAT.GEO.WILD.us" site_id="9100002976#9233002054"><display-name>NAT GEO WILD</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/National%20Geographic%20Wild.png"/><url>https://tvguide.com</url></channel>
+<channel id="SMITHSONIAN.CHANNEL.us"><display-name>SMITHSONIAN CHANNEL</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/smithsonian%20channel%20extra.png"/><url>https://tvguide.com</url></channel>
 <channel id="THE.WEATHER.CHANNEL.us"><display-name>THE WEATHER CHANNEL</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Weather.png"/><url>https://tvguide.com</url></channel>
 <channel id="BRAVO.us"><display-name>BRAVO</display-name>
