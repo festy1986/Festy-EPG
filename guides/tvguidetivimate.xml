@@ -48,7 +48,7 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Bravo.png"/><url>https://tvguide.com</url></channel>
 <channel id="VH1.us"><display-name>VH1</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/VH1.png"/><url>https://tvguide.com</url></channel>
 <channel id="CMT.us"><display-name>CMT</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/CMT.png"/><url>https://tvguide.com</url></channel>
-<channel id="BET.us"><display-name>BET</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/bet.png"/><url>https://tvguide.com</url></channel>
+<channel id="BET.us" site_id="9100002976#9233005931"><display-name>BET</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/bet.png"/><url>https://tvguide.com</url></channel>
 <channel id="OWN.us"><display-name>OWN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/own.png"/><url>https://tvguide.com</url></channel>
 <channel id="WE.us"><display-name>WE</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WE%20tv.png"/><url>https://tvguide.com</url></channel>
