@@ -302,7 +302,7 @@
   <channel site="tvguide.com" lang="en" xmltv_id="NGC-E.us" site_id="9100002976#9233002310">NGC-E</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="NATIONAL.GEOGRAPHIC.us" site_id="9100002976#9233009337">NATIONAL GEOGRAPHIC</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="NGCMUNDO.us" site_id="9100002976#9266072788">NGCMUNDO</channel>
-  <channel site="tvguide.com" lang="en" xmltv_id="NGEOWILD.us" site_id="9100002976#9200004683">NGEOWILD</channel>
+  <channel id="NAT.GEO.WILD.us" site_id="9100002976#9200020638"><display-name>AWE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/awe.png"/><url>https://tvguide.com</url></channel>
   <channel site="tvguide.com" lang="en" xmltv_id="NAT.GEO.WILD.us" site_id="9100002976#9233002054">NAT GEO WILD</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="NAT.GEO.WILD.us" site_id="9100002976#9200020638">NAT GEO WILD</channel>
   <channel site="tvguide.com" lang="en" xmltv_id="NHLMLB1.us" site_id="9100002976#9233008379">NHLMLB1</channel>
