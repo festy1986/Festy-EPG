@@ -784,6 +784,35 @@ jobs:
             return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
           }
 
+
+
+          function shouldSuppressTvmazeDisplayDate(block, airdate) {
+            if (!airdate) return false
+
+            const title = getTag(block, 'title')
+            const desc = getTag(block, 'desc')
+            const categories = getTags(block, 'category')
+            const haystack = [title, desc, categories]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const liveOrCurrent = /\b(live|news|newscast|weather|sports|sporting|game|match|tournament|football|basketball|baseball|hockey|soccer|golf|tennis|racing|wwe|ufc|mma|boxing|pregame|postgame|post-game|pre-game|paid programming|infomercial)\b/.test(haystack)
+            if (!liveOrCurrent) return false
+
+            const scheduleDateText = getStartDate(block)
+            if (!scheduleDateText || !/^\d{4}-\d{2}-\d{2}$/.test(scheduleDateText) || !/^\d{4}-\d{2}-\d{2}$/.test(airdate)) return true
+
+            const scheduleDate = new Date(`${scheduleDateText}T00:00:00Z`)
+            const parsedAirDate = new Date(`${airdate}T00:00:00Z`)
+
+            if (Number.isNaN(scheduleDate.getTime()) || Number.isNaN(parsedAirDate.getTime())) return true
+
+            // Match the original guide pass: for live/current news, sports, paid programming,
+            // and similar listings, suppress dates when TVMaze only found the current airing date.
+            return Math.abs(scheduleDate.getTime() - parsedAirDate.getTime()) / 86400000 <= 45
+          }
           function cleanPackedTvmazeDescription(value) {
             return String(value || '')
               .replace(/\s+/g, ' ')
@@ -844,7 +873,7 @@ jobs:
             }
           }
 
-          function buildTvmazePackedDescription(existingDesc, show, episode) {
+          function buildTvmazePackedDescription(existingDesc, show, episode, block) {
             if (!episode) return cleanPackedTvmazeDescription(existingDesc)
 
             const existing = cleanPackedTvmazeDescription(existingDesc)
@@ -880,7 +909,7 @@ jobs:
               bodyPart = episodeSummary || showSummary || ''
             }
 
-            if (!datePart && displayDate && !descHasDisplayDate(existing, episode?.airdate)) {
+            if (!datePart && displayDate && !shouldSuppressTvmazeDisplayDate(block, episode?.airdate) && !descHasDisplayDate(existing, episode?.airdate)) {
               datePart = displayDate
             }
 
@@ -927,7 +956,7 @@ jobs:
             }
 
             const existingDesc = getTag(updated, 'desc')
-            const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode)
+            const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode, updated)
 
             if (packedDesc && packedDesc !== existingDesc) {
               updated = replaceTag(updated, 'desc', packedDesc)
