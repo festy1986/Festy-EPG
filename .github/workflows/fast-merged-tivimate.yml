@@ -58,7 +58,7 @@ jobs:
 
           module.exports = {
             site: 'i.mjh.nz',
-            days: 2,
+            days: 14,
             request: {
               cache: {
                 ttl: 3 * 60 * 60 * 1000
@@ -201,12 +201,21 @@ jobs:
 
           let cachedContent
 
+          function resolveTag(tag) {
+            const aliases = {
+              US1: 'US2'
+            }
+
+            return aliases[tag] || tag
+          }
+
           module.exports = {
             site: 'epgshare01.online',
-            days: 2,
+            days: 14,
             url({ channel }) {
               const [tag] = channel.site_id.split('#')
-              return `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+              const resolvedTag = resolveTag(tag)
+              return `https://epgshare01.online/epgshare01/epg_ripper_${resolvedTag}.xml.gz`
             },
             request: {
               cache: {
@@ -232,7 +241,8 @@ jobs:
               return programs
             },
             async channels({ tag }) {
-              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+              const resolvedTag = resolveTag(tag)
+              const url = `https://epgshare01.online/epgshare01/epg_ripper_${resolvedTag}.xml.gz`
 
               try {
                 const res = await axios.get(url, { responseType: 'stream' })
