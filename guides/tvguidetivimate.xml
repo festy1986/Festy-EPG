@@ -180,4 +180,5 @@
 <channel id="RETRPLEXHD.us" site_id="9100002976#9200006666"><display-name>RETROPLEX</display-name><url>https://tvguide.com</url></channel>
 <channel id="SHOWTIME.SHOWCASE.us" site_id="9100002976#9233003805"><display-name>SHOWTIME SHOWCASE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20SHOWCASE.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINESONY.us" site_id="9100002976#9200015867"><display-name>CINESONY</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/cinesony.png"/><url>https://tvguide.com</url></channel>
+<channel site="tvguide.com" lang="en" xmltv_id="RETRPLEXHD.us" site_id="9100002976#9200006666">RETRPLEXHD</channel>
 </tv>
