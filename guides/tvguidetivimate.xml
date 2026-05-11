@@ -109,8 +109,8 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20NEXT.png"/><url>https://tvguide.com</url></channel>
 <channel id="SHOWTIME.WOMEN.us"><display-name>SHOWTIME WOMEN</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/SHOWTIME%20WOMEN.png"/><url>https://tvguide.com</url></channel>
-<channel id="THE.MOVIE.CHANNEL.us"><display-name>THE MOVIE CHANNEL</display-name><url>https://tvguide.com</url></channel>
-<channel id="TMC.XTRA.us"><display-name>TMC XTRA</display-name><url>https://tvguide.com</url></channel>
+<channel id="THE.MOVIE.CHANNEL.us"><display-name>THE MOVIE CHANNEL</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Movie%20Channel.png"/><url>https://tvguide.com</url></channel>
+    <channel id="TMC.XTRA.us"><display-name>TMC XTRA</display-name><url>https://tvguide.com</url></channel>
 <channel id="STARZ.us"><display-name>STARZ</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ.png"/><url>https://tvguide.com</url></channel>
 <channel id="STARZ.EDGE.us"><display-name>STARZ EDGE</display-name>
