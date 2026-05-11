@@ -1,0 +1,1467 @@
+name: FAST-Merged-Tivimate
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 */12 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fast-merged-guide-writes-main
+  cancel-in-progress: false
+
+jobs:
+  build-fast-merged-tivimate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone IPTV-org EPG engine
+        run: |
+          rm -rf epg
+          git clone --depth 1 https://github.com/iptv-org/epg.git epg
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: epg/package-lock.json
+
+      - name: Install EPG dependencies
+        run: |
+          cd epg
+          npm ci
+          npm install iconv-lite pako sax
+
+      - name: Write Roku i.mjh.nz config
+        run: |
+          mkdir -p epg/sites/i.mjh.nz
+
+          cat > epg/sites/i.mjh.nz/i.mjh.nz.config.js <<'EOF'
+          const dayjs = require('dayjs')
+          const axios = require('axios')
+          const parser = require('epg-parser')
+          const isBetween = require('dayjs/plugin/isBetween')
+          const customParseFormat = require('dayjs/plugin/customParseFormat')
+
+          dayjs.extend(isBetween)
+          dayjs.extend(customParseFormat)
+
+          const API_ENDPOINT = 'https://raw.githubusercontent.com/matthuisman/i.mjh.nz/master'
+
+          module.exports = {
+            site: 'i.mjh.nz',
+            days: 2,
+            request: {
+              cache: {
+                ttl: 3 * 60 * 60 * 1000
+              },
+              maxContentLength: 100 * 1024 * 1024
+            },
+            url({ channel }) {
+              const [path] = channel.site_id.split('#')
+              return `${API_ENDPOINT}/${path}.xml`
+            },
+            parser({ content, channel, date }) {
+              const items = parseItems(content, channel, date)
+
+              const programs = items.map(item => {
+                return {
+                  ...item,
+                  title: getTitle(item),
+                  description: getDescription(item),
+                  categories: getCategories(item),
+                  icon: getIcon(item)
+                }
+              })
+
+              return mergeMovieParts(programs)
+            },
+            async channels({ provider }) {
+              const providers = {
+                roku: [{ path: 'Roku/all', lang: 'en' }]
+              }
+
+              const channels = []
+              const added = new Set()
+              const providerOptions = providers[provider] || providers.roku
+
+              for (const option of providerOptions) {
+                const xml = await axios
+                  .get(`${API_ENDPOINT}/${option.path}.xml`)
+                  .then(r => r.data)
+                  .catch(err => {
+                    console.error(`Error fetching ${option.path}: ${err.message}`)
+                    return null
+                  })
+
+                if (!xml) continue
+
+                const data = parser.parse(xml)
+
+                data.channels.forEach(item => {
+                  const site_id = `${option.path}#${item.id}`
+                  if (!added.has(site_id)) {
+                    added.add(site_id)
+                    channels.push({
+                      lang: option.lang,
+                      site_id,
+                      name: item.displayName?.[0]?.value || item.name?.[0]?.value || item.id
+                    })
+                  }
+                })
+              }
+
+              return channels
+            }
+          }
+
+          function mergeMovieParts(programs) {
+            const output = []
+
+            programs.forEach(prog => {
+              let prev = output[output.length - 1]
+              let found =
+                prev &&
+                prog.categories.includes('Movie') &&
+                prev.title === prog.title &&
+                prev.description === prog.description
+
+              if (found) {
+                prev.stop = prog.stop
+              } else {
+                output.push(prog)
+              }
+            })
+
+            return output
+          }
+
+          function getTitle(item) {
+            return item.title.length ? item.title[0].value : null
+          }
+
+          function getDescription(item) {
+            return item.desc.length ? item.desc[0].value : null
+          }
+
+          function getCategories(item) {
+            return item.category.map(c => c.value)
+          }
+
+          function getIcon(item) {
+            return item.icon && item.icon.length ? item.icon[0].src : null
+          }
+
+          function parseItems(content, channel, date) {
+            try {
+              const curr_day = date
+              const next_day = date.add(1, 'd')
+              const [, site_id] = channel.site_id.split('#')
+              const data = parser.parse(content)
+
+              if (!data || !Array.isArray(data.programs)) return []
+
+              return data.programs
+                .filter(
+                  p =>
+                    p.channel === site_id &&
+                    dayjs(p.start, 'YYYYMMDDHHmmss ZZ').isBetween(curr_day, next_day)
+                )
+                .map(p => {
+                  if (Array.isArray(p.date) && p.date.length) {
+                    p.date = p.date[0]
+                  }
+                  return p
+                })
+            } catch {
+              return []
+            }
+          }
+          EOF
+
+      - name: Write EPGShare config
+        run: |
+          mkdir -p epg/sites/epgshare01.online
+
+          cat > epg/sites/epgshare01.online/epgshare01.online.config.js <<'EOF'
+          const axios = require('axios')
+          const iconv = require('iconv-lite')
+          const parser = require('epg-parser')
+          const { ungzip } = require('pako')
+          const zlib = require('zlib')
+          const sax = require('sax')
+
+          let cachedContent
+
+          module.exports = {
+            site: 'epgshare01.online',
+            days: 2,
+            url({ channel }) {
+              const [tag] = channel.site_id.split('#')
+              return `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+            },
+            request: {
+              cache: {
+                ttl: 24 * 60 * 60 * 1000
+              },
+              maxContentLength: 100000000
+            },
+            parser({ buffer, channel, date, cached }) {
+              if (!cached) cachedContent = undefined
+
+              let programs = []
+              const items = parseItems(buffer, channel, date)
+
+              items.forEach(item => {
+                programs.push({
+                  title: item.title?.[0]?.value,
+                  description: item.desc?.[0]?.value,
+                  start: item.start,
+                  stop: item.stop
+                })
+              })
+
+              return programs
+            },
+            async channels({ tag }) {
+              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+
+              try {
+                const res = await axios.get(url, { responseType: 'stream' })
+
+                const parserStream = sax.createStream(true, { trim: true })
+                const channels = []
+                let current = null
+                let curText = ''
+                let curTag = null
+
+                parserStream.on('opentag', node => {
+                  const name = node.name.toLowerCase()
+
+                  if (name === 'channel') {
+                    current = { id: node.attributes.id || node.attributes.ID, displayName: [] }
+                  } else if (current && (name === 'display-name' || name === 'displayname')) {
+                    curTag = 'displayName'
+                    curText = ''
+                    current._lang =
+                      node.attributes['xml:lang'] || node.attributes['xml:Lang'] || node.attributes.lang
+                  }
+                })
+
+                parserStream.on('text', text => {
+                  if (curTag === 'displayName') curText += text
+                })
+
+                parserStream.on('cdata', text => {
+                  if (curTag === 'displayName') curText += text
+                })
+
+                parserStream.on('closetag', nameRaw => {
+                  const name = nameRaw.toLowerCase()
+
+                  if (current && (name === 'display-name' || name === 'displayname')) {
+                    current.displayName.push({
+                      lang: current._lang || 'en',
+                      value: curText.trim()
+                    })
+                    curTag = null
+                    curText = ''
+                    current._lang = undefined
+                  } else if (name === 'channel' && current) {
+                    channels.push({ id: current.id, displayName: current.displayName })
+                    current = null
+                  }
+                })
+
+                await new Promise((resolve, reject) => {
+                  res.data.pipe(zlib.createGunzip()).pipe(parserStream).on('end', resolve).on('error', reject)
+                })
+
+                return channels.map(channel => {
+                  const displayName = (channel.displayName && channel.displayName[0]) || {
+                    lang: 'en',
+                    value: channel.id
+                  }
+
+                  return {
+                    lang: displayName.lang || 'en',
+                    site_id: `${tag}#${channel.id}`,
+                    name: displayName.value
+                  }
+                })
+              } catch (err) {
+                console.error(err)
+                return []
+              }
+            }
+          }
+
+          function parseItems(buffer, channel, date) {
+            if (!buffer) return []
+
+            if (!cachedContent) {
+              const content = ungzip(buffer)
+              const encoded = iconv.decode(content, 'utf8')
+              cachedContent = parser.parse(encoded)
+            }
+
+            const { programs } = cachedContent
+            const [, channelId] = channel.site_id.split('#')
+
+            return programs.filter(p => p.channel === channelId && date.isSame(p.start, 'day'))
+          }
+          EOF
+
+      - name: Validate curated source lists
+        run: |
+          if [ ! -f guides/rokucurated.xml ]; then
+            echo "Missing guides/rokucurated.xml"
+            exit 1
+          fi
+
+          if [ ! -f guides/epgcurated.xml ]; then
+            echo "Missing guides/epgcurated.xml"
+            exit 1
+          fi
+
+          ROKU_CH=$(grep -c '<channel ' guides/rokucurated.xml || true)
+          EPG_CH=$(grep -c '<channel ' guides/epgcurated.xml || true)
+
+          echo "Roku curated channels: $ROKU_CH"
+          echo "EPGShare curated channels: $EPG_CH"
+
+          if [ "$ROKU_CH" -lt 1 ]; then
+            echo "Invalid guides/rokucurated.xml - no channels found"
+            exit 1
+          fi
+
+          if [ "$EPG_CH" -lt 1 ]; then
+            echo "Invalid guides/epgcurated.xml - no channels found"
+            exit 1
+          fi
+
+      - name: Grab Roku guide with schedule recovery
+        run: |
+          cd epg
+
+          rm -f ../guides/rokuguide.xml
+          rm -f ../guides/rokuguide.pass*.xml
+          rm -f ../guides/rokuguide.pass*.log
+          rm -f ../guides/rokuguide.pass*.count
+
+          run_pass() {
+            PASS_NAME="$1"
+            MAX_CONNECTIONS="$2"
+
+            echo ""
+            echo "============================================================"
+            echo "Starting Roku $PASS_NAME"
+            echo "maxConnections=$MAX_CONNECTIONS"
+            echo "============================================================"
+
+            set +e
+            npx tsx scripts/commands/epg/grab.ts \
+              --channels=../guides/rokucurated.xml \
+              --output="../guides/rokuguide.${PASS_NAME}.xml" \
+              --days=2 \
+              --maxConnections="$MAX_CONNECTIONS" \
+              2>&1 | tee "../guides/rokuguide.${PASS_NAME}.log"
+
+            STATUS=${PIPESTATUS[0]}
+            set -e
+
+            if [ "$STATUS" -ne 0 ]; then
+              echo "Roku $PASS_NAME exited with status $STATUS"
+            fi
+
+            if [ ! -f "../guides/rokuguide.${PASS_NAME}.xml" ]; then
+              echo "Roku $PASS_NAME did not create an XML file"
+              echo "0" > "../guides/rokuguide.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/rokuguide.${PASS_NAME}.descriptions.count"
+              echo "999999" > "../guides/rokuguide.${PASS_NAME}.issues.count"
+              return 0
+            fi
+
+            PR=$(grep -c '<programme ' "../guides/rokuguide.${PASS_NAME}.xml" || true)
+            DESC=$(grep -c '<desc ' "../guides/rokuguide.${PASS_NAME}.xml" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/rokuguide.${PASS_NAME}.log" || true)
+
+            echo "$PR" > "../guides/rokuguide.${PASS_NAME}.programmes.count"
+            echo "$DESC" > "../guides/rokuguide.${PASS_NAME}.descriptions.count"
+            echo "$ISSUE_COUNT" > "../guides/rokuguide.${PASS_NAME}.issues.count"
+
+            echo "Roku $PASS_NAME programmes: $PR"
+            echo "Roku $PASS_NAME descriptions: $DESC"
+            echo "Roku $PASS_NAME possible issues: $ISSUE_COUNT"
+          }
+
+          run_pass "pass1-fast" 10
+
+          PASS1_ISSUES=$(cat ../guides/rokuguide.pass1-fast.issues.count)
+
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
+            echo "Roku fast pass had possible issues, running backup pass..."
+            run_pass "pass2-backup" 5
+          else
+            echo "Roku fast pass had no obvious issues. Skipping backup pass."
+          fi
+
+          BEST_PASS="pass1-fast"
+          BEST_PR=$(cat ../guides/rokuguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/rokuguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/rokuguide.pass1-fast.issues.count)
+
+          for PASS in pass2-backup; do
+            if [ -f "../guides/rokuguide.${PASS}.programmes.count" ]; then
+              CANDIDATE_PR=$(cat "../guides/rokuguide.${PASS}.programmes.count")
+              CANDIDATE_DESC=$(cat "../guides/rokuguide.${PASS}.descriptions.count")
+              CANDIDATE_ISSUES=$(cat "../guides/rokuguide.${PASS}.issues.count")
+
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              fi
+            fi
+          done
+
+          echo "Selected best Roku pass: $BEST_PASS"
+          echo "Best Roku programmes: $BEST_PR"
+          echo "Best Roku descriptions: $BEST_DESC"
+          echo "Best Roku possible issues: $BEST_ISSUES"
+
+          cp "../guides/rokuguide.${BEST_PASS}.xml" "../guides/rokuguide.xml"
+
+          cd ..
+
+      - name: Grab EPGShare guide with schedule recovery
+        run: |
+          cd epg
+
+          rm -f ../guides/epgshareguide.xml
+          rm -f ../guides/epgshareguide.pass*.xml
+          rm -f ../guides/epgshareguide.pass*.log
+          rm -f ../guides/epgshareguide.pass*.count
+
+          run_pass() {
+            PASS_NAME="$1"
+            MAX_CONNECTIONS="$2"
+
+            echo ""
+            echo "============================================================"
+            echo "Starting EPGShare $PASS_NAME"
+            echo "maxConnections=$MAX_CONNECTIONS"
+            echo "============================================================"
+
+            set +e
+            npx tsx scripts/commands/epg/grab.ts \
+              --channels=../guides/epgcurated.xml \
+              --output="../guides/epgshareguide.${PASS_NAME}.xml" \
+              --days=2 \
+              --maxConnections="$MAX_CONNECTIONS" \
+              2>&1 | tee "../guides/epgshareguide.${PASS_NAME}.log"
+
+            STATUS=${PIPESTATUS[0]}
+            set -e
+
+            if [ "$STATUS" -ne 0 ]; then
+              echo "EPGShare $PASS_NAME exited with status $STATUS"
+            fi
+
+            if [ ! -f "../guides/epgshareguide.${PASS_NAME}.xml" ]; then
+              echo "EPGShare $PASS_NAME did not create an XML file"
+              echo "0" > "../guides/epgshareguide.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/epgshareguide.${PASS_NAME}.descriptions.count"
+              echo "999999" > "../guides/epgshareguide.${PASS_NAME}.issues.count"
+              return 0
+            fi
+
+            PR=$(grep -c '<programme ' "../guides/epgshareguide.${PASS_NAME}.xml" || true)
+            DESC=$(grep -c '<desc ' "../guides/epgshareguide.${PASS_NAME}.xml" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/epgshareguide.${PASS_NAME}.log" || true)
+
+            echo "$PR" > "../guides/epgshareguide.${PASS_NAME}.programmes.count"
+            echo "$DESC" > "../guides/epgshareguide.${PASS_NAME}.descriptions.count"
+            echo "$ISSUE_COUNT" > "../guides/epgshareguide.${PASS_NAME}.issues.count"
+
+            echo "EPGShare $PASS_NAME programmes: $PR"
+            echo "EPGShare $PASS_NAME descriptions: $DESC"
+            echo "EPGShare $PASS_NAME possible issues: $ISSUE_COUNT"
+          }
+
+          run_pass "pass1-fast" 5
+
+          PASS1_ISSUES=$(cat ../guides/epgshareguide.pass1-fast.issues.count)
+
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
+            echo "EPGShare fast pass had possible issues, running backup pass..."
+            run_pass "pass2-backup" 2
+          else
+            echo "EPGShare fast pass had no obvious issues. Skipping backup pass."
+          fi
+
+          BEST_PASS="pass1-fast"
+          BEST_PR=$(cat ../guides/epgshareguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/epgshareguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/epgshareguide.pass1-fast.issues.count)
+
+          for PASS in pass2-backup; do
+            if [ -f "../guides/epgshareguide.${PASS}.programmes.count" ]; then
+              CANDIDATE_PR=$(cat "../guides/epgshareguide.${PASS}.programmes.count")
+              CANDIDATE_DESC=$(cat "../guides/epgshareguide.${PASS}.descriptions.count")
+              CANDIDATE_ISSUES=$(cat "../guides/epgshareguide.${PASS}.issues.count")
+
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
+                BEST_PASS="$PASS"
+                BEST_PR="$CANDIDATE_PR"
+                BEST_DESC="$CANDIDATE_DESC"
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+              fi
+            fi
+          done
+
+          echo "Selected best EPGShare pass: $BEST_PASS"
+          echo "Best EPGShare programmes: $BEST_PR"
+          echo "Best EPGShare descriptions: $BEST_DESC"
+          echo "Best EPGShare possible issues: $BEST_ISSUES"
+
+          cp "../guides/epgshareguide.${BEST_PASS}.xml" "../guides/epgshareguide.xml"
+
+          cd ..
+
+      - name: Merge Roku and EPGShare guides
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const inputPaths = [
+            'guides/rokuguide.xml',
+            'guides/epgshareguide.xml'
+          ]
+
+          const outputPath = 'guides/FASTGuide.xml'
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function attr(block, name) {
+            const m = block.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function tagText(block, tag) {
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
+          }
+
+          function channelKey(block) {
+            return attr(block, 'id')
+          }
+
+          function programmeKey(block) {
+            return [
+              attr(block, 'start'),
+              attr(block, 'stop'),
+              attr(block, 'channel'),
+              tagText(block, 'title')
+            ].join('|')
+          }
+
+          const channels = new Map()
+          const programmes = new Map()
+
+          for (const inputPath of inputPaths) {
+            if (!fs.existsSync(inputPath)) {
+              console.error(`Missing ${inputPath}`)
+              process.exit(1)
+            }
+
+            const xml = fs.readFileSync(inputPath, 'utf8')
+
+            for (const match of xml.matchAll(/<channel\b[\s\S]*?<\/channel>/gi)) {
+              const block = match[0].trim()
+              const key = channelKey(block)
+              if (!key) continue
+              if (!channels.has(key)) channels.set(key, block)
+            }
+
+            for (const match of xml.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)) {
+              const block = match[0].trim()
+              const key = programmeKey(block)
+              if (!key) continue
+              if (!programmes.has(key)) programmes.set(key, block)
+            }
+          }
+
+          const channelBlocks = [...channels.values()]
+          const programmeBlocks = [...programmes.values()].sort((a, b) => {
+            const ca = attr(a, 'channel')
+            const cb = attr(b, 'channel')
+            if (ca !== cb) return ca.localeCompare(cb)
+
+            const sa = attr(a, 'start')
+            const sb = attr(b, 'start')
+            return sa.localeCompare(sb)
+          })
+
+          const output = [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<tv>',
+            ...channelBlocks,
+            ...programmeBlocks,
+            '</tv>',
+            ''
+          ].join('\n')
+
+          fs.writeFileSync(outputPath, output)
+
+          console.log(`Merged channels: ${channelBlocks.length}`)
+          console.log(`Merged programmes: ${programmeBlocks.length}`)
+          EOF
+
+      - name: Fill missing FAST metadata from TVMaze
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const guidePath = 'guides/FASTGuide.xml'
+          const cachePath = 'guides/.tvmaze-fast-cache.json'
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing ${guidePath}`)
+            process.exit(1)
+          }
+
+          const xml = fs.readFileSync(guidePath, 'utf8')
+          let cache = {}
+
+          if (fs.existsSync(cachePath)) {
+            try {
+              cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'))
+            } catch {
+              cache = {}
+            }
+          }
+
+          const stats = {
+            programmes: 0,
+            skippedMovies: 0,
+            searchedShows: 0,
+            matchedShows: 0,
+            enriched: 0,
+            addedCategories: 0,
+            addedSubtitles: 0,
+            addedEpisodeNums: 0,
+            addedDates: 0,
+            addedDescriptions: 0
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function stripTags(s) {
+            return decodeXml(String(s || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function getTag(block, tag) {
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? stripTags(m[1]) : ''
+          }
+
+          function getTags(block, tag) {
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
+              .map(m => stripTags(m[1]))
+              .filter(Boolean)
+          }
+
+          function hasTag(block, tag) {
+            return new RegExp(`<${tag}\\b`, 'i').test(block)
+          }
+
+          function hasCategory(block, category) {
+            return getTags(block, 'category').some(c => c.toLowerCase() === category.toLowerCase())
+          }
+
+          function hasAnyCategory(block) {
+            return hasTag(block, 'category')
+          }
+
+          function getStartDate(block) {
+            const m = block.match(/start="(\d{8})/i)
+            if (!m) return ''
+            return `${m[1].slice(0, 4)}-${m[1].slice(4, 6)}-${m[1].slice(6, 8)}`
+          }
+
+          function cleanTitleForSearch(title) {
+            return String(title || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function isMovie(block) {
+            if (hasCategory(block, 'Movie')) return true
+            if (hasCategory(block, 'Film')) return true
+            return false
+          }
+
+          function needsTvmaze(block) {
+            if (!hasAnyCategory(block)) return true
+
+            const desc = getTag(block, 'desc')
+            if (!desc) return true
+
+            // Strict rule: TVMaze may only fill fields TVGuide did not find.
+            // It must not rebuild descriptions because an episode title/code is missing.
+            // The only packed-desc edit allowed after provider is appending a missing airdate.
+            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+            if (!hasPackedDisplayDate) return true
+
+            return false
+          }
+
+          function tvmazeShowIsMovieLike(show) {
+            const type = String(show?.type || '').toLowerCase()
+            return type === 'movie' || type === 'film'
+          }
+
+          function tvmazeShowIsMiniseries(show) {
+            const type = String(show?.type || '').toLowerCase()
+            const name = String(show?.name || '').toLowerCase()
+            const summary = String(show?.summary || '').toLowerCase()
+
+            return (
+              type.includes('mini') ||
+              type.includes('limited') ||
+              name.includes('miniseries') ||
+              summary.includes('miniseries') ||
+              summary.includes('limited series')
+            )
+          }
+
+          function normalize(s) {
+            return String(s || '')
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function scoreShow(title, show) {
+            const a = normalize(title)
+            const b = normalize(show?.name || '')
+            if (!a || !b) return 0
+            if (a === b) return 100
+            if (a.includes(b) || b.includes(a)) return 80
+            return 0
+          }
+
+          async function tvmazeSearchShow(title) {
+            const key = `show:${normalize(title)}`
+            if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
+
+            const url = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`
+            const result = await fetchJsonWithRetries(url, `search ${title}`)
+            const candidates = Array.isArray(result) ? result.map(x => x.show).filter(Boolean) : []
+
+            let best = null
+            let bestScore = 0
+
+            for (const show of candidates) {
+              if (tvmazeShowIsMovieLike(show)) continue
+
+              const score = scoreShow(title, show)
+              if (score > bestScore) {
+                best = show
+                bestScore = score
+              }
+            }
+
+            if (bestScore < 80) best = null
+
+            cache[key] = best
+            await sleep(250)
+            return best
+          }
+
+          async function tvmazeEpisodes(showId) {
+            const key = `episodes:${showId}`
+            if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
+
+            const url = `https://api.tvmaze.com/shows/${showId}/episodes`
+            const episodes = await fetchJsonWithRetries(url, `episodes ${showId}`)
+            cache[key] = Array.isArray(episodes) ? episodes : []
+            await sleep(250)
+            return cache[key]
+          }
+
+          async function fetchJsonWithRetries(url, label) {
+            const attempts = 4
+
+            for (let attempt = 1; attempt <= attempts; attempt++) {
+              try {
+                const response = await fetch(url, {
+                  headers: {
+                    'User-Agent': 'festy-epg-tvmaze-fast-fill-missing-only/1.0'
+                  }
+                })
+
+                if (response.status === 404) return null
+                if (response.status === 429 || response.status >= 500) {
+                  throw new Error(`HTTP ${response.status}`)
+                }
+
+                if (!response.ok) return null
+
+                return await response.json()
+              } catch (err) {
+                if (attempt === attempts) {
+                  console.log(`[TVMAZE FAIL] ${label} | ${err.message}`)
+                  return null
+                }
+
+                const delay = 1000 * attempt + Math.floor(Math.random() * 500)
+                console.log(`[TVMAZE RETRY] ${label} | ${err.message} | attempt=${attempt}/${attempts}`)
+                await sleep(delay)
+              }
+            }
+
+            return null
+          }
+
+          function findEpisodeForProgramme(episodes, block) {
+            const scheduleDate = getStartDate(block)
+            const subtitle = getTag(block, 'sub-title')
+            const desc = getTag(block, 'desc')
+
+            const codeMatch = desc.match(/\bS(\d+)E(\d+)\b/i)
+            if (codeMatch) {
+              const season = Number(codeMatch[1])
+              const number = Number(codeMatch[2])
+              const byCode = episodes.find(ep => Number(ep.season) === season && Number(ep.number) === number)
+              if (byCode) return byCode
+            }
+
+            if (subtitle) {
+              const subNorm = normalize(subtitle)
+              const byName = episodes.find(ep => normalize(ep.name) === subNorm)
+              if (byName) return byName
+            }
+
+            const packedTitle = getPackedEpisodeTitleFromDesc(desc)
+            if (packedTitle) {
+              const packedNorm = normalize(packedTitle)
+              const byPackedTitle = episodes.find(ep => normalize(ep.name) === packedNorm)
+              if (byPackedTitle) return byPackedTitle
+            }
+
+            // Last fallback only. The schedule date is the current rerun date, so it is usually
+            // not the original TVMaze airdate for syndicated/retro channels.
+            if (scheduleDate) {
+              const exact = episodes.find(ep => ep.airdate === scheduleDate)
+              if (exact) return exact
+            }
+
+            return null
+          }
+
+          function getPackedEpisodeTitleFromDesc(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+              .replace(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/, '')
+              .trim()
+            if (!cleaned) return ''
+
+            const firstSentence = cleaned.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            if (!first) return ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) return prefixMatch[1].trim()
+
+            if (/^S\d+E\d+$/i.test(first)) return ''
+            if (first.length > 80) return ''
+            return first
+          }
+
+          function xmltvNs(season, episode) {
+            const s = Number(season)
+            const e = Number(episode)
+            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
+            return `${s - 1}.${e - 1}.`
+          }
+
+          function formatDateXmltv(date) {
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
+            return date.replace(/-/g, '')
+          }
+
+          function cleanTvmazeSummary(value) {
+            return decodeXml(String(value || '')
+              .replace(/<[^>]+>/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim())
+          }
+
+          function formatDateDisplay(date) {
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
+            return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`
+          }
+
+          function buildTvmazeEpisodeCode(season, episode) {
+            const s = Number(season)
+            const e = Number(episode)
+            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
+            return `S${s}E${e}`
+          }
+
+          function descHasEpisodeName(desc, episodeName) {
+            if (!desc || !episodeName) return false
+            const descNorm = normalize(desc)
+            const nameNorm = normalize(episodeName)
+            return Boolean(nameNorm && descNorm.includes(nameNorm))
+          }
+
+          function descHasEpisodeCode(desc, season, episode) {
+            const code = buildTvmazeEpisodeCode(season, episode)
+            if (!desc || !code) return false
+            return new RegExp(`\\b${code}\\b`, 'i').test(desc)
+          }
+
+          function descHasDisplayDate(desc, airdate) {
+            const displayDate = formatDateDisplay(airdate)
+            if (!desc || !displayDate) return false
+            return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
+          }
+
+
+
+          function shouldSuppressTvmazeDisplayDate(block, airdate) {
+            if (!airdate) return false
+
+            const title = getTag(block, 'title')
+            const desc = getTag(block, 'desc')
+            const categories = getTags(block, 'category')
+            const haystack = [title, desc, categories]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const liveOrCurrent = /\b(live|news|newscast|weather|sports|sporting|game|match|tournament|football|basketball|baseball|hockey|soccer|golf|tennis|racing|wwe|ufc|mma|boxing|pregame|postgame|post-game|pre-game|paid programming|infomercial)\b/.test(haystack)
+            if (!liveOrCurrent) return false
+
+            const scheduleDateText = getStartDate(block)
+            if (!scheduleDateText || !/^\d{4}-\d{2}-\d{2}$/.test(scheduleDateText) || !/^\d{4}-\d{2}-\d{2}$/.test(airdate)) return true
+
+            const scheduleDate = new Date(`${scheduleDateText}T00:00:00Z`)
+            const parsedAirDate = new Date(`${airdate}T00:00:00Z`)
+
+            if (Number.isNaN(scheduleDate.getTime()) || Number.isNaN(parsedAirDate.getTime())) return true
+
+            // Match the original guide pass: for live/current news, sports, paid programming,
+            // and similar listings, suppress dates when TVMaze only found the current airing date.
+            return Math.abs(scheduleDate.getTime() - parsedAirDate.getTime()) / 86400000 <= 45
+          }
+          function cleanPackedTvmazeDescription(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function splitTrailingDisplayDate(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+            const match = cleaned.match(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/)
+            if (!match) return { body: cleaned, dateText: '' }
+            return {
+              body: cleaned.slice(0, match.index).trim(),
+              dateText: match[1]
+            }
+          }
+
+          function parsePackedDescription(desc) {
+            const split = splitTrailingDisplayDate(desc)
+            const withoutDate = split.body
+            const firstSentence = withoutDate.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            const rest = firstSentence && firstSentence[0].length < withoutDate.length
+              ? withoutDate.slice(firstSentence[0].length).trim()
+              : ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) {
+              return {
+                episodeTitle: prefixMatch[1].trim(),
+                episodeCode: prefixMatch[2].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            const codeOnlyMatch = first.match(/^(S\d+E\d+|S\d+|E\d+)$/i)
+            if (codeOnlyMatch) {
+              return {
+                episodeTitle: '',
+                episodeCode: codeOnlyMatch[1].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            // A first sentence that exactly matches the TVMaze episode name is an existing title-only prefix.
+            return {
+              episodeTitle: '',
+              episodeCode: '',
+              body: withoutDate,
+              dateText: split.dateText,
+              hadPrefix: false
+            }
+          }
+
+          function buildTvmazePackedDescription(existingDesc, show, episode, block) {
+            const existing = cleanPackedTvmazeDescription(existingDesc)
+            const parsed = parsePackedDescription(existing)
+
+            const episodeName = cleanTvmazeSummary(episode?.name || '')
+            const episodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
+            const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
+            const showSummary = cleanTvmazeSummary(show?.summary || '')
+            const displayDate = formatDateDisplay(episode?.airdate)
+
+            let titlePart = parsed.episodeTitle
+            let codePart = parsed.episodeCode
+            let bodyPart = parsed.body
+            let datePart = parsed.dateText
+
+            // If provider packed the episode title as the first sentence, e.g.
+            // "Thanksgiving. The Taylor family...", recognize it as the episode title
+            // instead of treating it as synopsis text.
+            const packedTitle = getPackedEpisodeTitleFromDesc(existing)
+            if (!titlePart && episodeName && packedTitle && normalize(packedTitle) === normalize(episodeName)) {
+              titlePart = packedTitle
+              const firstSentence = bodyPart.match(/^(.+?)(?:\.\s+|$)/)
+              if (firstSentence) bodyPart = bodyPart.slice(firstSentence[0].length).trim()
+            }
+
+            // If provider already put the episode title in the desc, leave it.
+            // If it is missing and TVMaze has it, add only that missing title.
+            if (!titlePart && episodeName && !descHasEpisodeName(existing, episodeName)) {
+              titlePart = episodeName
+            }
+
+            // If provider already put SxxExx in the desc, leave it.
+            // If it is missing and TVMaze has it, add only that missing code.
+            if (!codePart && episodeCode && !descHasEpisodeCode(existing, episode?.season, episode?.number)) {
+              codePart = episodeCode
+            }
+
+            // If provider already gave a real description body, leave it untouched.
+            // If the body is missing or the whole desc was only metadata, add only the missing synopsis.
+            if (!bodyPart || bodyPart === titlePart || bodyPart === codePart || bodyPart === `${titlePart} - ${codePart}`) {
+              bodyPart = episodeSummary || showSummary || ''
+            }
+
+            // If provider already put the date/year at the end, leave it.
+            // If it is missing and TVMaze has an airdate, add only that missing date.
+            if (!datePart && displayDate && !shouldSuppressTvmazeDisplayDate(block, episode?.airdate) && !descHasDisplayDate(existing, episode?.airdate)) {
+              datePart = displayDate
+            }
+
+            const parts = []
+            if (titlePart && codePart) parts.push(`${titlePart} - ${codePart}`)
+            else if (titlePart) parts.push(titlePart)
+            else if (codePart) parts.push(codePart)
+
+            if (bodyPart) {
+              const bodyNorm = normalize(bodyPart)
+              const prefixNorm = normalize(parts[0] || '')
+              if (!prefixNorm || bodyNorm !== prefixNorm) parts.push(bodyPart)
+            }
+
+            let desc = cleanPackedTvmazeDescription(parts.join('. '))
+            if (datePart) desc = desc ? `${desc} (${datePart})` : `(${datePart})`
+            return cleanPackedTvmazeDescription(desc)
+          }
+
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
+            const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
+
+            if (hasTag(block, tag)) {
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
+            }
+
+            return insertBeforeProgrammeEnd(block, tagXml)
+          }
+
+          function insertBeforeProgrammeEnd(block, tagXml) {
+            return block.replace(/<\/programme>\s*$/i, `${tagXml}\n</programme>`)
+          }
+
+          function enrichBlockMissingOnly(block, show, episode) {
+            let updated = block
+            let changed = false
+
+            if (!hasAnyCategory(updated)) {
+              const category = tvmazeShowIsMiniseries(show) ? 'Miniseries' : 'Series'
+              updated = insertBeforeProgrammeEnd(updated, `  <category lang="en">${category}</category>`)
+              changed = true
+              stats.addedCategories++
+            }
+
+            // Field-level fill only:
+            // Keep every provider-provided desc component that already exists.
+            // Add only missing episode title, missing SxxExx, missing synopsis, or missing airdate.
+            // Never replace provider's existing synopsis just because one metadata piece is missing.
+            const existingDesc = getTag(updated, 'desc')
+            const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode, updated)
+
+            if (packedDesc && packedDesc !== existingDesc) {
+              updated = replaceTag(updated, 'desc', packedDesc)
+              changed = true
+              stats.addedDescriptions++
+            }
+
+            if (changed) stats.enriched++
+            return updated
+          }
+
+          async function main() {
+            const parts = xml.split(/(<programme\b[\s\S]*?<\/programme>)/gi)
+            const out = []
+
+            for (const part of parts) {
+              if (!/^<programme\b/i.test(part)) {
+                out.push(part)
+                continue
+              }
+
+              stats.programmes++
+
+              let block = part
+              const title = cleanTitleForSearch(getTag(block, 'title'))
+
+              if (!title) {
+                out.push(block)
+                continue
+              }
+
+              if (isMovie(block)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              if (!needsTvmaze(block)) {
+                out.push(block)
+                continue
+              }
+
+              stats.searchedShows++
+              const show = await tvmazeSearchShow(title)
+
+              if (!show) {
+                out.push(block)
+                continue
+              }
+
+              if (tvmazeShowIsMovieLike(show)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              stats.matchedShows++
+
+              const episodes = await tvmazeEpisodes(show.id)
+              const episode = findEpisodeForProgramme(episodes, block)
+
+              block = enrichBlockMissingOnly(block, show, episode)
+              out.push(block)
+            }
+
+            fs.writeFileSync(guidePath, out.join(''))
+            fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2))
+
+            console.log('[TVMAZE] FAST missing-only enrichment complete')
+            console.log(`[TVMAZE] programmes scanned: ${stats.programmes}`)
+            console.log(`[TVMAZE] movies skipped: ${stats.skippedMovies}`)
+            console.log(`[TVMAZE] shows searched: ${stats.searchedShows}`)
+            console.log(`[TVMAZE] shows matched: ${stats.matchedShows}`)
+            console.log(`[TVMAZE] programmes enriched: ${stats.enriched}`)
+            console.log(`[TVMAZE] categories added: ${stats.addedCategories}`)
+            console.log(`[TVMAZE] subtitles added: ${stats.addedSubtitles}`)
+            console.log(`[TVMAZE] episode nums added: ${stats.addedEpisodeNums}`)
+            console.log(`[TVMAZE] dates added: ${stats.addedDates}`)
+            console.log(`[TVMAZE] descriptions added: ${stats.addedDescriptions}`)
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
+
+      - name: Inject curated logos into merged guide
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const curatedPaths = [
+            'guides/rokucurated.xml',
+            'guides/epgcurated.xml'
+          ]
+
+          const guidePath = 'guides/FASTGuide.xml'
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing generated guide: ${guidePath}`)
+            process.exit(1)
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function normalize(s) {
+            return decodeXml(s)
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/\+/g, 'plus')
+              .replace(/\.us$/i, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function channelName(block) {
+            const m = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
+          }
+
+          const logoById = new Map()
+          const logoByName = new Map()
+
+          for (const curatedPath of curatedPaths) {
+            if (!fs.existsSync(curatedPath)) {
+              console.error(`Missing curated channel list: ${curatedPath}`)
+              process.exit(1)
+            }
+
+            const curatedXml = fs.readFileSync(curatedPath, 'utf8')
+
+            for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
+              const attrs = match[1]
+              const block = match[0]
+              const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+              const name = channelName(block)
+              const iconMatch = block.match(/<icon\b[^>]*src="([^"]+)"/i)
+              const logoAttr = attr(attrs, 'logo')
+
+              const logo = iconMatch ? decodeXml(iconMatch[1]).trim() : logoAttr
+              if (!logo) continue
+
+              if (id) logoById.set(id, logo)
+              if (id) logoById.set(decodeXml(id).replace(/&amp;/g, '&'), logo)
+              if (name) logoByName.set(normalize(name), logo)
+            }
+          }
+
+          let guideXml = fs.readFileSync(guidePath, 'utf8')
+          let scanned = 0
+          let added = 0
+          let updated = 0
+          let missing = 0
+
+          guideXml = guideXml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi, (block, attrs) => {
+            scanned++
+
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(block)
+
+            const logo =
+              logoById.get(id) ||
+              logoById.get(decodeXml(id).replace(/&amp;/g, '&')) ||
+              logoByName.get(normalize(name))
+
+            if (!logo) {
+              missing++
+              return block
+            }
+
+            if (/<icon\b[^>]*src="/i.test(block)) {
+              const next = block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
+              if (next !== block) updated++
+              return next
+            }
+
+            added++
+            return block.replace(/(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i, `$1<icon src="${escapeXml(logo)}"/>`)
+          })
+
+          fs.writeFileSync(guidePath, guideXml)
+
+          console.log(`Merged guide channels scanned: ${scanned}`)
+          console.log(`Curated logos available: ${logoById.size}`)
+          console.log(`Icons added to merged guide: ${added}`)
+          console.log(`Icons updated in merged guide: ${updated}`)
+          console.log(`Merged guide channels still without curated logo match: ${missing}`)
+          EOF
+
+      - name: Validate merged FAST guide
+        run: |
+          CH=$(grep -c '<channel ' guides/FASTGuide.xml || true)
+          PR=$(grep -c '<programme ' guides/FASTGuide.xml || true)
+          DESC=$(grep -c '<desc ' guides/FASTGuide.xml || true)
+
+          echo "FASTGuide channels: $CH"
+          echo "FASTGuide programmes: $PR"
+          echo "FASTGuide descriptions: $DESC"
+
+          if [ "$CH" -lt 1 ]; then
+            echo "Invalid FASTGuide output - no channels"
+            exit 1
+          fi
+
+          if [ "$PR" -lt 1 ]; then
+            echo "Invalid FASTGuide output - no programmes"
+            exit 1
+          fi
+
+          if [ "$DESC" -lt 1 ]; then
+            echo "Invalid FASTGuide output - no descriptions"
+            exit 1
+          fi
+
+      - name: Compress merged FAST guide
+        run: |
+          gzip -c guides/FASTGuide.xml > guides/FASTGuide.xml.gz
+
+      - name: Commit and push merged FAST guide safely
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin main
+
+          # Preserve compressed guides created by other workflows.
+          git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+          git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
+          git add guides/rokuguide.xml guides/epgshareguide.xml
+          git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "No FAST guide changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update merged FAST guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, retrying after fresh fetch/rebase..."
+
+            git fetch origin main
+            git rebase origin/main
+
+            git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+            git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
+            git add guides/rokuguide.xml guides/epgshareguide.xml
+            git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+            if git diff --cached --quiet; then
+              echo "No new commit needed after rebase, retrying push..."
+            else
+              git commit -m "Update merged FAST guide"
+            fi
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
