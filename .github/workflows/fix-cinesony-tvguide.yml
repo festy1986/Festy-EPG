@@ -19,7 +19,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y imagemagick
 
-      - name: Convert CINESONY logo and update TiviMate channel
+      - name: Convert CINESONY logo and update guide
         run: |
           set -e
 
@@ -37,7 +37,7 @@ jobs:
             exit 1
           fi
 
-          magick "$OLD_LOGO" "$NEW_LOGO"
+          convert "$OLD_LOGO" "$NEW_LOGO"
 
           if [ ! -s "$NEW_LOGO" ]; then
             echo "PNG conversion failed"
