@@ -58,7 +58,7 @@ jobs:
 
           module.exports = {
             site: 'i.mjh.nz',
-            days: 14,
+            days: 2,
             request: {
               cache: {
                 ttl: 3 * 60 * 60 * 1000
@@ -203,7 +203,7 @@ jobs:
 
           module.exports = {
             site: 'epgshare01.online',
-            days: 14,
+            days: 2,
             url({ channel }) {
               const [tag] = channel.site_id.split('#')
               return `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
@@ -457,7 +457,7 @@ jobs:
         run: |
           cd epg
 
-          node <<'EOF'
+          node --input-type=commonjs <<'EOF'
           const fs = require('fs')
           const axios = require('axios')
           const { ungzip } = require('pako')
