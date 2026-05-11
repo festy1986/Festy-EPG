@@ -400,7 +400,7 @@ jobs:
             }
 
             const xml = fs.readFileSync(curatedPath, 'utf8')
-            const channels = [...xml.matchAll(/<channel([^>]*)>/gi)]
+            const channels = [...xml.matchAll(/<channel\b([^>]*)>/gi)]
               .map(m => attr(m[1], 'site_id'))
               .filter(Boolean)
               .map(siteId => {
