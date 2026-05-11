@@ -1,3 +1,4 @@
+```yaml
 name: Add TVPassport channels and convert logos
 
 on:
@@ -11,21 +12,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Install conversion tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick librsvg2-bin
+          sudo apt-get install -y imagemagick librsvg2-bin webp
 
       - name: Convert and rename logos
         run: |
           rsvg-convert "logos/Home_Network_2024_green.svg" -o "logos/Home Network.png"
+
           rsvg-convert "logos/Military_History_Channel_2005.svg" -o "logos/Military History.png"
-          magick "logos/MeTV282021%29.webp" "logos/MeTV Plus.png"
-          magick "logos/lifetime real woman.png" "logos/Lifetime Real Women East.png"
+
+          convert "logos/MeTV282021%29.webp" "logos/MeTV Plus.png"
+
+          convert "logos/lifetime real woman.png" "logos/Lifetime Real Women East.png"
+
           rsvg-convert "logos/The_Movie_Channel_1997.svg" -o "logos/The Movie Channel.png"
-          magick "logos/starz encore westerns.png" "logos/Starz Encore Westerns.png"
+
+          convert "logos/starz encore westerns.png" "logos/Starz Encore Westerns.png"
 
           rm -f \
             "logos/Home_Network_2024_green.svg" \
@@ -35,34 +42,45 @@ jobs:
             "logos/The_Movie_Channel_1997.svg" \
             "logos/starz encore westerns.png"
 
-      - name: Add TVPassport channels
+      - name: Add channels to TVPassport.channels.xml
         run: |
           python3 <<'PY'
           from pathlib import Path
 
-          path = Path("guides/TVPassport.channels.xml")
-          text = path.read_text()
+          xml_file = Path("guides/TVPassport.channels.xml")
 
-          channels = [
-          '<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Home%20Network.png" site="tvpassport.com" site_id="hgtv-canada-hd/8793" lang="en" xmltv_id="">Home Network</channel>',
-          '<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Military%20History.png" site="tvpassport.com" site_id="military-history/5271" lang="en" xmltv_id="">Military History</channel>',
-          '<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MeTV%20Plus.png" site="tvpassport.com" site_id="metv-plus/36199" lang="en" xmltv_id="">MeTV Plus</channel>',
-          '<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Lifetime%20Real%20Women%20East.png" site="tvpassport.com" site_id="lifetime-real-women-east/2707" lang="en" xmltv_id="">Lifetime Real Women East</channel>',
-          '<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Movie%20Channel.png" site="tvpassport.com" site_id="" lang="en" xmltv_id="">The Movie Channel</channel>',
-          '<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Starz%20Encore%20Westerns.png" site="tvpassport.com" site_id="starz-encore-westerns--eastern/1959" lang="en" xmltv_id="StarzEncoreWesterns.us@East">Starz Encore Westerns - Eastern</channel>',
-          ]
+          text = xml_file.read_text(encoding="utf-8")
 
-          for channel in channels:
-              if channel not in text:
-                  text = text.replace("</channels>", channel + "\n</channels>")
+          new_channels = """
 
-          path.write_text(text)
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Home%20Network.png" site="tvpassport.com" site_id="hgtv-canada-hd/8793" lang="en" xmltv_id="">Home Network</channel>
+
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Military%20History.png" site="tvpassport.com" site_id="military-history/5271" lang="en" xmltv_id="">Military History</channel>
+
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MeTV%20Plus.png" site="tvpassport.com" site_id="metv-plus/36199" lang="en" xmltv_id="">MeTV Plus</channel>
+
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Lifetime%20Real%20Women%20East.png" site="tvpassport.com" site_id="lifetime-real-women-east/2707" lang="en" xmltv_id="">Lifetime Real Women East</channel>
+
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Movie%20Channel.png" site="tvpassport.com" site_id="" lang="en" xmltv_id="">The Movie Channel</channel>
+
+<channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Starz%20Encore%20Westerns.png" site="tvpassport.com" site_id="starz-encore-westerns--eastern/1959" lang="en" xmltv_id="StarzEncoreWesterns.us@East">Starz Encore Westerns - Eastern</channel>
+
+"""
+
+          if "Home Network" not in text:
+              text = text.replace("</channels>", new_channels + "\n</channels>")
+
+          xml_file.write_text(text, encoding="utf-8")
           PY
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add guides/TVPassport.channels.xml logos/
+
           git commit -m "Add TVPassport channels and convert logos" || exit 0
+
           git push
+```
