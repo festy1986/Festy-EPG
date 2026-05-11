@@ -58,7 +58,7 @@ jobs:
 
           module.exports = {
             site: 'i.mjh.nz',
-            days: 2,
+            days: 14,
             request: {
               cache: {
                 ttl: 3 * 60 * 60 * 1000
@@ -203,7 +203,7 @@ jobs:
 
           module.exports = {
             site: 'epgshare01.online',
-            days: 2,
+            days: 14,
             url({ channel }) {
               const [tag] = channel.site_id.split('#')
               return `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
@@ -464,77 +464,86 @@ jobs:
           const iconv = require('iconv-lite')
           const parser = require('epg-parser')
 
-          const curatedPath = '../guides/epgcurated.xml'
+          async function main() {
+            const curatedPath = '../guides/epgcurated.xml'
 
-          if (!fs.existsSync(curatedPath)) {
-            console.error(`Missing ${curatedPath}`)
-            process.exit(1)
-          }
+            if (!fs.existsSync(curatedPath)) {
+              console.error(`Missing ${curatedPath}`)
+              process.exit(1)
+            }
 
-          function decodeXml(s) {
-            return String(s || '')
-              .replace(/&amp;/g, '&')
-              .replace(/&quot;/g, '"')
-              .replace(/&apos;/g, "'")
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
-          }
+            function decodeXml(s) {
+              return String(s || '')
+                .replace(/&amp;/g, '&')
+                .replace(/&quot;/g, '"')
+                .replace(/&apos;/g, "'")
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+            }
 
-          function attr(attrs, name) {
-            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? decodeXml(m[1]).trim() : ''
-          }
+            function attr(attrs, name) {
+              const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+              return m ? decodeXml(m[1]).trim() : ''
+            }
 
-          const xml = fs.readFileSync(curatedPath, 'utf8')
-          const channels = [...xml.matchAll(/<channel\b([^>]*)>/gi)]
-            .map(m => attr(m[1], 'site_id'))
-            .filter(Boolean)
-            .map(siteId => {
-              const [tag, channelId] = siteId.split('#')
-              return { tag, channelId, siteId }
-            })
-            .filter(x => x.tag && x.channelId)
+            const xml = fs.readFileSync(curatedPath, 'utf8')
 
-          const byTag = new Map()
-          for (const ch of channels) {
-            if (!byTag.has(ch.tag)) byTag.set(ch.tag, [])
-            byTag.get(ch.tag).push(ch)
-          }
+            const channels = [...xml.matchAll(/<channel([^>]*)>/gi)]
+              .map(m => attr(m[1], 'site_id'))
+              .filter(Boolean)
+              .map(siteId => {
+                const [tag, channelId] = siteId.split('#')
+                return { tag, channelId, siteId }
+              })
+              .filter(x => x.tag && x.channelId)
 
-          let missing = []
+            const byTag = new Map()
 
-          for (const [tag, list] of byTag.entries()) {
-            const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+            for (const ch of channels) {
+              if (!byTag.has(ch.tag)) byTag.set(ch.tag, [])
+              byTag.get(ch.tag).push(ch)
+            }
 
-            console.log(`[EPGSHARE VERIFY] downloading ${url}`)
+            let missing = []
 
-            const res = await axios.get(url, {
-              responseType: 'arraybuffer',
-              timeout: 30000,
-              maxContentLength: 100000000
-            })
+            for (const [tag, list] of byTag.entries()) {
+              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
 
-            const content = ungzip(new Uint8Array(res.data))
-            const decoded = iconv.decode(content, 'utf8')
-            const data = parser.parse(decoded)
-            const ids = new Set((data.channels || []).map(c => c.id))
+              console.log(`[EPGSHARE VERIFY] downloading ${url}`)
 
-            console.log(`[EPGSHARE VERIFY] ${tag}: feed channels=${ids.size}, curated channels=${list.length}`)
+              const res = await axios.get(url, {
+                responseType: 'arraybuffer',
+                timeout: 30000,
+                maxContentLength: 100000000
+              })
 
-            for (const ch of list) {
-              if (!ids.has(ch.channelId)) {
-                missing.push(ch.siteId)
+              const content = ungzip(new Uint8Array(res.data))
+              const decoded = iconv.decode(content, 'utf8')
+              const data = parser.parse(decoded)
+              const ids = new Set((data.channels || []).map(c => c.id))
+
+              console.log(`[EPGSHARE VERIFY] ${tag}: feed channels=${ids.size}, curated channels=${list.length}`)
+
+              for (const ch of list) {
+                if (!ids.has(ch.channelId)) {
+                  missing.push(ch.siteId)
+                }
               }
             }
+
+            if (missing.length) {
+              console.error('[EPGSHARE VERIFY] These curated site_id values are not present in their source feed:')
+              missing.forEach(x => console.error(`- ${x}`))
+              process.exit(1)
+            }
+
+            console.log('[EPGSHARE VERIFY] all curated IDs exist in their exact source feeds')
           }
 
-          if (missing.length) {
-            console.error('[EPGSHARE VERIFY] These curated site_id values are not present in their source feed:')
-            missing.forEach(x => console.error(`- ${x}`))
+          main().catch(err => {
+            console.error(err)
             process.exit(1)
-          }
-
-          console.log('[EPGSHARE VERIFY] all curated IDs exist in their exact source feeds')
+          })
           EOF
 
           cd ..
