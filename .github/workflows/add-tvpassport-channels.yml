@@ -1,4 +1,4 @@
-name: Convert logo files to clean PNG names
+name: Fix MGM Plex channel logos
 
 on:
   workflow_dispatch:
@@ -7,52 +7,86 @@ permissions:
   contents: write
 
 jobs:
-  convert-logos:
+  fix-logos:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install tools
+      - name: Install SVG converter
         run: |
           sudo apt-get update
-          sudo apt-get install -y imagemagick librsvg2-bin webp
+          sudo apt-get install -y librsvg2-bin
 
-      - name: Convert logos to PNG
+      - name: Convert RetroPlex logo
         run: |
-          convert "logos/ScreenPix_Action.webp" "logos/ScreenPix Action.png"
-          convert "logos/ScreenPix_Voices_2019.webp" "logos/ScreenPix Voices.png"
-          convert "logos/ScreenPix_logo_2019.webp" "logos/ScreenPix.png"
+          rsvg-convert "logos/Retroplex_logo.svg" -o "logos/RetroPlex.png"
+          rm -f "logos/Retroplex_logo.svg"
 
-          rsvg-convert "logos/MGM+.svg" -o "logos/MGM+.png"
-          rsvg-convert "logos/MGM+_Drive-In_2023.svg" -o "logos/MGM+ Drive-In.png"
-          rsvg-convert "logos/MGM+_Hits_2023.svg" -o "logos/MGM+ Hits.png"
-          rsvg-convert "logos/MGM+_Marquee_2023.svg" -o "logos/MGM+ Marquee.png"
-
-          convert "logos/Movieplex_logo_old.webp" "logos/MoviePlex.png"
-          rsvg-convert "logos/Indieplex_logo.svg" -o "logos/IndiePlex.png"
-
-      - name: Delete original files
+      - name: Add logos to XML channels
         run: |
-          rm -f "logos/ScreenPix_Action.webp"
-          rm -f "logos/ScreenPix_Voices_2019.webp"
-          rm -f "logos/ScreenPix_logo_2019.webp"
+          python3 <<'PY'
+          from pathlib import Path
+          import re
 
-          rm -f "logos/MGM+.svg"
-          rm -f "logos/MGM+_Drive-In_2023.svg"
-          rm -f "logos/MGM+_Hits_2023.svg"
-          rm -f "logos/MGM+_Marquee_2023.svg"
+          files = list(Path(".").rglob("*.xml"))
 
-          rm -f "logos/Movieplex_logo_old.webp"
-          rm -f "logos/Indieplex_logo.svg"
+          replacements = {
+              "MGMPLUS.HITS.us": {
+                  "name": "MGM+ HITS",
+                  "logo": "https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Hits.png",
+              },
+              "MGMPLUS.MARQUEE.us": {
+                  "name": "MGM+ MARQUEE",
+                  "logo": "https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Marquee.png",
+              },
+              "MGMPLUS.DRIVE.IN.us": {
+                  "name": "MGM+ DRIVE-IN",
+                  "logo": "https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Drive-In.png",
+              },
+              "MOVIEPLEX.us": {
+                  "name": "MOVIEPLEX",
+                  "logo": "https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MoviePlex.png",
+              },
+              "INDIEPLEX.us": {
+                  "name": "INDIEPLEX",
+                  "logo": "https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/IndiePlex.png",
+              },
+              "RETROPLEX.us": {
+                  "name": "RETROPLEX",
+                  "logo": "https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/RetroPlex.png",
+              },
+          }
+
+          for path in files:
+              text = path.read_text(encoding="utf-8", errors="ignore")
+              original = text
+
+              for channel_id, data in replacements.items():
+                  pattern = re.compile(
+                      rf'<channel id="{re.escape(channel_id)}">.*?</channel>',
+                      re.DOTALL
+                  )
+
+                  replacement = (
+                      f'<channel id="{channel_id}">'
+                      f'<display-name>{data["name"]}</display-name>'
+                      f'<icon src="{data["logo"]}"/>'
+                      f'<url>https://tvguide.com</url>'
+                      f'</channel>'
+                  )
+
+                  text = pattern.sub(replacement, text)
+
+              if text != original:
+                  path.write_text(text, encoding="utf-8")
+
+          PY
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add logos/
-
-          git commit -m "Convert logo files to clean PNG names" || exit 0
-
+          git add .
+          git commit -m "Fix MGM Plex XML channel logos" || exit 0
           git push
