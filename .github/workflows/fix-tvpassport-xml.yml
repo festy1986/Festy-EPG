@@ -1,0 +1,108 @@
+# GitHub Workflow — Auto Fix TVPassport XML IDs, Logos, and Formatting
+
+Save as:
+
+`.github/workflows/fix-tvpassport-xml.yml`
+
+```yaml
+name: Fix TVPassport XML
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-xml:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick librsvg2-bin webp
+
+      - name: Convert logos to PNG
+        run: |
+          rsvg-convert "logos/Retroplex_logo.svg" -o "logos/RetroPlex.png"
+          rm -f "logos/Retroplex_logo.svg"
+
+          convert "logos/ScreenPix_Action.webp" "logos/ScreenPix Action.png"
+          convert "logos/ScreenPix_Voices_2019.webp" "logos/ScreenPix Voices.png"
+          convert "logos/ScreenPix_logo_2019.webp" "logos/ScreenPix.png"
+
+          rsvg-convert "logos/MGM+.svg" -o "logos/MGM+.png"
+          rsvg-convert "logos/MGM+_Drive-In_2023.svg" -o "logos/MGM+ Drive-In.png"
+          rsvg-convert "logos/MGM+_Hits_2023.svg" -o "logos/MGM+ Hits.png"
+          rsvg-convert "logos/MGM+_Marquee_2023.svg" -o "logos/MGM+ Marquee.png"
+
+          convert "logos/Movieplex_logo_old.webp" "logos/MoviePlex.png"
+          rsvg-convert "logos/Indieplex_logo.svg" -o "logos/IndiePlex.png"
+
+          rm -f "logos/ScreenPix_Action.webp"
+          rm -f "logos/ScreenPix_Voices_2019.webp"
+          rm -f "logos/ScreenPix_logo_2019.webp"
+          rm -f "logos/MGM+.svg"
+          rm -f "logos/MGM+_Drive-In_2023.svg"
+          rm -f "logos/MGM+_Hits_2023.svg"
+          rm -f "logos/MGM+_Marquee_2023.svg"
+          rm -f "logos/Movieplex_logo_old.webp"
+          rm -f "logos/Indieplex_logo.svg"
+
+      - name: Fix XML
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+
+          path = Path('guides/TVPassport.channels.xml')
+          text = path.read_text(encoding='utf-8')
+
+          fixes = {
+              'xmltv_id=""'>Home Network</channel>': 'xmltv_id="HOME.NETWORK.ca">Home Network</channel>',
+              'xmltv_id=""'>Military History</channel>': 'xmltv_id="MILITARY.HISTORY.us">Military History</channel>',
+              'xmltv_id=""'>MeTV Plus</channel>': 'xmltv_id="METV.PLUS.us">MeTV Plus</channel>',
+              'xmltv_id=""'>Lifetime Real Women East</channel>': 'xmltv_id="LIFETIME.REAL.WOMEN.us">Lifetime Real Women East</channel>',
+              'xmltv_id=""'>The Movie Channel</channel>': 'xmltv_id="THE.MOVIE.CHANNEL.ca">The Movie Channel</channel>',
+              'xmltv_id="StarzEncoreWesterns.us@East"': 'xmltv_id="STARZ.ENCORE.WESTERNS.us"',
+              'xmltv_id="CW..us"': 'xmltv_id="CW.us"',
+              'xmltv_id="FOX..us"': 'xmltv_id="FOX.BOSTON.us"',
+              'xmltv_id=""'>ScreenPix</channel>': 'xmltv_id="SCREENPIX.us">ScreenPix</channel>',
+              'xmltv_id=""'>ScreenPix Voices</channel>': 'xmltv_id="SCREENPIX.VOICES.us">ScreenPix Voices</channel>',
+          }
+
+          for old, new in fixes.items():
+              text = text.replace(old, new)
+
+          replacements = {
+              'site_id="retroplex-hd/8837" lang="en" xmltv_id="RETROPLEX.us">RetroPlex</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/RetroPlex.png" site="tvpassport.com" site_id="retroplex-hd/8837" lang="en" xmltv_id="RETROPLEX.us">RetroPlex</channel>',
+              'site_id="indieplex-hd/9026" lang="en" xmltv_id="INDIEPLEX.us">IndiePlex</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/IndiePlex.png" site="tvpassport.com" site_id="indieplex-hd/9026" lang="en" xmltv_id="INDIEPLEX.us">IndiePlex</channel>',
+              'site_id="movieplex-hd--eastern/11443" lang="en" xmltv_id="MOVIEPLEX.us">MoviePlex</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MoviePlex.png" site="tvpassport.com" site_id="movieplex-hd--eastern/11443" lang="en" xmltv_id="MOVIEPLEX.us">MoviePlex</channel>',
+              'site_id="mgm-hd--east/7610" lang="en" xmltv_id="MGM.us">MGM</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B.png" site="tvpassport.com" site_id="mgm-hd--east/7610" lang="en" xmltv_id="MGMPLUS.us">MGM+</channel>',
+              'site_id="mgm-drive-in-hd/33934" lang="en" xmltv_id="MGM.DRIVE.IN.us">MGM Drive-In</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Drive-In.png" site="tvpassport.com" site_id="mgm-drive-in-hd/33934" lang="en" xmltv_id="MGMPLUS.DRIVE.IN.us">MGM+ Drive-In</channel>',
+              'site_id="mgm-hits-hd--east/11615" lang="en" xmltv_id="MGM.HITS.us">MGM Hits</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Hits.png" site="tvpassport.com" site_id="mgm-hits-hd--east/11615" lang="en" xmltv_id="MGMPLUS.HITS.us">MGM+ Hits</channel>',
+              'site_id="mgm-marquee-hd/11616" lang="en" xmltv_id="MGM.MARQUEE.us">MGM Marquee</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Marquee.png" site="tvpassport.com" site_id="mgm-marquee-hd/11616" lang="en" xmltv_id="MGMPLUS.MARQUEE.us">MGM+ Marquee</channel>',
+              'site_id="screenpix/34659" lang="en" xmltv_id="SCREENPIX.us">ScreenPix</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ScreenPix.png" site="tvpassport.com" site_id="screenpix/34659" lang="en" xmltv_id="SCREENPIX.us">ScreenPix</channel>',
+              'site_id="screenpix-action/34660" lang="en" xmltv_id="SCREENPIX.ACTION.us">ScreenPix Action</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ScreenPix%20Action.png" site="tvpassport.com" site_id="screenpix-action/34660" lang="en" xmltv_id="SCREENPIX.ACTION.us">ScreenPix Action</channel>',
+              'site_id="screenpix-voices/34662" lang="en" xmltv_id="SCREENPIX.VOICES.us">ScreenPix Voices</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ScreenPix%20Voices.png" site="tvpassport.com" site_id="screenpix-voices/34662" lang="en" xmltv_id="SCREENPIX.VOICES.us">ScreenPix Voices</channel>',
+              'site_id="screenpix-westerns/34661" lang="en" xmltv_id="SCREENPIX.WESTERNS.us">ScreenPix Westerns</channel>': 'logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ScreenPix%20Westerns.png" site="tvpassport.com" site_id="screenpix-westerns/34661" lang="en" xmltv_id="SCREENPIX.WESTERNS.us">ScreenPix Westerns</channel>'
+          }
+
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+
+          text = text.replace('</channel><channel', '</channel>\n<channel')
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Fix TVPassport XML formatting, ids and logos" || exit 0
+          git push
+```
