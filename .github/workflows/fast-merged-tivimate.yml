@@ -127,9 +127,10 @@ jobs:
             const output = []
 
             programs.forEach(prog => {
-              let prev = output[output.length - 1]
-              let found =
+              const prev = output[output.length - 1]
+              const found =
                 prev &&
+                Array.isArray(prog.categories) &&
                 prog.categories.includes('Movie') &&
                 prev.title === prog.title &&
                 prev.description === prog.description
@@ -217,7 +218,7 @@ jobs:
             parser({ buffer, channel, date, cached }) {
               if (!cached) cachedContent = undefined
 
-              let programs = []
+              const programs = []
               const items = parseItems(buffer, channel, date)
 
               items.forEach(item => {
@@ -348,6 +349,101 @@ jobs:
             exit 1
           fi
 
+      - name: Verify EPGShare curated IDs against source feeds
+        run: |
+          cd epg
+
+          node --input-type=commonjs <<'EOF'
+          const fs = require('fs')
+          const axios = require('axios')
+          const { ungzip } = require('pako')
+          const iconv = require('iconv-lite')
+          const parser = require('epg-parser')
+
+          async function main() {
+            const curatedPath = '../guides/epgcurated.xml'
+
+            if (!fs.existsSync(curatedPath)) {
+              console.error(`Missing ${curatedPath}`)
+              process.exit(1)
+            }
+
+            function decodeXml(s) {
+              return String(s || '')
+                .replace(/&amp;/g, '&')
+                .replace(/&quot;/g, '"')
+                .replace(/&apos;/g, "'")
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+            }
+
+            function attr(attrs, name) {
+              const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+              return m ? decodeXml(m[1]).trim() : ''
+            }
+
+            const xml = fs.readFileSync(curatedPath, 'utf8')
+
+            const channels = [...xml.matchAll(/<channel\b([^>]*)>/gi)]
+              .map(m => attr(m[1], 'site_id'))
+              .filter(Boolean)
+              .map(siteId => {
+                const [tag, channelId] = siteId.split('#')
+                return { tag, channelId, siteId }
+              })
+              .filter(x => x.tag && x.channelId)
+
+            const byTag = new Map()
+
+            for (const ch of channels) {
+              if (!byTag.has(ch.tag)) byTag.set(ch.tag, [])
+              byTag.get(ch.tag).push(ch)
+            }
+
+            let missing = []
+
+            for (const [tag, list] of byTag.entries()) {
+              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+
+              console.log(`[EPGSHARE VERIFY] downloading ${url}`)
+
+              const res = await axios.get(url, {
+                responseType: 'arraybuffer',
+                timeout: 30000,
+                maxContentLength: 100000000
+              })
+
+              const content = ungzip(new Uint8Array(res.data))
+              const decoded = iconv.decode(content, 'utf8')
+              const data = parser.parse(decoded)
+              const ids = new Set((data.channels || []).map(c => c.id))
+
+              console.log(`[EPGSHARE VERIFY] ${tag}: feed channels=${ids.size}, curated channels=${list.length}`)
+
+              for (const ch of list) {
+                if (!ids.has(ch.channelId)) {
+                  missing.push(ch.siteId)
+                }
+              }
+            }
+
+            if (missing.length) {
+              console.error('[EPGSHARE VERIFY] These curated site_id values are not present in their source feed:')
+              missing.forEach(x => console.error(`- ${x}`))
+              process.exit(1)
+            }
+
+            console.log('[EPGSHARE VERIFY] all curated IDs exist in their exact source feeds')
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
+
+          cd ..
+
       - name: Grab Roku guide with schedule recovery
         run: |
           cd epg
@@ -365,13 +461,14 @@ jobs:
             echo "============================================================"
             echo "Starting Roku $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
+            echo "days=14"
             echo "============================================================"
 
             set +e
             npx tsx scripts/commands/epg/grab.ts \
               --channels=../guides/rokucurated.xml \
               --output="../guides/rokuguide.${PASS_NAME}.xml" \
-              --days=2 \
+              --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/rokuguide.${PASS_NAME}.log"
 
@@ -392,7 +489,7 @@ jobs:
 
             PR=$(grep -c '<programme ' "../guides/rokuguide.${PASS_NAME}.xml" || true)
             DESC=$(grep -c '<desc ' "../guides/rokuguide.${PASS_NAME}.xml" || true)
-            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/rokuguide.${PASS_NAME}.log" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|\(0 programs\)|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/rokuguide.${PASS_NAME}.log" || true)
 
             echo "$PR" > "../guides/rokuguide.${PASS_NAME}.programmes.count"
             echo "$DESC" > "../guides/rokuguide.${PASS_NAME}.descriptions.count"
@@ -453,101 +550,6 @@ jobs:
 
           cd ..
 
-      - name: Verify EPGShare curated IDs against source feeds
-        run: |
-          cd epg
-
-          node --input-type=commonjs <<'EOF'
-          const fs = require('fs')
-          const axios = require('axios')
-          const { ungzip } = require('pako')
-          const iconv = require('iconv-lite')
-          const parser = require('epg-parser')
-
-          async function main() {
-            const curatedPath = '../guides/epgcurated.xml'
-
-            if (!fs.existsSync(curatedPath)) {
-              console.error(`Missing ${curatedPath}`)
-              process.exit(1)
-            }
-
-            function decodeXml(s) {
-              return String(s || '')
-                .replace(/&amp;/g, '&')
-                .replace(/&quot;/g, '"')
-                .replace(/&apos;/g, "'")
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-            }
-
-            function attr(attrs, name) {
-              const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-              return m ? decodeXml(m[1]).trim() : ''
-            }
-
-            const xml = fs.readFileSync(curatedPath, 'utf8')
-
-            const channels = [...xml.matchAll(/<channel([^>]*)>/gi)]
-              .map(m => attr(m[1], 'site_id'))
-              .filter(Boolean)
-              .map(siteId => {
-                const [tag, channelId] = siteId.split('#')
-                return { tag, channelId, siteId }
-              })
-              .filter(x => x.tag && x.channelId)
-
-            const byTag = new Map()
-
-            for (const ch of channels) {
-              if (!byTag.has(ch.tag)) byTag.set(ch.tag, [])
-              byTag.get(ch.tag).push(ch)
-            }
-
-            let missing = []
-
-            for (const [tag, list] of byTag.entries()) {
-              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
-
-              console.log(`[EPGSHARE VERIFY] downloading ${url}`)
-
-              const res = await axios.get(url, {
-                responseType: 'arraybuffer',
-                timeout: 30000,
-                maxContentLength: 100000000
-              })
-
-              const content = ungzip(new Uint8Array(res.data))
-              const decoded = iconv.decode(content, 'utf8')
-              const data = parser.parse(decoded)
-              const ids = new Set((data.channels || []).map(c => c.id))
-
-              console.log(`[EPGSHARE VERIFY] ${tag}: feed channels=${ids.size}, curated channels=${list.length}`)
-
-              for (const ch of list) {
-                if (!ids.has(ch.channelId)) {
-                  missing.push(ch.siteId)
-                }
-              }
-            }
-
-            if (missing.length) {
-              console.error('[EPGSHARE VERIFY] These curated site_id values are not present in their source feed:')
-              missing.forEach(x => console.error(`- ${x}`))
-              process.exit(1)
-            }
-
-            console.log('[EPGSHARE VERIFY] all curated IDs exist in their exact source feeds')
-          }
-
-          main().catch(err => {
-            console.error(err)
-            process.exit(1)
-          })
-          EOF
-
-          cd ..
-
       - name: Grab EPGShare guide with schedule recovery
         run: |
           cd epg
@@ -565,13 +567,14 @@ jobs:
             echo "============================================================"
             echo "Starting EPGShare $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
+            echo "days=14"
             echo "============================================================"
 
             set +e
             npx tsx scripts/commands/epg/grab.ts \
               --channels=../guides/epgcurated.xml \
               --output="../guides/epgshareguide.${PASS_NAME}.xml" \
-              --days=2 \
+              --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/epgshareguide.${PASS_NAME}.log"
 
@@ -659,7 +662,7 @@ jobs:
 
       - name: Merge Roku and EPGShare guides
         run: |
-          node <<'EOF'
+          node --input-type=commonjs <<'EOF'
           const fs = require('fs')
 
           const inputPaths = [
@@ -755,7 +758,7 @@ jobs:
 
       - name: Fill missing FAST metadata from TVMaze
         run: |
-          node <<'EOF'
+          node --input-type=commonjs <<'EOF'
           const fs = require('fs')
 
           const guidePath = 'guides/FASTGuide.xml'
@@ -784,9 +787,6 @@ jobs:
             matchedShows: 0,
             enriched: 0,
             addedCategories: 0,
-            addedSubtitles: 0,
-            addedEpisodeNums: 0,
-            addedDates: 0,
             addedDescriptions: 0
           }
 
@@ -854,23 +854,15 @@ jobs:
           }
 
           function isMovie(block) {
-            if (hasCategory(block, 'Movie')) return true
-            if (hasCategory(block, 'Film')) return true
-            return false
+            return hasCategory(block, 'Movie') || hasCategory(block, 'Film')
           }
 
           function needsTvmaze(block) {
             if (!hasAnyCategory(block)) return true
-
             const desc = getTag(block, 'desc')
             if (!desc) return true
-
-            // Strict rule: TVMaze may only fill fields TVGuide did not find.
-            // It must not rebuild descriptions because an episode title/code is missing.
-            // The only packed-desc edit allowed after provider is appending a missing airdate.
             const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
             if (!hasPackedDisplayDate) return true
-
             return false
           }
 
@@ -1009,8 +1001,6 @@ jobs:
               if (byPackedTitle) return byPackedTitle
             }
 
-            // Last fallback only. The schedule date is the current rerun date, so it is usually
-            // not the original TVMaze airdate for syndicated/retro channels.
             if (scheduleDate) {
               const exact = episodes.find(ep => ep.airdate === scheduleDate)
               if (exact) return exact
@@ -1035,18 +1025,6 @@ jobs:
             if (/^S\d+E\d+$/i.test(first)) return ''
             if (first.length > 80) return ''
             return first
-          }
-
-          function xmltvNs(season, episode) {
-            const s = Number(season)
-            const e = Number(episode)
-            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
-            return `${s - 1}.${e - 1}.`
-          }
-
-          function formatDateXmltv(date) {
-            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
-            return date.replace(/-/g, '')
           }
 
           function cleanTvmazeSummary(value) {
@@ -1087,8 +1065,6 @@ jobs:
             return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
           }
 
-
-
           function shouldSuppressTvmazeDisplayDate(block, airdate) {
             if (!airdate) return false
 
@@ -1112,10 +1088,9 @@ jobs:
 
             if (Number.isNaN(scheduleDate.getTime()) || Number.isNaN(parsedAirDate.getTime())) return true
 
-            // Match the original guide pass: for live/current news, sports, paid programming,
-            // and similar listings, suppress dates when TVMaze only found the current airing date.
             return Math.abs(scheduleDate.getTime() - parsedAirDate.getTime()) / 86400000 <= 45
           }
+
           function cleanPackedTvmazeDescription(value) {
             return String(value || '')
               .replace(/\s+/g, ' ')
@@ -1167,7 +1142,6 @@ jobs:
               }
             }
 
-            // A first sentence that exactly matches the TVMaze episode name is an existing title-only prefix.
             return {
               episodeTitle: '',
               episodeCode: '',
@@ -1192,9 +1166,6 @@ jobs:
             let bodyPart = parsed.body
             let datePart = parsed.dateText
 
-            // If provider packed the episode title as the first sentence, e.g.
-            // "Thanksgiving. The Taylor family...", recognize it as the episode title
-            // instead of treating it as synopsis text.
             const packedTitle = getPackedEpisodeTitleFromDesc(existing)
             if (!titlePart && episodeName && packedTitle && normalize(packedTitle) === normalize(episodeName)) {
               titlePart = packedTitle
@@ -1202,26 +1173,18 @@ jobs:
               if (firstSentence) bodyPart = bodyPart.slice(firstSentence[0].length).trim()
             }
 
-            // If provider already put the episode title in the desc, leave it.
-            // If it is missing and TVMaze has it, add only that missing title.
             if (!titlePart && episodeName && !descHasEpisodeName(existing, episodeName)) {
               titlePart = episodeName
             }
 
-            // If provider already put SxxExx in the desc, leave it.
-            // If it is missing and TVMaze has it, add only that missing code.
             if (!codePart && episodeCode && !descHasEpisodeCode(existing, episode?.season, episode?.number)) {
               codePart = episodeCode
             }
 
-            // If provider already gave a real description body, leave it untouched.
-            // If the body is missing or the whole desc was only metadata, add only the missing synopsis.
             if (!bodyPart || bodyPart === titlePart || bodyPart === codePart || bodyPart === `${titlePart} - ${codePart}`) {
               bodyPart = episodeSummary || showSummary || ''
             }
 
-            // If provider already put the date/year at the end, leave it.
-            // If it is missing and TVMaze has an airdate, add only that missing date.
             if (!datePart && displayDate && !shouldSuppressTvmazeDisplayDate(block, episode?.airdate) && !descHasDisplayDate(existing, episode?.airdate)) {
               datePart = displayDate
             }
@@ -1268,10 +1231,6 @@ jobs:
               stats.addedCategories++
             }
 
-            // Field-level fill only:
-            // Keep every provider-provided desc component that already exists.
-            // Add only missing episode title, missing SxxExx, missing synopsis, or missing airdate.
-            // Never replace provider's existing synopsis just because one metadata piece is missing.
             const existingDesc = getTag(updated, 'desc')
             const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode, updated)
 
@@ -1349,9 +1308,6 @@ jobs:
             console.log(`[TVMAZE] shows matched: ${stats.matchedShows}`)
             console.log(`[TVMAZE] programmes enriched: ${stats.enriched}`)
             console.log(`[TVMAZE] categories added: ${stats.addedCategories}`)
-            console.log(`[TVMAZE] subtitles added: ${stats.addedSubtitles}`)
-            console.log(`[TVMAZE] episode nums added: ${stats.addedEpisodeNums}`)
-            console.log(`[TVMAZE] dates added: ${stats.addedDates}`)
             console.log(`[TVMAZE] descriptions added: ${stats.addedDescriptions}`)
           }
 
@@ -1363,7 +1319,7 @@ jobs:
 
       - name: Inject curated logos into merged guide
         run: |
-          node <<'EOF'
+          node --input-type=commonjs <<'EOF'
           const fs = require('fs')
 
           const curatedPaths = [
@@ -1520,7 +1476,6 @@ jobs:
 
           git fetch origin main
 
-          # Preserve compressed guides created by other workflows.
           git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
