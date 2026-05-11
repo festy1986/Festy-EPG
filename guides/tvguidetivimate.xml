@@ -132,11 +132,11 @@
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20ENCORE%20Family.png"/><url>https://tvguide.com</url></channel>
 <channel id="STARZ.INBLACK.us"><display-name>STARZ INBLACK</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/STARZ%20InBlack.png"/><url>https://tvguide.com</url></channel>
-<channel id="MGMPLUS.HITS.us"><display-name>MGM+ HITS</display-name><url>https://tvguide.com</url></channel>
-<channel id="MGMPLUS.MARQUEE.us"><display-name>MGM+ MARQUEE</display-name><url>https://tvguide.com</url></channel>
-<channel id="MGMPLUS.DRIVE.IN.us"><display-name>MGM+ DRIVE-IN</display-name><url>https://tvguide.com</url></channel>
-<channel id="MOVIEPLEX.us"><display-name>MOVIEPLEX</display-name><url>https://tvguide.com</url></channel>
-<channel id="INDIEPLEX.us"><display-name>INDIEPLEX</display-name><url>https://tvguide.com</url></channel>
+<channel id="MGMPLUS.HITS.us"><display-name>MGM+ HITS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Hits.png"/><url>https://tvguide.com</url></channel>
+<channel id="MGMPLUS.MARQUEE.us"><display-name>MGM+ MARQUEE</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Marquee.png"/><url>https://tvguide.com</url></channel>
+<channel id="MGMPLUS.DRIVE.IN.us"><display-name>MGM+ DRIVE-IN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MGM%2B%20Drive-In.png"/><url>https://tvguide.com</url></channel>
+<channel id="MOVIEPLEX.us"><display-name>MOVIEPLEX</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MoviePlex.png"/><url>https://tvguide.com</url></channel>
+<channel id="INDIEPLEX.us"><display-name>INDIEPLEX</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/IndiePlex.png"/><url>https://tvguide.com</url></channel>
 <channel id="NECN.us" site_id="9100002976#9233005457"><display-name>NECN</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/New%20England%20Cable%20News.png"/><url>https://tvguide.com</url></channel>
 <channel id="ESPN2.us" site_id="9100002976#9200012351"><display-name>ESPN2</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/ESPN2.png"/><url>https://tvguide.com</url></channel>
 <channel id="FS1.us" site_id="9100002976#9233008440"><display-name>FS1</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/FOX%20Sports%201%20HD.png"/><url>https://tvguide.com</url></channel>
