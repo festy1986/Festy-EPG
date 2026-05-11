@@ -270,18 +270,18 @@ jobs:
           }
           EOF
 
-      - name: Build Xumo channel list
+      - name: Validate curated Xumo channel list
         run: |
-          cd epg
-          npm run channels:parse --- \
-            --config=./sites/xumo.tv/xumo.tv.config.js \
-            --output=./sites/xumo.tv/festy-xumo.channels.xml
+          if [ ! -f guides/xumcurated.xml ]; then
+            echo "Missing guides/xumcurated.xml"
+            exit 1
+          fi
 
-          CH=$(grep -c '<channel ' sites/xumo.tv/festy-xumo.channels.xml || true)
-          echo "Xumo channels built: $CH"
+          CH=$(grep -c '<channel ' guides/xumcurated.xml || true)
+          echo "Curated Xumo channels: $CH"
 
-          if [ "$CH" -lt 50 ]; then
-            echo "Invalid Xumo channel list - expected at least 50 channels"
+          if [ "$CH" -lt 1 ]; then
+            echo "Invalid curated Xumo channel list - no channels found"
             exit 1
           fi
 
@@ -310,7 +310,7 @@ jobs:
 
             set +e
             npx tsx scripts/commands/epg/grab.ts \
-              --channels=sites/xumo.tv/festy-xumo.channels.xml \
+              --channels=../guides/xumcurated.xml \
               --output="../guides/xumotivimateguide.${PASS_NAME}.xml" \
               --days=2 \
               --maxConnections="$MAX_CONNECTIONS" \
@@ -1005,8 +1005,8 @@ jobs:
           echo "Xumo programmes: $PR"
           echo "Xumo descriptions: $DESC"
 
-          if [ "$CH" -lt 50 ]; then
-            echo "Invalid Xumo output - expected at least 50 channels"
+          if [ "$CH" -lt 1 ]; then
+            echo "Invalid Xumo output - no channels"
             exit 1
           fi
 
