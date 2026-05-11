@@ -187,7 +187,7 @@ jobs:
           }
           EOF
 
-      - name: Write EPGShare config
+      - name: Write EPGShare config from official IPTV-org logic
         run: |
           mkdir -p epg/sites/epgshare01.online
 
@@ -201,21 +201,12 @@ jobs:
 
           let cachedContent
 
-          function resolveTag(tag) {
-            const aliases = {
-              US1: 'US2'
-            }
-
-            return aliases[tag] || tag
-          }
-
           module.exports = {
             site: 'epgshare01.online',
             days: 14,
             url({ channel }) {
               const [tag] = channel.site_id.split('#')
-              const resolvedTag = resolveTag(tag)
-              return `https://epgshare01.online/epgshare01/epg_ripper_${resolvedTag}.xml.gz`
+              return `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
             },
             request: {
               cache: {
@@ -241,8 +232,7 @@ jobs:
               return programs
             },
             async channels({ tag }) {
-              const resolvedTag = resolveTag(tag)
-              const url = `https://epgshare01.online/epgshare01/epg_ripper_${resolvedTag}.xml.gz`
+              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
 
               try {
                 const res = await axios.get(url, { responseType: 'stream' })
@@ -463,6 +453,92 @@ jobs:
 
           cd ..
 
+      - name: Verify EPGShare curated IDs against source feeds
+        run: |
+          cd epg
+
+          node <<'EOF'
+          const fs = require('fs')
+          const axios = require('axios')
+          const { ungzip } = require('pako')
+          const iconv = require('iconv-lite')
+          const parser = require('epg-parser')
+
+          const curatedPath = '../guides/epgcurated.xml'
+
+          if (!fs.existsSync(curatedPath)) {
+            console.error(`Missing ${curatedPath}`)
+            process.exit(1)
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          const xml = fs.readFileSync(curatedPath, 'utf8')
+          const channels = [...xml.matchAll(/<channel\b([^>]*)>/gi)]
+            .map(m => attr(m[1], 'site_id'))
+            .filter(Boolean)
+            .map(siteId => {
+              const [tag, channelId] = siteId.split('#')
+              return { tag, channelId, siteId }
+            })
+            .filter(x => x.tag && x.channelId)
+
+          const byTag = new Map()
+          for (const ch of channels) {
+            if (!byTag.has(ch.tag)) byTag.set(ch.tag, [])
+            byTag.get(ch.tag).push(ch)
+          }
+
+          let missing = []
+
+          for (const [tag, list] of byTag.entries()) {
+            const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+
+            console.log(`[EPGSHARE VERIFY] downloading ${url}`)
+
+            const res = await axios.get(url, {
+              responseType: 'arraybuffer',
+              timeout: 30000,
+              maxContentLength: 100000000
+            })
+
+            const content = ungzip(new Uint8Array(res.data))
+            const decoded = iconv.decode(content, 'utf8')
+            const data = parser.parse(decoded)
+            const ids = new Set((data.channels || []).map(c => c.id))
+
+            console.log(`[EPGSHARE VERIFY] ${tag}: feed channels=${ids.size}, curated channels=${list.length}`)
+
+            for (const ch of list) {
+              if (!ids.has(ch.channelId)) {
+                missing.push(ch.siteId)
+              }
+            }
+          }
+
+          if (missing.length) {
+            console.error('[EPGSHARE VERIFY] These curated site_id values are not present in their source feed:')
+            missing.forEach(x => console.error(`- ${x}`))
+            process.exit(1)
+          }
+
+          console.log('[EPGSHARE VERIFY] all curated IDs exist in their exact source feeds')
+          EOF
+
+          cd ..
+
       - name: Grab EPGShare guide with schedule recovery
         run: |
           cd epg
@@ -507,7 +583,11 @@ jobs:
 
             PR=$(grep -c '<programme ' "../guides/epgshareguide.${PASS_NAME}.xml" || true)
             DESC=$(grep -c '<desc ' "../guides/epgshareguide.${PASS_NAME}.xml" || true)
-            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/epgshareguide.${PASS_NAME}.log" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|\(0 programs\)|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/epgshareguide.${PASS_NAME}.log" || true)
+
+            if [ "$PR" -lt 1 ]; then
+              ISSUE_COUNT=$((ISSUE_COUNT + 1000))
+            fi
 
             echo "$PR" > "../guides/epgshareguide.${PASS_NAME}.programmes.count"
             echo "$DESC" > "../guides/epgshareguide.${PASS_NAME}.descriptions.count"
