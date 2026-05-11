@@ -47,13 +47,13 @@ jobs:
           cat > guides/epgcurated.xml <<'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
           <channels>
-            <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Action.us" site_id="US1#MGM.Presents.Action.us">MGM Presents Action</channel>
-            <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Horror.us" site_id="US1#MGM.Presents.Horror.us">MGM Presents Horror</channel>
-            <channel site="epgshare01.online" lang="en" xmltv_id="Scares.by.Shudder.us" site_id="US1#Scares.by.Shudder.us">Scares by Shudder</channel>
+            <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Action.us" site_id="US2#MGM.Presents.Action.us">MGM Presents Action</channel>
+            <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Horror.us" site_id="US2#MGM.Presents.Horror.us">MGM Presents Horror</channel>
+            <channel site="epgshare01.online" lang="en" xmltv_id="Scares.by.Shudder.us" site_id="US2#Scares.by.Shudder.us">Scares by Shudder</channel>
           </channels>
           EOF
 
-          echo "Wrote guides/epgcurated.xml with US1 source IDs"
+          echo "Wrote guides/epgcurated.xml with US2 source IDs"
           grep -n '<channel ' guides/epgcurated.xml
 
       - name: Write Roku i.mjh.nz config
@@ -365,7 +365,7 @@ jobs:
             exit 1
           fi
 
-      - name: Verify EPGShare US1 feed and curated IDs
+      - name: Verify EPGShare US2 feed and curated IDs
         run: |
           cd epg
 
@@ -378,7 +378,7 @@ jobs:
 
           async function main() {
             const curatedPath = '../guides/epgcurated.xml'
-            const url = 'https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz'
+            const url = 'https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz'
 
             if (!fs.existsSync(curatedPath)) {
               console.error(`Missing ${curatedPath}`)
@@ -407,10 +407,10 @@ jobs:
                 const [tag, channelId] = siteId.split('#')
                 return { tag, channelId, siteId }
               })
-              .filter(x => x.tag === 'US1' && x.channelId)
+              .filter(x => x.tag === 'US2' && x.channelId)
 
             if (!channels.length) {
-              console.error('[EPGSHARE VERIFY] No US1 channels found in guides/epgcurated.xml')
+              console.error('[EPGSHARE VERIFY] No US2 channels found in guides/epgcurated.xml')
               process.exit(1)
             }
 
@@ -427,17 +427,17 @@ jobs:
             const data = parser.parse(decoded)
             const ids = new Set((data.channels || []).map(c => c.id))
 
-            console.log(`[EPGSHARE VERIFY] US1 feed channels=${ids.size}, curated US1 channels=${channels.length}`)
+            console.log(`[EPGSHARE VERIFY] US2 feed channels=${ids.size}, curated US2 channels=${channels.length}`)
 
             const missing = channels.filter(ch => !ids.has(ch.channelId)).map(ch => ch.siteId)
 
             if (missing.length) {
-              console.error('[EPGSHARE VERIFY] These curated US1 site_id values are not present in the US1 source feed:')
+              console.error('[EPGSHARE VERIFY] These curated US2 site_id values are not present in the US2 source feed:')
               missing.forEach(x => console.error(`- ${x}`))
               process.exit(1)
             }
 
-            console.log('[EPGSHARE VERIFY] all curated US1 IDs exist in the US1 source feed')
+            console.log('[EPGSHARE VERIFY] all curated US2 IDs exist in the US2 source feed')
           }
 
           main().catch(err => {
@@ -466,7 +466,7 @@ jobs:
             echo "Starting Roku $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
             echo "days=14"
-            echo "source=https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz"
+            echo "source=https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz"
             echo "============================================================"
 
             set +e
