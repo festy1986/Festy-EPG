@@ -365,7 +365,7 @@ jobs:
             exit 1
           fi
 
-      - name: Verify EPGShare US2 feed and curated IDs
+      - name: Verify EPGShare US1 feed and curated IDs
         run: |
           cd epg
 
@@ -407,10 +407,10 @@ jobs:
                 const [tag, channelId] = siteId.split('#')
                 return { tag, channelId, siteId }
               })
-              .filter(x => x.tag === 'US2' && x.channelId)
+              .filter(x => x.tag === 'US1' && x.channelId)
 
             if (!channels.length) {
-              console.error('[EPGSHARE VERIFY] No US2 channels found in guides/epgcurated.xml')
+              console.error('[EPGSHARE VERIFY] No US1 channels found in guides/epgcurated.xml')
               process.exit(1)
             }
 
@@ -427,17 +427,17 @@ jobs:
             const data = parser.parse(decoded)
             const ids = new Set((data.channels || []).map(c => c.id))
 
-            console.log(`[EPGSHARE VERIFY] US2 feed channels=${ids.size}, curated US2 channels=${channels.length}`)
+            console.log(`[EPGSHARE VERIFY] US1 feed channels=${ids.size}, curated US1 channels=${channels.length}`)
 
             const missing = channels.filter(ch => !ids.has(ch.channelId)).map(ch => ch.siteId)
 
             if (missing.length) {
-              console.error('[EPGSHARE VERIFY] These curated US2 site_id values are not present in the US2 source feed:')
+              console.error('[EPGSHARE VERIFY] These curated US1 site_id values are not present in the US1 source feed:')
               missing.forEach(x => console.error(`- ${x}`))
               process.exit(1)
             }
 
-            console.log('[EPGSHARE VERIFY] all curated US2 IDs exist in the US2 source feed')
+            console.log('[EPGSHARE VERIFY] all curated US1 IDs exist in the US1 source feed')
           }
 
           main().catch(err => {
