@@ -1,4 +1,4 @@
-name: Add TVPassport channels and convert logos
+name: Convert logo files to clean PNG names
 
 on:
   workflow_dispatch:
@@ -7,39 +7,52 @@ permissions:
   contents: write
 
 jobs:
-  update-tvpassport:
+  convert-logos:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - run: sudo apt-get update && sudo apt-get install -y imagemagick librsvg2-bin webp
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick librsvg2-bin webp
 
-      - run: |
-          rsvg-convert "logos/Home_Network_2024_green.svg" -o "logos/Home Network.png"
-          rsvg-convert "logos/Military_History_Channel_2005.svg" -o "logos/Military History.png"
-          convert "logos/MeTV282021%29.webp" "logos/MeTV Plus.png"
-          convert "logos/lifetime real woman.png" "logos/Lifetime Real Women East.png"
-          rsvg-convert "logos/The_Movie_Channel_1997.svg" -o "logos/The Movie Channel.png"
-          convert "logos/starz encore westerns.png" "logos/Starz Encore Westerns.png"
+      - name: Convert logos to PNG
+        run: |
+          convert "logos/ScreenPix_Action.webp" "logos/ScreenPix Action.png"
+          convert "logos/ScreenPix_Voices_2019.webp" "logos/ScreenPix Voices.png"
+          convert "logos/ScreenPix_logo_2019.webp" "logos/ScreenPix.png"
 
-          rm -f "logos/Home_Network_2024_green.svg"
-          rm -f "logos/Military_History_Channel_2005.svg"
-          rm -f "logos/MeTV282021%29.webp"
-          rm -f "logos/lifetime real woman.png"
-          rm -f "logos/The_Movie_Channel_1997.svg"
-          rm -f "logos/starz encore westerns.png"
+          rsvg-convert "logos/MGM+.svg" -o "logos/MGM+.png"
+          rsvg-convert "logos/MGM+_Drive-In_2023.svg" -o "logos/MGM+ Drive-In.png"
+          rsvg-convert "logos/MGM+_Hits_2023.svg" -o "logos/MGM+ Hits.png"
+          rsvg-convert "logos/MGM+_Marquee_2023.svg" -o "logos/MGM+ Marquee.png"
 
-      - run: |
-          sed -i '/<\/channels>/i <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Home%20Network.png" site="tvpassport.com" site_id="hgtv-canada-hd/8793" lang="en" xmltv_id="">Home Network</channel>' guides/TVPassport.channels.xml
-          sed -i '/<\/channels>/i <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Military%20History.png" site="tvpassport.com" site_id="military-history/5271" lang="en" xmltv_id="">Military History</channel>' guides/TVPassport.channels.xml
-          sed -i '/<\/channels>/i <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/MeTV%20Plus.png" site="tvpassport.com" site_id="metv-plus/36199" lang="en" xmltv_id="">MeTV Plus</channel>' guides/TVPassport.channels.xml
-          sed -i '/<\/channels>/i <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Lifetime%20Real%20Women%20East.png" site="tvpassport.com" site_id="lifetime-real-women-east/2707" lang="en" xmltv_id="">Lifetime Real Women East</channel>' guides/TVPassport.channels.xml
-          sed -i '/<\/channels>/i <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/The%20Movie%20Channel.png" site="tvpassport.com" site_id="" lang="en" xmltv_id="">The Movie Channel</channel>' guides/TVPassport.channels.xml
-          sed -i '/<\/channels>/i <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Starz%20Encore%20Westerns.png" site="tvpassport.com" site_id="starz-encore-westerns--eastern/1959" lang="en" xmltv_id="StarzEncoreWesterns.us@East">Starz Encore Westerns - Eastern</channel>' guides/TVPassport.channels.xml
+          convert "logos/Movieplex_logo_old.webp" "logos/MoviePlex.png"
+          rsvg-convert "logos/Indieplex_logo.svg" -o "logos/IndiePlex.png"
 
-      - run: |
+      - name: Delete original files
+        run: |
+          rm -f "logos/ScreenPix_Action.webp"
+          rm -f "logos/ScreenPix_Voices_2019.webp"
+          rm -f "logos/ScreenPix_logo_2019.webp"
+
+          rm -f "logos/MGM+.svg"
+          rm -f "logos/MGM+_Drive-In_2023.svg"
+          rm -f "logos/MGM+_Hits_2023.svg"
+          rm -f "logos/MGM+_Marquee_2023.svg"
+
+          rm -f "logos/Movieplex_logo_old.webp"
+          rm -f "logos/Indieplex_logo.svg"
+
+      - name: Commit and push changes
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add guides/TVPassport.channels.xml logos/
-          git commit -m "Add TVPassport channels and convert logos" || exit 0
+
+          git add logos/
+
+          git commit -m "Convert logo files to clean PNG names" || exit 0
+
           git push
