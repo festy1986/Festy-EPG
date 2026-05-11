@@ -29,9 +29,9 @@
 <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Comedy%20Central.png" site="tvpassport.com" site_id="comedy-central-hd--eastern-feed/6957" lang="en" xmltv_id="COMEDY.CENTRAL.us">Comedy Central</channel>
 <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/WPFO-DT3%20Waterville%2C%20Maine.%20(Comet).png" site="tvpassport.com" site_id="comet-tv-katv2-little-rock-ar-hd/9280" lang="en" xmltv_id="COMET.us">COMET</channel>
 <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cooking.png" site="tvpassport.com" site_id="the-cooking-channel-hd/8113" lang="en" xmltv_id="CookingChannel.us@SD">The Cooking Channel HD</channel>
-<channel site="tvpassport.com" site_id="crave1--east-hd/2820" lang="en" xmltv_id="CRAVE.1.ca">Crave 1</channel>
-<channel site="tvpassport.com" site_id="crave2--east-hd/7139" lang="en" xmltv_id="CRAVE.2.ca">Crave 2</channel>
-<channel site="tvpassport.com" site_id="crave3--east-hd/7137" lang="en" xmltv_id="CRAVE.3.ca">Crave 3</channel>
+<channel site="tvpassport.com" site_id="crave1--east/72" lang="en" xmltv_id="">Crave1 - East</channel>
+<channel site="tvpassport.com" site_id="crave2--east/86" lang="en" xmltv_id="">Crave2 - East</channel>
+<channel site="tvpassport.com" site_id="crave3--east/85" lang="en" xmltv_id="">Crave3 - East</channel>
 <channel site="tvpassport.com" site_id="crave4-hd/10781" lang="en" xmltv_id="CRAVE.4.ca">Crave 4</channel>
 <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png" site="tvpassport.com" site_id="crime--investigation-canada-hd/13784" lang="en" xmltv_id="CRIME.AND.INVESTIGATION.us">Crime &amp; Investigation</channel>
 <channel logo="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/cw.png" site="tvpassport.com" site_id="cw-wlvi--ma-hd/7114" lang="en" xmltv_id="CW..us">CW</channel>
