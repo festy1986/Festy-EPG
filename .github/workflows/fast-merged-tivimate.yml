@@ -40,6 +40,22 @@ jobs:
           npm ci
           npm install iconv-lite pako sax
 
+      - name: Force correct EPGShare curated entries
+        run: |
+          mkdir -p guides
+
+          cat > guides/epgcurated.xml <<'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <channels>
+            <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Action.us" site_id="US1#MGM.Presents.Action.us">MGM Presents Action</channel>
+            <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Horror.us" site_id="US1#MGM.Presents.Horror.us">MGM Presents Horror</channel>
+            <channel site="epgshare01.online" lang="en" xmltv_id="Scares.by.Shudder.us" site_id="US1#Scares.by.Shudder.us">Scares by Shudder</channel>
+          </channels>
+          EOF
+
+          echo "Wrote guides/epgcurated.xml with US1 source IDs"
+          grep -n '<channel ' guides/epgcurated.xml
+
       - name: Write Roku i.mjh.nz config
         run: |
           mkdir -p epg/sites/i.mjh.nz
@@ -349,7 +365,7 @@ jobs:
             exit 1
           fi
 
-      - name: Verify EPGShare curated IDs against source feeds
+      - name: Verify EPGShare US1 feed and curated IDs
         run: |
           cd epg
 
@@ -362,6 +378,7 @@ jobs:
 
           async function main() {
             const curatedPath = '../guides/epgcurated.xml'
+            const url = 'https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz'
 
             if (!fs.existsSync(curatedPath)) {
               console.error(`Missing ${curatedPath}`)
@@ -383,57 +400,44 @@ jobs:
             }
 
             const xml = fs.readFileSync(curatedPath, 'utf8')
-
-            const channels = [...xml.matchAll(/<channel\b([^>]*)>/gi)]
+            const channels = [...xml.matchAll(/<channel([^>]*)>/gi)]
               .map(m => attr(m[1], 'site_id'))
               .filter(Boolean)
               .map(siteId => {
                 const [tag, channelId] = siteId.split('#')
                 return { tag, channelId, siteId }
               })
-              .filter(x => x.tag && x.channelId)
+              .filter(x => x.tag === 'US1' && x.channelId)
 
-            const byTag = new Map()
-
-            for (const ch of channels) {
-              if (!byTag.has(ch.tag)) byTag.set(ch.tag, [])
-              byTag.get(ch.tag).push(ch)
+            if (!channels.length) {
+              console.error('[EPGSHARE VERIFY] No US1 channels found in guides/epgcurated.xml')
+              process.exit(1)
             }
 
-            let missing = []
+            console.log(`[EPGSHARE VERIFY] downloading ${url}`)
 
-            for (const [tag, list] of byTag.entries()) {
-              const url = `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
+            const res = await axios.get(url, {
+              responseType: 'arraybuffer',
+              timeout: 30000,
+              maxContentLength: 100000000
+            })
 
-              console.log(`[EPGSHARE VERIFY] downloading ${url}`)
+            const content = ungzip(new Uint8Array(res.data))
+            const decoded = iconv.decode(content, 'utf8')
+            const data = parser.parse(decoded)
+            const ids = new Set((data.channels || []).map(c => c.id))
 
-              const res = await axios.get(url, {
-                responseType: 'arraybuffer',
-                timeout: 30000,
-                maxContentLength: 100000000
-              })
+            console.log(`[EPGSHARE VERIFY] US1 feed channels=${ids.size}, curated US1 channels=${channels.length}`)
 
-              const content = ungzip(new Uint8Array(res.data))
-              const decoded = iconv.decode(content, 'utf8')
-              const data = parser.parse(decoded)
-              const ids = new Set((data.channels || []).map(c => c.id))
-
-              console.log(`[EPGSHARE VERIFY] ${tag}: feed channels=${ids.size}, curated channels=${list.length}`)
-
-              for (const ch of list) {
-                if (!ids.has(ch.channelId)) {
-                  missing.push(ch.siteId)
-                }
-              }
-            }
+            const missing = channels.filter(ch => !ids.has(ch.channelId)).map(ch => ch.siteId)
 
             if (missing.length) {
-              console.error('[EPGSHARE VERIFY] These curated site_id values are not present in their source feed:')
+              console.error('[EPGSHARE VERIFY] These curated US1 site_id values are not present in the US1 source feed:')
               missing.forEach(x => console.error(`- ${x}`))
               process.exit(1)
             }
 
-            console.log('[EPGSHARE VERIFY] all curated IDs exist in their exact source feeds')
+            console.log('[EPGSHARE VERIFY] all curated US1 IDs exist in the US1 source feed')
           }
 
           main().catch(err => {
@@ -462,6 +466,7 @@ jobs:
             echo "Starting Roku $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
             echo "days=14"
+            echo "source=https://epgshare01.online/epgshare01/epg_ripper_US1.xml.gz"
             echo "============================================================"
 
             set +e
@@ -1479,7 +1484,7 @@ jobs:
           git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
-          git add guides/rokuguide.xml guides/epgshareguide.xml
+          git add guides/rokuguide.xml guides/epgshareguide.xml guides/epgcurated.xml
           git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -1505,7 +1510,7 @@ jobs:
             git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
-            git add guides/rokuguide.xml guides/epgshareguide.xml
+            git add guides/rokuguide.xml guides/epgshareguide.xml guides/epgcurated.xml
             git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
