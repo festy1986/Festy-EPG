@@ -63,7 +63,7 @@ jobs:
           module.exports = {
             site: 'xumo.tv',
             delay: 200,
-            days: 2,
+            days: 14,
 
             request: {
               method: 'GET',
@@ -312,7 +312,7 @@ jobs:
             npx tsx scripts/commands/epg/grab.ts \
               --channels=../guides/xumcurated.xml \
               --output="../guides/xumotivimateguide.${PASS_NAME}.xml" \
-              --days=2 \
+              --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/xumotivimateguide.${PASS_NAME}.log"
 
