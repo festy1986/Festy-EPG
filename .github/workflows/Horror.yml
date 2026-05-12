@@ -1,0 +1,848 @@
+name: Horror
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "20 */12 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: horror-guide-writes-main
+  cancel-in-progress: false
+
+jobs:
+  build-horror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build Horror guide from EPG.pw new channels
+        run: |
+          mkdir -p guides
+
+          node <<'EOF'
+          const fs = require('fs')
+
+          const LANG = 'en'
+          const TIMEZONE = 'QW1lcmljYS9FZG1vbnRvbg%3D%3D'
+          const DAYS = 14
+          const guidePath = 'guides/Horror.xml'
+
+          const channels = [
+            { name: 'MGM Presents', id: '484887' },
+            { name: 'MGM Presents Action', id: '484880' },
+            { name: 'MGM Presents Horror', id: '464981' },
+            { name: 'Scares by Shudder', id: '465306' },
+            { name: 'Universal Monsters', id: '492941' }
+          ]
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function escapeXml(value) {
+            return String(value || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function decodeXml(value) {
+            return String(value || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function yyyymmdd(date) {
+            return date.toISOString().slice(0, 10).replace(/-/g, '')
+          }
+
+          function stripOuterXmlTv(xml) {
+            return String(xml || '')
+              .replace(/^\uFEFF/, '')
+              .replace(/<\?xml[^>]*\?>/gi, '')
+              .replace(/<\/?tv[^>]*>/gi, '')
+              .trim()
+          }
+
+          function attr(block, name) {
+            const match = String(block || '').match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return match ? decodeXml(match[1]).trim() : ''
+          }
+
+          function tagText(block, tag) {
+            const match = String(block || '').match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return match ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim()) : ''
+          }
+
+          function programmeKey(block) {
+            return [
+              attr(block, 'start'),
+              attr(block, 'stop'),
+              attr(block, 'channel'),
+              tagText(block, 'title')
+            ].join('|')
+          }
+
+          function extractProgrammeBlocks(xml) {
+            return [...String(xml || '').matchAll(/<programme\b[\s\S]*?<\/programme>/gi)]
+              .map(match => match[0].trim())
+              .filter(Boolean)
+          }
+
+          function normalizeProgrammeChannelIds(xml, channel) {
+            return String(xml || '').replace(
+              /<programme\b([^>]*)channel="([^"]+)"([^>]*)>/gi,
+              `<programme$1channel="${escapeXml(channel.id)}"$3>`
+            )
+          }
+
+          async function fetchChannelDay(channel, date) {
+            const url =
+              `https://epg.pw/api/epg.xml?lang=${LANG}` +
+              `&timezone=${TIMEZONE}` +
+              `&date=${date}` +
+              `&channel_id=${channel.id}`
+
+            console.log(`[HORROR] fetching ${channel.name} | ${date} | channel_id=${channel.id}`)
+
+            const response = await fetch(url, {
+              headers: {
+                'User-Agent': 'festy-horror-epgpw-guide/1.0'
+              }
+            })
+
+            if (!response.ok) {
+              console.log(`[HORROR WARN] ${channel.name} | ${date} | HTTP ${response.status}`)
+              return []
+            }
+
+            const raw = await response.text()
+            const body = stripOuterXmlTv(raw)
+            const normalized = normalizeProgrammeChannelIds(body, channel)
+            return extractProgrammeBlocks(normalized)
+          }
+
+          async function main() {
+            const channelBlocks = channels.map(channel => {
+              return [
+                `  <channel id="${escapeXml(channel.id)}">`,
+                `    <display-name lang="en">${escapeXml(channel.name)}</display-name>`,
+                `  </channel>`
+              ].join('\n')
+            })
+
+            const programmes = new Map()
+
+            for (let dayOffset = 0; dayOffset < DAYS; dayOffset++) {
+              const date = new Date()
+              date.setUTCDate(date.getUTCDate() + dayOffset)
+              const dateText = yyyymmdd(date)
+
+              for (const channel of channels) {
+                const blocks = await fetchChannelDay(channel, dateText)
+
+                for (const block of blocks) {
+                  const key = programmeKey(block)
+                  if (key && !programmes.has(key)) {
+                    programmes.set(key, block)
+                  }
+                }
+
+                console.log(`[HORROR] ${channel.name} | ${dateText} | programmes=${blocks.length}`)
+                await sleep(250)
+              }
+            }
+
+            const programmeBlocks = [...programmes.values()].sort((a, b) => {
+              const ca = attr(a, 'channel')
+              const cb = attr(b, 'channel')
+              if (ca !== cb) return ca.localeCompare(cb)
+
+              const sa = attr(a, 'start')
+              const sb = attr(b, 'start')
+              return sa.localeCompare(sb)
+            })
+
+            const output = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<tv generator-info-name="festy-horror-epgpw">',
+              ...channelBlocks,
+              ...programmeBlocks,
+              '</tv>',
+              ''
+            ].join('\n')
+
+            fs.writeFileSync(guidePath, output)
+
+            console.log(`[HORROR] wrote ${guidePath}`)
+            console.log(`[HORROR] channels=${channels.length}`)
+            console.log(`[HORROR] programmes=${programmeBlocks.length}`)
+
+            if (programmeBlocks.length < 1) {
+              console.error('[HORROR] no programmes found')
+              process.exit(1)
+            }
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
+
+      - name: Fill missing Horror metadata from TVMaze
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const guidePath = 'guides/Horror.xml'
+          const cachePath = 'guides/.tvmaze-horror-cache.json'
+
+          if (!fs.existsSync(guidePath)) {
+            console.error(`Missing ${guidePath}`)
+            process.exit(1)
+          }
+
+          const xml = fs.readFileSync(guidePath, 'utf8')
+          let cache = {}
+
+          if (fs.existsSync(cachePath)) {
+            try {
+              cache = JSON.parse(fs.readFileSync(cachePath, 'utf8'))
+            } catch {
+              cache = {}
+            }
+          }
+
+          const stats = {
+            programmes: 0,
+            skippedMovies: 0,
+            searchedShows: 0,
+            matchedShows: 0,
+            enriched: 0,
+            addedCategories: 0,
+            addedDescriptions: 0
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function stripTags(s) {
+            return decodeXml(String(s || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function getTag(block, tag) {
+            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
+            return m ? stripTags(m[1]) : ''
+          }
+
+          function getTags(block, tag) {
+            return [...block.matchAll(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi'))]
+              .map(m => stripTags(m[1]))
+              .filter(Boolean)
+          }
+
+          function hasTag(block, tag) {
+            return new RegExp(`<${tag}\\b`, 'i').test(block)
+          }
+
+          function hasCategory(block, category) {
+            return getTags(block, 'category').some(c => c.toLowerCase() === category.toLowerCase())
+          }
+
+          function hasAnyCategory(block) {
+            return hasTag(block, 'category')
+          }
+
+          function getStartDate(block) {
+            const m = block.match(/start="(\d{8})/i)
+            if (!m) return ''
+            return `${m[1].slice(0, 4)}-${m[1].slice(4, 6)}-${m[1].slice(6, 8)}`
+          }
+
+          function cleanTitleForSearch(title) {
+            return String(title || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function isMovie(block) {
+            if (hasCategory(block, 'Movie')) return true
+            if (hasCategory(block, 'Film')) return true
+            return false
+          }
+
+          function needsTvmaze(block) {
+            if (!hasAnyCategory(block)) return true
+
+            const desc = getTag(block, 'desc')
+            if (!desc) return true
+
+            const hasPackedDisplayDate = /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(desc)
+            if (!hasPackedDisplayDate) return true
+
+            return false
+          }
+
+          function tvmazeShowIsMovieLike(show) {
+            const type = String(show?.type || '').toLowerCase()
+            return type === 'movie' || type === 'film'
+          }
+
+          function tvmazeShowIsMiniseries(show) {
+            const type = String(show?.type || '').toLowerCase()
+            const name = String(show?.name || '').toLowerCase()
+            const summary = String(show?.summary || '').toLowerCase()
+
+            return (
+              type.includes('mini') ||
+              type.includes('limited') ||
+              name.includes('miniseries') ||
+              summary.includes('miniseries') ||
+              summary.includes('limited series')
+            )
+          }
+
+          function normalize(s) {
+            return String(s || '')
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function scoreShow(title, show) {
+            const a = normalize(title)
+            const b = normalize(show?.name || '')
+            if (!a || !b) return 0
+            if (a === b) return 100
+            if (a.includes(b) || b.includes(a)) return 80
+            return 0
+          }
+
+          async function tvmazeSearchShow(title) {
+            const key = `show:${normalize(title)}`
+            if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
+
+            const url = `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`
+            const result = await fetchJsonWithRetries(url, `search ${title}`)
+            const candidates = Array.isArray(result) ? result.map(x => x.show).filter(Boolean) : []
+
+            let best = null
+            let bestScore = 0
+
+            for (const show of candidates) {
+              if (tvmazeShowIsMovieLike(show)) continue
+
+              const score = scoreShow(title, show)
+              if (score > bestScore) {
+                best = show
+                bestScore = score
+              }
+            }
+
+            if (bestScore < 80) best = null
+
+            cache[key] = best
+            await sleep(250)
+            return best
+          }
+
+          async function tvmazeEpisodes(showId) {
+            const key = `episodes:${showId}`
+            if (Object.prototype.hasOwnProperty.call(cache, key)) return cache[key]
+
+            const url = `https://api.tvmaze.com/shows/${showId}/episodes`
+            const episodes = await fetchJsonWithRetries(url, `episodes ${showId}`)
+            cache[key] = Array.isArray(episodes) ? episodes : []
+            await sleep(250)
+            return cache[key]
+          }
+
+          async function fetchJsonWithRetries(url, label) {
+            const attempts = 4
+
+            for (let attempt = 1; attempt <= attempts; attempt++) {
+              try {
+                const response = await fetch(url, {
+                  headers: {
+                    'User-Agent': 'festy-epg-tvmaze-horror-fill-missing-only/1.0'
+                  }
+                })
+
+                if (response.status === 404) return null
+                if (response.status === 429 || response.status >= 500) {
+                  throw new Error(`HTTP ${response.status}`)
+                }
+
+                if (!response.ok) return null
+
+                return await response.json()
+              } catch (err) {
+                if (attempt === attempts) {
+                  console.log(`[TVMAZE FAIL] ${label} | ${err.message}`)
+                  return null
+                }
+
+                const delay = 1000 * attempt + Math.floor(Math.random() * 500)
+                console.log(`[TVMAZE RETRY] ${label} | ${err.message} | attempt=${attempt}/${attempts}`)
+                await sleep(delay)
+              }
+            }
+
+            return null
+          }
+
+          function findEpisodeForProgramme(episodes, block) {
+            const scheduleDate = getStartDate(block)
+            const subtitle = getTag(block, 'sub-title')
+            const desc = getTag(block, 'desc')
+
+            const codeMatch = desc.match(/\bS(\d+)E(\d+)\b/i)
+            if (codeMatch) {
+              const season = Number(codeMatch[1])
+              const number = Number(codeMatch[2])
+              const byCode = episodes.find(ep => Number(ep.season) === season && Number(ep.number) === number)
+              if (byCode) return byCode
+            }
+
+            if (subtitle) {
+              const subNorm = normalize(subtitle)
+              const byName = episodes.find(ep => normalize(ep.name) === subNorm)
+              if (byName) return byName
+            }
+
+            const packedTitle = getPackedEpisodeTitleFromDesc(desc)
+            if (packedTitle) {
+              const packedNorm = normalize(packedTitle)
+              const byPackedTitle = episodes.find(ep => normalize(ep.name) === packedNorm)
+              if (byPackedTitle) return byPackedTitle
+            }
+
+            if (scheduleDate) {
+              const exact = episodes.find(ep => ep.airdate === scheduleDate)
+              if (exact) return exact
+            }
+
+            return null
+          }
+
+          function getPackedEpisodeTitleFromDesc(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+              .replace(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/, '')
+              .trim()
+            if (!cleaned) return ''
+
+            const firstSentence = cleaned.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            if (!first) return ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) return prefixMatch[1].trim()
+
+            if (/^S\d+E\d+$/i.test(first)) return ''
+            if (first.length > 80) return ''
+            return first
+          }
+
+          function cleanTvmazeSummary(value) {
+            return decodeXml(String(value || '')
+              .replace(/<[^>]+>/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim())
+          }
+
+          function formatDateDisplay(date) {
+            if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return ''
+            return `${date.slice(5, 7)}/${date.slice(8, 10)}/${date.slice(0, 4)}`
+          }
+
+          function buildTvmazeEpisodeCode(season, episode) {
+            const s = Number(season)
+            const e = Number(episode)
+            if (!Number.isFinite(s) || !Number.isFinite(e) || s < 1 || e < 1) return ''
+            return `S${s}E${e}`
+          }
+
+          function descHasEpisodeName(desc, episodeName) {
+            if (!desc || !episodeName) return false
+            const descNorm = normalize(desc)
+            const nameNorm = normalize(episodeName)
+            return Boolean(nameNorm && descNorm.includes(nameNorm))
+          }
+
+          function descHasEpisodeCode(desc, season, episode) {
+            const code = buildTvmazeEpisodeCode(season, episode)
+            if (!desc || !code) return false
+            return new RegExp(`\\b${code}\\b`, 'i').test(desc)
+          }
+
+          function descHasDisplayDate(desc, airdate) {
+            const displayDate = formatDateDisplay(airdate)
+            if (!desc || !displayDate) return false
+            return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
+          }
+
+          function shouldSuppressTvmazeDisplayDate(block, airdate) {
+            if (!airdate) return false
+
+            const title = getTag(block, 'title')
+            const desc = getTag(block, 'desc')
+            const categories = getTags(block, 'category')
+            const haystack = [title, desc, categories]
+              .flat()
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const liveOrCurrent = /\b(live|news|newscast|weather|sports|sporting|game|match|tournament|football|basketball|baseball|hockey|soccer|golf|tennis|racing|wwe|ufc|mma|boxing|pregame|postgame|post-game|pre-game|paid programming|infomercial)\b/.test(haystack)
+            if (!liveOrCurrent) return false
+
+            const scheduleDateText = getStartDate(block)
+            if (!scheduleDateText || !/^\d{4}-\d{2}-\d{2}$/.test(scheduleDateText) || !/^\d{4}-\d{2}-\d{2}$/.test(airdate)) return true
+
+            const scheduleDate = new Date(`${scheduleDateText}T00:00:00Z`)
+            const parsedAirDate = new Date(`${airdate}T00:00:00Z`)
+
+            if (Number.isNaN(scheduleDate.getTime()) || Number.isNaN(parsedAirDate.getTime())) return true
+
+            return Math.abs(scheduleDate.getTime() - parsedAirDate.getTime()) / 86400000 <= 45
+          }
+
+          function cleanPackedTvmazeDescription(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function splitTrailingDisplayDate(desc) {
+            const cleaned = cleanPackedTvmazeDescription(desc)
+            const match = cleaned.match(/\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/)
+            if (!match) return { body: cleaned, dateText: '' }
+            return {
+              body: cleaned.slice(0, match.index).trim(),
+              dateText: match[1]
+            }
+          }
+
+          function parsePackedDescription(desc) {
+            const split = splitTrailingDisplayDate(desc)
+            const withoutDate = split.body
+            const firstSentence = withoutDate.match(/^(.+?)(?:\.\s+|$)/)
+            const first = firstSentence ? firstSentence[1].trim() : ''
+            const rest = firstSentence && firstSentence[0].length < withoutDate.length
+              ? withoutDate.slice(firstSentence[0].length).trim()
+              : ''
+
+            const prefixMatch = first.match(/^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i)
+            if (prefixMatch) {
+              return {
+                episodeTitle: prefixMatch[1].trim(),
+                episodeCode: prefixMatch[2].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            const codeOnlyMatch = first.match(/^(S\d+E\d+|S\d+|E\d+)$/i)
+            if (codeOnlyMatch) {
+              return {
+                episodeTitle: '',
+                episodeCode: codeOnlyMatch[1].toUpperCase(),
+                body: rest,
+                dateText: split.dateText,
+                hadPrefix: true
+              }
+            }
+
+            return {
+              episodeTitle: '',
+              episodeCode: '',
+              body: withoutDate,
+              dateText: split.dateText,
+              hadPrefix: false
+            }
+          }
+
+          function buildTvmazePackedDescription(existingDesc, show, episode, block) {
+            const existing = cleanPackedTvmazeDescription(existingDesc)
+            const parsed = parsePackedDescription(existing)
+
+            const episodeName = cleanTvmazeSummary(episode?.name || '')
+            const episodeCode = buildTvmazeEpisodeCode(episode?.season, episode?.number)
+            const episodeSummary = cleanTvmazeSummary(episode?.summary || '')
+            const showSummary = cleanTvmazeSummary(show?.summary || '')
+            const displayDate = formatDateDisplay(episode?.airdate)
+
+            let titlePart = parsed.episodeTitle
+            let codePart = parsed.episodeCode
+            let bodyPart = parsed.body
+            let datePart = parsed.dateText
+
+            const packedTitle = getPackedEpisodeTitleFromDesc(existing)
+            if (!titlePart && episodeName && packedTitle && normalize(packedTitle) === normalize(episodeName)) {
+              titlePart = packedTitle
+              const firstSentence = bodyPart.match(/^(.+?)(?:\.\s+|$)/)
+              if (firstSentence) bodyPart = bodyPart.slice(firstSentence[0].length).trim()
+            }
+
+            if (!titlePart && episodeName && !descHasEpisodeName(existing, episodeName)) {
+              titlePart = episodeName
+            }
+
+            if (!codePart && episodeCode && !descHasEpisodeCode(existing, episode?.season, episode?.number)) {
+              codePart = episodeCode
+            }
+
+            if (!bodyPart || bodyPart === titlePart || bodyPart === codePart || bodyPart === `${titlePart} - ${codePart}`) {
+              bodyPart = episodeSummary || showSummary || ''
+            }
+
+            if (!datePart && displayDate && !shouldSuppressTvmazeDisplayDate(block, episode?.airdate) && !descHasDisplayDate(existing, episode?.airdate)) {
+              datePart = displayDate
+            }
+
+            const parts = []
+            if (titlePart && codePart) parts.push(`${titlePart} - ${codePart}`)
+            else if (titlePart) parts.push(titlePart)
+            else if (codePart) parts.push(codePart)
+
+            if (bodyPart) {
+              const bodyNorm = normalize(bodyPart)
+              const prefixNorm = normalize(parts[0] || '')
+              if (!prefixNorm || bodyNorm !== prefixNorm) parts.push(bodyPart)
+            }
+
+            let desc = cleanPackedTvmazeDescription(parts.join('. '))
+            if (datePart) desc = desc ? `${desc} (${datePart})` : `(${datePart})`
+            return cleanPackedTvmazeDescription(desc)
+          }
+
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
+            const tagXml = `  <${tag} lang="en">${escaped}</${tag}>`
+
+            if (hasTag(block, tag)) {
+              return block.replace(new RegExp(`<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`, 'i'), tagXml.trim())
+            }
+
+            return insertBeforeProgrammeEnd(block, tagXml)
+          }
+
+          function insertBeforeProgrammeEnd(block, tagXml) {
+            return block.replace(/<\/programme>\s*$/i, `${tagXml}\n</programme>`)
+          }
+
+          function enrichBlockMissingOnly(block, show, episode) {
+            let updated = block
+            let changed = false
+
+            if (!hasAnyCategory(updated)) {
+              const category = tvmazeShowIsMiniseries(show) ? 'Miniseries' : 'Series'
+              updated = insertBeforeProgrammeEnd(updated, `  <category lang="en">${category}</category>`)
+              changed = true
+              stats.addedCategories++
+            }
+
+            const existingDesc = getTag(updated, 'desc')
+            const packedDesc = buildTvmazePackedDescription(existingDesc, show, episode, updated)
+
+            if (packedDesc && packedDesc !== existingDesc) {
+              updated = replaceTag(updated, 'desc', packedDesc)
+              changed = true
+              stats.addedDescriptions++
+            }
+
+            if (changed) stats.enriched++
+            return updated
+          }
+
+          async function main() {
+            const parts = xml.split(/(<programme\b[\s\S]*?<\/programme>)/gi)
+            const out = []
+
+            for (const part of parts) {
+              if (!/^<programme\b/i.test(part)) {
+                out.push(part)
+                continue
+              }
+
+              stats.programmes++
+
+              let block = part
+              const title = cleanTitleForSearch(getTag(block, 'title'))
+
+              if (!title) {
+                out.push(block)
+                continue
+              }
+
+              if (isMovie(block)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              if (!needsTvmaze(block)) {
+                out.push(block)
+                continue
+              }
+
+              stats.searchedShows++
+              const show = await tvmazeSearchShow(title)
+
+              if (!show) {
+                out.push(block)
+                continue
+              }
+
+              if (tvmazeShowIsMovieLike(show)) {
+                stats.skippedMovies++
+                out.push(block)
+                continue
+              }
+
+              stats.matchedShows++
+
+              const episodes = await tvmazeEpisodes(show.id)
+              const episode = findEpisodeForProgramme(episodes, block)
+
+              block = enrichBlockMissingOnly(block, show, episode)
+              out.push(block)
+            }
+
+            fs.writeFileSync(guidePath, out.join(''))
+            fs.writeFileSync(cachePath, JSON.stringify(cache, null, 2))
+
+            console.log('[TVMAZE] missing-only Horror enrichment complete')
+            console.log(`[TVMAZE] programmes scanned: ${stats.programmes}`)
+            console.log(`[TVMAZE] movies skipped: ${stats.skippedMovies}`)
+            console.log(`[TVMAZE] shows searched: ${stats.searchedShows}`)
+            console.log(`[TVMAZE] shows matched: ${stats.matchedShows}`)
+            console.log(`[TVMAZE] programmes enriched: ${stats.enriched}`)
+            console.log(`[TVMAZE] categories added: ${stats.addedCategories}`)
+            console.log(`[TVMAZE] descriptions added: ${stats.addedDescriptions}`)
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOF
+
+      - name: Validate Horror output
+        run: |
+          CH=$(grep -c '<channel ' guides/Horror.xml || true)
+          PR=$(grep -c '<programme ' guides/Horror.xml || true)
+          DESC=$(grep -c '<desc ' guides/Horror.xml || true)
+
+          echo "Horror channels: $CH"
+          echo "Horror programmes: $PR"
+          echo "Horror descriptions: $DESC"
+
+          if [ "$CH" -lt 5 ]; then
+            echo "Invalid Horror output - expected at least 5 channels"
+            exit 1
+          fi
+
+          if [ "$PR" -lt 1 ]; then
+            echo "Invalid Horror output - no programmes"
+            exit 1
+          fi
+
+      - name: Compress Horror guide
+        run: |
+          gzip -c guides/Horror.xml > guides/Horror.xml.gz
+
+      - name: Commit and push Horror guide safely
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin main
+
+          # Preserve compressed guides created by the other workflows.
+          # This workflow should only update its own XML/GZ output.
+          git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+          git add guides/Horror.xml guides/Horror.xml.gz guides/.tvmaze-horror-cache.json
+          git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "No Horror guide changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update Horror guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, retrying after fresh fetch/rebase..."
+
+            git fetch origin main
+            git rebase origin/main
+
+            git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+            git add guides/Horror.xml guides/Horror.xml.gz guides/.tvmaze-horror-cache.json
+            git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+
+            if git diff --cached --quiet; then
+              echo "No new commit needed after rebase, retrying push..."
+            else
+              git commit -m "Update Horror guide"
+            fi
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
