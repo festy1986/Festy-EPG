@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <channels>
-  <channel site="i.mjh.nz" site_id="Plex/us#5e20b730f2f8d5003d739db7-661fca34414d94009d1206ec" lang="en" xmltv_id="Miramax.Movie.Channel.us">Miramax Movie Channel</channel>
-  <channel site="i.mjh.nz" site_id="Plex/ca#647f8d22a2fc3fadb4721685-641db53c2f7a0fca29488c99" lang="en" xmltv_id="Screambox.TV.ca">Screambox TV</channel>
+  <channel site="plex.tv" lang="en" xmltv_id="Miramax.Movie.Channel.us" site_id="661fca34414d94009d1206ec">Miramax Movie Channel</channel>
+  <channel site="plex.tv" lang="en" xmltv_id="Screambox.TV.us" site_id="641db53c2f7a0fca29488c99">Screambox TV</channel>
 </channels>
