@@ -1,4 +1,4 @@
-name: FAST-Merged-Tivimate
+name: FAST-EPGShare-Tivimate
 
 on:
   workflow_dispatch:
@@ -9,11 +9,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: fast-merged-guide-writes-main
+  group: fast-epgshare-guide-writes-main
   cancel-in-progress: false
 
 jobs:
-  build-fast-merged-tivimate:
+  build-fast-epgshare-tivimate:
     runs-on: ubuntu-latest
 
     steps:
@@ -49,160 +49,11 @@ jobs:
           <channels>
             <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Action.us" site_id="US2#MGM.Presents.Action.us">MGM Presents Action</channel>
             <channel site="epgshare01.online" lang="en" xmltv_id="MGM.Presents.Horror.us" site_id="US2#MGM.Presents.Horror.us">MGM Presents Horror</channel>
-            <channel site="epgshare01.online" lang="en" xmltv_id="Scares.by.Shudder.us" site_id="US2#Scares.by.Shudder.us">Scares by Shudder</channel>
           </channels>
           EOF
 
           echo "Wrote guides/epgcurated.xml with US2 source IDs"
           grep -n '<channel ' guides/epgcurated.xml
-
-      - name: Write Roku i.mjh.nz config
-        run: |
-          mkdir -p epg/sites/i.mjh.nz
-
-          cat > epg/sites/i.mjh.nz/i.mjh.nz.config.js <<'EOF'
-          const dayjs = require('dayjs')
-          const axios = require('axios')
-          const parser = require('epg-parser')
-          const isBetween = require('dayjs/plugin/isBetween')
-          const customParseFormat = require('dayjs/plugin/customParseFormat')
-
-          dayjs.extend(isBetween)
-          dayjs.extend(customParseFormat)
-
-          const API_ENDPOINT = 'https://raw.githubusercontent.com/matthuisman/i.mjh.nz/master'
-
-          module.exports = {
-            site: 'i.mjh.nz',
-            days: 14,
-            request: {
-              cache: {
-                ttl: 3 * 60 * 60 * 1000
-              },
-              maxContentLength: 100 * 1024 * 1024
-            },
-            url({ channel }) {
-              const [path] = channel.site_id.split('#')
-              return `${API_ENDPOINT}/${path}.xml`
-            },
-            parser({ content, channel, date }) {
-              const items = parseItems(content, channel, date)
-
-              const programs = items.map(item => {
-                return {
-                  ...item,
-                  title: getTitle(item),
-                  description: getDescription(item),
-                  categories: getCategories(item),
-                  icon: getIcon(item)
-                }
-              })
-
-              return mergeMovieParts(programs)
-            },
-            async channels({ provider }) {
-              const providers = {
-                roku: [{ path: 'Roku/all', lang: 'en' }]
-              }
-
-              const channels = []
-              const added = new Set()
-              const providerOptions = providers[provider] || providers.roku
-
-              for (const option of providerOptions) {
-                const xml = await axios
-                  .get(`${API_ENDPOINT}/${option.path}.xml`)
-                  .then(r => r.data)
-                  .catch(err => {
-                    console.error(`Error fetching ${option.path}: ${err.message}`)
-                    return null
-                  })
-
-                if (!xml) continue
-
-                const data = parser.parse(xml)
-
-                data.channels.forEach(item => {
-                  const site_id = `${option.path}#${item.id}`
-                  if (!added.has(site_id)) {
-                    added.add(site_id)
-                    channels.push({
-                      lang: option.lang,
-                      site_id,
-                      name: item.displayName?.[0]?.value || item.name?.[0]?.value || item.id
-                    })
-                  }
-                })
-              }
-
-              return channels
-            }
-          }
-
-          function mergeMovieParts(programs) {
-            const output = []
-
-            programs.forEach(prog => {
-              const prev = output[output.length - 1]
-              const found =
-                prev &&
-                Array.isArray(prog.categories) &&
-                prog.categories.includes('Movie') &&
-                prev.title === prog.title &&
-                prev.description === prog.description
-
-              if (found) {
-                prev.stop = prog.stop
-              } else {
-                output.push(prog)
-              }
-            })
-
-            return output
-          }
-
-          function getTitle(item) {
-            return item.title.length ? item.title[0].value : null
-          }
-
-          function getDescription(item) {
-            return item.desc.length ? item.desc[0].value : null
-          }
-
-          function getCategories(item) {
-            return item.category.map(c => c.value)
-          }
-
-          function getIcon(item) {
-            return item.icon && item.icon.length ? item.icon[0].src : null
-          }
-
-          function parseItems(content, channel, date) {
-            try {
-              const curr_day = date
-              const next_day = date.add(1, 'd')
-              const [, site_id] = channel.site_id.split('#')
-              const data = parser.parse(content)
-
-              if (!data || !Array.isArray(data.programs)) return []
-
-              return data.programs
-                .filter(
-                  p =>
-                    p.channel === site_id &&
-                    dayjs(p.start, 'YYYYMMDDHHmmss ZZ').isBetween(curr_day, next_day)
-                )
-                .map(p => {
-                  if (Array.isArray(p.date) && p.date.length) {
-                    p.date = p.date[0]
-                  }
-                  return p
-                })
-            } catch {
-              return []
-            }
-          }
-          EOF
 
       - name: Write EPGShare config from official IPTV-org logic
         run: |
@@ -220,7 +71,7 @@ jobs:
 
           module.exports = {
             site: 'epgshare01.online',
-            days: 14,
+            days: 4,
             url({ channel }) {
               const [tag] = channel.site_id.split('#')
               return `https://epgshare01.online/epgshare01/epg_ripper_${tag}.xml.gz`
@@ -339,26 +190,14 @@ jobs:
 
       - name: Validate curated source lists
         run: |
-          if [ ! -f guides/rokucurated.xml ]; then
-            echo "Missing guides/rokucurated.xml"
-            exit 1
-          fi
-
           if [ ! -f guides/epgcurated.xml ]; then
             echo "Missing guides/epgcurated.xml"
             exit 1
           fi
 
-          ROKU_CH=$(grep -c '<channel ' guides/rokucurated.xml || true)
           EPG_CH=$(grep -c '<channel ' guides/epgcurated.xml || true)
 
-          echo "Roku curated channels: $ROKU_CH"
           echo "EPGShare curated channels: $EPG_CH"
-
-          if [ "$ROKU_CH" -lt 1 ]; then
-            echo "Invalid guides/rokucurated.xml - no channels found"
-            exit 1
-          fi
 
           if [ "$EPG_CH" -lt 1 ]; then
             echo "Invalid guides/epgcurated.xml - no channels found"
@@ -412,11 +251,6 @@ jobs:
                 name: 'MGM Presents Horror',
                 xmltv_id: 'MGM.Presents.Horror.us',
                 keywords: ['mgm', 'horror']
-              },
-              {
-                name: 'Scares by Shudder',
-                xmltv_id: 'Scares.by.Shudder.us',
-                keywords: ['scares', 'shudder']
               }
             ]
 
@@ -503,113 +337,6 @@ jobs:
 
           cd ..
 
-      - name: Grab Roku guide with schedule recovery
-        run: |
-          cd epg
-
-          rm -f ../guides/rokuguide.xml
-          rm -f ../guides/rokuguide.pass*.xml
-          rm -f ../guides/rokuguide.pass*.log
-          rm -f ../guides/rokuguide.pass*.count
-
-          run_pass() {
-            PASS_NAME="$1"
-            MAX_CONNECTIONS="$2"
-
-            echo ""
-            echo "============================================================"
-            echo "Starting Roku $PASS_NAME"
-            echo "maxConnections=$MAX_CONNECTIONS"
-            echo "days=14"
-            echo "source=https://epgshare01.online/epgshare01/epg_ripper_US2.xml.gz"
-            echo "============================================================"
-
-            set +e
-            npx tsx scripts/commands/epg/grab.ts \
-              --channels=../guides/rokucurated.xml \
-              --output="../guides/rokuguide.${PASS_NAME}.xml" \
-              --days=14 \
-              --maxConnections="$MAX_CONNECTIONS" \
-              2>&1 | tee "../guides/rokuguide.${PASS_NAME}.log"
-
-            STATUS=${PIPESTATUS[0]}
-            set -e
-
-            if [ "$STATUS" -ne 0 ]; then
-              echo "Roku $PASS_NAME exited with status $STATUS"
-            fi
-
-            if [ ! -f "../guides/rokuguide.${PASS_NAME}.xml" ]; then
-              echo "Roku $PASS_NAME did not create an XML file"
-              echo "0" > "../guides/rokuguide.${PASS_NAME}.programmes.count"
-              echo "0" > "../guides/rokuguide.${PASS_NAME}.descriptions.count"
-              echo "999999" > "../guides/rokuguide.${PASS_NAME}.issues.count"
-              return 0
-            fi
-
-            PR=$(grep -c '<programme ' "../guides/rokuguide.${PASS_NAME}.xml" || true)
-            DESC=$(grep -c '<desc ' "../guides/rokuguide.${PASS_NAME}.xml" || true)
-            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|\(0 programs\)|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/rokuguide.${PASS_NAME}.log" || true)
-
-            echo "$PR" > "../guides/rokuguide.${PASS_NAME}.programmes.count"
-            echo "$DESC" > "../guides/rokuguide.${PASS_NAME}.descriptions.count"
-            echo "$ISSUE_COUNT" > "../guides/rokuguide.${PASS_NAME}.issues.count"
-
-            echo "Roku $PASS_NAME programmes: $PR"
-            echo "Roku $PASS_NAME descriptions: $DESC"
-            echo "Roku $PASS_NAME possible issues: $ISSUE_COUNT"
-          }
-
-          run_pass "pass1-fast" 10
-
-          PASS1_ISSUES=$(cat ../guides/rokuguide.pass1-fast.issues.count)
-
-          if [ "$PASS1_ISSUES" -gt 0 ]; then
-            echo "Roku fast pass had possible issues, running backup pass..."
-            run_pass "pass2-backup" 5
-          else
-            echo "Roku fast pass had no obvious issues. Skipping backup pass."
-          fi
-
-          BEST_PASS="pass1-fast"
-          BEST_PR=$(cat ../guides/rokuguide.pass1-fast.programmes.count)
-          BEST_DESC=$(cat ../guides/rokuguide.pass1-fast.descriptions.count)
-          BEST_ISSUES=$(cat ../guides/rokuguide.pass1-fast.issues.count)
-
-          for PASS in pass2-backup; do
-            if [ -f "../guides/rokuguide.${PASS}.programmes.count" ]; then
-              CANDIDATE_PR=$(cat "../guides/rokuguide.${PASS}.programmes.count")
-              CANDIDATE_DESC=$(cat "../guides/rokuguide.${PASS}.descriptions.count")
-              CANDIDATE_ISSUES=$(cat "../guides/rokuguide.${PASS}.issues.count")
-
-              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              fi
-            fi
-          done
-
-          echo "Selected best Roku pass: $BEST_PASS"
-          echo "Best Roku programmes: $BEST_PR"
-          echo "Best Roku descriptions: $BEST_DESC"
-          echo "Best Roku possible issues: $BEST_ISSUES"
-
-          cp "../guides/rokuguide.${BEST_PASS}.xml" "../guides/rokuguide.xml"
-
-          cd ..
-
       - name: Grab EPGShare guide with schedule recovery
         run: |
           cd epg
@@ -627,14 +354,14 @@ jobs:
             echo "============================================================"
             echo "Starting EPGShare $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
-            echo "days=14"
+            echo "days=4"
             echo "============================================================"
 
             set +e
             npx tsx scripts/commands/epg/grab.ts \
               --channels=../guides/epgcurated.xml \
               --output="../guides/epgshareguide.${PASS_NAME}.xml" \
-              --days=14 \
+              --days=4 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/epgshareguide.${PASS_NAME}.log"
 
@@ -720,101 +447,20 @@ jobs:
 
           cd ..
 
-      - name: Merge Roku and EPGShare guides
+      - name: Write FAST guide from EPGShare guide
         run: |
-          node --input-type=commonjs <<'EOF'
-          const fs = require('fs')
+          if [ ! -f guides/epgshareguide.xml ]; then
+            echo "Missing guides/epgshareguide.xml"
+            exit 1
+          fi
 
-          const inputPaths = [
-            'guides/rokuguide.xml',
-            'guides/epgshareguide.xml'
-          ]
+          cp guides/epgshareguide.xml guides/FASTGuide.xml
 
-          const outputPath = 'guides/FASTGuide.xml'
+          CH=$(grep -c '<channel ' guides/FASTGuide.xml || true)
+          PR=$(grep -c '<programme ' guides/FASTGuide.xml || true)
 
-          function decodeXml(s) {
-            return String(s || '')
-              .replace(/&amp;/g, '&')
-              .replace(/&quot;/g, '"')
-              .replace(/&apos;/g, "'")
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
-          }
-
-          function attr(block, name) {
-            const m = block.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? decodeXml(m[1]).trim() : ''
-          }
-
-          function tagText(block, tag) {
-            const m = block.match(new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i'))
-            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
-          }
-
-          function channelKey(block) {
-            return attr(block, 'id')
-          }
-
-          function programmeKey(block) {
-            return [
-              attr(block, 'start'),
-              attr(block, 'stop'),
-              attr(block, 'channel'),
-              tagText(block, 'title')
-            ].join('|')
-          }
-
-          const channels = new Map()
-          const programmes = new Map()
-
-          for (const inputPath of inputPaths) {
-            if (!fs.existsSync(inputPath)) {
-              console.error(`Missing ${inputPath}`)
-              process.exit(1)
-            }
-
-            const xml = fs.readFileSync(inputPath, 'utf8')
-
-            for (const match of xml.matchAll(/<channel\b[\s\S]*?<\/channel>/gi)) {
-              const block = match[0].trim()
-              const key = channelKey(block)
-              if (!key) continue
-              if (!channels.has(key)) channels.set(key, block)
-            }
-
-            for (const match of xml.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)) {
-              const block = match[0].trim()
-              const key = programmeKey(block)
-              if (!key) continue
-              if (!programmes.has(key)) programmes.set(key, block)
-            }
-          }
-
-          const channelBlocks = [...channels.values()]
-          const programmeBlocks = [...programmes.values()].sort((a, b) => {
-            const ca = attr(a, 'channel')
-            const cb = attr(b, 'channel')
-            if (ca !== cb) return ca.localeCompare(cb)
-
-            const sa = attr(a, 'start')
-            const sb = attr(b, 'start')
-            return sa.localeCompare(sb)
-          })
-
-          const output = [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<tv>',
-            ...channelBlocks,
-            ...programmeBlocks,
-            '</tv>',
-            ''
-          ].join('\n')
-
-          fs.writeFileSync(outputPath, output)
-
-          console.log(`Merged channels: ${channelBlocks.length}`)
-          console.log(`Merged programmes: ${programmeBlocks.length}`)
-          EOF
+          echo "FASTGuide channels copied from EPGShare: $CH"
+          echo "FASTGuide programmes copied from EPGShare: $PR"
 
       - name: Fill missing FAST metadata from TVMaze
         run: |
@@ -1377,13 +1023,12 @@ jobs:
           })
           EOF
 
-      - name: Inject curated logos into merged guide
+      - name: Inject curated logos into FAST guide
         run: |
           node --input-type=commonjs <<'EOF'
           const fs = require('fs')
 
           const curatedPaths = [
-            'guides/rokucurated.xml',
             'guides/epgcurated.xml'
           ]
 
@@ -1500,7 +1145,7 @@ jobs:
           console.log(`Merged guide channels still without curated logo match: ${missing}`)
           EOF
 
-      - name: Validate merged FAST guide
+      - name: Validate FAST guide
         run: |
           CH=$(grep -c '<channel ' guides/FASTGuide.xml || true)
           PR=$(grep -c '<programme ' guides/FASTGuide.xml || true)
@@ -1525,11 +1170,11 @@ jobs:
             exit 1
           fi
 
-      - name: Compress merged FAST guide
+      - name: Compress FAST guide
         run: |
           gzip -c guides/FASTGuide.xml > guides/FASTGuide.xml.gz
 
-      - name: Commit and push merged FAST guide safely
+      - name: Commit and push FAST guide safely
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -1539,7 +1184,7 @@ jobs:
           git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
-          git add guides/rokuguide.xml guides/epgshareguide.xml guides/epgcurated.xml
+          git add guides/epgshareguide.xml guides/epgcurated.xml
           git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -1547,7 +1192,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Update merged FAST guide"
+          git commit -m "Update FAST EPGShare guide"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
@@ -1565,13 +1210,13 @@ jobs:
             git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             git add guides/FASTGuide.xml guides/FASTGuide.xml.gz guides/.tvmaze-fast-cache.json
-            git add guides/rokuguide.xml guides/epgshareguide.xml guides/epgcurated.xml
+            git add guides/epgshareguide.xml guides/epgcurated.xml
             git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
               echo "No new commit needed after rebase, retrying push..."
             else
-              git commit -m "Update merged FAST guide"
+              git commit -m "Update FAST EPGShare guide"
             fi
 
             sleep 5
