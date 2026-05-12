@@ -2,4 +2,6 @@
 <channels>
   <channel site="plex.tv" lang="en" xmltv_id="Miramax.Movie.Channel.us" site_id="661fca34414d94009d1206ec">Miramax Movie Channel</channel>
   <channel site="plex.tv" lang="en" xmltv_id="Screambox.TV.us" site_id="641db53c2f7a0fca29488c99">Screambox TV</channel>
+  <channel site="plex.tv" lang="en" xmltv_id="MGM.Presents.us" site_id="6876fa82e50e77c59c8940c2">MGM Presents</channel>
+  <channel site="plex.tv" lang="en" xmltv_id="Scares.by.Shudder.us" site_id="650b38f490baad1963ad96f9">Scares by Shudder</channel>
 </channels>

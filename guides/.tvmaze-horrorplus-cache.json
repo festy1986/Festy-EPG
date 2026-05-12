@@ -922,5 +922,1225 @@
       }
     }
   ],
-  "show:this week in horror": null
+  "show:this week in horror": null,
+  "show:slasher flesh and blood": {
+    "id": 7019,
+    "url": "https://www.tvmaze.com/shows/7019/slasher",
+    "name": "Slasher",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Horror",
+      "Thriller",
+      "Mystery"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": 52,
+    "premiered": "2016-03-04",
+    "ended": "2023-05-11",
+    "officialSite": "https://www.shudder.com/series/watch/slasher-ripper/a83709343bef62ea?season=1",
+    "schedule": {
+      "time": "03:00",
+      "days": []
+    },
+    "rating": {
+      "average": 6.5
+    },
+    "weight": 97,
+    "network": null,
+    "webChannel": {
+      "id": 213,
+      "name": "Shudder",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.shudder.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 48960,
+      "thetvdb": 305194,
+      "imdb": "tt4667888"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/455/1138494.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/455/1138494.jpg"
+    },
+    "summary": "<p><b>Slasher</b> is a Canadian-American horror anthology series in which each season sees a new rampaging serial killer leave carnage in their wake as their next victims fight to stay alive. From a quiet town to a former summer camp, dark secrets are unearthed as the past refuses to die. As the body count rises, those remaining alive must figure out how to protect themselves from a killer who wants nothing more than make them suffer for their sins.</p><p>Each season features completely new story unrelated to other seasons, keeping you guessing who the killer is and who is going to be left alive in the end.</p>",
+    "updated": 1729764460,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/7019"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2501374",
+        "name": "Vengeance"
+      }
+    }
+  },
+  "episodes:7019": [
+    {
+      "id": 615202,
+      "url": "https://www.tvmaze.com/episodes/615202/slasher-1x01-an-eye-for-an-eye",
+      "name": "An Eye for an Eye",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2016-03-04",
+      "airtime": "21:00",
+      "airstamp": "2016-03-05T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462581.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462581.jpg"
+      },
+      "summary": "<p>Returning to the small town where her parents were murdered many years ago, Sarah Bennett is horrified when she finds herself at the center of a new series of murders that bear an eerily similarity to the murder of her parents.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/615202"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 625883,
+      "url": "https://www.tvmaze.com/episodes/625883/slasher-1x02-digging-your-grave-with-your-teeth",
+      "name": "Digging Your Grave with Your Teeth",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2016-03-04",
+      "airtime": "22:00",
+      "airstamp": "2016-03-05T03:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462583.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462583.jpg"
+      },
+      "summary": "<p>After she receives a gruesome and cryptic package in the mail, Sarah investigates the recent murders with help from an unlikely ally, leading to the discovery of a long buried secret. Robin has a close call with the killer, and Sarah's grandmother unexpectedly arrives at the Bennett home.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/625883"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 638857,
+      "url": "https://www.tvmaze.com/episodes/638857/slasher-1x03-like-as-fire-eateth-up-and-burneth-wood",
+      "name": "Like as Fire Eateth Up and Burneth Wood",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2016-03-11",
+      "airtime": "21:00",
+      "airstamp": "2016-03-12T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462584.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462584.jpg"
+      },
+      "summary": "<p>Unpleasant truths haunt Robin, who faces steep financial penalties for Justin's crimes. Meanwhile, a shocking misdeed from Brenda's youth causes Sarah to believe that the police have arrested the wrong person for the recent murders.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/638857"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 640265,
+      "url": "https://www.tvmaze.com/episodes/640265/slasher-1x04-as-water-is-corrupted-unless-it-moves",
+      "name": "As Water Is Corrupted Unless It Moves",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2016-03-18",
+      "airtime": "21:00",
+      "airstamp": "2016-03-19T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/49/123089.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/49/123089.jpg"
+      },
+      "summary": "<p>Sarah believes the killer is using the seven deadly sins as part of their plan and is disappointed by the police chief's lack of responsiveness. Unfortunately Sarah's attempt to investigate the murders leads to misfortune.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/640265"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 640274,
+      "url": "https://www.tvmaze.com/episodes/640274/slasher-1x05-ill-gotten-gains",
+      "name": "Ill-Gotten Gains",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2016-03-25",
+      "airtime": "21:00",
+      "airstamp": "2016-03-26T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462586.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462586.jpg"
+      },
+      "summary": "<p>Sarah blames herself when another disturbing murder occurs. Meanwhile, Alison has mixed reactions to Dylan's TV commentaries about the killings and makes a bold move to grab the spotlight for herself.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/640274"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 640330,
+      "url": "https://www.tvmaze.com/episodes/640330/slasher-1x06-the-one-who-sows-his-own-flesh",
+      "name": "The One Who Sows His Own Flesh",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2016-04-01",
+      "airtime": "21:00",
+      "airstamp": "2016-04-02T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462587.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462587.jpg"
+      },
+      "summary": "<p>Sarah learns of some unsettling information about her past from Tom Winston, which leads her to believe she knows the next target of the Executioner. Elsewhere, Chief Vaughn takes great pains to conceal the truth about his own history.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/640330"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 640332,
+      "url": "https://www.tvmaze.com/episodes/640332/slasher-1x07-in-the-pride-of-his-face",
+      "name": "In the Pride of His Face",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2016-04-08",
+      "airtime": "21:00",
+      "airstamp": "2016-04-09T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462590.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462590.jpg"
+      },
+      "summary": "<p>Convinced that Sarah is the Executioner's final target, Tom Winston escapes from prison. Sarah discovers the truth about her relationship with Dylan.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/640332"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 640334,
+      "url": "https://www.tvmaze.com/episodes/640334/slasher-1x08-soon-your-own-eyes-will-see",
+      "name": "Soon Your Own Eyes Will See",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2016-04-15",
+      "airtime": "21:00",
+      "airstamp": "2016-04-16T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462592.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462592.jpg"
+      },
+      "summary": "<p>The Executioner plans one last grand act of retribution, while Sarah is comforted by Cam after Dylan's dishonesty.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/640334"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317451,
+      "url": "https://www.tvmaze.com/episodes/1317451/slasher-2x01-six-feet-under",
+      "name": "Six Feet Under",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/462992.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/462992.jpg"
+      },
+      "summary": "<p>A group of friends return to a retreat near Camp Motega, where they were counselors; the same place where, five years prior, they murdered another counselor in cold blood.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317451"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317452,
+      "url": "https://www.tvmaze.com/episodes/1317452/slasher-2x02-between-good-and-evil",
+      "name": "Between Good and Evil",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/139/349206.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/139/349206.jpg"
+      },
+      "summary": "<p>After a body is found and a guest vanishes, both groups discover they're trapped at the camp with communication to the outside world cut off.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317452"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317453,
+      "url": "https://www.tvmaze.com/episodes/1317453/slasher-2x03-saint-sebastian",
+      "name": "Saint Sebastian",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/463032.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/463032.jpg"
+      },
+      "summary": "<p>As the list of victims continues to grow, the number of possible suspects narrows and the two groups are forced to cooperate despite mutual suspicion.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317453"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317454,
+      "url": "https://www.tvmaze.com/episodes/1317454/slasher-2x04-night-of-hunters",
+      "name": "Night of Hunters",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/463034.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/463034.jpg"
+      },
+      "summary": "<p>The histories of several characters unfold in flashback, revealing surprising connections, while an innocent hiker is pulled into the unfolding drama.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317454"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317455,
+      "url": "https://www.tvmaze.com/episodes/1317455/slasher-2x05-out-of-the-frying-pan",
+      "name": "Out of the Frying Pan",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/463090.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/463090.jpg"
+      },
+      "summary": "<p>The gruesome past and false identity of a commune member is discovered, although it may be too late to save the fellow camper they have kidnapped.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317455"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317456,
+      "url": "https://www.tvmaze.com/episodes/1317456/slasher-2x06-drone",
+      "name": "Drone",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/139/349628.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/139/349628.jpg"
+      },
+      "summary": "<p>Desperate to discover the identity of the killer preying on them, the remaining survivors reluctantly conduct a mock hearing to learn the truth.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317456"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317457,
+      "url": "https://www.tvmaze.com/episodes/1317457/slasher-2x07-dawn-of-the-dead",
+      "name": "Dawn of the Dead",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/185/463105.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/185/463105.jpg"
+      },
+      "summary": "<p>Misinterpreted evidence points everyone in a false direction, while one camper finds evidence that makes him question the motive behind the slaughter.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317457"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1317458,
+      "url": "https://www.tvmaze.com/episodes/1317458/slasher-2x08-the-past-is-never-dead",
+      "name": "The Past Is Never Dead",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2017-10-17",
+      "airtime": "",
+      "airstamp": "2017-10-17T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/139/349673.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/139/349673.jpg"
+      },
+      "summary": "<p>The serial killer confesses to another camper, but the rest of the stranded survivors are still in the dark as final twists and truths are divulged.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1317458"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1613998,
+      "url": "https://www.tvmaze.com/episodes/1613998/slasher-3x01-6am-to-9am",
+      "name": "6am to 9am",
+      "season": 3,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496811.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496811.jpg"
+      },
+      "summary": "<p>On the first anniversary of a mysterious slaying, the masked killer responsible strikes again, butchering one of the earlier crime's eyewitnesses.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1613998"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660085,
+      "url": "https://www.tvmaze.com/episodes/1660085/slasher-3x02-9am-to-12pm",
+      "name": "9am to 12pm",
+      "season": 3,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496812.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496812.jpg"
+      },
+      "summary": "<p>Connections to Kit are revealed in flashbacks, while a couple's secret affair is exposed via social media and another slaying strikes the community.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660085"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660086,
+      "url": "https://www.tvmaze.com/episodes/1660086/slasher-3x03-12pm-to-3pm",
+      "name": "12pm to 3pm",
+      "season": 3,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496813.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496813.jpg"
+      },
+      "summary": "<p>As school is dismissed for the summer, more shocking memories from the past year surface and a teacher who tries to be an ally to Saadia pays a price.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660086"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660087,
+      "url": "https://www.tvmaze.com/episodes/1660087/slasher-3x04-3pm-to-6pm",
+      "name": "3pm to 6pm",
+      "season": 3,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496814.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496814.jpg"
+      },
+      "summary": "<p>The Druid kills again as Amy recalls her role in Kit's death, Roberta questions multiple witnesses, and plans get underway for the solstice party.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660087"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660088,
+      "url": "https://www.tvmaze.com/episodes/1660088/slasher-3x05-6pm-to-9pm",
+      "name": "6pm to 9pm",
+      "season": 3,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496815.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496815.jpg"
+      },
+      "summary": "<p>Roberta and Pujit identify a suspect while Violet's lurid, exploitative murder blog goes too far, making her and Joe targets of outrage and revenge.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660088"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660089,
+      "url": "https://www.tvmaze.com/episodes/1660089/slasher-3x06-9pm-to-12am",
+      "name": "9pm to 12am",
+      "season": 3,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496816.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496816.jpg"
+      },
+      "summary": "<p>Attendees of the solstice party are stalked by the Druid while someone engineers a violent confrontation in the basement between Angel and Dan.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660089"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660090,
+      "url": "https://www.tvmaze.com/episodes/1660090/slasher-3x07-midnight-to-3am",
+      "name": "Midnight to 3am",
+      "season": 3,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 48,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496817.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496817.jpg"
+      },
+      "summary": "<p>Angel and Dan desperately try to escape, Roberta and Pujit get too close to the Druid, and Saadia grows closer to Connor in the hours after the party.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660090"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 1660091,
+      "url": "https://www.tvmaze.com/episodes/1660091/slasher-3x08-3am-to-6am",
+      "name": "3am to 6am",
+      "season": 3,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2019-05-23",
+      "airtime": "",
+      "airstamp": "2019-05-23T16:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/496818.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/496818.jpg"
+      },
+      "summary": "<p>With the identity of the Druid revealed, the few remaining survivors inside the apartment building must make a last-ditch fight for their lives.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1660091"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2102581,
+      "url": "https://www.tvmaze.com/episodes/2102581/slasher-4x01-thicker-than-water",
+      "name": "Thicker Than Water",
+      "season": 4,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2021-08-12",
+      "airtime": "",
+      "airstamp": "2021-08-12T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/348/871251.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/348/871251.jpg"
+      },
+      "summary": "<p>As the various members of the Galloway family gather to depart for their annual reunion, years-long tensions and rivalries flare up, as they arrive at the private island home of patriarch Spencer. After receiving shocking news about his end-of-life plans, the group is faced with the resumption of a long-dormant round of cruel family competitions from the past.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2102581"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146675,
+      "url": "https://www.tvmaze.com/episodes/2146675/slasher-4x02-the-sins-of-the-father",
+      "name": "The Sins of the Father",
+      "season": 4,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2021-08-12",
+      "airtime": "",
+      "airstamp": "2021-08-12T16:00:00+00:00",
+      "runtime": 43,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/348/871252.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/348/871252.jpg"
+      },
+      "summary": "<p>Shocking revelations make the Galloway family competition even more difficult, as grizzly discoveries and panic grip the family, and the killer claims the first victims. Meanwhile, suspicions start to mount against one outsider following an unexpected reveal.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146675"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146724,
+      "url": "https://www.tvmaze.com/episodes/2146724/slasher-4x03-in-trust",
+      "name": "In Trust",
+      "season": 4,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2021-08-19",
+      "airtime": "03:00",
+      "airstamp": "2021-08-20T07:00:00+00:00",
+      "runtime": 55,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/350/875425.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/350/875425.jpg"
+      },
+      "summary": "<p>Reeling from witnessing a gruesome murder, the remaining Galloway family regroup to try and escape the island. But they quickly realize the competition can't be stopped, no matter what. Seamus and Christy's marriage tensions drive them further apart as more secrets from the past are revealed.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146724"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146725,
+      "url": "https://www.tvmaze.com/episodes/2146725/slasher-4x04-upstairs-downstairs",
+      "name": "Upstairs Downstairs",
+      "season": 4,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2021-08-26",
+      "airtime": "03:00",
+      "airstamp": "2021-08-27T07:00:00+00:00",
+      "runtime": 43,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/352/880125.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/352/880125.jpg"
+      },
+      "summary": "<p>Paranoia and suspicion grow among the surviving group, as another body is discovered and terrible secrets from the past come to the surface.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146725"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146726,
+      "url": "https://www.tvmaze.com/episodes/2146726/slasher-4x05-family-ties",
+      "name": "Family Ties",
+      "season": 4,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2021-09-02",
+      "airtime": "03:00",
+      "airstamp": "2021-09-03T07:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/353/884720.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/353/884720.jpg"
+      },
+      "summary": "<p>The family devolves into more violence as both the competition and the infighting continue, leading to bloody results.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146726"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146727,
+      "url": "https://www.tvmaze.com/episodes/2146727/slasher-4x06-face-time",
+      "name": "Face Time",
+      "season": 4,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2021-09-09",
+      "airtime": "03:00",
+      "airstamp": "2021-09-10T07:00:00+00:00",
+      "runtime": 48,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/356/890323.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/356/890323.jpg"
+      },
+      "summary": "<p>The family members dole out justice to one of their own, as The Gentleman finds an unexpected ally.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146727"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146728,
+      "url": "https://www.tvmaze.com/episodes/2146728/slasher-4x07-goldfinger",
+      "name": "Goldfinger",
+      "season": 4,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2021-09-16",
+      "airtime": "03:00",
+      "airstamp": "2021-09-17T07:00:00+00:00",
+      "runtime": 43,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/357/894216.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/357/894216.jpg"
+      },
+      "summary": "<p>More Galloways meet a horrific end as the contest continues, and The Gentleman is finally unmasked.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146728"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2146729,
+      "url": "https://www.tvmaze.com/episodes/2146729/slasher-4x08-kindred",
+      "name": "Kindred",
+      "season": 4,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2021-09-16",
+      "airtime": "03:00",
+      "airstamp": "2021-09-17T07:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/357/894217.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/357/894217.jpg"
+      },
+      "summary": "<p>With The Gentleman's identity revealed, the surviving Galloways take matters into their own hands to finish the competition and escape the island.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2146729"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2467109,
+      "url": "https://www.tvmaze.com/episodes/2467109/slasher-5x01-the-slaughterhouse",
+      "name": "The Slaughterhouse",
+      "season": 5,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2023-04-06",
+      "airtime": "",
+      "airstamp": "2023-04-06T16:00:00+00:00",
+      "runtime": 51,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/455/1139124.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/455/1139124.jpg"
+      },
+      "summary": "<p>The city's elite are thrown into panic when a member of the upper crust is murdered by a killer dubbed \"the Widow.\" Detective Rijkers is put on the case. The city's most powerful man, Basil Garvey, is a target and works to control the investigation.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2467109"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501368,
+      "url": "https://www.tvmaze.com/episodes/2501368/slasher-5x02-the-painful-truth",
+      "name": "The Painful Truth",
+      "season": 5,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2023-04-06",
+      "airtime": "",
+      "airstamp": "2023-04-06T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/455/1139125.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/455/1139125.jpg"
+      },
+      "summary": "<p>The Widow strikes again, and Kenneth Rijkers begins connecting the killings to a 12-year-old mystery, while Basil Garvey, a business oligarch, pulls a number of strings to control the investigation.</p><p> </p><p> </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501368"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501369,
+      "url": "https://www.tvmaze.com/episodes/2501369/slasher-5x03-backbone",
+      "name": "Backbone",
+      "season": 5,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2023-04-13",
+      "airtime": "",
+      "airstamp": "2023-04-13T16:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/456/1141841.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/456/1141841.jpg"
+      },
+      "summary": "<p>A key piece of evidence emerges as the list of victims begin to grow, and those seemingly involved with the death of Margaret Mehar begin to panic as they're pursued by both Rijkers and the Widow.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501369"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501370,
+      "url": "https://www.tvmaze.com/episodes/2501370/slasher-5x04-left-handed-justice",
+      "name": "Left Handed Justice",
+      "season": 5,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2023-04-20",
+      "airtime": "",
+      "airstamp": "2023-04-20T16:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": 6.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/457/1144967.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/457/1144967.jpg"
+      },
+      "summary": "<p>Kenneth moves on pursuing his lead suspect - apprehending him before potential harm is brought to Regina. However, the Widow isn't the only one up to cruel mischief, with the Botticelli sisters taking sinister measures to protect their fortunes.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501370"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501371,
+      "url": "https://www.tvmaze.com/episodes/2501371/slasher-5x05-everybodys-darling",
+      "name": "Everybody's Darling",
+      "season": 5,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2023-04-27",
+      "airtime": "",
+      "airstamp": "2023-04-27T16:00:00+00:00",
+      "runtime": 49,
+      "rating": {
+        "average": 6.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/459/1147720.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/459/1147720.jpg"
+      },
+      "summary": "<p>The Widow's latest victim is found on Valentine's Day, dragged to death behind a horse and made up to look like Cupid; a torn piece of the Widow's weeds sends Kenneth and Regina off on a hunt; Salomé entertains bidders for Verdi.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501371"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501372,
+      "url": "https://www.tvmaze.com/episodes/2501372/slasher-5x06-resurrections",
+      "name": "Resurrections",
+      "season": 5,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2023-05-04",
+      "airtime": "",
+      "airstamp": "2023-05-04T16:00:00+00:00",
+      "runtime": 52,
+      "rating": {
+        "average": 6.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/460/1151047.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/460/1151047.jpg"
+      },
+      "summary": "<p>The pressure gets to Israel, who admits to her and seven other involvements in Margaret's death; Kenneth secures the suspects, freeing only Israel to operate on a friend of Regina's - inadvertently putting her into the Widow's clutches.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501372"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501373,
+      "url": "https://www.tvmaze.com/episodes/2501373/slasher-5x07-divine-secrets",
+      "name": "Divine Secrets",
+      "season": 5,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2023-05-11",
+      "airtime": "",
+      "airstamp": "2023-05-11T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 6.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/460/1151592.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/460/1151592.jpg"
+      },
+      "summary": "<p>Kenneth sets his sights on Georges.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501373"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    },
+    {
+      "id": 2501374,
+      "url": "https://www.tvmaze.com/episodes/2501374/slasher-5x08-vengeance",
+      "name": "Vengeance",
+      "season": 5,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2023-05-11",
+      "airtime": "",
+      "airstamp": "2023-05-11T16:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 6.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/460/1151593.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/460/1151593.jpg"
+      },
+      "summary": "<p>Kenneth's time is running out.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2501374"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/7019",
+          "name": "Slasher"
+        }
+      }
+    }
+  ]
 }
