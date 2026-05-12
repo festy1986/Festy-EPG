@@ -43,165 +43,422 @@ jobs:
         run: |
           mkdir -p guides
 
-          cat > guides/horrorplus.xml <<'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <channels>
-            <channel site="i.mjh.nz" site_id="Plex/us#5e20b730f2f8d5003d739db7-661fca34414d94009d1206ec" lang="en" xmltv_id="Miramax.Movie.Channel.us">Miramax Movie Channel</channel>
-            <channel site="i.mjh.nz" site_id="Plex/ca#647f8d22a2fc3fadb4721685-641db53c2f7a0fca29488c99" lang="en" xmltv_id="Screambox.TV.ca">Screambox TV</channel>
-          </channels>
+          node <<'EOF'
+          const fs = require('fs')
+
+          const sourcePath = 'epg/sites/plex.tv/plex.tv_us.channels.xml'
+          const outputPath = 'guides/horrorplus.xml'
+
+          const wanted = [
+            {
+              name: 'Miramax Movie Channel',
+              xmltv_id: 'Miramax.Movie.Channel.us'
+            },
+            {
+              name: 'Screambox TV',
+              xmltv_id: 'Screambox.TV.us'
+            }
+          ]
+
+          function decodeXml(s) {
+            return String(s || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(s) {
+            return String(s || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function cleanBody(body) {
+            return decodeXml(String(body || '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function norm(s) {
+            return decodeXml(s)
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/\+/g, 'plus')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function parseChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
+              const attrs = m[1]
+              const body = m[2]
+
+              return {
+                site: attr(attrs, 'site'),
+                site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
+                lang: attr(attrs, 'lang') || 'en',
+                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'id'),
+                name: cleanBody(body)
+              }
+            })
+          }
+
+          if (!fs.existsSync(sourcePath)) {
+            console.error(`Missing ${sourcePath}`)
+            process.exit(1)
+          }
+
+          const raw = parseChannels(fs.readFileSync(sourcePath, 'utf8'))
+
+          const out = []
+          const missing = []
+
+          for (const target of wanted) {
+            const match = raw.find(ch => norm(ch.name) === norm(target.name))
+
+            if (!match || !match.site_id) {
+              missing.push(target.name)
+              continue
+            }
+
+            out.push(
+              `  <channel site="plex.tv" lang="en" xmltv_id="${escapeXml(target.xmltv_id)}" site_id="${escapeXml(match.site_id)}">${escapeXml(target.name)}</channel>`
+            )
+
+            console.log(`[HORRORPLUS CHANNEL] ${target.name} -> ${match.site_id}`)
+          }
+
+          if (missing.length) {
+            console.error('Missing Plex channel IDs:')
+            missing.forEach(x => console.error(`- ${x}`))
+            process.exit(1)
+          }
+
+          fs.writeFileSync(
+            outputPath,
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
+          )
+
+          console.log(`Wrote ${outputPath}`)
+          console.log(`Horrorplus Plex channels: ${out.length}`)
+
+          if (out.length !== wanted.length) {
+            console.error(`Expected ${wanted.length} channels, built ${out.length}`)
+            process.exit(1)
+          }
           EOF
 
-          echo "Wrote guides/horrorplus.xml"
-          grep -n '<channel ' guides/horrorplus.xml
-
-      - name: Write i.mjh.nz Plex config
+      - name: Write Plex config
         run: |
-          mkdir -p epg/sites/i.mjh.nz
+          mkdir -p epg/sites/plex.tv
 
-          cat > epg/sites/i.mjh.nz/i.mjh.nz.config.js <<'EOF'
-          const dayjs = require('dayjs')
+          cat > epg/sites/plex.tv/plex.tv.config.js <<'EOF'
           const axios = require('axios')
-          const parser = require('epg-parser')
-          const isBetween = require('dayjs/plugin/isBetween')
-          const customParseFormat = require('dayjs/plugin/customParseFormat')
+          const dayjs = require('dayjs')
 
-          dayjs.extend(isBetween)
-          dayjs.extend(customParseFormat)
-
-          const API_ENDPOINT = 'https://raw.githubusercontent.com/matthuisman/i.mjh.nz/master'
+          const API_ENDPOINT = 'https://epg.provider.plex.tv'
 
           module.exports = {
-            site: 'i.mjh.nz',
+            site: 'plex.tv',
+            delay: 200,
             days: 14,
             request: {
               cache: {
                 ttl: 3 * 60 * 60 * 1000
               },
-              maxContentLength: 100 * 1024 * 1024
+              headers: {
+                'x-plex-provider-version': '7.2',
+                Accept: 'application/json'
+              }
             },
-            url({ channel }) {
-              const [path] = channel.site_id.split('#')
-              return `${API_ENDPOINT}/${path}.xml`
+            url({ channel, date }) {
+              return `${API_ENDPOINT}/grid?channelGridKey=${channel.site_id}&date=${date.format('YYYY-MM-DD')}`
             },
             parser({ content, channel, date }) {
-              const items = parseItems(content, channel, date)
+              const programs = []
+              const items = parseItems(content)
 
-              const programs = items.map(item => {
-                return {
-                  ...item,
-                  title: getTitle(item),
-                  description: getDescription(item),
-                  categories: getCategories(item),
-                  icon: getIcon(item)
+              for (const item of items) {
+                const title = cleanTitle(item.grandparentTitle || item.title || '')
+                const episodeTitle =
+                  item.grandparentTitle && item.title !== item.grandparentTitle
+                    ? cleanSpaces(item.title)
+                    : ''
+
+                const seasonNumber = item.parentIndex || ''
+                const episodeNumber = item.index || ''
+                const episodeCode = buildEpisodeCode(seasonNumber, episodeNumber)
+                const description = cleanSpaces(item.summary || '')
+                const releaseYear = item.year || ''
+                const airDate = formatPlexDate(item.originallyAvailableAt)
+
+                const programType = classifyProgramType({
+                  item,
+                  episodeTitle,
+                  seasonNumber,
+                  episodeNumber,
+                  airDate,
+                  releaseYear
+                })
+
+                const suppressDisplayDate = shouldSuppressDisplayDate({
+                  title,
+                  description,
+                  programType,
+                  item,
+                  airDate,
+                  date
+                })
+
+                const finalDescription = buildPackedDescription({
+                  programType,
+                  episodeTitle,
+                  episodeCode,
+                  description,
+                  airDate,
+                  releaseYear,
+                  suppressDisplayDate
+                })
+
+                programs.push({
+                  title,
+                  description: finalDescription,
+                  rating: item.contentRating || null,
+                  categories: buildCategories(programType, item),
+                  icon: item.thumb || item.grandparentThumb || null,
+                  start: parseStart(item),
+                  stop: parseStop(item)
+                })
+              }
+
+              console.log(`[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${programs.length}`)
+              return programs
+            }
+          }
+
+          function parseItems(content) {
+            const data = JSON.parse(content)
+            if (!data || !data.MediaContainer || !Array.isArray(data.MediaContainer.Metadata)) return []
+
+            const metadata = data.MediaContainer.Metadata
+            const items = []
+
+            metadata.forEach(item => {
+              const mediaList = Array.isArray(item.Media) ? item.Media : []
+              const segments = []
+
+              mediaList.sort(byTime).forEach(media => {
+                const prevSegment = segments[segments.length - 1]
+
+                if (prevSegment && prevSegment.endsAt === media.beginsAt) {
+                  prevSegment.endsAt = media.endsAt
+                } else {
+                  segments.push(media)
                 }
               })
 
-              return mergeMovieParts(programs)
-            },
-            async channels({ provider }) {
-              const providers = {
-                plex: [
-                  { path: 'Plex/ca', lang: 'en' },
-                  { path: 'Plex/us', lang: 'en' }
-                ]
-              }
-
-              const channels = []
-              const added = new Set()
-              const providerOptions = providers[provider] || providers.plex
-
-              for (const option of providerOptions) {
-                const xml = await axios
-                  .get(`${API_ENDPOINT}/${option.path}.xml`)
-                  .then(r => r.data)
-                  .catch(err => {
-                    console.error(`Error fetching ${option.path}: ${err.message}`)
-                    return null
-                  })
-
-                if (!xml) continue
-
-                const data = parser.parse(xml)
-
-                data.channels.forEach(item => {
-                  const site_id = `${option.path}#${item.id}`
-                  if (!added.has(site_id)) {
-                    added.add(site_id)
-                    channels.push({
-                      lang: option.lang,
-                      site_id,
-                      name: item.displayName?.[0]?.value || item.name?.[0]?.value || item.id
-                    })
-                  }
+              segments.forEach(segment => {
+                items.push({
+                  ...item,
+                  segments,
+                  beginsAt: segment.beginsAt,
+                  endsAt: segment.endsAt
                 })
-              }
-
-              return channels
-            }
-          }
-
-          function mergeMovieParts(programs) {
-            const output = []
-
-            programs.forEach(prog => {
-              const prev = output[output.length - 1]
-              const found =
-                prev &&
-                Array.isArray(prog.categories) &&
-                prog.categories.includes('Movie') &&
-                prev.title === prog.title &&
-                prev.description === prog.description
-
-              if (found) {
-                prev.stop = prog.stop
-              } else {
-                output.push(prog)
-              }
+              })
             })
 
-            return output
-          }
+            return items.sort(byTime)
 
-          function getTitle(item) {
-            return item.title.length ? item.title[0].value : null
-          }
-
-          function getDescription(item) {
-            return item.desc.length ? item.desc[0].value : null
-          }
-
-          function getCategories(item) {
-            return item.category.map(c => c.value)
-          }
-
-          function getIcon(item) {
-            return item.icon && item.icon.length ? item.icon[0].src : null
-          }
-
-          function parseItems(content, channel, date) {
-            try {
-              const curr_day = date
-              const next_day = date.add(1, 'd')
-              const [, site_id] = channel.site_id.split('#')
-              const data = parser.parse(content)
-
-              if (!data || !Array.isArray(data.programs)) return []
-
-              return data.programs
-                .filter(
-                  p =>
-                    p.channel === site_id &&
-                    dayjs(p.start, 'YYYYMMDDHHmmss ZZ').isBetween(curr_day, next_day)
-                )
-                .map(p => {
-                  if (Array.isArray(p.date) && p.date.length) {
-                    p.date = p.date[0]
-                  }
-                  return p
-                })
-            } catch {
-              return []
+            function byTime(a, b) {
+              if (a.beginsAt > b.beginsAt) return 1
+              if (a.beginsAt < b.beginsAt) return -1
+              return 0
             }
+          }
+
+          function parseStart(item) {
+            return item.beginsAt ? dayjs.unix(item.beginsAt) : null
+          }
+
+          function parseStop(item) {
+            return item.endsAt ? dayjs.unix(item.endsAt) : null
+          }
+
+          function classifyProgramType({ item, episodeTitle, seasonNumber, episodeNumber, airDate, releaseYear }) {
+            const genres = Array.isArray(item.Genre) ? item.Genre.map(g => g.tag).join(' ') : ''
+
+            const haystack = [
+              item.type,
+              item.subtype,
+              item.librarySectionTitle,
+              item.contentRating,
+              genres
+            ]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const hasEpisodeSignals = Boolean(
+              episodeTitle ||
+              seasonNumber ||
+              episodeNumber ||
+              item.grandparentTitle ||
+              item.parentTitle ||
+              item.parentIndex ||
+              item.index
+            )
+
+            if (/mini[\s-]?series|limited series|limited-series/.test(haystack)) return 'miniseries'
+            if (/series|episode|show|tv/.test(haystack)) return 'series'
+            if (hasEpisodeSignals) return 'series'
+            if (/movie|film|cinema/.test(haystack)) return 'movie'
+
+            const durationMinutes = getDurationMinutes(item)
+            if (durationMinutes >= 75 && (releaseYear || airDate) && !hasEpisodeSignals) return 'movie'
+
+            return 'program'
+          }
+
+          function getDurationMinutes(item) {
+            const start = Number(item.beginsAt || 0)
+            const end = Number(item.endsAt || 0)
+            if (!start || !end || end <= start) return 0
+            return Math.round((end - start) / 60)
+          }
+
+          function buildCategories(programType, item) {
+            const existing = Array.isArray(item.Genre) ? item.Genre.map(g => g.tag).filter(Boolean) : []
+
+            if (existing.length) return existing
+            if (programType === 'movie') return ['Movie']
+            if (programType === 'miniseries') return ['Miniseries', 'Series']
+            if (programType === 'series') return ['Series']
+            return ['Program']
+          }
+
+          function shouldSuppressDisplayDate({ title, description, programType, item, airDate, date }) {
+            if (!airDate) return false
+
+            const genres = Array.isArray(item.Genre) ? item.Genre.map(g => g.tag).join(' ') : ''
+            const haystack = [
+              title,
+              description,
+              item?.type,
+              item?.subtype,
+              genres
+            ]
+              .filter(Boolean)
+              .join(' ')
+              .toLowerCase()
+
+            const liveOrCurrent = /\b(live|news|newscast|weather|sports|game|match|tournament|football|basketball|baseball|hockey|soccer|golf|tennis|racing|wwe|ufc|mma|boxing|pregame|postgame|post-game|pre-game)\b/.test(haystack)
+            if (!liveOrCurrent) return false
+
+            const parsedAirDate = parseDisplayDate(airDate)
+            if (!date || !date.isValid() || !parsedAirDate || !parsedAirDate.isValid()) return true
+
+            return Math.abs(date.diff(parsedAirDate, 'day')) <= 45
+          }
+
+          function buildPackedDescription({ programType, episodeTitle, episodeCode, description, airDate, releaseYear, suppressDisplayDate }) {
+            const parts = []
+
+            let prefix = ''
+            if (programType === 'series' || programType === 'miniseries') {
+              if (episodeTitle && episodeCode) prefix = `${episodeTitle} - ${episodeCode}`
+              else if (episodeTitle) prefix = episodeTitle
+              else if (episodeCode) prefix = episodeCode
+            }
+
+            if (prefix) parts.push(prefix)
+            if (description) parts.push(description)
+
+            let finalDescription = cleanPackedDescription(parts.join('. '))
+
+            if (programType === 'movie') {
+              if (releaseYear && !descriptionIncludesDisplayDate(finalDescription, releaseYear)) {
+                finalDescription = finalDescription ? `${finalDescription} (${releaseYear})` : `(${releaseYear})`
+              }
+              return finalDescription
+            }
+
+            if (programType === 'series' || programType === 'miniseries') {
+              if (airDate && !suppressDisplayDate && !descriptionIncludesDisplayDate(finalDescription, airDate)) {
+                finalDescription = finalDescription ? `${finalDescription} (${airDate})` : `(${airDate})`
+              }
+              return finalDescription
+            }
+
+            const dateOrYear = suppressDisplayDate ? releaseYear : (airDate || releaseYear)
+            if (dateOrYear && !descriptionIncludesDisplayDate(finalDescription, dateOrYear)) {
+              finalDescription = finalDescription ? `${finalDescription} (${dateOrYear})` : `(${dateOrYear})`
+            }
+
+            return finalDescription
+          }
+
+          function buildEpisodeCode(seasonNumber, episodeNumber) {
+            const s = String(seasonNumber || '').trim()
+            const e = String(episodeNumber || '').trim()
+
+            if (!s && !e) return ''
+            if (s && e) return `S${s}E${e}`
+            if (e) return `E${e}`
+            return `S${s}`
+          }
+
+          function cleanTitle(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
+          }
+
+          function cleanPackedDescription(value) {
+            return cleanSpaces(value)
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function descriptionIncludesDisplayDate(description, dateOrYear) {
+            if (!description || !dateOrYear) return false
+            const escaped = String(dateOrYear).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            return new RegExp(`\\(${escaped}\\)\\s*$`).test(description) || description.includes(String(dateOrYear))
+          }
+
+          function formatPlexDate(value) {
+            const raw = String(value || '').trim()
+            if (!raw) return ''
+
+            const parsed = dayjs(raw)
+            if (!parsed.isValid()) return ''
+
+            return parsed.format('MM/DD/YYYY')
+          }
+
+          function parseDisplayDate(value) {
+            const raw = String(value || '').trim()
+            const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+            if (!m) return dayjs(raw)
+            return dayjs(`${m[3]}-${m[1].padStart(2, '0')}-${m[2].padStart(2, '0')}`)
           }
           EOF
 
@@ -238,7 +495,7 @@ jobs:
             echo "Starting Horrorplus $PASS_NAME"
             echo "maxConnections=$MAX_CONNECTIONS"
             echo "days=14"
-            echo "source=i.mjh.nz Plex"
+            echo "source=plex.tv"
             echo "============================================================"
 
             set +e
