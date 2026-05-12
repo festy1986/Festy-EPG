@@ -57,6 +57,14 @@ jobs:
             {
               name: 'Screambox TV',
               xmltv_id: 'Screambox.TV.us'
+            },
+            {
+              name: 'MGM Presents',
+              xmltv_id: 'MGM.Presents.us'
+            },
+            {
+              name: 'Scares by Shudder',
+              xmltv_id: 'Scares.by.Shudder.us'
             }
           ]
 
@@ -416,6 +424,7 @@ jobs:
 
           function cleanTitle(value) {
             return String(value || '')
+              .replace(/\s+\((19|20)\d{2}\)\s*$/i, '')
               .replace(/\s+/g, ' ')
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
@@ -472,8 +481,8 @@ jobs:
           CH=$(grep -c '<channel ' guides/horrorplus.xml || true)
           echo "Horrorplus curated channels: $CH"
 
-          if [ "$CH" -ne 2 ]; then
-            echo "Invalid guides/horrorplus.xml - expected exactly 2 channels"
+          if [ "$CH" -ne 4 ]; then
+            echo "Invalid guides/horrorplus.xml - expected exactly 4 channels"
             exit 1
           fi
 
@@ -1187,8 +1196,8 @@ jobs:
           echo "Horrorplus programmes: $PR"
           echo "Horrorplus descriptions: $DESC"
 
-          if [ "$CH" -lt 2 ]; then
-            echo "Invalid Horrorplus output - expected at least 2 channels"
+          if [ "$CH" -lt 4 ]; then
+            echo "Invalid Horrorplus output - expected at least 4 channels"
             exit 1
           fi
 
