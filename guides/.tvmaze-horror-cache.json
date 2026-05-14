@@ -27712,5 +27712,2335 @@
       }
     }
   ],
-  "show:the mummy s curse": null
+  "show:the mummy s curse": null,
+  "show:species": {
+    "id": 47573,
+    "url": "https://www.tvmaze.com/shows/47573/endangered-species",
+    "name": "Endangered Species",
+    "type": "Animation",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Children"
+    ],
+    "status": "Ended",
+    "runtime": 10,
+    "averageRuntime": 10,
+    "premiered": "2014-08-22",
+    "ended": "2014-10-03",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 4.5
+    },
+    "weight": 34,
+    "network": {
+      "id": 376,
+      "name": "Cartoon Network",
+      "country": {
+        "name": "Canada",
+        "code": "CA",
+        "timezone": "America/Toronto"
+      },
+      "officialSite": "https://www.cartoonnetwork.ca/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 287139,
+      "imdb": "tt4406352"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/253/634772.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/253/634772.jpg"
+    },
+    "summary": "<p>A bunny, a squirrel and a seagull might be the most common park animals around, but in a certain tree stump these particular critters call home, they are perpetually endangered! PICKLE is a hyper-imaginative bunny with a compulsive need to super-charge everything and have the Best! Adventure! Day! EVER! (Resistance is futile, Merl!) MERL is an overly suspicious and safety conscious squirrel, who believes a perfectly planned day at home is the key to surviving the dangerous and unpredictable world outside-and Pickle's plans for fun. GULL the garbage-loving seagull may not be the brightest buoy on the ocean, but you'll never find a more adoring (and malodorous) buddy. The most important thing to Gull is that his two bestest friends are happy...and close by. Forever. And ever and ever. Three animal buddies living together in a tree stump might sound pretty tame, but everything that happens to this trio is seriously, hilariously wild! Every day-to-day happening in the stump becomes a ...</p>",
+    "updated": 1704795358,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/47573"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1849614",
+        "name": "The Fast and the Furriest"
+      }
+    }
+  },
+  "episodes:47573": [
+    {
+      "id": 1849608,
+      "url": "https://www.tvmaze.com/episodes/1849608/endangered-species-1x01-collecting-merl",
+      "name": "Collecting Merl",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2014-08-22",
+      "airtime": "",
+      "airstamp": "2014-08-22T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849608"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    },
+    {
+      "id": 1849609,
+      "url": "https://www.tvmaze.com/episodes/1849609/endangered-species-1x02-family-fun-day",
+      "name": "Family Fun Day",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2014-08-29",
+      "airtime": "",
+      "airstamp": "2014-08-29T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849609"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    },
+    {
+      "id": 1849610,
+      "url": "https://www.tvmaze.com/episodes/1849610/endangered-species-1x03-raiders-of-the-lost-throne-room",
+      "name": "Raiders of the Lost Throne Room",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2014-09-05",
+      "airtime": "",
+      "airstamp": "2014-09-05T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849610"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    },
+    {
+      "id": 1849611,
+      "url": "https://www.tvmaze.com/episodes/1849611/endangered-species-1x04-stump-of-horrors",
+      "name": "Stump of Horrors",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2014-09-12",
+      "airtime": "",
+      "airstamp": "2014-09-12T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849611"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    },
+    {
+      "id": 1849612,
+      "url": "https://www.tvmaze.com/episodes/1849612/endangered-species-1x05-family-puzzle-night",
+      "name": "Family Puzzle Night",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2014-09-19",
+      "airtime": "",
+      "airstamp": "2014-09-19T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849612"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    },
+    {
+      "id": 1849613,
+      "url": "https://www.tvmaze.com/episodes/1849613/endangered-species-1x06-tub-of-troubles",
+      "name": "Tub of Troubles",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2014-09-26",
+      "airtime": "",
+      "airstamp": "2014-09-26T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849613"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    },
+    {
+      "id": 1849614,
+      "url": "https://www.tvmaze.com/episodes/1849614/endangered-species-1x07-the-fast-and-the-furriest",
+      "name": "The Fast and the Furriest",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2014-10-03",
+      "airtime": "",
+      "airstamp": "2014-10-03T15:00:00+00:00",
+      "runtime": 10,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1849614"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/47573",
+          "name": "Endangered Species"
+        }
+      }
+    }
+  ],
+  "show:species ii": null,
+  "show:poltergeist ii the other side": null,
+  "show:poltergeist iii": null,
+  "show:the dark half": null,
+  "show:movie": {
+    "id": 31947,
+    "url": "https://www.tvmaze.com/shows/31947/movie-connections",
+    "name": "Movie Connections",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2007-09-10",
+    "ended": "2009-02-25",
+    "officialSite": "http://www.bbc.co.uk/programmes/b00gw8w7",
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 66,
+    "network": {
+      "id": 12,
+      "name": "BBC One",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.bbc.co.uk/bbcone"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 89291,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/127/319502.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/127/319502.jpg"
+    },
+    "summary": "<p>Documentary series looking at famous British films.</p>",
+    "updated": 1505523567,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/31947"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1302128",
+        "name": "Calendar Girls"
+      }
+    }
+  },
+  "episodes:31947": [
+    {
+      "id": 1302113,
+      "url": "https://www.tvmaze.com/episodes/1302113/movie-connections-1x01-four-weddings-and-a-funeral",
+      "name": "Four Weddings and a Funeral",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2007-09-10",
+      "airtime": "21:00",
+      "airstamp": "2007-09-10T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302113"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302114,
+      "url": "https://www.tvmaze.com/episodes/1302114/movie-connections-1x02-the-commitments",
+      "name": "The Commitments",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2007-09-17",
+      "airtime": "21:00",
+      "airstamp": "2007-09-17T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302114"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302115,
+      "url": "https://www.tvmaze.com/episodes/1302115/movie-connections-1x03-billy-elliot",
+      "name": "Billy Elliot",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2007-09-24",
+      "airtime": "21:00",
+      "airstamp": "2007-09-24T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302115"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302116,
+      "url": "https://www.tvmaze.com/episodes/1302116/movie-connections-1x04-lock-stock-and-two-smoking-barrels",
+      "name": "Lock, Stock and Two Smoking Barrels",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2007-10-01",
+      "airtime": "21:00",
+      "airstamp": "2007-10-01T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302116"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302117,
+      "url": "https://www.tvmaze.com/episodes/1302117/movie-connections-1x05-bend-it-like-beckham",
+      "name": "Bend It Like Beckham",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2007-10-08",
+      "airtime": "21:00",
+      "airstamp": "2007-10-08T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302117"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302118,
+      "url": "https://www.tvmaze.com/episodes/1302118/movie-connections-1x06-shakespeare-in-love",
+      "name": "Shakespeare in Love",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2007-10-15",
+      "airtime": "21:00",
+      "airstamp": "2007-10-15T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302118"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302119,
+      "url": "https://www.tvmaze.com/episodes/1302119/movie-connections-1x07-brassed-off",
+      "name": "Brassed Off",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2007-10-22",
+      "airtime": "21:00",
+      "airstamp": "2007-10-22T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302119"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302120,
+      "url": "https://www.tvmaze.com/episodes/1302120/movie-connections-1x08-gregorys-girl",
+      "name": "Gregory's Girl",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2007-11-05",
+      "airtime": "21:00",
+      "airstamp": "2007-11-05T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302120"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302121,
+      "url": "https://www.tvmaze.com/episodes/1302121/movie-connections-2x01-monty-python-and-the-holy-grail",
+      "name": "Monty Python and the Holy Grail",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2009-01-07",
+      "airtime": "21:00",
+      "airstamp": "2009-01-07T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302121"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302122,
+      "url": "https://www.tvmaze.com/episodes/1302122/movie-connections-2x02-summer-holiday",
+      "name": "Summer Holiday",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2009-01-14",
+      "airtime": "21:00",
+      "airstamp": "2009-01-14T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302122"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302123,
+      "url": "https://www.tvmaze.com/episodes/1302123/movie-connections-2x03-sliding-doors",
+      "name": "Sliding Doors",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2009-01-21",
+      "airtime": "21:00",
+      "airstamp": "2009-01-21T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302123"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302124,
+      "url": "https://www.tvmaze.com/episodes/1302124/movie-connections-2x04-trainspotting",
+      "name": "Trainspotting",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2009-01-28",
+      "airtime": "21:00",
+      "airstamp": "2009-01-28T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302124"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302125,
+      "url": "https://www.tvmaze.com/episodes/1302125/movie-connections-2x05-shirley-valentine",
+      "name": "Shirley Valentine",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2009-02-04",
+      "airtime": "21:00",
+      "airstamp": "2009-02-04T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302125"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302126,
+      "url": "https://www.tvmaze.com/episodes/1302126/movie-connections-2x06-buster",
+      "name": "Buster",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2009-02-11",
+      "airtime": "21:00",
+      "airstamp": "2009-02-11T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302126"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302127,
+      "url": "https://www.tvmaze.com/episodes/1302127/movie-connections-2x07-local-hero",
+      "name": "Local Hero",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2009-02-18",
+      "airtime": "21:00",
+      "airstamp": "2009-02-18T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302127"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    },
+    {
+      "id": 1302128,
+      "url": "https://www.tvmaze.com/episodes/1302128/movie-connections-2x08-calendar-girls",
+      "name": "Calendar Girls",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2009-02-25",
+      "airtime": "21:00",
+      "airstamp": "2009-02-25T21:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1302128"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/31947",
+          "name": "Movie Connections"
+        }
+      }
+    }
+  ],
+  "show:death wish ii": null,
+  "show:death wish 3": null,
+  "show:death wish 4 the crackdown": null,
+  "show:death wish v the face of death": null,
+  "show:missing in action": null,
+  "show:missing in action 2 the beginning": null,
+  "show:braddock missing in action iii": null,
+  "show:the battle of britain": {
+    "id": 49000,
+    "url": "https://www.tvmaze.com/shows/49000/the-battle-of-britain-3-days-that-saved-the-nation",
+    "name": "The Battle of Britain: 3 Days That Saved the Nation",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [
+      "War",
+      "History"
+    ],
+    "status": "To Be Determined",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2020-07-07",
+    "ended": null,
+    "officialSite": "https://www.channel5.com/show/the-battle-of-britain-3-days-that-saved-the-nation/",
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Tuesday",
+        "Wednesday",
+        "Thursday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 53,
+    "network": {
+      "id": 135,
+      "name": "5",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.channel5.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 385102,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/264/661027.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/264/661027.jpg"
+    },
+    "summary": "<p>In June 1940, a long hot summer lay ahead as a battle for national survival was fought in the skies over Britain. The programme explores the phases of the Battle of Britain and how it came to an end.</p><p>Dan Snow and Kate Humble present a three-part guide to the critical aerial battle that changed the course of the Second World War, featuring personal stories of pilots, ground crews and members of the public.</p>",
+    "updated": 1626508226,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/49000"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1895913",
+        "name": "The Blitz"
+      }
+    }
+  },
+  "episodes:49000": [
+    {
+      "id": 1895911,
+      "url": "https://www.tvmaze.com/episodes/1895911/the-battle-of-britain-3-days-that-saved-the-nation-1x01-the-few",
+      "name": "The Few",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2020-07-07",
+      "airtime": "21:00",
+      "airstamp": "2020-07-07T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Dan Snow and Kate Humble present a three-part guide to the critical aerial battle that changed the course of the Second World War, featuring personal stories of pilots, ground crews and members of the public. The first episode tracks the first skirmishes of the three-day battle,as the Luftwaffe began an all-out assault to rid Britain of air power prior to a land invasion. The first skirmishes were being tracked by a 19-year-old WAAF member in a secret London bunker, and her secret diaries provide fresh insight into the strategies behind the aerial combat.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1895911"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/49000",
+          "name": "The Battle of Britain: 3 Days That Saved the Nation"
+        }
+      }
+    },
+    {
+      "id": 1895912,
+      "url": "https://www.tvmaze.com/episodes/1895912/the-battle-of-britain-3-days-that-saved-the-nation-1x02-the-darkest-hour",
+      "name": "The Darkest Hour",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2020-07-08",
+      "airtime": "21:00",
+      "airstamp": "2020-07-08T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Dan Snow and Kate Humble tell the story of August 30, 1940 - the RAF's most intense day of fighting across the whole battle, as Britain's airfields came under severe threat. Young armourer Ronald Pountain reported for another day of nerve-wracking duty, and seven decades later he can still recall the anxious wait for his pilots to return from their terrifying encounters with the enemy.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1895912"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/49000",
+          "name": "The Battle of Britain: 3 Days That Saved the Nation"
+        }
+      }
+    },
+    {
+      "id": 1895913,
+      "url": "https://www.tvmaze.com/episodes/1895913/the-battle-of-britain-3-days-that-saved-the-nation-1x03-the-blitz",
+      "name": "The Blitz",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2020-07-09",
+      "airtime": "21:00",
+      "airstamp": "2020-07-09T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Dan Snow and Kate Humble conclude their guide to aerial battle that changed the course of the Second World War. Here they tell the story of September 15, 1940 - the most decisive day in the battle for the RAF. With Hitler's plan to invade just days away, Britain's pilots had a final chance to save the nation against the Luftwaffe.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1895913"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/49000",
+          "name": "The Battle of Britain: 3 Days That Saved the Nation"
+        }
+      }
+    }
+  ],
+  "show:a bridge too far": null,
+  "show:the mummy s ghost": null,
+  "show:the mummy s hand": null,
+  "show:the mummy s tomb": null,
+  "show:night creatures": null,
+  "show:night monster": null,
+  "show:the night walker": null,
+  "show:the people under the stairs": null,
+  "show:phantom of the opera": {
+    "id": 24123,
+    "url": "https://www.tvmaze.com/shows/24123/the-phantom-of-the-opera",
+    "name": "The Phantom of the Opera",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Music",
+      "Mystery"
+    ],
+    "status": "Ended",
+    "runtime": 90,
+    "averageRuntime": 90,
+    "premiered": "1990-03-18",
+    "ended": "1990-03-19",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Monday",
+        "Sunday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 28,
+    "network": {
+      "id": 1,
+      "name": "NBC",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.nbc.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 248924,
+      "imdb": "tt0100361"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/91/228651.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/91/228651.jpg"
+    },
+    "summary": "<p>Count de Chagnie has discovered Christine's singing talent on a market place and sent her to his friend Carriere, the director of the Parisian opera. However just when she arrives Carriere's dismissed. His arrogant successor refuses to let a woman of low birth sing in his opera, but graciously employs Christine as gadrobiere for his wife Charlotta, who's installed as first singer. He also fights the phantom, an unknown guy who lives since many years in the catacombs below the opera and was granted privileges by Carriere. However the phantom knows how to defend himself and at the same time helps Christine to her career.</p>",
+    "updated": 1714237993,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/24123"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1028724",
+        "name": "Part 2"
+      }
+    }
+  },
+  "episodes:24123": [
+    {
+      "id": 1028723,
+      "url": "https://www.tvmaze.com/episodes/1028723/the-phantom-of-the-opera-1x01-part-1",
+      "name": "Part 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1990-03-18",
+      "airtime": "",
+      "airstamp": "1990-03-18T17:00:00+00:00",
+      "runtime": 90,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/260/652434.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/260/652434.jpg"
+      },
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1028723"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24123",
+          "name": "The Phantom of the Opera"
+        }
+      }
+    },
+    {
+      "id": 1028724,
+      "url": "https://www.tvmaze.com/episodes/1028724/the-phantom-of-the-opera-1x02-part-2",
+      "name": "Part 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1990-03-19",
+      "airtime": "",
+      "airstamp": "1990-03-19T17:00:00+00:00",
+      "runtime": 90,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/260/652442.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/260/652442.jpg"
+      },
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1028724"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24123",
+          "name": "The Phantom of the Opera"
+        }
+      }
+    }
+  ],
+  "show:revenge of the creature": null,
+  "show:she wolf of london": {
+    "id": 3712,
+    "url": "https://www.tvmaze.com/shows/3712/she-wolf-of-london",
+    "name": "She-Wolf of London",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Horror",
+      "Mystery"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "1990-10-09",
+    "ended": "1991-04-10",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 39,
+    "network": {
+      "id": 72,
+      "name": "Syndication",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 73060,
+      "imdb": "tt0098909"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/19/47527.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/19/47527.jpg"
+    },
+    "summary": "<p>While touring the UK and planning to meet mythology professor Ian Matheson, graduate student Randi Wallace is bitten by a werewolf. Now when the full is moon, Randi transforms into a werewolf herself. With the aid of Ian and his unwitting family, Randi and Ian investigate other supernatural incidents in England. After 14 episodes, the joint-production UK/American crew migrated to L.A. where Ian got a job as a talk-show host and acquired an agent, Skip Seville. The show was retitled <i>Love and Curses</i>, and was cancelled after six more episodes.</p>",
+    "updated": 1649764957,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/3712"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/238751",
+        "name": "Eclipse"
+      }
+    }
+  },
+  "episodes:3712": [
+    {
+      "id": 238732,
+      "url": "https://www.tvmaze.com/episodes/238732/she-wolf-of-london-1x01-she-wolf-of-london",
+      "name": "She-Wolf of London",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1990-10-09",
+      "airtime": "",
+      "airstamp": "1990-10-09T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238732"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238733,
+      "url": "https://www.tvmaze.com/episodes/238733/she-wolf-of-london-1x02-the-bogman-of-letchmoor-heath",
+      "name": "The Bogman of Letchmoor Heath",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1990-10-16",
+      "airtime": "",
+      "airstamp": "1990-10-16T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238733"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238734,
+      "url": "https://www.tvmaze.com/episodes/238734/she-wolf-of-london-1x03-moonlight-becomes-you",
+      "name": "Moonlight Becomes You",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1990-10-23",
+      "airtime": "",
+      "airstamp": "1990-10-23T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238734"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238735,
+      "url": "https://www.tvmaze.com/episodes/238735/she-wolf-of-london-1x04-the-juggler",
+      "name": "The Juggler",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1990-10-30",
+      "airtime": "",
+      "airstamp": "1990-10-30T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238735"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238736,
+      "url": "https://www.tvmaze.com/episodes/238736/she-wolf-of-london-1x05-nice-girls-dont",
+      "name": "Nice Girls Don't",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1990-11-06",
+      "airtime": "",
+      "airstamp": "1990-11-06T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238736"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238737,
+      "url": "https://www.tvmaze.com/episodes/238737/she-wolf-of-london-1x06-little-bookshop-of-horrors",
+      "name": "Little Bookshop of Horrors",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1990-11-13",
+      "airtime": "",
+      "airstamp": "1990-11-13T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238737"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238738,
+      "url": "https://www.tvmaze.com/episodes/238738/she-wolf-of-london-1x07-cant-keep-a-dead-man-down-1",
+      "name": "Can't Keep a Dead Man Down (1)",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1990-11-20",
+      "airtime": "",
+      "airstamp": "1990-11-20T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238738"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238739,
+      "url": "https://www.tvmaze.com/episodes/238739/she-wolf-of-london-1x08-cant-keep-a-dead-man-down-2",
+      "name": "Can't Keep a Dead Man Down (2)",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1990-11-27",
+      "airtime": "",
+      "airstamp": "1990-11-27T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238739"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238740,
+      "url": "https://www.tvmaze.com/episodes/238740/she-wolf-of-london-1x09-the-wild-hunt",
+      "name": "The Wild Hunt",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1990-12-04",
+      "airtime": "",
+      "airstamp": "1990-12-04T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238740"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238741,
+      "url": "https://www.tvmaze.com/episodes/238741/she-wolf-of-london-1x10-whats-got-into-them",
+      "name": "What's Got Into Them?",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1991-01-12",
+      "airtime": "",
+      "airstamp": "1991-01-12T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238741"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238742,
+      "url": "https://www.tvmaze.com/episodes/238742/she-wolf-of-london-1x11-big-top-she-wolf",
+      "name": "Big Top She-Wolf",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1991-01-19",
+      "airtime": "",
+      "airstamp": "1991-01-19T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238742"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238743,
+      "url": "https://www.tvmaze.com/episodes/238743/she-wolf-of-london-1x12-she-devil",
+      "name": "She-Devil",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1991-01-26",
+      "airtime": "",
+      "airstamp": "1991-01-26T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238743"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238744,
+      "url": "https://www.tvmaze.com/episodes/238744/she-wolf-of-london-1x13-voodoo-child",
+      "name": "Voodoo Child",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1991-02-02",
+      "airtime": "",
+      "airstamp": "1991-02-02T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238744"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238745,
+      "url": "https://www.tvmaze.com/episodes/238745/she-wolf-of-london-1x14-beyond-the-beyond",
+      "name": "Beyond the Beyond",
+      "season": 1,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1991-02-09",
+      "airtime": "",
+      "airstamp": "1991-02-09T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238745"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238746,
+      "url": "https://www.tvmaze.com/episodes/238746/she-wolf-of-london-1x15-curiosity-killed-the-cravitz",
+      "name": "Curiosity Killed the Cravitz",
+      "season": 1,
+      "number": 15,
+      "type": "regular",
+      "airdate": "1991-03-06",
+      "airtime": "",
+      "airstamp": "1991-03-06T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238746"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238747,
+      "url": "https://www.tvmaze.com/episodes/238747/she-wolf-of-london-1x16-habeas-corpses",
+      "name": "Habeas Corpses",
+      "season": 1,
+      "number": 16,
+      "type": "regular",
+      "airdate": "1991-03-13",
+      "airtime": "",
+      "airstamp": "1991-03-13T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238747"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238748,
+      "url": "https://www.tvmaze.com/episodes/238748/she-wolf-of-london-1x17-bride-of-the-wolfman",
+      "name": "Bride of the Wolfman",
+      "season": 1,
+      "number": 17,
+      "type": "regular",
+      "airdate": "1991-03-20",
+      "airtime": "",
+      "airstamp": "1991-03-20T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238748"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238749,
+      "url": "https://www.tvmaze.com/episodes/238749/she-wolf-of-london-1x18-heart-attack",
+      "name": "Heart Attack",
+      "season": 1,
+      "number": 18,
+      "type": "regular",
+      "airdate": "1991-03-27",
+      "airtime": "",
+      "airstamp": "1991-03-27T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238749"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238750,
+      "url": "https://www.tvmaze.com/episodes/238750/she-wolf-of-london-1x19-mystical-pizza",
+      "name": "Mystical Pizza",
+      "season": 1,
+      "number": 19,
+      "type": "regular",
+      "airdate": "1991-04-03",
+      "airtime": "",
+      "airstamp": "1991-04-03T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238750"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    },
+    {
+      "id": 238751,
+      "url": "https://www.tvmaze.com/episodes/238751/she-wolf-of-london-1x20-eclipse",
+      "name": "Eclipse",
+      "season": 1,
+      "number": 20,
+      "type": "regular",
+      "airdate": "1991-04-10",
+      "airtime": "",
+      "airstamp": "1991-04-10T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/238751"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3712",
+          "name": "She-Wolf of London"
+        }
+      }
+    }
+  ],
+  "show:son of dracula": null,
+  "show:son of frankenstein": null,
+  "show:sssssss": null,
+  "show:tarantula": {
+    "id": 19682,
+    "url": "https://www.tvmaze.com/shows/19682/tarantula",
+    "name": "Tarantula",
+    "type": "Animation",
+    "language": "English",
+    "genres": [
+      "Comedy"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "2017-12-04",
+    "ended": "2017-12-04",
+    "officialSite": "http://www.tbs.com/shows/tarantula",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 6.8
+    },
+    "weight": 43,
+    "network": null,
+    "webChannel": {
+      "id": 224,
+      "name": "TBS.com",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": null
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 338689,
+      "imdb": "tt6087072"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/404/1012385.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/404/1012385.jpg"
+    },
+    "summary": "<p>Set at the Tierra Chula Resident Hotel, <b>Tarantula</b> centers on Echo Johnson, a respected but uncertified tattoo artist. Echo's poetic ramblings tell tales of misadventures with the other residents as they partake in party crashing, dumpster diving and other socially dubious acts of mischief.</p>",
+    "updated": 1650259621,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/19682"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1367997",
+        "name": "Pig Head"
+      }
+    }
+  },
+  "episodes:19682": [
+    {
+      "id": 1367987,
+      "url": "https://www.tvmaze.com/episodes/1367987/tarantula-1x01-seesaw",
+      "name": "Seesaw",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343730.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343730.jpg"
+      },
+      "summary": "<p>When Echo's dog Seesaw is unjustly seized by a bureaucratic government agency, it's up to Echo and his friends to get the critter back.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367987"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367988,
+      "url": "https://www.tvmaze.com/episodes/1367988/tarantula-1x02-mushroom-valley",
+      "name": "Mushroom Valley",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343731.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343731.jpg"
+      },
+      "summary": "<p>When a highfalutin scientist impugns Echo's claims of fantastic fungi, Echo and Booty set off on a journey to retrieve a specimen, and quiet the know-it-all for good.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367988"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367990,
+      "url": "https://www.tvmaze.com/episodes/1367990/tarantula-1x03-toast-of-the-town",
+      "name": "Toast of the Town",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343732.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343732.jpg"
+      },
+      "summary": "<p>When Lucas discovers he's been ripped off by a hot shot producer, he and Echo attempt to breach the gates of Hollywood to right the wrong.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367990"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367991,
+      "url": "https://www.tvmaze.com/episodes/1367991/tarantula-1x04-one-weird-mama",
+      "name": "One Weird Mama",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343734.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343734.jpg"
+      },
+      "summary": "<p>When Bess embarrasses Penny at her school, the youngster summons a figure from their past, testing the relationship between mother and daughter.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367991"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367992,
+      "url": "https://www.tvmaze.com/episodes/1367992/tarantula-1x05-macaroni-salad",
+      "name": "Macaroni Salad",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343735.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343735.jpg"
+      },
+      "summary": "<p>When romantic foibles leads a friend to the edge of oblivion, Echo must retrieve the melodramatic fool from the brink.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367992"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367993,
+      "url": "https://www.tvmaze.com/episodes/1367993/tarantula-1x06-the-shade",
+      "name": "The Shade",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343736.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343736.jpg"
+      },
+      "summary": "<p>When Echo's egg-frying antics inadvertantly derail a man's life, he must venture to the fabled \"Weird River\" in order to retrieve him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367993"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367994,
+      "url": "https://www.tvmaze.com/episodes/1367994/tarantula-1x07-pajattery",
+      "name": "Pajattery",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343737.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343737.jpg"
+      },
+      "summary": "<p>When Echo discovers Paja's secret, his decision to share the knowledge with the rest of the Tarantula residents has affects he could never possibly imagine.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367994"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367995,
+      "url": "https://www.tvmaze.com/episodes/1367995/tarantula-1x08-frog-flog",
+      "name": "Frog Flog",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343738.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343738.jpg"
+      },
+      "summary": "<p>When Echo and Booty build their own hot springs it leads each of them to opposing philosophies, and creates a great rift between friends.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367995"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367996,
+      "url": "https://www.tvmaze.com/episodes/1367996/tarantula-1x09-shabzinzo",
+      "name": "Shabzinzo",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343740.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343740.jpg"
+      },
+      "summary": "<p>When Echo is wronged by a wealthy fool, he is sent a very fancy gift that instantly proves itself a burden, and sends him on a journey to rid himself of it.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367996"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    },
+    {
+      "id": 1367997,
+      "url": "https://www.tvmaze.com/episodes/1367997/tarantula-1x10-pig-head",
+      "name": "Pig Head",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2017-12-04",
+      "airtime": "",
+      "airstamp": "2017-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/137/343741.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/137/343741.jpg"
+      },
+      "summary": "<p>Echo reckons with his past.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1367997"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/19682",
+          "name": "Tarantula"
+        }
+      }
+    }
+  ],
+  "show:the thing": {
+    "id": 33533,
+    "url": "https://www.tvmaze.com/shows/33533/the-thing",
+    "name": "The Thing",
+    "type": "Animation",
+    "language": "English",
+    "genres": [
+      "Action",
+      "Adventure",
+      "Science-Fiction"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "1979-09-08",
+    "ended": "1979-12-01",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Saturday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 75,
+    "network": {
+      "id": 1,
+      "name": "NBC",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.nbc.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 73055,
+      "imdb": "tt0077091"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/136/341218.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/136/341218.jpg"
+    },
+    "summary": "<p>Loosely based on the Marvel's character with the same name, <b>The Thing</b> follows adventures of Benjy Grimm, who can change into big and mighty stone creature called Thing.</p>",
+    "updated": 1658970829,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/33533"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1362058",
+        "name": "The Thing and the Captain's Ghost/The Thing and the Absent-Minded Inventor"
+      }
+    }
+  },
+  "episodes:33533": [
+    {
+      "id": 1362046,
+      "url": "https://www.tvmaze.com/episodes/1362046/the-thing-1x01-the-picnic-panicbigfoot-meets-the-thing",
+      "name": "The Picnic Panic/Bigfoot Meets the Thing",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1979-09-08",
+      "airtime": "",
+      "airstamp": "1979-09-08T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>When a motorcycle gang causes trouble at the high school picnic, The Thing must save the day.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362046"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362047,
+      "url": "https://www.tvmaze.com/episodes/1362047/the-thing-1x02-junkyard-hijinksgone-away-gulch",
+      "name": "Junkyard Hijinks/Gone Away Gulch",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1979-09-15",
+      "airtime": "",
+      "airstamp": "1979-09-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Ben and his friends decide to transform the Yancy Street Gang's junkyard into a playground for the neighborhood children.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362047"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362048,
+      "url": "https://www.tvmaze.com/episodes/1362048/the-thing-1x03-circus-stampedethe-thing-and-the-queen",
+      "name": "Circus Stampede/The Thing and the Queen",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1979-09-22",
+      "airtime": "",
+      "airstamp": "1979-09-22T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The Yancy Street Gang sets a mouse loose at the circus, causing the elephants to stampede and free all the other animals.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362048"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362049,
+      "url": "https://www.tvmaze.com/episodes/1362049/the-thing-1x04-carnival-caperthe-thing-blanks-out",
+      "name": "Carnival Caper/The Thing Blanks Out",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1979-09-29",
+      "airtime": "",
+      "airstamp": "1979-09-29T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>After stopping a runaway ferris wheel, The Thing is offered a job at the carnival.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362049"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362050,
+      "url": "https://www.tvmaze.com/episodes/1362050/the-thing-1x05-the-thing-meets-the-clunkbeach-party-crashers",
+      "name": "The Thing Meets the Clunk/Beach Party Crashers",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1979-10-06",
+      "airtime": "",
+      "airstamp": "1979-10-06T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Dr. Quimby's new robot goes rogue and causes trouble for The Thing.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362050"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362051,
+      "url": "https://www.tvmaze.com/episodes/1362051/the-thing-1x06-decepto-the-greatthe-things-the-play",
+      "name": "Decepto the Great/The Thing's the Play",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1979-10-13",
+      "airtime": "",
+      "airstamp": "1979-10-13T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>A dis-honest magician comes to town, planning on stealing from the school kids.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362051"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362052,
+      "url": "https://www.tvmaze.com/episodes/1362052/the-thing-1x07-double-trouble-for-the-thingto-thing-or-not-to-thing",
+      "name": "Double Trouble for the Thing/To Thing or not to Thing",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1979-10-20",
+      "airtime": "",
+      "airstamp": "1979-10-20T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>An evil scientist creates a robot Thing to rob the citizens and make them think The Thing has gone bad.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362052"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362053,
+      "url": "https://www.tvmaze.com/episodes/1362053/the-thing-1x08-the-big-bike-racethe-thing-and-the-treasure-hunt",
+      "name": "The Big Bike Race/The Thing and the Treasure Hunt",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1979-10-27",
+      "airtime": "",
+      "airstamp": "1979-10-27T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Ben enters a cross country bike race because the winner gets to escort the Race Queen to the dance.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362053"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362054,
+      "url": "https://www.tvmaze.com/episodes/1362054/the-thing-1x09-out-to-launchthe-day-the-ring-didnt-do-a-thing",
+      "name": "Out to Launch/The Day the Ring Didn't Do a Thing",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1979-11-03",
+      "airtime": "",
+      "airstamp": "1979-11-03T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Ben and his friends are going to a ship launching but the world's greatest demolition expert intends to ruin the day.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362054"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362055,
+      "url": "https://www.tvmaze.com/episodes/1362055/the-thing-1x10-a-hot-air-affair-at-the-fairthe-thing-goes-to-the-dogs",
+      "name": "A Hot Air Affair at the Fair/The Thing Goes to the Dogs",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1979-11-10",
+      "airtime": "",
+      "airstamp": "1979-11-10T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Ben enters a hot air balloon race but The Yancy Street Gang plans on doing whatever it takes to make sure he loses.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362055"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362056,
+      "url": "https://www.tvmaze.com/episodes/1362056/the-thing-1x11-the-thing-goes-campingdude-ranch-rodeo",
+      "name": "The Thing Goes Camping/Dude Ranch Rodeo",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1979-11-17",
+      "airtime": "",
+      "airstamp": "1979-11-17T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Ben and his friends go camping and encounter a bear who wants to hang out with them.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362056"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362057,
+      "url": "https://www.tvmaze.com/episodes/1362057/the-thing-1x12-photo-finishlights-action-thing",
+      "name": "Photo Finish/Lights, Action, Thing!",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1979-11-24",
+      "airtime": "",
+      "airstamp": "1979-11-24T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The zoo is having a photo contest and The Yancy Street Gang resorts to their usual dirty tactics to win.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362057"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    },
+    {
+      "id": 1362058,
+      "url": "https://www.tvmaze.com/episodes/1362058/the-thing-1x13-the-thing-and-the-captains-ghostthe-thing-and-the-absent-minded-inventor",
+      "name": "The Thing and the Captain's Ghost/The Thing and the Absent-Minded Inventor",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1979-12-01",
+      "airtime": "",
+      "airstamp": "1979-12-01T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The Yancy Street Gang dares Ben and his friends to stay on a haunted ship for a night.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1362058"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33533",
+          "name": "The Thing"
+        }
+      }
+    }
+  ]
 }
