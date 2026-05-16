@@ -52446,5 +52446,4596 @@
     }
   },
   "episodes:85995": [],
-  "show:cucuy the boogeyman": null
+  "show:cucuy the boogeyman": null,
+  "show:h g wells the food of the gods": null,
+  "show:robocop": {
+    "id": 91268,
+    "url": "https://www.tvmaze.com/shows/91268/robocop",
+    "name": "RoboCop",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [],
+    "status": "In Development",
+    "runtime": null,
+    "averageRuntime": null,
+    "premiered": null,
+    "ended": null,
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 92,
+    "network": null,
+    "webChannel": {
+      "id": 3,
+      "name": "Prime Video",
+      "country": null,
+      "officialSite": "https://www.primevideo.com"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": null,
+      "imdb": null
+    },
+    "image": null,
+    "summary": null,
+    "updated": 1775579027,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/91268"
+      }
+    }
+  },
+  "episodes:91268": [],
+  "show:mad max": {
+    "id": 70313,
+    "url": "https://www.tvmaze.com/shows/70313/mad-max-univers-brulant",
+    "name": "Mad Max, univers brûlant",
+    "type": "Documentary",
+    "language": "French",
+    "genres": [],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 33,
+    "premiered": "2016-05-10",
+    "ended": "2016-05-11",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 4,
+    "network": {
+      "id": 105,
+      "name": "Canal+",
+      "country": {
+        "name": "France",
+        "code": "FR",
+        "timezone": "Europe/Paris"
+      },
+      "officialSite": "https://www.canalplus.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 437893,
+      "imdb": "tt5855638"
+    },
+    "image": null,
+    "summary": null,
+    "updated": 1690990536,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/70313"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2611857",
+        "name": "Civilisation"
+      }
+    }
+  },
+  "episodes:70313": [
+    {
+      "id": 2611856,
+      "url": "https://www.tvmaze.com/episodes/2611856/mad-max-univers-brulant-1x01-destruction",
+      "name": "Destruction",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2016-05-10",
+      "airtime": "",
+      "airstamp": "2016-05-10T10:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2611856"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/70313",
+          "name": "Mad Max, univers brûlant"
+        }
+      }
+    },
+    {
+      "id": 2611857,
+      "url": "https://www.tvmaze.com/episodes/2611857/mad-max-univers-brulant-1x02-civilisation",
+      "name": "Civilisation",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2016-05-11",
+      "airtime": "",
+      "airstamp": "2016-05-11T10:00:00+00:00",
+      "runtime": 35,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2611857"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/70313",
+          "name": "Mad Max, univers brûlant"
+        }
+      }
+    }
+  ],
+  "show:midnight cowboy": null,
+  "show:the darkness": {
+    "id": 80536,
+    "url": "https://www.tvmaze.com/shows/80536/the-darkness",
+    "name": "The Darkness",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Mystery"
+    ],
+    "status": "To Be Determined",
+    "runtime": null,
+    "averageRuntime": 46,
+    "premiered": "2024-11-01",
+    "ended": null,
+    "officialSite": "https://www.skyshowtime.com/se/its-time-for/the-darkness",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 6.4
+    },
+    "weight": 95,
+    "network": null,
+    "webChannel": {
+      "id": 584,
+      "name": "SkyShowtime",
+      "country": null,
+      "officialSite": "https://www.skyshowtime.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 446929,
+      "imdb": "tt10011518"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/541/1354590.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/541/1354590.jpg"
+    },
+    "summary": "<p>Detective Inspector Hulda Hermannsdóttir is given a shocking new murder case whilst having to work with a new partner, and being in the cusp of early retirement.</p>",
+    "updated": 1768173673,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/80536"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3042612",
+        "name": "So Eden Sank to Grief"
+      }
+    }
+  },
+  "episodes:80536": [
+    {
+      "id": 3041779,
+      "url": "https://www.tvmaze.com/episodes/3041779/the-darkness-1x01-the-mountain-of-pigs",
+      "name": "The Mountain of Pigs",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2024-11-01",
+      "airtime": "",
+      "airstamp": "2024-11-01T12:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": 6.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1357793.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1357793.jpg"
+      },
+      "summary": "<p>Hulda is faced with the case of a missing woman that consumes her completely.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3041779"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/80536",
+          "name": "The Darkness"
+        }
+      }
+    },
+    {
+      "id": 3042608,
+      "url": "https://www.tvmaze.com/episodes/3042608/the-darkness-1x02-hello-old-friend",
+      "name": "Hello Old Friend",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2024-11-01",
+      "airtime": "",
+      "airstamp": "2024-11-01T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1357794.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1357794.jpg"
+      },
+      "summary": "<p>Hulda and Lukas delve into the complex and corrupt world of refugees in Iceland.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3042608"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/80536",
+          "name": "The Darkness"
+        }
+      }
+    },
+    {
+      "id": 3042609,
+      "url": "https://www.tvmaze.com/episodes/3042609/the-darkness-1x03-beautiful-girls",
+      "name": "Beautiful Girls",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2024-11-01",
+      "airtime": "",
+      "airstamp": "2024-11-01T12:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1357795.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1357795.jpg"
+      },
+      "summary": "<p>When another victim goes missing, Hulda and Lukas must uncover the connection between the cases.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3042609"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/80536",
+          "name": "The Darkness"
+        }
+      }
+    },
+    {
+      "id": 3042610,
+      "url": "https://www.tvmaze.com/episodes/3042610/the-darkness-1x04-through-me-the-way-into-the-suffering-city",
+      "name": "Through Me the Way Into the Suffering City",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2024-11-01",
+      "airtime": "",
+      "airstamp": "2024-11-01T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1357796.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1357796.jpg"
+      },
+      "summary": "<p>While investigating the case of the two missing women, Hulda discovers what lies behind Dimma's death.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3042610"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/80536",
+          "name": "The Darkness"
+        }
+      }
+    },
+    {
+      "id": 3042611,
+      "url": "https://www.tvmaze.com/episodes/3042611/the-darkness-1x05-all-that-is-hidden",
+      "name": "All That Is Hidden",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2024-11-01",
+      "airtime": "",
+      "airstamp": "2024-11-01T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1357797.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1357797.jpg"
+      },
+      "summary": "<p>Lukas and Hulda's investigation progresses as they delve into political and legal corruption.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3042611"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/80536",
+          "name": "The Darkness"
+        }
+      }
+    },
+    {
+      "id": 3042612,
+      "url": "https://www.tvmaze.com/episodes/3042612/the-darkness-1x06-so-eden-sank-to-grief",
+      "name": "So Eden Sank to Grief",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2024-11-01",
+      "airtime": "",
+      "airstamp": "2024-11-01T12:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 7.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1357798.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1357798.jpg"
+      },
+      "summary": "<p>After discovering who killed Katja and kidnapped Elena, Hulda finds herself trapped with the killer.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3042612"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/80536",
+          "name": "The Darkness"
+        }
+      }
+    }
+  ],
+  "show:dead in the water": {
+    "id": 76042,
+    "url": "https://www.tvmaze.com/shows/76042/dead-in-the-water",
+    "name": "Dead in the Water",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [
+      "Crime",
+      "History"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": 46,
+    "premiered": "2024-02-28",
+    "ended": "2024-02-28",
+    "officialSite": "https://www.primevideo.com/detail/0T7JW97B0IQM8L7RZPF8RMKHB8",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 41,
+    "network": null,
+    "webChannel": {
+      "id": 3,
+      "name": "Prime Video",
+      "country": null,
+      "officialSite": "https://www.primevideo.com"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 445590,
+      "imdb": "tt31511857"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/524/1311168.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/524/1311168.jpg"
+    },
+    "summary": "<p>A young British couple's dream trip through remote Central America, turns into a chilling nightmare when they are brutally murdered and the trail for their killer goes cold. Four decades later, failed by law enforcement, their family take up the manhunt and make a shocking discovery.</p>",
+    "updated": 1719050271,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/76042"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2826695",
+        "name": "Episode 3"
+      }
+    }
+  },
+  "episodes:76042": [
+    {
+      "id": 2826693,
+      "url": "https://www.tvmaze.com/episodes/2826693/dead-in-the-water-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2024-02-28",
+      "airtime": "",
+      "airstamp": "2024-02-28T12:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/524/1311165.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/524/1311165.jpg"
+      },
+      "summary": "<p>1978. 25-year-old childhood sweethearts Chris Farmer and Peta Frampton are travelling through Central America sending tapes and letters home with details of their travels. A chance encounter with an American skipper and his two sons changes their plans and the nightmare back home, begins.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2826693"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/76042",
+          "name": "Dead in the Water"
+        }
+      }
+    },
+    {
+      "id": 2826694,
+      "url": "https://www.tvmaze.com/episodes/2826694/dead-in-the-water-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2024-02-28",
+      "airtime": "",
+      "airstamp": "2024-02-28T12:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/524/1311166.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/524/1311166.jpg"
+      },
+      "summary": "<p>Chris and Peta's bodies have been found floating off the coast of Guatemala. The killer is on the loose, and a key witness, fights to be heard. The case goes cold for four decades until, Chris' sister Penny turns online sleuth and discovers a truth much darker than they'd ever imagined.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2826694"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/76042",
+          "name": "Dead in the Water"
+        }
+      }
+    },
+    {
+      "id": 2826695,
+      "url": "https://www.tvmaze.com/episodes/2826695/dead-in-the-water-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2024-02-28",
+      "airtime": "",
+      "airstamp": "2024-02-28T12:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/524/1311167.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/524/1311167.jpg"
+      },
+      "summary": "<p>2016. With the suspected killer in custody, Prosecution and Defense prepare for an epic courtroom battle that hinges on the credibility of the key witness. Justice is within reach when both families are dealt a cruel blow and are forced to face another agonising twist in a long journey for answers.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2826695"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/76042",
+          "name": "Dead in the Water"
+        }
+      }
+    }
+  ],
+  "show:dead man s eyes": null,
+  "show:delirium": {
+    "id": 8306,
+    "url": "https://www.tvmaze.com/shows/8306/delirium",
+    "name": "Delirium",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [],
+    "status": "Ended",
+    "runtime": 43,
+    "averageRuntime": 43,
+    "premiered": "2014-06-20",
+    "ended": "2014-06-20",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Friday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 43,
+    "network": null,
+    "webChannel": {
+      "id": 2,
+      "name": "Hulu",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.hulu.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 339319,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/29/74790.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/29/74790.jpg"
+    },
+    "summary": "<p>Set in a world where love is deemed illegal and can be eradicated with a special procedure. With 95 days to go until her scheduled treatment, Lena Holoway does the unthinkable, she falls in love.</p>",
+    "updated": 1589843435,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/8306"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/458760",
+        "name": "Pilot"
+      }
+    }
+  },
+  "episodes:8306": [
+    {
+      "id": 458760,
+      "url": "https://www.tvmaze.com/episodes/458760/delirium-1x01-pilot",
+      "name": "Pilot",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2014-06-20",
+      "airtime": "",
+      "airstamp": "2014-06-20T16:00:00+00:00",
+      "runtime": 43,
+      "rating": {
+        "average": 10
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/458760"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/8306",
+          "name": "Delirium"
+        }
+      }
+    }
+  ],
+  "show:dementia 13": null,
+  "show:the forest": {
+    "id": 34358,
+    "url": "https://www.tvmaze.com/shows/34358/the-forest",
+    "name": "The Forest",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [
+      "Nature"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "2018-01-08",
+    "ended": "2018-02-12",
+    "officialSite": "http://www.bbc.co.uk/programmes/b09m61c0",
+    "schedule": {
+      "time": "19:30",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 44,
+    "network": {
+      "id": 1042,
+      "name": "BBC One Scotland",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 340721,
+      "imdb": null
+    },
+    "image": null,
+    "summary": "<p>Series revealing the hidden world of Galloway Forest, the country's largest afforested area.</p>",
+    "updated": 1600278194,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/34358"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1410366",
+        "name": "Episode 6"
+      }
+    }
+  },
+  "episodes:34358": [
+    {
+      "id": 1388424,
+      "url": "https://www.tvmaze.com/episodes/1388424/the-forest-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2018-01-08",
+      "airtime": "19:30",
+      "airstamp": "2018-01-08T19:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/230/576031.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/230/576031.jpg"
+      },
+      "summary": "<p>In this episode, the Forestry Commission's recreation team is tasked with rebuilding steps on a well-worn pathway at Fairy Knowe, but the steps are up a 330-foot hill. Getting hunks of granite rock to the remote hill is one problem and digging them in by hand is another. A team of specialist contractors from Wales arrive in Galloway Forest to harvest timber from the most inaccessible areas using a massive system of cables and winches called the skyline. Deep in the forest, conservationists Bill and Christine breed and hand rear hyacinth macaws, the world's largest flying parrot. And on a remote peatbog the size of 32 football pitches, Graeme Little operates his own customised mulching machine.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1388424"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/34358",
+          "name": "The Forest"
+        }
+      }
+    },
+    {
+      "id": 1388425,
+      "url": "https://www.tvmaze.com/episodes/1388425/the-forest-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2018-01-15",
+      "airtime": "19:30",
+      "airstamp": "2018-01-15T19:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/230/576030.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/230/576030.jpg"
+      },
+      "summary": "<p>In this episode, James Jones sawmill in Lockerbie powers through 20,000 logs a day. But when a six-tonne machine called a crosscut stacker breaks down, a dedicated engineering team must save the day. A decline in salmon numbers in the River Cree near Newton Stewart has led to a tireless effort to restock the river by the Cree Hatchery and Habitat Trust. Archie McNeillie and John Coughtrie from the Forestry Commission's Recreation Department deal with a rat infestation in a public area caused by an overzealous bird feeder. And at Balloch O'Dee campsite, owner James gets ready to stage a comedy night.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1388425"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/34358",
+          "name": "The Forest"
+        }
+      }
+    },
+    {
+      "id": 1388426,
+      "url": "https://www.tvmaze.com/episodes/1388426/the-forest-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2018-01-22",
+      "airtime": "19:30",
+      "airstamp": "2018-01-22T19:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/230/576029.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/230/576029.jpg"
+      },
+      "summary": "<p>In this episode, Planning and Environment forester Bill Fisher surveys the vast forest and checks the health of the cash crop in a helicopter, where the bird's-eye view allows him to better spot any pockets of larch disease. Forestry Commission recreation boss Archie McNeillie attempts to balance the needs of the public with the needs of the timber industry by spray-painting some trees as a marker to the harvesters to save them so the public can still enjoy the scenic views. And Environment forester Gareth Ventress hires some traditional horse loggers to carry out a method called horse rolling in an area of dense bracken. Crushing the bracken using a horse is less damaging to the soil and allows light and space for oak saplings and native herbs and flowers to flourish.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1388426"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/34358",
+          "name": "The Forest"
+        }
+      }
+    },
+    {
+      "id": 1400792,
+      "url": "https://www.tvmaze.com/episodes/1400792/the-forest-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2018-01-29",
+      "airtime": "19:30",
+      "airstamp": "2018-01-29T19:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/230/576028.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/230/576028.jpg"
+      },
+      "summary": "<p>This episode follows three truckers as they track down, load and ferry timber to mills in the UK.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1400792"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/34358",
+          "name": "The Forest"
+        }
+      }
+    },
+    {
+      "id": 1405815,
+      "url": "https://www.tvmaze.com/episodes/1405815/the-forest-1x05-episode-5",
+      "name": "Episode 5",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2018-02-05",
+      "airtime": "19:30",
+      "airstamp": "2018-02-05T19:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/230/576027.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/230/576027.jpg"
+      },
+      "summary": "<p>Community liaison forester Lyndy Renwick must decide the fate of huts discovered on Forestry Commission land.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1405815"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/34358",
+          "name": "The Forest"
+        }
+      }
+    },
+    {
+      "id": 1410366,
+      "url": "https://www.tvmaze.com/episodes/1410366/the-forest-1x06-episode-6",
+      "name": "Episode 6",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2018-02-12",
+      "airtime": "19:30",
+      "airstamp": "2018-02-12T19:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/230/576026.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/230/576026.jpg"
+      },
+      "summary": "<p>John Coughtrie and Archie McNeillie prepare safe standing places for the crowds at the Galloway Hills Rally.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1410366"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/34358",
+          "name": "The Forest"
+        }
+      }
+    }
+  ],
+  "show:games": {
+    "id": 18197,
+    "url": "https://www.tvmaze.com/shows/18197/sacred-games",
+    "name": "Sacred Games",
+    "type": "Scripted",
+    "language": "Hindi",
+    "genres": [
+      "Drama",
+      "Action",
+      "Crime"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": 50,
+    "premiered": "2018-07-06",
+    "ended": "2019-08-15",
+    "officialSite": "https://www.netflix.com/title/80115328",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 7.5
+    },
+    "weight": 88,
+    "network": null,
+    "webChannel": {
+      "id": 1,
+      "name": "Netflix",
+      "country": null,
+      "officialSite": "https://www.netflix.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 343435,
+      "imdb": "tt6077448"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/204/511629.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/204/511629.jpg"
+    },
+    "summary": "<p>Set in Mumbai, <b>Sacred Games</b> delves into the city's intricate web of organized crime, corruption, politics and espionage that lie beneath India's economic renaissance. It is an epic masterwork of exceptional richness and power that interweaves the lives of the privileged, the famous, the wretched and the bloodthirsty.</p>",
+    "updated": 1645995597,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/18197"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1696928",
+        "name": "Radcliffe"
+      }
+    }
+  },
+  "episodes:18197": [
+    {
+      "id": 1452177,
+      "url": "https://www.tvmaze.com/episodes/1452177/sacred-games-1x01-aswatthama",
+      "name": "Aswatthama",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 51,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495781.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495781.jpg"
+      },
+      "summary": "<p>A mysterious phone call from an anonymous man leads police officer Sartaj Singh on a chase around Mumbai in a dangerous cat-and-mouse game.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1452177"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492321,
+      "url": "https://www.tvmaze.com/episodes/1492321/sacred-games-1x02-halahala",
+      "name": "Halahala",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 50,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495780.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495780.jpg"
+      },
+      "summary": "<p>News of Ganesh Gaitonde creates a stir among Mumbai's VIPs, from politicians to film stars. Removed from the case, Sartaj begins his own investigation.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492321"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492322,
+      "url": "https://www.tvmaze.com/episodes/1492322/sacred-games-1x03-aatapi-vatapi",
+      "name": "Aatapi Vatapi",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495779.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495779.jpg"
+      },
+      "summary": "<p>The woman found in the bunker leads Sartaj to Gaitonde's thug, Bunty. In a flashback, Gaitonde recalls stealing a lucky charm from rival Suleiman Isa.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492322"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492323,
+      "url": "https://www.tvmaze.com/episodes/1492323/sacred-games-1x04-brahmahatya",
+      "name": "Brahmahatya",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 54,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/170/426922.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/170/426922.jpg"
+      },
+      "summary": "<p>TV Starlet Nayanika visits Bunty with a hidden camera. In the mid-'80s, Gaitonde discovers a racket even more lucrative than drugs and guns: politics.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492323"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492324,
+      "url": "https://www.tvmaze.com/episodes/1492324/sacred-games-1x05-sarama",
+      "name": "Sarama",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495778.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495778.jpg"
+      },
+      "summary": "<p>To save Nayanika, Sartaj intervenes during a RAW operation, In 1992, as political unrest increases, so does the bloodshed from Gaitonde and Isa's fued.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492324"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492325,
+      "url": "https://www.tvmaze.com/episodes/1492325/sacred-games-1x06-pretakalps",
+      "name": "Pretakalps",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495777.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495777.jpg"
+      },
+      "summary": "<p>When Sartaj's constable, Katekar, is pressured to investigate the disappearance of a young man from a Muslim slum, disastrous consequences follow.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492325"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492326,
+      "url": "https://www.tvmaze.com/episodes/1492326/sacred-games-1x07-rudra",
+      "name": "Rudra",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 43,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495776.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495776.jpg"
+      },
+      "summary": "<p>Hoping to tie up the many loose ends of their case, Sartaj and Anjali reunite to figure out how the enigmatic Trivedi is linked to Gatonde's prophecy.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492326"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1492327,
+      "url": "https://www.tvmaze.com/episodes/1492327/sacred-games-1x08-yayati",
+      "name": "Yayati",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2018-07-06",
+      "airtime": "",
+      "airstamp": "2018-07-06T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/198/495775.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/198/495775.jpg"
+      },
+      "summary": "<p>To save Mumbai from impending doom, Sartaj races against time to find out who Gaitonde's third father is and what's planned to happen on the 25th day.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1492327"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1679604,
+      "url": "https://www.tvmaze.com/episodes/1679604/sacred-games-2x01-matsya",
+      "name": "Matsya",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 56,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520359.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520359.jpg"
+      },
+      "summary": "<p>After making a discovery in Gaitonde's bunker, Sartaj joins a mission to foil a deadly conspiracy. In 1994, Gaitonde resurfaces in a new location.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1679604"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696922,
+      "url": "https://www.tvmaze.com/episodes/1696922/sacred-games-2x02-siduri",
+      "name": "Siduri",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 49,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520360.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520360.jpg"
+      },
+      "summary": "<p>With the terrorist-cell investigation underway, Sartaj visits Guruji's ashram. In the late '90s, Gaitonde is urged to seek a spiritual anchor.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696922"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696923,
+      "url": "https://www.tvmaze.com/episodes/1696923/sacred-games-2x03-apasmara",
+      "name": "Apasmara",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 53,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520361.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520361.jpg"
+      },
+      "summary": "<p>Sartaj traces how Shahid Khan's nuclear consignment was delivered to India. In the early 2000s, Gaitonde takes bold action to maintain his notoriety.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696923"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696924,
+      "url": "https://www.tvmaze.com/episodes/1696924/sacred-games-2x04-bardo",
+      "name": "Bardo",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 54,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520362.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520362.jpg"
+      },
+      "summary": "<p>Sartaj's team tries to reach Shahid Khan via an internet chatroom. In 2003, Gaitonde's growing disenchantment with his life brings him closer to Guruji.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696924"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696925,
+      "url": "https://www.tvmaze.com/episodes/1696925/sacred-games-2x05-vikarna",
+      "name": "Vikarna",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 49,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520363.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520363.jpg"
+      },
+      "summary": "<p>As Sartaj's team baits a trap for Shahid Khan, Majid suspects a department member. Immersed in ashram life, Gaitonde learns of Guruji's lethal plans.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696925"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696926,
+      "url": "https://www.tvmaze.com/episodes/1696926/sacred-games-2x06-azrael",
+      "name": "Azrael",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 41,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520364.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520364.jpg"
+      },
+      "summary": "<p>Batya lets Sartaj in on several secrets, leaving him reeling and conflicted. Gaitonde returns to Mumbai to set Guruji's destructive plan in motion.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696926"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696927,
+      "url": "https://www.tvmaze.com/episodes/1696927/sacred-games-2x07-torino",
+      "name": "Torino",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 48,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520365.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520365.jpg"
+      },
+      "summary": "<p>After committing a drastic act, Gaitonde can't silence Guruji's voice in his mind. Parulkar reaches a shocking realization. Sartaj makes a breakthrough.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696927"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    },
+    {
+      "id": 1696928,
+      "url": "https://www.tvmaze.com/episodes/1696928/sacred-games-2x08-radcliffe",
+      "name": "Radcliffe",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2019-08-15",
+      "airtime": "",
+      "airstamp": "2019-08-15T12:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520366.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520366.jpg"
+      },
+      "summary": "<p>Unsettling truths, complex betrayals and unforeseen connections emerge for Sartaj, Gaitonde and Shahid Khan as doomsday descends on Mumbai.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696928"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18197",
+          "name": "Sacred Games"
+        }
+      }
+    }
+  ],
+  "show:gone": {
+    "id": 88579,
+    "url": "https://www.tvmaze.com/shows/88579/gone",
+    "name": "Gone",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Mystery"
+    ],
+    "status": "To Be Determined",
+    "runtime": null,
+    "averageRuntime": 47,
+    "premiered": "2026-03-08",
+    "ended": null,
+    "officialSite": "https://www.itv.com/watch/gone/10a6279",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 7.6
+    },
+    "weight": 98,
+    "network": null,
+    "webChannel": {
+      "id": 54,
+      "name": "ITVX",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.itvx.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 470831,
+      "imdb": "tt39019156"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/615/1538714.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/615/1538714.jpg"
+    },
+    "summary": "<p>Set against the backdrop of a prestigious private school, a foreboding forest and the quiet sprawl of Bristol, <b>Gone</b><i>, </i>is a chilling mystery focusing on local Headmaster Michael Polly who becomes the prime suspect in his wife Sarah's disappearance.<br /><br />An upstanding member of the community, Michael Polly is inscrutable and likes order and precision in his working life. Until, that is, he encounters super bright, gutsy Detective Annie Cassidy and a compulsive game of cat and mouse begins as she chips away at his veneer in search of the truth.  </p>",
+    "updated": 1777796910,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/88579"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3557520",
+        "name": "Episode 6"
+      }
+    }
+  },
+  "episodes:88579": [
+    {
+      "id": 3557421,
+      "url": "https://www.tvmaze.com/episodes/3557421/gone-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2026-03-08",
+      "airtime": "06:00",
+      "airstamp": "2026-03-08T06:00:00+00:00",
+      "runtime": 49,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/616/1542295.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/616/1542295.jpg"
+      },
+      "summary": "<p>Headmaster Michael Polly arrives home with his daughter, Alana, to find no sign of his wife, Sarah, a music teacher at his school. Next day, he reports her missing to the police, and as DS Annie Cassidy and DC Becky Hammond begin investigating, a puzzling discovery sends Alana in a tailspin. As more evidence emerges, Sarah's disappearance is escalated to high risk.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3557421"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/88579",
+          "name": "Gone"
+        }
+      }
+    },
+    {
+      "id": 3557516,
+      "url": "https://www.tvmaze.com/episodes/3557516/gone-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2026-03-08",
+      "airtime": "06:00",
+      "airstamp": "2026-03-08T06:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 8.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/616/1542302.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/616/1542302.jpg"
+      },
+      "summary": "<p>Annie is struck by Michael's strangeness in the wake of an awful discovery, while Alana seeks comfort from her dad, but he appears to be in denial. As the case escalates, Ivan reminds Annie that her duties are restricted to family liaison, while Michael is frustrated by the detective and Becky's constant presence in the house.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3557516"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/88579",
+          "name": "Gone"
+        }
+      }
+    },
+    {
+      "id": 3557517,
+      "url": "https://www.tvmaze.com/episodes/3557517/gone-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2026-03-08",
+      "airtime": "06:00",
+      "airstamp": "2026-03-08T06:00:00+00:00",
+      "runtime": 48,
+      "rating": {
+        "average": 8.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/616/1542303.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/616/1542303.jpg"
+      },
+      "summary": "<p>Michael expresses his discontent with the investigation during questioning, and Annie alights on a new suspect. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3557517"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/88579",
+          "name": "Gone"
+        }
+      }
+    },
+    {
+      "id": 3557518,
+      "url": "https://www.tvmaze.com/episodes/3557518/gone-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2026-03-08",
+      "airtime": "06:00",
+      "airstamp": "2026-03-08T06:00:00+00:00",
+      "runtime": 46,
+      "rating": {
+        "average": 8.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/616/1542304.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/616/1542304.jpg"
+      },
+      "summary": "<p>Annie and her colleagues begin to see things in a new light as fresh information continues to emerge.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3557518"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/88579",
+          "name": "Gone"
+        }
+      }
+    },
+    {
+      "id": 3557519,
+      "url": "https://www.tvmaze.com/episodes/3557519/gone-1x05-episode-5",
+      "name": "Episode 5",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2026-03-08",
+      "airtime": "06:00",
+      "airstamp": "2026-03-08T06:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": 8.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/616/1542305.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/616/1542305.jpg"
+      },
+      "summary": "<p>Michael is increasingly isolated as the investigation broadens. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3557519"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/88579",
+          "name": "Gone"
+        }
+      }
+    },
+    {
+      "id": 3557520,
+      "url": "https://www.tvmaze.com/episodes/3557520/gone-1x06-episode-6",
+      "name": "Episode 6",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2026-03-08",
+      "airtime": "06:00",
+      "airstamp": "2026-03-08T06:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/616/1542306.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/616/1542306.jpg"
+      },
+      "summary": "<p>The investigation hurtles towards a shattering conclusion.</p><p> </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3557520"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/88579",
+          "name": "Gone"
+        }
+      }
+    }
+  ],
+  "show:the green inferno": null,
+  "show:the guardian": {
+    "id": 2219,
+    "url": "https://www.tvmaze.com/shows/2219/the-guardian",
+    "name": "The Guardian",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Legal"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2001-09-25",
+    "ended": "2004-05-04",
+    "officialSite": null,
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Tuesday"
+      ]
+    },
+    "rating": {
+      "average": 7.3
+    },
+    "weight": 95,
+    "network": {
+      "id": 2,
+      "name": "CBS",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.cbs.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 5835,
+      "thetvdb": 82866,
+      "imdb": "tt0285370"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/495/1239348.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239348.jpg"
+    },
+    "summary": "<p>Nick Fallin is a hotshot lawyer working at his father's ultra successful Pittsburgh law firm. Unfortunately, the high life has gotten the best of Nick. Arrested for drug use, he's sentenced to do 1,500 hours of community service, somehow to be squeezed into his 24/7 cutthroat world of mergers, acquisitions and board meetings. Reluctantly, he's now The Guardian - a part-time child advocate at Legal Aid Services, where one case after another is an eye-opening instance of kids caught up in difficult circumstances.</p>",
+    "updated": 1704794335,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/2219"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/181722",
+        "name": "Antarctica"
+      }
+    }
+  },
+  "episodes:2219": [
+    {
+      "id": 181656,
+      "url": "https://www.tvmaze.com/episodes/181656/the-guardian-1x01-pilot",
+      "name": "Pilot",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2001-09-25",
+      "airtime": "21:00",
+      "airstamp": "2001-09-26T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239326.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239326.jpg"
+      },
+      "summary": "<p>Corporate Attorney, Nick Fallen has just been assigned to work community service hours in Children's Legal Services.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181656"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181657,
+      "url": "https://www.tvmaze.com/episodes/181657/the-guardian-1x02-reunion",
+      "name": "Reunion",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2001-10-02",
+      "airtime": "21:00",
+      "airstamp": "2001-10-03T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239327.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239327.jpg"
+      },
+      "summary": "<p>Nick decides to take legal action on an incident that is personal to him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181657"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181658,
+      "url": "https://www.tvmaze.com/episodes/181658/the-guardian-1x03-paternity",
+      "name": "Paternity",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2001-10-09",
+      "airtime": "21:00",
+      "airstamp": "2001-10-10T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239328.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239328.jpg"
+      },
+      "summary": "<p>Nick works to help a prostitute and her 11-year-old handicapped son attempt to collect child support from his biological father.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181658"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181659,
+      "url": "https://www.tvmaze.com/episodes/181659/the-guardian-1x04-lolita",
+      "name": "Lolita?",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2001-10-16",
+      "airtime": "21:00",
+      "airstamp": "2001-10-17T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239329.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239329.jpg"
+      },
+      "summary": "<p>Nick is asked to represent a 15 year-old girl who accuses her cop father of raping her.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181659"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181660,
+      "url": "https://www.tvmaze.com/episodes/181660/the-guardian-1x05-the-men-from-the-boys",
+      "name": "The Men from the Boys",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2001-10-23",
+      "airtime": "21:00",
+      "airstamp": "2001-10-24T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239330.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239330.jpg"
+      },
+      "summary": "<p>Fallin and Associates take on a sexual harassment case while Nick works to get a homeless gay teen off the streets.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181660"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181661,
+      "url": "https://www.tvmaze.com/episodes/181661/the-guardian-1x06-indian-summer",
+      "name": "Indian Summer",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2001-10-30",
+      "airtime": "21:00",
+      "airstamp": "2001-10-31T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239331.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239331.jpg"
+      },
+      "summary": "<p>While Nick and co-workers are unwinding after work at a bar (although Nick is reviewing some papers), he is propositioned by an attractive young woman. What seems like an innocent tryst, however, could turn Nick's career upside down. Meanwhile, Nick's boss at Children's Legal Services must present his proposal to renew the annual contract for the non-profit agency, and this is the first year he has any competition. Will CLS receive the needed funding again this year?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181661"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181662,
+      "url": "https://www.tvmaze.com/episodes/181662/the-guardian-1x07-feeding-frenzy",
+      "name": "Feeding Frenzy",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2001-11-06",
+      "airtime": "21:00",
+      "airstamp": "2001-11-07T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239332.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239332.jpg"
+      },
+      "summary": "<p>Since Child Legal Services is now also assisting adults, Nick's first client is a mentally challenged young man whose mother is certain he's being taken advantage of by his neighbor, a drug dealer. However, there is not enough evidence for the court to decide the young man must move back home, until . . . something catastrophic happens. Meanwhile, Nick's friend at his dad's firm, Jake, is facing legal issues of his own, following a disturbing auto accident.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181662"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181663,
+      "url": "https://www.tvmaze.com/episodes/181663/the-guardian-1x08-heart",
+      "name": "Heart",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2001-11-20",
+      "airtime": "21:00",
+      "airstamp": "2001-11-21T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 9.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239333.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239333.jpg"
+      },
+      "summary": "<p>One of the most heart-wrenching episodes I have ever seen on TV; how surprising it's in the first half of the freshman season for this show. I love when writers name an episode, and it relates in more than one way, as we see in the simple word \"Heart.\" First, Nick represents a 12-year-old (\"going on 40\") girl who needs a heart transplant. And Nick's father struggles with an almost ironclad contract he wrote 30 years ago, and watches while the terms are used against a good friend.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181663"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181664,
+      "url": "https://www.tvmaze.com/episodes/181664/the-guardian-1x09-the-funnies",
+      "name": "The Funnies",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2001-11-27",
+      "airtime": "21:00",
+      "airstamp": "2001-11-28T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239334.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239334.jpg"
+      },
+      "summary": "<p>Barbara, the secretary at Legal Services of Pittsburgh, as well as Nick's co-worker/friend, needs his help. Her 16-year-old son is found with drugs in the vehicle he is driving, which leads to a tragedy. But her son won't divulge where he obtained the drugs, so he's facing hard times. Also, one of Fallin &amp; Associates' clients is trying to sell his toy company, but the creator of a popular children's character doesn't want to give up his rights to the intellectual property. Also, Nick's African American friend, James, at Legal Services of Pittsburgh, is called upon to defend a Neo-Nazi whose landlord is trying to evict him on any possible cause, as the landlord is Jewish and is offended by the free paper his tenant publishes. James defends the man, but it also arouses his own feelings about the client's offensive beliefs.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181664"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181665,
+      "url": "https://www.tvmaze.com/episodes/181665/the-guardian-1x10-loyalites",
+      "name": "Loyalites",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2001-12-11",
+      "airtime": "21:00",
+      "airstamp": "2001-12-12T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239335.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239335.jpg"
+      },
+      "summary": "<p>Nick interviews Louise Archer for his father's firm, but she announces she's already accepted position elsewhere. Fallin and Associates loses a lawyer to a competitor, Kirk &amp; McGee, who then proceeds to try to poach other staff from Fallin's firm. Nick is assigned to work on a case with a new staff member at Legal Services of Pittsburgh, which involves an Arab American shopkeeper who used a bat against a vandal who broke into his store. Nick's father marathons sweet-talking all his clients that might be leaving due to the staff upheaval. As always, surprises ensue.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181665"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181666,
+      "url": "https://www.tvmaze.com/episodes/181666/the-guardian-1x11-home",
+      "name": "Home",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2001-12-18",
+      "airtime": "21:00",
+      "airstamp": "2001-12-19T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239336.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239336.jpg"
+      },
+      "summary": "<p>Nick's first CLS case is now up for the lawsuit against the drug company, which Burton negotiates, as well as where Hunter will live. Alvin's ex-wife appears, asking for his help as she wants to bring a wrongful termination suit against her former employer, which she claims is retaliation for whistle-blowing. And, we learn for the first time, that Nick has been involved in an illicit affair with a married woman.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181666"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181667,
+      "url": "https://www.tvmaze.com/episodes/181667/the-guardian-1x12-causality",
+      "name": "Causality",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2002-01-08",
+      "airtime": "21:00",
+      "airstamp": "2002-01-09T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239337.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239337.jpg"
+      },
+      "summary": "<p>This episode begins on Friday night during a birthday celebration, and then we see the days leading up to the events of that night. Nick starts his new position at Kirk &amp; McGee, but things are not going as well as he planned. He is assigned to represent a father/son business transaction, where he squares off with his own father at the negotiating table. At the new firm, Nick sees an unwelcome figure from his past. Alvin also faces his past during a mother's request to keep her young boy, and Lu makes a surprising discovery.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181667"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181668,
+      "url": "https://www.tvmaze.com/episodes/181668/the-guardian-1x13-privilege",
+      "name": "Privilege",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2002-01-22",
+      "airtime": "21:00",
+      "airstamp": "2002-01-23T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239338.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239338.jpg"
+      },
+      "summary": "<p>Nick and his father attend a funeral for a client's daughter, unsure if she was murdered for her trust money or not. Nick accidentally witnesses disturbing behavior by the decedent's sister, and many questions arise. Amanda dips her toes into pro bono work at Legal Services of Pittsburgh, and represents an older woman who claims her doctor is taking advantage of her financially; however, Amanda gets a surprise revelation during the hearing.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181668"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181669,
+      "url": "https://www.tvmaze.com/episodes/181669/the-guardian-1x14-family",
+      "name": "Family",
+      "season": 1,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2002-02-05",
+      "airtime": "21:00",
+      "airstamp": "2002-02-06T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239339.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239339.jpg"
+      },
+      "summary": "<p>Nick's Aunt LIz and her son, Jeremy, come to ask for assistance as she negotiates a deal to sell her business, since she has been diagnosed with cancer. Nick learns his cousin's secret, and encourages him to admit his problem to Liz. Nick shares some words of wisdom with the teen, since Nick watched his mother fight cancer when he was about Jeremy's age. At LS/Pittsburgh, James Mooney has a new client from Thailand, who is supposedly looking for her uncle living in America.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181669"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181670,
+      "url": "https://www.tvmaze.com/episodes/181670/the-guardian-1x15-in-loco-parentis",
+      "name": "In Loco Parentis",
+      "season": 1,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2002-02-26",
+      "airtime": "21:00",
+      "airstamp": "2002-02-27T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239340.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239340.jpg"
+      },
+      "summary": "<p>Another gut wrenching episode from this company of writers. Lu represents a crack addicted woman recently out of rehab for a custody hearing, and has second thoughts about her client's ability to care for her children, so Nick is added to the defense team. The situation escalates to involve SWAT and a negotiator. At LS/Pittsburgh, James is asked to represent a 17-year-old young man who claims he did not consent to give up his parental rights for his girlfriend's baby. Burton asks Nick for a ride home after a surgical procedure on his eyes, but refuses to give specifics to Nick, except that he has had multiple operations.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181670"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181671,
+      "url": "https://www.tvmaze.com/episodes/181671/the-guardian-1x16-solidarity",
+      "name": "Solidarity",
+      "season": 1,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2002-03-05",
+      "airtime": "21:00",
+      "airstamp": "2002-03-06T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239341.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239341.jpg"
+      },
+      "summary": "<p>A mother seeks Nick's help to block her 17-year-old son's request for emancipation. Turns out, while he can't take her case, she has information that can help in a Fallin &amp; Associates union contract negotiation. We meet James' nephew, sister and grandmother when the teenager goes to his mother's aid and events turn tragic. And a former girlfriend of Nick's shows up to see how he's doing, and whether he has room for her in his life.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181671"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181672,
+      "url": "https://www.tvmaze.com/episodes/181672/the-guardian-1x17-the-divide",
+      "name": "The Divide",
+      "season": 1,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2002-03-12",
+      "airtime": "21:00",
+      "airstamp": "2002-03-13T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239342.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239342.jpg"
+      },
+      "summary": "<p>Interpersonal relationships between the main characters get strained in some ways, and deepened in others. Nick represents two brothers who don't want to be separated, but only one has an immediate adoption offer, which forces Nick and Lu to face each other in court. Jake helps his parents out when his father's personal and business debts threaten the family home, and Jake finally meets a mutually interested lady friend. Nick's NA sponsor challenges Nick about his commitment to his recovery.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181672"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181673,
+      "url": "https://www.tvmaze.com/episodes/181673/the-guardian-1x18-mothers-of-the-disappeared",
+      "name": "Mothers of the Disappeared",
+      "season": 1,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2002-03-26",
+      "airtime": "21:00",
+      "airstamp": "2002-03-27T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239343.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239343.jpg"
+      },
+      "summary": "<p>Nick runs into an important person in both his and his father's lives, which may have a significant impact on both their futures. A woman asks for Nick's help, as a trust was set up for her young daughter who disappeared about 7 years ago, and she needs the trust money to save her home. Nick asks the detective who was on the case, and things get complicated from there. And Alvin and Laurie Solt, the social services worker, discover a mutual passion for helping juveniles who fall through the cracks when they need psychiatric evaluation and not just detention.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181673"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181674,
+      "url": "https://www.tvmaze.com/episodes/181674/the-guardian-1x19-lawyers-guns-and-money",
+      "name": "Lawyers, Guns and Money",
+      "season": 1,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2002-04-09",
+      "airtime": "21:00",
+      "airstamp": "2002-04-10T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239344.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239344.jpg"
+      },
+      "summary": "<p>This episode has multiple subplots, and it appears Nick feels like his entire world is spinning out of control. (1) His parole officer threatens to report some technical violations to the judge, if Nick won't assist him with legal services while he tries to purchase and renovate a gentleman's club with his girlfriend, and the situation ends very badly for some parties involved. (2) A friend of a close friend asks Nick to bail him out of jail, but keep it all a secret. (3) Nick's father is being looked at for a federal judgeship, and Nick's legal problems could hinder this appointment, putting additional pressure on Nick. (4) At Legal Services, Nick represents a recent parolee whose ex-wife is trying to get his parental rights severed. (5) Lu personally invites Nick to her upcoming engagement party. (6) And, James' new guardianship with his nephew is already being challenged by the young man.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181674"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181675,
+      "url": "https://www.tvmaze.com/episodes/181675/the-guardian-1x20-shelter",
+      "name": "Shelter",
+      "season": 1,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2002-05-07",
+      "airtime": "21:00",
+      "airstamp": "2002-05-08T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239345.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239345.jpg"
+      },
+      "summary": "<p>While visiting the house where Lu and Brian have placed an offer, Nick and the couple meet two homeless teens who need much help and guidance; Nick and Lu are assigned to represent these teens' interests in court. Nick's father divulges that he would like to leave the firm in Nick's hands, if he is appointed to the federal judgeship, and suggests Nick assist on of Burton's personal clients as a stepping stone, but it reveals to Nick some of his weaknesses. And Lu and Nick's friendship begins to move along a new path.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181675"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181676,
+      "url": "https://www.tvmaze.com/episodes/181676/the-guardian-1x21-the-chinese-wall",
+      "name": "The Chinese Wall",
+      "season": 1,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2002-05-14",
+      "airtime": "21:00",
+      "airstamp": "2002-05-15T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239346.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239346.jpg"
+      },
+      "summary": "<p>Burton surprises the firm with a new senior partner: a former senator, and his unscrupulous aide. Nick is advised he needs to drop one of his big clients, where there could be a conflict of interest with the senator, which is where the episode pulls its name from: \"Chinese Wall.\" Lu is pulled into her grandmother's life when she falls in her nursing home and breaks a leg under questionable circumstances.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181676"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181677,
+      "url": "https://www.tvmaze.com/episodes/181677/the-guardian-1x22-the-beginning",
+      "name": "The Beginning",
+      "season": 1,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2002-05-21",
+      "airtime": "21:00",
+      "airstamp": "2002-05-22T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/495/1239347.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/495/1239347.jpg"
+      },
+      "summary": "<p>Alvin is concerned about James' use of boxing to discipline his nephew; James ask Nick to represent him regarding parenting classes. Dr. Reed visits Nick again, concerned about his son's trust. With a new managing partner at the firm, Nick discusses starting a new firm with some of his colleagues. Mandy Gressler shows up unexpectedly, and threatens to jeopardize Nick's probationary status. Alvin attempts to support Nick in a difficult situation, but Nick shuts him down. And we are left with a suspenseful cliffhanger for the first season.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181677"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181678,
+      "url": "https://www.tvmaze.com/episodes/181678/the-guardian-2x01-testimony",
+      "name": "Testimony",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2002-09-24",
+      "airtime": "21:00",
+      "airstamp": "2002-09-25T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806312.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806312.jpg"
+      },
+      "summary": "<p>While Nick awaits probation revocation in jail, his father begins some investigative work about his story. First, the hospital to find out about Mandy's health status, where he meets Shannon, Mandy's daughter. Then Burton speaks to the detective who has been trying to locate Mandy for a month. And he meets Mary, Shannon's grandmother, for the first time. He asks Mary if Shannon can testify for Nick, but Mary refuses. James interviews with Caldwell, Fallin's new managing partner. Jake continues to work on getting Nick's firm started. Lulu visits Nick in jail, partly to ask him about a case she had to take over for him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181678"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181679,
+      "url": "https://www.tvmaze.com/episodes/181679/the-guardian-2x02-monster",
+      "name": "Monster",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2002-10-01",
+      "airtime": "21:00",
+      "airstamp": "2002-10-02T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806313.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806313.jpg"
+      },
+      "summary": "<p>(NO SPOILERS) Nick's first day back at LSP after his hearing is a very difficult one. A young man, about 13 years old, killed his mother. Ronnie seems to have a strange affect; disconnected, focused on concerns that are not super important. Nick also has a fender bender in the parking lot, which is an interesting first meeting of Kim. Also, James and Jake help Nick with the opening of their new law firm.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181679"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181680,
+      "url": "https://www.tvmaze.com/episodes/181680/the-guardian-2x03-the-dead",
+      "name": "The Dead",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2002-10-08",
+      "airtime": "21:00",
+      "airstamp": "2002-10-09T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806314.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806314.jpg"
+      },
+      "summary": "<p>Nick sees an opportunity to get a former client at his new firm, and meets with the client at The Incline, the favorite watering hole for Burton's firm. The client is building a new property, and wants to build a road through a cemetery, which would require 15 graves to be relocated. Burton visits Mary at work, and finds out the reason Mandy hasn't been buried yet; Burton offers to help. The FBI puts pressure on some unscrupulous actions among major players. And a difficult issue from Burton's past arises during a current case, although he is on the verge of being sworn in as a judge. Kim and Nick continue their bedroom relationship.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181680"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181681,
+      "url": "https://www.tvmaze.com/episodes/181681/the-guardian-2x04-the-next-life",
+      "name": "The Next Life",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2002-10-15",
+      "airtime": "21:00",
+      "airstamp": "2002-10-16T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806315.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806315.jpg"
+      },
+      "summary": "<p>An \"angel of death\" nurse at a hospital confesses to killing 19 cancer patients; James' grandmother may have been one of them. While visiting the hospital, he meets a young woman whose husband also may be a victim. At LSP, Nick is asked to represent a child who has been difficult to adopt, so he can go to an \"adoption party.\" Lulu represents a pregnant teenager who has an at risk pregnancy and needs to find a new shelter, as she doesn't like to follow rules.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181681"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181682,
+      "url": "https://www.tvmaze.com/episodes/181682/the-guardian-2x05-assuming-the-position",
+      "name": "Assuming the Position",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2002-10-22",
+      "airtime": "21:00",
+      "airstamp": "2002-10-23T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806316.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806316.jpg"
+      },
+      "summary": "<p>A raid on a Massage Parlor jeopardizes Alvin's job. Nick is appointed to represent a young boy who is having severe medical issues from lead exposure. Jake is pressed to the limit both personally and professionally as he tries to help a close friend. And we find out that Lulu's marriage is meeting neither her nor her husband's expectations.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181682"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181683,
+      "url": "https://www.tvmaze.com/episodes/181683/the-guardian-2x06-the-living",
+      "name": "The Living",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2002-10-29",
+      "airtime": "21:00",
+      "airstamp": "2002-10-30T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806317.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806317.jpg"
+      },
+      "summary": "<p>Nick's father has him take over a client with many secrets and idiosyncrasies; Nick begins to question his own personal motives while he does his job. Is it to be successful, meet his father's expectations, or purely for the money? Does his corporate job allow the \"human factor\" to be relevant? Nick also helps a teen who needs a bone marrow transplant from his sister, but her location is unknown. And Lu confides to Nick the reason she's mad at him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181683"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181684,
+      "url": "https://www.tvmaze.com/episodes/181684/the-guardian-2x07-the-innocent",
+      "name": "The Innocent",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2002-11-12",
+      "airtime": "21:00",
+      "airstamp": "2002-11-13T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806318.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806318.jpg"
+      },
+      "summary": "<p>Nick and Jake help a family whose lives have been torn apart by cancer death of mother, and drug use by father. Fortunately, the children's godparents want to adopt them, and are a good home for them. However, it doesn't mean there aren't some large issues to overcome. Lulu is asked to help a man who was wrongfully imprisoned for decades as he tries to re-enter life outside prison and keep his marriage. And Nick and Lulu begin talking about her concerns about her marriage.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181684"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181685,
+      "url": "https://www.tvmaze.com/episodes/181685/the-guardian-2x08-the-neighborhood",
+      "name": "The Neighborhood",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2002-11-19",
+      "airtime": "21:00",
+      "airstamp": "2002-11-20T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806319.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806319.jpg"
+      },
+      "summary": "<p>A close friend of Lulu's has a daughter go missing, and foul play is suspected. Nick's father tries to celebrate Nick's birthday with a surprise. And Nick is assigned a new case, then discovers he knows the client from his childhood days, and the client needs help to retain custody of his dog.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181685"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181686,
+      "url": "https://www.tvmaze.com/episodes/181686/the-guardian-2x09-the-dark",
+      "name": "The Dark",
+      "season": 2,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2002-11-26",
+      "airtime": "21:00",
+      "airstamp": "2002-11-27T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806320.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806320.jpg"
+      },
+      "summary": "<p>Another appropriate name for a powerful episode. James' nephew, Levi, is assaulted by his former gang members at his reform school, and is threatened with expulsion unless he gives the headmaster the names of the assailants. Alvin represents a former baseball idol in a personal property dispute; Nick's dad has another eye surgery that compromises his ability to work, so Nick must take over a large merger on short notice, while he's juggling assisting others in his life, also with major personal issues.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181686"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181687,
+      "url": "https://www.tvmaze.com/episodes/181687/the-guardian-2x10-sacrifice",
+      "name": "Sacrifice",
+      "season": 2,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2002-12-10",
+      "airtime": "21:00",
+      "airstamp": "2002-12-11T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806321.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806321.jpg"
+      },
+      "summary": "<p>Lulu's husband comes under scrutiny by the hospital after a problem in the operating room, and it puts Nick and Lulu on opposite sides of the courtroom. Nick's father meets a client's beautiful daughter, and wants Nick to date her. And a young mother is pushed to the limit in her multi-generational home where illness has taken over family function.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181687"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181688,
+      "url": "https://www.tvmaze.com/episodes/181688/the-guardian-2x11-no-good-deed",
+      "name": "No Good Deed",
+      "season": 2,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2002-12-17",
+      "airtime": "21:00",
+      "airstamp": "2002-12-18T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806322.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806322.jpg"
+      },
+      "summary": "<p>A client Nick has been working with for a long time graduates high school, and Nick offers him a temporary job. The first day, he follows Nick to his various duties, and his life is changed forever. Nick also represents a family where the father is mentally altered due to Acquired Brain Injury. Burton makes a generous offer to Mary and Shannon, and the friendship deepens. And Lulu needs representation, and Nick offers to help.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181688"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181689,
+      "url": "https://www.tvmaze.com/episodes/181689/the-guardian-2x12-you-belong-to-me",
+      "name": "You Belong to Me",
+      "season": 2,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2003-01-07",
+      "airtime": "21:00",
+      "airstamp": "2003-01-08T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806323.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806323.jpg"
+      },
+      "summary": "<p>Lulu has a stalker, and it's unclear who it is: repeat, silent phone calls, and a break-in while her husband is away. Burton gets a lead on picking up some of the city's legal matters, which can help the firm monetarily, but it conflicts with other duties at the law firm. Specifically, he sues a man to remove a nuisance aviary in his small back yard. And a mother who has been physically abused seems to feed her son with lies about his father, so he's afraid of him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181689"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181690,
+      "url": "https://www.tvmaze.com/episodes/181690/the-guardian-2x13-ambition",
+      "name": "Ambition",
+      "season": 2,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2003-01-21",
+      "airtime": "21:00",
+      "airstamp": "2003-01-22T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806324.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806324.jpg"
+      },
+      "summary": "<p>Nick gets a new client, and then finds out it's actually Lulu's mother, who is moving her business to Pittsburgh. She tries to entice Lulu away from her non-profit work and begin working with her as she builds her company in this new location. James represents a young man who has foster parents who want to adopt him, but the youngster is being enticed by a potential rap recording contract in New York. And a long time client of Burton's is wanting to expand his inherited business to a completely new business venture, and this encourages Burton to consider his \"old fuddy duddy\" ways.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181690"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181691,
+      "url": "https://www.tvmaze.com/episodes/181691/the-guardian-2x14-understand-your-man",
+      "name": "Understand Your Man",
+      "season": 2,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2003-02-04",
+      "airtime": "21:00",
+      "airstamp": "2003-02-05T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806325.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806325.jpg"
+      },
+      "summary": "<p>At a benefit dinner for LSP, Jake meets a \"model\" woman who recently got custody of her son. They happened to have gone to the same local high school, and there is a mutual interest. Since Jake is spending time with her, he begins to question if she is really a fit mother. After Burton is rebuffed, he rethinks his relationship with Mary, and Nick witnesses her true side. Brian files a suit against the hospital for wrongful termination. Nick represents a transvestite man whose partner is now deceased, and is trying to keep custody of the young boy he's been raising as his own for several years now. Lulu bid on some law books of Burton's, but the box which is delivered is more of a personal nature, and she begins to see how Nick was raised.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181691"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181692,
+      "url": "https://www.tvmaze.com/episodes/181692/the-guardian-2x15-where-you-are",
+      "name": "Where You Are",
+      "season": 2,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2003-02-11",
+      "airtime": "21:00",
+      "airstamp": "2003-02-12T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806326.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806326.jpg"
+      },
+      "summary": "<p>A school friend of Nick's has a new product, and he's asking for the firm's assistance with a business plan, etc. Meanwhile, Lulu has a young boy who misses a lot of school. Nick has second thoughts about working with his friend, but his invention proves extremely effective at a crucial moment. James approaches his friend still at Fallin &amp; Fallin, Jake, regarding an unscrupulous auto lending company for his latest client.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181692"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181693,
+      "url": "https://www.tvmaze.com/episodes/181693/the-guardian-2x16-the-weight",
+      "name": "The Weight",
+      "season": 2,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2003-02-18",
+      "airtime": "21:00",
+      "airstamp": "2003-02-19T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806327.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806327.jpg"
+      },
+      "summary": "<p>Barbara has some very exciting news, with invitations in hand for the entire office. Nick takes over a case for Lulu, where a terminally ill child has parents who disagree on the direction her care takes; Burton has a medical scare. And a factory in Burton's small hometown may have to close, which would devastate the community's economy.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181693"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181694,
+      "url": "https://www.tvmaze.com/episodes/181694/the-guardian-2x17-the-intersection",
+      "name": "The Intersection",
+      "season": 2,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2003-02-25",
+      "airtime": "21:00",
+      "airstamp": "2003-02-26T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806328.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806328.jpg"
+      },
+      "summary": "<p>This episode shows how the lives of the different people in the accident intersect. We see how the accident happened and the cause, the people involved, and how they are affected by the accident and subsequent consequences. Nick has the opportunity to show us his most vulnerable side. Both Barbara and her fiance get difficult news.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181694"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181695,
+      "url": "https://www.tvmaze.com/episodes/181695/the-guardian-2x18-my-aim-is-true",
+      "name": "My Aim Is True",
+      "season": 2,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2003-03-18",
+      "airtime": "21:00",
+      "airstamp": "2003-03-19T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806329.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806329.jpg"
+      },
+      "summary": "<p>A young cop shoots Nick's former drug dealer while on duty, and Burton takes a hard line on the settlement after Nick removes himself from the case. Lulu's recovery goes well. A new probationary official visits Alvin's office to question Nick's hours reporting, since he also has a full time job. And Nick has to represent three of his former clients as they need to find new shelter when their facility shuts down.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181695"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181696,
+      "url": "https://www.tvmaze.com/episodes/181696/the-guardian-2x19-back-in-the-ring",
+      "name": "Back in the Ring",
+      "season": 2,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2003-04-01",
+      "airtime": "21:00",
+      "airstamp": "2003-04-02T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806330.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806330.jpg"
+      },
+      "summary": "<p>A popular local boxer seeks assistance with a custody issue, and Burton, Nick and Lulu attend his first big fight together. Nick takes Lulu replacement car shopping. Lulu is concerned about a teenage cheerleader into some questionable behavior, and works with Jake to assist her family. And Lulu's mother testifies before a grand jury.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181696"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181697,
+      "url": "https://www.tvmaze.com/episodes/181697/the-guardian-2x20-what-it-means-to-you",
+      "name": "What It Means to You",
+      "season": 2,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2003-04-22",
+      "airtime": "21:00",
+      "airstamp": "2003-04-23T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806331.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806331.jpg"
+      },
+      "summary": "<p>The new temp attorney at Fallin &amp; Fallin has two unusual encounters with a client which cause concern for Burton. Lulu is representing a church in an eminent domain dispute, and Nick is representing the opposite side. A close friend from Burton's recent past needs his help. And the \"police officer vs drug dealer\" lawsuit ends differently than any one was expecting.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181697"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181698,
+      "url": "https://www.tvmaze.com/episodes/181698/the-guardian-2x21-burton-amp-ernie",
+      "name": "Burton &amp; Ernie",
+      "season": 2,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2003-04-29",
+      "airtime": "21:00",
+      "airstamp": "2003-04-30T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806332.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806332.jpg"
+      },
+      "summary": "<p>Burton's nephew, Jeremy, begins exhibiting very disturbing behavior, and it affects the entire extended family. Lulu and Nick host their first dinner party as a couple. Jake buys a cabin in the woods and is excited about fixing it up. Shannon has trouble adjusting to life in a new environment and without her grandmother.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181698"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181699,
+      "url": "https://www.tvmaze.com/episodes/181699/the-guardian-2x22-sensitive-jackals",
+      "name": "Sensitive Jackals",
+      "season": 2,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2003-05-06",
+      "airtime": "21:00",
+      "airstamp": "2003-05-07T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806333.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806333.jpg"
+      },
+      "summary": "<p>Nick wants to diversify the firm with criminal law practice. Jake went to school with the best criminal defense lawyer in town, and Nick asks Jake to try to land him. Nick is assigned a client, Taliek, who was the victim of a brutal attack, and he's trying to get visitation rights. Nick and his father square off in a mock trial for credits toward continuing legal education (CLE). Lulu tells Nick she's going to interview for a great job in Berkeley, California. James realizes he may have made a tragic mistake about 6 months ago. We find out that Jake's relationship with Clay, the criminal defense attorney, may not be as friendly as we originally were led to believe. Nick tries to apologize to Shannon for humiliating her in front of several people.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181699"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181700,
+      "url": "https://www.tvmaze.com/episodes/181700/the-guardian-2x23-all-the-rage",
+      "name": "All the Rage",
+      "season": 2,
+      "number": 23,
+      "type": "regular",
+      "airdate": "2003-05-13",
+      "airtime": "21:00",
+      "airstamp": "2003-05-14T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806334.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806334.jpg"
+      },
+      "summary": "<p>Lulu travels to Berkley for a job interview, which could split up Nick and Lulu. Shannon's father shows up to seek custody. James confesses about his past behavior, and many people get hurt. Nick is court-ordered for anger counseling, but he's resistant. And a parking spot becomes the last straw for two frustrated men.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181700"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181701,
+      "url": "https://www.tvmaze.com/episodes/181701/the-guardian-3x01-carnival",
+      "name": "Carnival",
+      "season": 3,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2003-09-23",
+      "airtime": "21:00",
+      "airstamp": "2003-09-24T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806335.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806335.jpg"
+      },
+      "summary": "<p>Nick fights to keep a small boy whose mother performs in a traveling carnival in DCF custody when he claims he was molested by the carnival owner.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181701"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181702,
+      "url": "https://www.tvmaze.com/episodes/181702/the-guardian-3x02-big-coal",
+      "name": "Big Coal",
+      "season": 3,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2003-09-30",
+      "airtime": "21:00",
+      "airstamp": "2003-10-01T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806336.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806336.jpg"
+      },
+      "summary": "<p>Pressured to bring his own new business to the firm, Nick and Sadie Harper, Fallin &amp; Fallin's new defense attorney associate, must get a town of 23 people to sign release settlements in order for Nick to land a huge coal manufacturer as a client.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181702"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181703,
+      "url": "https://www.tvmaze.com/episodes/181703/the-guardian-3x03-the-line",
+      "name": "The Line",
+      "season": 3,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2003-10-07",
+      "airtime": "21:00",
+      "airstamp": "2003-10-08T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806337.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806337.jpg"
+      },
+      "summary": "<p>Nick gets caught between father/son clients when the sale of their family department store becomes complicated with a class action lawsuit from several African American customers claiming discrimination.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181703"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181704,
+      "url": "https://www.tvmaze.com/episodes/181704/the-guardian-3x04-the-father-daughter-dance",
+      "name": "The Father-Daughter Dance",
+      "season": 3,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2003-10-14",
+      "airtime": "21:00",
+      "airstamp": "2003-10-15T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806338.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806338.jpg"
+      },
+      "summary": "<p>Although a married couple wants Burton to sue a fertility clinic when their child is born black.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181704"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181705,
+      "url": "https://www.tvmaze.com/episodes/181705/the-guardian-3x05-shame",
+      "name": "Shame",
+      "season": 3,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2003-10-21",
+      "airtime": "21:00",
+      "airstamp": "2003-10-22T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806339.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806339.jpg"
+      },
+      "summary": "<p>When Fallin &amp; Fallin's credit line is called in, Nick tries to get a longtime Fallin client who owes millions to pay in full; Burton and Nick lose him to firm.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181705"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181706,
+      "url": "https://www.tvmaze.com/episodes/181706/the-guardian-3x06-lets-spend-the-night-together",
+      "name": "Let's Spend the Night Together",
+      "season": 3,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2003-10-28",
+      "airtime": "21:00",
+      "airstamp": "2003-10-29T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806340.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806340.jpg"
+      },
+      "summary": "<p>When Lulu's father decides to stay at her place, she and Nick agree they still have feelings for each other and agree to move in together.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181706"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181707,
+      "url": "https://www.tvmaze.com/episodes/181707/the-guardian-3x07-hazel-park",
+      "name": "Hazel Park",
+      "season": 3,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2003-11-04",
+      "airtime": "21:00",
+      "airstamp": "2003-11-05T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806341.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806341.jpg"
+      },
+      "summary": "<p>As part of his community service, Nick is reassigned to help clean up an inner city park, where he meets a former LSP client he does not remember.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181707"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181708,
+      "url": "https://www.tvmaze.com/episodes/181708/the-guardian-3x08-believe",
+      "name": "Believe",
+      "season": 3,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2003-11-11",
+      "airtime": "21:00",
+      "airstamp": "2003-11-12T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806342.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806342.jpg"
+      },
+      "summary": "<p>Lulu tells Nick she is pregnant, and he proposes to her.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181708"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181709,
+      "url": "https://www.tvmaze.com/episodes/181709/the-guardian-3x09-let-god-sort-em-out",
+      "name": "Let God Sort 'Em Out",
+      "season": 3,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2003-11-25",
+      "airtime": "21:00",
+      "airstamp": "2003-11-26T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806343.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806343.jpg"
+      },
+      "summary": "<p>When Fallin &amp; Fallin evict squatters from land being used for future developments, the ripple effect at LSP is tremendous.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181709"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181710,
+      "url": "https://www.tvmaze.com/episodes/181710/the-guardian-3x10-swimming",
+      "name": "Swimming",
+      "season": 3,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2003-12-16",
+      "airtime": "21:00",
+      "airstamp": "2003-12-17T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806344.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806344.jpg"
+      },
+      "summary": "<p>Nick and Suzanne Pell attempt to help Christopher, a client at LSP, after he is locked in a closet for disciplinary measures at a teen boot camp.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181710"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181711,
+      "url": "https://www.tvmaze.com/episodes/181711/the-guardian-3x11-legacy",
+      "name": "Legacy",
+      "season": 3,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2004-01-06",
+      "airtime": "21:00",
+      "airstamp": "2004-01-07T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806345.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806345.jpg"
+      },
+      "summary": "<p>Nick must find a kid a home after his father, who was recently let go from Kane Industries, went crazy and shot his boss and several other coworkers in a conference room during a meeting.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181711"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181712,
+      "url": "https://www.tvmaze.com/episodes/181712/the-guardian-3x12-beautiful-blue-mystic",
+      "name": "Beautiful Blue Mystic",
+      "season": 3,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2004-01-13",
+      "airtime": "21:00",
+      "airstamp": "2004-01-14T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806346.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806346.jpg"
+      },
+      "summary": "<p>After Lulu leaves Nick for having an affiar with Suzanne, Burton counsels Nick to seek help at rehab.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181712"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181713,
+      "url": "https://www.tvmaze.com/episodes/181713/the-guardian-3x13-amends",
+      "name": "Amends",
+      "season": 3,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2004-01-27",
+      "airtime": "21:00",
+      "airstamp": "2004-01-28T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806347.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806347.jpg"
+      },
+      "summary": "<p>Alvin accuses Nick of rushing through the \"steps\" of working his recovery program.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181713"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181714,
+      "url": "https://www.tvmaze.com/episodes/181714/the-guardian-3x14-all-is-mended",
+      "name": "All Is Mended",
+      "season": 3,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2004-02-10",
+      "airtime": "21:00",
+      "airstamp": "2004-02-11T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806348.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806348.jpg"
+      },
+      "summary": "<p>Lulu informs Nick that their unborn baby has Downs Syndrome.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181714"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181715,
+      "url": "https://www.tvmaze.com/episodes/181715/the-guardian-3x15-without-consent",
+      "name": "Without Consent",
+      "season": 3,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2004-02-17",
+      "airtime": "21:00",
+      "airstamp": "2004-02-18T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806349.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806349.jpg"
+      },
+      "summary": "<p>Nick attempts to help a teenage boy who beat up his mother after he walked in on her and his best friend in bed.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181715"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181716,
+      "url": "https://www.tvmaze.com/episodes/181716/the-guardian-3x16-sparkle",
+      "name": "Sparkle",
+      "season": 3,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2004-02-24",
+      "airtime": "21:00",
+      "airstamp": "2004-02-25T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806350.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806350.jpg"
+      },
+      "summary": "<p>Nick helps a boy whose adoption is halted when the couple's own newborn baby is injured in the boy's presence.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181716"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181717,
+      "url": "https://www.tvmaze.com/episodes/181717/the-guardian-3x17-the-watchers",
+      "name": "The Watchers",
+      "season": 3,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2004-03-02",
+      "airtime": "21:00",
+      "airstamp": "2004-03-03T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806351.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806351.jpg"
+      },
+      "summary": "<p>When Burton is unable to physically help the police find Shannon, Nick takes his place and tracks her down through a prostitute, Dina, and her daughter Violet.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181717"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181718,
+      "url": "https://www.tvmaze.com/episodes/181718/the-guardian-3x18-the-bachelor-party",
+      "name": "The Bachelor Party",
+      "season": 3,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2004-03-09",
+      "airtime": "21:00",
+      "airstamp": "2004-03-10T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806352.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806352.jpg"
+      },
+      "summary": "<p>Alvin Masterson has a lot to do in so little time. He is getting married to Victoria Little and has ALS. Nick decides go to Los Angles.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181718"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181719,
+      "url": "https://www.tvmaze.com/episodes/181719/the-guardian-3x19-remember",
+      "name": "Remember",
+      "season": 3,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2004-04-06",
+      "airtime": "21:00",
+      "airstamp": "2004-04-07T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806353.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806353.jpg"
+      },
+      "summary": "<p>Nick defends a sexually abused teenage boy who wants to protect his father from being implicated in the crime, even though it appears that his father was the abuser.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181719"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181720,
+      "url": "https://www.tvmaze.com/episodes/181720/the-guardian-3x20-the-vote",
+      "name": "The Vote",
+      "season": 3,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2004-04-20",
+      "airtime": "21:00",
+      "airstamp": "2004-04-21T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806354.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806354.jpg"
+      },
+      "summary": "<p>Nick and Jake battle wills when they try to get an elderly and sick client declared incompetent when his wife and partner disagree with the terms of a corporate sale.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181720"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181721,
+      "url": "https://www.tvmaze.com/episodes/181721/the-guardian-3x21-blood-in-blood-out",
+      "name": "Blood In, Blood Out",
+      "season": 3,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2004-04-27",
+      "airtime": "21:00",
+      "airstamp": "2004-04-28T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806355.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806355.jpg"
+      },
+      "summary": "<p>Led by Jake, the firm's partners take a vote and kick Nick out of the partnership, despite Burton's attempts to keep his son's name on the door.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181721"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    },
+    {
+      "id": 181722,
+      "url": "https://www.tvmaze.com/episodes/181722/the-guardian-3x22-antarctica",
+      "name": "Antarctica",
+      "season": 3,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2004-05-04",
+      "airtime": "21:00",
+      "airstamp": "2004-05-05T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/322/806356.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/322/806356.jpg"
+      },
+      "summary": "<p>Having been forced from Fallin &amp; Fallin, Nick takes another corporate law at a competing firm, but Burton questions if corporate law is truly Nick's passion.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/181722"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2219",
+          "name": "The Guardian"
+        }
+      }
+    }
+  ],
+  "show:the hitcher ii i ve been waiting": null,
+  "show:i saw what you did": null,
+  "show:incarnate": {
+    "id": 16143,
+    "url": "https://www.tvmaze.com/shows/16143/jealousy-incarnate",
+    "name": "Jealousy Incarnate",
+    "type": "Scripted",
+    "language": "Korean",
+    "genres": [
+      "Drama",
+      "Comedy",
+      "Romance"
+    ],
+    "status": "Ended",
+    "runtime": 65,
+    "averageRuntime": 65,
+    "premiered": "2016-08-24",
+    "ended": "2016-11-10",
+    "officialSite": "http://tv.sbs.co.kr/jealousy",
+    "schedule": {
+      "time": "22:00",
+      "days": [
+        "Wednesday",
+        "Thursday"
+      ]
+    },
+    "rating": {
+      "average": 7.6
+    },
+    "weight": 44,
+    "network": {
+      "id": 127,
+      "name": "SBS",
+      "country": {
+        "name": "Korea, Republic of",
+        "code": "KR",
+        "timezone": "Asia/Seoul"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 312024,
+      "imdb": "tt5936884"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/71/179798.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/71/179798.jpg"
+    },
+    "summary": "<p>The drama depicts romance as well as intense competitive rivalry between an anchor and a weather forecaster working together for a television news show.</p>",
+    "updated": 1768155285,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/16143"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/900827",
+        "name": "Episode 24"
+      }
+    }
+  },
+  "episodes:16143": [
+    {
+      "id": 804559,
+      "url": "https://www.tvmaze.com/episodes/804559/jealousy-incarnate-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2016-08-24",
+      "airtime": "22:00",
+      "airstamp": "2016-08-24T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387764.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387764.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/804559"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 804558,
+      "url": "https://www.tvmaze.com/episodes/804558/jealousy-incarnate-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2016-08-25",
+      "airtime": "22:00",
+      "airstamp": "2016-08-25T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387765.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387765.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/804558"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 804561,
+      "url": "https://www.tvmaze.com/episodes/804561/jealousy-incarnate-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2016-08-31",
+      "airtime": "22:00",
+      "airstamp": "2016-08-31T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387766.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387766.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/804561"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 804560,
+      "url": "https://www.tvmaze.com/episodes/804560/jealousy-incarnate-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2016-09-01",
+      "airtime": "22:00",
+      "airstamp": "2016-09-01T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387767.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387767.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/804560"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 888040,
+      "url": "https://www.tvmaze.com/episodes/888040/jealousy-incarnate-1x05-episode-5",
+      "name": "Episode 5",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2016-09-07",
+      "airtime": "22:00",
+      "airstamp": "2016-09-07T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387768.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387768.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/888040"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 804562,
+      "url": "https://www.tvmaze.com/episodes/804562/jealousy-incarnate-1x06-episode-6",
+      "name": "Episode 6",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2016-09-08",
+      "airtime": "22:00",
+      "airstamp": "2016-09-08T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387769.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387769.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/804562"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 888041,
+      "url": "https://www.tvmaze.com/episodes/888041/jealousy-incarnate-1x07-episode-7",
+      "name": "Episode 7",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2016-09-14",
+      "airtime": "22:00",
+      "airstamp": "2016-09-14T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387770.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387770.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/888041"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 888042,
+      "url": "https://www.tvmaze.com/episodes/888042/jealousy-incarnate-1x08-episode-8",
+      "name": "Episode 8",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2016-09-15",
+      "airtime": "22:00",
+      "airstamp": "2016-09-15T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387771.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387771.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/888042"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 888043,
+      "url": "https://www.tvmaze.com/episodes/888043/jealousy-incarnate-1x09-episode-9",
+      "name": "Episode 9",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2016-09-21",
+      "airtime": "22:00",
+      "airstamp": "2016-09-21T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387772.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387772.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/888043"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 888044,
+      "url": "https://www.tvmaze.com/episodes/888044/jealousy-incarnate-1x10-episode-10",
+      "name": "Episode 10",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2016-09-22",
+      "airtime": "22:00",
+      "airstamp": "2016-09-22T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387773.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387773.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/888044"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900814,
+      "url": "https://www.tvmaze.com/episodes/900814/jealousy-incarnate-1x11-episode-11",
+      "name": "Episode 11",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2016-09-28",
+      "airtime": "22:00",
+      "airstamp": "2016-09-28T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387774.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387774.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900814"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900815,
+      "url": "https://www.tvmaze.com/episodes/900815/jealousy-incarnate-1x12-episode-12",
+      "name": "Episode 12",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2016-09-29",
+      "airtime": "22:00",
+      "airstamp": "2016-09-29T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387775.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387775.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900815"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900816,
+      "url": "https://www.tvmaze.com/episodes/900816/jealousy-incarnate-1x13-episode-13",
+      "name": "Episode 13",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2016-10-05",
+      "airtime": "22:00",
+      "airstamp": "2016-10-05T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387776.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387776.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900816"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900817,
+      "url": "https://www.tvmaze.com/episodes/900817/jealousy-incarnate-1x14-episode-14",
+      "name": "Episode 14",
+      "season": 1,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2016-10-06",
+      "airtime": "22:00",
+      "airstamp": "2016-10-06T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387777.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387777.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900817"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900818,
+      "url": "https://www.tvmaze.com/episodes/900818/jealousy-incarnate-1x15-episode-15",
+      "name": "Episode 15",
+      "season": 1,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2016-10-12",
+      "airtime": "22:00",
+      "airstamp": "2016-10-12T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387778.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387778.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900818"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900819,
+      "url": "https://www.tvmaze.com/episodes/900819/jealousy-incarnate-1x16-episode-16",
+      "name": "Episode 16",
+      "season": 1,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2016-10-13",
+      "airtime": "22:00",
+      "airstamp": "2016-10-13T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387779.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387779.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900819"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900820,
+      "url": "https://www.tvmaze.com/episodes/900820/jealousy-incarnate-1x17-episode-17",
+      "name": "Episode 17",
+      "season": 1,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2016-10-19",
+      "airtime": "22:00",
+      "airstamp": "2016-10-19T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387780.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387780.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900820"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900821,
+      "url": "https://www.tvmaze.com/episodes/900821/jealousy-incarnate-1x18-episode-18",
+      "name": "Episode 18",
+      "season": 1,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2016-10-20",
+      "airtime": "22:00",
+      "airstamp": "2016-10-20T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387781.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387781.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900821"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900822,
+      "url": "https://www.tvmaze.com/episodes/900822/jealousy-incarnate-1x19-episode-19",
+      "name": "Episode 19",
+      "season": 1,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2016-10-26",
+      "airtime": "22:00",
+      "airstamp": "2016-10-26T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387782.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387782.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900822"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900823,
+      "url": "https://www.tvmaze.com/episodes/900823/jealousy-incarnate-1x20-episode-20",
+      "name": "Episode 20",
+      "season": 1,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2016-10-27",
+      "airtime": "22:00",
+      "airstamp": "2016-10-27T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387783.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387783.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900823"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900824,
+      "url": "https://www.tvmaze.com/episodes/900824/jealousy-incarnate-1x21-episode-21",
+      "name": "Episode 21",
+      "season": 1,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2016-11-02",
+      "airtime": "22:00",
+      "airstamp": "2016-11-02T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387784.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387784.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900824"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900825,
+      "url": "https://www.tvmaze.com/episodes/900825/jealousy-incarnate-1x22-episode-22",
+      "name": "Episode 22",
+      "season": 1,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2016-11-03",
+      "airtime": "22:00",
+      "airstamp": "2016-11-03T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387785.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387785.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900825"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900826,
+      "url": "https://www.tvmaze.com/episodes/900826/jealousy-incarnate-1x23-episode-23",
+      "name": "Episode 23",
+      "season": 1,
+      "number": 23,
+      "type": "regular",
+      "airdate": "2016-11-09",
+      "airtime": "22:00",
+      "airstamp": "2016-11-09T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387786.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387786.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900826"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    },
+    {
+      "id": 900827,
+      "url": "https://www.tvmaze.com/episodes/900827/jealousy-incarnate-1x24-episode-24",
+      "name": "Episode 24",
+      "season": 1,
+      "number": 24,
+      "type": "regular",
+      "airdate": "2016-11-10",
+      "airtime": "22:00",
+      "airstamp": "2016-11-10T13:00:00+00:00",
+      "runtime": 65,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/155/387787.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/155/387787.jpg"
+      },
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/900827"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/16143",
+          "name": "Jealousy Incarnate"
+        }
+      }
+    }
+  ],
+  "show:karma": {
+    "id": 72633,
+    "url": "https://www.tvmaze.com/shows/72633/karma",
+    "name": "Karma",
+    "type": "Scripted",
+    "language": "Korean",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Thriller"
+    ],
+    "status": "To Be Determined",
+    "runtime": null,
+    "averageRuntime": 53,
+    "premiered": "2025-04-04",
+    "ended": null,
+    "officialSite": "https://www.netflix.com/title/81703410",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 7.4
+    },
+    "weight": 92,
+    "network": null,
+    "webChannel": {
+      "id": 1,
+      "name": "Netflix",
+      "country": null,
+      "officialSite": "https://www.netflix.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 438835,
+      "imdb": "tt29921070"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/562/1406587.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1406587.jpg"
+    },
+    "summary": "<p>A fateful accident intertwines six lives in a thrilling tale of karma and crime, where each must face their own dark truths and connections. A hit-and-run. A cover-up. A debt-fueled murder plot. <b>Karma</b> weaves together the fates of six characters, each bound by a single, irreversible moment. The Witness observed a mysterious accident in the dead of night, setting the Unspoken Fate in motion. The Surgeon, haunted by a lifelong trauma, and confronted by the painful past she vowed never to face again. The Debtor &amp; the Outsider, jobless and trapped, plunge headlong into the fate of dark deals. The Doctor &amp; the Alluring Girlfriend, as one fateful mistake on a dark night spirals uncontrollably into a catastrophic accident. Six lives, one inescapable fate.</p>",
+    "updated": 1767909228,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/72633"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3196298",
+        "name": "Karma"
+      }
+    }
+  },
+  "episodes:72633": [
+    {
+      "id": 3164456,
+      "url": "https://www.tvmaze.com/episodes/3164456/karma-1x01-the-man-with-loan-shark-debts",
+      "name": "The Man With Loan Shark Debts",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2025-04-04",
+      "airtime": "",
+      "airstamp": "2025-04-04T12:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/562/1407160.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1407160.jpg"
+      },
+      "summary": "<p>As the debtor faces imminent danger from his loan shark, he enlists Jang Gil Ryong for a diabolical task — one that comes at a high and personal cost.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3164456"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72633",
+          "name": "Karma"
+        }
+      }
+    },
+    {
+      "id": 3196294,
+      "url": "https://www.tvmaze.com/episodes/3196294/karma-1x02-the-man-who-disposed-of-a-body",
+      "name": "The Man Who Disposed of a Body",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2025-04-04",
+      "airtime": "",
+      "airstamp": "2025-04-04T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/562/1407161.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1407161.jpg"
+      },
+      "summary": "<p>Distracted by Lee Yoo Jung, Glasses gets into a car accident. When he discovers a witness, he panics and tries to erase any trace of his involvement.</p><p> </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3196294"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72633",
+          "name": "Karma"
+        }
+      }
+    },
+    {
+      "id": 3196295,
+      "url": "https://www.tvmaze.com/episodes/3196295/karma-1x03-the-unrighteous",
+      "name": "The Unrighteous",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2025-04-04",
+      "airtime": "",
+      "airstamp": "2025-04-04T12:00:00+00:00",
+      "runtime": 54,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/562/1407162.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1407162.jpg"
+      },
+      "summary": "<p>After the witness demands more money, Glasses uncovers inconsistencies in the recent accident. The Debtor panics as Gil Ryong demands his due.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3196295"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72633",
+          "name": "Karma"
+        }
+      }
+    },
+    {
+      "id": 3196296,
+      "url": "https://www.tvmaze.com/episodes/3196296/karma-1x04-the-woman-trapped-in-the-past",
+      "name": "The Woman Trapped in the Past",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2025-04-04",
+      "airtime": "",
+      "airstamp": "2025-04-04T12:00:00+00:00",
+      "runtime": 49,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/562/1407163.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1407163.jpg"
+      },
+      "summary": "<p>Caught in the shadows of her past, Lee Joo Yun is stirred by a name that echoes old memories, pushing her to confront lingering questions.</p><p> </p><p><br /> </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3196296"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72633",
+          "name": "Karma"
+        }
+      }
+    },
+    {
+      "id": 3196297,
+      "url": "https://www.tvmaze.com/episodes/3196297/karma-1x05-rewind",
+      "name": "Rewind",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2025-04-04",
+      "airtime": "",
+      "airstamp": "2025-04-04T12:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/562/1407164.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1407164.jpg"
+      },
+      "summary": "<p>Prepared with a plan, the Debtor confronts Gil Ryong — but the plot soon devolves into chaos when the Witness sees an opportunity to exploit.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3196297"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72633",
+          "name": "Karma"
+        }
+      }
+    },
+    {
+      "id": 3196298,
+      "url": "https://www.tvmaze.com/episodes/3196298/karma-1x06-karma",
+      "name": "Karma",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2025-04-04",
+      "airtime": "",
+      "airstamp": "2025-04-04T12:00:00+00:00",
+      "runtime": 61,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/562/1407165.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/562/1407165.jpg"
+      },
+      "summary": "<p>The Witness faces unexpected setbacks after thinking he's in the clear. But with Joo Yun on his trail, can he break free from the relentless karmic cycle?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3196298"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72633",
+          "name": "Karma"
+        }
+      }
+    }
+  ]
 }
