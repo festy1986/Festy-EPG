@@ -99196,5 +99196,356 @@
   "show:abbott and costello meet dr jekyll and mr hyde": null,
   "show:abbott and costello meet frankenstein": null,
   "show:abbott and costello meet the invisible man": null,
-  "show:abbott and costello meet the killer boris karloff": null
+  "show:abbott and costello meet the killer boris karloff": null,
+  "show:four weddings and a funeral": {
+    "id": 33096,
+    "url": "https://www.tvmaze.com/shows/33096/four-weddings-and-a-funeral",
+    "name": "Four Weddings and a Funeral",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Romance"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2019-07-31",
+    "ended": "2019-09-11",
+    "officialSite": "https://www.hulu.com/series/four-weddings-and-a-funeral-2e17b3b3-cadf-41ee-b8a2-59fe64c17f67",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": 6.4
+    },
+    "weight": 67,
+    "network": null,
+    "webChannel": {
+      "id": 2,
+      "name": "Hulu",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.hulu.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 362415,
+      "imdb": "tt7587362"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/203/509804.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/203/509804.jpg"
+    },
+    "summary": "<p>Four American friends reunite for a fabulous London wedding. But after a bombshell at the altar throws their lives into turmoil, they must weather a tumultuous year of romance and heartbreak. Relationships are forged and broken, political scandals exposed, London social life lampooned, love affairs ignited and doused, and of course, there are four weddings... and a funeral.</p>",
+    "updated": 1678032381,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/33096"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1696675",
+        "name": "New Jersey"
+      }
+    }
+  },
+  "episodes:33096": [
+    {
+      "id": 1638955,
+      "url": "https://www.tvmaze.com/episodes/1638955/four-weddings-and-a-funeral-1x01-kash-with-a-k",
+      "name": "Kash with a K",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2019-07-31",
+      "airtime": "",
+      "airstamp": "2019-07-31T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/206/516897.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/206/516897.jpg"
+      },
+      "summary": "<p>Coming off a devastating heartbreak, Maya travels to London for her best friend Ainsley's wedding. While in town, Maya reconnects with her old college friends, Craig and Duffy, and finds herself thrust into their personal crises.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1638955"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1675280,
+      "url": "https://www.tvmaze.com/episodes/1675280/four-weddings-and-a-funeral-1x02-hounslow",
+      "name": "Hounslow",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2019-07-31",
+      "airtime": "",
+      "airstamp": "2019-07-31T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/206/516898.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/206/516898.jpg"
+      },
+      "summary": "<p>Maya and Ainsley struggle to get over their respective breakups. After moving back home with his dad, Kash runs into an old friend he lost touch with. Zara makes a startling discovery that threatens her and Craig's future.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1675280"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1675281,
+      "url": "https://www.tvmaze.com/episodes/1675281/four-weddings-and-a-funeral-1x03-we-broke",
+      "name": "We Broke",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2019-07-31",
+      "airtime": "",
+      "airstamp": "2019-07-31T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/207/518309.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/207/518309.jpg"
+      },
+      "summary": "<p>After Ainsley's mother cuts her off, Ainsley struggles to save her business. Maya attempts to find a job, but realizes it may be harder to escape her past than she anticipated. Duffy and Tabby's new relationship hits a bump in the road. Kash's acting ambitions are derailed by a family emergency.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1675281"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1675282,
+      "url": "https://www.tvmaze.com/episodes/1675282/four-weddings-and-a-funeral-1x04-the-winner-takes-it-all",
+      "name": "The Winner Takes It All",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2019-07-31",
+      "airtime": "",
+      "airstamp": "2019-07-31T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/206/517210.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/206/517210.jpg"
+      },
+      "summary": "<p>An impending funeral stirs up old feelings for Maya. Haroon pressures Kash to consider an arranged marriage. Gemma makes a difficult parenting decision. Duffy and Tabby take a big step in their relationship.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1675282"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1692477,
+      "url": "https://www.tvmaze.com/episodes/1692477/four-weddings-and-a-funeral-1x05-love-chalet",
+      "name": "Love, Chalet",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2019-08-07",
+      "airtime": "",
+      "airstamp": "2019-08-07T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/207/518732.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/207/518732.jpg"
+      },
+      "summary": "<p>Craig becomes obsessed with Zara's reality show. Duffy tries not to screw things up with Maya. Ainsley meets an exciting new client who could help save her business... as well as the client's horrible ex-husband, Bryce.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1692477"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1696618,
+      "url": "https://www.tvmaze.com/episodes/1696618/four-weddings-and-a-funeral-1x06-lights-camera-wedding",
+      "name": "Lights, Camera, Wedding",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2019-08-14",
+      "airtime": "",
+      "airstamp": "2019-08-14T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/520200.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/520200.jpg"
+      },
+      "summary": "<p>Ainsley doubles down on her fight with Craig. Duffy stumbles upon a secret love letter that gives him hope. Kash considers taking the next step with Fatima.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696618"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1696672,
+      "url": "https://www.tvmaze.com/episodes/1696672/four-weddings-and-a-funeral-1x07-the-sound-of-music",
+      "name": "The Sound of Music",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2019-08-21",
+      "airtime": "",
+      "airstamp": "2019-08-21T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/208/521729.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/208/521729.jpg"
+      },
+      "summary": "<p>Maya feels guilty that her work is forcing her to interact with Ainsley's ex; Andrew and Tony 2 realize that they have an unexpected connection; Bryce tries to take his professional relationship with Ainsley to the next level.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696672"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1696673,
+      "url": "https://www.tvmaze.com/episodes/1696673/four-weddings-and-a-funeral-1x08-game-night",
+      "name": "Game Night",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2019-08-28",
+      "airtime": "",
+      "airstamp": "2019-08-28T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/209/523370.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/209/523370.jpg"
+      },
+      "summary": "<p>Maya and Kash get to know each other behind Ainsley's back. Tony 2 realizes he and Andrew come from very different worlds. Ainsley and Craig play matchmaker, as do Gemma and Duffy.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696673"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1696674,
+      "url": "https://www.tvmaze.com/episodes/1696674/four-weddings-and-a-funeral-1x09-four-friends-and-a-secret",
+      "name": "Four Friends and a Secret",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2019-09-04",
+      "airtime": "",
+      "airstamp": "2019-09-04T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/210/525152.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/210/525152.jpg"
+      },
+      "summary": "<p>Maya struggles to tell Ainsley about Kash. Fearing their relationship may be getting too friendly, Gemma fires Duffy. Zara finds a way for Craig to reconnect with his daughter. Andrew has a surprising change of heart.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696674"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    },
+    {
+      "id": 1696675,
+      "url": "https://www.tvmaze.com/episodes/1696675/four-weddings-and-a-funeral-1x10-new-jersey",
+      "name": "New Jersey",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2019-09-11",
+      "airtime": "",
+      "airstamp": "2019-09-11T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/210/526906.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/210/526906.jpg"
+      },
+      "summary": "<p>A year after Maya and Ainsley's blowup, the fractured friend group hopes that a wedding may be the perfect occasion for a reunion.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1696675"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/33096",
+          "name": "Four Weddings and a Funeral"
+        }
+      }
+    }
+  ]
 }
