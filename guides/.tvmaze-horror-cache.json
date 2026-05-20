@@ -99547,5 +99547,2034 @@
         }
       }
     }
+  ],
+  "show:mystic pizza": null,
+  "show:mermaids": {
+    "id": 4225,
+    "url": "https://www.tvmaze.com/shows/4225/mako-mermaids",
+    "name": "Mako Mermaids",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Family",
+      "Fantasy"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": 23,
+    "premiered": "2013-07-27",
+    "ended": "2016-05-27",
+    "officialSite": "https://www.netflix.com/title/70281343",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 7.7
+    },
+    "weight": 89,
+    "network": null,
+    "webChannel": {
+      "id": 1,
+      "name": "Netflix",
+      "country": null,
+      "officialSite": "https://www.netflix.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 269909,
+      "imdb": "tt2548214"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/20/50690.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/20/50690.jpg"
+    },
+    "summary": "<p>A boy is magically turned a merman, and discovers his underwater origins, after he comes in contact with the magic waters at the mysterious Mako Island guarded by a trio of mermaids.</p>",
+    "updated": 1753918880,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/4225"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/761028",
+        "name": "Homecoming"
+      }
+    }
+  },
+  "episodes:4225": [
+    {
+      "id": 279049,
+      "url": "https://www.tvmaze.com/episodes/279049/mako-mermaids-1x01-outcasts",
+      "name": "Outcasts",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/913883.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/913883.jpg"
+      },
+      "summary": "<p>During a full moon, a land boy named Zac falls into the Moon Pool, and the power of the moon transforms him into a merman.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279049"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279050,
+      "url": "https://www.tvmaze.com/episodes/279050/mako-mermaids-1x02-getting-legs",
+      "name": "Getting Legs",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/913951.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/913951.jpg"
+      },
+      "summary": "<p>Sirena, Lyla and Nixie must turn Zac back into a land boy. Using Sirena's Moon Ring, they give themselves legs and walk on land to begin their task.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279050"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279051,
+      "url": "https://www.tvmaze.com/episodes/279051/mako-mermaids-1x03-meeting-rita",
+      "name": "Meeting Rita",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914113.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914113.jpg"
+      },
+      "summary": "<p>Sirena, Lyla and Nixie follow Zac to school, but the school principal confronts them and takes Sirena's Moon Ring.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279051"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279052,
+      "url": "https://www.tvmaze.com/episodes/279052/mako-mermaids-1x04-lyla-alone",
+      "name": "Lyla Alone",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914124.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914124.jpg"
+      },
+      "summary": "<p>When a waitress spills a drink on Lyla, she rushes to the cool room -- just before transforming into a mermaid!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279052"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279053,
+      "url": "https://www.tvmaze.com/episodes/279053/mako-mermaids-1x05-blizzard",
+      "name": "Blizzard",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914780.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914780.jpg"
+      },
+      "summary": "<p>Rain keeps the mermaids indoors and unable to look for Zac. Lyla and Sirena try to use the Moon Ring to stop the rain, but they create a blizzard.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279053"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279054,
+      "url": "https://www.tvmaze.com/episodes/279054/mako-mermaids-1x06-dolphin-tale",
+      "name": "Dolphin Tale",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914789.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914789.jpg"
+      },
+      "summary": "<p>Joe has a new boat and takes it out for a spin. His fish finder locates a dolphin, but it's not like any dolphin he's seen before.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279054"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279055,
+      "url": "https://www.tvmaze.com/episodes/279055/mako-mermaids-1x07-zacs-pool-party",
+      "name": "Zac's Pool Party",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914814.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914814.jpg"
+      },
+      "summary": "<p>Zac's struggle with his merman secret intensifies when his girlfriend, Evie, throws him a pool party.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279055"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279056,
+      "url": "https://www.tvmaze.com/episodes/279056/mako-mermaids-1x08-zacs-return-to-mako",
+      "name": "Zac's Return to Mako",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914824.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914824.jpg"
+      },
+      "summary": "<p>It's a full moon, and the mermaids think that if they keep Zac out of the moonlight, he'll lose his powers and return to his land-dwelling self.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279056"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279057,
+      "url": "https://www.tvmaze.com/episodes/279057/mako-mermaids-1x09-the-siren",
+      "name": "The Siren",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914836.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914836.jpg"
+      },
+      "summary": "<p>While listening to Sirena sing, Lyla has an idea: If Sirena sings the \"Enchantment Song\" to Zac, he'll fall under her spell.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279057"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279058,
+      "url": "https://www.tvmaze.com/episodes/279058/mako-mermaids-1x10-zac-returns-to-mako",
+      "name": "Zac Returns to Mako",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914862.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914862.jpg"
+      },
+      "summary": "<p>Against Nixie and Sirena's advice, Lyla helps Zac get to the Moon Pool. But when the entrance suddenly closes, they're trapped inside.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279058"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279059,
+      "url": "https://www.tvmaze.com/episodes/279059/mako-mermaids-1x11-i-dont-believe-in-mermaids",
+      "name": "I Don't Believe in Mermaids",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914896.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914896.jpg"
+      },
+      "summary": "<p>Fearing they'll never get the pod to return to Mako, a despondent Nixie finds herself at odds with Lyla and Sirena.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279059"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279060,
+      "url": "https://www.tvmaze.com/episodes/279060/mako-mermaids-1x12-close-call",
+      "name": "Close Call",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914915.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914915.jpg"
+      },
+      "summary": "<p>Sirena is collecting shells on the reef when she sees merman Zac. Luckily, she torpedoes away before he recognizes her.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279060"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279061,
+      "url": "https://www.tvmaze.com/episodes/279061/mako-mermaids-1x13-betrayal",
+      "name": "Betrayal",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2013-07-27",
+      "airtime": "",
+      "airstamp": "2013-07-27T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/365/914968.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/365/914968.jpg"
+      },
+      "summary": "<p>The full moon is once again upon Mako, and the mermaids have to stop Zac from getting the all-powerful Trident.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279061"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279062,
+      "url": "https://www.tvmaze.com/episodes/279062/mako-mermaids-1x14-battlelines",
+      "name": "Battlelines",
+      "season": 1,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915210.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915210.jpg"
+      },
+      "summary": "<p>Now that he knows Sirena, Lyla and Nixie are mermaids, Zac begins to wonder about his school principal, Rita, and why she helps them.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279062"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279063,
+      "url": "https://www.tvmaze.com/episodes/279063/mako-mermaids-1x15-sirenas-secret",
+      "name": "Sirena's Secret",
+      "season": 1,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915296.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915296.jpg"
+      },
+      "summary": "<p>When David invites Sirena to sing with him at the café, their connection grows. Lyla and Nixie fear that she might not want to return to the sea.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279063"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279064,
+      "url": "https://www.tvmaze.com/episodes/279064/mako-mermaids-1x16-truce",
+      "name": "Truce",
+      "season": 1,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915841.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915841.jpg"
+      },
+      "summary": "<p>While showing off his brand-new smartphone, Cam takes video footage of Zac swimming as a merman.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279064"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279065,
+      "url": "https://www.tvmaze.com/episodes/279065/mako-mermaids-1x17-moon-ring-2",
+      "name": "Moon Ring 2",
+      "season": 1,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915847.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915847.jpg"
+      },
+      "summary": "<p>Zac finds a Moon Ring on the ocean floor, and when he gives the ring to Evie, the mermaids know it's no ordinary ring -- they have to get it back.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279065"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279066,
+      "url": "https://www.tvmaze.com/episodes/279066/mako-mermaids-1x18-the-trident-job",
+      "name": "The Trident Job",
+      "season": 1,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915850.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915850.jpg"
+      },
+      "summary": "<p>The mermaids keep a close watch on Zac at the Halloween party, but he evades them with Cam's help.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279066"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279067,
+      "url": "https://www.tvmaze.com/episodes/279067/mako-mermaids-1x19-wheres-the-on-button",
+      "name": "Where's the On Button",
+      "season": 1,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915919.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915919.jpg"
+      },
+      "summary": "<p>The Trident is every bit as powerful as Zac imagined -- but he can't get it to work. He wonders if the Trident needs to be activated by moonlight.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279067"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279068,
+      "url": "https://www.tvmaze.com/episodes/279068/mako-mermaids-1x20-nowhere-to-hide",
+      "name": "Nowhere to Hide",
+      "season": 1,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915922.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915922.jpg"
+      },
+      "summary": "<p>The Trident is active and dangerous, and the mermaids must take it from Zac. Knowing this, Zac searches for the perfect hiding place.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279068"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279069,
+      "url": "https://www.tvmaze.com/episodes/279069/mako-mermaids-1x21-aquata-returns",
+      "name": "Aquata Returns",
+      "season": 1,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915929.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915929.jpg"
+      },
+      "summary": "<p>Sirena's sister, Aquata, returns to Mako with great news: Sirena can return to the pod. Unfortunately, the invitation isn't extended to Lyla and Nixie.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279069"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279070,
+      "url": "https://www.tvmaze.com/episodes/279070/mako-mermaids-1x22-evie-times-two",
+      "name": "Evie Times Two",
+      "season": 1,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915933.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915933.jpg"
+      },
+      "summary": "<p>When Rita's cat, Poseidon, steps through a puddle of mermaid powders, he is transformed into a person.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279070"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279071,
+      "url": "https://www.tvmaze.com/episodes/279071/mako-mermaids-1x23-zacs-choice",
+      "name": "Zac's Choice",
+      "season": 1,
+      "number": 23,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916651.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916651.jpg"
+      },
+      "summary": "<p>Zac manages to find the Trident, but Lyla is right behind him. As the two battle for possession, a flash of energy knocks Lyla unconscious.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279071"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279072,
+      "url": "https://www.tvmaze.com/episodes/279072/mako-mermaids-1x24-trust",
+      "name": "Trust",
+      "season": 1,
+      "number": 24,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916652.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916652.jpg"
+      },
+      "summary": "<p>While Lyla tries to teach Zac more about the ocean and mermaid history, Nixie refuses to trust him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279072"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279073,
+      "url": "https://www.tvmaze.com/episodes/279073/mako-mermaids-1x25-betrayed",
+      "name": "Betrayed",
+      "season": 1,
+      "number": 25,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916653.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916653.jpg"
+      },
+      "summary": "<p>Behind Sirena and Lyla's backs, Nixie helps Cam get into the Moon Pool to unlock the Trident. But Evie insists on coming along for the dive.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279073"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279074,
+      "url": "https://www.tvmaze.com/episodes/279074/mako-mermaids-1x26-decision-time",
+      "name": "Decision Time",
+      "season": 1,
+      "number": 26,
+      "type": "regular",
+      "airdate": "2013-09-15",
+      "airtime": "",
+      "airstamp": "2013-09-15T02:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916654.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916654.jpg"
+      },
+      "summary": "<p>When Cam takes the Trident to Mako behind Nixie's back, the mermaids realize that he intends to turn himself into a merman so he can rule Mako Island.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279074"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279075,
+      "url": "https://www.tvmaze.com/episodes/279075/mako-mermaids-2x01-the-seventh-cycle",
+      "name": "The Seventh Cycle",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916659.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916659.jpg"
+      },
+      "summary": "<p>When the pod decides Zac is a threat and must give up his merman powers, two new mermaids, Mimmi and Ondina, are sent to make sure he obeys.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279075"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279076,
+      "url": "https://www.tvmaze.com/episodes/279076/mako-mermaids-2x02-sticky-situation",
+      "name": "Sticky Situation",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916664.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916664.jpg"
+      },
+      "summary": "<p>With Evie now a mermaid, Mimmi and Ondina try a dangerous spell to change her back to a human form, but the results are less than ideal.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279076"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279077,
+      "url": "https://www.tvmaze.com/episodes/279077/mako-mermaids-2x03-discovery",
+      "name": "Discovery",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916833.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916833.jpg"
+      },
+      "summary": "<p>When Zac has a powerful vision about his connection to Mako Island, he and the mermaids visit the island to investigate.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279077"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279078,
+      "url": "https://www.tvmaze.com/episodes/279078/mako-mermaids-2x04-a-new-tail",
+      "name": "A New Tail",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916841.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916841.jpg"
+      },
+      "summary": "<p>Erik's curiosity about the girls and Mako Island becomes a problem when he decides to investigate further.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279078"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279079,
+      "url": "https://www.tvmaze.com/episodes/279079/mako-mermaids-2x05-bad-for-business",
+      "name": "Bad for Business",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/916989.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/916989.jpg"
+      },
+      "summary": "<p>When Evie's dad decides to take tourists on dive charters to Mako Island, the gang must find a way to change his mind.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279079"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279080,
+      "url": "https://www.tvmaze.com/episodes/279080/mako-mermaids-2x06-stormy-seas",
+      "name": "Stormy Seas",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/367/917572.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/367/917572.jpg"
+      },
+      "summary": "<p>Sirena gives Evie mermaid lessons, which rubs Ondina the wrong way, while Erik tries to get to the bottom of Zac and Cam's falling out.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279080"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279081,
+      "url": "https://www.tvmaze.com/episodes/279081/mako-mermaids-2x07-awakening",
+      "name": "Awakening",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/368/920260.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/368/920260.jpg"
+      },
+      "summary": "<p>With the full moon approaching, Zac's plan to avoid Mako Island is dealt a blow when his father insists they go on their annual camping trip.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279081"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279082,
+      "url": "https://www.tvmaze.com/episodes/279082/mako-mermaids-2x08-land-school",
+      "name": "Land School",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/922913.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/922913.jpg"
+      },
+      "summary": "<p>When Mimmi goes to the first day of the new school year, things get out of hand fast when she runs afoul of the science teacher.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279082"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279083,
+      "url": "https://www.tvmaze.com/episodes/279083/mako-mermaids-2x09-stowaway",
+      "name": "Stowaway",
+      "season": 2,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/922924.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/922924.jpg"
+      },
+      "summary": "<p>When a young mermaid follows Ondina back to Mako Island after a mermaid council meeting, it could spell trouble with the pod.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279083"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279084,
+      "url": "https://www.tvmaze.com/episodes/279084/mako-mermaids-2x10-keeping-the-secret",
+      "name": "Keeping the Secret",
+      "season": 2,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/922936.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/922936.jpg"
+      },
+      "summary": "<p>When David sees Evie in the water as a mermaid, it puts Zac and the girls' secret at risk unless they can convince David he's wrong.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279084"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279085,
+      "url": "https://www.tvmaze.com/episodes/279085/mako-mermaids-2x11-only-as-young-as-you-feel",
+      "name": "Only as Young as You Feel",
+      "season": 2,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/922946.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/922946.jpg"
+      },
+      "summary": "<p>Ondina adds too much jellyfish extract to Mimmi's body lotion, and the results put Principal Santos in dangerous waters at the marine park.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279085"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279086,
+      "url": "https://www.tvmaze.com/episodes/279086/mako-mermaids-2x12-supersized",
+      "name": "Supersized",
+      "season": 2,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/924014.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/924014.jpg"
+      },
+      "summary": "<p>When Mimmi loses her moon ring in the Ocean Café's cooler room, it creates havoc for David and his brother's business.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279086"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279087,
+      "url": "https://www.tvmaze.com/episodes/279087/mako-mermaids-2x13-reunion",
+      "name": "Reunion",
+      "season": 2,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2015-02-13",
+      "airtime": "",
+      "airstamp": "2015-02-13T01:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/924135.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/924135.jpg"
+      },
+      "summary": "<p>On the night of the full moon, Zac and Erik swim to Mako Island and unlock the merman chamber, revealing a startling secret.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279087"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279088,
+      "url": "https://www.tvmaze.com/episodes/279088/mako-mermaids-2x14-a-new-man",
+      "name": "A New Man",
+      "season": 2,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/924157.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/924157.jpg"
+      },
+      "summary": "<p>Zac struggles to come to terms with the news that he's a real merman, he's adopted and Mimmi is his sister.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279088"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279089,
+      "url": "https://www.tvmaze.com/episodes/279089/mako-mermaids-2x15-careful-what-you-wish-for",
+      "name": "Careful What You Wish for",
+      "season": 2,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/924217.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/924217.jpg"
+      },
+      "summary": "<p>After Cam absorbs moon pool water, he discovers he has power over water, which gets him a place in the trials for the school swim team.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279089"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279090,
+      "url": "https://www.tvmaze.com/episodes/279090/mako-mermaids-2x16-first-date",
+      "name": "First Date",
+      "season": 2,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/369/924906.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/369/924906.jpg"
+      },
+      "summary": "<p>Ondina sneaks Erik into the grotto to duplicate a pearl he gave her, but she accidentally turns him into a copy of Poseidon.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279090"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279091,
+      "url": "https://www.tvmaze.com/episodes/279091/mako-mermaids-2x17-the-merman-code",
+      "name": "The Merman Code",
+      "season": 2,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/925249.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/925249.jpg"
+      },
+      "summary": "<p>When Erik dives down and touches one of the rock outcrops on Mako reef, he's transported into a sphere of endless water with no way out.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279091"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279092,
+      "url": "https://www.tvmaze.com/episodes/279092/mako-mermaids-2x18-the-siren",
+      "name": "The Siren",
+      "season": 2,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/925298.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/925298.jpg"
+      },
+      "summary": "<p>When Sirena sees a video that shows a kayaker being lured by a mermaid's song, she starts to follow David obsessively, and he falls under her spell.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279092"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279093,
+      "url": "https://www.tvmaze.com/episodes/279093/mako-mermaids-2x19-surprise",
+      "name": "Surprise!",
+      "season": 2,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/925843.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/925843.jpg"
+      },
+      "summary": "<p>A surprise birthday party is in the works for Evie, who accidentally shrinks herself and falls into an aquarium after trying on Mimmi's moon ring.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279093"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279094,
+      "url": "https://www.tvmaze.com/episodes/279094/mako-mermaids-2x20-the-job",
+      "name": "The Job",
+      "season": 2,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926524.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926524.jpg"
+      },
+      "summary": "<p>Mimmi takes a job at the marine park, where she meets Chris, a young man who is desperate to get into a dolphin training program.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279094"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279095,
+      "url": "https://www.tvmaze.com/episodes/279095/mako-mermaids-2x21-new-orders",
+      "name": "New Orders",
+      "season": 2,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926559.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926559.jpg"
+      },
+      "summary": "<p>On the night of the full moon, Zac and Ondina sneak away to Mako, and Ondina reveals her plan to destroy the chamber.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279095"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279096,
+      "url": "https://www.tvmaze.com/episodes/279096/mako-mermaids-2x22-the-last-dance",
+      "name": "The Last Dance",
+      "season": 2,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926797.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926797.jpg"
+      },
+      "summary": "<p>Ondina doesn't want to choose between Erik and the pod when the pod returns. To cheer her up, Erik decides to throw a party in the café.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279096"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279097,
+      "url": "https://www.tvmaze.com/episodes/279097/mako-mermaids-2x23-stay-or-go",
+      "name": "Stay or Go",
+      "season": 2,
+      "number": 23,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926806.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926806.jpg"
+      },
+      "summary": "<p>At the marine park, Ondina and Mimmi get into trouble when a dolphin splashes them and a little girl sees them transform into mermaids.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279097"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279098,
+      "url": "https://www.tvmaze.com/episodes/279098/mako-mermaids-2x24-the-truth-about-evie",
+      "name": "The Truth About Evie",
+      "season": 2,
+      "number": 24,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926829.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926829.jpg"
+      },
+      "summary": "<p>When Evie comes down with a fever that causes the temperature in the room to soar, Carly suspects that her friend is keeping a secret from her.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279098"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279099,
+      "url": "https://www.tvmaze.com/episodes/279099/mako-mermaids-2x25-the-trident-stone",
+      "name": "The Trident Stone",
+      "season": 2,
+      "number": 25,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926836.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926836.jpg"
+      },
+      "summary": "<p>When Erik learns that the trident stone is the missing element needed to activate the merman chamber, Zac gives it to the mermaids for safekeeping.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279099"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 279100,
+      "url": "https://www.tvmaze.com/episodes/279100/mako-mermaids-2x26-the-chosen-one",
+      "name": "The Chosen One",
+      "season": 2,
+      "number": 26,
+      "type": "regular",
+      "airdate": "2015-05-29",
+      "airtime": "",
+      "airstamp": "2015-05-29T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926846.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926846.jpg"
+      },
+      "summary": "<p>The chamber's true purpose is revealed: to drain the magic from all mermaids. Zac risks his life to shut it down and restore the mermaids' magic.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/279100"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761006,
+      "url": "https://www.tvmaze.com/episodes/761006/mako-mermaids-3x01-a-visit-from-the-east",
+      "name": "A Visit from the East",
+      "season": 3,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": 5.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/926856.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/926856.jpg"
+      },
+      "summary": "<p>Ondina is tasked with teaching the younger mermaids. A mermaid from China joins the pod. During a full moon ceremony, a terrifying beast emerges.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761006"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761007,
+      "url": "https://www.tvmaze.com/episodes/761007/mako-mermaids-3x02-seeing-is-believing",
+      "name": "Seeing Is Believing",
+      "season": 3,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/371/929491.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/371/929491.jpg"
+      },
+      "summary": "<p>When marine park workers are sent to investigate the reported sea monster, the mermaids must create a credible explanation to stop further inquiries.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761007"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761008,
+      "url": "https://www.tvmaze.com/episodes/761008/mako-mermaids-3x03-recipe-for-success",
+      "name": "Recipe for Success",
+      "season": 3,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/930010.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/930010.jpg"
+      },
+      "summary": "<p>Weilan casts a knowledge transference spell on Zac to help him pass a biology test. But more than just science facts transfer from her body to his!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761008"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761009,
+      "url": "https://www.tvmaze.com/episodes/761009/mako-mermaids-3x04-mopping-up",
+      "name": "Mopping Up",
+      "season": 3,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/930015.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/930015.jpg"
+      },
+      "summary": "<p>When Evie tries using her new moon ring to magically finish her chores, things quickly get out of control. Joe makes an upsetting announcement.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761009"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761010,
+      "url": "https://www.tvmaze.com/episodes/761010/mako-mermaids-3x05-the-puzzle-box",
+      "name": "The Puzzle Box",
+      "season": 3,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/930252.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/930252.jpg"
+      },
+      "summary": "<p>Weilan comes up with the idea of using a Chinese puzzle box to trap the sea dragon. Cam panics when Carly suggests they take dance lessons.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761010"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761012,
+      "url": "https://www.tvmaze.com/episodes/761012/mako-mermaids-3x06-new-beginnings",
+      "name": "New Beginnings",
+      "season": 3,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/930479.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/930479.jpg"
+      },
+      "summary": "<p>Evie's moon ring lesson with Ondina takes an unexpected turn. At the marine park, Mimmi discovers the reason for a rescued dolphin's distress.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761012"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761013,
+      "url": "https://www.tvmaze.com/episodes/761013/mako-mermaids-3x07-turning-the-tide",
+      "name": "Turning the Tide",
+      "season": 3,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/930484.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/930484.jpg"
+      },
+      "summary": "<p>Zac begs Weilan to teach him an Eastern spell few have mastered, which he hopes to use against the dragon. Joe encounters a water ball.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761013"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761014,
+      "url": "https://www.tvmaze.com/episodes/761014/mako-mermaids-3x08-the-way-of-the-dragon",
+      "name": "The Way of the Dragon",
+      "season": 3,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/931044.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/931044.jpg"
+      },
+      "summary": "<p>On the eve of the full moon, Ondina and Mimmi defy Veridia's orders. Evie becomes suspicious when she spots Zac and Weilan meeting in secret again.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761014"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761015,
+      "url": "https://www.tvmaze.com/episodes/761015/mako-mermaids-3x09-reversal-of-fortune",
+      "name": "Reversal of Fortune",
+      "season": 3,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/372/932176.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/372/932176.jpg"
+      },
+      "summary": "<p>After overhearing Ondina blaming her for Evie's loss, Weilan runs off. Meanwhile, Mimmi and Ondina combine their powers to try to restore Evie.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761015"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761017,
+      "url": "https://www.tvmaze.com/episodes/761017/mako-mermaids-3x10-wishful-thinking",
+      "name": "Wishful Thinking",
+      "season": 3,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933035.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933035.jpg"
+      },
+      "summary": "<p>Zac realizes a shell he found has magical powers, and he accidentally sends the mermaids back in time five years, where they meet his younger self.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761017"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761018,
+      "url": "https://www.tvmaze.com/episodes/761018/mako-mermaids-3x11-lost-and-found",
+      "name": "Lost and Found",
+      "season": 3,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933066.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933066.jpg"
+      },
+      "summary": "<p>While Ondina teaches the little mermaids to walk on land, her fastest-learning student wanders off and soon runs into Chris and Karl on the beach.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761018"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761019,
+      "url": "https://www.tvmaze.com/episodes/761019/mako-mermaids-3x12-trust-issues",
+      "name": "Trust Issues",
+      "season": 3,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933504.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933504.jpg"
+      },
+      "summary": "<p>When Mimmi and Chris go on a date at the beach, Ondina goes to great lengths to protect her. Cam tries to lure more upscale customers to the cafe.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761019"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761020,
+      "url": "https://www.tvmaze.com/episodes/761020/mako-mermaids-3x13-letting-go",
+      "name": "Letting Go",
+      "season": 3,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933510.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933510.jpg"
+      },
+      "summary": "<p>Mimmi and Zac are startled by a mysterious yet strangely familiar vision. Cam's dual role as Carly's boss and boyfriend becomes difficult to manage.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761020"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761026,
+      "url": "https://www.tvmaze.com/episodes/761026/mako-mermaids-3x14-age-before-beauty",
+      "name": "Age Before Beauty",
+      "season": 3,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933582.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933582.jpg"
+      },
+      "summary": "<p>Weilan mistakenly makes tea for Rita using a magic growth accelerator. Can the mermaids cure Rita before Mrs. Trumble takes over her principal job?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761026"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761027,
+      "url": "https://www.tvmaze.com/episodes/761027/mako-mermaids-3x15-the-legend-of-jiao-long",
+      "name": "The Legend of Jiao Long",
+      "season": 3,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": 10
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933695.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933695.jpg"
+      },
+      "summary": "<p>A priceless artifact recovered by a deep-sea treasure hunter provides a clue as to how the mermaids can defeat the water dragon.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761027"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    },
+    {
+      "id": 761028,
+      "url": "https://www.tvmaze.com/episodes/761028/mako-mermaids-3x16-homecoming",
+      "name": "Homecoming",
+      "season": 3,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2016-05-27",
+      "airtime": "",
+      "airstamp": "2016-05-27T02:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": 9.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/373/933832.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/373/933832.jpg"
+      },
+      "summary": "<p>The vision reappears to Mimmi and Zac, this time speaking to them. Weilan learns a new detail about the dragon legend that suggests Nerissa is alive.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/761028"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/4225",
+          "name": "Mako Mermaids"
+        }
+      }
+    }
   ]
 }
