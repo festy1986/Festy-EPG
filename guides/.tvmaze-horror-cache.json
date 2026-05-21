@@ -101576,5 +101576,437 @@
         }
       }
     }
+  ],
+  "show:paths of glory": null,
+  "show:platoon": {
+    "id": 90059,
+    "url": "https://www.tvmaze.com/shows/90059/platoon-247-preparing-for-war",
+    "name": "Platoon 24/7: Preparing for War",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [],
+    "status": "Running",
+    "runtime": 90,
+    "averageRuntime": 90,
+    "premiered": "2026-02-02",
+    "ended": null,
+    "officialSite": "https://www.channel5.com/show/platoon-call-of-duty/",
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 31,
+    "network": {
+      "id": 135,
+      "name": "5",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.channel5.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 473415,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/611/1528616.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/611/1528616.jpg"
+    },
+    "summary": "<p>As war rages in Eastern Europe, the British Army is readying its infantry platoons for action. These platoons – 30 strong units of soldiers who eat, sleep and fight alongside each other – are the backbone of the British Army.</p><p>This series follows one newly assembled platoon in The Rifles, the British Army's largest infantry regiment, preparing for possible frontline deployment. Filmed over six brutal months, they must develop soldiering skills to compete with a battle-hardened enemy and grow into a band of brothers so tight they will lay down their lives for each other.</p>",
+    "updated": 1770606815,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/90059"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3543136",
+        "name": "Episode 3"
+      }
+    }
+  },
+  "episodes:90059": [
+    {
+      "id": 3533548,
+      "url": "https://www.tvmaze.com/episodes/3533548/platoon-247-preparing-for-war-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2026-02-02",
+      "airtime": "21:00",
+      "airstamp": "2026-02-02T21:00:00+00:00",
+      "runtime": 90,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>In episode one, the thirty soldiers of 13 Platoon, D Company, 5th Battalion The Rifles come together for the first time. They come from all different walks of life and corners of the country, most with little experience beyond basic training. Their challenge is to become a fighting unit, capable of deploying to Eastern Europe in six months' time.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3533548"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/90059",
+          "name": "Platoon 24/7: Preparing for War"
+        }
+      }
+    },
+    {
+      "id": 3533549,
+      "url": "https://www.tvmaze.com/episodes/3533549/platoon-247-preparing-for-war-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2026-02-09",
+      "airtime": "21:00",
+      "airstamp": "2026-02-09T21:00:00+00:00",
+      "runtime": 90,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The platoon is back in Bulford after Top Dog. But no sooner have the Riflemen unpacked their bags when news arrives that Donald Trump intends to stop sharing American military intelligence with Ukraine, Keir Starmer says that Britain is ready to deploy a peacekeeping force within weeks. As Armoured Infantry, 13 Platoon could be some of the first deployed.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3533549"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/90059",
+          "name": "Platoon 24/7: Preparing for War"
+        }
+      }
+    },
+    {
+      "id": 3543136,
+      "url": "https://www.tvmaze.com/episodes/3543136/platoon-247-preparing-for-war-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2026-02-16",
+      "airtime": "22:00",
+      "airstamp": "2026-02-16T22:00:00+00:00",
+      "runtime": 90,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The soldiers of 13 Platoon reach the end of their training, but ahead of them are the two biggest tests of the six months. First is Exercise Iron Storm, in which they will fight alongside tanks and artillery in a large-scale exercise across the Salisbury Plain Training Area, while the second challenge is an endurance competition staged on the inhospitable terrain of Dartmoor in Devon.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3543136"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/90059",
+          "name": "Platoon 24/7: Preparing for War"
+        }
+      }
+    }
+  ],
+  "show:the great escape": {
+    "id": 3468,
+    "url": "https://www.tvmaze.com/shows/3468/the-great-escape",
+    "name": "The Great Escape",
+    "type": "Game Show",
+    "language": "English",
+    "genres": [
+      "Action",
+      "Adventure"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2012-06-24",
+    "ended": "2012-08-26",
+    "officialSite": null,
+    "schedule": {
+      "time": "22:00",
+      "days": [
+        "Sunday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 73,
+    "network": {
+      "id": 14,
+      "name": "TNT",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.tntdrama.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 30612,
+      "thetvdb": 258603,
+      "imdb": "tt1942995"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/18/45720.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/18/45720.jpg"
+    },
+    "summary": "<p><b>The Great Escape</b> drops teams of ordinary people into the middle of their own epic action/adventure movie. Each week, three pairs of players will compete for a cash prize by escaping from such locations as a seven-story castle, a deserted island, a sinking ship or a maximum security prison. Players must use their wits, skills and whatever tools they can find to overcome obstacles, evade pursuers and make their way to freedom.</p>",
+    "updated": 1495456551,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/3468"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/227597",
+        "name": "Escape from the Tower"
+      }
+    }
+  },
+  "episodes:3468": [
+    {
+      "id": 227589,
+      "url": "https://www.tvmaze.com/episodes/227589/the-great-escape-1x01-escape-from-alcatraz",
+      "name": "Escape from Alcatraz",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2012-06-24",
+      "airtime": "22:00",
+      "airstamp": "2012-06-25T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227589"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227590,
+      "url": "https://www.tvmaze.com/episodes/227590/the-great-escape-1x02-escape-from-the-uss-hornet",
+      "name": "Escape from the Uss Hornet",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2012-07-01",
+      "airtime": "22:00",
+      "airstamp": "2012-07-02T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227590"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227591,
+      "url": "https://www.tvmaze.com/episodes/227591/the-great-escape-1x03-escape-from-the-institution",
+      "name": "Escape from the Institution",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2012-07-08",
+      "airtime": "22:00",
+      "airstamp": "2012-07-09T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227591"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227592,
+      "url": "https://www.tvmaze.com/episodes/227592/the-great-escape-1x04-escape-from-titan-missile-silo",
+      "name": "Escape from Titan Missile Silo",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2012-07-15",
+      "airtime": "22:00",
+      "airstamp": "2012-07-16T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227592"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227593,
+      "url": "https://www.tvmaze.com/episodes/227593/the-great-escape-1x05-escape-from-air-force-boneyard",
+      "name": "Escape from Air Force Boneyard",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2012-07-22",
+      "airtime": "22:00",
+      "airstamp": "2012-07-23T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227593"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227594,
+      "url": "https://www.tvmaze.com/episodes/227594/the-great-escape-1x06-escape-from-los-angeles",
+      "name": "Escape from Los Angeles",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2012-08-05",
+      "airtime": "22:00",
+      "airstamp": "2012-08-06T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227594"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227595,
+      "url": "https://www.tvmaze.com/episodes/227595/the-great-escape-1x07-escape-from-the-power-station",
+      "name": "Escape from the Power Station",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2012-08-12",
+      "airtime": "22:00",
+      "airstamp": "2012-08-13T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227595"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227596,
+      "url": "https://www.tvmaze.com/episodes/227596/the-great-escape-1x08-escape-from-the-swamp",
+      "name": "Escape from the Swamp",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2012-08-19",
+      "airtime": "22:00",
+      "airstamp": "2012-08-20T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227596"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    },
+    {
+      "id": 227597,
+      "url": "https://www.tvmaze.com/episodes/227597/the-great-escape-1x09-escape-from-the-tower",
+      "name": "Escape from the Tower",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2012-08-26",
+      "airtime": "22:00",
+      "airstamp": "2012-08-27T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/227597"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/3468",
+          "name": "The Great Escape"
+        }
+      }
+    }
   ]
 }
