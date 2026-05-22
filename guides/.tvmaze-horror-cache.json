@@ -102008,5 +102008,1896 @@
         }
       }
     }
+  ],
+  "show:the boy behind the door": null,
+  "show:the pink panther": {
+    "id": 29583,
+    "url": "https://www.tvmaze.com/shows/29583/the-pink-panther",
+    "name": "The Pink Panther",
+    "type": "Animation",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Family"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "1993-09-11",
+    "ended": "1995-04-12",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Saturday"
+      ]
+    },
+    "rating": {
+      "average": 7
+    },
+    "weight": 82,
+    "network": {
+      "id": 72,
+      "name": "Syndication",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 100741,
+      "imdb": "tt0108895"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/117/294031.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/117/294031.jpg"
+    },
+    "summary": "<p>The cartoon follows the adventures of an actual pink panther with the occasional cartoon starring Inspector Clouseau.</p>",
+    "updated": 1674508142,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/29583"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1221363",
+        "name": "The Texas Toads / Driving Mr. Pink / The Ant and the Aardvark"
+      }
+    }
+  },
+  "episodes:29583": [
+    {
+      "id": 1221241,
+      "url": "https://www.tvmaze.com/episodes/1221241/the-pink-panther-1x01-pink-pink-away-down-on-the-ant-farm",
+      "name": "Pink, Pink & Away / Down on the Ant Farm",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1993-09-11",
+      "airtime": "",
+      "airstamp": "1993-09-11T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221241"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221242,
+      "url": "https://www.tvmaze.com/episodes/1221242/the-pink-panther-1x02-pink-and-quiet-the-pinky-500",
+      "name": "Pink and Quiet / The Pinky 500",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1993-09-18",
+      "airtime": "",
+      "airstamp": "1993-09-18T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221242"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221243,
+      "url": "https://www.tvmaze.com/episodes/1221243/the-pink-panther-1x03-the-ghost-and-mr-panther-cleopanthra",
+      "name": "The Ghost and Mr. Panther / Cleopanthra",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1993-09-25",
+      "airtime": "",
+      "airstamp": "1993-09-25T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221243"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221244,
+      "url": "https://www.tvmaze.com/episodes/1221244/the-pink-panther-1x04-big-top-pinky-yeti-nother-bigfoot-story",
+      "name": "Big Top Pinky / Yeti Nother Bigfoot Story",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1993-10-02",
+      "airtime": "",
+      "airstamp": "1993-10-02T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221244"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221245,
+      "url": "https://www.tvmaze.com/episodes/1221245/the-pink-panther-1x05-pinky-in-paradise-department-store-pinkerton",
+      "name": "Pinky In Paradise / Department Store Pinkerton",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1993-10-09",
+      "airtime": "",
+      "airstamp": "1993-10-09T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221245"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221246,
+      "url": "https://www.tvmaze.com/episodes/1221246/the-pink-panther-1x06-moby-pink-the-pink-stuff",
+      "name": "Moby Pink / The Pink Stuff",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1993-10-16",
+      "airtime": "",
+      "airstamp": "1993-10-16T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221246"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221247,
+      "url": "https://www.tvmaze.com/episodes/1221247/the-pink-panther-1x07-pink-pizza-pink-painter",
+      "name": "Pink Pizza / Pink Painter",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1993-10-23",
+      "airtime": "",
+      "airstamp": "1993-10-23T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221247"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221248,
+      "url": "https://www.tvmaze.com/episodes/1221248/the-pink-panther-1x08-pink-paparazzi-werewolf-in-panthers-clothing",
+      "name": "Pink Paparazzi / Werewolf in Panther's Clothing",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1993-10-30",
+      "airtime": "",
+      "airstamp": "1993-10-30T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221248"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221249,
+      "url": "https://www.tvmaze.com/episodes/1221249/the-pink-panther-1x09-rock-me-pink-pinkus-pantherus",
+      "name": "Rock Me Pink / Pinkus Pantherus",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1993-11-06",
+      "airtime": "",
+      "airstamp": "1993-11-06T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221249"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221250,
+      "url": "https://www.tvmaze.com/episodes/1221250/the-pink-panther-1x10-pilgrim-panther-that-old-pink-magic",
+      "name": "Pilgrim Panther / That Old Pink Magic",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1993-11-13",
+      "airtime": "",
+      "airstamp": "1993-11-13T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221250"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221251,
+      "url": "https://www.tvmaze.com/episodes/1221251/the-pink-panther-1x11-pink-anderthal-man-pink-kong",
+      "name": "Pink-anderthal Man / Pink Kong",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1993-11-20",
+      "airtime": "",
+      "airstamp": "1993-11-20T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221251"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221252,
+      "url": "https://www.tvmaze.com/episodes/1221252/the-pink-panther-1x12-the-magnificent-pink-one-downhill-panther",
+      "name": "The Magnificent Pink One / Downhill Panther",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1993-11-27",
+      "airtime": "",
+      "airstamp": "1993-11-27T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221252"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221253,
+      "url": "https://www.tvmaze.com/episodes/1221253/the-pink-panther-1x13-14-karat-pink-robo-pink",
+      "name": "14 Karat Pink / Robo-Pink",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1993-12-04",
+      "airtime": "",
+      "airstamp": "1993-12-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221253"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221254,
+      "url": "https://www.tvmaze.com/episodes/1221254/the-pink-panther-1x14-pink-encounters-junkyard-pink-blues",
+      "name": "Pink Encounters / Junkyard Pink Blues",
+      "season": 1,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1993-12-11",
+      "airtime": "",
+      "airstamp": "1993-12-11T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221254"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221255,
+      "url": "https://www.tvmaze.com/episodes/1221255/the-pink-panther-1x15-pantherobics-pinkenstein",
+      "name": "Pantherobics / Pinkenstein",
+      "season": 1,
+      "number": 15,
+      "type": "regular",
+      "airdate": "1993-12-18",
+      "airtime": "",
+      "airstamp": "1993-12-18T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221255"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221256,
+      "url": "https://www.tvmaze.com/episodes/1221256/the-pink-panther-1x16-pinky-rider-midnight-ride-of-pink-revere",
+      "name": "Pinky Rider / Midnight Ride of Pink Revere",
+      "season": 1,
+      "number": 16,
+      "type": "regular",
+      "airdate": "1993-12-25",
+      "airtime": "",
+      "airstamp": "1993-12-25T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221256"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221257,
+      "url": "https://www.tvmaze.com/episodes/1221257/the-pink-panther-1x17-pinkyhe-delivers-super-pinks-egg-cellent-adventure",
+      "name": "Pinky...He Delivers / Super-Pink's Egg-cellent Adventure",
+      "season": 1,
+      "number": 17,
+      "type": "regular",
+      "airdate": "1994-01-01",
+      "airtime": "",
+      "airstamp": "1994-01-01T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221257"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221258,
+      "url": "https://www.tvmaze.com/episodes/1221258/the-pink-panther-1x18-cowboy-pinky-stealth-panther",
+      "name": "Cowboy Pinky / Stealth Panther",
+      "season": 1,
+      "number": 18,
+      "type": "regular",
+      "airdate": "1994-01-08",
+      "airtime": "",
+      "airstamp": "1994-01-08T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221258"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221259,
+      "url": "https://www.tvmaze.com/episodes/1221259/the-pink-panther-1x19-pinkazumas-revenge-pink-down-under",
+      "name": "Pinkazuma's Revenge / Pink Down Under",
+      "season": 1,
+      "number": 19,
+      "type": "regular",
+      "airdate": "1994-01-15",
+      "airtime": "",
+      "airstamp": "1994-01-15T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221259"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221260,
+      "url": "https://www.tvmaze.com/episodes/1221260/the-pink-panther-1x20-pinkadoon-a-camp-pink-we-will-go",
+      "name": "Pinkadoon / A Camp Pink We Will Go",
+      "season": 1,
+      "number": 20,
+      "type": "regular",
+      "airdate": "1994-01-22",
+      "airtime": "",
+      "airstamp": "1994-01-22T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221260"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221261,
+      "url": "https://www.tvmaze.com/episodes/1221261/the-pink-panther-1x21-icy-pink-the-end-of-superpink",
+      "name": "Icy Pink / The End of Superpink?",
+      "season": 1,
+      "number": 21,
+      "type": "regular",
+      "airdate": "1994-01-29",
+      "airtime": "",
+      "airstamp": "1994-01-29T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221261"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221262,
+      "url": "https://www.tvmaze.com/episodes/1221262/the-pink-panther-1x22-all-for-pink-and-pink-for-all-service-with-a-pink-smile",
+      "name": "All for Pink and Pink for All / Service with a Pink Smile",
+      "season": 1,
+      "number": 22,
+      "type": "regular",
+      "airdate": "1994-02-05",
+      "airtime": "",
+      "airstamp": "1994-02-05T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221262"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221263,
+      "url": "https://www.tvmaze.com/episodes/1221263/the-pink-panther-1x23-trains-pains-and-panthers-wet-and-wild-pinky",
+      "name": "Trains, Pains, and Panthers / Wet and Wild Pinky",
+      "season": 1,
+      "number": 23,
+      "type": "regular",
+      "airdate": "1994-02-12",
+      "airtime": "",
+      "airstamp": "1994-02-12T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221263"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221264,
+      "url": "https://www.tvmaze.com/episodes/1221264/the-pink-panther-1x24-from-hair-to-eternity-strike-flea-youre-out",
+      "name": "From Hair to Eternity / Strike Flea, You're Out!",
+      "season": 1,
+      "number": 24,
+      "type": "regular",
+      "airdate": "1994-02-19",
+      "airtime": "",
+      "airstamp": "1994-02-19T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221264"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221265,
+      "url": "https://www.tvmaze.com/episodes/1221265/the-pink-panther-1x25-cinderpink-its-a-bird-its-a-pain-its-superfan",
+      "name": "Cinderpink / It's a Bird! It's a Pain! It's Superfan!",
+      "season": 1,
+      "number": 25,
+      "type": "regular",
+      "airdate": "1994-02-26",
+      "airtime": "",
+      "airstamp": "1994-02-26T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221265"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221266,
+      "url": "https://www.tvmaze.com/episodes/1221266/the-pink-panther-1x26-whos-smiling-now-the-inspector-robin-hoodwinked",
+      "name": "Who's Smiling Now? (The Inspector) / Robin Hoodwinked",
+      "season": 1,
+      "number": 26,
+      "type": "regular",
+      "airdate": "1994-03-05",
+      "airtime": "",
+      "airstamp": "1994-03-05T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221266"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221267,
+      "url": "https://www.tvmaze.com/episodes/1221267/the-pink-panther-1x27-hook-line-and-pinker-valentine-pink",
+      "name": "Hook Line and Pinker / Valentine Pink",
+      "season": 1,
+      "number": 27,
+      "type": "regular",
+      "airdate": "1994-03-12",
+      "airtime": "",
+      "airstamp": "1994-03-12T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221267"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221268,
+      "url": "https://www.tvmaze.com/episodes/1221268/the-pink-panther-1x28-dino-sour-head-the-luck-of-the-pinkish",
+      "name": "Dino Sour Head / The Luck of the Pinkish",
+      "season": 1,
+      "number": 28,
+      "type": "regular",
+      "airdate": "1994-04-19",
+      "airtime": "",
+      "airstamp": "1994-04-19T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221268"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221269,
+      "url": "https://www.tvmaze.com/episodes/1221269/the-pink-panther-1x29-the-inspectornot-the-inspector-pink-links",
+      "name": "The Inspector...Not (The Inspector) / Pink Links",
+      "season": 1,
+      "number": 29,
+      "type": "regular",
+      "airdate": "1994-03-26",
+      "airtime": "",
+      "airstamp": "1994-03-26T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221269"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221270,
+      "url": "https://www.tvmaze.com/episodes/1221270/the-pink-panther-1x30-stool-parrot-the-inspector-pinky-and-slusho",
+      "name": "Stool Parrot (The Inspector) / Pinky and Slusho",
+      "season": 1,
+      "number": 30,
+      "type": "regular",
+      "airdate": "1994-04-02",
+      "airtime": "",
+      "airstamp": "1994-04-02T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221270"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221271,
+      "url": "https://www.tvmaze.com/episodes/1221271/the-pink-panther-1x31-panthergeist-pink-pendings-pink-slip",
+      "name": "Panthergeist / Pink Pending's Pink Slip",
+      "season": 1,
+      "number": 31,
+      "type": "regular",
+      "airdate": "1994-04-09",
+      "airtime": "",
+      "airstamp": "1994-04-09T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221271"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221272,
+      "url": "https://www.tvmaze.com/episodes/1221272/the-pink-panther-1x32-the-three-pink-porker-the-heart-of-pinkness",
+      "name": "The Three Pink Porker / The Heart of Pinkness",
+      "season": 1,
+      "number": 32,
+      "type": "regular",
+      "airdate": "1994-04-16",
+      "airtime": "",
+      "airstamp": "1994-04-16T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221272"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221273,
+      "url": "https://www.tvmaze.com/episodes/1221273/the-pink-panther-1x33-the-inspectors-most-wanted-the-inspector-pinky-appleseed",
+      "name": "The Inspector's Most Wanted (The Inspector) / Pinky Appleseed",
+      "season": 1,
+      "number": 33,
+      "type": "regular",
+      "airdate": "1994-04-23",
+      "airtime": "",
+      "airstamp": "1994-04-23T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221273"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221274,
+      "url": "https://www.tvmaze.com/episodes/1221274/the-pink-panther-1x34-calling-dr-panther-for-those-who-pink-young",
+      "name": "Calling Dr. Panther / For Those Who Pink Young",
+      "season": 1,
+      "number": 34,
+      "type": "regular",
+      "airdate": "1994-04-30",
+      "airtime": "",
+      "airstamp": "1994-04-30T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221274"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221275,
+      "url": "https://www.tvmaze.com/episodes/1221275/the-pink-panther-1x35-lights-camera-voodoo-im-dreaming-of-a-pink-christmas",
+      "name": "Lights, Camera, Voodoo / I'm Dreaming of a Pink Christmas",
+      "season": 1,
+      "number": 35,
+      "type": "regular",
+      "airdate": "1994-05-07",
+      "airtime": "",
+      "airstamp": "1994-05-07T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221275"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221339,
+      "url": "https://www.tvmaze.com/episodes/1221339/the-pink-panther-1x36-wiener-takes-all-the-easter-panther",
+      "name": "Wiener Takes All / The Easter Panther",
+      "season": 1,
+      "number": 36,
+      "type": "regular",
+      "airdate": "1994-05-14",
+      "airtime": "",
+      "airstamp": "1994-05-14T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/443/1108747.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/443/1108747.jpg"
+      },
+      "summary": "<p>1. A rival wiener restaurant owner kidnaps Pinky's boss, a granny, to discredit their successful diner. Pinky hires a witch to masquerade as the real granny. 2. The pink panther is an event organizer for children. He is hired to plan and carry out an Easter party. However, a naughty girl and a trio of crooks are in charge of spoiling the party.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221339"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221340,
+      "url": "https://www.tvmaze.com/episodes/1221340/the-pink-panther-1x37-the-inspectors-club-the-inspector-a-royal-pain",
+      "name": "The Inspector's Club (The Inspector) / A Royal Pain",
+      "season": 1,
+      "number": 37,
+      "type": "regular",
+      "airdate": "1994-05-21",
+      "airtime": "",
+      "airstamp": "1994-05-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221340"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221341,
+      "url": "https://www.tvmaze.com/episodes/1221341/the-pink-panther-1x38-black-white-pink-all-over-beach-blanket-pinky",
+      "name": "Black & White & Pink All Over / Beach Blanket Pinky",
+      "season": 1,
+      "number": 38,
+      "type": "regular",
+      "airdate": "1994-05-28",
+      "airtime": "",
+      "airstamp": "1994-05-28T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221341"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221342,
+      "url": "https://www.tvmaze.com/episodes/1221342/the-pink-panther-1x39-digging-for-dollars-the-inspector-pinknocchio",
+      "name": "Digging for Dollars (The Inspector) / Pinknocchio",
+      "season": 1,
+      "number": 39,
+      "type": "regular",
+      "airdate": "1994-06-04",
+      "airtime": "",
+      "airstamp": "1994-06-04T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221342"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221343,
+      "url": "https://www.tvmaze.com/episodes/1221343/the-pink-panther-1x40-pink-up-the-river-long-john-pinky",
+      "name": "Pink Up the River / Long John Pinky",
+      "season": 1,
+      "number": 40,
+      "type": "regular",
+      "airdate": "1994-06-11",
+      "airtime": "",
+      "airstamp": "1994-06-11T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221343"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221344,
+      "url": "https://www.tvmaze.com/episodes/1221344/the-pink-panther-2x01-muff-the-magic-dragon-pink-thumb",
+      "name": "Muff the Magic Dragon / Pink Thumb",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1994-09-10",
+      "airtime": "",
+      "airstamp": "1994-09-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221344"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221345,
+      "url": "https://www.tvmaze.com/episodes/1221345/the-pink-panther-2x02-pink-dilemma-oh-varkula",
+      "name": "Pink Dilemma / Oh, Varkula",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1994-09-17",
+      "airtime": "",
+      "airstamp": "1994-09-17T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221345"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221346,
+      "url": "https://www.tvmaze.com/episodes/1221346/the-pink-panther-2x03-ice-blue-pink-pink-trek",
+      "name": "Ice Blue Pink / Pink Trek",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1994-09-24",
+      "airtime": "",
+      "airstamp": "1994-09-24T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221346"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221347,
+      "url": "https://www.tvmaze.com/episodes/1221347/the-pink-panther-2x04-legend-of-el-pinko-pinky-big",
+      "name": "Legend of El Pinko / Pinky Big",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1994-10-01",
+      "airtime": "",
+      "airstamp": "1994-10-01T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221347"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221348,
+      "url": "https://www.tvmaze.com/episodes/1221348/the-pink-panther-2x05-eric-the-pink-pretty-and-pink",
+      "name": "Eric the Pink / Pretty and Pink",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1994-10-08",
+      "airtime": "",
+      "airstamp": "1994-10-08T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221348"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221349,
+      "url": "https://www.tvmaze.com/episodes/1221349/the-pink-panther-2x06-built-for-speed-pooch-the-panther",
+      "name": "Built for Speed / Pooch the Panther",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1994-10-15",
+      "airtime": "",
+      "airstamp": "1994-10-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221349"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221350,
+      "url": "https://www.tvmaze.com/episodes/1221350/the-pink-panther-2x07-pinky-in-toyland-the-detective-of-oz",
+      "name": "Pinky in Toyland / The Detective of Oz",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1994-10-22",
+      "airtime": "",
+      "airstamp": "1994-10-22T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221350"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221351,
+      "url": "https://www.tvmaze.com/episodes/1221351/the-pink-panther-2x08-royal-canadian-mounted-panther-power-of-pink",
+      "name": "Royal Canadian Mounted Panther / Power of Pink",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1994-10-29",
+      "airtime": "",
+      "airstamp": "1994-10-29T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221351"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221352,
+      "url": "https://www.tvmaze.com/episodes/1221352/the-pink-panther-2x09-lifestyles-of-the-pink-and-famous-happy-trails-pinky",
+      "name": "Lifestyles of the Pink and Famous / Happy Trails Pinky",
+      "season": 2,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1994-11-05",
+      "airtime": "",
+      "airstamp": "1994-11-05T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221352"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221353,
+      "url": "https://www.tvmaze.com/episodes/1221353/the-pink-panther-2x10-a-hard-days-pink-you-only-pink-twice",
+      "name": "A Hard Day's Pink / You Only Pink Twice",
+      "season": 2,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1994-11-12",
+      "airtime": "",
+      "airstamp": "1994-11-12T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221353"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221354,
+      "url": "https://www.tvmaze.com/episodes/1221354/the-pink-panther-2x11-its-just-a-gypsy-in-my-soup-three-aliens-and-a-footstool",
+      "name": "It's Just a Gypsy in My Soup / Three Aliens and a Footstool",
+      "season": 2,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1994-11-19",
+      "airtime": "",
+      "airstamp": "1994-11-19T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221354"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221355,
+      "url": "https://www.tvmaze.com/episodes/1221355/the-pink-panther-2x12-mummy-dearest-feast-of-famine",
+      "name": "Mummy Dearest / Feast of Famine",
+      "season": 2,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1994-11-26",
+      "airtime": "",
+      "airstamp": "1994-11-26T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221355"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221356,
+      "url": "https://www.tvmaze.com/episodes/1221356/the-pink-panther-2x13-no-pink-is-an-island-pinky-and-the-golden-fleece",
+      "name": "No Pink is an Island / Pinky and the Golden Fleece",
+      "season": 2,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1994-12-03",
+      "airtime": "",
+      "airstamp": "1994-12-03T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221356"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221357,
+      "url": "https://www.tvmaze.com/episodes/1221357/the-pink-panther-2x14-home-stretch-pinky-pink-pucks",
+      "name": "Home Stretch Pinky / Pink Pucks",
+      "season": 2,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1994-12-10",
+      "airtime": "",
+      "airstamp": "1994-12-10T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221357"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221358,
+      "url": "https://www.tvmaze.com/episodes/1221358/the-pink-panther-2x15-the-reluctant-ninja-pantherella",
+      "name": "The Reluctant Ninja / Pantherella",
+      "season": 2,
+      "number": 15,
+      "type": "regular",
+      "airdate": "1994-12-17",
+      "airtime": "",
+      "airstamp": "1994-12-17T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221358"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221359,
+      "url": "https://www.tvmaze.com/episodes/1221359/the-pink-panther-2x16-pinks-ark-rain-or-snow-or-pink-of-night",
+      "name": "Pink's Ark / Rain or Snow or Pink of Night",
+      "season": 2,
+      "number": 16,
+      "type": "regular",
+      "airdate": "1994-12-24",
+      "airtime": "",
+      "airstamp": "1994-12-24T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221359"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221360,
+      "url": "https://www.tvmaze.com/episodes/1221360/the-pink-panther-2x17-pink-in-the-middle-pink-in-the-poke",
+      "name": "Pink in the Middle / Pink in the Poke",
+      "season": 2,
+      "number": 17,
+      "type": "regular",
+      "airdate": "1994-12-31",
+      "airtime": "",
+      "airstamp": "1994-12-31T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221360"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221361,
+      "url": "https://www.tvmaze.com/episodes/1221361/the-pink-panther-2x18-a-nut-at-the-opera-hamm-n-eggz",
+      "name": "A Nut at the Opera / Hamm-n-Eggz",
+      "season": 2,
+      "number": 18,
+      "type": "regular",
+      "airdate": "1995-01-07",
+      "airtime": "",
+      "airstamp": "1995-01-07T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221361"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221362,
+      "url": "https://www.tvmaze.com/episodes/1221362/the-pink-panther-2x19-voodoo-man-7-manly-men",
+      "name": "Voodoo Man / 7 Manly Men",
+      "season": 2,
+      "number": 19,
+      "type": "regular",
+      "airdate": "1995-01-14",
+      "airtime": "",
+      "airstamp": "1995-01-14T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221362"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    },
+    {
+      "id": 1221363,
+      "url": "https://www.tvmaze.com/episodes/1221363/the-pink-panther-2x20-the-texas-toads-driving-mr-pink-the-ant-and-the-aardvark",
+      "name": "The Texas Toads / Driving Mr. Pink / The Ant and the Aardvark",
+      "season": 2,
+      "number": 20,
+      "type": "regular",
+      "airdate": "1995-04-12",
+      "airtime": "",
+      "airstamp": "1995-04-12T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1221363"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/29583",
+          "name": "The Pink Panther"
+        }
+      }
+    }
+  ],
+  "show:the pink panther 2": null,
+  "show:bill and ted s excellent adventure": {
+    "id": 9624,
+    "url": "https://www.tvmaze.com/shows/9624/bill-teds-excellent-adventures",
+    "name": "Bill & Ted's Excellent Adventures",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Adventure",
+      "Science-Fiction"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "1992-06-28",
+    "ended": "1992-08-09",
+    "officialSite": null,
+    "schedule": {
+      "time": "19:00",
+      "days": [
+        "Sunday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 42,
+    "network": {
+      "id": 4,
+      "name": "FOX",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.fox.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 147651,
+      "imdb": "tt0103365"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/81/204520.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/81/204520.jpg"
+    },
+    "summary": "<p>Picking up where the film left off, <b>Bill &amp; Ted's Excellent Adventures</b> shows the further exploits of the future's greatest duo. Continued to be mentored by Rufus, the two manage find more adventures in time travel while trying to hold down a steady job at a hardware store.</p><p>The series was originally scheduled for an earlier season, but delayed for contractual reasons until Bill &amp; Ted's Bogus Journey hit a specific box office gross. This explains why the two leads took over for voicing their characters in the animated series the year before.</p>",
+    "updated": 1714271644,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/9624"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/517845",
+        "name": "Stand Up Guy"
+      }
+    }
+  },
+  "episodes:9624": [
+    {
+      "id": 517839,
+      "url": "https://www.tvmaze.com/episodes/517839/bill-teds-excellent-adventures-1x01-nail-the-conquering-hero",
+      "name": "Nail the Conquering Hero",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1992-06-28",
+      "airtime": "19:00",
+      "airstamp": "1992-06-28T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 3.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291463.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291463.jpg"
+      },
+      "summary": "<p>Keilson accidentally winds up in feudal times.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517839"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    },
+    {
+      "id": 517840,
+      "url": "https://www.tvmaze.com/episodes/517840/bill-teds-excellent-adventures-1x02-as-the-dude-turns",
+      "name": "As the Dude Turns",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1992-07-05",
+      "airtime": "19:00",
+      "airstamp": "1992-07-05T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291471.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291471.jpg"
+      },
+      "summary": "<p>A soap star has a gender-identity crisis.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517840"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    },
+    {
+      "id": 517841,
+      "url": "https://www.tvmaze.com/episodes/517841/bill-teds-excellent-adventures-1x03-its-a-totally-wonderful-life",
+      "name": "It's a Totally Wonderful Life",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1992-07-12",
+      "airtime": "19:00",
+      "airstamp": "1992-07-12T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291473.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291473.jpg"
+      },
+      "summary": "<p>Rufus tries to go back to when the pair met to save their friendship.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517841"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    },
+    {
+      "id": 517842,
+      "url": "https://www.tvmaze.com/episodes/517842/bill-teds-excellent-adventures-1x04-hunka-hunka-bill-and-ted",
+      "name": "Hunka Hunka Bill and Ted",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1992-07-19",
+      "airtime": "19:00",
+      "airstamp": "1992-07-19T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291482.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291482.jpg"
+      },
+      "summary": "<p>The guys seek the original to win an Elvis impersonation contest.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517842"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    },
+    {
+      "id": 517843,
+      "url": "https://www.tvmaze.com/episodes/517843/bill-teds-excellent-adventures-1x05-destiny-babes",
+      "name": "Destiny Babes",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1992-07-26",
+      "airtime": "19:00",
+      "airstamp": "1992-07-26T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291484.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291484.jpg"
+      },
+      "summary": "<p>In 18th-century Italy, the guys seek tips from Casanova.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517843"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    },
+    {
+      "id": 517844,
+      "url": "https://www.tvmaze.com/episodes/517844/bill-teds-excellent-adventures-1x06-deja-vu",
+      "name": "Deja Vu",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1992-08-02",
+      "airtime": "19:00",
+      "airstamp": "1992-08-02T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291486.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291486.jpg"
+      },
+      "summary": "<p>The guys go back to the '60s to rectify a grudge involving Ted's mom.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517844"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    },
+    {
+      "id": 517845,
+      "url": "https://www.tvmaze.com/episodes/517845/bill-teds-excellent-adventures-1x07-stand-up-guy",
+      "name": "Stand Up Guy",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1992-08-09",
+      "airtime": "19:00",
+      "airstamp": "1992-08-09T23:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/516/1291487.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/516/1291487.jpg"
+      },
+      "summary": "<p>Low aptitude scores send the guys in search of Albert Einstein.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/517845"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/9624",
+          "name": "Bill & Ted's Excellent Adventures"
+        }
+      }
+    }
   ]
 }
