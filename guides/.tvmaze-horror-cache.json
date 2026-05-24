@@ -105787,5 +105787,1369 @@
         }
       }
     }
+  ],
+  "show:creepshow": {
+    "id": 37790,
+    "url": "https://www.tvmaze.com/shows/37790/creepshow",
+    "name": "Creepshow",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Horror"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": 25,
+    "premiered": "2019-09-26",
+    "ended": "2023-10-13",
+    "officialSite": "https://www.shudder.com/series/watch/creepshow/5138009",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": 6.3
+    },
+    "weight": 93,
+    "network": null,
+    "webChannel": {
+      "id": 213,
+      "name": "Shudder",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.shudder.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 364865,
+      "imdb": "tt8762206"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/480/1201981.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1201981.jpg"
+    },
+    "summary": "<p><b>Creepshow</b>, the anthology series based on the 1982 horror comedy classic, is still the most fun you'll ever have being scared! A comic book comes to life in a series of twelve vignettes over six episodes, exploring terrors from murder to the supernatural and unexplainable. Haunted dollhouses, werewolves, murderous goblins, villainous trick-or-treaters, the dead, and medical marvels are just a few of the things to watch out for in this new series. You never know what will be on the next page...</p>",
+    "updated": 1757790253,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/37790"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2664430",
+        "name": "Baby Teeth"
+      }
+    }
+  },
+  "episodes:37790": [
+    {
+      "id": 1684968,
+      "url": "https://www.tvmaze.com/episodes/1684968/creepshow-1x01-gray-matter",
+      "name": "Gray Matter",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2019-09-26",
+      "airtime": "",
+      "airstamp": "2019-09-26T16:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/212/532146.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/212/532146.jpg"
+      },
+      "summary": "<p>A small-town man turns to drink after his wife dies, but accidentally consumes contaminated beer and starts... changing.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1684968"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1722656,
+      "url": "https://www.tvmaze.com/episodes/1722656/creepshow-1x02-the-house-of-the-head",
+      "name": "The House of the Head",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2019-09-26",
+      "airtime": "",
+      "airstamp": "2019-09-26T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/212/532262.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/212/532262.jpg"
+      },
+      "summary": "<p>A young girl, Evie, populates her dollhouse with a family, the Smith-Smiths. Evie soon discovers that the dollhouse is haunted by a severed head that kills every doll that it encounters.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1722656"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1712391,
+      "url": "https://www.tvmaze.com/episodes/1712391/creepshow-1x03-bad-wolf-down",
+      "name": "Bad Wolf Down",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2019-10-03",
+      "airtime": "",
+      "airstamp": "2019-10-03T16:00:00+00:00",
+      "runtime": 19,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/214/535583.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/214/535583.jpg"
+      },
+      "summary": "<p>The surviving members of B Company take refuge in an abandoned police station. A woman is imprisoned inside, providing them with a way to escape the Nazis who have surrounded the building.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1712391"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1722657,
+      "url": "https://www.tvmaze.com/episodes/1722657/creepshow-1x04-the-finger",
+      "name": "The Finger",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2019-10-03",
+      "airtime": "",
+      "airstamp": "2019-10-03T16:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 6.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/213/534521.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/213/534521.jpg"
+      },
+      "summary": "<p>Divorced and alone, Clark Wilson finds a finger and brings it home. It soon grows into a small lizardlike creature and does whatever Clark wants...when Clark wants his enemies dead.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1722657"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1712392,
+      "url": "https://www.tvmaze.com/episodes/1712392/creepshow-1x05-all-hallows-eve",
+      "name": "All Hallow's Eve",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2019-10-10",
+      "airtime": "",
+      "airstamp": "2019-10-10T16:00:00+00:00",
+      "runtime": 20,
+      "rating": {
+        "average": 7.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/214/537091.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/214/537091.jpg"
+      },
+      "summary": "<p>Five trick-or-treaters go out to ask for treats... and tend to unfinished business.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1712392"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1722658,
+      "url": "https://www.tvmaze.com/episodes/1722658/creepshow-1x06-the-man-in-the-suitcase",
+      "name": "The Man in the Suitcase",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2019-10-10",
+      "airtime": "",
+      "airstamp": "2019-10-10T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 6.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/214/537092.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/214/537092.jpg"
+      },
+      "summary": "<p>A down-and-out college student grabs the wrong bag at the airport, and finds a man inside, twisted to fit and suffering from a strange condition.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1722658"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1712393,
+      "url": "https://www.tvmaze.com/episodes/1712393/creepshow-1x07-the-companion",
+      "name": "The Companion",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2019-10-17",
+      "airtime": "",
+      "airstamp": "2019-10-17T16:00:00+00:00",
+      "runtime": 20,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/216/540280.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/216/540280.jpg"
+      },
+      "summary": "<p>A teenage boy flees from his abusive older brother and takes refuge in an old farmhouse which has a unique scarecrow watching over it.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1712393"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1722659,
+      "url": "https://www.tvmaze.com/episodes/1722659/creepshow-1x08-lydia-laynes-better-half",
+      "name": "Lydia Layne's Better Half",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2019-10-17",
+      "airtime": "",
+      "airstamp": "2019-10-17T16:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/216/540274.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/216/540274.jpg"
+      },
+      "summary": "<p>Executive Lydia Layne promotes a man over her lover Celia, and then shares an elevator ride with Celia afterward.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1722659"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1712394,
+      "url": "https://www.tvmaze.com/episodes/1712394/creepshow-1x09-night-of-the-paw",
+      "name": "Night of the Paw",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2019-10-24",
+      "airtime": "",
+      "airstamp": "2019-10-24T16:00:00+00:00",
+      "runtime": 28,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/217/544008.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/217/544008.jpg"
+      },
+      "summary": "<p>A fleeing woman crashes her car and seeks refugee in a funeral home. The owner tells her the tale of the monkey's paw that he owns... and how it cursed his life.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1712394"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1722660,
+      "url": "https://www.tvmaze.com/episodes/1722660/creepshow-1x10-times-is-tough-in-musky-holler",
+      "name": "Times Is Tough in Musky Holler",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2019-10-24",
+      "airtime": "",
+      "airstamp": "2019-10-24T16:00:00+00:00",
+      "runtime": 16,
+      "rating": {
+        "average": 6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/217/543418.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/217/543418.jpg"
+      },
+      "summary": "<p>After the Change, the townspeople of Musky Holler turn on the mayor and his goons who forced them to watch as they dispatched anyone who opposed them.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1722660"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1712395,
+      "url": "https://www.tvmaze.com/episodes/1712395/creepshow-1x11-skincrawlers",
+      "name": "Skincrawlers",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2019-10-31",
+      "airtime": "",
+      "airstamp": "2019-10-31T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/218/545239.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/218/545239.jpg"
+      },
+      "summary": "<p>An overweight Henry Quayle refuses to try a new leech-based weight-loss program, and soon discovers that he was right to suspect it.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1712395"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 1722661,
+      "url": "https://www.tvmaze.com/episodes/1722661/creepshow-1x12-by-the-silver-water-of-lake-champlain",
+      "name": "By the Silver Water of Lake Champlain",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2019-10-31",
+      "airtime": "",
+      "airstamp": "2019-10-31T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 6.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/218/545240.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/218/545240.jpg"
+      },
+      "summary": "<p>After her father dies in Lake Champlain, his daughter Rose continues her quest to find the fabled lake monster.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1722661"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2034187,
+      "url": "https://www.tvmaze.com/episodes/2034187/creepshow-2x01-model-kid",
+      "name": "Model Kid",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2021-04-01",
+      "airtime": "",
+      "airstamp": "2021-04-01T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/301/754172.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/301/754172.jpg"
+      },
+      "summary": "<p>Joe's closest friends are the models toys of his favorite scary movie monsters.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2034187"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2056872,
+      "url": "https://www.tvmaze.com/episodes/2056872/creepshow-2x02-public-television-of-the-dead",
+      "name": "Public Television of the Dead",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2021-04-01",
+      "airtime": "",
+      "airstamp": "2021-04-01T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/301/754173.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/301/754173.jpg"
+      },
+      "summary": "<p>A public TV station is overwhelmed when the appraisal of an antique book accidentally summons a dark force.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2056872"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2065093,
+      "url": "https://www.tvmaze.com/episodes/2065093/creepshow-2x03-dead-and-breakfast",
+      "name": "Dead and Breakfast",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2021-04-08",
+      "airtime": "",
+      "airstamp": "2021-04-08T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/304/762111.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/304/762111.jpg"
+      },
+      "summary": "<p>A marketing ploy at a haunted Bed and Breakfast becomes way too realistic.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2065093"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2065096,
+      "url": "https://www.tvmaze.com/episodes/2065096/creepshow-2x04-pesticide",
+      "name": "Pesticide",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2021-04-08",
+      "airtime": "",
+      "airstamp": "2021-04-08T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 6.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/304/762122.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/304/762122.jpg"
+      },
+      "summary": "<p>An exterminator gets more than he bargained for when he takes on a big job.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2065096"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2071776,
+      "url": "https://www.tvmaze.com/episodes/2071776/creepshow-2x05-the-right-snuff",
+      "name": "The Right Snuff",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2021-04-15",
+      "airtime": "",
+      "airstamp": "2021-04-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/308/770663.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/308/770663.jpg"
+      },
+      "summary": "<p>A misunderstanding in space ensures two astronauts go down in history for all the worst reasons.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2071776"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2071777,
+      "url": "https://www.tvmaze.com/episodes/2071777/creepshow-2x06-sibling-rivalry",
+      "name": "Sibling Rivalry",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2021-04-15",
+      "airtime": "",
+      "airstamp": "2021-04-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/308/770664.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/308/770664.jpg"
+      },
+      "summary": "<p>Lola is convinced her brother is trying to kill her but she's worried about the wrong monster.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2071777"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2071853,
+      "url": "https://www.tvmaze.com/episodes/2071853/creepshow-2x07-pipe-screams",
+      "name": "Pipe Screams",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2021-04-22",
+      "airtime": "",
+      "airstamp": "2021-04-22T16:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/310/775256.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/310/775256.jpg"
+      },
+      "summary": "<p>A complicated drain clog.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2071853"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2071854,
+      "url": "https://www.tvmaze.com/episodes/2071854/creepshow-2x08-within-the-walls-of-madness",
+      "name": "Within the Walls of Madness",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2021-04-22",
+      "airtime": "",
+      "airstamp": "2021-04-22T16:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": 6.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/310/775257.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/310/775257.jpg"
+      },
+      "summary": "<p>Scientists fight to contain the creature they've been studying.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2071854"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2077582,
+      "url": "https://www.tvmaze.com/episodes/2077582/creepshow-2x09-night-of-the-living-late-show",
+      "name": "Night of the Living Late Show",
+      "season": 2,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2021-04-29",
+      "airtime": "",
+      "airstamp": "2021-04-29T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/311/778272.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/311/778272.jpg"
+      },
+      "summary": "<p>Simon has invented an incredible virtual reality experience that allows him to join in on his favorite films but is unprepared for when virtual reality becomes his actual reality.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2077582"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2136203,
+      "url": "https://www.tvmaze.com/episodes/2136203/creepshow-3x01-mums",
+      "name": "Mums",
+      "season": 3,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2021-09-23",
+      "airtime": "",
+      "airstamp": "2021-09-23T16:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/359/899804.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/359/899804.jpg"
+      },
+      "summary": "<p>Jack's mother is taken from him, but her garden leaves more to remember her by than he first thought.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2136203"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2177965,
+      "url": "https://www.tvmaze.com/episodes/2177965/creepshow-3x02-queen-bee",
+      "name": "Queen Bee",
+      "season": 3,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2021-09-23",
+      "airtime": "",
+      "airstamp": "2021-09-23T16:00:00+00:00",
+      "runtime": 23,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/359/899805.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/359/899805.jpg"
+      },
+      "summary": "<p>Three teens meet their favorite pop star and realize she's not at all what they imagined.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2177965"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2183434,
+      "url": "https://www.tvmaze.com/episodes/2183434/creepshow-3x03-skeletons-in-the-closet",
+      "name": "Skeletons in the Closet",
+      "season": 3,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2021-09-30",
+      "airtime": "",
+      "airstamp": "2021-09-30T16:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/362/905072.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/362/905072.jpg"
+      },
+      "summary": "<p>A movie buff opens a prop museum, but a rival collector could put everything at risk.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2183434"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2183435,
+      "url": "https://www.tvmaze.com/episodes/2183435/creepshow-3x04-familiar",
+      "name": "Familiar",
+      "season": 3,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2021-09-30",
+      "airtime": "",
+      "airstamp": "2021-09-30T16:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/362/905074.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/362/905074.jpg"
+      },
+      "summary": "<p>Jackson is being followed by a dark force, but will his attempts to rid himself of it work?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2183435"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2188373,
+      "url": "https://www.tvmaze.com/episodes/2188373/creepshow-3x05-the-last-tsuburaya",
+      "name": "The Last Tsuburaya",
+      "season": 3,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2021-10-07",
+      "airtime": "",
+      "airstamp": "2021-10-07T16:00:00+00:00",
+      "runtime": 27,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/909251.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/909251.jpg"
+      },
+      "summary": "<p>An art collector could never have anticipated the ways a terrifying painting would change his life.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2188373"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2188374,
+      "url": "https://www.tvmaze.com/episodes/2188374/creepshow-3x06-okay-ill-bite",
+      "name": "Okay, I'll Bite",
+      "season": 3,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2021-10-07",
+      "airtime": "",
+      "airstamp": "2021-10-07T16:00:00+00:00",
+      "runtime": 26,
+      "rating": {
+        "average": 7.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/909252.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/909252.jpg"
+      },
+      "summary": "<p>Life in prison is tough, but Elmer's pet spiders always have his back.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2188374"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2193913,
+      "url": "https://www.tvmaze.com/episodes/2193913/creepshow-3x07-stranger-sings",
+      "name": "Stranger Sings",
+      "season": 3,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2021-10-14",
+      "airtime": "",
+      "airstamp": "2021-10-14T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 6.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915940.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915940.jpg"
+      },
+      "summary": "<p>A siren lures a doctor into her trap to carry out a diabolical plan.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2193913"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2193914,
+      "url": "https://www.tvmaze.com/episodes/2193914/creepshow-3x08-meter-reader",
+      "name": "Meter Reader",
+      "season": 3,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2021-10-14",
+      "airtime": "",
+      "airstamp": "2021-10-14T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/366/915942.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/366/915942.jpg"
+      },
+      "summary": "<p>A teenage girl must fight off a demonic plague when she realizes her family might be infected.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2193914"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2195975,
+      "url": "https://www.tvmaze.com/episodes/2195975/creepshow-3x09-time-out",
+      "name": "Time Out",
+      "season": 3,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2021-10-21",
+      "airtime": "",
+      "airstamp": "2021-10-21T16:00:00+00:00",
+      "runtime": 27,
+      "rating": {
+        "average": 6.9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/368/920517.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/368/920517.jpg"
+      },
+      "summary": "<p>Tim finds the answer to needing more hours in the day, but is it worth the cost?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2195975"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2195976,
+      "url": "https://www.tvmaze.com/episodes/2195976/creepshow-3x10-the-things-in-oakwoods-past",
+      "name": "The Things in Oakwood's Past",
+      "season": 3,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2021-10-21",
+      "airtime": "",
+      "airstamp": "2021-10-21T16:00:00+00:00",
+      "runtime": 18,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/368/920518.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/368/920518.jpg"
+      },
+      "summary": "<p>When a small town opens a time capsule, the local librarian must try to keep history from repeating itself.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2195976"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2198909,
+      "url": "https://www.tvmaze.com/episodes/2198909/creepshow-3x11-drug-traffic",
+      "name": "Drug Traffic",
+      "season": 3,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2021-10-28",
+      "airtime": "",
+      "airstamp": "2021-10-28T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/925103.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/925103.jpg"
+      },
+      "summary": "<p>A family is detained, and a young girl's distressing symptoms quickly escalate without her medication.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2198909"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2198910,
+      "url": "https://www.tvmaze.com/episodes/2198910/creepshow-3x12-a-dead-girl-named-sue",
+      "name": "A Dead Girl Named Sue",
+      "season": 3,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2021-10-28",
+      "airtime": "",
+      "airstamp": "2021-10-28T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/370/925104.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/370/925104.jpg"
+      },
+      "summary": "<p>When the dead rise from their graves, townspeople take justice into their own hands.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2198910"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2628100,
+      "url": "https://www.tvmaze.com/episodes/2628100/creepshow-4x01-twenty-minutes-with-cassandra",
+      "name": "Twenty Minutes with Cassandra",
+      "season": 4,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 36,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202458.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202458.jpg"
+      },
+      "summary": "<p>Cassie is being chased by a monster and endangers a kind stranger when she asks for help. By doing so, they are both trapped, but what can they do?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2628100"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664425,
+      "url": "https://www.tvmaze.com/episodes/2664425/creepshow-4x02-smile",
+      "name": "Smile",
+      "season": 4,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 18,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202478.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202478.jpg"
+      },
+      "summary": "<p>A celebrated photographer, finds himself tormented due to an award-winning photograph. Sometimes a picture isn't worth more than a thousand words.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664425"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664410,
+      "url": "https://www.tvmaze.com/episodes/2664410/creepshow-4x03-the-hat",
+      "name": "The Hat",
+      "season": 4,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 29,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202459.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202459.jpg"
+      },
+      "summary": "<p>A horror novelist has severe writer's block. Fortunately, his agent has just the right thing. The hat worn by none other than Stephen Bachman. Of course, the struggling author can't resist… he also can't write if he stops wearing the hat, which takes away all concepts of time and space.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664410"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664426,
+      "url": "https://www.tvmaze.com/episodes/2664426/creepshow-4x04-grieving-process",
+      "name": "Grieving Process",
+      "season": 4,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202479.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202479.jpg"
+      },
+      "summary": "<p>Richard finds himself in quite a predicament. His wife has been attacked and is but a shell of the woman he loved. Within a short time, Richard is ready to do anything to help her feel better. This is put to the test and it appears Richard is ready to deliver.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664426"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664411,
+      "url": "https://www.tvmaze.com/episodes/2664411/creepshow-4x05-parent-death-trap",
+      "name": "Parent Death Trap",
+      "season": 4,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 29,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202481.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202481.jpg"
+      },
+      "summary": "<p>Lyle is a disappointment to his wealthy parents, who constantly meddle in his life. Unfortunately, their plan backfires, and now he has to deal with the aftermath.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664411"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664427,
+      "url": "https://www.tvmaze.com/episodes/2664427/creepshow-4x06-to-grandmothers-house-we-go",
+      "name": "To Grandmother's House We Go",
+      "season": 4,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 20,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202460.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202460.jpg"
+      },
+      "summary": "<p>Marcia needs to take her stepdaughter to the girl's grandmother's house to claim their inheritance. However, this simple task is easier said than done.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664427"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664413,
+      "url": "https://www.tvmaze.com/episodes/2664413/creepshow-4x07-meet-the-belaskos",
+      "name": "Meet the Belaskos",
+      "season": 4,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 25,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202466.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202466.jpg"
+      },
+      "summary": "<p>The Belaskos get more than they bargained for when they move in next door to a vampire-hating suburbanite.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664413"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664428,
+      "url": "https://www.tvmaze.com/episodes/2664428/creepshow-4x08-cheat-code",
+      "name": "Cheat Code",
+      "season": 4,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202462.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202462.jpg"
+      },
+      "summary": "<p>A father and son bond by playing an old video game, but soon find out there's a reason it was abandoned.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664428"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664414,
+      "url": "https://www.tvmaze.com/episodes/2664414/creepshow-4x09-something-burrowed-something-blue",
+      "name": "Something Burrowed, Something Blue",
+      "season": 4,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 26,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202485.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202485.jpg"
+      },
+      "summary": "<p>A young couple are gifted everything they could ever wish for.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664414"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664429,
+      "url": "https://www.tvmaze.com/episodes/2664429/creepshow-4x10-doodles",
+      "name": "Doodles",
+      "season": 4,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202463.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202463.jpg"
+      },
+      "summary": "<p>An aspiring comic artist keeps hitting roadblocks.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664429"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664415,
+      "url": "https://www.tvmaze.com/episodes/2664415/creepshow-4x11-george-romero-in-3-d",
+      "name": "George Romero in 3-D!",
+      "season": 4,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202464.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202464.jpg"
+      },
+      "summary": "<p>A struggling bookstore owner finds unpublished works of George Romero, but the comics lead to new troubles.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664415"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    },
+    {
+      "id": 2664430,
+      "url": "https://www.tvmaze.com/episodes/2664430/creepshow-4x12-baby-teeth",
+      "name": "Baby Teeth",
+      "season": 4,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2023-10-13",
+      "airtime": "",
+      "airstamp": "2023-10-13T16:00:00+00:00",
+      "runtime": 24,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/480/1202490.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/480/1202490.jpg"
+      },
+      "summary": "<p>Shelby's mom struggles to accept that her baby is growing up, but hanging on to childhood relics isn't as harmless as she thinks.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2664430"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/37790",
+          "name": "Creepshow"
+        }
+      }
+    }
   ]
 }
