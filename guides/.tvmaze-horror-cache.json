@@ -107152,5 +107152,402 @@
       }
     }
   ],
-  "show:a creepshow animated special": null
+  "show:a creepshow animated special": null,
+  "show:dirty rotten scoundrels": null,
+  "show:baby boom": {
+    "id": 27222,
+    "url": "https://www.tvmaze.com/shows/27222/baby-boom",
+    "name": "Baby Boom",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "1988-09-10",
+    "ended": "1989-09-10",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 73,
+    "network": {
+      "id": 1,
+      "name": "NBC",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.nbc.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 71821,
+      "imdb": "tt0094419"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/578/1446122.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/578/1446122.jpg"
+    },
+    "summary": "<p>A comedy series based on the feature film of the same title. Kate Jackson portrays J.C. Wiatt, a high-powered executive who suddenly becomes a mother to a child left in her care by a relative who has died.</p>",
+    "updated": 1752507118,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/27222"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1143941",
+        "name": "When It Rains"
+      }
+    }
+  },
+  "episodes:27222": [
+    {
+      "id": 1143932,
+      "url": "https://www.tvmaze.com/episodes/1143932/baby-boom-1x01-bring-in-your-bad-myrtle",
+      "name": "Bring in Your Bad, Myrtle",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1988-09-10",
+      "airtime": "",
+      "airstamp": "1988-09-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Kate Jackson plays J.C. Wiatt, executive and single mother, in this series based on the 1987 film. In the pilot, J.C. tries to cope with a new assistant at work and a lost \"blankie\" at home.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143932"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143933,
+      "url": "https://www.tvmaze.com/episodes/1143933/baby-boom-1x02-guilt",
+      "name": "Guilt",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1988-11-02",
+      "airtime": "",
+      "airstamp": "1988-11-02T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. gets some advice from TV moms Margaret Anderson and June Cleaver.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143933"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143934,
+      "url": "https://www.tvmaze.com/episodes/1143934/baby-boom-1x03-center",
+      "name": "Center",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1988-11-09",
+      "airtime": "",
+      "airstamp": "1988-11-09T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. finagles her way into an intensive learning course for Elizabeth, but the experience may be too intense---for J.C.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143934"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143935,
+      "url": "https://www.tvmaze.com/episodes/1143935/baby-boom-1x04-stress",
+      "name": "Stress",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1988-11-16",
+      "airtime": "",
+      "airstamp": "1988-11-16T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. stands back to look at her life when she begins to fear that, like her father, she'll die of a heart attack.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143935"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143936,
+      "url": "https://www.tvmaze.com/episodes/1143936/baby-boom-1x05-saturday",
+      "name": "Saturday",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1988-11-30",
+      "airtime": "",
+      "airstamp": "1988-11-30T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. is sure that Elizabeth is on an outing with a mass murderer and a '60s burnout.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143936"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143937,
+      "url": "https://www.tvmaze.com/episodes/1143937/baby-boom-1x06-the-he-man-womans-hater-club",
+      "name": "The He-Man Woman's Hater Club",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1988-12-14",
+      "airtime": "",
+      "airstamp": "1988-12-14T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. and Arlene feel like they're back in the Dark Ages when they face discrimination at an all-male club.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143937"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143938,
+      "url": "https://www.tvmaze.com/episodes/1143938/baby-boom-1x07-ill-be-home-for-christmas",
+      "name": "I'll Be Home for Christmas",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1988-12-21",
+      "airtime": "",
+      "airstamp": "1988-12-21T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. makes sure Santa goes to town for her first Christmas with Elizabeth, while Fritz celebrates his wife's return from the Betty Ford Center.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143938"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143939,
+      "url": "https://www.tvmaze.com/episodes/1143939/baby-boom-1x08-one-wednesday",
+      "name": "One Wednesday",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1989-07-13",
+      "airtime": "",
+      "airstamp": "1989-07-13T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. waits to hear about a big account, Charlotte waits to hear about her raise and Fritz waits to hear about a date.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143939"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143944,
+      "url": "https://www.tvmaze.com/episodes/1143944/baby-boom-1x09-x-y-l-o-p-h-o-n-e",
+      "name": "X-Y-L-O-P-H-O-N-E",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1989-08-14",
+      "airtime": "",
+      "airstamp": "1989-08-14T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. finds her dating drought quenched by a wonderful guy, but she hopes an old pattern's not repeating itself when he seems afraid of being eaten alive by the \"Tiger Lady.\"</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143944"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143941,
+      "url": "https://www.tvmaze.com/episodes/1143941/baby-boom-1x10-when-it-rains",
+      "name": "When It Rains",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1989-09-10",
+      "airtime": "",
+      "airstamp": "1989-09-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. has her hands full when Helga quits, Elizabeth gets sick, the doctor is cute, and the parade of unsuitable nannies seems endless.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143941"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143940,
+      "url": "https://www.tvmaze.com/episodes/1143940/baby-boom-1x11-a-fine-romance",
+      "name": "A Fine Romance",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>When J.C. passes out after her gym workout, she awakens to see the handsome Dr. Kevin Atwater back in her life. The good doctor is no longer engaged, and asks J.C. out to dinner.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143940"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143942,
+      "url": "https://www.tvmaze.com/episodes/1143942/baby-boom-1x12-charlottes-secret",
+      "name": "Charlotte's Secret",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Charlotte makes several mistakes in J.C.'s schedule and then apologizes for being so tired and inattentive. J.C. later discovers the source of Charlotte's problems when she attends a local comedy club.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143942"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    },
+    {
+      "id": 1143943,
+      "url": "https://www.tvmaze.com/episodes/1143943/baby-boom-1x13-jc-the-man",
+      "name": "J.C.--The Man",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>J.C. casually wishes she was a man, so she could see how the other half lives. When she wakes up the next day, she finds her wish has come true, and spends her day noticing all the differences.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1143943"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27222",
+          "name": "Baby Boom"
+        }
+      }
+    }
+  ]
 }
