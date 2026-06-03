@@ -1612,6 +1612,10 @@ jobs:
           }
           EOF
 
+      - name: Normalize Air Disasters title
+        run: |
+          perl -0pi -e 's/Mayday: Air Disaster/Air Disasters/g' guides/tvguidetivimateguide.xml
+
       - name: Compress TiviMate guide
         run: |
           gzip -c guides/tvguidetivimateguide.xml > guides/tvguidetivimateguide.xml.gz
@@ -1627,7 +1631,7 @@ jobs:
           # This workflow should only update its own XML/GZ output.
           git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
+          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
           git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -1652,7 +1656,7 @@ jobs:
 
             git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz guides/.tvmaze-tivimate-cache.json
+            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
             git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
