@@ -107552,5 +107552,573 @@
   ],
   "show:thelma and louise": null,
   "show:desperately seeking susan": null,
-  "show:crowsnest": null
+  "show:crowsnest": null,
+  "show:superdeep": null,
+  "show:sam was here": null,
+  "show:would you rather": {
+    "id": 27250,
+    "url": "https://www.tvmaze.com/shows/27250/would-you-rather",
+    "name": "Would You Rather?",
+    "type": "Reality",
+    "language": "English",
+    "genres": [],
+    "status": "Ended",
+    "runtime": 180,
+    "averageRuntime": 180,
+    "premiered": "2015-02-04",
+    "ended": "2015-02-25",
+    "officialSite": null,
+    "schedule": {
+      "time": "20:00",
+      "days": [
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 21,
+    "network": {
+      "id": 83,
+      "name": "National Geographic Wild",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": null,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/107/269408.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/107/269408.jpg"
+    },
+    "summary": "<p><b>Would You Rather?</b> A popular game that has taken the country — and social media — by storm. So big, Tina Fey and Amy Poehler kicked off the Golden Globes with a friendly game of Would You Rather … Colin Farrell or Colin Firth? Ed Norton or Mark Ruffalo?</p><p>Whether you're playing PG versions with your family or R-rated versions at the local bar, the game has taken on a life of its own. And now, Nat Geo WILD is the first network to get into the fray, letting viewers decide what programming they want to watch with the first-ever Would You RatherWILD Wednesdays in February.</p><p>Viewers decide if they would rather watch tiny or big animals, furry or scaly ones, ones that swim or slither, or ones that live in a hot or cold climate.</p>",
+    "updated": 1497993528,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/27250"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1144803",
+        "name": "#WILDhot vs #WILDcold"
+      }
+    }
+  },
+  "episodes:27250": [
+    {
+      "id": 1144800,
+      "url": "https://www.tvmaze.com/episodes/1144800/would-you-rather-1x01-wildfur-vs-wildscales",
+      "name": "#WILDfur vs #WILDscales",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2015-02-04",
+      "airtime": "20:00",
+      "airstamp": "2015-02-05T01:00:00+00:00",
+      "runtime": 180,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Featuring either fury animals such as ice bears, wolves and cheetahs or scaly creatures including bluefin tuna, crocodiles and deadly snakes</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1144800"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27250",
+          "name": "Would You Rather?"
+        }
+      }
+    },
+    {
+      "id": 1144801,
+      "url": "https://www.tvmaze.com/episodes/1144801/would-you-rather-1x02-wildtiny-vs-wildbig",
+      "name": "#WILDtiny vs #WILDbig",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2015-02-11",
+      "airtime": "20:00",
+      "airstamp": "2015-02-12T01:00:00+00:00",
+      "runtime": 180,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Pitting the animal kingdom's mini-me's such as hummingbirds and killer shrimp against killer whales, apes and giant pandas</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1144801"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27250",
+          "name": "Would You Rather?"
+        }
+      }
+    },
+    {
+      "id": 1144802,
+      "url": "https://www.tvmaze.com/episodes/1144802/would-you-rather-1x03-wildswim-vs-wildslither",
+      "name": "#WILDswim vs #WILDslither",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2015-02-18",
+      "airtime": "20:00",
+      "airstamp": "2015-02-19T01:00:00+00:00",
+      "runtime": 180,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Presenting blue whales and sharks in one corner and king cobras and anacondas in the other</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1144802"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27250",
+          "name": "Would You Rather?"
+        }
+      }
+    },
+    {
+      "id": 1144803,
+      "url": "https://www.tvmaze.com/episodes/1144803/would-you-rather-1x04-wildhot-vs-wildcold",
+      "name": "#WILDhot vs #WILDcold",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2015-02-25",
+      "airtime": "20:00",
+      "airstamp": "2015-02-26T01:00:00+00:00",
+      "runtime": 180,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Setting African butterfly fish and eel catfish opposite camping friends bears and caribou</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1144803"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/27250",
+          "name": "Would You Rather?"
+        }
+      }
+    }
+  ],
+  "show:don t grow up": null,
+  "show:quicksand": null,
+  "show:the ranger": null,
+  "show:hunter hunter": {
+    "id": 55394,
+    "url": "https://www.tvmaze.com/shows/55394/hunter",
+    "name": "Hunter",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Action",
+      "Adventure"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "1977-02-18",
+    "ended": "1977-05-27",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Friday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 66,
+    "network": {
+      "id": 2,
+      "name": "CBS",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.cbs.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 314990,
+      "imdb": "tt0075517"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/318/796247.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796247.jpg"
+    },
+    "summary": "<p>It is 1977 and the seeds of our distrust in the American government are growing. Spymaster General Baker is told to start a new covert agency of six agents. His first choice is retired \"Agency\" spy, now Santa Barbara (CA) bookstore owner, Jim Hunter.</p>",
+    "updated": 1780723802,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/55394"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2094634",
+        "name": "Yesterday, Upon the Stair"
+      }
+    }
+  },
+  "episodes:55394": [
+    {
+      "id": 2094626,
+      "url": "https://www.tvmaze.com/episodes/2094626/hunter-1x01-bluebird-is-back",
+      "name": "Bluebird is Back",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1977-02-18",
+      "airtime": "21:00",
+      "airstamp": "1977-02-19T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The caper concerns a man who hires nuclear power plant specialists. Seems he's bee selling low-grade intelligence about U.S. nuclear power plants \"to the other side.\"<br />The cad plans to turn double-agent. But he is terminated with extreme prejudice at a zoo where U.S. agents are waiting for him to meet \"the other side.\" The doom is done with a four-pointed metal weapon, \"the death star,\" a device Hunter recognizes as the trademark of a years-ago foe named \"Bluebird,\" an ace Communist intelligence agent he hates.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094626"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094627,
+      "url": "https://www.tvmaze.com/episodes/2094627/hunter-1x02-mirror-image",
+      "name": "Mirror Image",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1977-02-25",
+      "airtime": "22:00",
+      "airstamp": "1977-02-26T03:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>By subjecting one of their own people to plastic surgery and re-education, the Reds create an exact replica of secret agent Jim Hunter (James Franciscus) for the purpose of using the false Hunter to get the true Hunter out of their hair. Their plan is to use the false Hunter to lure Baker (Ralph Bellamy), the US. Intelligence Kingpin who is Hunter's supervisor, into a trap and to kill him before witnesses, thereby framing the true Hunter for the murder of his boss. Proceeding with the first phase of the plan, the Soviet agents kidnap Hunter in order to isolate him temporarily. Then they palm off the false Hunter on Marty Shaw (Linda Evans), Hunter's lover and fellow secret agent, tensely waiting to see if the imposter will pass this most meticulous test. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094627"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094628,
+      "url": "https://www.tvmaze.com/episodes/2094628/hunter-1x03-lysenko-syndrome",
+      "name": "Lysenko Syndrome",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1977-03-04",
+      "airtime": "22:00",
+      "airstamp": "1977-03-05T03:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Using an experimental mind-altering technique, Russian agents program Marty Shaw to  assassinate her uncle, US. Admiral Carleton Young, in a plot that also calls for the murder of James Hunter. William Windom guest stars as one of the Soviets. While Marty is unaware she has been subjected to psychological tampering, Hunter suspects, \"something\" has happened to her, though he is mystified as to what, by whom, and to what purpose. As he tries to find evidence that can reveal what is going on, the Red agents make their final preparations for the day on which Marty is to do their will and Hunter is to die. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094628"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094629,
+      "url": "https://www.tvmaze.com/episodes/2094629/hunter-1x04-the-hit",
+      "name": "The Hit",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1977-03-11",
+      "airtime": "",
+      "airstamp": "1977-03-11T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>James Hunter is tailing professional hitman G. L. Bassett. During a chase, Bassett is killed in a car accident. Hunter then assumes the identity of the hired killer and meets with the client, Arthur Hillman. However, during their meeting on the beach, both men are shot. Who wants whom dead?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094629"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094630,
+      "url": "https://www.tvmaze.com/episodes/2094630/hunter-1x05-the-costa-rican-connection",
+      "name": "The Costa Rican Connection",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1977-03-18",
+      "airtime": "",
+      "airstamp": "1977-03-18T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094630"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094631,
+      "url": "https://www.tvmaze.com/episodes/2094631/hunter-1x06-the-k-group-part-one",
+      "name": "The K Group (Part One)",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1977-04-08",
+      "airtime": "",
+      "airstamp": "1977-04-08T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094631"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094632,
+      "url": "https://www.tvmaze.com/episodes/2094632/hunter-1x07-the-k-group-part-two",
+      "name": "The K Group (Part Two)",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1977-04-15",
+      "airtime": "21:00",
+      "airstamp": "1977-04-16T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Jim Hunter suddenly finds himself in a wary alliance with Victor, the ruthless East German spy who is the one man in the world for whom Hunter bears an implacable hatred. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094632"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094633,
+      "url": "https://www.tvmaze.com/episodes/2094633/hunter-1x08-the-barking-dog",
+      "name": "The Barking Dog",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1977-04-22",
+      "airtime": "",
+      "airstamp": "1977-04-22T17:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094633"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094634,
+      "url": "https://www.tvmaze.com/episodes/2094634/hunter-1x09-yesterday-upon-the-stair",
+      "name": "Yesterday, Upon the Stair",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1977-05-27",
+      "airtime": "",
+      "airstamp": "1977-05-27T16:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094634"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094802,
+      "url": "https://www.tvmaze.com/episodes/2094802/hunter-1x10-the-back-up",
+      "name": "The Back-Up",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094802"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094803,
+      "url": "https://www.tvmaze.com/episodes/2094803/hunter-1x11-the-chand-is-burning",
+      "name": "The Chand is Burning",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094803"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094804,
+      "url": "https://www.tvmaze.com/episodes/2094804/hunter-1x12-the-lovejoy-files",
+      "name": "The Lovejoy Files",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094804"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    },
+    {
+      "id": 2094805,
+      "url": "https://www.tvmaze.com/episodes/2094805/hunter-1x13-ufm-13",
+      "name": "U.F.M. 13",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2094805"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55394",
+          "name": "Hunter"
+        }
+      }
+    }
+  ],
+  "show:mosquito state": null
 }
