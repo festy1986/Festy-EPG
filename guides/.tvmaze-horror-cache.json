@@ -108120,5 +108120,675 @@
       }
     }
   ],
-  "show:mosquito state": null
+  "show:mosquito state": null,
+  "show:the shed": {
+    "id": 24756,
+    "url": "https://www.tvmaze.com/shows/24756/the-shed",
+    "name": "The Shed",
+    "type": "Reality",
+    "language": "English",
+    "genres": [],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "2013-08-04",
+    "ended": "2013-09-02",
+    "officialSite": null,
+    "schedule": {
+      "time": "22:00",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 34,
+    "network": {
+      "id": 81,
+      "name": "Food Network",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.foodnetwork.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 272151,
+      "imdb": "tt3041286"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/95/237649.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/95/237649.jpg"
+    },
+    "summary": "<p>Meet the First Family of Mississippi Barbecue, the Orrisons. Their wildly popular barbecue joint's earned them fame, fortune, devoted fans and a lot of big toys. But no matter how big their business grows, the boisterous, fun-loving clan insists on running the business as a family. Add in all the colorful employees and regulars and it's obvious: This down-home joint is a real-life sitcom.</p>",
+    "updated": 1633357757,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/24756"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1049798",
+        "name": "Barbecue Battle"
+      }
+    }
+  },
+  "episodes:24756": [
+    {
+      "id": 1049793,
+      "url": "https://www.tvmaze.com/episodes/1049793/the-shed-1x01-do-you-take-this-hog",
+      "name": "Do You Take This Hog...",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2013-08-04",
+      "airtime": "22:00",
+      "airstamp": "2013-08-05T02:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/907536.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/907536.jpg"
+      },
+      "summary": "<p>Brad enlists the Shed's catering services for a friend's wedding and things spiral out of hand. The bride requests the Shed cook a whole hog for the reception, which takes four days but she needs it finished in less than two.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1049793"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24756",
+          "name": "The Shed"
+        }
+      }
+    },
+    {
+      "id": 1049794,
+      "url": "https://www.tvmaze.com/episodes/1049794/the-shed-1x02-marketing-geniuses",
+      "name": "Marketing Geniuses",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2013-08-05",
+      "airtime": "22:00",
+      "airstamp": "2013-08-06T02:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/907537.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/907537.jpg"
+      },
+      "summary": "<p>When Mama Shed's misfired marketing idea leads to an unplanned ribs giveaway, Brad decides he can do a better job. Brooke disagrees, and challenges Brad and Daddy-O to a guys versus girls Shed marketing contest.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1049794"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24756",
+          "name": "The Shed"
+        }
+      }
+    },
+    {
+      "id": 1049795,
+      "url": "https://www.tvmaze.com/episodes/1049795/the-shed-1x03-welcome-to-the-shed",
+      "name": "Welcome to the Shed",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2013-08-12",
+      "airtime": "22:00",
+      "airstamp": "2013-08-13T02:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/907538.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/907538.jpg"
+      },
+      "summary": "<p>The wild summer rush is in full swing at Miss.'s hottest barbecue joint, so it's up to Brad, Brooke and Mama Shed to hire new help. The job interviews are unique, including on-stage auditions and a visit with Shed Pimps.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1049795"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24756",
+          "name": "The Shed"
+        }
+      }
+    },
+    {
+      "id": 1049796,
+      "url": "https://www.tvmaze.com/episodes/1049796/the-shed-1x04-somethings-fishy",
+      "name": "Something's Fishy",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2013-08-19",
+      "airtime": "22:00",
+      "airstamp": "2013-08-20T02:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/907539.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/907539.jpg"
+      },
+      "summary": "<p>It's adventure in the Gulf, when Brooke books a catering job aboard a fishing boat for friends visiting from New Zealand. Brad has other business ideas and sets up a Shed pulled pork sandwich concession with Hobson on the beach.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1049796"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24756",
+          "name": "The Shed"
+        }
+      }
+    },
+    {
+      "id": 1049797,
+      "url": "https://www.tvmaze.com/episodes/1049797/the-shed-1x05-one-smokin-taxi",
+      "name": "One Smokin' Taxi",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2013-08-26",
+      "airtime": "22:00",
+      "airstamp": "2013-08-27T02:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/907540.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/907540.jpg"
+      },
+      "summary": "<p>Brad seeks to expand the enterprises. So, he takes a job creating a barbecue smoker out of a Checker cab for a taxi company. Coal Miner decides to take a vacation. So, he hangs around The Shed in his customized \"vacation chair.\"</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1049797"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24756",
+          "name": "The Shed"
+        }
+      }
+    },
+    {
+      "id": 1049798,
+      "url": "https://www.tvmaze.com/episodes/1049798/the-shed-1x06-barbecue-battle",
+      "name": "Barbecue Battle",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2013-09-02",
+      "airtime": "22:00",
+      "airstamp": "2013-09-03T02:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/363/907541.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/363/907541.jpg"
+      },
+      "summary": "<p>Brad and The Shed crew hit the road to Virginia for the Smoke on the Mountain barbecue competition. But it's trouble right from the start, when problems during transit may force them to withdraw from the whole hog competition.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1049798"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/24756",
+          "name": "The Shed"
+        }
+      }
+    }
+  ],
+  "show:confessional": {
+    "id": 50951,
+    "url": "https://www.tvmaze.com/shows/50951/confessional",
+    "name": "Confessional",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Thriller",
+      "Espionage"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": null,
+    "premiered": "1989-10-04",
+    "ended": "1989-10-25",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 18,
+    "network": {
+      "id": 35,
+      "name": "ITV1",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.itv.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 246531,
+      "imdb": "tt0097103"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/276/691559.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/276/691559.jpg"
+    },
+    "summary": "<p>The series follows a rouge terrorist turned Soviet assassin, code named Cuchulain, trying to prevent a peace agreement between the parties involved in Northern Ireland.</p>",
+    "updated": 1601846041,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/50951"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1943450",
+        "name": "Episode 4"
+      }
+    }
+  },
+  "episodes:50951": [
+    {
+      "id": 1943447,
+      "url": "https://www.tvmaze.com/episodes/1943447/confessional-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1989-10-04",
+      "airtime": "",
+      "airstamp": "1989-10-04T11:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1943447"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/50951",
+          "name": "Confessional"
+        }
+      }
+    },
+    {
+      "id": 1943448,
+      "url": "https://www.tvmaze.com/episodes/1943448/confessional-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1989-10-11",
+      "airtime": "",
+      "airstamp": "1989-10-11T11:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1943448"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/50951",
+          "name": "Confessional"
+        }
+      }
+    },
+    {
+      "id": 1943449,
+      "url": "https://www.tvmaze.com/episodes/1943449/confessional-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1989-10-18",
+      "airtime": "",
+      "airstamp": "1989-10-18T11:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1943449"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/50951",
+          "name": "Confessional"
+        }
+      }
+    },
+    {
+      "id": 1943450,
+      "url": "https://www.tvmaze.com/episodes/1943450/confessional-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1989-10-25",
+      "airtime": "",
+      "airstamp": "1989-10-25T11:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1943450"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/50951",
+          "name": "Confessional"
+        }
+      }
+    }
+  ],
+  "show:wendigo": null,
+  "show:barbarians": {
+    "id": 18598,
+    "url": "https://www.tvmaze.com/shows/18598/barbarians",
+    "name": "Barbarians",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [
+      "History"
+    ],
+    "status": "Ended",
+    "runtime": 45,
+    "averageRuntime": 45,
+    "premiered": "2004-12-20",
+    "ended": "2007-03-07",
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": [
+        "Monday",
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 86,
+    "network": {
+      "id": 53,
+      "name": "History",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.history.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 80372,
+      "imdb": "tt1209452"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/63/158791.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/63/158791.jpg"
+    },
+    "summary": "<p>Who were the warriors who battled the Romans and spread terror throughout Europe? Watch as The History Channel tells the gripping story of some of the most brutal men in history: the Vikings, the Goths, the Mongols, and the Huns.</p>",
+    "updated": 1606658824,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/18598"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/843764",
+        "name": "The Franks"
+      }
+    }
+  },
+  "episodes:18598": [
+    {
+      "id": 843757,
+      "url": "https://www.tvmaze.com/episodes/843757/barbarians-1x01-the-goths",
+      "name": "The Goths",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2004-12-20",
+      "airtime": "",
+      "airstamp": "2004-12-20T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843757"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843758,
+      "url": "https://www.tvmaze.com/episodes/843758/barbarians-1x02-the-mongols",
+      "name": "The Mongols",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2004-12-20",
+      "airtime": "",
+      "airstamp": "2004-12-20T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843758"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843759,
+      "url": "https://www.tvmaze.com/episodes/843759/barbarians-1x03-the-huns",
+      "name": "The Huns",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2004-12-21",
+      "airtime": "",
+      "airstamp": "2004-12-21T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843759"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843760,
+      "url": "https://www.tvmaze.com/episodes/843760/barbarians-1x04-the-vikings",
+      "name": "The Vikings",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2004-12-22",
+      "airtime": "",
+      "airstamp": "2004-12-22T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843760"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843761,
+      "url": "https://www.tvmaze.com/episodes/843761/barbarians-2x01-the-vandals",
+      "name": "The Vandals",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2007-03-05",
+      "airtime": "",
+      "airstamp": "2007-03-05T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843761"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843762,
+      "url": "https://www.tvmaze.com/episodes/843762/barbarians-2x02-the-lombards",
+      "name": "The Lombards",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2007-03-07",
+      "airtime": "",
+      "airstamp": "2007-03-07T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843762"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843763,
+      "url": "https://www.tvmaze.com/episodes/843763/barbarians-2x03-the-saxons",
+      "name": "The Saxons",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2007-03-07",
+      "airtime": "",
+      "airstamp": "2007-03-07T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843763"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    },
+    {
+      "id": 843764,
+      "url": "https://www.tvmaze.com/episodes/843764/barbarians-2x04-the-franks",
+      "name": "The Franks",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2007-03-07",
+      "airtime": "",
+      "airstamp": "2007-03-07T17:00:00+00:00",
+      "runtime": 45,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/843764"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/18598",
+          "name": "Barbarians"
+        }
+      }
+    }
+  ],
+  "show:the clovehitch killer": null,
+  "show:who invited them": null
 }
