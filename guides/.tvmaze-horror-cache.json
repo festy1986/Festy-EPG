@@ -108790,5 +108790,452 @@
     }
   ],
   "show:the clovehitch killer": null,
-  "show:who invited them": null
+  "show:who invited them": null,
+  "show:sissy": {
+    "id": 72378,
+    "url": "https://www.tvmaze.com/shows/72378/sissy-that-psyche",
+    "name": "Sissy That Psyche",
+    "type": "Talk Show",
+    "language": "English",
+    "genres": [],
+    "status": "To Be Determined",
+    "runtime": null,
+    "averageRuntime": 14,
+    "premiered": "2023-11-06",
+    "ended": null,
+    "officialSite": "https://www.wowpresentsplus.com/sissy-that-psyche",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 31,
+    "network": null,
+    "webChannel": {
+      "id": 195,
+      "name": "WOW Presents Plus",
+      "country": null,
+      "officialSite": "http://www.wowpresentsplus.com"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": null,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/485/1212711.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/485/1212711.jpg"
+    },
+    "summary": "<p>In <b>Sissy That Psyche</b>, best squirrel-friends D'Vaugn Neville, David Brandyn, and Dr. Matthew Brinkley give a play-by-play breakdown of legendary Drag Race meltdowns. Tune in as they reveal the best strategies to navigate conflict with guests and callers who find themselves in similar situations.</p>",
+    "updated": 1704303168,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/72378"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2732250",
+        "name": "Breath, Sissy, Breathe"
+      }
+    }
+  },
+  "episodes:72378": [
+    {
+      "id": 2678393,
+      "url": "https://www.tvmaze.com/episodes/2678393/sissy-that-psyche-1x01-halleloo",
+      "name": "Halleloo!",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2023-11-06",
+      "airtime": "",
+      "airstamp": "2023-11-06T12:00:00+00:00",
+      "runtime": 13,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/486/1216995.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/486/1216995.jpg"
+      },
+      "summary": "<p>The Sissy Squad dissects the iconic feud between Coco Montrese and Alyssa Edwards, takes a pause with Sissy Talk, and helps out a caller on the Sissy Hotline!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2678393"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2683480,
+      "url": "https://www.tvmaze.com/episodes/2683480/sissy-that-psyche-1x02-sissy-and-chill",
+      "name": "Sissy and Chill",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2023-11-13",
+      "airtime": "",
+      "airstamp": "2023-11-13T12:00:00+00:00",
+      "runtime": 14,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/487/1219854.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/487/1219854.jpg"
+      },
+      "summary": "<p>The Sissy Squad examines Jimbo reading Rita Baga to filth, then cools down with some Sissy and Chill. Later, the Squad takes a call from the Sissy Hotline.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2683480"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2688084,
+      "url": "https://www.tvmaze.com/episodes/2688084/sissy-that-psyche-1x03-ask-dr-brinkley-friendship",
+      "name": "Ask Dr. Brinkley - Friendship",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2023-11-20",
+      "airtime": "",
+      "airstamp": "2023-11-20T12:00:00+00:00",
+      "runtime": 16,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/489/1223708.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/489/1223708.jpg"
+      },
+      "summary": "<p>The Sissy Squad sits down for a Sissy Consultation with best friends Anna Maria and Jessica, and Skittles and Rudy, in these heartfelt interviews.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2688084"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2691884,
+      "url": "https://www.tvmaze.com/episodes/2691884/sissy-that-psyche-1x04-sissy-space",
+      "name": "Sissy Space",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2023-11-27",
+      "airtime": "",
+      "airstamp": "2023-11-27T12:00:00+00:00",
+      "runtime": 14,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/490/1227384.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/490/1227384.jpg"
+      },
+      "summary": "<p>The Sissy Squad dissects Alaska's viral moment on All Stars 2, takes us to their Sissy Space, and helps out a caller on the Sissy Hotline!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2691884"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2697386,
+      "url": "https://www.tvmaze.com/episodes/2697386/sissy-that-psyche-1x05-if-you-cant-love-yourself",
+      "name": "If You Can't Love Yourself…",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2023-12-04",
+      "airtime": "",
+      "airstamp": "2023-12-04T12:00:00+00:00",
+      "runtime": 14,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/492/1231510.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/492/1231510.jpg"
+      },
+      "summary": "<p>A red wig and a silver dress? I don't think. The Sissy Squad unpacks the fight between The Vivienne and Divina de Campo and helps out a caller on the Sissy Hotline!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2697386"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2697387,
+      "url": "https://www.tvmaze.com/episodes/2697387/sissy-that-psyche-1x06-sissy-senses",
+      "name": "Sissy Senses",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2023-12-11",
+      "airtime": "",
+      "airstamp": "2023-12-11T12:00:00+00:00",
+      "runtime": 14,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/498/1245550.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/498/1245550.jpg"
+      },
+      "summary": "<p>The Sissy Squad dissects Aiden Zhane and Heidi N. Closet's heated Untucked argument, get their Sissy Senses tingling, and help out a caller on the Sissy Hotline! </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2697387"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2717999,
+      "url": "https://www.tvmaze.com/episodes/2717999/sissy-that-psyche-1x07-ask-dr-brinkley-twinning",
+      "name": "Ask Dr. Brinkley - Twinning",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2023-12-18",
+      "airtime": "",
+      "airstamp": "2023-12-18T12:00:00+00:00",
+      "runtime": 12,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/498/1245551.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/498/1245551.jpg"
+      },
+      "summary": "<p>The Sissy Squad sits down for a Sissy Consultation with real twins Michael and Zak Zakar, and best-friend twins Kirk and Deandre in these heartfelt interviews.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2717999"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    },
+    {
+      "id": 2732250,
+      "url": "https://www.tvmaze.com/episodes/2732250/sissy-that-psyche-1x08-breath-sissy-breathe",
+      "name": "Breath, Sissy, Breathe",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2023-12-25",
+      "airtime": "",
+      "airstamp": "2023-12-25T12:00:00+00:00",
+      "runtime": 14,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/498/1245552.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/498/1245552.jpg"
+      },
+      "summary": "<p>The Sissy Squad dissects the fight between Miss Vanjie and Yvie Oddly, learns how to \"Breathe, Sissy, Breathe\", and helps out a caller on the Sissy Hotline!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2732250"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/72378",
+          "name": "Sissy That Psyche"
+        }
+      }
+    }
+  ],
+  "show:queer for fear the history of queer horror": {
+    "id": 63459,
+    "url": "https://www.tvmaze.com/shows/63459/queer-for-fear-the-history-of-queer-horror",
+    "name": "Queer for Fear: The History of Queer Horror",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [],
+    "status": "Running",
+    "runtime": null,
+    "averageRuntime": 57,
+    "premiered": "2022-09-30",
+    "ended": null,
+    "officialSite": null,
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 80,
+    "network": null,
+    "webChannel": {
+      "id": 213,
+      "name": "Shudder",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.shudder.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 416194,
+      "imdb": "tt13639222"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/418/1045872.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/418/1045872.jpg"
+    },
+    "summary": "<p>In <b>Queer for Fear: The History of Queer Horror</b> viewers are able to take a look into the world of horror and its effect on queer audiences, representation and symbolism from the very beginning.</p>",
+    "updated": 1666397134,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/63459"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2408296",
+        "name": "Episode 4"
+      }
+    }
+  },
+  "episodes:63459": [
+    {
+      "id": 2404257,
+      "url": "https://www.tvmaze.com/episodes/2404257/queer-for-fear-the-history-of-queer-horror-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2022-09-30",
+      "airtime": "",
+      "airstamp": "2022-09-30T16:00:00+00:00",
+      "runtime": 47,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Queer gothic writers Mary Shelley, Oscar Wilde and Bram Stoker invent the horror genre.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2404257"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/63459",
+          "name": "Queer for Fear: The History of Queer Horror"
+        }
+      }
+    },
+    {
+      "id": 2408294,
+      "url": "https://www.tvmaze.com/episodes/2408294/queer-for-fear-the-history-of-queer-horror-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2022-10-07",
+      "airtime": "",
+      "airstamp": "2022-10-07T16:00:00+00:00",
+      "runtime": 61,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Legendary gay director James Whale makes four classics for Universal that paved the way for all Hollywood horror movies after.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2408294"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/63459",
+          "name": "Queer for Fear: The History of Queer Horror"
+        }
+      }
+    },
+    {
+      "id": 2408295,
+      "url": "https://www.tvmaze.com/episodes/2408295/queer-for-fear-the-history-of-queer-horror-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2022-10-14",
+      "airtime": "",
+      "airstamp": "2022-10-14T16:00:00+00:00",
+      "runtime": 55,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Werewolves and aliens are uniquely queer metaphors.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2408295"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/63459",
+          "name": "Queer for Fear: The History of Queer Horror"
+        }
+      }
+    },
+    {
+      "id": 2408296,
+      "url": "https://www.tvmaze.com/episodes/2408296/queer-for-fear-the-history-of-queer-horror-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2022-10-21",
+      "airtime": "",
+      "airstamp": "2022-10-21T16:00:00+00:00",
+      "runtime": 64,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The dangerous queer woman has been terrorizing horror audiences before the dawn of cinema. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2408296"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/63459",
+          "name": "Queer for Fear: The History of Queer Horror"
+        }
+      }
+    }
+  ],
+  "show:the nightshifter": null
 }
