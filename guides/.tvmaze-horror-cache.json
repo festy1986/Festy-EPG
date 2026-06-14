@@ -109237,5 +109237,689 @@
       }
     }
   ],
-  "show:the nightshifter": null
+  "show:the nightshifter": null,
+  "show:the pact": {
+    "id": 55154,
+    "url": "https://www.tvmaze.com/shows/55154/the-pact",
+    "name": "The Pact",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama"
+    ],
+    "status": "To Be Determined",
+    "runtime": null,
+    "averageRuntime": 58,
+    "premiered": "2021-05-17",
+    "ended": null,
+    "officialSite": "https://www.bbc.co.uk/programmes/p09cwbzf",
+    "schedule": {
+      "time": "21:00",
+      "days": []
+    },
+    "rating": {
+      "average": 6.9
+    },
+    "weight": 97,
+    "network": null,
+    "webChannel": {
+      "id": 26,
+      "name": "BBC iPlayer",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.bbc.co.uk/iplayer"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 402282,
+      "imdb": "tt13107070"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/427/1069355.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069355.jpg"
+    },
+    "summary": "<p>How far would you go to protect those you love? Divided loyalties test the ties of family and friends - because secrets always have consequences.</p>",
+    "updated": 1750592813,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/55154"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2414249",
+        "name": "Episode 6"
+      }
+    }
+  },
+  "episodes:55154": [
+    {
+      "id": 2085900,
+      "url": "https://www.tvmaze.com/episodes/2085900/the-pact-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2021-05-17",
+      "airtime": "21:00",
+      "airstamp": "2021-05-17T20:00:00+00:00",
+      "runtime": 55,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/318/796669.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796669.jpg"
+      },
+      "summary": "<p>Anna, Nancy, Louie and Cat have had enough of their tyrannical young boss Jack Evans, and make a drunken snap decision at a work function that has shocking repercussions.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2085900"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2085901,
+      "url": "https://www.tvmaze.com/episodes/2085901/the-pact-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2021-05-17",
+      "airtime": "21:00",
+      "airstamp": "2021-05-17T20:00:00+00:00",
+      "runtime": 55,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/318/796670.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796670.jpg"
+      },
+      "summary": "<p>Anna struggles to hide her dilemma from Max as the police investigation ramps up. Meanwhile the women must go to extraordinary lengths to protect their dark secret.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2085901"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2085902,
+      "url": "https://www.tvmaze.com/episodes/2085902/the-pact-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2021-05-17",
+      "airtime": "21:00",
+      "airstamp": "2021-05-17T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 8.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/318/796671.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796671.jpg"
+      },
+      "summary": "<p>It is the day of Jack's memorial, and while the police investigation ramps up, the pact begins to fracture. Max realises what Arwel has done and arrests him, prompting a disbelieving Louie to confront him over dark family secrets. Anna's relationship with Max is strained when he realises their savings account has been emptied, and she is forced to weave a web of lies to keep her secret. As another blackmail message comes through, she reaches breaking point and decides to uncover who is behind the threats.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2085902"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2085903,
+      "url": "https://www.tvmaze.com/episodes/2085903/the-pact-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2021-05-17",
+      "airtime": "21:00",
+      "airstamp": "2021-05-17T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/318/796672.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796672.jpg"
+      },
+      "summary": "<p>Nancy learns some disturbing news about Richard and confronts him, only to be rocked by his admission. Unsure how to remedy the situation, she's drawn closer to Fr Martin, and makes a rash decision. Cat and Tish try to get rid of Louie's stolen goods, while Louie struggles with the news about Arwel and faces a terrible dilemma. As the police make a significant breakthrough, Max tries to grill Anna on what she knows about Jack's death - putting their marriage on the line.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2085903"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2085904,
+      "url": "https://www.tvmaze.com/episodes/2085904/the-pact-1x05-episode-5",
+      "name": "Episode 5",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2021-05-17",
+      "airtime": "21:00",
+      "airstamp": "2021-05-17T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/318/796673.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796673.jpg"
+      },
+      "summary": "<p>The police net tightens. Meanwhile Max resorts to unorthodox methods to get to the truth.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2085904"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2085905,
+      "url": "https://www.tvmaze.com/episodes/2085905/the-pact-1x06-episode-6",
+      "name": "Episode 6",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2021-05-17",
+      "airtime": "21:00",
+      "airstamp": "2021-05-17T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/318/796674.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/318/796674.jpg"
+      },
+      "summary": "<p>The shocking truth about Jack Evans' death is revealed. Will the lives of the four friends change forever?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2085905"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2414244,
+      "url": "https://www.tvmaze.com/episodes/2414244/the-pact-2x01-episode-1",
+      "name": "Episode 1",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2022-10-24",
+      "airtime": "21:00",
+      "airstamp": "2022-10-24T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 6.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/427/1069389.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069389.jpg"
+      },
+      "summary": "<p>Devoted mother and social worker Christine Rees is still grieving a tragic loss when a stranger contacts her family, claiming an extraordinary connection. Is Christine hiding something from her family?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2414244"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2414245,
+      "url": "https://www.tvmaze.com/episodes/2414245/the-pact-2x02-episode-2",
+      "name": "Episode 2",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2022-10-24",
+      "airtime": "21:00",
+      "airstamp": "2022-10-24T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/427/1069390.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069390.jpg"
+      },
+      "summary": "<p>Connor grows closer to Megan and Jamie, while matriarch Christine pulls out all the stops to dispute his claim.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2414245"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2414246,
+      "url": "https://www.tvmaze.com/episodes/2414246/the-pact-2x03-episode-3",
+      "name": "Episode 3",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2022-10-24",
+      "airtime": "21:00",
+      "airstamp": "2022-10-24T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/427/1069391.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069391.jpg"
+      },
+      "summary": "<p>Tensions are sky-high at Megan's wedding when Connor turns up uninvited and armed with damning information that Christine is desperate to keep hidden.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2414246"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2414247,
+      "url": "https://www.tvmaze.com/episodes/2414247/the-pact-2x04-episode-4",
+      "name": "Episode 4",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2022-10-24",
+      "airtime": "21:00",
+      "airstamp": "2022-10-24T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 8.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/427/1069392.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069392.jpg"
+      },
+      "summary": "<p>After the devastating events at Megan's wedding, Christine brings the Rees family together to make a risky pact. Megan and Jamie finally get some answers.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2414247"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2414248,
+      "url": "https://www.tvmaze.com/episodes/2414248/the-pact-2x05-episode-5",
+      "name": "Episode 5",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2022-10-24",
+      "airtime": "21:00",
+      "airstamp": "2022-10-24T20:00:00+00:00",
+      "runtime": 58,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/427/1069393.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069393.jpg"
+      },
+      "summary": "<p>As the police investigate Connor's disappearance, Christine must pull off her most masterful show of lies yet. The Rees siblings come to blows when Jamie makes a rash decision.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2414248"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    },
+    {
+      "id": 2414249,
+      "url": "https://www.tvmaze.com/episodes/2414249/the-pact-2x06-episode-6",
+      "name": "Episode 6",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2022-10-24",
+      "airtime": "21:00",
+      "airstamp": "2022-10-24T20:00:00+00:00",
+      "runtime": 59,
+      "rating": {
+        "average": 8.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/427/1069394.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/427/1069394.jpg"
+      },
+      "summary": "<p>The walls close in on the Rees family as Will becomes the prime suspect in the police investigation. Christine grapples with the reality of Kayla's connection to her family.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2414249"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/55154",
+          "name": "The Pact"
+        }
+      }
+    }
+  ],
+  "show:the pact ii": null,
+  "show:the wretched": null,
+  "show:the vigil": null,
+  "show:32 malasa a street": null,
+  "show:baskin": {
+    "id": 15101,
+    "url": "https://www.tvmaze.com/shows/15101/skin",
+    "name": "Skin",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Romance"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2003-10-20",
+    "ended": "2003-11-03",
+    "officialSite": null,
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 84,
+    "network": {
+      "id": 4,
+      "name": "FOX",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.fox.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 5215,
+      "thetvdb": 239891,
+      "imdb": "tt0364008"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/353/882923.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/353/882923.jpg"
+    },
+    "summary": "<p>Two mismatched teens fall in love with each other despite the family feud between their fathers, one a pornographer, the other a district attorney, trying to bring each other down.</p>",
+    "updated": 1630428337,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/15101"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/686528",
+        "name": "Endorsement"
+      }
+    }
+  },
+  "episodes:15101": [
+    {
+      "id": 686526,
+      "url": "https://www.tvmaze.com/episodes/686526/skin-1x01-pilot",
+      "name": "Pilot",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2003-10-20",
+      "airtime": "21:00",
+      "airstamp": "2003-10-21T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686526"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686527,
+      "url": "https://www.tvmaze.com/episodes/686527/skin-1x02-secrets-lies",
+      "name": "Secrets & Lies",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2003-10-27",
+      "airtime": "21:00",
+      "airstamp": "2003-10-28T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686527"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686528,
+      "url": "https://www.tvmaze.com/episodes/686528/skin-1x03-endorsement",
+      "name": "Endorsement",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2003-11-03",
+      "airtime": "21:00",
+      "airstamp": "2003-11-04T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686528"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686529,
+      "url": "https://www.tvmaze.com/episodes/686529/skin-1x04-amber-synn",
+      "name": "Amber Synn",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686529"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686530,
+      "url": "https://www.tvmaze.com/episodes/686530/skin-1x05-fidelity",
+      "name": "Fidelity",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686530"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686531,
+      "url": "https://www.tvmaze.com/episodes/686531/skin-1x06-blowback",
+      "name": "Blowback",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686531"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686532,
+      "url": "https://www.tvmaze.com/episodes/686532/skin-1x07-family-values",
+      "name": "Family Values",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686532"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    },
+    {
+      "id": 686533,
+      "url": "https://www.tvmaze.com/episodes/686533/skin-1x08-true-lies",
+      "name": "True Lies",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "",
+      "airtime": "",
+      "airstamp": null,
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/686533"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/15101",
+          "name": "Skin"
+        }
+      }
+    }
+  ],
+  "show:can t take it back": null,
+  "show:martyrs lane": null,
+  "show:la llorona": null,
+  "show:warning do not play": null,
+  "show:the housemaid": null
 }
