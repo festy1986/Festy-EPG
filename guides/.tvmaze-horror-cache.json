@@ -109921,5 +109921,949 @@
   "show:martyrs lane": null,
   "show:la llorona": null,
   "show:warning do not play": null,
-  "show:the housemaid": null
+  "show:the housemaid": null,
+  "show:consecration": null,
+  "show:gwen": {
+    "id": 57915,
+    "url": "https://www.tvmaze.com/shows/57915/the-way-down-god-greed-and-the-cult-of-gwen-shamblin",
+    "name": "The Way Down: God, Greed, and the Cult of Gwen Shamblin",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": null,
+    "premiered": "2021-09-30",
+    "ended": "2022-04-28",
+    "officialSite": "https://www.hbomax.com/series/urn:hbo:series:GYS_1DQ3ANK29TgEAAAAg",
+    "schedule": {
+      "time": "",
+      "days": []
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 85,
+    "network": null,
+    "webChannel": {
+      "id": 329,
+      "name": "HBO Max",
+      "country": null,
+      "officialSite": "https://www.hbomax.com"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": null,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/360/902127.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/360/902127.jpg"
+    },
+    "summary": "<p>Follows the Remnant Fellowship Church and its leader Gwen Shamblin Lara. Exploring Lara's fame and power as a diet guru and church leader, and truth behind her carefully curated image, detailing the controversial practices of the church.</p>",
+    "updated": 1663678974,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/57915"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/2321592",
+        "name": "The Way Forward"
+      }
+    }
+  },
+  "episodes:57915": [
+    {
+      "id": 2180522,
+      "url": "https://www.tvmaze.com/episodes/2180522/the-way-down-god-greed-and-the-cult-of-gwen-shamblin-1x01-the-kingdom",
+      "name": "The Kingdom",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2021-09-30",
+      "airtime": "",
+      "airstamp": "2021-09-30T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": 4.5
+      },
+      "image": null,
+      "summary": "<p>A deadly plane crash draws public attention to the Remnant Fellowship, a Christian-diet-program-turned-church, and its infamous leader, Gwen Shamblin Lara.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2180522"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/57915",
+          "name": "The Way Down: God, Greed, and the Cult of Gwen Shamblin"
+        }
+      }
+    },
+    {
+      "id": 2184055,
+      "url": "https://www.tvmaze.com/episodes/2184055/the-way-down-god-greed-and-the-cult-of-gwen-shamblin-1x02-a-family-affair",
+      "name": "A Family Affair",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2021-09-30",
+      "airtime": "",
+      "airstamp": "2021-09-30T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Gwen's divorce and prompt remarriage to struggling actor/musician Joe Lara raise questions about the odd couple's checkered past – and the church's finances.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2184055"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/57915",
+          "name": "The Way Down: God, Greed, and the Cult of Gwen Shamblin"
+        }
+      }
+    },
+    {
+      "id": 2184056,
+      "url": "https://www.tvmaze.com/episodes/2184056/the-way-down-god-greed-and-the-cult-of-gwen-shamblin-1x03-seen-but-not-heard",
+      "name": "Seen But Not Heard",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2021-09-30",
+      "airtime": "",
+      "airstamp": "2021-09-30T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>When two Remnant members are charged with murder, Gwen rallies her congregation to defend against claims of abuse. As former church members recount their chilling experiences, another tragedy threatens to upend the future of the church.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2184056"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/57915",
+          "name": "The Way Down: God, Greed, and the Cult of Gwen Shamblin"
+        }
+      }
+    },
+    {
+      "id": 2321591,
+      "url": "https://www.tvmaze.com/episodes/2321591/the-way-down-god-greed-and-the-cult-of-gwen-shamblin-1x04-revelations",
+      "name": "Revelations",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2022-04-28",
+      "airtime": "",
+      "airstamp": "2022-04-28T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2321591"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/57915",
+          "name": "The Way Down: God, Greed, and the Cult of Gwen Shamblin"
+        }
+      }
+    },
+    {
+      "id": 2321592,
+      "url": "https://www.tvmaze.com/episodes/2321592/the-way-down-god-greed-and-the-cult-of-gwen-shamblin-1x05-the-way-forward",
+      "name": "The Way Forward",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2022-04-28",
+      "airtime": "",
+      "airstamp": "2022-04-28T12:00:00+00:00",
+      "runtime": 44,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2321592"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/57915",
+          "name": "The Way Down: God, Greed, and the Cult of Gwen Shamblin"
+        }
+      }
+    }
+  ],
+  "show:the queen of black magic": null,
+  "show:terrified": {
+    "id": 79153,
+    "url": "https://www.tvmaze.com/shows/79153/a-terrified-teacher-at-ghoul-school",
+    "name": "A Terrified Teacher at Ghoul School!",
+    "type": "Animation",
+    "language": "Japanese",
+    "genres": [
+      "Comedy",
+      "Anime",
+      "Fantasy"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "2024-10-08",
+    "ended": "2025-03-25",
+    "officialSite": "https://youkaigakkou.com/",
+    "schedule": {
+      "time": "23:00",
+      "days": [
+        "Tuesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 33,
+    "network": {
+      "id": 132,
+      "name": "Tokyo MX",
+      "country": {
+        "name": "Japan",
+        "code": "JP",
+        "timezone": "Asia/Tokyo"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 443404,
+      "imdb": "tt32832431"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/538/1346333.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/538/1346333.jpg"
+    },
+    "summary": "<p>Haruaki Abe is happy to finally fulfill his dream of becoming a teacher. That happiness is short-lived after he arrives at Hyakki Academy and finds out the school is full of monsters! Can Abe overcome his cowardice and get his supernatural students under control? Join the timid teacher and his bizarre class for a tale of ghoulish mischief and paranormal education.</p>",
+    "updated": 1744558304,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/79153"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3105904",
+        "name": "The Bond Continuing with Ren-Ren. The Teacher from Ghoul School Will Do His Best!"
+      }
+    }
+  },
+  "episodes:79153": [
+    {
+      "id": 2985621,
+      "url": "https://www.tvmaze.com/episodes/2985621/a-terrified-teacher-at-ghoul-school-1x01-welcome-to-hyakki-academy",
+      "name": "Welcome to Hyakki Academy!",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2024-10-08",
+      "airtime": "23:00",
+      "airstamp": "2024-10-08T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/538/1346332.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/538/1346332.jpg"
+      },
+      "summary": "<p>A loser teacher, Haruaki Abe, starts his new position at a school filled with youkai called Hyakki Academy. He then goes to visit a shut-in zashikiwarashi named Beniko so everyone can be included in the class picture.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2985621"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024563,
+      "url": "https://www.tvmaze.com/episodes/3024563/a-terrified-teacher-at-ghoul-school-1x02-physical-exams-are-life-threatening",
+      "name": "Physical Exams Are Life-Threatening?!",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2024-10-15",
+      "airtime": "23:00",
+      "airstamp": "2024-10-15T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/541/1353593.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/541/1353593.jpg"
+      },
+      "summary": "<p>Hyakki Academy is in a panic because of the upcoming physical exams. Haruaki has trouble doing the cyclops Rensuke's eye exam and getting the daidarabocchi Oota's height. But further misfortune falls upon him as he's also tasked with cleaning the pool...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024563"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024564,
+      "url": "https://www.tvmaze.com/episodes/3024564/a-terrified-teacher-at-ghoul-school-1x03-panic-in-miki-senseis-youkai-studies-class",
+      "name": "Panic! In Miki-sensei's Youkai Studies Class!!",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2024-10-22",
+      "airtime": "23:00",
+      "airstamp": "2024-10-22T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/541/1353590.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/541/1353590.jpg"
+      },
+      "summary": "<p>Haruaki is invited to observe Miki's youkai studies class but things immediately get hectic when Miki decides to demonstrate his powers by having a little bit of sake...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024564"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024565,
+      "url": "https://www.tvmaze.com/episodes/3024565/a-terrified-teacher-at-ghoul-school-1x04-an-interview-with-haruaki-here-comes-youkai-tv",
+      "name": "An Interview with Haruaki?! Here Comes Youkai TV!",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2024-10-29",
+      "airtime": "23:00",
+      "airstamp": "2024-10-29T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/541/1353589.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/541/1353589.jpg"
+      },
+      "summary": "<p>Youkai TV wants to do an up-close-and-personal interview with Haruaki?! Of course, he has trouble during an extracurricular lesson and his students try to make him look good but it fails! Will this thing actually air?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024565"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024566,
+      "url": "https://www.tvmaze.com/episodes/3024566/a-terrified-teacher-at-ghoul-school-1x05-i-know-lets-go-to-senseis-family-home",
+      "name": "I Know. Let's Go to Sensei's Family Home.",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2024-11-05",
+      "airtime": "23:00",
+      "airstamp": "2024-11-05T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/542/1355933.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/542/1355933.jpg"
+      },
+      "summary": "<p>Haruaki goes back to his family home, but then a few of the students decide to visit him there. While they're there, the students meet Haruaki's older brother, Amaaki, who seems to dislike youkai.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024566"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024567,
+      "url": "https://www.tvmaze.com/episodes/3024567/a-terrified-teacher-at-ghoul-school-1x06-sports-day-at-ghoul-school-commences",
+      "name": "Sports Day at Ghoul School!! ~Commences~",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2024-11-12",
+      "airtime": "23:00",
+      "airstamp": "2024-11-12T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/543/1358721.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/543/1358721.jpg"
+      },
+      "summary": "<p>It's Sports Day at Hyakki Academy! A scavenger hunt relay, mandragora toss... plenty of youkai-themed events! A fiery battle over Class 2-3's victory and Haruaki's xxxx begins now!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024567"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024568,
+      "url": "https://www.tvmaze.com/episodes/3024568/a-terrified-teacher-at-ghoul-school-1x07-sports-day-at-ghoul-school-finishes",
+      "name": "Sports Day at Ghoul School!! ~Finishes~",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2024-11-19",
+      "airtime": "23:00",
+      "airstamp": "2024-11-19T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/544/1361532.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/544/1361532.jpg"
+      },
+      "summary": "<p>It's Sports Day at Hyakki Academy part 2! Class 2-3 is struggling at 3rd place, but they're trying to get to 1st place with the obstacle course relay. But an accident occurs and steers the event into an unexpected direction. </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024568"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024569,
+      "url": "https://www.tvmaze.com/episodes/3024569/a-terrified-teacher-at-ghoul-school-1x08-amaaki-momoyama-san-and-the-nudity-festival",
+      "name": "Amaaki, Momoyama-san, and the Nudity Festival",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2024-11-26",
+      "airtime": "23:00",
+      "airstamp": "2024-11-26T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/545/1363820.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/545/1363820.jpg"
+      },
+      "summary": "<p>Amaaki, Haruaki's twin brother, takes his place and becomes a teacher for a day. Soon after, Yanagida's love potion cause havoc at the school. And to finish the episode off, the whole class goes to a public bath.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024569"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024570,
+      "url": "https://www.tvmaze.com/episodes/3024570/a-terrified-teacher-at-ghoul-school-1x09-save-me-seimei-kun-the-case-of-the-animal-youkai-abductions",
+      "name": "Save Me, Seimei-kun! The Case of the Animal Youkai Abductions!!",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2024-12-03",
+      "airtime": "23:00",
+      "airstamp": "2024-12-03T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/546/1365756.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/546/1365756.jpg"
+      },
+      "summary": "<p>Numerous cases where animal youkai are getting abducted and having their fur shaved off occur! Mamekichi, Tamao, and Hatanaka also disappear so Haruaki and Sano try to save them. Will Haruaki be able to save his furry friends in this mysterious case?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024570"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024571,
+      "url": "https://www.tvmaze.com/episodes/3024571/a-terrified-teacher-at-ghoul-school-1x10-school-camp-of-terror",
+      "name": "School Camp of Terror",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2024-12-10",
+      "airtime": "23:00",
+      "airstamp": "2024-12-10T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/547/1368167.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/547/1368167.jpg"
+      },
+      "summary": "<p>This episode involved a huge event: a school camp! Or rather, it ended up being a final exam for spookology. Can the students safely get through the old school building and the various trials that await?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024571"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024572,
+      "url": "https://www.tvmaze.com/episodes/3024572/a-terrified-teacher-at-ghoul-school-1x11-parent-teacher-conference-from-hell",
+      "name": "Parent-Teacher Conference from Hell!",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2024-12-17",
+      "airtime": "23:00",
+      "airstamp": "2024-12-17T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/548/1370378.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/548/1370378.jpg"
+      },
+      "summary": "<p>Haruaki does some parent-teacher conferences, but of course, the parents are also youkai, so they don't very smoothly. On the way home, he scouts Kyoto with Miki and Hatanaka for a future school trip but then they all remember a certain incident...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024572"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024573,
+      "url": "https://www.tvmaze.com/episodes/3024573/a-terrified-teacher-at-ghoul-school-1x12-the-great-tokyo-haruaki-search",
+      "name": "The Great Tokyo Haruaki Search!!",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2024-12-24",
+      "airtime": "23:00",
+      "airstamp": "2024-12-24T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/549/1372734.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/549/1372734.jpg"
+      },
+      "summary": "<p>Kaminarimon and Tokyo Tower! Class 2-3's excitement over their Tokyo field trip comes to a sudden halt when Haruaki gets swept away by a wave of salarymen into the subway and gets lost. The students split up to find him but Sano gets a really bad feeling.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024573"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024840,
+      "url": "https://www.tvmaze.com/episodes/3024840/a-terrified-teacher-at-ghoul-school-1x13-the-cursed-secondhand-book",
+      "name": "The Cursed Secondhand Book",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2025-01-07",
+      "airtime": "23:00",
+      "airstamp": "2025-01-07T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/550/1377282.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/550/1377282.jpg"
+      },
+      "summary": "<p>Summer vacation is finally here! Hijita and Rensuke enjoy Beniko's special shaved ice, while Mamekichi and Tamao go catch some bugs. Meanwhile, Haruaki goes to a bookstore where Sano works and is recommended a book but that ends up causing havoc!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024840"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3024841,
+      "url": "https://www.tvmaze.com/episodes/3024841/a-terrified-teacher-at-ghoul-school-1x14-zashiki-sans-bed-and-breakfast-home",
+      "name": "Zashiki-san's Bed-and-Breakfast Home",
+      "season": 1,
+      "number": 14,
+      "type": "regular",
+      "airdate": "2025-01-14",
+      "airtime": "23:00",
+      "airstamp": "2025-01-14T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/552/1380391.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/552/1380391.jpg"
+      },
+      "summary": "<p>During the middle of summer vacation, Beniko's family home that's a bed and breakfast is going to be featured in an occult magazine. Beniko and her friends work together to spook the scientist that the reporter brought along to disprove her home being supernatural.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3024841"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105895,
+      "url": "https://www.tvmaze.com/episodes/3105895/a-terrified-teacher-at-ghoul-school-1x15-abe-no-seimei-haruaki-abe-and-shutendouji",
+      "name": "Abe no Seimei, Haruaki Abe, and Shutendouji",
+      "season": 1,
+      "number": 15,
+      "type": "regular",
+      "airdate": "2025-01-21",
+      "airtime": "23:00",
+      "airstamp": "2025-01-21T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/553/1382531.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/553/1382531.jpg"
+      },
+      "summary": "<p>Summer vacation still continues! Haruaki is invited to Miki's family home in Mount Ooe. There, he finds out Rintarou's dark past and ends up having to fight a great enemy.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105895"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105896,
+      "url": "https://www.tvmaze.com/episodes/3105896/a-terrified-teacher-at-ghoul-school-1x16-the-great-hyakki-academy-island-chase",
+      "name": "The Great Hyakki Academy Island Chase!!",
+      "season": 1,
+      "number": 16,
+      "type": "regular",
+      "airdate": "2025-01-28",
+      "airtime": "23:00",
+      "airstamp": "2025-01-28T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/553/1384539.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/553/1384539.jpg"
+      },
+      "summary": "<p>Officer Yamazaki, the doppelganger police officer of Hyakki Academy Island, tries to protect the peace by capturing a teketeke robber.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105896"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105897,
+      "url": "https://www.tvmaze.com/episodes/3105897/a-terrified-teacher-at-ghoul-school-1x17-summer-the-ocean-huh-its-already-august-31st",
+      "name": "Summer! The Ocean! Huh? It's Already August 31st...",
+      "season": 1,
+      "number": 17,
+      "type": "regular",
+      "airdate": "2025-02-04",
+      "airtime": "23:00",
+      "airstamp": "2025-02-04T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/554/1386791.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/554/1386791.jpg"
+      },
+      "summary": "<p>Class 2-3 enjoys some time at the beach during their summer vacation and Haruaki and Sano learn about youkai births.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105897"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105898,
+      "url": "https://www.tvmaze.com/episodes/3105898/a-terrified-teacher-at-ghoul-school-1x18-the-temporary-teacher-ebisu-sensei",
+      "name": "The Temporary Teacher, Ebisu-sensei",
+      "season": 1,
+      "number": 18,
+      "type": "regular",
+      "airdate": "2025-02-11",
+      "airtime": "23:00",
+      "airstamp": "2025-02-11T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/555/1388847.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/555/1388847.jpg"
+      },
+      "summary": "<p>A new teacher named Ebisu-sensei, who is a god of fortune, comes to teach at Hyakki Academy for a short time.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105898"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105899,
+      "url": "https://www.tvmaze.com/episodes/3105899/a-terrified-teacher-at-ghoul-school-1x19-welcome-to-the-youkai-train",
+      "name": "Welcome to the Youkai Train",
+      "season": 1,
+      "number": 19,
+      "type": "regular",
+      "airdate": "2025-02-18",
+      "airtime": "23:00",
+      "airstamp": "2025-02-18T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/556/1391180.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/556/1391180.jpg"
+      },
+      "summary": "<p>Haruaki and some of the kids in Class 2-3 take the train to go shopping but there's something off about the train.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105899"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105900,
+      "url": "https://www.tvmaze.com/episodes/3105900/a-terrified-teacher-at-ghoul-school-1x20-the-night-parade-cultural-festival",
+      "name": "The Night Parade Cultural Festival",
+      "season": 1,
+      "number": 20,
+      "type": "regular",
+      "airdate": "2025-02-25",
+      "airtime": "23:00",
+      "airstamp": "2025-02-25T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/557/1393655.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/557/1393655.jpg"
+      },
+      "summary": "<p>The Night Parade Cultural Festival at Hyakki Academy begins!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105900"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105901,
+      "url": "https://www.tvmaze.com/episodes/3105901/a-terrified-teacher-at-ghoul-school-1x21-the-underground-night-parade-cultural-festival",
+      "name": "The Underground Night Parade Cultural Festival",
+      "season": 1,
+      "number": 21,
+      "type": "regular",
+      "airdate": "2025-03-04",
+      "airtime": "23:00",
+      "airstamp": "2025-03-04T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/558/1395886.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/558/1395886.jpg"
+      },
+      "summary": "<p>Haruaki goes with Tamao to get some equipment for the cultural fair but something goes wrong.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105901"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105902,
+      "url": "https://www.tvmaze.com/episodes/3105902/a-terrified-teacher-at-ghoul-school-1x22-goodbye-ren-ren",
+      "name": "Goodbye, Ren-Ren",
+      "season": 1,
+      "number": 22,
+      "type": "regular",
+      "airdate": "2025-03-11",
+      "airtime": "23:00",
+      "airstamp": "2025-03-11T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/559/1398223.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/559/1398223.jpg"
+      },
+      "summary": "<p>Nyuudou suddenly announces that he's leaving school so Haruaki and the class try to stop him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105902"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105903,
+      "url": "https://www.tvmaze.com/episodes/3105903/a-terrified-teacher-at-ghoul-school-1x23-the-gashadokuro-kuniko-utagawa",
+      "name": "The Gashadokuro, Kuniko Utagawa",
+      "season": 1,
+      "number": 23,
+      "type": "regular",
+      "airdate": "2025-03-18",
+      "airtime": "23:00",
+      "airstamp": "2025-03-18T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/560/1400177.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/560/1400177.jpg"
+      },
+      "summary": "<p>Haruaki and his class continue their efforts to get Nyuudou back and Utagawa reveals a secret about herself.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105903"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    },
+    {
+      "id": 3105904,
+      "url": "https://www.tvmaze.com/episodes/3105904/a-terrified-teacher-at-ghoul-school-1x24-the-bond-continuing-with-ren-ren-the-teacher-from-ghoul-school-will-do-his-best",
+      "name": "The Bond Continuing with Ren-Ren. The Teacher from Ghoul School Will Do His Best!",
+      "season": 1,
+      "number": 24,
+      "type": "regular",
+      "airdate": "2025-03-25",
+      "airtime": "23:00",
+      "airstamp": "2025-03-25T14:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/560/1402455.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/560/1402455.jpg"
+      },
+      "summary": "<p>Haruaki and his students continue to do their best to get Nyuudou back.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3105904"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/79153",
+          "name": "A Terrified Teacher at Ghoul School!"
+        }
+      }
+    }
+  ],
+  "show:contorted": null,
+  "show:blood flower": null
 }
