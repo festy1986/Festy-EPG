@@ -110865,5 +110865,123 @@
     }
   ],
   "show:contorted": null,
-  "show:blood flower": null
+  "show:blood flower": null,
+  "show:the reckoning": {
+    "id": 14663,
+    "url": "https://www.tvmaze.com/shows/14663/the-reckoning",
+    "name": "The Reckoning",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Thriller"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2011-04-18",
+    "ended": "2011-04-19",
+    "officialSite": null,
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 75,
+    "network": {
+      "id": 35,
+      "name": "ITV1",
+      "country": {
+        "name": "United Kingdom",
+        "code": "GB",
+        "timezone": "Europe/London"
+      },
+      "officialSite": "https://www.itv.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 247838,
+      "imdb": "tt1722726"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/49/124155.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/49/124155.jpg"
+    },
+    "summary": "<p><i><b>\"The Reckoning\"</b></i> was a British television drama starring Ashley Jensen and Max Beesley. It was broadcast in two parts by ITV on 18 and 19 April 2011.</p><p>Sally Wilson, a single mother, has been bequeathed £5 million, but she must kill a man who deserves to die in order to get the money. Sally doesn't know what to do and confides in her ex-policeman boyfriend, Mark.</p>",
+    "updated": 1718728175,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/14663"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/667435",
+        "name": "Episode 2"
+      }
+    }
+  },
+  "episodes:14663": [
+    {
+      "id": 667434,
+      "url": "https://www.tvmaze.com/episodes/667434/the-reckoning-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2011-04-18",
+      "airtime": "21:00",
+      "airstamp": "2011-04-18T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/667434"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/14663",
+          "name": "The Reckoning"
+        }
+      }
+    },
+    {
+      "id": 667435,
+      "url": "https://www.tvmaze.com/episodes/667435/the-reckoning-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2011-04-19",
+      "airtime": "21:00",
+      "airstamp": "2011-04-19T20:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/667435"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/14663",
+          "name": "The Reckoning"
+        }
+      }
+    }
+  ],
+  "show:the midnight man": null,
+  "show:v h s 94": null,
+  "show:v h s 99": null,
+  "show:kandisha": null,
+  "show:leap of faith william friedkin on the exorcist": null
 }
