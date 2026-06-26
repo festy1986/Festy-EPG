@@ -110985,5 +110985,2764 @@
   "show:kandisha": null,
   "show:leap of faith william friedkin on the exorcist": null,
   "show:the devil s rain": null,
-  "show:slapface": null
+  "show:slapface": null,
+  "show:tales from the crypt": {
+    "id": 453,
+    "url": "https://www.tvmaze.com/shows/453/tales-from-the-crypt",
+    "name": "Tales from the Crypt",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Fantasy",
+      "Horror"
+    ],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "1989-06-10",
+    "ended": "1996-07-19",
+    "officialSite": null,
+    "schedule": {
+      "time": "22:00",
+      "days": [
+        "Friday"
+      ]
+    },
+    "rating": {
+      "average": 8
+    },
+    "weight": 96,
+    "network": {
+      "id": 8,
+      "name": "HBO",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.hbo.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 5448,
+      "thetvdb": 73029,
+      "imdb": "tt0096708"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/3/9142.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/3/9142.jpg"
+    },
+    "summary": "<p>Cadaverous scream legend/all-around punster the Crypt Keeper hosts these forays of fright and fun based on classic E.C. Comics tales from back in the day – and drawing on the talents of top filmmakers Richard Donner, Walter Hill, Joel Silver, Robert Zemeckis and others. So belly up to the bar and name your poison. Is it a deranged Santa on a personal slay ride? A man surgically implanted with as many lives (and deaths) as a cat? Honeymooners who each want the other to fulfill the 'til-death vow pronto? These and more terror-rific tales await. Ghoul love 'em!</p>",
+    "updated": 1746067960,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/453"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/42469",
+        "name": "The Third Pig"
+      }
+    }
+  },
+  "episodes:453": [
+    {
+      "id": 42377,
+      "url": "https://www.tvmaze.com/episodes/42377/tales-from-the-crypt-1x01-the-man-who-was-death",
+      "name": "The Man Who Was Death",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1989-06-10",
+      "airtime": "",
+      "airstamp": "1989-06-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594244.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594244.jpg"
+      },
+      "summary": "<p>After the death penalty is abolished, an executioner continues his work via freelancing.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42377"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42378,
+      "url": "https://www.tvmaze.com/episodes/42378/tales-from-the-crypt-1x02-and-all-through-the-house",
+      "name": "And All Through the House",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1989-06-10",
+      "airtime": "",
+      "airstamp": "1989-06-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594245.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594245.jpg"
+      },
+      "summary": "<p>A greedy woman makes the mistake of murdering her husband while an escaped mental patient dressed in a Santa Claus outfit is on the loose.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42378"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42379,
+      "url": "https://www.tvmaze.com/episodes/42379/tales-from-the-crypt-1x03-dig-that-cat-hes-real-gone",
+      "name": "Dig That Cat... He's Real Gone",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1989-06-10",
+      "airtime": "",
+      "airstamp": "1989-06-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594246.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594246.jpg"
+      },
+      "summary": "<p>A bum named Ulric is given the chance of a lifetime when a scientist puts the gland of a cat inside his body. Soon Ulric becomes the main attraction at a sideshow.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42379"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42380,
+      "url": "https://www.tvmaze.com/episodes/42380/tales-from-the-crypt-1x04-only-sin-deep",
+      "name": "Only Sin Deep",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1989-06-14",
+      "airtime": "",
+      "airstamp": "1989-06-14T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594247.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594247.jpg"
+      },
+      "summary": "<p>A call girl goes to a pawnshop to rob him of his jewelry. Instead the owner offers her 10,000 dollars for her beauty. She sells her beauty and lands a new job but discovers she is aging very fast.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42380"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42381,
+      "url": "https://www.tvmaze.com/episodes/42381/tales-from-the-crypt-1x05-lover-come-hack-to-me",
+      "name": "Lover Come Hack to Me",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1989-06-21",
+      "airtime": "",
+      "airstamp": "1989-06-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594248.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594248.jpg"
+      },
+      "summary": "<p>Charles marries Peggy but only for her money planning to kill her and make it look like an accident. One night things change when her dead mother pays a visit and Peggy shows Charles her own family tradition.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42381"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42382,
+      "url": "https://www.tvmaze.com/episodes/42382/tales-from-the-crypt-1x06-collection-completed",
+      "name": "Collection Completed",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1989-06-28",
+      "airtime": "",
+      "airstamp": "1989-06-28T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594249.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594249.jpg"
+      },
+      "summary": "<p>After 47 year of tool sales, Jonas has finally found some time to relax and take a break. Or so he thinks. After he returns from his work, he finds out that his wife has been taking in stray animals. He decides to take up a new hobby ... taxidermy.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42382"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42383,
+      "url": "https://www.tvmaze.com/episodes/42383/tales-from-the-crypt-2x01-dead-right",
+      "name": "Dead Right",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1990-04-21",
+      "airtime": "",
+      "airstamp": "1990-04-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594250.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594250.jpg"
+      },
+      "summary": "<p>Cathy wants a rich and successful life, and fast. She visits a medium who tells her she will meet a man who will inherit a lot of money, and die in a violent way soon after. When she meets grossly overweight Charlie who informs her of his rich relatives, she promptly marries him. As it turns out, the medium is always right.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42383"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42384,
+      "url": "https://www.tvmaze.com/episodes/42384/tales-from-the-crypt-2x02-the-switch",
+      "name": "The Switch",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1990-04-21",
+      "airtime": "",
+      "airstamp": "1990-04-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594251.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594251.jpg"
+      },
+      "summary": "<p>A wealthy and elderly man subjects himself to a revolutionary new treatment in order to please his gold-digger girlfriend. Unfortunately becoming young again turns out to be very expensive.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42384"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42385,
+      "url": "https://www.tvmaze.com/episodes/42385/tales-from-the-crypt-2x03-cutting-cards",
+      "name": "Cutting Cards",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1990-04-21",
+      "airtime": "",
+      "airstamp": "1990-04-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/75/188221.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/75/188221.jpg"
+      },
+      "summary": "<p>Two rival gamblers engage in a series of high-stakes games where \"losing a hand\" involves more than folding in a game of poker.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42385"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42386,
+      "url": "https://www.tvmaze.com/episodes/42386/tales-from-the-crypt-2x04-til-death",
+      "name": "'Til Death",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1990-04-24",
+      "airtime": "",
+      "airstamp": "1990-04-24T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594252.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594252.jpg"
+      },
+      "summary": "<p>The gold-digging landowner of a Caribbean villa attempts to woo a haughty rich young woman with the aid of a potion maxed by his ex-lover; a voodoo priestess. But trouble ensues when he ignores the warnings of the potion.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42386"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42387,
+      "url": "https://www.tvmaze.com/episodes/42387/tales-from-the-crypt-2x05-threes-a-crowd",
+      "name": "Three's a Crowd",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1990-05-01",
+      "airtime": "",
+      "airstamp": "1990-05-01T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 6.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594253.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594253.jpg"
+      },
+      "summary": "<p>For their tenth anniversary a couple heads down to a cabin owned by their friend. When she and her friend start sneaking around the husband gets jealous and assumes that they are having an affair.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42387"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42388,
+      "url": "https://www.tvmaze.com/episodes/42388/tales-from-the-crypt-2x06-the-thing-from-the-grave",
+      "name": "The Thing from the Grave",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1990-05-08",
+      "airtime": "",
+      "airstamp": "1990-05-08T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594254.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594254.jpg"
+      },
+      "summary": "<p>When an abusive agent learns that his sexy model of a girlfriend is cheating on him with a photographer, he kills him and later kidnaps his girlfriend, but soon learns the love is more powerful in death.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42388"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42389,
+      "url": "https://www.tvmaze.com/episodes/42389/tales-from-the-crypt-2x07-the-sacrifice",
+      "name": "The Sacrifice",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1990-05-15",
+      "airtime": "",
+      "airstamp": "1990-05-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594255.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594255.jpg"
+      },
+      "summary": "<p>An insurance salesman murders an obnoxious tycoon to get his seductive wife and his fortune, but later is blackmailed by a rival.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42389"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42390,
+      "url": "https://www.tvmaze.com/episodes/42390/tales-from-the-crypt-2x08-for-cryin-out-loud",
+      "name": "For Cryin' Out Loud",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1990-05-22",
+      "airtime": "",
+      "airstamp": "1990-05-22T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594256.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594256.jpg"
+      },
+      "summary": "<p>A greedy rock promoter tries to steal the money raised at a benefit concert when his conscience intervenes.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42390"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42391,
+      "url": "https://www.tvmaze.com/episodes/42391/tales-from-the-crypt-2x09-four-sided-triangle",
+      "name": "Four-Sided Triangle",
+      "season": 2,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1990-05-29",
+      "airtime": "",
+      "airstamp": "1990-05-29T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594257.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594257.jpg"
+      },
+      "summary": "<p>Farmer George is attracted to Mary Jo, the nubile young woman who helps out with the chores. The problem is... she's in love with a scarecrow.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42391"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42392,
+      "url": "https://www.tvmaze.com/episodes/42392/tales-from-the-crypt-2x10-the-ventriloquists-dummy",
+      "name": "The Ventriloquist's Dummy",
+      "season": 2,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1990-06-05",
+      "airtime": "",
+      "airstamp": "1990-06-05T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594258.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594258.jpg"
+      },
+      "summary": "<p>Amateur ventriloquist Billy Goldman learns that being a ventriloquist might not be the best career for him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42392"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42393,
+      "url": "https://www.tvmaze.com/episodes/42393/tales-from-the-crypt-2x11-judy-youre-not-yourself-today",
+      "name": "Judy, You're Not Yourself Today",
+      "season": 2,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1990-06-12",
+      "airtime": "",
+      "airstamp": "1990-06-12T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594259.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594259.jpg"
+      },
+      "summary": "<p>A housewife stressed out by her husbands reckless behavior welcomes an elderly cosmetics saleswoman in to her home. Only to discover that the old hag has another more devious motive.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42393"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42394,
+      "url": "https://www.tvmaze.com/episodes/42394/tales-from-the-crypt-2x12-fitting-punishment",
+      "name": "Fitting Punishment",
+      "season": 2,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1990-06-19",
+      "airtime": "",
+      "airstamp": "1990-06-19T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594261.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594261.jpg"
+      },
+      "summary": "<p>When funeral director Ezra Thornberry gets his very polite young nephew Bobby as a roommate, he eventually learns his rude harsh behavior towards him could be fatal.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42394"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42395,
+      "url": "https://www.tvmaze.com/episodes/42395/tales-from-the-crypt-2x13-kormans-kalamity",
+      "name": "Korman's Kalamity",
+      "season": 2,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1990-06-26",
+      "airtime": "",
+      "airstamp": "1990-06-26T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594262.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594262.jpg"
+      },
+      "summary": "<p>A cop learns that an illustrator of \"Tales from the Crypt\" might have the power to make his monstrous creations come to life due to his shrewish wife.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42395"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42396,
+      "url": "https://www.tvmaze.com/episodes/42396/tales-from-the-crypt-2x14-lower-berth",
+      "name": "Lower Berth",
+      "season": 2,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1990-07-03",
+      "airtime": "",
+      "airstamp": "1990-07-03T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594264.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594264.jpg"
+      },
+      "summary": "<p>Enoch, the two-faced man, an attraction at a sideshow, falls in love with a 4,000 year old mummy, eventually leading up to the conception of their bastard child, The Crypt Keeper.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42396"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42397,
+      "url": "https://www.tvmaze.com/episodes/42397/tales-from-the-crypt-2x15-mute-witness-to-murder",
+      "name": "Mute Witness to Murder",
+      "season": 2,
+      "number": 15,
+      "type": "regular",
+      "airdate": "1990-07-10",
+      "airtime": "",
+      "airstamp": "1990-07-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594265.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594265.jpg"
+      },
+      "summary": "<p>Young woman Suzy looks out of the window of her apartment and witnesses a man murdering a woman in the apartment directly across from hers. Suzy is so traumatized by what she sees that she's rendered mute. Suzy is placed in the care of Dr. Trask, who alas turns out to be the man who committed the murder she witnessed.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42397"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42398,
+      "url": "https://www.tvmaze.com/episodes/42398/tales-from-the-crypt-2x16-television-terror",
+      "name": "Television Terror",
+      "season": 2,
+      "number": 16,
+      "type": "regular",
+      "airdate": "1990-07-17",
+      "airtime": "",
+      "airstamp": "1990-07-17T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/86/216888.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/86/216888.jpg"
+      },
+      "summary": "<p>Horton Rivers is an arrogant television tabloid host. He is trying to get big ratings and decides to take his crew through a haunted house. The house is rumored to be haunted by an old woman who killed a number of men. Soon strange things start happening. Someone or something is stalking Horton and his camera crew. The ratings could take him to the top or to the bottom.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42398"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42399,
+      "url": "https://www.tvmaze.com/episodes/42399/tales-from-the-crypt-2x17-my-brothers-keeper",
+      "name": "My Brother's Keeper",
+      "season": 2,
+      "number": 17,
+      "type": "regular",
+      "airdate": "1990-07-24",
+      "airtime": "",
+      "airstamp": "1990-07-24T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594266.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594266.jpg"
+      },
+      "summary": "<p>Siamese twins, one timid and kind-hearted and the other reckless and sadistic, must make a decision on whether or not to allow an experimental surgery to have them separated even though one of them doesn't want to be split from the other.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42399"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42400,
+      "url": "https://www.tvmaze.com/episodes/42400/tales-from-the-crypt-2x18-the-secret",
+      "name": "The Secret",
+      "season": 2,
+      "number": 18,
+      "type": "regular",
+      "airdate": "1990-07-31",
+      "airtime": "",
+      "airstamp": "1990-07-31T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594267.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594267.jpg"
+      },
+      "summary": "<p>Orphan boy Theodore is adopted by the Colberts, who are an eccentric rich couple with a very dark secret. They aren't the only ones.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42400"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42401,
+      "url": "https://www.tvmaze.com/episodes/42401/tales-from-the-crypt-3x01-loved-to-death",
+      "name": "Loved to Death",
+      "season": 3,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1991-06-15",
+      "airtime": "",
+      "airstamp": "1991-06-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/75/188207.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/75/188207.jpg"
+      },
+      "summary": "<p>A nebbish writer falls in lust with his beautiful neighbor, but she won't give him the time of day. The writer's landlord gives him a love potioin to make the woman fall madly in love with him. Emphasis on the \"madly\" part.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42401"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42402,
+      "url": "https://www.tvmaze.com/episodes/42402/tales-from-the-crypt-3x02-carrion-death",
+      "name": "Carrion Death",
+      "season": 3,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1991-06-15",
+      "airtime": "",
+      "airstamp": "1991-06-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/75/188333.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/75/188333.jpg"
+      },
+      "summary": "<p>A state trooper--and a vulture--track an escaped serial killer across the desert and none of them will stop.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42402"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42403,
+      "url": "https://www.tvmaze.com/episodes/42403/tales-from-the-crypt-3x03-the-trap",
+      "name": "The Trap",
+      "season": 3,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1991-06-15",
+      "airtime": "",
+      "airstamp": "1991-06-15T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594501.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594501.jpg"
+      },
+      "summary": "<p>Indebted unhappy married couple, Lou and Irene, commit a life insurance fraud. Lou's brother Billy helps him fake his death and leave for Mexico. But Irene and Billy fall in love and when Lou returns, they claim they don't know him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42403"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42404,
+      "url": "https://www.tvmaze.com/episodes/42404/tales-from-the-crypt-3x04-abra-cadaver",
+      "name": "Abra Cadaver",
+      "season": 3,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1991-06-19",
+      "airtime": "",
+      "airstamp": "1991-06-19T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594502.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594502.jpg"
+      },
+      "summary": "<p>A former potential surgeon sets out to wreak revenge on the brother whose cruel practical joke prevented him from realizing his dream.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42404"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42405,
+      "url": "https://www.tvmaze.com/episodes/42405/tales-from-the-crypt-3x05-top-billing",
+      "name": "Top Billing",
+      "season": 3,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1991-06-26",
+      "airtime": "",
+      "airstamp": "1991-06-26T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594503.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594503.jpg"
+      },
+      "summary": "<p>An unattractive and unlucky actor can't get a role because of his looks. His agent and girlfriend leave him. But he doesn't intend to give up - he wants the role of Hamlet.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42405"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42406,
+      "url": "https://www.tvmaze.com/episodes/42406/tales-from-the-crypt-3x06-dead-wait",
+      "name": "Dead Wait",
+      "season": 3,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1991-07-03",
+      "airtime": "",
+      "airstamp": "1991-07-03T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594504.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594504.jpg"
+      },
+      "summary": "<p>Red is a low life crook who is looking for a black pearl. He finds that it's on a island belonging to an ailing millionaire. He plans with the millionaire's mistress to steal the pearl but she turns on him. Fortunately a voodoo priestess comes to the rescue but she has something special for him that he'll never forget.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42406"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42407,
+      "url": "https://www.tvmaze.com/episodes/42407/tales-from-the-crypt-3x07-the-reluctant-vampire",
+      "name": "The Reluctant Vampire",
+      "season": 3,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1991-07-10",
+      "airtime": "",
+      "airstamp": "1991-07-10T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/75/188751.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/75/188751.jpg"
+      },
+      "summary": "<p>A mild-mannered vampire gets a night watchman job at a blood bank to sate his hunger. However, when the owner has to let his employees go because of product loss, the vampire has to prey on humans.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42407"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42408,
+      "url": "https://www.tvmaze.com/episodes/42408/tales-from-the-crypt-3x08-easel-kill-ya",
+      "name": "Easel Kill Ya",
+      "season": 3,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1991-07-17",
+      "airtime": "",
+      "airstamp": "1991-07-17T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594505.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594505.jpg"
+      },
+      "summary": "<p>Painter Jack Craig gains himself a wealthy patron when he sells a morbid painting. He soon finds that in order to please his patron, he must continue to paint pictures of death - and this leads him down a murderous path.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42408"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42409,
+      "url": "https://www.tvmaze.com/episodes/42409/tales-from-the-crypt-3x09-undertaking-palor",
+      "name": "Undertaking Palor",
+      "season": 3,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1991-07-24",
+      "airtime": "",
+      "airstamp": "1991-07-24T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594506.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594506.jpg"
+      },
+      "summary": "<p>Four boys find out that the local undertaker and a pharmacist are in cahoots to murder rich locals and profit from their funerals.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42409"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42410,
+      "url": "https://www.tvmaze.com/episodes/42410/tales-from-the-crypt-3x10-mournin-mess",
+      "name": "Mournin' Mess",
+      "season": 3,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1991-07-31",
+      "airtime": "",
+      "airstamp": "1991-07-31T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594507.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594507.jpg"
+      },
+      "summary": "<p>A journalist tries to solve the case of a mysterious serial killer who's been killing homeless people all across the city. What he doesn't realize is how deep the conspiracy behind the murders goes.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42410"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42411,
+      "url": "https://www.tvmaze.com/episodes/42411/tales-from-the-crypt-3x11-split-second",
+      "name": "Split Second",
+      "season": 3,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1991-08-07",
+      "airtime": "",
+      "airstamp": "1991-08-07T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594508.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594508.jpg"
+      },
+      "summary": "<p>A beautiful waitress marries the owner of a lumber camp and then quickly starts to realize that he is not what she really wants.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42411"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42412,
+      "url": "https://www.tvmaze.com/episodes/42412/tales-from-the-crypt-3x12-deadline",
+      "name": "Deadline",
+      "season": 3,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1991-08-14",
+      "airtime": "",
+      "airstamp": "1991-08-14T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/297/742828.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/297/742828.jpg"
+      },
+      "summary": "<p>Charles McKenzie is a drunk out of work reporter who would do anything for a story. He meets Vicki in a bar who makes him feel like he can turn his life around. He quits drinking and can get his old job back as long as he can stay on the wagon and prove he can still bring in a good murder story. While reading a newspaper in Niko's Grill, he hears the owner kill his wife in the back. This is just the story he needs...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42412"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42413,
+      "url": "https://www.tvmaze.com/episodes/42413/tales-from-the-crypt-3x13-spoiled",
+      "name": "Spoiled",
+      "season": 3,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1991-08-21",
+      "airtime": "",
+      "airstamp": "1991-08-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594510.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594510.jpg"
+      },
+      "summary": "<p>Janet is a soap opera loving woman. She likes to watch soaps everyday. She even imitates them. One day she misses the end of her favorite soap opera when the TV goes on the fritz. She decides to get cable soon. Janet finds her self falling for the attractive cable installer. When her Surgeon husband discovers what's going on, he decides to make them part of his experiment.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42413"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42414,
+      "url": "https://www.tvmaze.com/episodes/42414/tales-from-the-crypt-3x14-yellow",
+      "name": "Yellow",
+      "season": 3,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1991-08-28",
+      "airtime": "",
+      "airstamp": "1991-08-28T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/106/266743.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/106/266743.jpg"
+      },
+      "summary": "<p>During World War I, a lieutenant is unable to deal with the pressure of battle. His father, a general, has other ideas.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42414"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42415,
+      "url": "https://www.tvmaze.com/episodes/42415/tales-from-the-crypt-4x01-none-but-the-lonely-heart",
+      "name": "None But the Lonely Heart",
+      "season": 4,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1992-06-27",
+      "airtime": "",
+      "airstamp": "1992-06-27T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594511.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594511.jpg"
+      },
+      "summary": "<p>A con-man who meets and marries rich old widows through a dating service, then murders them and takes the inheritance, finally gets the date of his dreams - the very worst of them.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42415"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42416,
+      "url": "https://www.tvmaze.com/episodes/42416/tales-from-the-crypt-4x02-thisll-kill-ya",
+      "name": "This'll Kill Ya",
+      "season": 4,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1992-06-27",
+      "airtime": "",
+      "airstamp": "1992-06-27T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594512.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594512.jpg"
+      },
+      "summary": "<p>In a research lab, when two colleagues accidentally inject an experimental virus into their sleazy boss that will eventually kill him, he tries to get revenge on them, believing it was no accident.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42416"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42417,
+      "url": "https://www.tvmaze.com/episodes/42417/tales-from-the-crypt-4x03-on-a-deadmans-chest",
+      "name": "On a Deadman's Chest",
+      "season": 4,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1992-06-27",
+      "airtime": "",
+      "airstamp": "1992-06-27T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/113/284329.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/113/284329.jpg"
+      },
+      "summary": "<p>Rocky Danny Darwin gets a tattoo from a mysterious artist... and the tattoo shows the woman that Danny hates most.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42417"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42418,
+      "url": "https://www.tvmaze.com/episodes/42418/tales-from-the-crypt-4x04-seance",
+      "name": "Seance",
+      "season": 4,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1992-07-04",
+      "airtime": "",
+      "airstamp": "1992-07-04T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594513.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594513.jpg"
+      },
+      "summary": "<p>Two con artist attempt to steal the fortune of a rich man they accidentally killed by creating a fake seance for his blind wife, but not everything goes to plan.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42418"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42419,
+      "url": "https://www.tvmaze.com/episodes/42419/tales-from-the-crypt-4x05-beauty-rest",
+      "name": "Beauty Rest",
+      "season": 4,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1992-07-11",
+      "airtime": "",
+      "airstamp": "1992-07-11T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594514.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594514.jpg"
+      },
+      "summary": "<p>Life hasn't been easy for model Helen. She is getting older and her dreams of hitting the big time are drying out. So when she finally gets the chance to take part in a beauty contest, she is determined to do ANYTHING in her hands to win.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42419"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42420,
+      "url": "https://www.tvmaze.com/episodes/42420/tales-from-the-crypt-4x06-whats-cookin",
+      "name": "What's Cookin'",
+      "season": 4,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1992-07-22",
+      "airtime": "",
+      "airstamp": "1992-07-22T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594515.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594515.jpg"
+      },
+      "summary": "<p>Married couple Fred and Erma's restaurant has seen better days. But things change once a stranger walks in, with a rather unique steak recipe...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42420"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42421,
+      "url": "https://www.tvmaze.com/episodes/42421/tales-from-the-crypt-4x07-the-new-arrival",
+      "name": "The New Arrival",
+      "season": 4,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1992-07-25",
+      "airtime": "",
+      "airstamp": "1992-07-25T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594516.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594516.jpg"
+      },
+      "summary": "<p>An arrogant radio child psychologist is obsessed with proving to his manager that he is the best. He gets a new patient, a woman and her daughter. When he goes to her room, he assumes that the daughter is the woman's imaginary friend. He learns that her daughter died years ago but her mother's love keeps her alive.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42421"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42422,
+      "url": "https://www.tvmaze.com/episodes/42422/tales-from-the-crypt-4x08-showdown",
+      "name": "Showdown",
+      "season": 4,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1992-08-01",
+      "airtime": "",
+      "airstamp": "1992-08-01T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594517.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594517.jpg"
+      },
+      "summary": "<p>A gunman being is chased down by another quickdrawing gunslinger in an old abandoned western town. The gunman wins the duel but he soon learns a new meaning to the phrase \"\"ghost town\"\" as the spirits of all his victims come back to haunt him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42422"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42423,
+      "url": "https://www.tvmaze.com/episodes/42423/tales-from-the-crypt-4x09-king-of-the-road",
+      "name": "King of the Road",
+      "season": 4,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1992-08-08",
+      "airtime": "",
+      "airstamp": "1992-08-08T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594518.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594518.jpg"
+      },
+      "summary": "<p>A life on the edge hot rodder named Billy comes to town run by Sheriff Garrett, he immediately dates and romances his daughter with ulterior motives linked to Garrett's past, for which he was once a champion of the hot rodding. Will Garrett accept Billy's challenge to the death?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42423"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42424,
+      "url": "https://www.tvmaze.com/episodes/42424/tales-from-the-crypt-4x10-maniac-at-large",
+      "name": "Maniac at Large",
+      "season": 4,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1992-08-19",
+      "airtime": "",
+      "airstamp": "1992-08-19T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594519.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594519.jpg"
+      },
+      "summary": "<p>A shy library clerk is obsessed with a serial killer fearing that she will be his next victim. She thinks that her boss, the security guard and a patron are they killer. One night, while she is working late, it turns out that she is really the killer and her victims were ones she thought were after her.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42424"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42425,
+      "url": "https://www.tvmaze.com/episodes/42425/tales-from-the-crypt-4x11-split-personality",
+      "name": "Split Personality",
+      "season": 4,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1992-08-26",
+      "airtime": "",
+      "airstamp": "1992-08-26T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594520.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594520.jpg"
+      },
+      "summary": "<p>Stetson is a con man who likes to date twins. He finds himself in the arms of twin sisters and creates a twin of his own. He weds both of them and decides to knock them off. Little does he know these twins share alike.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42425"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42426,
+      "url": "https://www.tvmaze.com/episodes/42426/tales-from-the-crypt-4x12-strung-along",
+      "name": "Strung Along",
+      "season": 4,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1992-09-02",
+      "airtime": "",
+      "airstamp": "1992-09-02T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594521.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594521.jpg"
+      },
+      "summary": "<p>An aging puppeteer gets a new assistant. When he learns that his wife has a boyfriend, the assistant promises he'll do something about it. The puppeteer spends most of his time with is favorite puppet Koko. When he discovers that his assistant is his wife's lover, the two make him think that Koko has gone on a murderous rampage. Little do they know that Pinocchio isn't the only one with-out strings.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42426"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42427,
+      "url": "https://www.tvmaze.com/episodes/42427/tales-from-the-crypt-4x13-werewolf-concerto",
+      "name": "Werewolf Concerto",
+      "season": 4,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1992-09-09",
+      "airtime": "",
+      "airstamp": "1992-09-09T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594522.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594522.jpg"
+      },
+      "summary": "<p>An Agatha Christie-style mystery sees the inhabitants of a remote hotel terrorized by rumors of a werewolf prowling the area. Not to fear, as a self-appointed werewolf hunter is amongst them. But might he have a dark secret of his own?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42427"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42428,
+      "url": "https://www.tvmaze.com/episodes/42428/tales-from-the-crypt-4x14-curiosity-killed",
+      "name": "Curiosity Killed",
+      "season": 4,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1992-09-16",
+      "airtime": "",
+      "airstamp": "1992-09-16T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594523.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594523.jpg"
+      },
+      "summary": "<p>A bitter elderly woman learns that her husband and a lay back couple are hiding a youth potion from her while camping in the wilderness.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42428"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42429,
+      "url": "https://www.tvmaze.com/episodes/42429/tales-from-the-crypt-5x01-death-of-some-salesmen",
+      "name": "Death of Some Salesmen",
+      "season": 5,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1993-10-02",
+      "airtime": "",
+      "airstamp": "1993-10-02T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594524.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594524.jpg"
+      },
+      "summary": "<p>A conniving con-man posing as a salesman gets more than he bargained for when he comes knocks at the door of the wrong family.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42429"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42430,
+      "url": "https://www.tvmaze.com/episodes/42430/tales-from-the-crypt-5x02-as-ye-sow",
+      "name": "As Ye Sow",
+      "season": 5,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1993-10-02",
+      "airtime": "",
+      "airstamp": "1993-10-02T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594525.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594525.jpg"
+      },
+      "summary": "<p>Wealthy and successful middle-aged businessman Leo Burns suspects that his much younger wife Bridget is having an extramarital affair. Leo hires sleazy private investigator G.G. Devoe to find out the identity of Bridget's lover.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42430"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42431,
+      "url": "https://www.tvmaze.com/episodes/42431/tales-from-the-crypt-5x03-forever-ambergris",
+      "name": "Forever Ambergris",
+      "season": 5,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1993-10-02",
+      "airtime": "",
+      "airstamp": "1993-10-02T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/75/187524.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/75/187524.jpg"
+      },
+      "summary": "<p>An over-the-hill war photographer schemes to kill his young protege, take his pictures, and bed the protege's beautiful adoring girlfriend.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42431"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42432,
+      "url": "https://www.tvmaze.com/episodes/42432/tales-from-the-crypt-5x04-food-for-thought",
+      "name": "Food for Thought",
+      "season": 5,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1993-10-06",
+      "airtime": "",
+      "airstamp": "1993-10-06T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594526.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594526.jpg"
+      },
+      "summary": "<p>A psychic clown and part-time cook who abuses his assistant and wife learns that she is having an affair with a fire eater and plans to runs off with him.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42432"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42433,
+      "url": "https://www.tvmaze.com/episodes/42433/tales-from-the-crypt-5x05-people-who-live-in-brass-hearses",
+      "name": "People Who Live in Brass Hearses",
+      "season": 5,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1993-10-13",
+      "airtime": "",
+      "airstamp": "1993-10-13T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594527.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594527.jpg"
+      },
+      "summary": "<p>A hot-tempered convict with a butter addiction tries to get revenge, with the help of his mentally challenged brother, on the ice cream trucker who was responsible for his arrest, unaware the driver also has a dark secret too.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42433"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42434,
+      "url": "https://www.tvmaze.com/episodes/42434/tales-from-the-crypt-5x06-two-for-the-show",
+      "name": "Two for the Show",
+      "season": 5,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1993-10-20",
+      "airtime": "",
+      "airstamp": "1993-10-20T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594528.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594528.jpg"
+      },
+      "summary": "<p>A man murders his beautiful younger wife when she threatens to leave him. He then packs her body in a big suitcase and boards a train, where he is stalked by an inquisitive detective.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42434"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42435,
+      "url": "https://www.tvmaze.com/episodes/42435/tales-from-the-crypt-5x07-house-of-horror",
+      "name": "House of Horror",
+      "season": 5,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1993-10-27",
+      "airtime": "",
+      "airstamp": "1993-10-27T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594529.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594529.jpg"
+      },
+      "summary": "<p>Les Whilton is the president of a college fraternity. He decides to scare three pledges by daring them to spend a night in a haunted house. He and some of his friends have set up the place to look like it's haunted. Along for the ride is a group of sorority sisters. When everyone else turns up missing, everyone turns to Whilton. Whilton goes into the house alone and he gets a big surprise.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42435"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42436,
+      "url": "https://www.tvmaze.com/episodes/42436/tales-from-the-crypt-5x08-well-cooked-hams",
+      "name": "Well Cooked Hams",
+      "season": 5,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1993-11-03",
+      "airtime": "",
+      "airstamp": "1993-11-03T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594530.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594530.jpg"
+      },
+      "summary": "<p>A frustrated magician comes across a true genius. He decides to kill him and steal his magic, but he finds himself in big trouble and it's going to be the last magic trick he will ever perform.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42436"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42437,
+      "url": "https://www.tvmaze.com/episodes/42437/tales-from-the-crypt-5x09-creep-course",
+      "name": "Creep Course",
+      "season": 5,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1993-11-10",
+      "airtime": "",
+      "airstamp": "1993-11-10T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594531.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594531.jpg"
+      },
+      "summary": "<p>A bookworm is tricked by a jock and her devious Egyptology professor to be the virgin sacrifice to an ancient mummy in the teachers basment.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42437"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42438,
+      "url": "https://www.tvmaze.com/episodes/42438/tales-from-the-crypt-5x10-came-the-dawn",
+      "name": "Came the Dawn",
+      "season": 5,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1993-11-17",
+      "airtime": "",
+      "airstamp": "1993-11-17T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594532.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594532.jpg"
+      },
+      "summary": "<p>A lecherous millionaire offers a lift to a beautiful seductress in the middle of nowhere with horrific consequences.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42438"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42439,
+      "url": "https://www.tvmaze.com/episodes/42439/tales-from-the-crypt-5x11-oils-well-that-ends-well",
+      "name": "Oil's Well That Ends Well",
+      "season": 5,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1993-11-24",
+      "airtime": "",
+      "airstamp": "1993-11-24T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594533.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594533.jpg"
+      },
+      "summary": "<p>A duo of con artists try to take the jackpot when tricking a group of southern investors into thinking there's a large amount of oil under an isolated cemetery.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42439"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42440,
+      "url": "https://www.tvmaze.com/episodes/42440/tales-from-the-crypt-5x12-half-way-horrible",
+      "name": "Half-Way Horrible",
+      "season": 5,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1993-12-01",
+      "airtime": "",
+      "airstamp": "1993-12-01T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594534.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594534.jpg"
+      },
+      "summary": "<p>The owner of a chemical company's sinister past dealings come back to haunt him when he identifies the body of a business associate.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42440"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42441,
+      "url": "https://www.tvmaze.com/episodes/42441/tales-from-the-crypt-5x13-till-death-do-we-part",
+      "name": "Till Death Do We Part",
+      "season": 5,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1993-12-08",
+      "airtime": "",
+      "airstamp": "1993-12-08T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 5.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594535.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594535.jpg"
+      },
+      "summary": "<p>A young gigolo and husband of a female mobster begins an affair with a night club waitress and the two plots to overthrow the gangster.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42441"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42442,
+      "url": "https://www.tvmaze.com/episodes/42442/tales-from-the-crypt-6x01-let-the-punishment-fit-the-crime",
+      "name": "Let the Punishment Fit the Crime",
+      "season": 6,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1994-10-31",
+      "airtime": "",
+      "airstamp": "1994-10-31T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594536.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594536.jpg"
+      },
+      "summary": "<p>An unscrupulous ambulance-chasing lawyer gets stuck in a strange town for moving violations, and soon learns that the punishment for even petty crimes in the town comes with a gruesome result.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42442"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42443,
+      "url": "https://www.tvmaze.com/episodes/42443/tales-from-the-crypt-6x02-only-skin-deep",
+      "name": "Only Skin Deep",
+      "season": 6,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1994-10-31",
+      "airtime": "",
+      "airstamp": "1994-10-31T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594537.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594537.jpg"
+      },
+      "summary": "<p>A violent, hot-tempered man goes to a Halloween party hosted by his ex-wife, where he meets a mysterious but beautiful masked woman who needs more help than he does.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42443"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42444,
+      "url": "https://www.tvmaze.com/episodes/42444/tales-from-the-crypt-6x03-whirlpool",
+      "name": "Whirlpool",
+      "season": 6,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1994-10-31",
+      "airtime": "",
+      "airstamp": "1994-10-31T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594538.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594538.jpg"
+      },
+      "summary": "<p>Struggling comic book artist Rolanda gets fired from her job by her mean and demanding boss Vern. However, Rolanda finds herself experiencing the events of this one fateful day over and over again with some changes, but the same dismal results.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42444"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42445,
+      "url": "https://www.tvmaze.com/episodes/42445/tales-from-the-crypt-6x04-operation-friendship",
+      "name": "Operation Friendship",
+      "season": 6,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1994-11-09",
+      "airtime": "",
+      "airstamp": "1994-11-09T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594539.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594539.jpg"
+      },
+      "summary": "<p>When a talented but meek computer programmer hits it off with his cute female neighbor, his cocky imaginary friend insidiously turns on him fearing that he won't be needed anymore.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42445"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42446,
+      "url": "https://www.tvmaze.com/episodes/42446/tales-from-the-crypt-6x05-revenge-is-the-nuts",
+      "name": "Revenge Is the Nuts",
+      "season": 6,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1994-11-16",
+      "airtime": "",
+      "airstamp": "1994-11-16T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/75/188246.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/75/188246.jpg"
+      },
+      "summary": "<p>The residents of a county home for the blind plot poetic justice against the sadistic owner who torments them.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42446"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42447,
+      "url": "https://www.tvmaze.com/episodes/42447/tales-from-the-crypt-6x06-the-bribe",
+      "name": "The Bribe",
+      "season": 6,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1994-11-23",
+      "airtime": "",
+      "airstamp": "1994-11-23T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594540.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594540.jpg"
+      },
+      "summary": "<p>Zoeller is a fire marshal who wants a strip club closed down. He wants to get revenge on it's sneaky owner and his pal for letting his offspring dance there. Zoeller bribes an arsonist to burn the place but after he does it, he discovers that she was also in there. Little does he know that his daughter wasn't in the club when the fire happened. She left early to get married with her boyfriend.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42447"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42448,
+      "url": "https://www.tvmaze.com/episodes/42448/tales-from-the-crypt-6x07-the-pit",
+      "name": "The Pit",
+      "season": 6,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1994-11-30",
+      "airtime": "",
+      "airstamp": "1994-11-30T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594541.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594541.jpg"
+      },
+      "summary": "<p>Two men who are longtime rivals go head to head in a grudge match. But, the real fight isn't between them, it's between their feuding wives. When the two men realize they don't hate each other, they decide to put their wives in the ring. With the help of a Las Vegas showman, they set them up as they watch them in a boxing match on live television.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42448"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42449,
+      "url": "https://www.tvmaze.com/episodes/42449/tales-from-the-crypt-6x08-the-assassin",
+      "name": "The Assassin",
+      "season": 6,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1994-12-07",
+      "airtime": "",
+      "airstamp": "1994-12-07T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594542.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594542.jpg"
+      },
+      "summary": "<p>Janet is a suburban wife of an ex-CIA assassin. When a group of operatives invade her home, they seem to think her husband is up to his old tricks again. The leader tempts one of her men then kills him, then kills the other guy, then plans to do the same with Janet. But Janet has a nasty surprise for her that she will never forget.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42449"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42450,
+      "url": "https://www.tvmaze.com/episodes/42450/tales-from-the-crypt-6x09-staired-in-horror",
+      "name": "Staired in Horror",
+      "season": 6,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1994-12-14",
+      "airtime": "",
+      "airstamp": "1994-12-14T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594543.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594543.jpg"
+      },
+      "summary": "<p>Fugitive Clyde is on the lam from an angry mob. He seeks refuge in a decrepit old mansion owned by an elderly woman. Unbeknownst to Clyde, said creepy abode has an unusual curse attached to it.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42450"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42451,
+      "url": "https://www.tvmaze.com/episodes/42451/tales-from-the-crypt-6x10-in-the-groove",
+      "name": "In the Groove",
+      "season": 6,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1994-12-21",
+      "airtime": "",
+      "airstamp": "1994-12-21T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594544.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594544.jpg"
+      },
+      "summary": "<p>Abrasive shock jock Gary gets demoted to the graveyard shift by his bitchy radio station owner sister Rita because of poor ratings. Gary manages to regain his stride thanks to his eager new partner Valerie. Gary and Valerie plot together to murder Rita, but things don't go according to plan.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42451"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42452,
+      "url": "https://www.tvmaze.com/episodes/42452/tales-from-the-crypt-6x11-surprise-party",
+      "name": "Surprise Party",
+      "season": 6,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1994-12-28",
+      "airtime": "",
+      "airstamp": "1994-12-28T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594545.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594545.jpg"
+      },
+      "summary": "<p>No-count Ray Wells kills his dying father so he can inherit an old ruined farmhouse. Unbeknownst to Ray, said farmhouse has a nightmarish legacy attached to it.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42452"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42453,
+      "url": "https://www.tvmaze.com/episodes/42453/tales-from-the-crypt-6x12-doctor-of-horror",
+      "name": "Doctor of Horror",
+      "season": 6,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1995-01-04",
+      "airtime": "",
+      "airstamp": "1995-01-04T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594546.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594546.jpg"
+      },
+      "summary": "<p>A Mad Doctor enlists the help of two security guards in a morgue in an attempt to unlock the secrets of the human soul.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42453"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42454,
+      "url": "https://www.tvmaze.com/episodes/42454/tales-from-the-crypt-6x13-comes-the-dawn",
+      "name": "Comes the Dawn",
+      "season": 6,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1995-01-11",
+      "airtime": "",
+      "airstamp": "1995-01-11T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594547.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594547.jpg"
+      },
+      "summary": "<p>Colonel Parker and Sergeant Burrows, two ex-soldiers with a murky past, arrive in the Alaskan wilderness to do some illegal hunting. They get a local girl called Jeri Drumbeater, Parker's subordinate during Desert Storm, to be their scout. Unknown to the two army men, they are about to face consequences for their evil past actions in this dark, cold region.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42454"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42455,
+      "url": "https://www.tvmaze.com/episodes/42455/tales-from-the-crypt-6x14-99-44100-pure-horror",
+      "name": "99 & 44/100% Pure Horror",
+      "season": 6,
+      "number": 14,
+      "type": "regular",
+      "airdate": "1995-01-18",
+      "airtime": "",
+      "airstamp": "1995-01-18T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594548.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594548.jpg"
+      },
+      "summary": "<p>Luden Sandelton is the meek president of a company that manufactures bars of soap. When the advertising campaign for the latest line of soap is deemed a failure, Luden has no choice but to fire his artist wife Willa who designed the artwork for said campaign. However, the greedy and unfaithful Willa has her own deadly ideas about rectifying the situation.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42455"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42456,
+      "url": "https://www.tvmaze.com/episodes/42456/tales-from-the-crypt-6x15-you-murderer",
+      "name": "You, Murderer",
+      "season": 6,
+      "number": 15,
+      "type": "regular",
+      "airdate": "1995-01-25",
+      "airtime": "",
+      "airstamp": "1995-01-25T17:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594549.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594549.jpg"
+      },
+      "summary": "<p>Plastic surgery makes a criminal look like Humphrey Bogart. Years later, he's a successful businessmen. His angry wife finds out about his past and threatens him. He asks his plastic surgeon friend to end her. Twist after twist ensues.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42456"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42457,
+      "url": "https://www.tvmaze.com/episodes/42457/tales-from-the-crypt-7x01-fatal-caper",
+      "name": "Fatal Caper",
+      "season": 7,
+      "number": 1,
+      "type": "regular",
+      "airdate": "1996-04-19",
+      "airtime": "",
+      "airstamp": "1996-04-19T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594550.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594550.jpg"
+      },
+      "summary": "<p>Two adult brothers come to blows over the the fortune of their wealthy father, whose interests are protected by a lovely young woman with questionable loyalties.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42457"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42458,
+      "url": "https://www.tvmaze.com/episodes/42458/tales-from-the-crypt-7x02-last-respects",
+      "name": "Last Respects",
+      "season": 7,
+      "number": 2,
+      "type": "regular",
+      "airdate": "1996-04-26",
+      "airtime": "",
+      "airstamp": "1996-04-26T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594551.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594551.jpg"
+      },
+      "summary": "<p>Three bickering sisters left in charge of their late father's struggling curiosity shop come into possession of a cursed monkey's paw, and try to use it to their advantage - with deadly results.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42458"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42459,
+      "url": "https://www.tvmaze.com/episodes/42459/tales-from-the-crypt-7x03-a-slight-case-of-murder",
+      "name": "A Slight Case of Murder",
+      "season": 7,
+      "number": 3,
+      "type": "regular",
+      "airdate": "1996-05-03",
+      "airtime": "",
+      "airstamp": "1996-05-03T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594552.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594552.jpg"
+      },
+      "summary": "<p>A game of cat and mouse ensues between a female mystery novelist and her jealous former husband when he accuses her of having a love affair with her nosy neighbor's son.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42459"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42460,
+      "url": "https://www.tvmaze.com/episodes/42460/tales-from-the-crypt-7x04-escape",
+      "name": "Escape",
+      "season": 7,
+      "number": 4,
+      "type": "regular",
+      "airdate": "1996-05-17",
+      "airtime": "",
+      "airstamp": "1996-05-17T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594553.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594553.jpg"
+      },
+      "summary": "<p>A traitor in the second World War is restricted to a prison camp and one of the men he betrayed is transported to the camp and promises to reveal his identity.</p><p> </p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42460"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42461,
+      "url": "https://www.tvmaze.com/episodes/42461/tales-from-the-crypt-7x05-horror-in-the-night",
+      "name": "Horror in the Night",
+      "season": 7,
+      "number": 5,
+      "type": "regular",
+      "airdate": "1996-05-24",
+      "airtime": "",
+      "airstamp": "1996-05-24T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594554.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594554.jpg"
+      },
+      "summary": "<p>A double-crossing jewel thief is shot and hides out in a hotel where he starts to hallucinate about a mysterious beautiful woman.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42461"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42462,
+      "url": "https://www.tvmaze.com/episodes/42462/tales-from-the-crypt-7x06-cold-war",
+      "name": "Cold War",
+      "season": 7,
+      "number": 6,
+      "type": "regular",
+      "airdate": "1996-05-31",
+      "airtime": "",
+      "airstamp": "1996-05-31T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594555.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594555.jpg"
+      },
+      "summary": "<p>After losing their friend Cutter in a botched robbery, Ford and Cammy, a wild young Londoner crime couple, split up and Cammy finds a new lover, Jimmy. Jealous, Ford shoots him and the trio discovers something shocking about one another.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42462"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42463,
+      "url": "https://www.tvmaze.com/episodes/42463/tales-from-the-crypt-7x07-kidnapper",
+      "name": "Kidnapper",
+      "season": 7,
+      "number": 7,
+      "type": "regular",
+      "airdate": "1996-06-07",
+      "airtime": "",
+      "airstamp": "1996-06-07T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594556.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594556.jpg"
+      },
+      "summary": "<p>A young man takes in a pregnant woman and falls in love with her but becomes jealous when her baby is born so he sets out to get rid of the kid forever.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42463"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42464,
+      "url": "https://www.tvmaze.com/episodes/42464/tales-from-the-crypt-7x08-report-from-the-grave",
+      "name": "Report from the Grave",
+      "season": 7,
+      "number": 8,
+      "type": "regular",
+      "airdate": "1996-06-14",
+      "airtime": "",
+      "airstamp": "1996-06-14T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594557.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594557.jpg"
+      },
+      "summary": "<p>A scientist named Elliot invents a way to read memories of the dead. To test the device, Elliot and his girlfriend Arianne break into the crypt of a dead serial killer.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42464"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42465,
+      "url": "https://www.tvmaze.com/episodes/42465/tales-from-the-crypt-7x09-smoke-wrings",
+      "name": "Smoke Wrings",
+      "season": 7,
+      "number": 9,
+      "type": "regular",
+      "airdate": "1996-06-21",
+      "airtime": "",
+      "airstamp": "1996-06-21T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594558.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594558.jpg"
+      },
+      "summary": "<p>A young man with a strange device is hired onto an advertising company by an esteemed executive--but what the exec doesn't know is that the young man is in cahoots with her enraged ex-partner who is out for revenge.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42465"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42466,
+      "url": "https://www.tvmaze.com/episodes/42466/tales-from-the-crypt-7x10-about-face",
+      "name": "About Face",
+      "season": 7,
+      "number": 10,
+      "type": "regular",
+      "airdate": "1996-06-28",
+      "airtime": "",
+      "airstamp": "1996-06-28T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/84/210839.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/84/210839.jpg"
+      },
+      "summary": "<p>A cheating priest discovers that he has two 16-year-old daughters from an affair: one beautiful, one horribly disfigured.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42466"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42467,
+      "url": "https://www.tvmaze.com/episodes/42467/tales-from-the-crypt-7x11-confession",
+      "name": "Confession",
+      "season": 7,
+      "number": 11,
+      "type": "regular",
+      "airdate": "1996-07-05",
+      "airtime": "",
+      "airstamp": "1996-07-05T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 8.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594559.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594559.jpg"
+      },
+      "summary": "<p>A police detective interrogates a suspected serial killer, but the suspect knows all the tricks and a battle of wits ensues.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42467"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42468,
+      "url": "https://www.tvmaze.com/episodes/42468/tales-from-the-crypt-7x12-ear-today-gone-tomorrow",
+      "name": "Ear Today... Gone Tomorrow",
+      "season": 7,
+      "number": 12,
+      "type": "regular",
+      "airdate": "1996-07-12",
+      "airtime": "",
+      "airstamp": "1996-07-12T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 9
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594560.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594560.jpg"
+      },
+      "summary": "<p>A greedy safe cracker with a slight hearing loss gets entangled in a game between a mobster and his beautiful, exotic wife and ends up getting the auditory system he could only dream of. But there's a price.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42468"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    },
+    {
+      "id": 42469,
+      "url": "https://www.tvmaze.com/episodes/42469/tales-from-the-crypt-7x13-the-third-pig",
+      "name": "The Third Pig",
+      "season": 7,
+      "number": 13,
+      "type": "regular",
+      "airdate": "1996-07-19",
+      "airtime": "",
+      "airstamp": "1996-07-19T16:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": 6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/237/594561.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/237/594561.jpg"
+      },
+      "summary": "<p>An animated horror version of the Three Little Pigs story. When the third pig is tried and convicted for the murder of his two brothers by a wolf jury, he builds a zombie Frankenpig to take out his revenge on the actual murderer.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/42469"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/453",
+          "name": "Tales from the Crypt"
+        }
+      }
+    }
+  ]
 }
