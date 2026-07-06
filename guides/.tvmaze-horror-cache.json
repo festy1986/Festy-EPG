@@ -113744,5 +113744,1193 @@
         }
       }
     }
-  ]
+  ],
+  "show:monster party": null,
+  "show:the marshes": null,
+  "show:random acts of violence": null,
+  "show:all hallows eve": null,
+  "show:all hallows eve 2": null,
+  "show:vicious fun": null,
+  "show:dark glasses": null,
+  "show:shook": {
+    "id": 46277,
+    "url": "https://www.tvmaze.com/shows/46277/shook",
+    "name": "SHOOK",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Comedy",
+      "Family"
+    ],
+    "status": "Ended",
+    "runtime": null,
+    "averageRuntime": 6,
+    "premiered": "2019-09-29",
+    "ended": "2019-12-07",
+    "officialSite": "https://www.youtube.com/playlist?list=PLiv1IUQDVSNLT9GxDOyzA1tqBGzPys9sY",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Saturday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 29,
+    "network": null,
+    "webChannel": {
+      "id": 21,
+      "name": "YouTube",
+      "country": null,
+      "officialSite": "https://www.youtube.com"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 370199,
+      "imdb": "tt10847114"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/241/604219.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/241/604219.jpg"
+    },
+    "summary": "<p><b>SHOOK</b> centers around Mia, a 15-year-old who yearns to dance professionally but is hindered by daily obligations to her little sister, Skylar, and their single mom, Sandra, a registered nurse. Although Mia struggles to convey how she feels, she has the support of her extroverted best friend, Fredgy, and a new mentor, Ritz, who introduces her to the vibrant world of street dance. She soon begins to express her true and best self through dance.</p>",
+    "updated": 1581803431,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/46277"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/1802083",
+        "name": "Behind the Dance"
+      }
+    }
+  },
+  "episodes:46277": [
+    {
+      "id": 1802074,
+      "url": "https://www.tvmaze.com/episodes/1802074/shook-1x01-slay",
+      "name": "Slay",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2019-09-29",
+      "airtime": "",
+      "airstamp": "2019-09-29T12:00:00+00:00",
+      "runtime": 7,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Mia loves to dance, but she's afraid to pursue her dreams. When her best friend Fredgy signs her up for dance team tryouts, will Mia freeze up?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802074"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802075,
+      "url": "https://www.tvmaze.com/episodes/1802075/shook-1x02-blackout",
+      "name": "Blackout",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2019-10-12",
+      "airtime": "",
+      "airstamp": "2019-10-12T12:00:00+00:00",
+      "runtime": 7,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Mia struggles with balancing dancing and her family responsibilities. After she turns down the dance team, her reputation plummets, but things take an unexpected turn...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802075"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802076,
+      "url": "https://www.tvmaze.com/episodes/1802076/shook-1x03-fire",
+      "name": "Fire",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2019-10-19",
+      "airtime": "",
+      "airstamp": "2019-10-19T12:00:00+00:00",
+      "runtime": 4,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>After meeting Ritz and his hip-hop dance crew, Mia realizes that she might not need the dance team to pursue her dreams...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802076"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802077,
+      "url": "https://www.tvmaze.com/episodes/1802077/shook-1x04-busted",
+      "name": "Busted",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2019-10-26",
+      "airtime": "",
+      "airstamp": "2019-10-26T12:00:00+00:00",
+      "runtime": 7,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Mia sneaks out to dance with Ritz and his hip-hop crew to make some money—and an enemy...</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802077"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802078,
+      "url": "https://www.tvmaze.com/episodes/1802078/shook-1x05-grounded",
+      "name": "Grounded",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2019-11-02",
+      "airtime": "",
+      "airstamp": "2019-11-02T12:00:00+00:00",
+      "runtime": 6,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Mia fantasizes about her future dance career, but reality comes crashing down!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802078"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802079,
+      "url": "https://www.tvmaze.com/episodes/1802079/shook-1x06-viral",
+      "name": "Viral",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2019-11-09",
+      "airtime": "",
+      "airstamp": "2019-11-09T12:00:00+00:00",
+      "runtime": 9,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Mia gets a taste of fame when her dance post on social media goes viral!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802079"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802080,
+      "url": "https://www.tvmaze.com/episodes/1802080/shook-1x07-undone",
+      "name": "Undone",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2019-11-16",
+      "airtime": "",
+      "airstamp": "2019-11-16T12:00:00+00:00",
+      "runtime": 6,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>When Ritz confronts Mia about why she keeps running away from dance, Mia tells him her secret!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802080"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802081,
+      "url": "https://www.tvmaze.com/episodes/1802081/shook-1x08-runaway",
+      "name": "Runaway",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2019-11-23",
+      "airtime": "",
+      "airstamp": "2019-11-23T12:00:00+00:00",
+      "runtime": 4,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>After running away again, Mia and her mom have an explosive fight!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802081"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802082,
+      "url": "https://www.tvmaze.com/episodes/1802082/shook-1x09-dream",
+      "name": "Dream",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2019-11-30",
+      "airtime": "",
+      "airstamp": "2019-11-30T12:00:00+00:00",
+      "runtime": 6,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Mia gets a huge audition that will determine her dance and family's future!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802082"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    },
+    {
+      "id": 1802083,
+      "url": "https://www.tvmaze.com/episodes/1802083/shook-1x10-behind-the-dance",
+      "name": "Behind the Dance",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2019-12-07",
+      "airtime": "",
+      "airstamp": "2019-12-07T12:00:00+00:00",
+      "runtime": 4,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>That's a wrap! Sofia Wylie talks about Mia's journey to discovering who she is, what it means to represent diversity onscreen and the importance of following your dreams!</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/1802083"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/46277",
+          "name": "SHOOK"
+        }
+      }
+    }
+  ],
+  "show:almost human": {
+    "id": 202,
+    "url": "https://www.tvmaze.com/shows/202/almost-human",
+    "name": "Almost Human",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Science-Fiction"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2013-11-17",
+    "ended": "2014-03-03",
+    "officialSite": null,
+    "schedule": {
+      "time": "20:00",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": 7.7
+    },
+    "weight": 98,
+    "network": {
+      "id": 4,
+      "name": "FOX",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.fox.com/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 35771,
+      "thetvdb": 267702,
+      "imdb": "tt2654580"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/1/3020.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/1/3020.jpg"
+    },
+    "summary": "<p><b>Almost Human</b> is an action-packed police drama set 35 years in the future, when police officers are partnered with highly evolved human-like androids. The year is 2048. Meet John Kennex a cop who survived one of the most catastrophic attacks ever made against the police department. After waking up from a 17-month coma, he can't remember much - except that his partner was killed; his girlfriend, Anna Moore, left him after the attack; and he lost one of his legs and is now outfitted with a highly sophisticated synthetic appendage. Suffering from depression, mental atrophy, trauma-onset OCD, PTSD and the \"psychological rejection of his synthetic body part,\" John returns to work at the behest of longtime ally Captain Sandra Maldonado. By mandate, every cop must partner with a robot. And despite his passionate aversion to androids, John is paired up with a battle-ready MX-43. But he abruptly terminates his partnership after the robot discovers incriminating information about him. So technician Rudy Lom introduces John to Dorian, a discontinued android with unexpected emotional responses. Although such responses were deemed flaws, it is in these \"flaws\" that John relates to Dorian most. After all, John is part-machine now, and Dorian is part-human. John and Dorian's understanding of each other not only complements them, it connects them. As he adjusts to working with his new partner, John also must learn to get along with his new colleagues, including the eager and somewhat starstruck Detective Valerie Stahl and the distrustful Detective Richard Paul, who does not welcome John back with open arms. Almost Human will follow the week-to-week missions of John and Dorian, as they fight crime across this futuristic landscape, while the mysteries surrounding his attack and the larger mythology of this new world unfold.</p>",
+    "updated": 1704793416,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/202"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/13408",
+        "name": "Straw Man"
+      }
+    }
+  },
+  "episodes:202": [
+    {
+      "id": 13396,
+      "url": "https://www.tvmaze.com/episodes/13396/almost-human-1x01-pilot",
+      "name": "Pilot",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2013-11-17",
+      "airtime": "20:00",
+      "airstamp": "2013-11-18T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140947.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140947.jpg"
+      },
+      "summary": "<p>In the year 2048, an unprecedented increase in the crime rate has made being a cop only more dangerous than it is today, necessitating that every police officer partner with an android. John Kennex, a detective and sole survivor of a devastating police ambush, and his robot partner, Dorian, solve cases and fight to keep the lid on dangerously evolved criminals in this futuristic landscape.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13396"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13397,
+      "url": "https://www.tvmaze.com/episodes/13397/almost-human-1x02-skin",
+      "name": "Skin",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2013-11-18",
+      "airtime": "20:00",
+      "airstamp": "2013-11-19T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140948.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140948.jpg"
+      },
+      "summary": "<p>In night two of the series premiere, Detective John Kennex and Dorian are dispatched to investigate a murder and high-profile missing persons case that lead them into the highly profitable world of IRCs - Intimate Robot Companions - also known as sexbots. Meanwhile, Kennex looks to reconcile a part of his troubled past.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13397"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13398,
+      "url": "https://www.tvmaze.com/episodes/13398/almost-human-1x03-are-you-receiving",
+      "name": "Are You Receiving?",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2013-11-25",
+      "airtime": "20:00",
+      "airstamp": "2013-11-26T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140949.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140949.jpg"
+      },
+      "summary": "<p>The thrilling action continues in another all-new, adrenaline-fueled episode. Detective Kennex and Dorian battle an intense and futuristic hostage situation, while Captain Maldonado attempts to meet the terrorist's demands, hoping to protect innocent people.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13398"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13399,
+      "url": "https://www.tvmaze.com/episodes/13399/almost-human-1x04-the-bends",
+      "name": "The Bends",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2013-12-02",
+      "airtime": "20:00",
+      "airstamp": "2013-12-03T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140950.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140950.jpg"
+      },
+      "summary": "<p>An old cop friend of Detective Kennex's goes undercover, posing as a \"cook\" of a highly addictive street drug called \"The Bends.\" But his cover is blown. As the scope of the intense drug investigation unfolds, a determined Kennex and Dorian call on Rudy Lom for assistance.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13399"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13400,
+      "url": "https://www.tvmaze.com/episodes/13400/almost-human-1x05-blood-brothers",
+      "name": "Blood Brothers",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2013-12-09",
+      "airtime": "20:00",
+      "airstamp": "2013-12-10T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140951.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140951.jpg"
+      },
+      "summary": "<p>Detective John Kennex and Dorian are tasked with protecting the only remaining witness in a major murder trial, while Captain Maldonado faces off with the defendant.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13400"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13401,
+      "url": "https://www.tvmaze.com/episodes/13401/almost-human-1x06-arrhythmia",
+      "name": "Arrhythmia",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2013-12-16",
+      "airtime": "20:00",
+      "airstamp": "2013-12-17T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140952.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140952.jpg"
+      },
+      "summary": "<p>Detective John Kennex and Dorian respond to a suspicious death at a hospital where - before having a fatal cardiac arrest - a man claimed someone was trying to kill him, and inexplicably knew his exact time of death. As the investigation unfolds, a black market for vital organs is uncovered in which bio-mechanical hearts can be resold and remotely \"shut off.\" As the team fights to find the pulse of this 2048 tech-centric crime, Dorian reconnects with a decommissioned DRN.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13401"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13402,
+      "url": "https://www.tvmaze.com/episodes/13402/almost-human-1x07-simon-says",
+      "name": "Simon Says",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2014-01-06",
+      "airtime": "20:00",
+      "airstamp": "2014-01-07T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140953.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140953.jpg"
+      },
+      "summary": "<p>Det. Kennex and Dorian investigate Simon, a psychopathic killer who is strapping bombs to his victims' neck and broadcasting their final moments over the internet. When Simon targets Kennex, the team is in a nail-biting race against time to save his life. Meanwhile, a power deficiency affects Dorian's energy level, causing him to have unexpected outbursts.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13402"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13403,
+      "url": "https://www.tvmaze.com/episodes/13403/almost-human-1x08-you-are-here",
+      "name": "You are Here",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2014-01-13",
+      "airtime": "20:00",
+      "airstamp": "2014-01-14T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140954.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140954.jpg"
+      },
+      "summary": "<p>Det. Kennex and Dorian investigate a crime scene involving a self-guided bullet that can track, target and kill specific people at any moment. Meanwhile, Maldonado revisits the deadly ambush that almost killed Kennex.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13403"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13404,
+      "url": "https://www.tvmaze.com/episodes/13404/almost-human-1x09-unbound",
+      "name": "Unbound",
+      "season": 1,
+      "number": 9,
+      "type": "regular",
+      "airdate": "2014-02-03",
+      "airtime": "20:00",
+      "airstamp": "2014-02-04T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.1
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140955.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140955.jpg"
+      },
+      "summary": "<p>There are consequences and casualties when Danica, an XRN (an advanced DRN that operates more like a soldier than a cop), is rebuilt and on a rampage. With few clues about her mission, location and innocent lives being lost, Kennex and Dorian look to Dr. Nigel Vaughn, a genius roboticist and DRN creator, in attempt to track her down.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13404"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13405,
+      "url": "https://www.tvmaze.com/episodes/13405/almost-human-1x10-perception",
+      "name": "Perception",
+      "season": 1,
+      "number": 10,
+      "type": "regular",
+      "airdate": "2014-02-10",
+      "airtime": "20:00",
+      "airstamp": "2014-02-11T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140956.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140956.jpg"
+      },
+      "summary": "<p>When Det. Kennex and Dorian investigate the simultaneous and sudden deaths of two genetically-enhanced - or \"chrome\" - children, a fatal dose of the perfect designer drug appears to be the cause. As the investigation unfolds and a recent drowning victim is mysteriously connected, the case takes an unexpected turn. Meanwhile, Kennex endures painful flashes from the past and pays a visit to the recollectionist.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13405"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13406,
+      "url": "https://www.tvmaze.com/episodes/13406/almost-human-1x11-disrupt",
+      "name": "Disrupt",
+      "season": 1,
+      "number": 11,
+      "type": "regular",
+      "airdate": "2014-02-17",
+      "airtime": "20:00",
+      "airstamp": "2014-02-18T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140957.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140957.jpg"
+      },
+      "summary": "<p>Deadly crime from the future occurs when a \"smart home\" goes terribly bad and turns on its occupants. Detective Kennex and Dorian lead the investigation that forces them to interface with a house that is represented by a mysterious hologram character.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13406"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13407,
+      "url": "https://www.tvmaze.com/episodes/13407/almost-human-1x12-beholder",
+      "name": "Beholder",
+      "season": 1,
+      "number": 12,
+      "type": "regular",
+      "airdate": "2014-02-24",
+      "airtime": "20:00",
+      "airstamp": "2014-02-25T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140958.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140958.jpg"
+      },
+      "summary": "<p>When Det. Kennex and Dorian investigate the murder of a \"chrome,\" there are no signs of trauma, other than a very small pinprick on the back of his neck. As the investigation unfolds, it's revealed that the murder suspect is tapping into the DNA of his victims in pursuit of perfection.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13407"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    },
+    {
+      "id": 13408,
+      "url": "https://www.tvmaze.com/episodes/13408/almost-human-1x13-straw-man",
+      "name": "Straw Man",
+      "season": 1,
+      "number": 13,
+      "type": "regular",
+      "airdate": "2014-03-03",
+      "airtime": "20:00",
+      "airstamp": "2014-03-04T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/56/140959.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/56/140959.jpg"
+      },
+      "summary": "<p>Det. Kennex and Dorian investigate a string of murders by a copycat of a serial killer whom Kennex's father put in jail. As the investigation unfolds, biotechnology from the future sheds light on crimes of the past. Meanwhile, Dorian receives his performance evaluation since being reactivated.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/13408"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/202",
+          "name": "Almost Human"
+        }
+      }
+    }
+  ],
+  "show:wolf creek 2": null,
+  "show:horror": {
+    "id": 83588,
+    "url": "https://www.tvmaze.com/shows/83588/horror-candy",
+    "name": "Horror Candy",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [],
+    "status": "Running",
+    "runtime": null,
+    "averageRuntime": 25,
+    "premiered": "2024-01-01",
+    "ended": null,
+    "officialSite": "https://tv.apple.com/us/show/horror-candy/umc.cmc.626zgpxxa23x7egzrxllea79x",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Monday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 83,
+    "network": null,
+    "webChannel": {
+      "id": 310,
+      "name": "Apple TV",
+      "country": null,
+      "officialSite": "https://tv.apple.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 457794,
+      "imdb": "tt33508042"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/561/1402746.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/561/1402746.jpg"
+    },
+    "summary": "<p>Presents nine eclectic tales of terror, each a unique nightmare ranging from dystopian futures to haunted space stations. </p>",
+    "updated": 1742994046,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/83588"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3185058",
+        "name": "F for Freaks"
+      }
+    }
+  },
+  "episodes:83588": [
+    {
+      "id": 3185054,
+      "url": "https://www.tvmaze.com/episodes/3185054/horror-candy-1x01-oi-flotando",
+      "name": "O.I. / Flotando",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2024-01-01",
+      "airtime": "",
+      "airstamp": "2024-01-01T12:00:00+00:00",
+      "runtime": 27,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3185054"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/83588",
+          "name": "Horror Candy"
+        }
+      }
+    },
+    {
+      "id": 3185055,
+      "url": "https://www.tvmaze.com/episodes/3185055/horror-candy-1x02-happy-birthday-nightingale",
+      "name": "Happy Birthday / Nightingale",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2024-01-01",
+      "airtime": "",
+      "airstamp": "2024-01-01T12:00:00+00:00",
+      "runtime": 22,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3185055"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/83588",
+          "name": "Horror Candy"
+        }
+      }
+    },
+    {
+      "id": 3185056,
+      "url": "https://www.tvmaze.com/episodes/3185056/horror-candy-1x03-lunch-ladies-hold",
+      "name": "Lunch Ladies / Hold",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2024-01-01",
+      "airtime": "",
+      "airstamp": "2024-01-01T12:00:00+00:00",
+      "runtime": 28,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3185056"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/83588",
+          "name": "Horror Candy"
+        }
+      }
+    },
+    {
+      "id": 3185057,
+      "url": "https://www.tvmaze.com/episodes/3185057/horror-candy-1x04-maul-mirror-gaze",
+      "name": "Maul / Mirror Gaze",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2024-01-01",
+      "airtime": "",
+      "airstamp": "2024-01-01T12:00:00+00:00",
+      "runtime": 20,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3185057"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/83588",
+          "name": "Horror Candy"
+        }
+      }
+    },
+    {
+      "id": 3185058,
+      "url": "https://www.tvmaze.com/episodes/3185058/horror-candy-1x05-f-for-freaks",
+      "name": "F for Freaks",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2024-01-01",
+      "airtime": "",
+      "airstamp": "2024-01-01T12:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3185058"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/83588",
+          "name": "Horror Candy"
+        }
+      }
+    }
+  ],
+  "show:lucky": {
+    "id": 81228,
+    "url": "https://www.tvmaze.com/shows/81228/lucky",
+    "name": "Lucky",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Action",
+      "Thriller"
+    ],
+    "status": "In Development",
+    "runtime": null,
+    "averageRuntime": null,
+    "premiered": "2026-07-15",
+    "ended": null,
+    "officialSite": "https://tv.apple.com/show/lucky/umc.cmc.5qo7t3nngb2vj0m9dxkwebw1o",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Wednesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 99,
+    "network": null,
+    "webChannel": {
+      "id": 310,
+      "name": "Apple TV",
+      "country": null,
+      "officialSite": "https://tv.apple.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 457437,
+      "imdb": "tt34866681"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/627/1569020.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/627/1569020.jpg"
+    },
+    "summary": "<p>When a multi-million-dollar heist goes sideways, con artist Lucky is forced to go on the run. Pursued by both the FBI and a ruthless crime boss, Lucky must fight for her life — and a way out.</p>",
+    "updated": 1781375844,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/81228"
+      },
+      "nextepisode": {
+        "href": "https://api.tvmaze.com/episodes/3539006",
+        "name": "Episode 1"
+      }
+    }
+  },
+  "episodes:81228": [
+    {
+      "id": 3539006,
+      "url": "https://www.tvmaze.com/episodes/3539006/lucky-1x01-episode-1",
+      "name": "Episode 1",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2026-07-15",
+      "airtime": "",
+      "airstamp": "2026-07-15T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539006"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    },
+    {
+      "id": 3539009,
+      "url": "https://www.tvmaze.com/episodes/3539009/lucky-1x02-episode-2",
+      "name": "Episode 2",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2026-07-15",
+      "airtime": "",
+      "airstamp": "2026-07-15T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539009"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    },
+    {
+      "id": 3539011,
+      "url": "https://www.tvmaze.com/episodes/3539011/lucky-1x03-episode-3",
+      "name": "Episode 3",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2026-07-22",
+      "airtime": "",
+      "airstamp": "2026-07-22T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539011"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    },
+    {
+      "id": 3539012,
+      "url": "https://www.tvmaze.com/episodes/3539012/lucky-1x04-episode-4",
+      "name": "Episode 4",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2026-07-29",
+      "airtime": "",
+      "airstamp": "2026-07-29T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539012"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    },
+    {
+      "id": 3539013,
+      "url": "https://www.tvmaze.com/episodes/3539013/lucky-1x05-episode-5",
+      "name": "Episode 5",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2026-08-05",
+      "airtime": "",
+      "airstamp": "2026-08-05T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539013"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    },
+    {
+      "id": 3539014,
+      "url": "https://www.tvmaze.com/episodes/3539014/lucky-1x06-episode-6",
+      "name": "Episode 6",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2026-08-12",
+      "airtime": "",
+      "airstamp": "2026-08-12T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539014"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    },
+    {
+      "id": 3539015,
+      "url": "https://www.tvmaze.com/episodes/3539015/lucky-1x07-episode-7",
+      "name": "Episode 7",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2026-08-19",
+      "airtime": "",
+      "airstamp": "2026-08-19T12:00:00+00:00",
+      "runtime": null,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": null,
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3539015"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/81228",
+          "name": "Lucky"
+        }
+      }
+    }
+  ],
+  "show:party hard die young": null
 }
