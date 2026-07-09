@@ -93,7 +93,7 @@
 <channel id="AMERICAN.HEROES.CHANNEL.us"><display-name>AMERICAN HEROES CHANNEL</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/American%20Heroes.png"/><url>https://tvguide.com</url></channel>
 <channel id="CRIME.AND.INVESTIGATION.us"><display-name>CRIME AND INVESTIGATION</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png"/><url>https://tvguide.com</url></channel>
-<channel id="HBO.COMEDY.us"><display-name>HBO COMEDY</display-name>
+<channel id=".COMEDY.us"><display-name>HBO COMEDY</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Comedy.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.us"><display-name>CINEMAX</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax.png"/><url>https://tvguide.com</url></channel>
