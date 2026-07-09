@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tv generator-info-name="festy-horror-epgpw">
-<channel id="484887"><display-name lang="en">MGM Presents</display-name><icon src="https://github.com/festy1986/festy-epg/blob/main/logos/mgmpresents.png?raw=true"/></channel>
-<channel id="484880"><display-name lang="en">MGM Presents Action</display-name></channel>
-<channel id="464981"><display-name lang="en">MGM Presents Horror</display-name></channel>
-<channel id="465306"><display-name lang="en">Scares by Shudder</display-name><icon src="https://github.com/festy1986/festy-epg/blob/main/logos/Shudder.png?raw=true"/></channel>
-<channel id="492941"><display-name lang="en">Universal Monsters</display-name><icon src="https://github.com/festy1986/festy-epg/blob/main/logos/univeralmonster.png?raw=true"/></channel>
+  <channel id="484887">
+    <display-name lang="en">MGM Presents</display-name>
+  </channel>
+  <channel id="484880">
+    <display-name lang="en">MGM Presents Action</display-name>
+  </channel>
+  <channel id="464981">
+    <display-name lang="en">MGM Presents Horror</display-name>
+  </channel>
+  <channel id="465306">
+    <display-name lang="en">Scares by Shudder</display-name>
+  </channel>
+  <channel id="492941">
+    <display-name lang="en">Universal Monsters</display-name>
+  </channel>
 <programme channel="464981" start="20260709000000 -0600" stop="20260709050000 -0600">
     <title lang="zh">Channel No Longer Available</title>
     <desc>This channel is no longer available.</desc>
