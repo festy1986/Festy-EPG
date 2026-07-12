@@ -114932,5 +114932,1049 @@
       }
     }
   ],
-  "show:party hard die young": null
+  "show:party hard die young": null,
+  "show:magic": {
+    "id": 404,
+    "url": "https://www.tvmaze.com/shows/404/magic-city",
+    "name": "Magic City",
+    "type": "Scripted",
+    "language": "English",
+    "genres": [
+      "Drama",
+      "Crime",
+      "Mystery"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2012-03-30",
+    "ended": "2013-08-09",
+    "officialSite": null,
+    "schedule": {
+      "time": "21:00",
+      "days": [
+        "Friday"
+      ]
+    },
+    "rating": {
+      "average": 7.9
+    },
+    "weight": 81,
+    "network": {
+      "id": 17,
+      "name": "STARZ",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.starz.com/us/en/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 29628,
+      "thetvdb": 210961,
+      "imdb": "tt1832045"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/179/449238.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/179/449238.jpg"
+    },
+    "summary": "<p>Miami Beach, 1959.</p><p>As Ike Evans rings in the New Year at his luxurious Miramar Playa Hotel, Havana falls to Castro's rebels. It's a turbulent time in Miami, but it's the place to be. The Kennedys, the mob and the CIA all hold court here. And Ike, he's the star of his hotel. But everything comes at a price. To finance his dream, he sold his soul to mob boss Ben \"The Butcher\" Diamond. Ike's wife Vera, a former showgirl, and his three kids think he's an honorable man, but he can't break his pact with the devil. His life is a façade. In fact, nothing at the Miramar Playa is what it seems. By day, it's diving clowns and cha-cha lessons. By night, escorts have secret liaisons with husbands in the family cabanas, while Miami's seedier residents and the law drift together to hear legendary singers, musicians and comics. As Ike's world threatens to implode, he fights for his family, and the Miramar Playa, in <b>Magic City</b>.</p>",
+    "updated": 1704793912,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/404"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/39339",
+        "name": "The Sins of the Father"
+      }
+    }
+  },
+  "episodes:404": [
+    {
+      "id": 39324,
+      "url": "https://www.tvmaze.com/episodes/39324/magic-city-1x01-the-year-of-the-fin",
+      "name": "The Year of the Fin",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2012-03-30",
+      "airtime": "23:00",
+      "airstamp": "2012-03-31T03:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.4
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763385.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763385.jpg"
+      },
+      "summary": "<p>Ike Evans, owner of Miami's most glamorous hotel, needs his 1958 NYE concert to be a smash. He makes a deal with mobster Ben Diamond to ensure success that threatens his life and family.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39324"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39325,
+      "url": "https://www.tvmaze.com/episodes/39325/magic-city-1x02-feeding-frenzy",
+      "name": "Feeding Frenzy",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2012-04-13",
+      "airtime": "22:00",
+      "airstamp": "2012-04-14T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763386.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763386.jpg"
+      },
+      "summary": "<p>Ike Faces the disappearance of Mike Strauss while DA Klein attacks organized crime through Ike's law-student son. Meanwhile, Stevie Evans' affair with Lily Diamond heats up.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39325"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39326,
+      "url": "https://www.tvmaze.com/episodes/39326/magic-city-1x03-castles-made-of-sand",
+      "name": "Castles Made of Sand",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2012-04-20",
+      "airtime": "22:00",
+      "airstamp": "2012-04-21T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.2
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763387.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763387.jpg"
+      },
+      "summary": "<p>Ike tries to bribe officials to legalize casino gambling. And old friend visits Vera, and Ben wonders if his wife is faithful. Ike contacts his wealthy ex-sister-in-law for a favor.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39326"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39327,
+      "url": "https://www.tvmaze.com/episodes/39327/magic-city-1x04-atonement",
+      "name": "Atonement",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2012-04-27",
+      "airtime": "22:00",
+      "airstamp": "2012-04-28T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763388.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763388.jpg"
+      },
+      "summary": "<p>Mike Strauss' body is seized, Ike reacts to a break-in, and Victor plots to get his wife out of Cuba. Vera secures Jackie Kennedy for a charity event but laments not having children with Ike.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39327"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39328,
+      "url": "https://www.tvmaze.com/episodes/39328/magic-city-1x05-suicide-blonde",
+      "name": "Suicide Blonde",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2012-05-04",
+      "airtime": "22:00",
+      "airstamp": "2012-05-05T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763389.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763389.jpg"
+      },
+      "summary": "<p>Ike is determined to save Judi Silver from Ben Diamond. Polaroids of Stevie and Lily surface. Vera tries something new to get pregnant, Danny and Mercedes' bond grows, and Klein's search ramps up.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39328"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39329,
+      "url": "https://www.tvmaze.com/episodes/39329/magic-city-1x06-the-harder-they-fall",
+      "name": "The Harder They Fall",
+      "season": 1,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2012-05-11",
+      "airtime": "22:00",
+      "airstamp": "2012-05-12T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763390.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763390.jpg"
+      },
+      "summary": "<p>Ike and Ben Diamond bet big on a boxing match. Jackie Kennedy cancels on Vera. Danny gets blackmail photos meant for Stevie, and Klein finds something that will change Ike's life forever.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39329"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39330,
+      "url": "https://www.tvmaze.com/episodes/39330/magic-city-1x07-whos-the-horse-and-whos-the-rider",
+      "name": "Who's the Horse and Who's the Rider?",
+      "season": 1,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2012-05-18",
+      "airtime": "22:00",
+      "airstamp": "2012-05-19T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763391.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763391.jpg"
+      },
+      "summary": "<p>Danny confronts Stevie about his affair and uses the DA to uncover blackmail. Klein shows Ike damning evidence, and Meg refuses Ike's offer. Caught lying to Ben, Ike must make a deal.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39330"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39331,
+      "url": "https://www.tvmaze.com/episodes/39331/magic-city-1x08-time-and-tide",
+      "name": "Time and Tide",
+      "season": 1,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2012-06-01",
+      "airtime": "22:00",
+      "airstamp": "2012-06-02T02:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 6.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763392.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763392.jpg"
+      },
+      "summary": "<p>Judi Silver falls into Klein's hands, while Victor and Mercedes get bad news. Lily and Stevie's affair gets more dangerous. Juggling family, Ben Diamond, and a new partner, Ike's future is uncertain.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39331"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39332,
+      "url": "https://www.tvmaze.com/episodes/39332/magic-city-2x01-crime-and-punishment",
+      "name": "Crime and Punishment",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2013-06-14",
+      "airtime": "21:00",
+      "airstamp": "2013-06-15T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 4.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763393.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763393.jpg"
+      },
+      "summary": "<p>Ike is in jail on a murder charge - in the scramble to raise bail, his wife and son discover Ike's \"silent\" partners. Ben Diamond fears Ike will crumble under pressure and offers unexpected aid.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39332"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39333,
+      "url": "https://www.tvmaze.com/episodes/39333/magic-city-2x02-angels-of-death",
+      "name": "Angels of Death",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2013-06-21",
+      "airtime": "21:00",
+      "airstamp": "2013-06-22T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 4.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763394.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763394.jpg"
+      },
+      "summary": "<p>Ike sets a risky plan to rid his Miramar Playa of Ben Diamond in motion. Ben seeks permission to kill Ike. Stevie and Lily go on a real date. Meg threatens Vera, and Ben hosts a debauched \"Seder\".</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39333"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39334,
+      "url": "https://www.tvmaze.com/episodes/39334/magic-city-2x03-adapt-or-die",
+      "name": "Adapt or Die",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2013-06-28",
+      "airtime": "21:00",
+      "airstamp": "2013-06-29T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 4.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763395.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763395.jpg"
+      },
+      "summary": "<p>Ike goes to Cuba to retrieve Maria's ashes and set his plan to oust Ben in motion. Stevie is lured deeper into Ben's world. Stevie offers a chemical solution when Vera struggles with exhausting rehearsals.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39334"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39335,
+      "url": "https://www.tvmaze.com/episodes/39335/magic-city-2x04-crossroads",
+      "name": "Crossroads",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2013-07-12",
+      "airtime": "21:00",
+      "airstamp": "2013-07-13T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 4.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763396.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763396.jpg"
+      },
+      "summary": "<p>Ike makes mob boss Sy Berman a risky offer - Havana for the Miramar Playa. Danny commits to Jack Klein and learns the truth about Ben Diamond. Ben ruins an arms deal with the Cubans, with tragic results.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39335"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39336,
+      "url": "https://www.tvmaze.com/episodes/39336/magic-city-2x05-world-in-changes",
+      "name": "World in Changes",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2013-07-19",
+      "airtime": "21:00",
+      "airstamp": "2013-07-20T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 4.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763397.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763397.jpg"
+      },
+      "summary": "<p>Ike and Meg grow close as Meg uses connections to fight the gambling bill. Vera must face reality about her dancing future. Danny's world roils due to the busted arms deal. Ben makes Stevie an offer.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39336"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39337,
+      "url": "https://www.tvmaze.com/episodes/39337/magic-city-2x06-sitting-on-top-of-the-world",
+      "name": "Sitting on Top of the World",
+      "season": 2,
+      "number": 6,
+      "type": "regular",
+      "airdate": "2013-07-26",
+      "airtime": "21:00",
+      "airstamp": "2013-07-27T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763398.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763398.jpg"
+      },
+      "summary": "<p>Stevie's sex and booze-soaked deejay convention takes over the hotel. Mercedes makes a revelation to Vera. Ike's plot to fix the Cuban lottery begins. Ben seeks revenge in the wrong places.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39337"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39338,
+      "url": "https://www.tvmaze.com/episodes/39338/magic-city-2x07-and-your-enemies-closer",
+      "name": "...And Your Enemies Closer",
+      "season": 2,
+      "number": 7,
+      "type": "regular",
+      "airdate": "2013-08-02",
+      "airtime": "21:00",
+      "airstamp": "2013-08-03T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763401.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763401.jpg"
+      },
+      "summary": "<p>Ike's deal to run the Havana hotels hurts his ties to Victor. Stevie starts a new job with Ben. Klein swears to destroy Ike as passage of the gambling bill nears. Sy Berman arrives in Miami.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39338"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    },
+    {
+      "id": 39339,
+      "url": "https://www.tvmaze.com/episodes/39339/magic-city-2x08-the-sins-of-the-father",
+      "name": "The Sins of the Father",
+      "season": 2,
+      "number": 8,
+      "type": "regular",
+      "airdate": "2013-08-09",
+      "airtime": "21:00",
+      "airstamp": "2013-08-10T01:00:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": 5.7
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/305/763400.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/305/763400.jpg"
+      },
+      "summary": "<p>Ike and Ben's future hangs on the outcome of the gambling bill. Klein weighs Ike's offer to get The Butcher. Stevie and Lily face the end. Vera's heart is broken. What has Ike won?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/39339"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/404",
+          "name": "Magic City"
+        }
+      }
+    }
+  ],
+  "show:scare me": null,
+  "show:the amusement park": null,
+  "show:sequence break": null,
+  "show:jakob s wife": null,
+  "show:habit": {
+    "id": 11795,
+    "url": "https://www.tvmaze.com/shows/11795/the-habit",
+    "name": "The Habit",
+    "type": "Reality",
+    "language": "English",
+    "genres": [],
+    "status": "Ended",
+    "runtime": 30,
+    "averageRuntime": 30,
+    "premiered": "2015-01-04",
+    "ended": "2016-01-26",
+    "officialSite": "http://www.thesportsmanchannel.com/shows/the-habit/",
+    "schedule": {
+      "time": "19:30",
+      "days": [
+        "Tuesday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 20,
+    "network": {
+      "id": 217,
+      "name": "Sportsman Channel",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": null
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": null,
+      "imdb": null
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/39/99284.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/39/99284.jpg"
+    },
+    "summary": "<p>In life there are habits that bring people together in very unexpected ways. A few years ago on a bowfishing trip, Chuck Belmore, Jon Justice, and JP Morris met on a boat headed out to do what they all three loved to do…shoot fish. A friendship was made and <b>The Habit</b> was born. This trio all share in their desire to stretch long weekends into impossible outdoor road trips. No matter the distance or lack of sleep, they spend every free second in the outdoors. Whether it's ducks, deer, elk, or fish, you can always count on them to chase their habit.</p>",
+    "updated": 1628619926,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/11795"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/577175",
+        "name": "The U.S. Open Part 1"
+      }
+    }
+  },
+  "episodes:11795": [
+    {
+      "id": 573946,
+      "url": "https://www.tvmaze.com/episodes/573946/the-habit-1x01-pilot",
+      "name": "Pilot",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2015-01-04",
+      "airtime": "20:00",
+      "airstamp": "2015-01-05T01:00:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/573946"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/11795",
+          "name": "The Habit"
+        }
+      }
+    },
+    {
+      "id": 573947,
+      "url": "https://www.tvmaze.com/episodes/573947/the-habit-2x01-voodoo-sharks",
+      "name": "Voodoo Sharks",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2016-01-12",
+      "airtime": "19:30",
+      "airstamp": "2016-01-13T00:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>JP, Chuck and Jon meet up with Pigman to chase sharks and gator gar in Louisiana. Jp gets his biggest Gator Gar and Redfish with a bow.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/573947"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/11795",
+          "name": "The Habit"
+        }
+      }
+    },
+    {
+      "id": 573948,
+      "url": "https://www.tvmaze.com/episodes/573948/the-habit-2x02-the-donkey-ride",
+      "name": "The Donkey Ride",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2016-01-19",
+      "airtime": "19:30",
+      "airstamp": "2016-01-20T00:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>This episode showcases one of the biggest clusters in Outdoor TV. It was a whitetail hunt for the ages.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/573948"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/11795",
+          "name": "The Habit"
+        }
+      }
+    },
+    {
+      "id": 577175,
+      "url": "https://www.tvmaze.com/episodes/577175/the-habit-2x03-the-us-open-part-1",
+      "name": "The U.S. Open Part 1",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2016-01-26",
+      "airtime": "19:30",
+      "airstamp": "2016-01-27T00:30:00+00:00",
+      "runtime": 30,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The guys head to Kentucky for the annual youth bowfishing tournament, then roll straight to Missouri to bowfish with Kevin VanDam.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/577175"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/11795",
+          "name": "The Habit"
+        }
+      }
+    }
+  ],
+  "show:horror s greatest": {
+    "id": 78726,
+    "url": "https://www.tvmaze.com/shows/78726/horrors-greatest",
+    "name": "Horror's Greatest",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [
+      "Horror"
+    ],
+    "status": "To Be Determined",
+    "runtime": null,
+    "averageRuntime": 52,
+    "premiered": "2024-08-27",
+    "ended": null,
+    "officialSite": "https://www.shudder.com/series/watch/horrors-greatest/c5322fe848642faa?season=1",
+    "schedule": {
+      "time": "",
+      "days": [
+        "Tuesday"
+      ]
+    },
+    "rating": {
+      "average": 5.2
+    },
+    "weight": 87,
+    "network": null,
+    "webChannel": {
+      "id": 213,
+      "name": "Shudder",
+      "country": {
+        "name": "United States",
+        "code": "US",
+        "timezone": "America/New_York"
+      },
+      "officialSite": "https://www.shudder.com/"
+    },
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": null,
+      "thetvdb": 453068,
+      "imdb": "tt33054501"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/531/1328118.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/531/1328118.jpg"
+    },
+    "summary": "<p>Celebrating the very best the genre has to offer, <b>Horror's Greatest</b> is a deep dive into everything we love about horror. From fresh looks at classics to unearthing scores of hidden gems, this series has something for every fright film enthusiast. A gallery of ghoulish pros, including actors, directors, writers, composers, and special effects artists, draw on their unique knowledge to answer the big questions: What are the must-see films in horror's many sub-genres? What's the appeal of horror tropes, and how do today's filmmakers subvert our expectations? What shape does horror take in countries outside of the United States? The answers encompass the breath of the nightmares we watch for our entertainment.</p>",
+    "updated": 1738083464,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/78726"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/3096005",
+        "name": "Space Horror"
+      }
+    }
+  },
+  "episodes:78726": [
+    {
+      "id": 2977647,
+      "url": "https://www.tvmaze.com/episodes/2977647/horrors-greatest-1x01-tropes-cliches",
+      "name": "Tropes & Cliches",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2024-08-27",
+      "airtime": "",
+      "airstamp": "2024-08-27T16:00:00+00:00",
+      "runtime": 56,
+      "rating": {
+        "average": 5.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/533/1332673.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/533/1332673.jpg"
+      },
+      "summary": "<p>Experts name common horror tropes and clichés and show how clever filmmakers use and subvert them.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2977647"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 2977648,
+      "url": "https://www.tvmaze.com/episodes/2977648/horrors-greatest-1x02-giant-monsters",
+      "name": "Giant Monsters",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2024-09-03",
+      "airtime": "",
+      "airstamp": "2024-09-03T16:00:00+00:00",
+      "runtime": 53,
+      "rating": {
+        "average": 7.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/533/1334738.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/533/1334738.jpg"
+      },
+      "summary": "<p>From King Kong to the space shark in Nope, giant monsters are pure fun - and powerful metaphors.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2977648"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 2984820,
+      "url": "https://www.tvmaze.com/episodes/2984820/horrors-greatest-1x03-japanese-horror",
+      "name": "Japanese Horror",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2024-09-10",
+      "airtime": "",
+      "airstamp": "2024-09-10T16:00:00+00:00",
+      "runtime": 55,
+      "rating": {
+        "average": 5.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/534/1337294.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/534/1337294.jpg"
+      },
+      "summary": "<p>Deeply creepy, wildly violent, and perversely funny: these are the must-see J-Horror films.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2984820"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 2984821,
+      "url": "https://www.tvmaze.com/episodes/2984821/horrors-greatest-1x04-horror-comedies",
+      "name": "Horror Comedies",
+      "season": 1,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2024-09-17",
+      "airtime": "",
+      "airstamp": "2024-09-17T16:00:00+00:00",
+      "runtime": 49,
+      "rating": {
+        "average": 5.8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/535/1339575.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/535/1339575.jpg"
+      },
+      "summary": "<p>From the splatstick of Evil Dead ll to M3GAN's high camp, horror comedies help us laugh at our fears.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2984821"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 2984822,
+      "url": "https://www.tvmaze.com/episodes/2984822/horrors-greatest-1x05-stephen-king-adaptations",
+      "name": "Stephen King Adaptations",
+      "season": 1,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2024-09-24",
+      "airtime": "",
+      "airstamp": "2024-09-24T16:00:00+00:00",
+      "runtime": 58,
+      "rating": {
+        "average": 6.6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/550/1375381.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/550/1375381.jpg"
+      },
+      "summary": "<p>What elements need to come together to successfully adapt King on the page to King on the screen?</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/2984822"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 3075025,
+      "url": "https://www.tvmaze.com/episodes/3075025/horrors-greatest-2x01-animal-attacks",
+      "name": "Animal Attacks",
+      "season": 2,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2024-12-31",
+      "airtime": "",
+      "airstamp": "2024-12-31T17:00:00+00:00",
+      "runtime": 54,
+      "rating": {
+        "average": 5.5
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/549/1374543.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/549/1374543.jpg"
+      },
+      "summary": "<p>When wildlife runs amok, and good pets go bad.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3075025"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 3095728,
+      "url": "https://www.tvmaze.com/episodes/3095728/horrors-greatest-2x02-killer-dates",
+      "name": "Killer Dates",
+      "season": 2,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2025-01-07",
+      "airtime": "",
+      "airstamp": "2025-01-07T17:00:00+00:00",
+      "runtime": 48,
+      "rating": {
+        "average": 6
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/550/1377257.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/550/1377257.jpg"
+      },
+      "summary": "<p>In horror, looking for love leads to blood and carnage.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3095728"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 3096003,
+      "url": "https://www.tvmaze.com/episodes/3096003/horrors-greatest-2x03-hidden-gems",
+      "name": "Hidden Gems",
+      "season": 2,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2025-01-14",
+      "airtime": "",
+      "airstamp": "2025-01-14T17:00:00+00:00",
+      "runtime": 43,
+      "rating": {
+        "average": 4.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/552/1380311.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/552/1380311.jpg"
+      },
+      "summary": "<p>Experts select films for the ghoul who has \"seen everything\".</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3096003"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 3096004,
+      "url": "https://www.tvmaze.com/episodes/3096004/horrors-greatest-2x04-film-scores",
+      "name": "Film Scores",
+      "season": 2,
+      "number": 4,
+      "type": "regular",
+      "airdate": "2025-01-21",
+      "airtime": "",
+      "airstamp": "2025-01-21T17:00:00+00:00",
+      "runtime": 53,
+      "rating": {
+        "average": 8
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/553/1382536.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/553/1382536.jpg"
+      },
+      "summary": "<p>The bleeding edge of music.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3096004"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    },
+    {
+      "id": 3096005,
+      "url": "https://www.tvmaze.com/episodes/3096005/horrors-greatest-2x05-space-horror",
+      "name": "Space Horror",
+      "season": 2,
+      "number": 5,
+      "type": "regular",
+      "airdate": "2025-01-28",
+      "airtime": "",
+      "airstamp": "2025-01-28T17:00:00+00:00",
+      "runtime": 55,
+      "rating": {
+        "average": 6.3
+      },
+      "image": {
+        "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/553/1384500.jpg",
+        "original": "https://static.tvmaze.com/uploads/images/original_untouched/553/1384500.jpg"
+      },
+      "summary": "<p>The greatest sci-fi movies ever made are also horror films.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/3096005"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/78726",
+          "name": "Horror's Greatest"
+        }
+      }
+    }
+  ],
+  "show:what josiah saw": null,
+  "show:a nightmare wakes": null
 }
