@@ -115976,5 +115976,145 @@
     }
   ],
   "show:what josiah saw": null,
-  "show:a nightmare wakes": null
+  "show:a nightmare wakes": null,
+  "show:bleed with me": null,
+  "show:the reef": {
+    "id": 2563,
+    "url": "https://www.tvmaze.com/shows/2563/life-on-the-reef",
+    "name": "Life on the Reef",
+    "type": "Documentary",
+    "language": "English",
+    "genres": [
+      "Nature"
+    ],
+    "status": "Ended",
+    "runtime": 60,
+    "averageRuntime": 60,
+    "premiered": "2015-03-01",
+    "ended": "2015-03-15",
+    "officialSite": "http://www.abc.net.au/tv/programs/life-on-the-reef/",
+    "schedule": {
+      "time": "19:40",
+      "days": [
+        "Sunday"
+      ]
+    },
+    "rating": {
+      "average": null
+    },
+    "weight": 71,
+    "network": {
+      "id": 114,
+      "name": "ABC",
+      "country": {
+        "name": "Australia",
+        "code": "AU",
+        "timezone": "Australia/Sydney"
+      },
+      "officialSite": "https://www.abc.net.au/"
+    },
+    "webChannel": null,
+    "dvdCountry": null,
+    "externals": {
+      "tvrage": 44600,
+      "thetvdb": 282549,
+      "imdb": "tt4892108"
+    },
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/203/509971.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/203/509971.jpg"
+    },
+    "summary": "<p>Australia's Great Barrier Reef is the world's largest living structure and one of the richest and most complex natural ecosystems on Earth. To some, this place is full of mystery and hardship, an alien world full of bizarre, beautiful and deadly creatures. To others, however, it's home. Over the course of a year, <i>Life on the Reef</i> follows those who live in one of the most extraordinary places on the planet.</p><p>Along the 1500 miles of coastline, rangers and marine park officers work together with traditional owners, search and rescue crews, scientists and tourism operators to safeguard the reef and protect the millions of residents, tourists, divers and fishermen that visit each year. It's a monumental task — the reef covers an area bigger than the United Kingdom, Switzerland and Holland combined. Violent cyclonic weather, catastrophic crown of thorns starfish infestations, illegal commercial fishing and protecting endangered sea turtles are just some of the challenges they face.</p><p>Set against a backdrop of extraordinary marine habitats, ranging from coral reefs to tropical islands, shallow estuaries to deep oceanic waters — the series takes the audience above and beneath the waters as nature adapts to the changing seasons throughout the year. This is the blue frontier ... where man meets wild and nature calls the shots.</p>",
+    "updated": 1704794952,
+    "_links": {
+      "self": {
+        "href": "https://api.tvmaze.com/shows/2563"
+      },
+      "previousepisode": {
+        "href": "https://api.tvmaze.com/episodes/199914",
+        "name": "Summer"
+      }
+    }
+  },
+  "episodes:2563": [
+    {
+      "id": 199912,
+      "url": "https://www.tvmaze.com/episodes/199912/life-on-the-reef-1x01-winter",
+      "name": "Winter",
+      "season": 1,
+      "number": 1,
+      "type": "regular",
+      "airdate": "2015-03-01",
+      "airtime": "19:40",
+      "airstamp": "2015-03-02T00:40:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>Tourists flock to the reef to enjoy the perfect weather, and the humpback whales are here to give birth. Fire destroys a luxury yacht, and a critical rescue is launched. On the most protected island in Australia, 20,000 green sea turtles return to the biggest reptilian breeding colony on Earth.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/199912"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2563",
+          "name": "Life on the Reef"
+        }
+      }
+    },
+    {
+      "id": 199913,
+      "url": "https://www.tvmaze.com/episodes/199913/life-on-the-reef-1x02-spring",
+      "name": "Spring",
+      "season": 1,
+      "number": 2,
+      "type": "regular",
+      "airdate": "2015-03-08",
+      "airtime": "19:40",
+      "airstamp": "2015-03-08T23:40:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The approach of the wet season brings an explosion of life on the reef as corals spawn, sea birds nest and turtle hatchlings erupt over the beaches in the thousands. Like a great alien spaceship, the manta ray comes swooping in, a gentle plankton feeding giant up to seven meters wide and weighing as much as two tons. Soon torrential rain and severe storms will close in, bringing change and upheaval to the delicate ecosystem.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/199913"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2563",
+          "name": "Life on the Reef"
+        }
+      }
+    },
+    {
+      "id": 199914,
+      "url": "https://www.tvmaze.com/episodes/199914/life-on-the-reef-1x03-summer",
+      "name": "Summer",
+      "season": 1,
+      "number": 3,
+      "type": "regular",
+      "airdate": "2015-03-15",
+      "airtime": "19:40",
+      "airstamp": "2015-03-15T23:40:00+00:00",
+      "runtime": 60,
+      "rating": {
+        "average": null
+      },
+      "image": null,
+      "summary": "<p>The human and animal residents of the reef prepare as a category 5 cyclone brings destruction to the North Queensland coast. But as cyclone season finally gives way to calm seas, the reef begins to recover and thrive. From the mangroves to the coral cays, reef fish populations flourish, and mysterious dwarf minke whales arrive to enjoy the warm tropical waters.</p>",
+      "_links": {
+        "self": {
+          "href": "https://api.tvmaze.com/episodes/199914"
+        },
+        "show": {
+          "href": "https://api.tvmaze.com/shows/2563",
+          "name": "Life on the Reef"
+        }
+      }
+    }
+  ],
+  "show:a banquet": null
 }
