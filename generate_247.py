@@ -2,14 +2,9 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
-
 INPUT_FILE = "channels.txt"
 OUTPUT_FILE = "guides/24-7.xml"
 
-DAYS = 14
-
-
-# Make sure guides folder exists
 os.makedirs("guides", exist_ok=True)
 
 
@@ -27,8 +22,7 @@ with open(INPUT_FILE, "r", encoding="utf-8") as f:
         if not line:
             continue
 
-        # Remove old format:
-        # 123456 | CHANNEL NAME
+        # Remove old ID | NAME format
         if "|" in line:
             line = line.split("|", 1)[1].strip()
 
@@ -69,17 +63,18 @@ for channel in channels:
         }
     )
 
-    display = ET.SubElement(
+    name = ET.SubElement(
         ch,
         "display-name"
     )
 
-    display.text = channel
+    name.text = channel
 
 
 
 # -----------------------------
-# Create 14 Day Programming
+# Generate 14 Days
+# 2 Hour Blocks
 # -----------------------------
 
 start_date = datetime.now(
@@ -92,36 +87,44 @@ start_date = datetime.now(
 )
 
 
-stop_date = start_date + timedelta(days=DAYS)
-
-
 for channel in channels:
 
-    programme = ET.SubElement(
-        tv,
-        "programme",
-        {
-            "start": start_date.strftime("%Y%m%d%H%M%S +0000"),
-            "stop": stop_date.strftime("%Y%m%d%H%M%S +0000"),
-            "channel": channel
-        }
-    )
+    current = start_date
+
+    end_date = start_date + timedelta(days=14)
+
+    while current < end_date:
+
+        stop = current + timedelta(hours=2)
+
+        programme = ET.SubElement(
+            tv,
+            "programme",
+            {
+                "start": current.strftime("%Y%m%d%H%M%S +0000"),
+                "stop": stop.strftime("%Y%m%d%H%M%S +0000"),
+                "channel": channel
+            }
+        )
 
 
-    title = ET.SubElement(
-        programme,
-        "title"
-    )
+        title = ET.SubElement(
+            programme,
+            "title"
+        )
 
-    title.text = channel
+        title.text = channel
 
 
-    desc = ET.SubElement(
-        programme,
-        "desc"
-    )
+        desc = ET.SubElement(
+            programme,
+            "desc"
+        )
 
-    desc.text = channel
+        desc.text = channel
+
+
+        current = stop
 
 
 
@@ -147,4 +150,5 @@ print("")
 print("Created:")
 print(OUTPUT_FILE)
 print(f"Channels: {len(channels)}")
-print(f"Days: {DAYS}")
+print("Schedule: 14 days")
+print("Blocks: 2 hours")
