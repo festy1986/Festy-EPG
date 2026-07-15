@@ -1,0 +1,29 @@
+name: Clean Channels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run cleanup script
+        run: python clean_channels.py
+
+      - name: Commit cleaned file
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git add channels_clean.txt
+
+          git commit -m "Create cleaned channel list" || exit 0
+
+          git push
