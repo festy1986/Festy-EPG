@@ -33,7 +33,6 @@ jobs:
 
 
         CHANNELS = "xtream-epg/channels.json"
-        MAP = "xtream-epg/channel-map.txt"
 
         OUTPUT = "guides/24-7.xml.gz"
         LIST = "guides/24-7-channel-list.txt"
@@ -42,31 +41,9 @@ jobs:
         os.makedirs("guides", exist_ok=True)
 
 
-        with open(CHANNELS, "r", encoding="utf-8") as f:
-            channels = json.load(f)
 
-
-
-        categories = {}
-
-        if os.path.exists(MAP):
-
-            with open(
-                MAP,
-                "r",
-                encoding="utf-8",
-                errors="ignore"
-            ) as f:
-
-                for line in f:
-
-                    parts = [
-                        x.strip()
-                        for x in line.split("|")
-                    ]
-
-                    if len(parts) >= 2:
-                        categories[parts[0]] = parts[1]
+        with open(CHANNELS,"r",encoding="utf-8") as f:
+            channels=json.load(f)
 
 
 
@@ -75,103 +52,178 @@ jobs:
             if not name:
                 return "UNKNOWN"
 
-            name = str(name).strip()
+
+            name=str(name).strip()
 
 
-            if name in [
-                "",
-                "/",
-                "-"
-            ]:
-                return "UNKNOWN"
-
-
-            name = re.sub(
-                r'^(US|UK|CA|GB)\s*:\s*',
-                '',
-                name,
-                flags=re.I
-            )
-
-
-            name = re.sub(
-                r'[#♬]+',
-                '',
-                name
-            )
-
-
-            remove_words = [
-
+            remove=[
                 "24/7",
                 "RAW",
                 "LIVE",
                 "EXCLUSIVE",
                 "60FPS",
-                "60 FPS",
                 "4K",
                 "8K",
                 "HD",
                 "FHD",
                 "UHD"
-
             ]
 
 
-            for word in remove_words:
+            for word in remove:
 
-                name = re.sub(
-                    r'\b' + re.escape(word) + r'\b',
-                    '',
+                name=re.sub(
+                    r"\b"+re.escape(word)+r"\b",
+                    "",
                     name,
                     flags=re.I
                 )
 
 
-            name = re.sub(
-                r'\s+',
-                ' ',
+            name=re.sub(
+                r"\s+",
+                " ",
                 name
-            ).strip(" -_# ")
+            ).strip(" -_")
+
+
+
+            return name or "UNKNOWN"
+
+
+
+
+        #
+        # XMLTV ID CREATOR
+        #
+        # Example:
+        # A&E -> AANDE.us
+        # AMC HD -> AMC.us
+        #
+        def make_id(name):
+
+            name=clean_name(name)
+
+            name=name.upper()
+
+            name=name.replace("&","AND")
+
+            name=re.sub(
+                r"[^A-Z0-9]+",
+                ".",
+                name
+            )
+
+            name=name.strip(".")
+
+
+            return name + ".us"
+
+
+
+
+        #
+        # BUILD CHANNEL LIST
+        #
+
+        used=set()
+
+        channel_list=[]
+
+
+        for ch in channels:
+
+
+            name=clean_name(
+                ch.get(
+                    "name",
+                    ""
+                )
+            )
 
 
             if not name:
-                return "UNKNOWN"
-
-
-            return name
+                continue
 
 
 
-        def is_sports(cid):
-
-            category = categories.get(
-                str(cid),
-                ""
-            ).lower()
+            cid=make_id(name)
 
 
-            return any(
-                word in category
-                for word in [
-                    "sport",
-                    "ppv",
-                    "event"
-                ]
+
+            #
+            # prevent duplicate IDs
+            #
+            base=cid
+            count=2
+
+
+            while cid in used:
+
+                cid=f"{base}.{count}"
+
+                count+=1
+
+
+
+            used.add(cid)
+
+
+
+            channel_list.append(
+                (
+                    cid,
+                    name
+                )
             )
 
 
 
-        tv = ET.Element(
+
+
+        tv=ET.Element(
             "tv",
             {
+                "date":
+                datetime.now().strftime("%Y%m%d"),
                 "generator-info-name":
                 "Festy 24/7 XMLTV"
             }
         )
 
 
-        now = datetime.now(
+
+        #
+        # CHANNELS
+        #
+
+        for cid,name in channel_list:
+
+
+            channel=ET.SubElement(
+                tv,
+                "channel",
+                {
+                    "id":cid
+                }
+            )
+
+
+            ET.SubElement(
+                channel,
+                "display-name"
+            ).text=name
+
+
+
+
+
+
+        #
+        # PROGRAMMES
+        #
+
+        now=datetime.now(
             timezone.utc
         ).replace(
             minute=0,
@@ -180,112 +232,33 @@ jobs:
         )
 
 
-        channel_list = []
 
-
-
-        with open(
-            LIST,
-            "w",
-            encoding="utf-8"
-        ) as listing:
-
-
-            for ch in channels:
-
-                cid = str(
-                    ch.get(
-                        "stream_id",
-                        ""
-                    )
-                )
-
-
-                if not cid:
-                    continue
-
-
-                raw_name = ch.get(
-                    "name",
-                    "UNKNOWN"
-                )
-
-
-                display_name = clean_name(
-                    raw_name
-                )
-
-
-                channel_list.append(
-                    (
-                        cid,
-                        raw_name,
-                        display_name
-                    )
-                )
-
-
-                listing.write(
-                    f"{cid} | {raw_name} | {display_name}\n"
-                )
-
-
-
-        #
-        # CHANNELS FIRST
-        #
-
-        for cid, raw_name, display_name in channel_list:
-
-
-            channel = ET.SubElement(
-                tv,
-                "channel",
-                {
-                    "id": cid
-                }
-            )
-
-
-            ET.SubElement(
-                channel,
-                "display-name"
-            ).text = display_name
-
-
-
-        #
-        # PROGRAMMES SECOND
-        #
-
-        for cid, raw_name, display_name in channel_list:
-
-
-            block_hours = 2 if is_sports(cid) else 24
+        for cid,name in channel_list:
 
 
             for offset in range(
                 0,
-                24 * 7,
-                block_hours
+                24*7,
+                24
             ):
 
 
-                start = now + timedelta(
+                start=now+timedelta(
                     hours=offset
                 )
 
 
-                stop = start + timedelta(
-                    hours=block_hours
+                stop=start+timedelta(
+                    hours=24
                 )
 
 
-                programme = ET.SubElement(
+
+                programme=ET.SubElement(
                     tv,
                     "programme",
                     {
-                        "channel": cid,
+                        "channel":cid,
                         "start":
                         start.strftime(
                             "%Y%m%d%H%M%S +0000"
@@ -301,47 +274,69 @@ jobs:
                 ET.SubElement(
                     programme,
                     "title"
-                ).text = display_name
+                ).text=name
 
 
 
-        tree = ET.ElementTree(tv)
+                ET.SubElement(
+                    programme,
+                    "desc"
+                ).text=f"{name} 24/7"
+
+
+
+        #
+        # WRITE XML
+        #
+
+        tree=ET.ElementTree(tv)
 
         ET.indent(tree)
 
 
-        xml_file = "24-7.xml"
+        xml="24-7.xml"
 
 
         tree.write(
-            xml_file,
+            xml,
             encoding="utf-8",
             xml_declaration=True
         )
 
 
-        with open(
-            xml_file,
-            "rb"
-        ) as source:
+
+        with open(xml,"rb") as src:
 
             with gzip.open(
                 OUTPUT,
                 "wb"
-            ) as target:
+            ) as dst:
 
-                target.write(
-                    source.read()
+                dst.write(
+                    src.read()
                 )
+
+
+
+
+        with open(
+            LIST,
+            "w",
+            encoding="utf-8"
+        ) as f:
+
+            for cid,name in channel_list:
+
+                f.write(
+                    f"{cid} | {name}\n"
+                )
+
 
 
         print(
             f"Created {len(channel_list)} channels"
         )
 
-        print(
-            OUTPUT
-        )
 
         PY
 
@@ -372,11 +367,8 @@ jobs:
 
         git config user.email "github-actions@github.com"
 
-
         git add guides/24-7.xml.gz guides/24-7-channel-list.txt
 
-
         git commit -m "Update 24/7 XMLTV guide" || exit 0
-
 
         git push
