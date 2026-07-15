@@ -1,26 +1,25 @@
 import re
 
-
 INPUT_FILE = "channels.txt"
 OUTPUT_FILE = "channels_clean.txt"
 
 
 def clean_name(line):
 
-    # Remove ID at the beginning
+    # Remove ID and separator
     line = re.sub(r"^\d+\s*\|\s*", "", line)
 
-    # Remove the category prefix
+    # Remove leading colon separator
     line = re.sub(r"^:\s*", "", line)
 
     # Remove MC: prefix
     line = re.sub(r"^MC:\s*", "", line, flags=re.IGNORECASE)
 
     # Remove category headers
-    if "##" in line:
+    if line.strip().startswith("##"):
         return None
 
-    # Clean spaces
+    # Remove extra spaces
     line = line.strip()
 
     if not line:
@@ -33,28 +32,25 @@ def main():
 
     channels = set()
 
-    with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    with open(INPUT_FILE, "r", encoding="utf-8") as file:
+        for line in file:
+            name = clean_name(line)
 
-        for line in f:
-
-            cleaned = clean_name(line)
-
-            if cleaned:
-                channels.add(cleaned)
+            if name:
+                channels.add(name)
 
 
-    # Alphabetical sort
+    # Sort alphabetically
     channels = sorted(channels, key=str.lower)
 
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
         for channel in channels:
-            f.write(channel + "\n")
+            file.write(channel + "\n")
 
 
-    print(f"Cleaned {len(channels)} channels")
-    print(f"Saved to {OUTPUT_FILE}")
+    print(f"Created {OUTPUT_FILE}")
+    print(f"Total channels: {len(channels)}")
 
 
 if __name__ == "__main__":
