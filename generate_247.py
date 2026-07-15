@@ -1,120 +1,24 @@
 import os
-from datetime import datetime, timedelta, timezone
+import requests
 import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta, timezone
+import html
+import re
 
 INPUT_FILE = "channels.txt"
 OUTPUT_FILE = "guides/24-7.xml"
 
+TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "")
+
 os.makedirs("guides", exist_ok=True)
 
 
-def get_description(channel):
-    """
-    Generate a description based on channel name.
-    Falls back to channel name 24/7.
-    """
-
-    name = channel.upper()
-
-    # Music channels
-    music_keywords = [
-        "MUSIC",
-        "ROCK",
-        "POP",
-        "HIP-HOP",
-        "HIP HOP",
-        "RAP",
-        "R&B",
-        "SOUL",
-        "JAZZ",
-        "COUNTRY",
-        "CLASSIC HITS",
-        "OLDIES",
-        "80S",
-        "90S",
-        "2000S",
-        "2010S",
-        "ALTERNATIVE",
-        "METAL",
-        "PUNK",
-        "DANCE",
-        "EDM",
-        "REGGAE",
-        "BLUES"
-    ]
-
-    if any(keyword in name for keyword in music_keywords):
-        return f"24/7 {channel} music channel."
-
-    # Movie channels
-    movie_keywords = [
-        "MOVIE",
-        "MOVIES",
-        "FILM",
-        "HORROR",
-        "ACTION",
-        "THRILLER",
-        "COMEDY",
-        "WESTERN"
-    ]
-
-    if any(keyword in name for keyword in movie_keywords):
-        return f"24/7 {channel} movie channel."
-
-    # Sports channels
-    sports_keywords = [
-        "SPORT",
-        "NFL",
-        "NBA",
-        "MLB",
-        "NHL",
-        "FOOTBALL",
-        "BASEBALL",
-        "HOCKEY",
-        "SOCCER",
-        "WRESTLING"
-    ]
-
-    if any(keyword in name for keyword in sports_keywords):
-        return f"24/7 {channel} sports channel."
-
-    # TV show / series channels
-    show_keywords = [
-        "SHOW",
-        "SERIES",
-        "TV",
-        "ADULT",
-        "ANIME",
-        "CARTOON"
-    ]
-
-    if any(keyword in name for keyword in show_keywords):
-        return f"24/7 channel featuring {channel}."
-
-    # Known entertainment titles
-    entertainment_keywords = [
-        "STAR",
-        "CALL",
-        "SAUL",
-        "BATMAN",
-        "STAR TREK",
-        "STAR WARS",
-        "WALKING DEAD",
-        "SIMPSON",
-        "FRIENDS",
-        "OFFICE"
-    ]
-
-    if any(keyword in name for keyword in entertainment_keywords):
-        return f"24/7 channel featuring episodes of {channel}."
-
-    # Default fallback
-    return f"{channel} 24/7"
-
+# -----------------------------
+# Read Channels
+# -----------------------------
 
 channels = []
 
-# Read channels.txt
 with open(INPUT_FILE, "r", encoding="utf-8") as f:
     for line in f:
 
@@ -123,22 +27,191 @@ with open(INPUT_FILE, "r", encoding="utf-8") as f:
         if not line:
             continue
 
-        # Remove old format:
-        # 1832693 | MC: HIP-HOP PARTY
+        # remove old ID | NAME format
         if "|" in line:
             line = line.split("|", 1)[1].strip()
 
-        # Remove MC prefix
+        # remove MC:
         if line.upper().startswith("MC:"):
             line = line[3:].strip()
 
-        line = line.strip()
-
-        if line and line not in channels:
+        if line not in channels:
             channels.append(line)
 
 
-# Create XML
+print(f"Loaded {len(channels)} channels")
+
+
+# -----------------------------
+# Metadata Functions
+# -----------------------------
+
+metadata_cache = {}
+
+
+def clean(text):
+    if not text:
+        return None
+
+    text = html.unescape(text)
+    text = re.sub("<.*?>", "", text)
+
+    return text.strip()
+
+
+
+def tvmaze_lookup(name):
+
+    if name in metadata_cache:
+        return metadata_cache[name]
+
+    try:
+        url = "https://api.tvmaze.com/singlesearch/shows"
+
+        r = requests.get(
+            url,
+            params={"q": name},
+            timeout=10
+        )
+
+        if r.status_code == 200:
+
+            data = r.json()
+
+            desc = clean(data.get("summary"))
+
+            if desc:
+                metadata_cache[name] = desc
+                return desc
+
+    except Exception:
+        pass
+
+    return None
+
+
+
+def tmdb_lookup(name):
+
+    if not TMDB_API_KEY:
+        return None
+
+    try:
+
+        url = "https://api.themoviedb.org/3/search/multi"
+
+        r = requests.get(
+            url,
+            params={
+                "api_key": TMDB_API_KEY,
+                "query": name
+            },
+            timeout=10
+        )
+
+        if r.status_code == 200:
+
+            results = r.json().get("results", [])
+
+            if results:
+
+                item = results[0]
+
+                desc = item.get("overview")
+
+                if desc:
+                    return desc
+
+    except Exception:
+        pass
+
+    return None
+
+
+
+def logic_description(name):
+
+    n = name.lower()
+
+
+    # music logic
+    music_words = [
+        "music",
+        "rock",
+        "hits",
+        "country",
+        "hip-hop",
+        "rap",
+        "r&b",
+        "soul",
+        "jazz",
+        "pop",
+        "80s",
+        "90s",
+        "2000",
+        "2010",
+        "alternative"
+    ]
+
+
+    if any(x in n for x in music_words):
+
+        return (
+            f"{name} is a 24/7 music channel "
+            f"featuring related songs and programming."
+        )
+
+
+    # movie / horror logic
+
+    horror_words = [
+        "horror",
+        "friday",
+        "halloween",
+        "nightmare",
+        "fear",
+        "monster"
+    ]
+
+    if any(x in n for x in horror_words):
+
+        return (
+            f"{name} is a 24/7 channel featuring "
+            f"horror movies and related content."
+        )
+
+
+    return None
+
+
+
+def get_description(channel):
+
+    desc = tvmaze_lookup(channel)
+
+    if desc:
+        return desc
+
+
+    desc = tmdb_lookup(channel)
+
+    if desc:
+        return desc
+
+
+    desc = logic_description(channel)
+
+    if desc:
+        return desc
+
+
+    return f"{channel} is a 24/7 channel."
+
+
+# -----------------------------
+# Build XML
+# -----------------------------
+
 tv = ET.Element(
     "tv",
     {
@@ -147,8 +220,9 @@ tv = ET.Element(
 )
 
 
-# Add channels
-for channel in sorted(channels):
+# Channels
+
+for channel in channels:
 
     ch = ET.SubElement(
         tv,
@@ -158,12 +232,20 @@ for channel in sorted(channels):
         }
     )
 
-    name = ET.SubElement(ch, "display-name")
+    name = ET.SubElement(
+        ch,
+        "display-name"
+    )
+
     name.text = channel
 
 
-# Generate 7 days
-start_date = datetime.now(timezone.utc).replace(
+
+# Programming
+
+start_date = datetime.now(
+    timezone.utc
+).replace(
     hour=0,
     minute=0,
     second=0,
@@ -175,32 +257,59 @@ for channel in channels:
 
     description = get_description(channel)
 
+    print(
+        f"{channel}: {description[:80]}"
+    )
+
+
     for day in range(7):
 
         start = start_date + timedelta(days=day)
+
         stop = start + timedelta(days=1)
+
 
         programme = ET.SubElement(
             tv,
             "programme",
             {
-                "start": start.strftime("%Y%m%d%H%M%S +0000"),
-                "stop": stop.strftime("%Y%m%d%H%M%S +0000"),
-                "channel": channel
+                "start":
+                start.strftime("%Y%m%d%H%M%S +0000"),
+
+                "stop":
+                stop.strftime("%Y%m%d%H%M%S +0000"),
+
+                "channel":
+                channel
             }
         )
 
-        title = ET.SubElement(programme, "title")
+
+        title = ET.SubElement(
+            programme,
+            "title"
+        )
+
         title.text = channel
 
-        desc = ET.SubElement(programme, "desc")
+
+        desc = ET.SubElement(
+            programme,
+            "desc"
+        )
+
         desc.text = description
 
 
-# Write XML
+
+# Save
+
 tree = ET.ElementTree(tv)
 
-ET.indent(tree, space="  ")
+ET.indent(
+    tree,
+    space="  "
+)
 
 tree.write(
     OUTPUT_FILE,
@@ -209,5 +318,7 @@ tree.write(
 )
 
 
-print(f"Created {OUTPUT_FILE}")
-print(f"Total channels: {len(channels)}")
+print("")
+print("Created:")
+print(OUTPUT_FILE)
+print(f"Channels: {len(channels)}")
