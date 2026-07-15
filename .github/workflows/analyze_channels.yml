@@ -1,4 +1,4 @@
-name: Analyze Xtream Channels
+name: Analyze Xtream Channel Map
 
 on:
   workflow_dispatch:
@@ -11,42 +11,100 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Check Xtream files
-        run: |
-          echo "Xtream directory:"
-          ls -lh xtream-epg
-
-      - name: Inspect channels.json
+      - name: Analyze channel-map.txt
         run: |
           python3 <<'PY'
-          import json
 
-          INPUT = "xtream-epg/channels.json"
+          from collections import defaultdict
+
+          INPUT = "xtream-epg/channel-map.txt"
+          OUTPUT = "xtream-epg/category-analysis.txt"
+
+
+          categories = defaultdict(list)
+
 
           with open(INPUT, "r", encoding="utf-8", errors="ignore") as f:
-              data = json.load(f)
 
-          print()
-          print("TOTAL CHANNELS:")
-          print(len(data))
+              for line in f:
 
-          print()
-          print("FIRST CHANNEL KEYS:")
-          print("===================")
+                  line=line.strip()
 
-          for key in data[0].keys():
-              print(key)
+                  if not line:
+                      continue
 
-          print()
-          print("FIRST CHANNEL DATA:")
-          print("===================")
+                  parts=[x.strip() for x in line.split("|")]
 
-          print(json.dumps(data[0], indent=2)[:5000])
 
-          print()
-          print("SECOND CHANNEL DATA:")
-          print("====================")
+                  if len(parts) < 3:
+                      continue
 
-          print(json.dumps(data[1], indent=2)[:3000])
+
+                  stream_id = parts[0]
+                  category_id = parts[1]
+                  name = parts[-1]
+
+
+                  categories[category_id].append({
+                      "id": stream_id,
+                      "name": name
+                  })
+
+
+          print("Categories found:",len(categories))
+
+
+          with open(OUTPUT,"w",encoding="utf-8") as out:
+
+              out.write("XTREAM CATEGORY ANALYSIS\n")
+              out.write("========================\n\n")
+
+
+              for cat,items in sorted(
+                  categories.items(),
+                  key=lambda x:len(x[1]),
+                  reverse=True
+              ):
+
+                  out.write(
+                      f"CATEGORY {cat} - {len(items)} CHANNELS\n"
+                  )
+
+                  out.write("-"*60+"\n")
+
+
+                  for item in items[:30]:
+
+                      out.write(
+                          f"{item['id']} | {item['name']}\n"
+                      )
+
+                  out.write("\n\n")
+
+
+          print("\nCATEGORY SUMMARY")
+          print("================")
+
+          for cat,items in sorted(
+              categories.items(),
+              key=lambda x:len(x[1]),
+              reverse=True
+          ):
+
+              print(
+                  cat,
+                  "|",
+                  len(items),
+                  "channels"
+              )
+
+          print("\nCreated:",OUTPUT)
 
           PY
+
+
+      - name: Upload analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: category-analysis
+          path: xtream-epg/category-analysis.txt
