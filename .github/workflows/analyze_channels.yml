@@ -1,4 +1,4 @@
-name: Analyze Xtream Categories
+name: Analyze Xtream Channel Map
 
 on:
   workflow_dispatch:
@@ -11,116 +11,93 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Analyze Xtream Categories
+      - name: Analyze channel-map
         run: |
           python3 <<'PY'
 
-          import json
-          import re
           from collections import defaultdict
 
-          INPUT = "xtream-epg/channels.json"
-          OUTPUT = "xtream-epg/category-analysis.txt"
-
-          with open(INPUT, "r", encoding="utf-8") as f:
-              channels = json.load(f)
-
+          INPUT = "xtream-epg/channel-map.txt"
+          OUTPUT = "xtream-epg/channel-map-analysis.txt"
 
           categories = defaultdict(list)
 
+          with open(INPUT, "r", encoding="utf-8", errors="ignore") as f:
+              for line in f:
 
-          for ch in channels:
+                  line = line.strip()
 
-              cat = str(ch.get("category_id","UNKNOWN"))
+                  if not line:
+                      continue
 
-              name = ch.get("name","UNKNOWN")
+                  parts = line.split("|")
 
-              categories[cat].append(name)
+                  if len(parts) < 4:
+                      continue
 
+                  stream_id = parts[0].strip()
+                  category = parts[1].strip()
+                  name = parts[-1].strip()
 
-
-          def classify(names):
-
-              text = " ".join(names[:50]).lower()
-
-              if any(x in text for x in ["ppv","pay per view","event"]):
-                  return "PPV / EVENTS"
-
-              if any(x in text for x in ["radio","music","hits","jazz"]):
-                  return "MUSIC / RADIO"
-
-              if any(x in text for x in ["24/7","247"]):
-                  return "24/7 CHANNELS"
-
-              if any(x in text for x in ["movie","cinema","film"]):
-                  return "MOVIES"
-
-              if any(x in text for x in ["espn","nba","nfl","sports","tsn","dazn"]):
-                  return "SPORTS"
-
-              return "UNKNOWN"
+                  categories[category].append(
+                      {
+                          "id": stream_id,
+                          "name": name
+                      }
+                  )
 
 
+          with open(OUTPUT, "w", encoding="utf-8") as out:
 
-          with open(OUTPUT,"w",encoding="utf-8") as out:
+              out.write("XTREAM CHANNEL MAP ANALYSIS\n")
+              out.write("===========================\n\n")
 
-              out.write("XTREAM CATEGORY ANALYSIS\n")
-              out.write("========================\n\n")
-
-
-              for cat,names in sorted(
+              for cat, channels in sorted(
                   categories.items(),
                   key=lambda x: len(x[1]),
                   reverse=True
               ):
 
-                  group = classify(names)
-
                   out.write(
                       f"CATEGORY {cat}\n"
-                      f"TYPE: {group}\n"
-                      f"COUNT: {len(names)}\n"
+                      f"CHANNEL COUNT: {len(channels)}\n"
                   )
 
-                  out.write("-"*60+"\n")
+                  out.write("-"*60 + "\n")
 
-
-                  for n in names[:30]:
-                      out.write(n+"\n")
+                  for ch in channels[:100]:
+                      out.write(
+                          f"{ch['id']} | {ch['name']}\n"
+                      )
 
                   out.write("\n\n")
 
 
+          print("Categories:", len(categories))
 
-          print("Categories found:",len(categories))
-          print()
-          print("CATEGORY SUMMARY")
-          print("================")
+          print("\nSUMMARY")
+          print("=======")
 
-          for cat,names in sorted(
+          for cat, channels in sorted(
               categories.items(),
               key=lambda x: len(x[1]),
               reverse=True
           ):
-
               print(
                   cat,
                   "|",
-                  classify(names),
-                  "|",
-                  len(names),
+                  len(channels),
                   "channels"
               )
 
 
-          print()
-          print("Created:",OUTPUT)
+          print("\nCreated:", OUTPUT)
 
           PY
 
 
-      - name: Upload Analysis
+      - name: Upload report
         uses: actions/upload-artifact@v4
         with:
-          name: xtream-category-analysis
-          path: xtream-epg/category-analysis.txt
+          name: channel-map-analysis
+          path: xtream-epg/channel-map-analysis.txt
