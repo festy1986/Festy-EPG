@@ -1,12 +1,11 @@
 import os
 import json
+import requests
 import html
 import re
-import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
-
 
 INPUT_FILE = "channels.txt"
 OUTPUT_FILE = "guides/24-7.xml"
@@ -14,30 +13,30 @@ CACHE_FILE = "metadata_cache.json"
 
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY", "")
 
-MAX_THREADS = 10
-
-
 os.makedirs("guides", exist_ok=True)
 
 
 # -----------------------------
-# Load metadata cache
+# Load Metadata Cache
 # -----------------------------
 
 if os.path.exists(CACHE_FILE):
+
     with open(CACHE_FILE, "r", encoding="utf-8") as f:
         metadata_cache = json.load(f)
+
 else:
     metadata_cache = {}
 
 
 # -----------------------------
-# Read channels
+# Load Channels
 # -----------------------------
 
 channels = []
 
 with open(INPUT_FILE, "r", encoding="utf-8") as f:
+
     for line in f:
 
         line = line.strip()
@@ -46,7 +45,7 @@ with open(INPUT_FILE, "r", encoding="utf-8") as f:
             continue
 
         if "|" in line:
-            line = line.split("|",1)[1].strip()
+            line = line.split("|", 1)[1].strip()
 
         if line.upper().startswith("MC:"):
             line = line[3:].strip()
@@ -55,11 +54,11 @@ with open(INPUT_FILE, "r", encoding="utf-8") as f:
             channels.append(line)
 
 
-print(f"Channels loaded: {len(channels)}")
+print(f"Loaded {len(channels)} channels")
 
 
 # -----------------------------
-# Cleaning
+# Helpers
 # -----------------------------
 
 def clean(text):
@@ -75,16 +74,16 @@ def clean(text):
 
 
 # -----------------------------
-# Metadata lookups
+# Metadata Search
 # -----------------------------
 
-def tvmaze(channel):
+def tvmaze_lookup(name):
 
     try:
 
         r = requests.get(
             "https://api.tvmaze.com/singlesearch/shows",
-            params={"q": channel},
+            params={"q": name},
             timeout=5
         )
 
@@ -92,18 +91,22 @@ def tvmaze(channel):
 
             data = r.json()
 
-            return clean(
+            desc = clean(
                 data.get("summary")
             )
 
+            if desc:
+                return desc
+
     except:
+
         pass
 
     return None
 
 
 
-def tmdb(channel):
+def tmdb_lookup(name):
 
     if not TMDB_API_KEY:
         return None
@@ -114,11 +117,10 @@ def tmdb(channel):
             "https://api.themoviedb.org/3/search/multi",
             params={
                 "api_key": TMDB_API_KEY,
-                "query": channel
+                "query": name
             },
             timeout=5
         )
-
 
         if r.status_code == 200:
 
@@ -129,39 +131,212 @@ def tmdb(channel):
 
             if results:
 
-                return clean(
-                    results[0].get(
-                        "overview"
-                    )
+                desc = results[0].get(
+                    "overview"
                 )
 
+                if desc:
+                    return desc
+
     except:
+
         pass
+
+    return None
+
+
+
+# -----------------------------
+# Smart Fallback Generator
+# -----------------------------
+
+def smart_description(name):
+
+    n = name.lower()
+
+
+    decades = {
+        "50s": "the 1950s",
+        "60s": "the 1960s",
+        "70s": "the 1970s",
+        "80s": "the 1980s",
+        "90s": "the 1990s",
+        "2000s": "the 2000s",
+        "2010s": "the 2010s"
+    }
+
+
+    for key, era in decades.items():
+
+        if key in n:
+
+            if "movie" in n or "film" in n:
+
+                return (
+                    f"{name} is a 24/7 movie channel "
+                    f"featuring popular films from {era}, "
+                    f"including classic favorites and memorable performances."
+                )
+
+
+            if any(x in n for x in [
+                "music",
+                "hits",
+                "rock",
+                "rap",
+                "hip",
+                "r&b"
+            ]):
+
+                return (
+                    f"{name} is a 24/7 music channel featuring "
+                    f"popular songs and artists from {era}."
+                )
+
+
+            return (
+                f"{name} is a 24/7 entertainment channel "
+                f"featuring programming from {era}."
+            )
+
+
+
+    if "movie" in n or "movies" in n:
+
+        return (
+            f"{name} is a 24/7 movie channel featuring "
+            f"related films, entertainment, and programming."
+        )
+
+
+
+    if any(x in n for x in [
+        "elvis",
+        "presley",
+        "pacino",
+        "sandler",
+        "wayne",
+        "stallone"
+    ]):
+
+        return (
+            f"{name} is a 24/7 channel featuring "
+            f"movies, performances, and related programming."
+        )
+
+
+
+    if any(x in n for x in [
+        "horror",
+        "friday",
+        "halloween",
+        "nightmare",
+        "ghost",
+        "monster",
+        "zombie",
+        "fear"
+    ]):
+
+        return (
+            f"{name} is a 24/7 horror channel featuring "
+            f"horror movies, thrillers, and related content."
+        )
+
+
+
+    if any(x in n for x in [
+        "music",
+        "rock",
+        "hits",
+        "country",
+        "rap",
+        "hip-hop",
+        "r&b",
+        "soul",
+        "jazz",
+        "pop",
+        "vibes"
+    ]):
+
+        return (
+            f"{name} is a 24/7 music channel featuring "
+            f"related songs, artists, and programming."
+        )
+
+
+
+    if any(x in n for x in [
+        "family",
+        "kids",
+        "cartoon",
+        "anime",
+        "animation"
+    ]):
+
+        return (
+            f"{name} is a 24/7 family entertainment channel "
+            f"featuring related shows, movies, and programming."
+        )
+
+
+
+    if any(x in n for x in [
+        "yoga",
+        "fitness",
+        "wellness",
+        "meditation",
+        "relax"
+    ]):
+
+        return (
+            f"{name} is a 24/7 wellness channel featuring "
+            f"health, fitness, relaxation, and lifestyle programming."
+        )
 
 
     return None
 
 
 
-def lookup(channel):
+# -----------------------------
+# Process One Channel
+# -----------------------------
 
-    # use cache first
-    if channel in metadata_cache:
-        return channel, metadata_cache[channel], False
+def process_channel(channel):
+
+    existing = metadata_cache.get(channel)
 
 
-    desc = tvmaze(channel)
+    # Keep good metadata
+    if existing and not existing.endswith(
+        "is a 24/7 channel."
+    ):
 
-    if not desc:
-        desc = tmdb(channel)
+        return channel, existing, False
 
+
+
+    desc = tvmaze_lookup(channel)
 
     if desc:
-
         return channel, desc, True
 
 
-    # fallback only
+
+    desc = tmdb_lookup(channel)
+
+    if desc:
+        return channel, desc, True
+
+
+
+    desc = smart_description(channel)
+
+    if desc:
+        return channel, desc, True
+
+
+
     return (
         channel,
         f"{channel} is a 24/7 channel.",
@@ -171,54 +346,42 @@ def lookup(channel):
 
 
 # -----------------------------
-# Run lookups simultaneously
+# Run Parallel Metadata Search
 # -----------------------------
 
-new_metadata = 0
+new_saved = 0
 missing = 0
 
 
-with ThreadPoolExecutor(
-    max_workers=MAX_THREADS
-) as executor:
+with ThreadPoolExecutor(max_workers=10) as executor:
 
-
-    futures = [
+    jobs = [
         executor.submit(
-            lookup,
-            channel
+            process_channel,
+            c
         )
-        for channel in channels
+        for c in channels
     ]
 
 
-    for future in as_completed(futures):
+    for job in as_completed(jobs):
 
-        channel, desc, new = future.result()
+        channel, desc, saved = job.result()
 
-
-        if new:
+        if metadata_cache.get(channel) != desc:
 
             metadata_cache[channel] = desc
-            new_metadata += 1
+
+            if saved:
+                new_saved += 1
 
 
         if desc.endswith(
             "is a 24/7 channel."
         ):
-
             missing += 1
 
 
-        print(
-            f"{channel}: {desc[:80]}"
-        )
-
-
-
-# -----------------------------
-# Save metadata cache
-# -----------------------------
 
 with open(
     CACHE_FILE,
@@ -234,28 +397,22 @@ with open(
     )
 
 
-print("")
-print(
-    f"New metadata saved: {new_metadata}"
-)
-
-print(
-    f"Missing metadata: {missing}"
-)
+print(f"New metadata saved: {new_saved}")
+print(f"Missing metadata: {missing}")
 
 
 
 # -----------------------------
-# Build XML
+# Create XML
 # -----------------------------
 
 tv = ET.Element(
     "tv",
     {
-        "generator-info-name":
-        "24/7"
+        "generator-info-name": "24/7"
     }
 )
+
 
 
 for channel in channels:
@@ -290,67 +447,46 @@ start_date = datetime.now(
 
 for channel in channels:
 
-
-    description = metadata_cache.get(
-        channel,
-        f"{channel} is a 24/7 channel."
-    )
-
-
     for day in range(7):
 
-        start = (
-            start_date
-            +
-            timedelta(days=day)
-        )
+        start = start_date + timedelta(days=day)
 
-        stop = start + timedelta(
-            days=1
-        )
+        stop = start + timedelta(days=1)
 
 
-        programme = ET.SubElement(
+        p = ET.SubElement(
             tv,
             "programme",
             {
-                "start":
-                start.strftime(
+                "start": start.strftime(
                     "%Y%m%d%H%M%S +0000"
                 ),
 
-                "stop":
-                stop.strftime(
+                "stop": stop.strftime(
                     "%Y%m%d%H%M%S +0000"
                 ),
 
-                "channel":
-                channel
+                "channel": channel
             }
         )
 
 
         title = ET.SubElement(
-            programme,
+            p,
             "title"
         )
 
         title.text = channel
 
 
-
         desc = ET.SubElement(
-            programme,
+            p,
             "desc"
         )
 
-        desc.text = description
+        desc.text = metadata_cache[channel]
 
 
-
-# -----------------------------
-# Write XML
-# -----------------------------
 
 tree = ET.ElementTree(tv)
 
@@ -359,7 +495,6 @@ ET.indent(
     space="  "
 )
 
-
 tree.write(
     OUTPUT_FILE,
     encoding="utf-8",
@@ -367,10 +502,7 @@ tree.write(
 )
 
 
-
 print("")
 print("Created:")
 print(OUTPUT_FILE)
-print(
-    f"Channels: {len(channels)}"
-)
+print(f"Channels: {len(channels)}")
