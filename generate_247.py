@@ -1,95 +1,102 @@
+import os
+import html
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
 import xml.etree.ElementTree as ET
 
-CHANNEL_FILE = "channels.txt"
-OUTPUT_FILE = "guide/24-7.xml"
+INPUT_FILE = "channels.txt"
+OUTPUT_FILE = "guides/24-7.xml"
 
-DAYS = 7
+# Make sure guides folder exists
+os.makedirs("guides", exist_ok=True)
+
+channels = []
+
+# Read channels.txt
+with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    for line in f:
+        line = line.strip()
+
+        if not line:
+            continue
+
+        # Remove old format:
+        # 1832693 | MC: HIP-HOP PARTY
+        if "|" in line:
+            line = line.split("|", 1)[1].strip()
+
+        if line.upper().startswith("MC:"):
+            line = line[3:].strip()
+
+        line = line.strip()
+
+        if line and line not in channels:
+            channels.append(line)
 
 
-def load_channels():
-    with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
-        return [
-            line.strip()
-            for line in f
-            if line.strip()
-        ]
-
-
-def create_program(title, start, end):
-    program = ET.Element("programme", {
-        "start": start.strftime("%Y%m%d%H%M%S +0000"),
-        "stop": end.strftime("%Y%m%d%H%M%S +0000"),
-    })
-
-    ET.SubElement(program, "title").text = title
-    ET.SubElement(program, "desc").text = "24/7 channel"
-
-    return program
-
-
-def main():
-
-    channels = load_channels()
-
-    tv = ET.Element("tv", {
+# Create XML
+tv = ET.Element(
+    "tv",
+    {
         "generator-info-name": "24/7"
-    })
+    }
+)
 
-
-    # Create channels
-    for channel in channels:
-        ch = ET.SubElement(tv, "channel", {
+# Add channels
+for channel in sorted(channels):
+    ch = ET.SubElement(
+        tv,
+        "channel",
+        {
             "id": channel
-        })
-
-        ET.SubElement(ch, "display-name").text = channel
-
-
-    # Create 24-hour programming for 7 days
-    now = datetime.now(timezone.utc)
-
-    start_day = now.replace(
-        hour=0,
-        minute=0,
-        second=0,
-        microsecond=0
+        }
     )
 
-
-    for channel in channels:
-
-        current = start_day
-
-        for _ in range(DAYS):
-
-            end = current + timedelta(hours=24)
-
-            tv.append(
-                create_program(
-                    channel,
-                    current,
-                    end
-                )
-            )
-
-            current = end
+    name = ET.SubElement(ch, "display-name")
+    name.text = channel
 
 
-    Path("guide").mkdir(exist_ok=True)
+# Generate 7 days of programming
+start_date = datetime.now(timezone.utc).replace(
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0
+)
 
-    tree = ET.ElementTree(tv)
-    tree.write(
-        OUTPUT_FILE,
-        encoding="utf-8",
-        xml_declaration=True
-    )
+for channel in channels:
+
+    for day in range(7):
+
+        start = start_date + timedelta(days=day)
+        stop = start + timedelta(days=1)
+
+        programme = ET.SubElement(
+            tv,
+            "programme",
+            {
+                "start": start.strftime("%Y%m%d%H%M%S +0000"),
+                "stop": stop.strftime("%Y%m%d%H%M%S +0000"),
+                "channel": channel
+            }
+        )
+
+        title = ET.SubElement(programme, "title")
+        title.text = channel
+
+        desc = ET.SubElement(programme, "desc")
+        desc.text = "24/7 Music Channel"
 
 
-    print(f"Created {OUTPUT_FILE}")
-    print(f"Channels: {len(channels)}")
+# Write XML
+tree = ET.ElementTree(tv)
 
+ET.indent(tree, space="  ")
 
-if __name__ == "__main__":
-    main()
+tree.write(
+    OUTPUT_FILE,
+    encoding="utf-8",
+    xml_declaration=True
+)
+
+print(f"Created {OUTPUT_FILE}")
+print(f"Total channels: {len(channels)}")
