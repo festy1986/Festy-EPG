@@ -1,10 +1,10 @@
 import os
+import json
 import requests
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 import html
 import re
-import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
@@ -20,12 +20,41 @@ os.makedirs("guides", exist_ok=True)
 
 
 # -----------------------------
+# Load saved metadata
+# -----------------------------
+
+if os.path.exists(CACHE_FILE):
+
+    with open(
+        CACHE_FILE,
+        "r",
+        encoding="utf-8"
+    ) as f:
+        metadata_cache = json.load(f)
+
+else:
+
+    metadata_cache = {}
+
+
+print(
+    f"Saved metadata entries: {len(metadata_cache)}"
+)
+
+
+
+# -----------------------------
 # Read Channels
 # -----------------------------
 
 channels = []
 
-with open(INPUT_FILE, "r", encoding="utf-8") as f:
+with open(
+    INPUT_FILE,
+    "r",
+    encoding="utf-8"
+) as f:
+
     for line in f:
 
         line = line.strip()
@@ -33,37 +62,27 @@ with open(INPUT_FILE, "r", encoding="utf-8") as f:
         if not line:
             continue
 
+
         if "|" in line:
             line = line.split("|", 1)[1].strip()
 
+
         if line.upper().startswith("MC:"):
             line = line[3:].strip()
+
 
         if line not in channels:
             channels.append(line)
 
 
-print(f"Loaded {len(channels)} channels")
+print(
+    f"Loaded {len(channels)} channels"
+)
 
-
-# -----------------------------
-# Load Cache
-# -----------------------------
-
-if os.path.exists(CACHE_FILE):
-
-    with open(CACHE_FILE, "r", encoding="utf-8") as f:
-        metadata_cache = json.load(f)
-
-else:
-    metadata_cache = {}
-
-
-print(f"Cached metadata: {len(metadata_cache)}")
 
 
 # -----------------------------
-# Helpers
+# Clean text
 # -----------------------------
 
 def clean(text):
@@ -79,7 +98,7 @@ def clean(text):
 
 
 # -----------------------------
-# Metadata Lookup
+# TVMaze
 # -----------------------------
 
 def tvmaze_lookup(name):
@@ -88,7 +107,9 @@ def tvmaze_lookup(name):
 
         r = requests.get(
             "https://api.tvmaze.com/singlesearch/shows",
-            params={"q": name},
+            params={
+                "q": name
+            },
             timeout=10
         )
 
@@ -96,12 +117,10 @@ def tvmaze_lookup(name):
 
             data = r.json()
 
-            desc = clean(
+            return clean(
                 data.get("summary")
             )
 
-            if desc:
-                return desc
 
     except Exception:
         pass
@@ -111,10 +130,15 @@ def tvmaze_lookup(name):
 
 
 
+# -----------------------------
+# TMDB
+# -----------------------------
+
 def tmdb_lookup(name):
 
     if not TMDB_API_KEY:
         return None
+
 
     try:
 
@@ -127,6 +151,7 @@ def tmdb_lookup(name):
             timeout=10
         )
 
+
         if r.status_code == 200:
 
             results = r.json().get(
@@ -134,14 +159,13 @@ def tmdb_lookup(name):
                 []
             )
 
+
             if results:
 
-                desc = results[0].get(
+                return results[0].get(
                     "overview"
                 )
 
-                if desc:
-                    return desc
 
     except Exception:
         pass
@@ -150,6 +174,10 @@ def tmdb_lookup(name):
     return None
 
 
+
+# -----------------------------
+# Logic fallback
+# -----------------------------
 
 def logic_description(name):
 
@@ -175,7 +203,10 @@ def logic_description(name):
     ]
 
 
-    if any(x in n for x in music_words):
+    if any(
+        word in n
+        for word in music_words
+    ):
 
         return (
             f"{name} is a 24/7 music channel "
@@ -193,7 +224,10 @@ def logic_description(name):
     ]
 
 
-    if any(x in n for x in horror_words):
+    if any(
+        word in n
+        for word in horror_words
+    ):
 
         return (
             f"{name} is a 24/7 channel featuring "
@@ -205,16 +239,30 @@ def logic_description(name):
 
 
 
-def get_description(channel):
+# -----------------------------
+# Lookup channel
+# -----------------------------
 
-    # cache first
+def lookup_channel(channel):
 
+
+    # Already saved
     if channel in metadata_cache:
 
-        return metadata_cache[channel]
+        return (
+            channel,
+            metadata_cache[channel],
+            False
+        )
+
+
+    print(
+        f"Searching: {channel}"
+    )
 
 
     desc = tvmaze_lookup(channel)
+
 
     if not desc:
 
@@ -226,31 +274,33 @@ def get_description(channel):
         desc = logic_description(channel)
 
 
-    if not desc:
 
-        desc = f"{channel} is a 24/7 channel."
+    # Save ONLY real metadata/logic results
+    if desc:
+
+        metadata_cache[channel] = desc
+
+        return (
+            channel,
+            desc,
+            True
+        )
 
 
-    metadata_cache[channel] = desc
-
-    return desc
+    # Do NOT save fallback
+    return (
+        channel,
+        f"{channel} is a 24/7 channel.",
+        False
+    )
 
 
 
 # -----------------------------
-# Parallel Metadata Processing
+# Parallel metadata lookup
 # -----------------------------
 
-descriptions = {}
-
-
-def process_channel(channel):
-
-    return channel, get_description(channel)
-
-
-
-print("Getting metadata...")
+updated = 0
 
 
 with ThreadPoolExecutor(
@@ -259,8 +309,9 @@ with ThreadPoolExecutor(
 
 
     futures = [
+
         executor.submit(
-            process_channel,
+            lookup_channel,
             channel
         )
 
@@ -268,19 +319,29 @@ with ThreadPoolExecutor(
     ]
 
 
+    descriptions = {}
+
+
     for future in as_completed(futures):
 
-        channel, description = future.result()
+        channel, desc, saved = future.result()
 
-        descriptions[channel] = description
+        descriptions[channel] = desc
+
+
+        if saved:
+            updated += 1
+
 
         print(
-            f"Done: {channel}"
+            f"{channel}: {desc[:80]}"
         )
 
 
 
-# Save cache
+# -----------------------------
+# Save metadata cache
+# -----------------------------
 
 with open(
     CACHE_FILE,
@@ -297,13 +358,13 @@ with open(
 
 
 print(
-    f"Saved cache: {len(metadata_cache)}"
+    f"Metadata saved: {updated}"
 )
 
 
 
 # -----------------------------
-# Build XML
+# Create XML
 # -----------------------------
 
 tv = ET.Element(
@@ -347,17 +408,17 @@ start_date = datetime.now(
 
 for channel in channels:
 
-    description = descriptions[channel]
-
 
     for day in range(7):
 
-        start = start_date + timedelta(
-            days=day
+        start = (
+            start_date +
+            timedelta(days=day)
         )
 
-        stop = start + timedelta(
-            days=1
+        stop = (
+            start +
+            timedelta(days=1)
         )
 
 
@@ -365,14 +426,15 @@ for channel in channels:
             tv,
             "programme",
             {
-                "start":
-                start.strftime("%Y%m%d%H%M%S +0000"),
+                "start": start.strftime(
+                    "%Y%m%d%H%M%S +0000"
+                ),
 
-                "stop":
-                stop.strftime("%Y%m%d%H%M%S +0000"),
+                "stop": stop.strftime(
+                    "%Y%m%d%H%M%S +0000"
+                ),
 
-                "channel":
-                channel
+                "channel": channel
             }
         )
 
@@ -385,19 +447,14 @@ for channel in channels:
         title.text = channel
 
 
-
         desc = ET.SubElement(
             programme,
             "desc"
         )
 
-        desc.text = description
+        desc.text = descriptions[channel]
 
 
-
-# -----------------------------
-# Save XML
-# -----------------------------
 
 tree = ET.ElementTree(tv)
 
@@ -418,4 +475,6 @@ tree.write(
 print("")
 print("Created:")
 print(OUTPUT_FILE)
-print(f"Channels: {len(channels)}")
+print(
+    f"Channels: {len(channels)}"
+)
