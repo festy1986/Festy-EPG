@@ -13,118 +13,40 @@ jobs:
 
       - name: Check Xtream files
         run: |
-          echo "Checking Xtream directory..."
+          echo "Xtream directory:"
           ls -lh xtream-epg
 
-      - name: Analyze channels.json
+      - name: Inspect channels.json
         run: |
           python3 <<'PY'
           import json
-          from collections import defaultdict
-          import os
 
           INPUT = "xtream-epg/channels.json"
-          OUTPUT = "xtream-epg/channel-analysis.txt"
-
-          if not os.path.exists(INPUT):
-              raise FileNotFoundError(INPUT)
 
           with open(INPUT, "r", encoding="utf-8", errors="ignore") as f:
               data = json.load(f)
 
-          print(f"Loaded {len(data)} channels")
+          print()
+          print("TOTAL CHANNELS:")
+          print(len(data))
 
-          categories = defaultdict(list)
+          print()
+          print("FIRST CHANNEL KEYS:")
+          print("===================")
 
-          for ch in data:
+          for key in data[0].keys():
+              print(key)
 
-              category_id = str(
-                  ch.get("category_id")
-                  or ch.get("category")
-                  or ch.get("group_id")
-                  or "UNKNOWN"
-              )
+          print()
+          print("FIRST CHANNEL DATA:")
+          print("===================")
 
-              category_name = (
-                  ch.get("category_name")
-                  or ch.get("group_title")
-                  or ch.get("category_name")
-                  or "UNKNOWN"
-              )
+          print(json.dumps(data[0], indent=2)[:5000])
 
-              name = (
-                  ch.get("name")
-                  or ch.get("channel_name")
-                  or ch.get("title")
-                  or "UNKNOWN"
-              )
+          print()
+          print("SECOND CHANNEL DATA:")
+          print("====================")
 
-              channel_id = (
-                  ch.get("stream_id")
-                  or ch.get("id")
-                  or ch.get("channel_id")
-                  or ""
-              )
-
-              categories[category_id].append({
-                  "category_name": category_name,
-                  "id": channel_id,
-                  "name": name
-              })
-
-
-          with open(OUTPUT, "w", encoding="utf-8") as out:
-
-              out.write("XTREAM CHANNEL ANALYSIS\n")
-              out.write("=======================\n\n")
-
-              for cat, items in sorted(
-                  categories.items(),
-                  key=lambda x: len(x[1]),
-                  reverse=True
-              ):
-
-                  category_name = items[0]["category_name"]
-
-                  out.write(
-                      f"CATEGORY ID: {cat}\n"
-                  )
-                  out.write(
-                      f"CATEGORY NAME: {category_name}\n"
-                  )
-                  out.write(
-                      f"CHANNEL COUNT: {len(items)}\n"
-                  )
-                  out.write("-" * 60 + "\n")
-
-                  for item in items[:50]:
-                      out.write(
-                          f"{item['id']} | {item['name']}\n"
-                      )
-
-                  out.write("\n\n")
-
-
-          print("\nCATEGORY SUMMARY")
-          print("================")
-
-          for cat, items in sorted(
-              categories.items(),
-              key=lambda x: len(x[1]),
-              reverse=True
-          ):
-
-              print(
-                  f"{cat} | {items[0]['category_name']} | {len(items)} channels"
-              )
-
-
-          print(f"\nCreated {OUTPUT}")
+          print(json.dumps(data[1], indent=2)[:3000])
 
           PY
-
-      - name: Upload analysis report
-        uses: actions/upload-artifact@v4
-        with:
-          name: channel-analysis
-          path: xtream-epg/channel-analysis.txt
