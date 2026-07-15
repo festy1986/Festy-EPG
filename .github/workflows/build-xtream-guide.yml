@@ -1,0 +1,198 @@
+name: Build Xtream Guide
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-guide:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Check files
+      run: |
+        ls -lh xtream-epg
+        test -f xtream-epg/channels.json
+        test -f xtream-epg/xtream.xml
+
+    - name: Build XMLTV Guide
+      run: |
+        python3 <<'PY'
+
+        import json
+        import re
+        from datetime import datetime
+        from zoneinfo import ZoneInfo
+        import xml.etree.ElementTree as ET
+        import os
+
+
+        CHANNEL_FILE = "xtream-epg/channels.json"
+        SOURCE_XML = "xtream-epg/xtream.xml"
+        OUTPUT = "xtream-epg/guide.xml"
+
+
+        print("Loading channels...")
+
+        with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
+            channels = json.load(f)
+
+
+        print("Channels loaded:", len(channels))
+
+
+        # Load existing XMLTV
+        tree = ET.parse(SOURCE_XML)
+        root = tree.getroot()
+
+
+        # Output document
+        tv = ET.Element(
+            "tv",
+            {
+                "generator-info-name": "Festy Xtream Guide"
+            }
+        )
+
+
+        def clean_title(title):
+
+            if not title:
+                return "Unknown"
+
+            title = re.sub(
+                r"\b(LIVE|NEXT|ENDED|NEW|HD|4K|8K|EXCLUSIVE)\b",
+                "",
+                title,
+                flags=re.I
+            )
+
+            title = re.sub(
+                r"^\s*(US|UK|CA|GB):\s*",
+                "",
+                title,
+                flags=re.I
+            )
+
+            title = re.sub(
+                r"\s+",
+                " ",
+                title
+            )
+
+            return title.strip()
+
+
+
+        # Create channel list
+        for ch in channels:
+
+            cid = str(
+                ch.get("stream_id")
+            )
+
+            name = ch.get(
+                "name",
+                "Unknown"
+            )
+
+            channel = ET.SubElement(
+                tv,
+                "channel",
+                {
+                    "id": cid
+                }
+            )
+
+            ET.SubElement(
+                channel,
+                "display-name"
+            ).text = clean_title(name)
+
+
+
+        print("Channels created")
+
+
+        # Copy matching programs
+        count = 0
+
+
+        for program in root.findall("programme"):
+
+            channel_id = program.get("channel")
+
+
+            if not channel_id:
+                continue
+
+
+            if not any(
+                str(c.get("stream_id")) == channel_id
+                for c in channels
+            ):
+                continue
+
+
+            title = program.find("title")
+
+
+            if title is not None:
+                title.text = clean_title(
+                    title.text
+                )
+
+
+            # clean descriptions
+            desc = program.find("desc")
+
+            if desc is not None:
+                desc.text = clean_title(
+                    desc.text
+                )
+
+
+            tv.append(program)
+            count += 1
+
+
+
+        print(
+            "Programs added:",
+            count
+        )
+
+
+        os.makedirs(
+            "xtream-epg",
+            exist_ok=True
+        )
+
+
+        ET.ElementTree(tv).write(
+            OUTPUT,
+            encoding="utf-8",
+            xml_declaration=True
+        )
+
+
+        print(
+            "Created:",
+            OUTPUT
+        )
+
+
+        PY
+
+
+    - name: Upload guide
+      uses: actions/upload-artifact@v4
+      with:
+        name: xtream-guide
+        path: xtream-epg/guide.xml
