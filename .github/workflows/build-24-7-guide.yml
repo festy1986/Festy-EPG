@@ -1,0 +1,195 @@
+name: Build 24/7 Xtream Guide
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build-guide:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+
+    - name: Build XMLTV guide
+      run: |
+
+        python3 <<'PY'
+
+        import json
+        import gzip
+        import os
+        from datetime import datetime, timezone
+        import xml.etree.ElementTree as ET
+
+
+        INPUT = "xtream-epg/channels.json"
+
+        OUT_DIR = "guides"
+
+        XML_OUT = f"{OUT_DIR}/24-7.xml.gz"
+
+        LIST_OUT = f"{OUT_DIR}/24-7-channel-list.txt"
+
+
+        os.makedirs(OUT_DIR, exist_ok=True)
+
+
+        with open(INPUT, "r", encoding="utf-8") as f:
+            channels = json.load(f)
+
+
+        tv = ET.Element("tv", {
+            "generator-info-name": "Festy 24/7 Xtream Guide"
+        })
+
+
+        display_list = []
+
+
+        now = datetime.now(timezone.utc)
+
+        start = now.strftime("%Y%m%d%H%M%S +0000")
+
+        stop = (
+            datetime.fromtimestamp(
+                now.timestamp()+86400,
+                timezone.utc
+            )
+            .strftime("%Y%m%d%H%M%S +0000")
+        )
+
+
+        created = 0
+
+
+        for ch in channels:
+
+            cid = str(
+                ch.get("stream_id")
+                or ch.get("id")
+                or ch.get("channel_id")
+            )
+
+            name = (
+                ch.get("name")
+                or "Unknown Channel"
+            )
+
+
+            if not cid:
+                continue
+
+
+            display_list.append(
+                f"{cid} | {name}"
+            )
+
+
+            channel = ET.SubElement(
+                tv,
+                "channel",
+                {
+                    "id": cid
+                }
+            )
+
+
+            ET.SubElement(
+                channel,
+                "display-name"
+            ).text = name
+
+
+
+            # fallback guide entry
+            programme = ET.SubElement(
+                tv,
+                "programme",
+                {
+                    "start": start,
+                    "stop": stop,
+                    "channel": cid
+                }
+            )
+
+
+            ET.SubElement(
+                programme,
+                "title"
+            ).text = name
+
+
+            ET.SubElement(
+                programme,
+                "desc"
+            ).text = "Xtream channel fallback guide"
+
+
+            created += 1
+
+
+
+        tree = ET.ElementTree(tv)
+
+
+        xml_file = "temp.xml"
+
+        tree.write(
+            xml_file,
+            encoding="utf-8",
+            xml_declaration=True
+        )
+
+
+        with open(LIST_OUT,"w",encoding="utf-8") as f:
+
+            for line in display_list:
+                f.write(line+"\n")
+
+
+
+        with open(xml_file,"rb") as src:
+
+            with gzip.open(
+                XML_OUT,
+                "wb"
+            ) as dst:
+
+                dst.write(src.read())
+
+
+
+        print(
+            f"Created {created} channels"
+        )
+
+        print(XML_OUT)
+
+        PY
+
+
+
+    - name: Commit guide
+      run: |
+
+        git config user.name "github-actions"
+
+        git config user.email "github-actions@github.com"
+
+
+        git add guides/24-7.xml.gz guides/24-7-channel-list.txt
+
+
+        git commit -m "Update 24/7 XMLTV guide" || exit 0
+
+
+        git push
