@@ -1,24 +1,3 @@
-name: Build 24/7 Guide
-
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 */12 * * *"
-
-permissions:
-  contents: write
-
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Checkout
-      uses: actions/checkout@v4
-
-
     - name: Build XMLTV Guide
       run: |
 
@@ -46,11 +25,6 @@ jobs:
             channels = json.load(f)
 
 
-
-        #
-        # Load category map
-        #
-
         categories = {}
 
         if os.path.exists(MAP):
@@ -70,21 +44,21 @@ jobs:
                     ]
 
                     if len(parts) >= 2:
-
                         categories[parts[0]] = parts[1]
 
 
 
-        #
-        # Cleanup channel names for XMLTV
-        #
-
         def clean_name(name):
 
-            name = str(name)
+            if not name:
+                return "UNKNOWN"
+
+            name = str(name).strip()
 
 
-            # remove country prefix
+            if name in ["/", "-", ""]:
+                return "UNKNOWN"
+
 
             name = re.sub(
                 r'^(US|UK|CA|GB)\s*:\s*',
@@ -94,8 +68,6 @@ jobs:
             )
 
 
-            # remove decorative headers
-
             name = re.sub(
                 r'[#♬]+',
                 '',
@@ -103,34 +75,19 @@ jobs:
             )
 
 
-            remove_words = [
-
+            for word in [
                 "24/7",
-
                 "RAW",
-
                 "LIVE",
-
                 "EXCLUSIVE",
-
                 "60FPS",
-
                 "60 FPS",
-
                 "4K",
-
                 "8K",
-
                 "HD",
-
                 "FHD",
-
                 "UHD"
-
-            ]
-
-
-            for word in remove_words:
+            ]:
 
                 name = re.sub(
                     r'\b' + re.escape(word) + r'\b',
@@ -144,16 +101,16 @@ jobs:
                 r'\s+',
                 ' ',
                 name
-            )
+            ).strip(" -_# ")
 
 
-            return name.strip(" -_# ")
+            if not name:
+                return "UNKNOWN"
 
 
+            return name
 
-        #
-        # Determine sports/event channels
-        #
+
 
         def is_sports(cid):
 
@@ -185,8 +142,14 @@ jobs:
 
         now = datetime.now(
             timezone.utc
+        ).replace(
+            minute=0,
+            second=0,
+            microsecond=0
         )
 
+
+        channel_list = []
 
         count = 0
 
@@ -202,18 +165,16 @@ jobs:
 
 
                 cid = str(
-                    ch.get("stream_id")
+                    ch.get("stream_id","")
                 )
-
 
                 if not cid:
                     continue
 
 
-
                 raw_name = ch.get(
                     "name",
-                    "Unknown Channel"
+                    "UNKNOWN"
                 )
 
 
@@ -222,87 +183,98 @@ jobs:
                 )
 
 
-                #
-                # Manual lookup file
-                #
+                channel_list.append(
+                    (
+                        cid,
+                        raw_name,
+                        display_name
+                    )
+                )
+
 
                 listing.write(
-                    f"{cid} | {raw_name}\n"
+                    f"{cid} | {raw_name} | {display_name}\n"
                 )
 
 
 
-                #
-                # XMLTV channel
-                #
+        #
+        # CHANNELS FIRST
+        #
 
-                channel = ET.SubElement(
+        for cid, raw_name, display_name in channel_list:
+
+
+            channel = ET.SubElement(
+                tv,
+                "channel",
+                {
+                    "id": cid
+                }
+            )
+
+
+            ET.SubElement(
+                channel,
+                "display-name"
+            ).text = display_name
+
+
+
+        #
+        # PROGRAMMES SECOND
+        #
+
+        for cid, raw_name, display_name in channel_list:
+
+
+            block_hours = (
+                2
+                if is_sports(cid)
+                else 24
+            )
+
+
+            for offset in range(
+                0,
+                24 * 7,
+                block_hours
+            ):
+
+
+                start = now + timedelta(
+                    hours=offset
+                )
+
+                stop = start + timedelta(
+                    hours=block_hours
+                )
+
+
+                programme = ET.SubElement(
                     tv,
-                    "channel",
+                    "programme",
                     {
-                        "id": cid
+                        "channel": cid,
+                        "start":
+                        start.strftime(
+                            "%Y%m%d%H%M%S +0000"
+                        ),
+                        "stop":
+                        stop.strftime(
+                            "%Y%m%d%H%M%S +0000"
+                        )
                     }
                 )
 
 
                 ET.SubElement(
-                    channel,
-                    "display-name"
+                    programme,
+                    "title"
                 ).text = display_name
 
 
-
-                #
-                # Program blocks
-                #
-
-                block_hours = 2 if is_sports(cid) else 24
-
-
-                total_hours = 24 * 7
-
-
-                for offset in range(
-                    0,
-                    total_hours,
-                    block_hours
-                ):
-
-
-                    start = now + timedelta(
-                        hours=offset
-                    )
-
-
-                    stop = start + timedelta(
-                        hours=block_hours
-                    )
-
-
-                    programme = ET.SubElement(
-                        tv,
-                        "programme",
-                        {
-                            "channel": cid,
-                            "start":
-                            start.strftime(
-                                "%Y%m%d%H%M%S +0000"
-                            ),
-                            "stop":
-                            stop.strftime(
-                                "%Y%m%d%H%M%S +0000"
-                            )
-                        }
-                    )
-
-
-                    ET.SubElement(
-                        programme,
-                        "title"
-                    ).text = display_name
-
-
-                count += 1
+            count += 1
 
 
 
@@ -340,27 +312,6 @@ jobs:
             f"Created {count} channels"
         )
 
-        print(
-            OUTPUT
-        )
+        print(OUTPUT)
 
         PY
-
-
-
-    - name: Commit Guide
-
-      run: |
-
-        git config user.name "github-actions"
-
-        git config user.email "github-actions@github.com"
-
-
-        git add guides/24-7.xml.gz guides/24-7-channel-list.txt
-
-
-        git commit -m "Update 24/7 XMLTV guide" || exit 0
-
-
-        git push
