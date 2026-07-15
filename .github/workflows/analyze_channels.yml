@@ -11,40 +11,99 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Check files
+        run: |
+          echo "Checking Xtream files..."
+          ls -la xtream-epg
+          
       - name: Analyze channels.json
         run: |
           python3 <<'PY'
           import json
           from collections import defaultdict
+          import os
+          import re
 
-          FILE = "xtream-epg/channels.json"
+          INPUT = "xtream-epg/channels.json"
+          OUTPUT = "xtream-epg/channel-analysis.txt"
 
-          with open(FILE, "r", encoding="utf-8") as f:
+          if not os.path.exists(INPUT):
+              raise FileNotFoundError(INPUT)
+
+          with open(INPUT, "r", encoding="utf-8", errors="ignore") as f:
               data = json.load(f)
+
+          print(f"Loaded {len(data)} channels")
 
           categories = defaultdict(list)
 
           for ch in data:
-              category = str(ch.get("category_id", "unknown"))
-              name = ch.get("name", "")
-              stream_id = ch.get("stream_id", "")
+              category = str(
+                  ch.get("category_id")
+                  or ch.get("category")
+                  or ch.get("group_id")
+                  or "UNKNOWN"
+              )
+
+              name = (
+                  ch.get("name")
+                  or ch.get("channel_name")
+                  or ch.get("title")
+                  or "UNKNOWN"
+              )
+
+              cid = (
+                  ch.get("stream_id")
+                  or ch.get("id")
+                  or ch.get("channel_id")
+                  or ""
+              )
 
               categories[category].append({
-                  "id": stream_id,
+                  "id": cid,
                   "name": name
               })
 
+
+          with open(OUTPUT, "w", encoding="utf-8") as out:
+
+              out.write("XTREAM CHANNEL ANALYSIS\n")
+              out.write("=======================\n\n")
+
+              for cat, items in sorted(
+                  categories.items(),
+                  key=lambda x: len(x[1]),
+                  reverse=True
+              ):
+
+                  out.write(
+                      f"CATEGORY {cat}: {len(items)} CHANNELS\n"
+                  )
+                  out.write("-" * 50 + "\n")
+
+                  for item in items[:50]:
+                      out.write(
+                          f"{item['id']} | {item['name']}\n"
+                      )
+
+                  out.write("\n\n")
+
+          print("Created:", OUTPUT)
+
           print("\nCATEGORY SUMMARY")
-          print("=" * 50)
+          print("================")
 
-          for cat, items in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True):
-              print(f"Category {cat}: {len(items)} channels")
+          for cat, items in sorted(
+              categories.items(),
+              key=lambda x: len(x[1]),
+              reverse=True
+          ):
+              print(f"{cat}: {len(items)}")
 
-          print("\nSAMPLES")
-          print("=" * 50)
-
-          for cat, items in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True)[:20]:
-              print(f"\n--- CATEGORY {cat} ({len(items)}) ---")
-              for item in items[:10]:
-                  print(f"{item['id']} | {item['name']}")
           PY
+
+      - name: Upload analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: channel-analysis
+          path: xtream-epg/channel-analysis.txt
