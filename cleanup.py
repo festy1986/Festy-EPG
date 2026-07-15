@@ -4,22 +4,21 @@ INPUT_FILE = "channels.txt"
 OUTPUT_FILE = "channels_clean.txt"
 
 
-def clean_name(line):
-
-    # Remove ID and separator
+def clean_channel(line):
+    # Remove numeric ID and separator
     line = re.sub(r"^\d+\s*\|\s*", "", line)
 
-    # Remove leading colon separator
+    # Remove colon separator
     line = re.sub(r"^:\s*", "", line)
 
-    # Remove MC: prefix
+    # Remove Music Choice prefix
     line = re.sub(r"^MC:\s*", "", line, flags=re.IGNORECASE)
 
-    # Remove category headers
-    if line.strip().startswith("##"):
+    # Remove section headers
+    if line.startswith("##"):
         return None
 
-    # Remove extra spaces
+    # Trim spaces
     line = line.strip()
 
     if not line:
@@ -28,30 +27,24 @@ def clean_name(line):
     return line
 
 
-def main():
+channels = set()
 
-    channels = set()
+with open(INPUT_FILE, "r", encoding="utf-8") as file:
+    for line in file:
+        cleaned = clean_channel(line)
 
-    with open(INPUT_FILE, "r", encoding="utf-8") as file:
-        for line in file:
-            name = clean_name(line)
-
-            if name:
-                channels.add(name)
+        if cleaned:
+            channels.add(cleaned)
 
 
-    # Sort alphabetically
-    channels = sorted(channels, key=str.lower)
+# Alphabetical order
+channels = sorted(channels, key=str.lower)
 
 
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
-        for channel in channels:
-            file.write(channel + "\n")
+with open(OUTPUT_FILE, "w", encoding="utf-8") as file:
+    for channel in channels:
+        file.write(channel + "\n")
 
 
-    print(f"Created {OUTPUT_FILE}")
-    print(f"Total channels: {len(channels)}")
-
-
-if __name__ == "__main__":
-    main()
+print(f"Created {OUTPUT_FILE}")
+print(f"Total channels: {len(channels)}")
