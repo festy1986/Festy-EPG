@@ -2,9 +2,15 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
+
 INPUT_FILE = "channels.txt"
 OUTPUT_FILE = "guides/24-7.xml"
 
+DAYS = 1
+BLOCK_HOURS = 2
+
+
+# Make sure guides folder exists
 os.makedirs("guides", exist_ok=True)
 
 
@@ -22,7 +28,8 @@ with open(INPUT_FILE, "r", encoding="utf-8") as f:
         if not line:
             continue
 
-        # Remove old ID | NAME format
+        # Remove old format:
+        # 123456 | CHANNEL NAME
         if "|" in line:
             line = line.split("|", 1)[1].strip()
 
@@ -63,18 +70,18 @@ for channel in channels:
         }
     )
 
-    name = ET.SubElement(
+    display = ET.SubElement(
         ch,
         "display-name"
     )
 
-    name.text = channel
+    display.text = channel
 
 
 
 # -----------------------------
-# Generate 14 Days
-# 2 Hour Blocks
+# Generate Programming
+# 1 Day / 2 Hour Blocks
 # -----------------------------
 
 start_date = datetime.now(
@@ -87,15 +94,16 @@ start_date = datetime.now(
 )
 
 
+end_date = start_date + timedelta(days=DAYS)
+
+
 for channel in channels:
 
     current = start_date
 
-    end_date = start_date + timedelta(days=14)
-
     while current < end_date:
 
-        stop = current + timedelta(hours=2)
+        stop = current + timedelta(hours=BLOCK_HOURS)
 
         programme = ET.SubElement(
             tv,
@@ -129,7 +137,7 @@ for channel in channels:
 
 
 # -----------------------------
-# Write File
+# Write XML
 # -----------------------------
 
 tree = ET.ElementTree(tv)
@@ -150,5 +158,5 @@ print("")
 print("Created:")
 print(OUTPUT_FILE)
 print(f"Channels: {len(channels)}")
-print("Schedule: 14 days")
-print("Blocks: 2 hours")
+print(f"Days: {DAYS}")
+print(f"Block size: {BLOCK_HOURS} hours")
