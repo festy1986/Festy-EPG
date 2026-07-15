@@ -11,18 +11,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Check files
+      - name: Check Xtream files
         run: |
-          echo "Checking Xtream files..."
-          ls -la xtream-epg
-          
+          echo "Checking Xtream directory..."
+          ls -lh xtream-epg
+
       - name: Analyze channels.json
         run: |
           python3 <<'PY'
           import json
           from collections import defaultdict
           import os
-          import re
 
           INPUT = "xtream-epg/channels.json"
           OUTPUT = "xtream-epg/channel-analysis.txt"
@@ -38,10 +37,18 @@ jobs:
           categories = defaultdict(list)
 
           for ch in data:
-              category = str(
+
+              category_id = str(
                   ch.get("category_id")
                   or ch.get("category")
                   or ch.get("group_id")
+                  or "UNKNOWN"
+              )
+
+              category_name = (
+                  ch.get("category_name")
+                  or ch.get("group_title")
+                  or ch.get("category_name")
                   or "UNKNOWN"
               )
 
@@ -52,15 +59,16 @@ jobs:
                   or "UNKNOWN"
               )
 
-              cid = (
+              channel_id = (
                   ch.get("stream_id")
                   or ch.get("id")
                   or ch.get("channel_id")
                   or ""
               )
 
-              categories[category].append({
-                  "id": cid,
+              categories[category_id].append({
+                  "category_name": category_name,
+                  "id": channel_id,
                   "name": name
               })
 
@@ -76,10 +84,18 @@ jobs:
                   reverse=True
               ):
 
+                  category_name = items[0]["category_name"]
+
                   out.write(
-                      f"CATEGORY {cat}: {len(items)} CHANNELS\n"
+                      f"CATEGORY ID: {cat}\n"
                   )
-                  out.write("-" * 50 + "\n")
+                  out.write(
+                      f"CATEGORY NAME: {category_name}\n"
+                  )
+                  out.write(
+                      f"CHANNEL COUNT: {len(items)}\n"
+                  )
+                  out.write("-" * 60 + "\n")
 
                   for item in items[:50]:
                       out.write(
@@ -88,7 +104,6 @@ jobs:
 
                   out.write("\n\n")
 
-          print("Created:", OUTPUT)
 
           print("\nCATEGORY SUMMARY")
           print("================")
@@ -98,11 +113,17 @@ jobs:
               key=lambda x: len(x[1]),
               reverse=True
           ):
-              print(f"{cat}: {len(items)}")
+
+              print(
+                  f"{cat} | {items[0]['category_name']} | {len(items)} channels"
+              )
+
+
+          print(f"\nCreated {OUTPUT}")
 
           PY
 
-      - name: Upload analysis
+      - name: Upload analysis report
         uses: actions/upload-artifact@v4
         with:
           name: channel-analysis
