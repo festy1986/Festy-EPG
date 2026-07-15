@@ -1,4 +1,4 @@
-name: Build 24/7 Xtream Guide
+name: Build 24/7 Guide
 
 on:
   workflow_dispatch:
@@ -9,17 +9,17 @@ permissions:
   contents: write
 
 jobs:
-  build-guide:
+  build:
 
     runs-on: ubuntu-latest
 
     steps:
 
-    - name: Checkout repo
+    - name: Checkout
       uses: actions/checkout@v4
 
 
-    - name: Build XMLTV guide
+    - name: Build XMLTV
       run: |
 
         python3 <<'PY'
@@ -27,158 +27,299 @@ jobs:
         import json
         import gzip
         import os
-        from datetime import datetime, timezone
+        import re
         import xml.etree.ElementTree as ET
+        from datetime import datetime, timedelta
 
 
-        INPUT = "xtream-epg/channels.json"
+        CHANNELS = "xtream-epg/channels.json"
+        MAP = "xtream-epg/channel-map.txt"
 
-        OUT_DIR = "guides"
-
-        XML_OUT = f"{OUT_DIR}/24-7.xml.gz"
-
-        LIST_OUT = f"{OUT_DIR}/24-7-channel-list.txt"
+        OUTPUT = "guides/24-7.xml.gz"
+        LIST = "guides/24-7-channel-list.txt"
 
 
-        os.makedirs(OUT_DIR, exist_ok=True)
-
-
-        with open(INPUT, "r", encoding="utf-8") as f:
-            channels = json.load(f)
-
-
-        tv = ET.Element("tv", {
-            "generator-info-name": "Festy 24/7 Xtream Guide"
-        })
-
-
-        display_list = []
-
-
-        now = datetime.now(timezone.utc)
-
-        start = now.strftime("%Y%m%d%H%M%S +0000")
-
-        stop = (
-            datetime.fromtimestamp(
-                now.timestamp()+86400,
-                timezone.utc
-            )
-            .strftime("%Y%m%d%H%M%S +0000")
+        os.makedirs(
+            "guides",
+            exist_ok=True
         )
 
 
-        created = 0
+        with open(CHANNELS,"r",encoding="utf-8") as f:
+            channels=json.load(f)
 
 
-        for ch in channels:
+        #
+        # Load category information
+        #
 
-            cid = str(
-                ch.get("stream_id")
-                or ch.get("id")
-                or ch.get("channel_id")
+        categories={}
+
+        if os.path.exists(MAP):
+
+            with open(
+                MAP,
+                "r",
+                encoding="utf-8",
+                errors="ignore"
+            ) as f:
+
+                for line in f:
+
+                    parts=[
+                        x.strip()
+                        for x in line.split("|")
+                    ]
+
+                    if len(parts)>=4:
+
+                        cid=parts[0]
+
+                        categories[cid]=parts[1]
+
+
+
+        def clean_name(name):
+
+            name=re.sub(
+                r'^(US|CA|UK|GB):\s*',
+                '',
+                name,
+                flags=re.I
             )
 
-            name = (
-                ch.get("name")
-                or "Unknown Channel"
+            remove=[
+                "4K",
+                "8K",
+                "HD",
+                "FHD",
+                "UHD",
+                "RAW",
+                "LIVE",
+                "EXCLUSIVE"
+            ]
+
+            for word in remove:
+
+                name=re.sub(
+                    r'\b'+word+r'\b',
+                    '',
+                    name,
+                    flags=re.I
+                )
+
+
+            name=re.sub(
+                r'\s+',
+                ' ',
+                name
             )
 
 
-            if not cid:
-                continue
-
-
-            display_list.append(
-                f"{cid} | {name}"
-            )
-
-
-            channel = ET.SubElement(
-                tv,
-                "channel",
-                {
-                    "id": cid
-                }
-            )
-
-
-            ET.SubElement(
-                channel,
-                "display-name"
-            ).text = name
+            return name.strip(" #-")
 
 
 
-            # fallback guide entry
-            programme = ET.SubElement(
-                tv,
-                "programme",
-                {
-                    "start": start,
-                    "stop": stop,
-                    "channel": cid
-                }
-            )
+        def is_sports(cid):
 
+            cat=categories.get(cid,"").lower()
 
-            ET.SubElement(
-                programme,
-                "title"
-            ).text = name
+            if any(
+                x in cat
+                for x in [
+                    "sport",
+                    "ppv",
+                    "event"
+                ]
+            ):
+                return True
 
-
-            ET.SubElement(
-                programme,
-                "desc"
-            ).text = "Xtream channel fallback guide"
-
-
-            created += 1
+            return False
 
 
 
-        tree = ET.ElementTree(tv)
+        tv=ET.Element(
+            "tv",
+            {
+                "generator-info-name":
+                "Festy 24/7 Guide"
+            }
+        )
 
 
-        xml_file = "temp.xml"
+        now=datetime.utcnow()
+
+
+        created=0
+
+
+        with open(
+            LIST,
+            "w",
+            encoding="utf-8"
+        ) as out:
+
+
+            for ch in channels:
+
+
+                cid=str(
+                    ch.get("stream_id")
+                )
+
+
+                if not cid:
+                    continue
+
+
+                raw=ch.get(
+                    "name",
+                    "Unknown Channel"
+                )
+
+
+                name=clean_name(raw)
+
+
+
+                #
+                # channel entry
+                #
+
+                channel=ET.SubElement(
+                    tv,
+                    "channel",
+                    {
+                        "id":cid
+                    }
+                )
+
+
+                ET.SubElement(
+                    channel,
+                    "display-name"
+                ).text=raw
+
+
+
+                out.write(
+                    f"{cid} | {raw}\n"
+                )
+
+
+
+                sports=is_sports(cid)
+
+
+                days=7
+
+
+                if sports:
+
+                    block=2
+
+                else:
+
+                    block=24
+
+
+
+                total_hours=days*24
+
+
+                for hour in range(
+                    0,
+                    total_hours,
+                    block
+                ):
+
+
+                    start=now+timedelta(
+                        hours=hour
+                    )
+
+                    end=start+timedelta(
+                        hours=block
+                    )
+
+
+                    programme=ET.SubElement(
+                        tv,
+                        "programme",
+                        {
+                            "start":
+                            start.strftime(
+                                "%Y%m%d%H%M%S +0000"
+                            ),
+
+                            "stop":
+                            end.strftime(
+                                "%Y%m%d%H%M%S +0000"
+                            ),
+
+                            "channel":
+                            cid
+                        }
+                    )
+
+
+                    ET.SubElement(
+                        programme,
+                        "title"
+                    ).text=name
+
+
+
+                created+=1
+
+
+
+        tree=ET.ElementTree(tv)
+
+        ET.indent(tree)
+
+
+        temp="guide.xml"
+
 
         tree.write(
-            xml_file,
+            temp,
             encoding="utf-8",
             xml_declaration=True
         )
 
 
-        with open(LIST_OUT,"w",encoding="utf-8") as f:
-
-            for line in display_list:
-                f.write(line+"\n")
-
-
-
-        with open(xml_file,"rb") as src:
+        with open(
+            temp,
+            "rb"
+        ) as src:
 
             with gzip.open(
-                XML_OUT,
+                OUTPUT,
                 "wb"
             ) as dst:
 
-                dst.write(src.read())
+                dst.write(
+                    src.read()
+                )
 
 
 
         print(
-            f"Created {created} channels"
+            "Created channels:",
+            created
         )
 
-        print(XML_OUT)
+        print(
+            OUTPUT
+        )
 
         PY
 
 
 
-    - name: Commit guide
+    - name: Commit Guide
+
       run: |
 
         git config user.name "github-actions"
@@ -189,7 +330,7 @@ jobs:
         git add guides/24-7.xml.gz guides/24-7-channel-list.txt
 
 
-        git commit -m "Update 24/7 XMLTV guide" || exit 0
+        git commit -m "Update 24/7 guide" || exit 0
 
 
         git push
