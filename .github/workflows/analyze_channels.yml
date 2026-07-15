@@ -1,4 +1,4 @@
-name: Analyze Xtream Channel Map
+name: Analyze Xtream Categories
 
 on:
   workflow_dispatch:
@@ -8,50 +8,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Analyze channel-map.txt
+      - name: Analyze Xtream Categories
         run: |
           python3 <<'PY'
 
+          import json
+          import re
           from collections import defaultdict
 
-          INPUT = "xtream-epg/channel-map.txt"
+          INPUT = "xtream-epg/channels.json"
           OUTPUT = "xtream-epg/category-analysis.txt"
+
+          with open(INPUT, "r", encoding="utf-8") as f:
+              channels = json.load(f)
 
 
           categories = defaultdict(list)
 
 
-          with open(INPUT, "r", encoding="utf-8", errors="ignore") as f:
+          for ch in channels:
 
-              for line in f:
+              cat = str(ch.get("category_id","UNKNOWN"))
 
-                  line=line.strip()
+              name = ch.get("name","UNKNOWN")
 
-                  if not line:
-                      continue
-
-                  parts=[x.strip() for x in line.split("|")]
+              categories[cat].append(name)
 
 
-                  if len(parts) < 3:
-                      continue
 
+          def classify(names):
 
-                  stream_id = parts[0]
-                  category_id = parts[1]
-                  name = parts[-1]
+              text = " ".join(names[:50]).lower()
 
+              if any(x in text for x in ["ppv","pay per view","event"]):
+                  return "PPV / EVENTS"
 
-                  categories[category_id].append({
-                      "id": stream_id,
-                      "name": name
-                  })
+              if any(x in text for x in ["radio","music","hits","jazz"]):
+                  return "MUSIC / RADIO"
 
+              if any(x in text for x in ["24/7","247"]):
+                  return "24/7 CHANNELS"
 
-          print("Categories found:",len(categories))
+              if any(x in text for x in ["movie","cinema","film"]):
+                  return "MOVIES"
+
+              if any(x in text for x in ["espn","nba","nfl","sports","tsn","dazn"]):
+                  return "SPORTS"
+
+              return "UNKNOWN"
+
 
 
           with open(OUTPUT,"w",encoding="utf-8") as out:
@@ -60,51 +68,59 @@ jobs:
               out.write("========================\n\n")
 
 
-              for cat,items in sorted(
+              for cat,names in sorted(
                   categories.items(),
-                  key=lambda x:len(x[1]),
+                  key=lambda x: len(x[1]),
                   reverse=True
               ):
 
+                  group = classify(names)
+
                   out.write(
-                      f"CATEGORY {cat} - {len(items)} CHANNELS\n"
+                      f"CATEGORY {cat}\n"
+                      f"TYPE: {group}\n"
+                      f"COUNT: {len(names)}\n"
                   )
 
                   out.write("-"*60+"\n")
 
 
-                  for item in items[:30]:
-
-                      out.write(
-                          f"{item['id']} | {item['name']}\n"
-                      )
+                  for n in names[:30]:
+                      out.write(n+"\n")
 
                   out.write("\n\n")
 
 
-          print("\nCATEGORY SUMMARY")
+
+          print("Categories found:",len(categories))
+          print()
+          print("CATEGORY SUMMARY")
           print("================")
 
-          for cat,items in sorted(
+          for cat,names in sorted(
               categories.items(),
-              key=lambda x:len(x[1]),
+              key=lambda x: len(x[1]),
               reverse=True
           ):
 
               print(
                   cat,
                   "|",
-                  len(items),
+                  classify(names),
+                  "|",
+                  len(names),
                   "channels"
               )
 
-          print("\nCreated:",OUTPUT)
+
+          print()
+          print("Created:",OUTPUT)
 
           PY
 
 
-      - name: Upload analysis
+      - name: Upload Analysis
         uses: actions/upload-artifact@v4
         with:
-          name: category-analysis
+          name: xtream-category-analysis
           path: xtream-epg/category-analysis.txt
