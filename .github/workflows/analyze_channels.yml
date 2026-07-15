@@ -1,4 +1,4 @@
-name: Analyze Channels
+name: Analyze Xtream Channels
 
 on:
   workflow_dispatch:
@@ -8,52 +8,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Find channel file
+      - name: Analyze channels.json
         run: |
-          echo "Looking for channel files..."
-          find . -iname "channels.txt" -o -iname "*.txt"
-
-      - name: Analyze channels
-        shell: python
-        run: |
+          python3 <<'PY'
+          import json
           from collections import defaultdict
-          import os
 
-          INPUT_FILE = "channels.txt"
+          FILE = "xtream-epg/channels.json"
 
-          # Find channels.txt anywhere in repo
-          for root, dirs, files in os.walk("."):
-              if "channels.txt" in files:
-                  INPUT_FILE = os.path.join(root, "channels.txt")
-                  break
-
-          print(f"Using file: {INPUT_FILE}")
+          with open(FILE, "r", encoding="utf-8") as f:
+              data = json.load(f)
 
           categories = defaultdict(list)
 
-          with open(INPUT_FILE, "r", encoding="utf-8", errors="ignore") as f:
-              for line in f:
-                  line = line.strip()
+          for ch in data:
+              category = str(ch.get("category_id", "unknown"))
+              name = ch.get("name", "")
+              stream_id = ch.get("stream_id", "")
 
-                  if not line:
-                      continue
-
-                  parts = [x.strip() for x in line.split("|")]
-
-                  if len(parts) < 3:
-                      continue
-
-                  channel_id = parts[0]
-                  category_id = parts[1]
-                  name = parts[-1]
-
-                  categories[category_id].append({
-                      "id": channel_id,
-                      "name": name
-                  })
+              categories[category].append({
+                  "id": stream_id,
+                  "name": name
+              })
 
           print("\nCATEGORY SUMMARY")
           print("=" * 50)
@@ -61,12 +40,11 @@ jobs:
           for cat, items in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True):
               print(f"Category {cat}: {len(items)} channels")
 
-          print("\nCHANNEL EXAMPLES")
+          print("\nSAMPLES")
           print("=" * 50)
 
-          for cat, items in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True):
-
+          for cat, items in sorted(categories.items(), key=lambda x: len(x[1]), reverse=True)[:20]:
               print(f"\n--- CATEGORY {cat} ({len(items)}) ---")
-
               for item in items[:10]:
                   print(f"{item['id']} | {item['name']}")
+          PY
