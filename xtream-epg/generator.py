@@ -64,22 +64,30 @@ ALLOWED_CATEGORIES = {
 
 
 def xtream_request(action):
-    url = (
-        f"{BASE_URL}/player_api.php"
-        f"?username={USERNAME}"
-        f"&password={PASSWORD}"
-        f"&action={action}"
-    )
+
+    url = f"{BASE_URL}/player_api.php"
+
+    params = {
+        "username": USERNAME,
+        "password": PASSWORD,
+        "action": action
+    }
 
     for attempt in range(1, 6):
+
         try:
             print(f"Connecting attempt {attempt}/5")
 
             response = requests.get(
                 url,
-                timeout=120
+                params=params,
+                timeout=180,
+                headers={
+                    "User-Agent": "Mozilla/5.0"
+                }
             )
 
+            print("Request URL:", response.url)
             print("HTTP Status:", response.status_code)
 
             response.raise_for_status()
@@ -87,11 +95,12 @@ def xtream_request(action):
             return response.json()
 
         except Exception as e:
+
             print("Connection failed:", e)
 
             if attempt < 5:
-                print("Waiting 10 seconds...")
-                time.sleep(10)
+                print("Waiting 15 seconds...")
+                time.sleep(15)
 
     raise Exception("Unable to connect to Xtream server after 5 attempts")
 
@@ -104,18 +113,29 @@ def main():
 
     print(f"Provider channels: {len(channels)}")
 
+
     filtered = [
-        c for c in channels
-        if str(c.get("category_id")) in ALLOWED_CATEGORIES
+        channel
+        for channel in channels
+        if str(channel.get("category_id")) in ALLOWED_CATEGORIES
     ]
 
     print(f"Filtered channels: {len(filtered)}")
 
-    os.makedirs("xtream-epg", exist_ok=True)
+
+    os.makedirs(
+        "xtream-epg",
+        exist_ok=True
+    )
 
 
-    # Save full provider data
-    with open(JSON_OUTPUT, "w", encoding="utf-8") as f:
+    # Save provider data
+    with open(
+        JSON_OUTPUT,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
         json.dump(
             filtered,
             f,
@@ -125,39 +145,46 @@ def main():
 
 
     # Create channel map
-    with open(MAP_OUTPUT, "w", encoding="utf-8") as f:
-        for c in filtered:
+    with open(
+        MAP_OUTPUT,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        for channel in filtered:
 
             f.write(
-                f"{c.get('stream_id')} | "
-                f"{c.get('category_id')} | "
-                f"{c.get('epg_channel_id','')} | "
-                f"{c.get('name')}\n"
+                f"{channel.get('stream_id')} | "
+                f"{channel.get('category_id')} | "
+                f"{channel.get('epg_channel_id','')} | "
+                f"{channel.get('name')}\n"
             )
 
 
-    # Create XMLTV skeleton
+    # Create XMLTV channel list
     tv = ET.Element("tv")
 
-    for c in filtered:
 
-        channel = ET.SubElement(
+    for channel in filtered:
+
+        xml_channel = ET.SubElement(
             tv,
             "channel",
-            id=str(c["stream_id"])
+            id=str(channel.get("stream_id"))
         )
 
         display = ET.SubElement(
-            channel,
+            xml_channel,
             "display-name"
         )
 
-        display.text = c.get("name", "")
+        display.text = channel.get(
+            "name",
+            ""
+        )
 
 
-    tree = ET.ElementTree(tv)
-
-    tree.write(
+    ET.ElementTree(tv).write(
         OUTPUT,
         encoding="utf-8",
         xml_declaration=True
@@ -167,6 +194,7 @@ def main():
     print("Created:", OUTPUT)
     print("Created:", MAP_OUTPUT)
     print("Created:", JSON_OUTPUT)
+
 
 
 if __name__ == "__main__":
