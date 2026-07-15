@@ -93,8 +93,6 @@
 <channel id="AMERICAN.HEROES.CHANNEL.us"><display-name>AMERICAN HEROES CHANNEL</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/American%20Heroes.png"/><url>https://tvguide.com</url></channel>
 <channel id="CRIME.AND.INVESTIGATION.us"><display-name>CRIME AND INVESTIGATION</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Crime%20%26%20Investigation%20Network%20HD.png"/><url>https://tvguide.com</url></channel>
-<channel id=".COMEDY.us"><display-name>HBO COMEDY</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Comedy.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.us"><display-name>CINEMAX</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax.png"/><url>https://tvguide.com</url></channel>
 <channel id="PARAMOUNTPLUS.WITH.SHOWTIME.us"><display-name>PARAMOUNT+ WITH SHOWTIME</display-name>
@@ -155,6 +153,7 @@
 <channel id="AXS.TV.us" site_id="9100002976#9200002987"><display-name>AXS TV</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/AXS%20TV.png"/><url>https://tvguide.com</url></channel>
 <channel id="HBO.HITS.us" site_id="9100002976#9233013492"><display-name>HBO HITS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Hits.png"/><url>https://tvguide.com</url></channel>
 <channel id="HBO.DRAMA.us" site_id="9100002976#9200002532"><display-name>HBO DRAMA</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Drama.png"/><url>https://tvguide.com</url></channel>
+<channel id="HBO.COMEDY.us"><display-name>HBO COMEDY</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/HBO%20Comedy.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.HITS.us" site_id="9100002976#9200006529"><display-name>CINEMAX HITS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax%20Hits.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.ACTION.us" site_id="9100002976#9233006971"><display-name>CINEMAX ACTION</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax_Action_2025.png"/><url>https://tvguide.com</url></channel>
 <channel id="CINEMAX.CLASSICS.us" site_id="9100002976#9233006977"><display-name>CINEMAX CLASSICS</display-name><icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/Cinemax%20Classics.png"/><url>https://tvguide.com</url></channel>
