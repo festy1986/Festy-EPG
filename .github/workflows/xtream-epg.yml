@@ -1,0 +1,4 @@
+name: Xtream EPG Generator
+
+on:
+  workflow_dispatch:
