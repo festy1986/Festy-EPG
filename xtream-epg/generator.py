@@ -9,57 +9,16 @@ USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
 
 OUTPUT = "xtream-epg/xtream.xml"
+MAP_OUTPUT = "xtream-epg/channel-map.txt"
 
 
-# Categories to keep
 ALLOWED_CATEGORIES = {
-    "188",
-    "305",
-    "1732",
-    "575",
-    "1811",
-    "380",
-    "2221",
-    "929",
-    "1083",
-    "1930",
-    "1966",
-    "574",
-    "1920",
-    "1091",
-    "1594",
-    "1940",
-    "1109",
-    "1110",
-    "2213",
-    "2214",
-    "619",
-    "2057",
-    "2058",
-    "2059",
-    "2060",
-    "2061",
-    "2062",
-    "2063",
-    "2064",
-    "903",
-    "2222",
-    "1139",
-    "573",
-    "597",
-    "1501",
-    "604",
-    "1021",
-    "1503",
-    "606",
-    "1185",
-    "2094",
-    "605",
-    "1016",
-    "1960",
-    "911",
-    "2207",
-    "661"
+    "188","305","1732","575","1811","380","2221","929","1083",
+    "1930","1966","574","1920","1091","1594","1940","1109",
+    "1110","2213","2214","619","2057","2058","2059","2060",
+    "2061","2062","2063","2064","903","2222","1139","573",
+    "597","1501","604","1021","1503","606","1185","2094",
+    "605","1016","1960","911","2207","661"
 }
 
 
@@ -122,17 +81,30 @@ def main():
 
     for channel in channels:
 
-        category = str(
-            channel.get("category_id")
-        )
-
-        if category in ALLOWED_CATEGORIES:
+        if str(channel.get("category_id")) in ALLOWED_CATEGORIES:
             filtered.append(channel)
 
 
     print(
         f"Filtered channels: {len(filtered)}"
     )
+
+
+    # Create readable channel map
+
+    with open(
+        MAP_OUTPUT,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        for channel in filtered:
+
+            f.write(
+                f'{channel.get("stream_id")} | '
+                f'{channel.get("category_id")} | '
+                f'{clean_name(channel.get("name","Unknown"))}\n'
+            )
 
 
     tv = ET.Element(
@@ -144,14 +116,9 @@ def main():
     )
 
 
-    now = datetime.now(
-        timezone.utc
-    )
+    now = datetime.now(timezone.utc)
 
-    start = (
-        now.strftime("%Y%m%d%H%M%S")
-        + " +0000"
-    )
+    start = now.strftime("%Y%m%d%H%M%S") + " +0000"
 
     stop = (
         (now + timedelta(hours=24))
@@ -174,7 +141,7 @@ def main():
         )
 
 
-        channel_element = ET.SubElement(
+        ch = ET.SubElement(
             tv,
             "channel",
             {
@@ -182,16 +149,15 @@ def main():
             }
         )
 
-
         display = ET.SubElement(
-            channel_element,
+            ch,
             "display-name"
         )
 
         display.text = name
 
 
-        programme = ET.SubElement(
+        program = ET.SubElement(
             tv,
             "programme",
             {
@@ -201,23 +167,12 @@ def main():
             }
         )
 
-
         title = ET.SubElement(
-            programme,
+            program,
             "title"
         )
 
         title.text = name
-
-
-        desc = ET.SubElement(
-            programme,
-            "desc"
-        )
-
-        desc.text = (
-            "Generated from provider channel name."
-        )
 
 
     ET.ElementTree(tv).write(
@@ -227,9 +182,9 @@ def main():
     )
 
 
-    print(
-        f"Created {OUTPUT}"
-    )
+    print("Created:", OUTPUT)
+    print("Created:", MAP_OUTPUT)
+
 
 
 if __name__ == "__main__":
