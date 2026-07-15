@@ -1,3 +1,24 @@
+name: Build 24/7 Guide
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */12 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+
     - name: Build XMLTV Guide
       run: |
 
@@ -23,6 +44,7 @@
 
         with open(CHANNELS, "r", encoding="utf-8") as f:
             channels = json.load(f)
+
 
 
         categories = {}
@@ -56,7 +78,11 @@
             name = str(name).strip()
 
 
-            if name in ["/", "-", ""]:
+            if name in [
+                "",
+                "/",
+                "-"
+            ]:
                 return "UNKNOWN"
 
 
@@ -75,7 +101,8 @@
             )
 
 
-            for word in [
+            remove_words = [
+
                 "24/7",
                 "RAW",
                 "LIVE",
@@ -87,7 +114,11 @@
                 "HD",
                 "FHD",
                 "UHD"
-            ]:
+
+            ]
+
+
+            for word in remove_words:
 
                 name = re.sub(
                     r'\b' + re.escape(word) + r'\b',
@@ -121,8 +152,8 @@
 
 
             return any(
-                x in category
-                for x in [
+                word in category
+                for word in [
                     "sport",
                     "ppv",
                     "event"
@@ -151,7 +182,6 @@
 
         channel_list = []
 
-        count = 0
 
 
         with open(
@@ -163,10 +193,13 @@
 
             for ch in channels:
 
-
                 cid = str(
-                    ch.get("stream_id","")
+                    ch.get(
+                        "stream_id",
+                        ""
+                    )
                 )
+
 
                 if not cid:
                     continue
@@ -228,11 +261,7 @@
         for cid, raw_name, display_name in channel_list:
 
 
-            block_hours = (
-                2
-                if is_sports(cid)
-                else 24
-            )
+            block_hours = 2 if is_sports(cid) else 24
 
 
             for offset in range(
@@ -245,6 +274,7 @@
                 start = now + timedelta(
                     hours=offset
                 )
+
 
                 stop = start + timedelta(
                     hours=block_hours
@@ -274,27 +304,24 @@
                 ).text = display_name
 
 
-            count += 1
-
-
 
         tree = ET.ElementTree(tv)
 
         ET.indent(tree)
 
 
-        temp = "24-7.xml"
+        xml_file = "24-7.xml"
 
 
         tree.write(
-            temp,
+            xml_file,
             encoding="utf-8",
             xml_declaration=True
         )
 
 
         with open(
-            temp,
+            xml_file,
             "rb"
         ) as source:
 
@@ -309,9 +336,47 @@
 
 
         print(
-            f"Created {count} channels"
+            f"Created {len(channel_list)} channels"
         )
 
-        print(OUTPUT)
+        print(
+            OUTPUT
+        )
 
         PY
+
+
+
+    - name: Validate XMLTV
+      run: |
+
+        gunzip -c guides/24-7.xml.gz > /tmp/24-7.xml
+
+        python3 - <<'PY'
+
+        import xml.etree.ElementTree as ET
+
+        ET.parse("/tmp/24-7.xml")
+
+        print("XMLTV VALID")
+
+        PY
+
+
+
+    - name: Commit Guide
+
+      run: |
+
+        git config user.name "github-actions"
+
+        git config user.email "github-actions@github.com"
+
+
+        git add guides/24-7.xml.gz guides/24-7-channel-list.txt
+
+
+        git commit -m "Update 24/7 XMLTV guide" || exit 0
+
+
+        git push
