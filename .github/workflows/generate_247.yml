@@ -8,24 +8,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-
       - name: Generate 24/7 guide
         run: python generate_247.py
-        env:
-          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
 
-
-      - name: Commit generated guide and metadata cache
+      - name: Commit generated guide
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
 
-          git add guides/24-7.xml metadata_cache.json
+          git add guides/24-7.xml
 
-          git diff --cached --quiet || git commit -m "Update 24/7 guide and metadata cache"
+          git commit -m "Update 24/7 guide" || exit 0
 
           git push
