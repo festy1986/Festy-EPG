@@ -27,7 +27,6 @@ if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
     XTREAM_URL += ":80"
 
 
-
 os.makedirs(
     "guides",
     exist_ok=True
@@ -77,20 +76,17 @@ def clean_event_name(name):
         "GMT"
     ]
 
-
     for word in remove:
         name = name.replace(
             word,
             ""
         )
 
-
     name = re.sub(
         r"\s+",
         " ",
         name
     )
-
 
     return name.strip(
         " -|:"
@@ -100,7 +96,7 @@ def clean_event_name(name):
 
 def get_epg(stream_id):
 
-    url = (
+    epg_url = (
         f"{XTREAM_URL}/player_api.php"
         f"?username={USERNAME}"
         f"&password={PASSWORD}"
@@ -113,7 +109,7 @@ def get_epg(stream_id):
     try:
 
         r = requests.get(
-            url,
+            epg_url,
             timeout=30,
             headers={
                 "User-Agent":
@@ -144,14 +140,12 @@ def get_epg(stream_id):
         return None
 
 
-
     return None
 
 
 
-
 # -----------------------------
-# Load channels
+# Load selected channels
 # -----------------------------
 
 wanted = {}
@@ -167,7 +161,6 @@ with open(
     for line in f:
 
         line = line.strip()
-
 
         if not line:
             continue
@@ -202,7 +195,7 @@ print(
 
 
 # -----------------------------
-# Provider channels
+# Download provider channels
 # -----------------------------
 
 print(
@@ -219,21 +212,75 @@ url = (
 
 
 
-response = requests.get(
-    url,
-    timeout=120,
-    headers={
+session = requests.Session()
+
+
+session.headers.update(
+    {
         "User-Agent":
         "Mozilla/5.0"
     }
 )
 
 
-response.raise_for_status()
+
+streams = None
 
 
 
-streams = response.json()
+for attempt in range(1, 6):
+
+    try:
+
+        print(
+            f"Downloading provider channels (attempt {attempt}/5)..."
+        )
+
+
+        response = session.get(
+            url,
+            timeout=(30, 300)
+        )
+
+
+        response.raise_for_status()
+
+
+        streams = response.json()
+
+
+        break
+
+
+
+    except Exception as e:
+
+
+        print(
+            "Download failed:"
+        )
+
+
+        print(e)
+
+
+        time.sleep(10)
+
+
+
+if streams is None:
+
+    print(
+        "Unable to download provider channels"
+    )
+
+    exit(1)
+
+
+
+print(
+    f"Provider channels: {len(streams)}"
+)
 
 
 
@@ -248,15 +295,8 @@ for stream in streams:
 
 
 
-print(
-    f"Provider channels: {len(provider)}"
-)
-
-
-
-
 # -----------------------------
-# XMLTV
+# XMLTV creation
 # -----------------------------
 
 tv = ET.Element(
@@ -290,7 +330,6 @@ matched = 0
 
 for channel_id, display_name in wanted.items():
 
-
     if channel_id not in provider:
         continue
 
@@ -314,18 +353,16 @@ for channel_id, display_name in wanted.items():
     )
 
 
-    # TiviMate assignment name
+    # What TiviMate shows
     display.text = display_name
 
 
 
-
 # -----------------------------
-# Program data
+# Programs
 # -----------------------------
 
 for channel_id, display_name in wanted.items():
-
 
     if channel_id not in provider:
         continue
@@ -334,13 +371,12 @@ for channel_id, display_name in wanted.items():
     stream = provider[channel_id]
 
 
-    title_text = None
-    desc_text = None
+    title_text = ""
+    desc_text = ""
 
 
 
-    # First choice:
-    # Real provider EPG
+    # Try provider EPG first
 
     epg = get_epg(
         channel_id
@@ -348,7 +384,6 @@ for channel_id, display_name in wanted.items():
 
 
     if epg:
-
 
         title_text = clean_text(
             epg.get(
@@ -365,8 +400,7 @@ for channel_id, display_name in wanted.items():
 
 
 
-    # Fallback:
-    # Use provider channel name
+    # Fallback to provider channel name
 
     if not title_text:
 
@@ -387,7 +421,6 @@ for channel_id, display_name in wanted.items():
 
         title_text = display_name
         desc_text = display_name
-
 
 
 
@@ -433,12 +466,9 @@ for channel_id, display_name in wanted.items():
 
 
 
-    # Avoid hammering provider
-
     time.sleep(
         0.05
     )
-
 
 
 
