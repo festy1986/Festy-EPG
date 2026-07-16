@@ -1,54 +1,85 @@
 import os
 import re
+import html
+import time
+import requests
 import xml.etree.ElementTree as ET
+
 from datetime import datetime, timedelta, timezone
 
 
-INPUT_FILE = "channels2.txt"
+CHANNEL_FILE = "channels2.txt"
 OUTPUT_FILE = "guides/24-7part2.xml"
+
+XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
+USERNAME = os.environ["XTREAM_USERNAME"]
+PASSWORD = os.environ["XTREAM_PASSWORD"]
 
 DAYS = 1
 BLOCK_HOURS = 2
 
 
-# --------------------------------
-# Manual Display Name Overrides
-# --------------------------------
-#
-# Use this only when a channel needs
-# to be manually assigned or corrected.
-#
-# The key is the CLEAN DISPLAY NAME.
-#
-# Example:
-#
-# MANUAL_ID_OVERRIDES = {
-#     "CHAPPELLE'S SHOW": "485167",
-# }
-#
-# Normally, this can remain empty because
-# the ID is automatically read from channels2.txt.
+# ---------------------------------
+# Normalize Xtream URL
+# ---------------------------------
 
-MANUAL_ID_OVERRIDES = {
-}
+if XTREAM_URL.startswith("https://"):
+    XTREAM_URL = XTREAM_URL.replace(
+        "https://",
+        "http://"
+    )
+
+if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+    XTREAM_URL += ":80"
 
 
-# --------------------------------
-# Make sure guides folder exists
-# --------------------------------
+# ---------------------------------
+# Create guides folder
+# ---------------------------------
 
-os.makedirs("guides", exist_ok=True)
+os.makedirs(
+    "guides",
+    exist_ok=True
+)
 
 
-# --------------------------------
-# Clean Channel Name
-# --------------------------------
+# ---------------------------------
+# Session
+# ---------------------------------
+
+session = requests.Session()
+
+session.headers.update(
+    {
+        "User-Agent": "Mozilla/5.0"
+    }
+)
+
+
+# ---------------------------------
+# Clean channel name
+# ---------------------------------
 
 def clean_channel_name(name):
 
+    if not name:
+        return ""
+
+    name = html.unescape(
+        str(name)
+    )
+
+    name = re.sub(
+        r"<.*?>",
+        "",
+        name
+    )
+
     name = name.strip()
 
-    # Remove common country prefixes
+
+    # Remove country prefix
+
     name = re.sub(
         r"^(US|UK|CA|AU):\s*",
         "",
@@ -56,7 +87,9 @@ def clean_channel_name(name):
         flags=re.IGNORECASE
     )
 
+
     # Remove 24/7 prefix
+
     name = re.sub(
         r"^24/7\s*[:\-]?\s*",
         "",
@@ -64,135 +97,293 @@ def clean_channel_name(name):
         flags=re.IGNORECASE
     )
 
-    # Remove RAW / FPS markers
-    name = re.sub(
-        r"\s+ᴿᴬᵂ\b",
-        "",
-        name,
-        flags=re.IGNORECASE
+
+    # Remove RAW marker
+
+    name = name.replace(
+        "ᴿᴬᵂ",
+        ""
     )
 
-    name = re.sub(
-        r"\s+⁶⁰ᶠᵖˢ\b",
-        "",
-        name,
-        flags=re.IGNORECASE
+
+    # Remove 60 FPS marker
+
+    name = name.replace(
+        "⁶⁰ᶠᵖˢ",
+        ""
     )
 
-    # Remove leading/trailing whitespace
-    name = name.strip()
 
-    return name
+    # Normalize whitespace
 
-
-# --------------------------------
-# Load Channels
-# --------------------------------
-
-channels = []
-
-seen_ids = set()
+    name = re.sub(
+        r"\s+",
+        " ",
+        name
+    )
 
 
-with open(INPUT_FILE, "r", encoding="utf-8") as f:
+    return name.strip()
+
+
+# ---------------------------------
+# Load channels2.txt
+# ---------------------------------
+
+wanted = {}
+
+
+with open(
+    CHANNEL_FILE,
+    "r",
+    encoding="utf-8"
+) as f:
 
     for line in f:
 
         line = line.strip()
 
+
         if not line:
             continue
 
-        if "|" not in line:
-            continue
 
-        # Example:
-        #
-        # 485167 | 619 |  | US: 24/7 CHAPPELLE'S SHOW
-        #
         parts = [
-            part.strip()
-            for part in line.split("|")
+            x.strip()
+            for x in line.split("|")
         ]
+
 
         if len(parts) < 4:
             continue
 
-        provider_channel_id = parts[0]
-        raw_name = parts[3]
 
-        if not provider_channel_id or not raw_name:
+        stream_id = parts[0]
+
+        original_name = parts[3]
+
+
+        if not stream_id:
             continue
 
-        display_name = clean_channel_name(raw_name)
 
-        if not display_name:
-            continue
-
-        # --------------------------------
-        # Manual ID Override
-        # --------------------------------
-
-        channel_id = MANUAL_ID_OVERRIDES.get(
-            display_name,
-            provider_channel_id
-        )
-
-        # Prevent duplicate channel IDs
-        if channel_id in seen_ids:
-            continue
-
-        seen_ids.add(channel_id)
-
-        channels.append(
-            {
-                "id": channel_id,
-                "name": display_name
-            }
+        cleaned_name = clean_channel_name(
+            original_name
         )
 
 
-print(f"Loaded {len(channels)} channels")
+        if not cleaned_name:
+            continue
 
 
-# --------------------------------
-# Create XML
-# --------------------------------
+        wanted[stream_id] = {
+            "original_name":
+            original_name,
+
+            "cleaned_name":
+            cleaned_name
+        }
+
+
+print(
+    f"Requested channels: {len(wanted)}"
+)
+
+
+# ---------------------------------
+# Download provider channels
+# ---------------------------------
+
+streams_url = (
+    f"{XTREAM_URL}/player_api.php"
+    f"?username={USERNAME}"
+    f"&password={PASSWORD}"
+    f"&action=get_live_streams"
+)
+
+
+streams = None
+
+
+for attempt in range(1, 6):
+
+    try:
+
+        print(
+            f"Downloading provider channels "
+            f"(attempt {attempt}/5)..."
+        )
+
+
+        response = session.get(
+            streams_url,
+            timeout=(30, 300)
+        )
+
+
+        response.raise_for_status()
+
+
+        streams = response.json()
+
+
+        break
+
+
+    except Exception as e:
+
+        print(e)
+
+        time.sleep(10)
+
+
+if streams is None:
+
+    raise SystemExit(
+        "Provider download failed"
+    )
+
+
+print(
+    f"Provider channels: {len(streams)}"
+)
+
+
+# ---------------------------------
+# Index provider channels
+# ---------------------------------
+
+provider = {}
+
+
+for stream in streams:
+
+    stream_id = str(
+        stream.get(
+            "stream_id",
+            ""
+        )
+    )
+
+
+    if stream_id:
+
+        provider[stream_id] = stream
+
+
+# ---------------------------------
+# Match requested channels
+# ---------------------------------
+
+matched_channels = []
+
+
+for stream_id, data in wanted.items():
+
+    if stream_id not in provider:
+
+        print(
+            f"NOT FOUND: {stream_id} - "
+            f"{data['cleaned_name']}"
+        )
+
+        continue
+
+
+    matched_channels.append(
+        {
+            "stream_id":
+            stream_id,
+
+            "original_name":
+            data["original_name"],
+
+            "cleaned_name":
+            data["cleaned_name"],
+
+            "provider_name":
+            provider[stream_id].get(
+                "name",
+                ""
+            )
+        }
+    )
+
+
+print(
+    f"Matched channels: "
+    f"{len(matched_channels)}"
+)
+
+
+# ---------------------------------
+# Build XML
+# ---------------------------------
 
 tv = ET.Element(
     "tv",
     {
-        "generator-info-name": "24/7 Part 2"
+        "generator-info-name":
+        "24/7 Part 2"
     }
 )
 
 
-# --------------------------------
-# Add Channels
-# --------------------------------
+# ---------------------------------
+# Create channels
+# ---------------------------------
 
-for channel in channels:
+for channel_data in matched_channels:
 
-    ch = ET.SubElement(
+    stream_id = channel_data[
+        "stream_id"
+    ]
+
+    cleaned_name = channel_data[
+        "cleaned_name"
+    ]
+
+    original_name = channel_data[
+        "original_name"
+    ]
+
+
+    channel = ET.SubElement(
         tv,
         "channel",
         {
-            "id": channel["id"]
+            "id":
+            stream_id
         }
     )
 
+
+    # Clean name shown in guide
+
     display = ET.SubElement(
-        ch,
+        channel,
         "display-name"
     )
 
-    display.text = channel["name"]
+    display.text = cleaned_name
 
 
-# --------------------------------
-# Generate Programming
-# 1 Day / 2 Hour Blocks
-# --------------------------------
+    # Original provider name allows
+    # TiviMate to match the playlist name
+
+    if original_name != cleaned_name:
+
+        display_original = ET.SubElement(
+            channel,
+            "display-name"
+        )
+
+        display_original.text = original_name
+
+
+# ---------------------------------
+# Generate programming
+# ---------------------------------
 
 start_date = datetime.now(
     timezone.utc
@@ -209,9 +400,19 @@ end_date = start_date + timedelta(
 )
 
 
-for channel in channels:
+for channel_data in matched_channels:
+
+    stream_id = channel_data[
+        "stream_id"
+    ]
+
+    cleaned_name = channel_data[
+        "cleaned_name"
+    ]
+
 
     current = start_date
+
 
     while current < end_date:
 
@@ -219,44 +420,53 @@ for channel in channels:
             hours=BLOCK_HOURS
         )
 
+
         programme = ET.SubElement(
             tv,
             "programme",
             {
-                "start": current.strftime(
+                "start":
+                current.strftime(
                     "%Y%m%d%H%M%S +0000"
                 ),
 
-                "stop": stop.strftime(
+                "stop":
+                stop.strftime(
                     "%Y%m%d%H%M%S +0000"
                 ),
 
-                "channel": channel["id"]
+                "channel":
+                stream_id
             }
         )
+
 
         title = ET.SubElement(
             programme,
             "title"
         )
 
-        title.text = channel["name"]
+        title.text = cleaned_name
+
 
         desc = ET.SubElement(
             programme,
             "desc"
         )
 
-        desc.text = channel["name"]
+        desc.text = cleaned_name
+
 
         current = stop
 
 
-# --------------------------------
-# Write XML
-# --------------------------------
+# ---------------------------------
+# Save XML
+# ---------------------------------
 
-tree = ET.ElementTree(tv)
+tree = ET.ElementTree(
+    tv
+)
 
 
 ET.indent(
@@ -275,6 +485,14 @@ tree.write(
 print("")
 print("Created:")
 print(OUTPUT_FILE)
-print(f"Channels: {len(channels)}")
-print(f"Days: {DAYS}")
-print(f"Block size: {BLOCK_HOURS} hours")
+print(
+    f"Channels: "
+    f"{len(matched_channels)}"
+)
+print(
+    f"Days: {DAYS}"
+)
+print(
+    f"Block size: "
+    f"{BLOCK_HOURS} hours"
+)
