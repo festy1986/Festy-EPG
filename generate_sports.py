@@ -42,12 +42,11 @@ def clean_text(text):
     return text.strip()
 
 
-
 def clean_event_name(name):
 
     name = clean_text(name)
 
-    remove = [
+    remove_words = [
         "NO EVENT STREAMING NOW",
         "EXCLUSIVE",
         "NEXT",
@@ -55,7 +54,7 @@ def clean_event_name(name):
         "GMT"
     ]
 
-    for word in remove:
+    for word in remove_words:
         name = name.replace(word, "")
 
     name = re.sub(
@@ -67,9 +66,8 @@ def clean_event_name(name):
     return name.strip(" -|:")
 
 
-
 # -----------------------------
-# Load requested channels
+# Load selected channels
 # -----------------------------
 
 wanted = {}
@@ -91,7 +89,6 @@ with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
         if len(parts) < 2:
             continue
 
-
         channel_id = parts[0]
 
         display_name = " ".join(parts[1:])
@@ -99,15 +96,13 @@ with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
         wanted[channel_id] = display_name
 
 
-
 print(
     f"Requested channels: {len(wanted)}"
 )
 
 
-
 # -----------------------------
-# Get provider channels
+# Download provider channels
 # -----------------------------
 
 print("Downloading provider channels...")
@@ -121,10 +116,49 @@ streams_url = (
 )
 
 
-streams = requests.get(
+streams_response = requests.get(
     streams_url,
-    timeout=120
-).json()
+    timeout=120,
+    headers={
+        "User-Agent": "Mozilla/5.0"
+    }
+)
+
+
+print(
+    "Live API status:",
+    streams_response.status_code
+)
+
+
+if streams_response.status_code != 200:
+
+    print(
+        streams_response.text[:500]
+    )
+
+    exit(1)
+
+
+try:
+
+    streams = streams_response.json()
+
+except Exception:
+
+    print("Provider returned invalid JSON")
+
+    print(
+        streams_response.text[:500]
+    )
+
+    exit(1)
+
+
+
+print(
+    f"Provider channels: {len(streams)}"
+)
 
 
 
@@ -139,14 +173,8 @@ for stream in streams:
 
 
 
-print(
-    f"Provider channels: {len(provider)}"
-)
-
-
-
 # -----------------------------
-# XMLTV setup
+# Create XMLTV
 # -----------------------------
 
 tv = ET.Element(
@@ -159,6 +187,42 @@ tv = ET.Element(
 
 
 
+matched = 0
+
+
+
+for channel_id, display_name in wanted.items():
+
+    if channel_id not in provider:
+        continue
+
+    matched += 1
+
+
+    channel = ET.SubElement(
+        tv,
+        "channel",
+        {
+            "id": channel_id
+        }
+    )
+
+
+    display = ET.SubElement(
+        channel,
+        "display-name"
+    )
+
+
+    # TiviMate assignment name
+    display.text = display_name
+
+
+
+# -----------------------------
+# Temporary event data
+# -----------------------------
+
 start = datetime.now(
     timezone.utc
 ).replace(
@@ -170,40 +234,6 @@ start = datetime.now(
 
 
 
-# -----------------------------
-# Build channels
-# -----------------------------
-
-for channel_id, display_name in wanted.items():
-
-    if channel_id not in provider:
-        continue
-
-
-    ch = ET.SubElement(
-        tv,
-        "channel",
-        {
-            "id": channel_id
-        }
-    )
-
-
-    name = ET.SubElement(
-        ch,
-        "display-name"
-    )
-
-
-    # This is what TiviMate sees
-    name.text = display_name
-
-
-
-# -----------------------------
-# Build programs
-# -----------------------------
-
 for channel_id, display_name in wanted.items():
 
     if channel_id not in provider:
@@ -213,17 +243,16 @@ for channel_id, display_name in wanted.items():
     stream = provider[channel_id]
 
 
-    provider_name = clean_event_name(
+    event = clean_event_name(
         stream.get("name", "")
     )
 
 
-    title_text = provider_name
+    if not event:
+        event = display_name
 
-    desc_text = provider_name
 
 
-    # One day placeholder until EPG pull is added
     programme = ET.SubElement(
         tv,
         "programme",
@@ -246,7 +275,7 @@ for channel_id, display_name in wanted.items():
         "title"
     )
 
-    title.text = title_text
+    title.text = event
 
 
 
@@ -255,12 +284,12 @@ for channel_id, display_name in wanted.items():
         "desc"
     )
 
-    desc.text = desc_text
+    desc.text = event
 
 
 
 # -----------------------------
-# Save
+# Save file
 # -----------------------------
 
 tree = ET.ElementTree(tv)
@@ -270,6 +299,7 @@ ET.indent(
     space="  "
 )
 
+
 tree.write(
     OUTPUT_FILE,
     encoding="utf-8",
@@ -277,6 +307,10 @@ tree.write(
 )
 
 
+
 print("")
 print("Created:")
 print(OUTPUT_FILE)
+print(
+    f"Matched channels: {matched}"
+)
