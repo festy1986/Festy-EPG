@@ -1,1 +1,19 @@
+name: Generate Sports Guide
 
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Test provider credentials
+        run: |
+          echo "Provider credentials loaded"
+          echo "XTREAM_URL exists: ${{ secrets.XTREAM_URL != '' }}"
+          echo "XTREAM_USERNAME exists: ${{ secrets.XTREAM_USERNAME != '' }}"
+          echo "XTREAM_PASSWORD exists: ${{ secrets.XTREAM_PASSWORD != '' }}"
