@@ -3,20 +3,40 @@ import requests
 
 CHANNEL_FILE = "sports_channels.txt"
 
+# -----------------------------
+# Xtream Connection
+# -----------------------------
+
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
 
 
+# Provider reports HTTP port 80
+if XTREAM_URL.startswith("https://"):
+    XTREAM_URL = XTREAM_URL.replace("https://", "http://")
+
+if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+    XTREAM_URL = XTREAM_URL + ":80"
+
+
+print("Xtream server:")
+print(XTREAM_URL)
+
+
 # -----------------------------
-# Load selected channels
+# Load Sports Channels
 # -----------------------------
 
+print("")
 print("Loading sports channel list...")
+
 
 wanted_channels = {}
 
+
 with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
+
     for line in f:
 
         line = line.strip()
@@ -24,73 +44,95 @@ with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
         if not line:
             continue
 
-        parts = [x.strip() for x in line.split("|")]
+        parts = [
+            x.strip()
+            for x in line.split("|")
+        ]
 
         if len(parts) < 2:
             continue
+
 
         channel_id = parts[0]
 
         display_name = " ".join(parts[1:])
 
+
         wanted_channels[channel_id] = display_name
 
 
-print(f"Channels requested: {len(wanted_channels)}")
+
+print(
+    f"Channels requested: {len(wanted_channels)}"
+)
+
 
 
 # -----------------------------
-# Xtream API Test
+# Test Account API
 # -----------------------------
 
 print("")
 print("Connecting to Xtream...")
 
 
-api_url = (
+account_url = (
     f"{XTREAM_URL}/player_api.php"
     f"?username={USERNAME}"
     f"&password={PASSWORD}"
 )
 
 
-print("Testing account API...")
-
-
 response = requests.get(
-    api_url,
-    timeout=60
+    account_url,
+    timeout=60,
+    headers={
+        "User-Agent": "Mozilla/5.0"
+    }
 )
 
 
-print("API Status:", response.status_code)
+print(
+    "Account API status:",
+    response.status_code
+)
 
-print("Response Preview:")
-print(response.text[:500])
+
+print(
+    "Response preview:"
+)
+
+print(
+    response.text[:300]
+)
 
 
 if response.status_code != 200:
+
     print("")
-    print("Provider did not return a valid response.")
+    print("Account API failed.")
     exit(1)
 
 
+
 try:
+
     account = response.json()
 
 except Exception:
 
-    print("")
-    print("Response was not JSON.")
+    print("Invalid JSON response")
     exit(1)
+
 
 
 print("")
 print("Account API OK")
 
 
+
 # -----------------------------
-# Get Live Channels
+# Get Live Streams
 # -----------------------------
 
 print("")
@@ -105,22 +147,32 @@ channels_url = (
 )
 
 
+
 channels_response = requests.get(
     channels_url,
-    timeout=120
+    timeout=120,
+    headers={
+        "User-Agent": "Mozilla/5.0"
+    }
 )
 
 
+
 print(
-    "Live channel API status:",
+    "Live API status:",
     channels_response.status_code
 )
 
 
+
 if channels_response.status_code != 200:
 
-    print(channels_response.text[:500])
+    print(
+        channels_response.text[:500]
+    )
+
     exit(1)
+
 
 
 try:
@@ -129,9 +181,14 @@ try:
 
 except Exception:
 
-    print("Live channel response was not JSON")
-    print(channels_response.text[:500])
+    print("Live channel response not JSON")
+
+    print(
+        channels_response.text[:500]
+    )
+
     exit(1)
+
 
 
 print(
@@ -139,11 +196,12 @@ print(
 )
 
 
+
 # -----------------------------
-# Match channels
+# Match Selected Channels
 # -----------------------------
 
-provider_ids = {}
+provider_channels = {}
 
 
 for channel in channels:
@@ -152,22 +210,24 @@ for channel in channels:
         channel.get("stream_id")
     )
 
-    provider_ids[stream_id] = channel
+    provider_channels[stream_id] = channel
 
 
 
 found = []
+
 missing = []
 
 
-for channel_id, name in wanted_channels.items():
 
-    if channel_id in provider_ids:
+for channel_id, display_name in wanted_channels.items():
+
+    if channel_id in provider_channels:
 
         found.append(
             (
                 channel_id,
-                name
+                display_name
             )
         )
 
@@ -176,9 +236,10 @@ for channel_id, name in wanted_channels.items():
         missing.append(
             (
                 channel_id,
-                name
+                display_name
             )
         )
+
 
 
 print("")
@@ -191,27 +252,29 @@ print(
 )
 
 
+
 print("")
 print("Sample matches:")
 
 
-for item in found[:25]:
+for channel in found[:25]:
 
     print(
-        item[0],
+        channel[0],
         "->",
-        item[1]
+        channel[1]
     )
+
 
 
 print("")
 print("Sample missing:")
 
 
-for item in missing[:25]:
+for channel in missing[:25]:
 
     print(
-        item[0],
+        channel[0],
         "->",
-        item[1]
+        channel[1]
     )
