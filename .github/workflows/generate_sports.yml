@@ -12,8 +12,30 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Test provider credentials
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
           echo "Provider credentials loaded"
-          echo "XTREAM_URL exists: ${{ secrets.XTREAM_URL != '' }}"
-          echo "XTREAM_USERNAME exists: ${{ secrets.XTREAM_USERNAME != '' }}"
-          echo "XTREAM_PASSWORD exists: ${{ secrets.XTREAM_PASSWORD != '' }}"
+
+          if [ -n "$XTREAM_URL" ]; then
+            echo "XTREAM_URL exists"
+          else
+            echo "XTREAM_URL missing"
+            exit 1
+          fi
+
+          if [ -n "$XTREAM_USERNAME" ]; then
+            echo "XTREAM_USERNAME exists"
+          else
+            echo "XTREAM_USERNAME missing"
+            exit 1
+          fi
+
+          if [ -n "$XTREAM_PASSWORD" ]; then
+            echo "XTREAM_PASSWORD exists"
+          else
+            echo "XTREAM_PASSWORD missing"
+            exit 1
+          fi
