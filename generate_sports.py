@@ -4,9 +4,12 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 import re
 import html
+import time
+
 
 CHANNEL_FILE = "sports_channels.txt"
 OUTPUT_FILE = "guides/sports.xml"
+
 
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
@@ -14,7 +17,7 @@ PASSWORD = os.environ["XTREAM_PASSWORD"]
 
 
 # -----------------------------
-# Normalize provider URL
+# Normalize URL
 # -----------------------------
 
 if XTREAM_URL.startswith("https://"):
@@ -24,7 +27,12 @@ if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
     XTREAM_URL += ":80"
 
 
-os.makedirs("guides", exist_ok=True)
+
+os.makedirs(
+    "guides",
+    exist_ok=True
+)
+
 
 
 # -----------------------------
@@ -32,21 +40,36 @@ os.makedirs("guides", exist_ok=True)
 # -----------------------------
 
 def clean_text(text):
+
     if not text:
         return ""
 
     text = html.unescape(text)
-    text = re.sub("<.*?>", "", text)
-    text = text.replace("\n", " ")
 
-    return text.strip()
+    text = re.sub(
+        "<.*?>",
+        "",
+        text
+    )
+
+    text = text.replace(
+        "\n",
+        " "
+    )
+
+    return re.sub(
+        r"\s+",
+        " ",
+        text
+    ).strip()
+
 
 
 def clean_event_name(name):
 
     name = clean_text(name)
 
-    remove_words = [
+    remove = [
         "NO EVENT STREAMING NOW",
         "EXCLUSIVE",
         "NEXT",
@@ -54,8 +77,13 @@ def clean_event_name(name):
         "GMT"
     ]
 
-    for word in remove_words:
-        name = name.replace(word, "")
+
+    for word in remove:
+        name = name.replace(
+            word,
+            ""
+        )
+
 
     name = re.sub(
         r"\s+",
@@ -63,37 +91,108 @@ def clean_event_name(name):
         name
     )
 
-    return name.strip(" -|:")
+
+    return name.strip(
+        " -|:"
+    )
+
+
+
+def get_epg(stream_id):
+
+    url = (
+        f"{XTREAM_URL}/player_api.php"
+        f"?username={USERNAME}"
+        f"&password={PASSWORD}"
+        f"&action=get_short_epg"
+        f"&stream_id={stream_id}"
+        f"&limit=5"
+    )
+
+
+    try:
+
+        r = requests.get(
+            url,
+            timeout=30,
+            headers={
+                "User-Agent":
+                "Mozilla/5.0"
+            }
+        )
+
+
+        if r.status_code != 200:
+            return None
+
+
+        data = r.json()
+
+
+        listings = data.get(
+            "epg_listings",
+            []
+        )
+
+
+        if listings:
+            return listings[0]
+
+
+    except Exception:
+
+        return None
+
+
+
+    return None
+
+
 
 
 # -----------------------------
-# Load selected channels
+# Load channels
 # -----------------------------
 
 wanted = {}
 
-with open(CHANNEL_FILE, "r", encoding="utf-8") as f:
+
+with open(
+    CHANNEL_FILE,
+    "r",
+    encoding="utf-8"
+) as f:
+
 
     for line in f:
 
         line = line.strip()
 
+
         if not line:
             continue
+
 
         parts = [
             x.strip()
             for x in line.split("|")
         ]
 
+
         if len(parts) < 2:
             continue
 
+
         channel_id = parts[0]
 
-        display_name = " ".join(parts[1:])
+
+        display_name = " ".join(
+            parts[1:]
+        )
+
 
         wanted[channel_id] = display_name
+
 
 
 print(
@@ -101,14 +200,17 @@ print(
 )
 
 
+
 # -----------------------------
-# Download provider channels
+# Provider channels
 # -----------------------------
 
-print("Downloading provider channels...")
+print(
+    "Downloading provider channels..."
+)
 
 
-streams_url = (
+url = (
     f"{XTREAM_URL}/player_api.php"
     f"?username={USERNAME}"
     f"&password={PASSWORD}"
@@ -116,49 +218,22 @@ streams_url = (
 )
 
 
-streams_response = requests.get(
-    streams_url,
+
+response = requests.get(
+    url,
     timeout=120,
     headers={
-        "User-Agent": "Mozilla/5.0"
+        "User-Agent":
+        "Mozilla/5.0"
     }
 )
 
 
-print(
-    "Live API status:",
-    streams_response.status_code
-)
-
-
-if streams_response.status_code != 200:
-
-    print(
-        streams_response.text[:500]
-    )
-
-    exit(1)
-
-
-try:
-
-    streams = streams_response.json()
-
-except Exception:
-
-    print("Provider returned invalid JSON")
-
-    print(
-        streams_response.text[:500]
-    )
-
-    exit(1)
+response.raise_for_status()
 
 
 
-print(
-    f"Provider channels: {len(streams)}"
-)
+streams = response.json()
 
 
 
@@ -173,8 +248,15 @@ for stream in streams:
 
 
 
+print(
+    f"Provider channels: {len(provider)}"
+)
+
+
+
+
 # -----------------------------
-# Create XMLTV
+# XMLTV
 # -----------------------------
 
 tv = ET.Element(
@@ -187,14 +269,31 @@ tv = ET.Element(
 
 
 
+start = datetime.now(
+    timezone.utc
+).replace(
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0
+)
+
+
+
 matched = 0
 
 
 
+# -----------------------------
+# Channels
+# -----------------------------
+
 for channel_id, display_name in wanted.items():
+
 
     if channel_id not in provider:
         continue
+
 
     matched += 1
 
@@ -203,7 +302,8 @@ for channel_id, display_name in wanted.items():
         tv,
         "channel",
         {
-            "id": channel_id
+            "id":
+            channel_id
         }
     )
 
@@ -219,22 +319,13 @@ for channel_id, display_name in wanted.items():
 
 
 
+
 # -----------------------------
-# Temporary event data
+# Program data
 # -----------------------------
-
-start = datetime.now(
-    timezone.utc
-).replace(
-    hour=0,
-    minute=0,
-    second=0,
-    microsecond=0
-)
-
-
 
 for channel_id, display_name in wanted.items():
+
 
     if channel_id not in provider:
         continue
@@ -243,13 +334,60 @@ for channel_id, display_name in wanted.items():
     stream = provider[channel_id]
 
 
-    event = clean_event_name(
-        stream.get("name", "")
+    title_text = None
+    desc_text = None
+
+
+
+    # First choice:
+    # Real provider EPG
+
+    epg = get_epg(
+        channel_id
     )
 
 
-    if not event:
-        event = display_name
+    if epg:
+
+
+        title_text = clean_text(
+            epg.get(
+                "title"
+            )
+        )
+
+
+        desc_text = clean_text(
+            epg.get(
+                "description"
+            )
+        )
+
+
+
+    # Fallback:
+    # Use provider channel name
+
+    if not title_text:
+
+
+        title_text = clean_event_name(
+            stream.get(
+                "name",
+                ""
+            )
+        )
+
+
+        desc_text = title_text
+
+
+
+    if not title_text:
+
+        title_text = display_name
+        desc_text = display_name
+
 
 
 
@@ -258,11 +396,17 @@ for channel_id, display_name in wanted.items():
         "programme",
         {
             "start":
-            start.strftime("%Y%m%d%H%M%S +0000"),
+            start.strftime(
+                "%Y%m%d%H%M%S +0000"
+            ),
 
             "stop":
-            (start + timedelta(days=1))
-            .strftime("%Y%m%d%H%M%S +0000"),
+            (
+                start +
+                timedelta(days=1)
+            ).strftime(
+                "%Y%m%d%H%M%S +0000"
+            ),
 
             "channel":
             channel_id
@@ -270,12 +414,13 @@ for channel_id, display_name in wanted.items():
     )
 
 
+
     title = ET.SubElement(
         programme,
         "title"
     )
 
-    title.text = event
+    title.text = title_text
 
 
 
@@ -284,15 +429,27 @@ for channel_id, display_name in wanted.items():
         "desc"
     )
 
-    desc.text = event
+    desc.text = desc_text
+
+
+
+    # Avoid hammering provider
+
+    time.sleep(
+        0.05
+    )
+
 
 
 
 # -----------------------------
-# Save file
+# Save
 # -----------------------------
 
-tree = ET.ElementTree(tv)
+tree = ET.ElementTree(
+    tv
+)
+
 
 ET.indent(
     tree,
@@ -309,8 +466,14 @@ tree.write(
 
 
 print("")
-print("Created:")
-print(OUTPUT_FILE)
+print(
+    "Created:"
+)
+
+print(
+    OUTPUT_FILE
+)
+
 print(
     f"Matched channels: {matched}"
 )
