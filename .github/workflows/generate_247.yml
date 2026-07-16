@@ -1,31 +1,110 @@
-name: Generate 24/7 Guide
+name: 24/7 Guide
 
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "0 */6 * * *"
+
+
+permissions:
+  contents: write
+
+
 jobs:
-  generate:
+
+  guide-247:
+
     runs-on: ubuntu-latest
 
+
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+
+      - name: Verify provider credentials
+
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
         run: |
+
+          echo "Provider credentials loaded"
+
+
+          if [ -z "$XTREAM_URL" ]; then
+
+            echo "XTREAM_URL missing"
+
+            exit 1
+
+          fi
+
+
+          if [ -z "$XTREAM_USERNAME" ]; then
+
+            echo "XTREAM_USERNAME missing"
+
+            exit 1
+
+          fi
+
+
+          if [ -z "$XTREAM_PASSWORD" ]; then
+
+            echo "XTREAM_PASSWORD missing"
+
+            exit 1
+
+          fi
+
+
+          echo "XTREAM_URL exists"
+
+          echo "XTREAM_USERNAME exists"
+
+          echo "XTREAM_PASSWORD exists"
+
+
+      - name: Install Python requirements
+
+        run: |
+
           python -m pip install requests
 
+
       - name: Generate 24/7 guide
+
+        env:
+
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
         run: |
+
           python generate_247.py
 
-      - name: Commit generated guide
+
+      - name: Commit and push guide
+
         run: |
+
           git config --global user.name "github-actions"
-          git config --global user.email "actions@github.com"
+
+          git config --global user.email "github-actions@github.com"
+
 
           git add guides/24-7.xml
 
-          git commit -m "Update 24/7 guide" || exit 0
+
+          git commit -m "Update 24/7 guide" || echo "No changes"
+
 
           git push
