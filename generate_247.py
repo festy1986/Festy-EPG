@@ -8,14 +8,14 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
 
-CHANNEL_FILE = "channels2.txt"
-OUTPUT_FILE = "guides/24-7part2.xml"
+CHANNEL_FILE = "channels.txt"
+OUTPUT_FILE = "guides/24-7.xml"
 
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
 
-DAYS = 1
+DAYS = 2
 BLOCK_HOURS = 2
 
 
@@ -24,12 +24,15 @@ BLOCK_HOURS = 2
 # ---------------------------------
 
 if XTREAM_URL.startswith("https://"):
+
     XTREAM_URL = XTREAM_URL.replace(
         "https://",
         "http://"
     )
 
+
 if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+
     XTREAM_URL += ":80"
 
 
@@ -63,17 +66,21 @@ session.headers.update(
 def clean_channel_name(name):
 
     if not name:
+
         return ""
+
 
     name = html.unescape(
         str(name)
     )
+
 
     name = re.sub(
         r"<.*?>",
         "",
         name
     )
+
 
     name = name.strip()
 
@@ -127,7 +134,7 @@ def clean_channel_name(name):
 
 
 # ---------------------------------
-# Load channels2.txt
+# Load channels.txt
 # ---------------------------------
 
 wanted = {}
@@ -139,22 +146,28 @@ with open(
     encoding="utf-8"
 ) as f:
 
+
     for line in f:
 
         line = line.strip()
 
 
         if not line:
+
             continue
 
 
         parts = [
+
             x.strip()
+
             for x in line.split("|")
+
         ]
 
 
         if len(parts) < 4:
+
             continue
 
 
@@ -164,6 +177,7 @@ with open(
 
 
         if not stream_id:
+
             continue
 
 
@@ -173,20 +187,24 @@ with open(
 
 
         if not cleaned_name:
+
             continue
 
 
         wanted[stream_id] = {
+
             "original_name":
             original_name,
 
             "cleaned_name":
             cleaned_name
+
         }
 
 
 print(
-    f"Requested channels: {len(wanted)}"
+    f"Requested channels: "
+    f"{len(wanted)}"
 )
 
 
@@ -195,10 +213,15 @@ print(
 # ---------------------------------
 
 streams_url = (
+
     f"{XTREAM_URL}/player_api.php"
+
     f"?username={USERNAME}"
+
     f"&password={PASSWORD}"
+
     f"&action=get_live_streams"
+
 )
 
 
@@ -209,15 +232,22 @@ for attempt in range(1, 6):
 
     try:
 
+
         print(
+
             f"Downloading provider channels "
+
             f"(attempt {attempt}/5)..."
+
         )
 
 
         response = session.get(
+
             streams_url,
+
             timeout=(30, 300)
+
         )
 
 
@@ -232,7 +262,9 @@ for attempt in range(1, 6):
 
     except Exception as e:
 
+
         print(e)
+
 
         time.sleep(10)
 
@@ -240,12 +272,18 @@ for attempt in range(1, 6):
 if streams is None:
 
     raise SystemExit(
+
         "Provider download failed"
+
     )
 
 
 print(
-    f"Provider channels: {len(streams)}"
+
+    f"Provider channels: "
+
+    f"{len(streams)}"
+
 )
 
 
@@ -258,15 +296,22 @@ provider = {}
 
 for stream in streams:
 
+
     stream_id = str(
+
         stream.get(
+
             "stream_id",
+
             ""
+
         )
+
     )
 
 
     if stream_id:
+
 
         provider[stream_id] = stream
 
@@ -280,39 +325,64 @@ matched_channels = []
 
 for stream_id, data in wanted.items():
 
+
     if stream_id not in provider:
 
+
         print(
-            f"NOT FOUND: {stream_id} - "
+
+            f"NOT FOUND: "
+
+            f"{stream_id} - "
+
             f"{data['cleaned_name']}"
+
         )
+
 
         continue
 
 
     matched_channels.append(
+
         {
+
             "stream_id":
+
             stream_id,
 
+
             "original_name":
+
             data["original_name"],
 
+
             "cleaned_name":
+
             data["cleaned_name"],
 
+
             "provider_name":
+
             provider[stream_id].get(
+
                 "name",
+
                 ""
+
             )
+
         }
+
     )
 
 
 print(
+
     f"Matched channels: "
+
     f"{len(matched_channels)}"
+
 )
 
 
@@ -321,11 +391,17 @@ print(
 # ---------------------------------
 
 tv = ET.Element(
+
     "tv",
+
     {
+
         "generator-info-name":
-        "24/7 Part 2"
+
+        "24/7"
+
     }
+
 )
 
 
@@ -335,124 +411,189 @@ tv = ET.Element(
 
 for channel_data in matched_channels:
 
+
     stream_id = channel_data[
+
         "stream_id"
+
     ]
+
 
     cleaned_name = channel_data[
+
         "cleaned_name"
+
     ]
 
+
     original_name = channel_data[
+
         "original_name"
+
     ]
 
 
     channel = ET.SubElement(
+
         tv,
+
         "channel",
+
         {
+
             "id":
+
             stream_id
+
         }
+
     )
 
 
     # Clean name shown in guide
 
     display = ET.SubElement(
+
         channel,
+
         "display-name"
+
     )
+
 
     display.text = cleaned_name
 
 
-    # Original provider name allows
-    # TiviMate to match the playlist name
+    # Original provider name remains
+    # available as an alternate name
+    # for matching purposes
 
     if original_name != cleaned_name:
 
+
         display_original = ET.SubElement(
+
             channel,
+
             "display-name"
+
         )
+
 
         display_original.text = original_name
 
 
 # ---------------------------------
-# Generate programming
+# Generate Programming
+# 2 Days / 48 Hours
+# 2 Hour Blocks
 # ---------------------------------
 
 start_date = datetime.now(
+
     timezone.utc
+
 ).replace(
+
     hour=0,
+
     minute=0,
+
     second=0,
+
     microsecond=0
-)
 
-
-end_date = start_date + timedelta(
-    days=DAYS
 )
 
 
 for channel_data in matched_channels:
 
+
     stream_id = channel_data[
+
         "stream_id"
+
     ]
 
+
     cleaned_name = channel_data[
+
         "cleaned_name"
+
     ]
 
 
     current = start_date
 
 
-    while current < end_date:
+    # 2 days × 12 blocks per day
+    # = 24 total 2-hour blocks
+
+    for block in range(24):
+
 
         stop = current + timedelta(
+
             hours=BLOCK_HOURS
+
         )
 
 
         programme = ET.SubElement(
+
             tv,
+
             "programme",
+
             {
+
                 "start":
+
                 current.strftime(
+
                     "%Y%m%d%H%M%S +0000"
+
                 ),
+
 
                 "stop":
+
                 stop.strftime(
+
                     "%Y%m%d%H%M%S +0000"
+
                 ),
 
+
                 "channel":
+
                 stream_id
+
             }
+
         )
 
 
         title = ET.SubElement(
+
             programme,
+
             "title"
+
         )
+
 
         title.text = cleaned_name
 
 
         desc = ET.SubElement(
+
             programme,
+
             "desc"
+
         )
+
 
         desc.text = cleaned_name
 
@@ -465,34 +606,88 @@ for channel_data in matched_channels:
 # ---------------------------------
 
 tree = ET.ElementTree(
+
     tv
+
 )
 
 
 ET.indent(
+
     tree,
+
     space="  "
+
 )
 
 
 tree.write(
+
     OUTPUT_FILE,
+
     encoding="utf-8",
+
     xml_declaration=True
+
 )
 
 
 print("")
-print("Created:")
-print(OUTPUT_FILE)
+
 print(
+
+    "Created:"
+
+)
+
+
+print(
+
+    OUTPUT_FILE
+
+)
+
+
+print(
+
     f"Channels: "
+
     f"{len(matched_channels)}"
+
 )
+
+
 print(
-    f"Days: {DAYS}"
+
+    f"Days: "
+
+    f"{DAYS}"
+
 )
+
+
 print(
+
+    f"Hours: "
+
+    f"{DAYS * 24}"
+
+)
+
+
+print(
+
     f"Block size: "
+
     f"{BLOCK_HOURS} hours"
+
+)
+
+
+print(
+
+    f"Programmes per channel: "
+
+    f"{DAYS * 24 // BLOCK_HOURS}"
+
 )
