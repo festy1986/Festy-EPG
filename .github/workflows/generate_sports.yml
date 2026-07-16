@@ -11,7 +11,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Test provider credentials
+      - name: Install requirements
+        run: |
+          python -m pip install requests
+
+      - name: Test Xtream credentials
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -40,10 +44,6 @@ jobs:
             exit 1
           fi
 
-      - name: Install requirements
-        run: |
-          python -m pip install requests
-
       - name: Test Xtream channel matching
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
@@ -51,3 +51,22 @@ jobs:
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
           python test_xtream.py
+
+      - name: Generate sports guide
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+        run: |
+          python generate_sports.py
+
+      - name: Commit sports guide
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git add guides/sports.xml
+
+          git diff --cached --quiet || git commit -m "Update sports guide"
+
+          git push
