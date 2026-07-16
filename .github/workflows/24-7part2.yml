@@ -1,0 +1,31 @@
+name: Generate 24/7 Part 2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          python -m pip install requests
+
+      - name: Generate 24/7 Part 2 guide
+        run: |
+          python generate_247part2.py
+
+      - name: Commit generated guide
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+          git add guides/24-7part2.xml
+
+          git commit -m "Update 24/7 Part 2 guide" || exit 0
+
+          git push
