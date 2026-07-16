@@ -1,72 +1,107 @@
-name: Generate Sports Guide
+name: Sports Guide
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
+
+
+permissions:
+  contents: write
+
 
 jobs:
-  generate:
+
+  sports-guide:
+
     runs-on: ubuntu-latest
 
+
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install requirements
-        run: |
-          python -m pip install requests
 
-      - name: Test Xtream credentials
+      - name: Verify provider credentials
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
         run: |
           echo "Provider credentials loaded"
 
-          if [ -n "$XTREAM_URL" ]; then
-            echo "XTREAM_URL exists"
-          else
+          if [ -z "$XTREAM_URL" ]; then
             echo "XTREAM_URL missing"
             exit 1
           fi
 
-          if [ -n "$XTREAM_USERNAME" ]; then
-            echo "XTREAM_USERNAME exists"
-          else
+          if [ -z "$XTREAM_USERNAME" ]; then
             echo "XTREAM_USERNAME missing"
             exit 1
           fi
 
-          if [ -n "$XTREAM_PASSWORD" ]; then
-            echo "XTREAM_PASSWORD exists"
-          else
+          if [ -z "$XTREAM_PASSWORD" ]; then
             echo "XTREAM_PASSWORD missing"
             exit 1
           fi
 
-      - name: Test Xtream channel matching
+          echo "XTREAM_URL exists"
+          echo "XTREAM_USERNAME exists"
+          echo "XTREAM_PASSWORD exists"
+
+
+
+      - name: Install Python requirements
+        run: |
+          python -m pip install requests
+
+
+
+      - name: Test Xtream connection
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
         run: |
           python test_xtream.py
+
+
+
+      - name: Test provider EPG
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
+        run: |
+          python test_epg.py
+
+
 
       - name: Generate sports guide
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
         run: |
           python generate_sports.py
 
-      - name: Commit sports guide
+
+
+      - name: Commit and push guide
+
         run: |
+
           git config --global user.name "github-actions"
+
           git config --global user.email "github-actions@github.com"
 
           git add guides/sports.xml
 
-          git diff --cached --quiet || git commit -m "Update sports guide"
+          git commit -m "Update sports guide" || echo "No changes"
 
           git push
