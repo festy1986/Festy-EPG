@@ -23,7 +23,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Create FAST working directory
         run: |
@@ -41,20 +41,323 @@ jobs:
           echo "Channels: $(grep -c '<channel ' fast/source.xml || true)"
           echo "Programmes: $(grep -c '<programme ' fast/source.xml || true)"
 
-      - name: Validate FAST source
+      - name: Process FAST metadata
         run: |
-          CHANNELS=$(grep -c '<channel ' fast/source.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' fast/source.xml || true)
+          node <<'EOF'
+          const fs = require('fs')
 
-          echo "FAST source channels: $CHANNELS"
-          echo "FAST source programmes: $PROGRAMMES"
+          const inputPath = 'fast/source.xml'
+          const outputPath = 'fast/processed.xml'
+
+          if (!fs.existsSync(inputPath)) {
+            console.error(`Missing ${inputPath}`)
+            process.exit(1)
+          }
+
+          const xml = fs.readFileSync(inputPath, 'utf8')
+
+          let programmeCount = 0
+          let changedTitles = 0
+          let cleanedDescriptions = 0
+
+          function decodeXml(value) {
+            return String(value || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(value) {
+            return String(value || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
+          }
+
+          function cleanTitle(value) {
+            return cleanSpaces(value)
+              .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+              .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .trim()
+          }
+
+          function cleanDescription(value) {
+            return cleanSpaces(value)
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .trim()
+          }
+
+          function getTag(block, tag) {
+            const match = block.match(
+              new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i')
+            )
+
+            return match ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim()) : ''
+          }
+
+          function getTags(block, tag) {
+            return [
+              ...block.matchAll(
+                new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi')
+              )
+            ]
+              .map(match => decodeXml(match[1].replace(/<[^>]+>/g, '').trim()))
+              .filter(Boolean)
+          }
+
+          function getProgrammeType(block) {
+            const categories = getTags(block, 'category')
+              .map(x => x.toLowerCase())
+
+            if (
+              categories.includes('movie') ||
+              categories.includes('film')
+            ) {
+              return 'movie'
+            }
+
+            if (
+              categories.includes('series') ||
+              categories.includes('tv series') ||
+              categories.includes('miniseries')
+            ) {
+              return 'series'
+            }
+
+            const title = getTag(block, 'title').toLowerCase()
+            const subtitle = getTag(block, 'sub-title')
+            const episodeNum = block.match(/<episode-num\b/i)
+
+            if (
+              subtitle ||
+              episodeNum ||
+              /\b(series|episode|season)\b/i.test(title)
+            ) {
+              return 'series'
+            }
+
+            return 'program'
+          }
+
+          function getEpisodeCode(block) {
+            const episodeNum = getTag(block, 'episode-num')
+
+            if (!episodeNum) return ''
+
+            const xmltvMatch = episodeNum.match(
+              /^(\d+)\.(\d+)\.$/
+            )
+
+            if (xmltvMatch) {
+              return `S${Number(xmltvMatch[1]) + 1}E${Number(xmltvMatch[2]) + 1}`
+            }
+
+            const directMatch = episodeNum.match(
+              /\bS(\d+)E(\d+)\b/i
+            )
+
+            if (directMatch) {
+              return `S${directMatch[1]}E${directMatch[2]}`
+            }
+
+            return episodeNum
+          }
+
+          function getDisplayDate(block) {
+            const start = block.match(
+              /<programme\b[^>]*start="(\d{8})/
+            )
+
+            if (!start) return ''
+
+            const value = start[1]
+
+            return `${value.slice(4, 6)}/${value.slice(6, 8)}/${value.slice(0, 4)}`
+          }
+
+          function hasTrailingDate(value) {
+            return /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(value)
+          }
+
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
+
+            const replacement =
+              `<${tag} lang="en">${escaped}</${tag}>`
+
+            const regex = new RegExp(
+              `<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
+              'i'
+            )
+
+            if (regex.test(block)) {
+              return block.replace(regex, replacement)
+            }
+
+            return block.replace(
+              /<\/programme>\s*$/i,
+              `  ${replacement}\n</programme>`
+            )
+          }
+
+          function removeTag(block, tag) {
+            return block.replace(
+              new RegExp(
+                `\\s*<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
+                'gi'
+              ),
+              ''
+            )
+          }
+
+          function processProgramme(block) {
+            programmeCount++
+
+            const originalTitle = getTag(block, 'title')
+            const originalDescription = getTag(block, 'desc')
+            const episodeTitle = getTag(block, 'sub-title')
+            const episodeCode = getEpisodeCode(block)
+            const programmeType = getProgrammeType(block)
+
+            const title = cleanTitle(originalTitle)
+
+            if (title !== originalTitle) {
+              changedTitles++
+            }
+
+            let description = cleanDescription(originalDescription)
+
+            if (description !== originalDescription) {
+              cleanedDescriptions++
+            }
+
+            if (
+              (programmeType === 'series' || episodeTitle || episodeCode) &&
+              episodeTitle &&
+              episodeCode
+            ) {
+              const prefix = `${cleanSpaces(episodeTitle)} - ${episodeCode}`
+
+              if (!description.startsWith(prefix)) {
+                description = description
+                  ? `${prefix}. ${description}`
+                  : prefix
+              }
+            } else if (
+              (programmeType === 'series' || episodeTitle || episodeCode) &&
+              episodeTitle
+            ) {
+              if (!description.startsWith(episodeTitle)) {
+                description = description
+                  ? `${cleanSpaces(episodeTitle)}. ${description}`
+                  : cleanSpaces(episodeTitle)
+              }
+            } else if (
+              (programmeType === 'series' || episodeCode) &&
+              episodeCode
+            ) {
+              if (!new RegExp(`\\b${episodeCode}\\b`, 'i').test(description)) {
+                description = description
+                  ? `${episodeCode}. ${description}`
+                  : episodeCode
+              }
+            }
+
+            if (
+              programmeType === 'movie' &&
+              !hasTrailingDate(description)
+            ) {
+              const yearMatch = originalDescription.match(
+                /\b(19|20)\d{2}\b/
+              )
+
+              if (yearMatch) {
+                description = description
+                  ? `${description} (${yearMatch[0]})`
+                  : `(${yearMatch[0]})`
+              }
+            }
+
+            if (
+              programmeType !== 'movie' &&
+              !hasTrailingDate(description)
+            ) {
+              const displayDate = getDisplayDate(block)
+
+              if (displayDate) {
+                description = description
+                  ? `${description} (${displayDate})`
+                  : `(${displayDate})`
+              }
+            }
+
+            let output = block
+
+            if (title && title !== originalTitle) {
+              output = replaceTag(output, 'title', title)
+            }
+
+            if (description !== originalDescription) {
+              output = replaceTag(output, 'desc', description)
+            }
+
+            // Keep the final display clean.
+            // Metadata remains packed into <desc>.
+            output = removeTag(output, 'sub-title')
+            output = removeTag(output, 'episode-num')
+            output = removeTag(output, 'date')
+
+            return output
+          }
+
+          const output = xml.replace(
+            /<programme\b[\s\S]*?<\/programme>/gi,
+            processProgramme
+          )
+
+          fs.writeFileSync(outputPath, output)
+
+          console.log('FAST metadata processing complete')
+          console.log(`Programmes processed: ${programmeCount}`)
+          console.log(`Titles cleaned: ${changedTitles}`)
+          console.log(`Descriptions cleaned: ${cleanedDescriptions}`)
+          console.log(`Output: ${outputPath}`)
+          EOF
+
+      - name: Validate processed FAST guide
+        run: |
+          CHANNELS=$(grep -c '<channel ' fast/processed.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' fast/processed.xml || true)
+
+          echo "Processed FAST channels: $CHANNELS"
+          echo "Processed FAST programmes: $PROGRAMMES"
 
           if [ "$CHANNELS" -lt 1 ]; then
-            echo "FAST source contains no channels"
+            echo "Processed FAST guide contains no channels"
             exit 1
           fi
 
           if [ "$PROGRAMMES" -lt 1 ]; then
-            echo "FAST source contains no programmes"
+            echo "Processed FAST guide contains no programmes"
             exit 1
           fi
+
+          test -s fast/processed.xml
+
+      - name: Show processed FAST size
+        run: |
+          ls -lh fast/source.xml
+          ls -lh fast/processed.xml
