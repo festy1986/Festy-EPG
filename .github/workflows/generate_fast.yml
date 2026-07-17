@@ -28,7 +28,6 @@ jobs:
       - name: Create FAST working directory
         run: |
           mkdir -p fast
-          mkdir -p guides
 
       - name: Download FAST source
         run: |
@@ -42,45 +41,42 @@ jobs:
           echo "Channels: $(grep -c '<channel ' fast/source.xml || true)"
           echo "Programmes: $(grep -c '<programme ' fast/source.xml || true)"
 
-      - name: Copy FAST source as initial output
+      - name: Validate FAST source
         run: |
-          cp fast/source.xml guides/FAST.xml
+          CHANNELS=$(grep -c '<channel ' fast/source.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' fast/source.xml || true)
 
-      - name: Validate FAST guide
-        run: |
-          CHANNELS=$(grep -c '<channel ' guides/FAST.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' guides/FAST.xml || true)
-
-          echo "FAST channels: $CHANNELS"
-          echo "FAST programmes: $PROGRAMMES"
+          echo "FAST source channels: $CHANNELS"
+          echo "FAST source programmes: $PROGRAMMES"
 
           if [ "$CHANNELS" -lt 1 ]; then
-            echo "FAST guide contains no channels"
+            echo "FAST source contains no channels"
             exit 1
           fi
 
           if [ "$PROGRAMMES" -lt 1 ]; then
-            echo "FAST guide contains no programmes"
+            echo "FAST source contains no programmes"
             exit 1
           fi
 
-      - name: Compress FAST guide
+      - name: Delete old oversized FAST files if present
         run: |
-          gzip -c guides/FAST.xml > guides/FAST.xml.gz
+          rm -f guides/FAST.xml
+          rm -f guides/FAST.xml.gz
 
-      - name: Commit FAST guide
+      - name: Commit cleanup
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/FAST.xml guides/FAST.xml.gz
+          git add -u guides/FAST.xml guides/FAST.xml.gz
 
           if git diff --cached --quiet; then
-            echo "No FAST guide changes to commit"
+            echo "No oversized FAST files to remove"
             exit 0
           fi
 
-          git commit -m "Update FAST guide"
+          git commit -m "Remove oversized FAST source files"
 
           git fetch origin main
           git rebase origin/main
