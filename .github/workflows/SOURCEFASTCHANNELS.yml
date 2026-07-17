@@ -86,37 +86,63 @@ jobs:
           const channels = []
 
           const channelMatches = xml.matchAll(
-            /<channel\\b[\\s\\S]*?<\\/channel>/gi
+            /<channel\b[\s\S]*?<\/channel>/gi
           )
 
           for (const match of channelMatches) {
             const block = match[0]
 
-            const id = getAttribute(block, 'id')
-            const displayName = getTag(block, 'display-name')
+            const id =
+              getAttribute(
+                block,
+                'id'
+              )
 
-            const iconBlock = block.match(
-              /<icon\\b[^>]*>/i
-            )
+            const displayName =
+              getTag(
+                block,
+                'display-name'
+              )
 
-            const icon = iconBlock
-              ? getAttribute(iconBlock[0], 'src')
-              : ''
+            const iconBlock =
+              block.match(
+                /<icon\b[^>]*>/i
+              )
 
-            const url = getTag(block, 'url')
+            const icon =
+              iconBlock
+                ? getAttribute(
+                    iconBlock[0],
+                    'src'
+                  )
+                : ''
 
-            if (id || displayName) {
-              channels.push({
-                id,
-                displayName,
-                icon,
-                url
-              })
+            const url =
+              getTag(
+                block,
+                'url'
+              )
+
+            if (
+              id ||
+              displayName
+            ) {
+              channels.push(
+                {
+                  id,
+                  displayName,
+                  icon,
+                  url
+                }
+              )
             }
           }
 
           channels.sort(
-            (a, b) =>
+            (
+              a,
+              b
+            ) =>
               a.displayName.localeCompare(
                 b.displayName,
                 undefined,
@@ -128,23 +154,38 @@ jobs:
 
           const lines = []
 
-          lines.push('SOURCE FAST CHANNELS')
+          lines.push(
+            'SOURCE FAST CHANNELS'
+          )
+
           lines.push(
             `Generated: ${new Date().toISOString()}`
           )
+
           lines.push(
             `Total channels: ${channels.length}`
           )
-          lines.push('')
 
-          for (const channel of channels) {
+          lines.push(
+            ''
+          )
+
+          for (
+            const channel of channels
+          ) {
             lines.push(
               [
-                channel.displayName || '(no display name)',
-                channel.id || '(no channel id)',
-                channel.icon || '(no icon)',
-                channel.url || '(no url)'
-              ].join(' | ')
+                channel.displayName ||
+                  '(no display name)',
+                channel.id ||
+                  '(no channel id)',
+                channel.icon ||
+                  '(no icon)',
+                channel.url ||
+                  '(no url)'
+              ].join(
+                ' | '
+              )
             )
           }
 
