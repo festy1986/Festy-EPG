@@ -1,0 +1,1431 @@
+name: FAST
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # Every night at 2:00 AM Eastern during daylight time
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: epg-fast
+  cancel-in-progress: false
+
+jobs:
+  build-fast:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Download fresh FAST source
+        run: |
+          set -e
+
+          mkdir -p guides
+
+          TEMP_FILE="guides/USFast.xml.tmp"
+          FINAL_FILE="guides/USFast.xml"
+
+          rm -f "$TEMP_FILE"
+
+          curl \
+            --fail \
+            --location \
+            --retry 5 \
+            --retry-delay 10 \
+            --connect-timeout 30 \
+            --max-time 600 \
+            -A "Mozilla/5.0" \
+            "https://epg.guru/7dayiptv/USFast.xml" \
+            -o "$TEMP_FILE"
+
+          test -s "$TEMP_FILE"
+
+          if ! grep -q "<tv" "$TEMP_FILE"; then
+            echo "Downloaded file is not valid XMLTV"
+            rm -f "$TEMP_FILE"
+            exit 1
+          fi
+
+          CHANNELS=$(grep -c "<channel " "$TEMP_FILE" || true)
+          PROGRAMMES=$(grep -c "<programme " "$TEMP_FILE" || true)
+
+          echo "Downloaded FAST channels: $CHANNELS"
+          echo "Downloaded FAST programmes: $PROGRAMMES"
+
+          if [ "$CHANNELS" -lt 100 ]; then
+            echo "Refusing to replace source: too few channels"
+            rm -f "$TEMP_FILE"
+            exit 1
+          fi
+
+          if [ "$PROGRAMMES" -lt 1000 ]; then
+            echo "Refusing to replace source: too few programmes"
+            rm -f "$TEMP_FILE"
+            exit 1
+          fi
+
+          mv "$TEMP_FILE" "$FINAL_FILE"
+
+          echo "Fresh USFast.xml installed"
+
+      - name: Process FAST metadata, enrich missing data, and keep 3 days
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+          const readline = require('readline')
+
+          const inputPath = 'guides/USFast.xml'
+          const outputPath = 'guides/FAST.xml'
+          const cachePath = 'guides/.tvmaze-fast-cache.json'
+
+          const now = new Date()
+          const cutoff = new Date(
+            now.getTime() + 3 * 24 * 60 * 60 * 1000
+          )
+
+          let cache = {}
+
+          if (fs.existsSync(cachePath)) {
+            try {
+              cache = JSON.parse(
+                fs.readFileSync(cachePath, 'utf8')
+              )
+            } catch {
+              cache = {}
+            }
+          }
+
+          const stats = {
+            programmes: 0,
+            kept: 0,
+            skipped: 0,
+            titlesCleaned: 0,
+            descriptionsChanged: 0,
+            showsSearched: 0,
+            showsMatched: 0,
+            episodesLoaded: 0,
+            enriched: 0,
+            moviesSkipped: 0
+          }
+
+          function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms))
+          }
+
+          function decodeXml(value) {
+            return String(value || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+          }
+
+          function escapeXml(value) {
+            return String(value || '')
+              .replace(/&/g, '&amp;')
+              .replace(/"/g, '&quot;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .replace(/\s+([.,!?;:])/g, '$1')
+              .replace(/([.,!?;:])([A-Za-z0-9])/g, '$1 $2')
+              .trim()
+          }
+
+          function normalize(value) {
+            return String(value || '')
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
+          }
+
+          function cleanTitle(value) {
+            return cleanSpaces(value)
+              .replace(
+                /^\s*(New|Live|Repeat)\s*[:\-]\s*/i,
+                ''
+              )
+              .replace(
+                /\s*\((New|Live|Repeat)\)\s*$/i,
+                ''
+              )
+              .replace(
+                /\s*[-–—]\s*(New|Live|Repeat)\s*$/i,
+                ''
+              )
+              .trim()
+          }
+
+          function cleanDescription(value) {
+            return cleanSpaces(value)
+              .replace(
+                /\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i,
+                ' ($1)'
+              )
+              .replace(
+                /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
+                ' ($2)'
+              )
+              .trim()
+          }
+
+          function getTag(block, tag) {
+            const match = block.match(
+              new RegExp(
+                `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
+                'i'
+              )
+            )
+
+            return match
+              ? decodeXml(
+                  match[1]
+                    .replace(/<[^>]+>/g, '')
+                    .trim()
+                )
+              : ''
+          }
+
+          function getTags(block, tag) {
+            return [
+              ...block.matchAll(
+                new RegExp(
+                  `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
+                  'gi'
+                )
+              )
+            ]
+              .map(match =>
+                decodeXml(
+                  match[1]
+                    .replace(/<[^>]+>/g, '')
+                    .trim()
+                )
+              )
+              .filter(Boolean)
+          }
+
+          function parseXmltvDate(value) {
+            if (!value) return null
+
+            const match = String(value).match(
+              /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+            )
+
+            if (!match) return null
+
+            const [, year, month, day, hour, minute, second] =
+              match
+
+            return new Date(
+              Date.UTC(
+                Number(year),
+                Number(month) - 1,
+                Number(day),
+                Number(hour),
+                Number(minute),
+                Number(second)
+              )
+            )
+          }
+
+          function programmeIsWithinThreeDays(block) {
+            const match = block.match(
+              /<programme\b[^>]*\bstart="([^"]+)"/i
+            )
+
+            if (!match) return false
+
+            const start = parseXmltvDate(match[1])
+
+            if (!start || Number.isNaN(start.getTime())) {
+              return false
+            }
+
+            return start >= now && start < cutoff
+          }
+
+          function getEpisodeCode(block) {
+            const episodeNum = getTag(block, 'episode-num')
+
+            if (!episodeNum) return ''
+
+            const xmltvMatch = episodeNum.match(
+              /^(\d+)\.(\d+)\.$/
+            )
+
+            if (xmltvMatch) {
+              return `S${Number(xmltvMatch[1]) + 1}E${Number(xmltvMatch[2]) + 1}`
+            }
+
+            const directMatch = episodeNum.match(
+              /\bS(\d+)E(\d+)\b/i
+            )
+
+            if (directMatch) {
+              return `S${directMatch[1]}E${directMatch[2]}`
+            }
+
+            return episodeNum
+          }
+
+          function getDisplayDate(block) {
+            const start = block.match(
+              /<programme\b[^>]*start="(\d{8})/
+            )
+
+            if (!start) return ''
+
+            const value = start[1]
+
+            return `${value.slice(4, 6)}/${value.slice(6, 8)}/${value.slice(0, 4)}`
+          }
+
+          function hasTrailingDate(value) {
+            return /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/.test(
+              value
+            )
+          }
+
+          function getProgrammeType(block) {
+            const categories = getTags(block, 'category')
+              .map(value => value.toLowerCase())
+
+            if (
+              categories.includes('movie') ||
+              categories.includes('film')
+            ) {
+              return 'movie'
+            }
+
+            if (
+              categories.includes('series') ||
+              categories.includes('tv series') ||
+              categories.includes('miniseries')
+            ) {
+              return 'series'
+            }
+
+            const subtitle = getTag(block, 'sub-title')
+            const episodeCode = getEpisodeCode(block)
+
+            if (subtitle || episodeCode) {
+              return 'series'
+            }
+
+            return 'program'
+          }
+
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
+
+            const replacement =
+              `<${tag} lang="en">${escaped}</${tag}>`
+
+            const regex = new RegExp(
+              `<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
+              'i'
+            )
+
+            if (regex.test(block)) {
+              return block.replace(regex, replacement)
+            }
+
+            return block.replace(
+              /<\/programme>\s*$/i,
+              `  ${replacement}\n</programme>`
+            )
+          }
+
+          function removeTag(block, tag) {
+            return block.replace(
+              new RegExp(
+                `\\s*<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
+                'gi'
+              ),
+              ''
+            )
+          }
+
+          function formatDate(date) {
+            if (!date) return ''
+
+            const value = String(date)
+
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+              return ''
+            }
+
+            return `${value.slice(5, 7)}/${value.slice(8, 10)}/${value.slice(0, 4)}`
+          }
+
+          function buildEpisodeCode(season, number) {
+            const s = Number(season)
+            const e = Number(number)
+
+            if (
+              !Number.isFinite(s) ||
+              !Number.isFinite(e) ||
+              s < 1 ||
+              e < 1
+            ) {
+              return ''
+            }
+
+            return `S${s}E${e}`
+          }
+
+          function parseExistingDescription(desc) {
+            const cleaned = cleanDescription(desc)
+
+            const dateMatch = cleaned.match(
+              /\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/
+            )
+
+            let body = cleaned
+            let date = ''
+
+            if (dateMatch) {
+              date = dateMatch[1]
+              body = cleaned
+                .slice(0, dateMatch.index)
+                .trim()
+            }
+
+            const firstSentence = body.match(
+              /^(.+?)(?:\.\s+|$)/
+            )
+
+            const first = firstSentence
+              ? firstSentence[1].trim()
+              : ''
+
+            const prefixMatch = first.match(
+              /^(.+?)\s+-\s+(S\d+E\d+|S\d+|E\d+)$/i
+            )
+
+            if (prefixMatch) {
+              return {
+                episodeTitle: prefixMatch[1].trim(),
+                episodeCode: prefixMatch[2].toUpperCase(),
+                body: body
+                  .slice(firstSentence[0].length)
+                  .trim(),
+                date
+              }
+            }
+
+            if (
+              /^S\d+E\d+$/i.test(first) ||
+              /^S\d+$/i.test(first) ||
+              /^E\d+$/i.test(first)
+            ) {
+              return {
+                episodeTitle: '',
+                episodeCode: first.toUpperCase(),
+                body: body
+                  .slice(firstSentence[0].length)
+                  .trim(),
+                date
+              }
+            }
+
+            return {
+              episodeTitle: '',
+              episodeCode: '',
+              body,
+              date
+            }
+          }
+
+          function findEpisode(episodes, block) {
+            const existingCode = getEpisodeCode(block)
+            const subtitle = getTag(block, 'sub-title')
+
+            if (existingCode) {
+              const match = existingCode.match(
+                /^S(\d+)E(\d+)$/i
+              )
+
+              if (match) {
+                const found = episodes.find(
+                  episode =>
+                    Number(episode.season) === Number(match[1]) &&
+                    Number(episode.number) === Number(match[2])
+                )
+
+                if (found) return found
+              }
+            }
+
+            if (subtitle) {
+              const wanted = normalize(subtitle)
+
+              const found = episodes.find(
+                episode =>
+                  normalize(episode.name) === wanted
+              )
+
+              if (found) return found
+            }
+
+            return null
+          }
+
+          function buildEnrichedDescription(
+            existingDescription,
+            episode
+          ) {
+            const existing = parseExistingDescription(
+              existingDescription
+            )
+
+            if (!episode) {
+              return existingDescription
+            }
+
+            const episodeTitle = cleanSpaces(
+              episode.name || ''
+            )
+
+            const episodeCode = buildEpisodeCode(
+              episode.season,
+              episode.number
+            )
+
+            const summary = cleanDescription(
+              String(episode.summary || '')
+                .replace(/<[^>]+>/g, ' ')
+            )
+
+            const airDate = formatDate(
+              episode.airdate
+            )
+
+            const title =
+              existing.episodeTitle ||
+              episodeTitle
+
+            const code =
+              existing.episodeCode ||
+              episodeCode
+
+            const body =
+              existing.body ||
+              summary
+
+            const date =
+              existing.date ||
+              airDate
+
+            const parts = []
+
+            if (title && code) {
+              parts.push(`${title} - ${code}`)
+            } else if (title) {
+              parts.push(title)
+            } else if (code) {
+              parts.push(code)
+            }
+
+            if (body) {
+              parts.push(body)
+            }
+
+            let result = cleanDescription(
+              parts.join('. ')
+            )
+
+            if (
+              date &&
+              !hasTrailingDate(result)
+            ) {
+              result = result
+                ? `${result} (${date})`
+                : `(${date})`
+            }
+
+            return cleanDescription(result)
+          }
+
+          async function fetchJson(url) {
+            const attempts = 4
+
+            for (
+              let attempt = 1;
+              attempt <= attempts;
+              attempt++
+            ) {
+              try {
+                const response = await fetch(
+                  url,
+                  {
+                    headers: {
+                      'User-Agent':
+                        'festy-fast-epg/1.0'
+                    }
+                  }
+                )
+
+                if (
+                  response.status === 404
+                ) {
+                  return null
+                }
+
+                if (
+                  response.status === 429 ||
+                  response.status >= 500
+                ) {
+                  throw new Error(
+                    `HTTP ${response.status}`
+                  )
+                }
+
+                if (!response.ok) {
+                  return null
+                }
+
+                return await response.json()
+              } catch (error) {
+                if (attempt === attempts) {
+                  console.log(
+                    `[TVMAZE FAIL] ${url} | ${error.message}`
+                  )
+
+                  return null
+                }
+
+                await sleep(
+                  1000 * attempt
+                )
+              }
+            }
+
+            return null
+          }
+
+          async function searchShow(title) {
+            const key =
+              `show:${normalize(title)}`
+
+            if (
+              Object.prototype.hasOwnProperty.call(
+                cache,
+                key
+              )
+            ) {
+              return cache[key]
+            }
+
+            stats.showsSearched++
+
+            const url =
+              `https://api.tvmaze.com/search/shows?q=${encodeURIComponent(title)}`
+
+            const result =
+              await fetchJson(url)
+
+            const candidates =
+              Array.isArray(result)
+                ? result
+                    .map(value => value.show)
+                    .filter(Boolean)
+                : []
+
+            const wanted =
+              normalize(title)
+
+            let best = null
+            let bestScore = 0
+
+            for (
+              const show of candidates
+            ) {
+              const name =
+                normalize(show.name)
+
+              let score = 0
+
+              if (
+                name === wanted
+              ) {
+                score = 100
+              } else if (
+                name.includes(wanted) ||
+                wanted.includes(name)
+              ) {
+                score = 80
+              }
+
+              if (
+                score > bestScore
+              ) {
+                best = show
+                bestScore = score
+              }
+            }
+
+            cache[key] =
+              bestScore >= 80
+                ? best
+                : null
+
+            if (
+              cache[key]
+            ) {
+              stats.showsMatched++
+            }
+
+            return cache[key]
+          }
+
+          async function getEpisodes(showId) {
+            const key =
+              `episodes:${showId}`
+
+            if (
+              Object.prototype.hasOwnProperty.call(
+                cache,
+                key
+              )
+            ) {
+              return cache[key]
+            }
+
+            const url =
+              `https://api.tvmaze.com/shows/${showId}/episodes`
+
+            const result =
+              await fetchJson(url)
+
+            const episodes =
+              Array.isArray(result)
+                ? result
+                : []
+
+            cache[key] =
+              episodes
+
+            stats.episodesLoaded++
+
+            return episodes
+          }
+
+          function processProgramme(
+            block,
+            enrichment
+          ) {
+            stats.programmes++
+
+            if (
+              !programmeIsWithinThreeDays(block)
+            ) {
+              stats.skipped++
+              return ''
+            }
+
+            stats.kept++
+
+            const originalTitle =
+              getTag(block, 'title')
+
+            const originalDescription =
+              getTag(block, 'desc')
+
+            const originalSubtitle =
+              getTag(block, 'sub-title')
+
+            const originalEpisodeCode =
+              getEpisodeCode(block)
+
+            const programmeType =
+              getProgrammeType(block)
+
+            const title =
+              cleanTitle(originalTitle)
+
+            if (
+              title !== originalTitle
+            ) {
+              stats.titlesCleaned++
+            }
+
+            let description =
+              cleanDescription(
+                originalDescription
+              )
+
+            const parsed =
+              parseExistingDescription(
+                description
+              )
+
+            let episodeTitle =
+              parsed.episodeTitle ||
+              originalSubtitle ||
+              ''
+
+            let episodeCode =
+              parsed.episodeCode ||
+              originalEpisodeCode ||
+              ''
+
+            let airDate =
+              parsed.date ||
+              ''
+
+            let body =
+              parsed.body ||
+              ''
+
+            const episode =
+              enrichment
+
+            if (
+              episode
+            ) {
+              stats.enriched++
+
+              if (
+                !episodeTitle
+              ) {
+                episodeTitle =
+                  cleanSpaces(
+                    episode.name || ''
+                  )
+              }
+
+              if (
+                !episodeCode
+              ) {
+                episodeCode =
+                  buildEpisodeCode(
+                    episode.season,
+                    episode.number
+                  )
+              }
+
+              if (
+                !body
+              ) {
+                body =
+                  cleanDescription(
+                    String(
+                      episode.summary || ''
+                    ).replace(
+                      /<[^>]+>/g,
+                      ' '
+                    )
+                  )
+              }
+
+              if (
+                !airDate
+              ) {
+                airDate =
+                  formatDate(
+                    episode.airdate
+                  )
+              }
+            }
+
+            const parts = []
+
+            if (
+              programmeType === 'series' ||
+              episodeTitle ||
+              episodeCode
+            ) {
+              if (
+                episodeTitle &&
+                episodeCode
+              ) {
+                parts.push(
+                  `${episodeTitle} - ${episodeCode}`
+                )
+              } else if (
+                episodeTitle
+              ) {
+                parts.push(
+                  episodeTitle
+                )
+              } else if (
+                episodeCode
+              ) {
+                parts.push(
+                  episodeCode
+                )
+              }
+            }
+
+            if (
+              body
+            ) {
+              parts.push(body)
+            }
+
+            let finalDescription =
+              cleanDescription(
+                parts.join('. ')
+              )
+
+            if (
+              programmeType === 'movie'
+            ) {
+              const year =
+                finalDescription.match(
+                  /\b(19|20)\d{2}\b/
+                )
+
+              if (
+                year &&
+                !hasTrailingDate(
+                  finalDescription
+                )
+              ) {
+                finalDescription =
+                  `${finalDescription} (${year[0]})`
+              }
+            } else if (
+              airDate &&
+              !hasTrailingDate(
+                finalDescription
+              )
+            ) {
+              finalDescription =
+                finalDescription
+                  ? `${finalDescription} (${airDate})`
+                  : `(${airDate})`
+            }
+
+            let output =
+              block
+
+            if (
+              title &&
+              title !== originalTitle
+            ) {
+              output =
+                replaceTag(
+                  output,
+                  'title',
+                  title
+                )
+            }
+
+            if (
+              finalDescription !==
+              originalDescription
+            ) {
+              stats.descriptionsChanged++
+
+              output =
+                replaceTag(
+                  output,
+                  'desc',
+                  finalDescription
+                )
+            }
+
+            output =
+              removeTag(
+                output,
+                'sub-title'
+              )
+
+            output =
+              removeTag(
+                output,
+                'episode-num'
+              )
+
+            output =
+              removeTag(
+                output,
+                'date'
+              )
+
+            return output
+          }
+
+          async function main() {
+            if (
+              !fs.existsSync(inputPath)
+            ) {
+              throw new Error(
+                `Missing ${inputPath}`
+              )
+            }
+
+            const input =
+              fs.createReadStream(
+                inputPath,
+                {
+                  encoding: 'utf8'
+                }
+              )
+
+            const output =
+              fs.createWriteStream(
+                outputPath,
+                {
+                  encoding: 'utf8'
+                }
+              )
+
+            const rl =
+              readline.createInterface(
+                {
+                  input,
+                  crlfDelay: Infinity
+                }
+              )
+
+            const blocks = []
+
+            let buffer = ''
+            let inside = false
+
+            for await (
+              const line of rl
+            ) {
+              if (
+                !inside
+              ) {
+                if (
+                  line.includes(
+                    '<programme '
+                  )
+                ) {
+                  inside = true
+                  buffer =
+                    line + '\n'
+
+                  if (
+                    line.includes(
+                      '</programme>'
+                    )
+                  ) {
+                    inside = false
+                    blocks.push(
+                      buffer
+                    )
+                    buffer = ''
+                  }
+                } else {
+                  output.write(
+                    line + '\n'
+                  )
+                }
+              } else {
+                buffer +=
+                  line + '\n'
+
+                if (
+                  line.includes(
+                    '</programme>'
+                  )
+                ) {
+                  inside = false
+                  blocks.push(
+                    buffer
+                  )
+                  buffer = ''
+                }
+              }
+            }
+
+            const enrichmentMap =
+              new Map()
+
+            const uniqueTitles =
+              new Set()
+
+            for (
+              const block of blocks
+            ) {
+              if (
+                !programmeIsWithinThreeDays(
+                  block
+                )
+              ) {
+                continue
+              }
+
+              const title =
+                cleanTitle(
+                  getTag(
+                    block,
+                    'title'
+                  )
+                )
+
+              if (
+                title
+              ) {
+                uniqueTitles.add(
+                  title
+                )
+              }
+            }
+
+            console.log(
+              `Unique titles requiring analysis: ${uniqueTitles.size}`
+            )
+
+            const titles =
+              [...uniqueTitles]
+
+            const concurrency =
+              8
+
+            let index = 0
+
+            async function worker() {
+              while (
+                true
+              ) {
+                const current =
+                  index++
+
+                if (
+                  current >=
+                  titles.length
+                ) {
+                  return
+                }
+
+                const title =
+                  titles[current]
+
+                const show =
+                  await searchShow(
+                    title
+                  )
+
+                if (
+                  !show
+                ) {
+                  continue
+                }
+
+                const episodes =
+                  await getEpisodes(
+                    show.id
+                  )
+
+                enrichmentMap.set(
+                  normalize(title),
+                  episodes
+                )
+
+                await sleep(100)
+              }
+            }
+
+            await Promise.all(
+              Array.from(
+                {
+                  length: concurrency
+                },
+                worker
+              )
+            )
+
+            for (
+              const block of blocks
+            ) {
+              const title =
+                cleanTitle(
+                  getTag(
+                    block,
+                    'title'
+                  )
+                )
+
+              const episodes =
+                enrichmentMap.get(
+                  normalize(title)
+                ) ||
+                []
+
+              const episode =
+                findEpisode(
+                  episodes,
+                  block
+                )
+
+              const processed =
+                processProgramme(
+                  block,
+                  episode
+                )
+
+              if (
+                processed
+              ) {
+                output.write(
+                  processed
+                )
+              }
+            }
+
+            await new Promise(
+              (resolve, reject) => {
+                output.end(
+                  resolve
+                )
+
+                output.on(
+                  'error',
+                  reject
+                )
+              }
+            )
+
+            fs.writeFileSync(
+              cachePath,
+              JSON.stringify(
+                cache,
+                null,
+                2
+              )
+            )
+
+            console.log(
+              'FAST processing complete'
+            )
+
+            console.log(
+              `Programmes scanned: ${stats.programmes}`
+            )
+
+            console.log(
+              `Programmes kept: ${stats.kept}`
+            )
+
+            console.log(
+              `Programmes skipped: ${stats.skipped}`
+            )
+
+            console.log(
+              `Titles cleaned: ${stats.titlesCleaned}`
+            )
+
+            console.log(
+              `Descriptions changed: ${stats.descriptionsChanged}`
+            )
+
+            console.log(
+              `Shows searched: ${stats.showsSearched}`
+            )
+
+            console.log(
+              `Shows matched: ${stats.showsMatched}`
+            )
+
+            console.log(
+              `Episode lists loaded: ${stats.episodesLoaded}`
+            )
+
+            console.log(
+              `Programmes enriched: ${stats.enriched}`
+            )
+          }
+
+          function findEpisode(
+            episodes,
+            block
+          ) {
+            const existingCode =
+              getEpisodeCode(
+                block
+              )
+
+            const subtitle =
+              getTag(
+                block,
+                'sub-title'
+              )
+
+            if (
+              existingCode
+            ) {
+              const match =
+                existingCode.match(
+                  /^S(\d+)E(\d+)$/i
+                )
+
+              if (
+                match
+              ) {
+                const found =
+                  episodes.find(
+                    episode =>
+                      Number(
+                        episode.season
+                      ) ===
+                      Number(
+                        match[1]
+                      ) &&
+                      Number(
+                        episode.number
+                      ) ===
+                      Number(
+                        match[2]
+                      )
+                  )
+
+                if (
+                  found
+                ) {
+                  return found
+                }
+              }
+            }
+
+            if (
+              subtitle
+            ) {
+              const wanted =
+                normalize(
+                  subtitle
+                )
+
+              const found =
+                episodes.find(
+                  episode =>
+                    normalize(
+                      episode.name
+                    ) ===
+                    wanted
+                )
+
+              if (
+                found
+              ) {
+                return found
+              }
+            }
+
+            return null
+          }
+
+          main().catch(
+            error => {
+              console.error(
+                error
+              )
+
+              process.exit(
+                1
+              )
+            }
+          )
+          EOF
+
+      - name: Validate FAST guide
+        run: |
+          CHANNELS=$(grep -c '<channel ' guides/FAST.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' guides/FAST.xml || true)
+
+          echo "FAST channels: $CHANNELS"
+          echo "FAST programmes: $PROGRAMMES"
+
+          if [ "$CHANNELS" -lt 1 ]; then
+            echo "FAST guide has no channels"
+            exit 1
+          fi
+
+          if [ "$PROGRAMMES" -lt 1 ]; then
+            echo "FAST guide has no programmes"
+            exit 1
+          fi
+
+          test -s guides/FAST.xml
+
+      - name: Compress FAST guide
+        run: |
+          gzip -c guides/FAST.xml > guides/FAST.xml.gz
+
+      - name: Validate compressed FAST guide
+        run: |
+          ls -lh guides/USFast.xml
+          ls -lh guides/FAST.xml
+          ls -lh guides/FAST.xml.gz
+
+          SIZE=$(stat -c%s guides/FAST.xml.gz)
+
+          echo "Compressed FAST size: $SIZE bytes"
+
+          if [ "$SIZE" -ge 100000000 ]; then
+            echo "FAST guide is too large"
+            exit 1
+          fi
+
+      - name: Commit and push FAST files safely
+        run: |
+          set -e
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/USFast.xml
+          git add guides/FAST.xml
+          git add guides/FAST.xml.gz
+          git add guides/.tvmaze-fast-cache.json
+
+          if git diff --cached --quiet; then
+            echo "No FAST changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update FAST guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, refreshing branch..."
+
+            git fetch origin main
+            git rebase origin/main
+
+            git add guides/USFast.xml
+            git add guides/FAST.xml
+            git add guides/FAST.xml.gz
+            git add guides/.tvmaze-fast-cache.json
+
+            if ! git diff --cached --quiet; then
+              git commit -m "Update FAST guide"
+            fi
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
