@@ -67,6 +67,8 @@ jobs:
           let programmesSkipped = 0
           let titlesCleaned = 0
           let descriptionsChanged = 0
+          let actorsRemoved = 0
+          let episodeNumbersConverted = 0
 
           function decodeXml(value) {
             return String(value || '')
@@ -160,13 +162,17 @@ jobs:
           }
 
           function parseXmltvDate(value) {
-            if (!value) return null
+            if (!value) {
+              return null
+            }
 
             const match = String(value).match(
               /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
             )
 
-            if (!match) return null
+            if (!match) {
+              return null
+            }
 
             const [
               ,
@@ -195,7 +201,9 @@ jobs:
               /<programme\b[^>]*\bstart="([^"]+)"/i
             )
 
-            if (!match) return false
+            if (!match) {
+              return false
+            }
 
             const start = parseXmltvDate(match[1])
 
@@ -214,7 +222,10 @@ jobs:
 
           function getProgrammeType(block) {
             const categories =
-              getTags(block, 'category')
+              getTags(
+                block,
+                'category'
+              )
                 .map(value =>
                   value.toLowerCase()
                 )
@@ -229,17 +240,24 @@ jobs:
             if (
               categories.includes('series') ||
               categories.includes('tv series') ||
-              categories.includes('miniseries')
+              categories.includes('miniseries') ||
+              categories.includes('episode')
             ) {
               return 'series'
             }
 
             const title =
-              getTag(block, 'title')
+              getTag(
+                block,
+                'title'
+              )
                 .toLowerCase()
 
             const subtitle =
-              getTag(block, 'sub-title')
+              getTag(
+                block,
+                'sub-title'
+              )
 
             const episodeNum =
               block.match(
@@ -259,9 +277,14 @@ jobs:
 
           function getEpisodeCode(block) {
             const episodeNum =
-              getTag(block, 'episode-num')
+              getTag(
+                block,
+                'episode-num'
+              )
 
-            if (!episodeNum) return ''
+            if (!episodeNum) {
+              return ''
+            }
 
             const xmltvMatch =
               episodeNum.match(
@@ -269,6 +292,8 @@ jobs:
               )
 
             if (xmltvMatch) {
+              episodeNumbersConverted++
+
               return (
                 `S${Number(xmltvMatch[1]) + 1}` +
                 `E${Number(xmltvMatch[2]) + 1}`
@@ -287,7 +312,21 @@ jobs:
               )
             }
 
-            return episodeNum
+            const tmsMatch =
+              episodeNum.match(
+                /EP\d+\.(\d+)\.(\d+)/
+              )
+
+            if (tmsMatch) {
+              episodeNumbersConverted++
+
+              return (
+                `S${Number(tmsMatch[1])}` +
+                `E${Number(tmsMatch[2])}`
+              )
+            }
+
+            return ''
           }
 
           function getDisplayDate(block) {
@@ -296,9 +335,12 @@ jobs:
                 /<programme\b[^>]*start="(\d{8})/
               )
 
-            if (!match) return ''
+            if (!match) {
+              return ''
+            }
 
-            const value = match[1]
+            const value =
+              match[1]
 
             return (
               `${value.slice(4, 6)}/` +
@@ -312,7 +354,11 @@ jobs:
               .test(value)
           }
 
-          function replaceTag(block, tag, value) {
+          function replaceTag(
+            block,
+            tag,
+            value
+          ) {
             const escaped =
               escapeXml(value)
 
@@ -325,7 +371,9 @@ jobs:
                 'i'
               )
 
-            if (regex.test(block)) {
+            if (
+              regex.test(block)
+            ) {
               return block.replace(
                 regex,
                 replacement
@@ -338,12 +386,32 @@ jobs:
             )
           }
 
-          function removeTag(block, tag) {
+          function removeTag(
+            block,
+            tag
+          ) {
             return block.replace(
               new RegExp(
                 `\\s*<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
                 'gi'
               ),
+              ''
+            )
+          }
+
+          function removeAllActors(block) {
+            const actorRegex =
+              /\\s*<actor\\b[^>]*>[\\s\\S]*?<\\/actor>/gi
+
+            const matches =
+              block.match(actorRegex)
+
+            if (matches) {
+              actorsRemoved += matches.length
+            }
+
+            return block.replace(
+              actorRegex,
               ''
             )
           }
@@ -357,6 +425,7 @@ jobs:
               )
             ) {
               programmesSkipped++
+
               return ''
             }
 
@@ -414,11 +483,6 @@ jobs:
             }
 
             if (
-              (
-                programmeType === 'series' ||
-                episodeTitle ||
-                episodeCode
-              ) &&
               episodeTitle &&
               episodeCode
             ) {
@@ -436,28 +500,24 @@ jobs:
                     : prefix
               }
             } else if (
-              (
-                programmeType === 'series' ||
-                episodeTitle ||
-                episodeCode
-              ) &&
               episodeTitle
             ) {
+              const cleanEpisodeTitle =
+                cleanSpaces(
+                  episodeTitle
+                )
+
               if (
                 !description.startsWith(
-                  episodeTitle
+                  cleanEpisodeTitle
                 )
               ) {
                 description =
                   description
-                    ? `${cleanSpaces(episodeTitle)}. ${description}`
-                    : cleanSpaces(episodeTitle)
+                    ? `${cleanEpisodeTitle}. ${description}`
+                    : cleanEpisodeTitle
               }
             } else if (
-              (
-                programmeType === 'series' ||
-                episodeCode
-              ) &&
               episodeCode
             ) {
               if (
@@ -547,12 +607,6 @@ jobs:
             output =
               removeTag(
                 output,
-                'actor'
-              )
-
-            output =
-              removeTag(
-                output,
                 'sub-title'
               )
 
@@ -566,6 +620,11 @@ jobs:
               removeTag(
                 output,
                 'date'
+              )
+
+            output =
+              removeAllActors(
+                output
               )
 
             return output
@@ -596,12 +655,18 @@ jobs:
                 }
               )
 
-            let insideProgramme = false
-            let programmeBuffer = ''
+            let insideProgramme =
+              false
+
+            let programmeBuffer =
+              ''
 
             function write(value) {
               return new Promise(
-                (resolve, reject) => {
+                (
+                  resolve,
+                  reject
+                ) => {
                   if (
                     output.write(
                       value
@@ -634,7 +699,8 @@ jobs:
                     '<programme '
                   )
                 ) {
-                  insideProgramme = true
+                  insideProgramme =
+                    true
 
                   programmeBuffer =
                     line + '\n'
@@ -644,7 +710,8 @@ jobs:
                       '</programme>'
                     )
                   ) {
-                    insideProgramme = false
+                    insideProgramme =
+                      false
 
                     const processed =
                       processProgramme(
@@ -659,7 +726,8 @@ jobs:
                       )
                     }
 
-                    programmeBuffer = ''
+                    programmeBuffer =
+                      ''
                   }
                 } else {
                   await write(
@@ -675,7 +743,8 @@ jobs:
                     '</programme>'
                   )
                 ) {
-                  insideProgramme = false
+                  insideProgramme =
+                    false
 
                   const processed =
                     processProgramme(
@@ -690,7 +759,8 @@ jobs:
                     )
                   }
 
-                  programmeBuffer = ''
+                  programmeBuffer =
+                    ''
                 }
               }
             }
@@ -713,8 +783,11 @@ jobs:
             }
 
             await new Promise(
-              (resolve, reject) => {
-                output.on(
+              (
+                resolve,
+                reject
+              ) => {
+                output.once(
                   'error',
                   reject
                 )
@@ -747,6 +820,14 @@ jobs:
 
             console.log(
               `Descriptions changed: ${descriptionsChanged}`
+            )
+
+            console.log(
+              `Actors removed: ${actorsRemoved}`
+            )
+
+            console.log(
+              `Episode numbers converted: ${episodeNumbersConverted}`
             )
 
             console.log(
@@ -798,10 +879,10 @@ jobs:
           SIZE=$(stat -c%s fast/FAST.xml.gz)
 
           echo "Compressed FAST size: $SIZE bytes"
-          echo "Compressed FAST size in MB: $((SIZE / 1024 / 1024)) MB"
+          echo "Compressed FAST size in MB: $((SIZE / 1000000)) MB"
 
           if [ "$SIZE" -ge 100000000 ]; then
-            echo "FAST guide is too large for GitHub"
+            echo "FAST guide is too large for GitHub's recommended file size"
             exit 1
           fi
 
@@ -812,10 +893,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git fetch origin main
-          git rebase origin/main
-
-          git add fast/FAST.xml.gz
+          git add -f fast/FAST.xml.gz
 
           if git diff --cached --quiet; then
             echo "No FAST guide changes to commit"
@@ -824,21 +902,4 @@ jobs:
 
           git commit -m "Update FAST guide"
 
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
-
-            echo "Push failed, refreshing branch..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            sleep 5
-          done
-
-          echo "Push failed after retries"
-          exit 1
+          git push origin HEAD:main
