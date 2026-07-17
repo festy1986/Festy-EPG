@@ -99,19 +99,6 @@ jobs:
               XTREAM_URL += ":80"
 
 
-          API_URL = (
-
-              f"{XTREAM_URL}/player_api.php"
-
-              f"?username={USERNAME}"
-
-              f"&password={PASSWORD}"
-
-              f"&action=get_live_streams"
-
-          )
-
-
           session = requests.Session()
 
           session.headers.update({
@@ -121,85 +108,182 @@ jobs:
           })
 
 
-          streams = None
+          def download_api(action):
 
+              url = (
 
-          # ---------------------------------
-          # Download complete provider list
-          # ---------------------------------
+                  f"{XTREAM_URL}/player_api.php"
 
-          for attempt in range(1, 6):
+                  f"?username={USERNAME}"
 
-              try:
+                  f"&password={PASSWORD}"
 
-                  print(
-
-                      f"Downloading provider channel list "
-
-                      f"(attempt {attempt}/5)..."
-
-                  )
-
-
-                  response = session.get(
-
-                      API_URL,
-
-                      timeout=(30, 600)
-
-                  )
-
-
-                  print(
-
-                      f"HTTP status: "
-
-                      f"{response.status_code}"
-
-                  )
-
-
-                  response.raise_for_status()
-
-
-                  streams = response.json()
-
-
-                  break
-
-
-              except Exception as error:
-
-                  print(
-
-                      f"Attempt {attempt} failed: "
-
-                      f"{error}"
-
-                  )
-
-
-                  if attempt < 5:
-
-                      time.sleep(15)
-
-
-          if streams is None:
-
-              raise SystemExit(
-
-                  "Provider channel download failed"
+                  f"&action={action}"
 
               )
 
 
-          if not isinstance(streams, list):
+              for attempt in range(1, 6):
+
+                  try:
+
+                      print(
+
+                          f"Downloading {action} "
+
+                          f"(attempt {attempt}/5)..."
+
+                      )
+
+
+                      response = session.get(
+
+                          url,
+
+                          timeout=(30, 600)
+
+                      )
+
+
+                      print(
+
+                          f"{action} HTTP status: "
+
+                          f"{response.status_code}"
+
+                      )
+
+
+                      response.raise_for_status()
+
+
+                      data = response.json()
+
+
+                      if not isinstance(data, list):
+
+                          raise RuntimeError(
+
+                              f"{action} did not return a list"
+
+                          )
+
+
+                      print(
+
+                          f"{action} returned "
+
+                          f"{len(data)} records"
+
+                      )
+
+
+                      return data
+
+
+                  except Exception as error:
+
+                      print(
+
+                          f"{action} attempt {attempt} failed: "
+
+                          f"{error}"
+
+                      )
+
+
+                      if attempt < 5:
+
+                          time.sleep(15)
+
 
               raise SystemExit(
 
-                  "Provider response was not a channel list"
+                  f"Failed to download {action}"
 
               )
+
+
+          # ---------------------------------
+          # Download all provider categories
+          # ---------------------------------
+
+          categories = download_api(
+
+              "get_live_categories"
+
+          )
+
+
+          # ---------------------------------
+          # Build category ID -> name lookup
+          # ---------------------------------
+
+          category_names = {}
+
+
+          for category in categories:
+
+              if not isinstance(category, dict):
+
+                  continue
+
+
+              category_id = str(
+
+                  category.get(
+
+                      "category_id",
+
+                      ""
+
+                  )
+
+              ).strip()
+
+
+              category_name = str(
+
+                  category.get(
+
+                      "category_name",
+
+                      ""
+
+                  )
+
+              ).strip()
+
+
+              if category_id and category_name:
+
+                  category_names[
+
+                      category_id
+
+                  ] = category_name
+
+
+          print("")
+
+          print(
+
+              f"Category names found: "
+
+              f"{len(category_names)}"
+
+          )
+
+
+          # ---------------------------------
+          # Download all live channels
+          # ---------------------------------
+
+          streams = download_api(
+
+              "get_live_streams"
+
+          )
 
 
           print("")
@@ -214,10 +298,12 @@ jobs:
 
 
           # ---------------------------------
-          # Extract unique group names
+          # Match every channel to its group
           # ---------------------------------
 
           groups = set()
+
+          channels_without_group = 0
 
 
           for stream in streams:
@@ -227,28 +313,60 @@ jobs:
                   continue
 
 
-              group = (
+              category_id = str(
 
-                  stream.get("category_name")
+                  stream.get(
 
-                  or stream.get("group_title")
+                      "category_id",
 
-                  or stream.get("group")
+                      ""
 
-                  or ""
+                  )
+
+              ).strip()
+
+
+              if category_id in category_names:
+
+                  groups.add(
+
+                      category_names[category_id]
+
+                  )
+
+              else:
+
+                  channels_without_group += 1
+
+
+          # ---------------------------------
+          # Save unique groups
+          # ---------------------------------
+
+          if not groups:
+
+              print("")
+
+              print(
+
+                  "No groups were matched."
 
               )
 
 
-              group = str(group).strip()
+              print("")
+
+              print(
+
+                  "Sample channel data:"
+
+              )
 
 
-              if group:
+              for stream in streams[:3]:
 
-                  groups.add(group)
+                  print(stream)
 
-
-          if not groups:
 
               raise SystemExit(
 
@@ -256,10 +374,6 @@ jobs:
 
               )
 
-
-          # ---------------------------------
-          # Sort groups
-          # ---------------------------------
 
           sorted_groups = sorted(
 
@@ -269,10 +383,6 @@ jobs:
 
           )
 
-
-          # ---------------------------------
-          # Save group list
-          # ---------------------------------
 
           output_file = "fast/fastgroups.txt"
 
@@ -318,6 +428,15 @@ jobs:
           )
 
 
+          print(
+
+              f"Channels without a matched group: "
+
+              f"{channels_without_group}"
+
+          )
+
+
           print("")
 
           print(
@@ -331,7 +450,11 @@ jobs:
 
           print("")
 
-          print("First 25 groups:")
+          print(
+
+              "First 25 groups:"
+
+          )
 
 
           for group in sorted_groups[:25]:
