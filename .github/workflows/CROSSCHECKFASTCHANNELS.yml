@@ -1,0 +1,795 @@
+name: CROSSCHECKFASTCHANNELS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: crosscheck-fast-channels
+  cancel-in-progress: false
+
+jobs:
+  crosscheck-fast-channels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cross-check provider channels against Jessman FAST channels
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+
+          const providerPath =
+            'fastchannels.txt'
+
+          const jessmanPath =
+            'SOURCEFASTCHANNELS2.txt'
+
+          const outputPath =
+            'FASTCROSSCHECKED.txt'
+
+          const providerText =
+            fs.readFileSync(
+              providerPath,
+              'utf8'
+            )
+
+          const jessmanText =
+            fs.readFileSync(
+              jessmanPath,
+              'utf8'
+            )
+
+          function cleanText(value) {
+            return String(value || '')
+              .normalize('NFD')
+              .replace(
+                /[\u0300-\u036f]/g,
+                ''
+              )
+              .toLowerCase()
+              .replace(
+                /[ᴿᴬᵂ]/g,
+                ''
+              )
+              .replace(
+                /\bprime\b/g,
+                ''
+              )
+              .replace(
+                /\b(raw|hd|sd|fhd|uhd|4k)\b/g,
+                ''
+              )
+              .replace(
+                /[^a-z0-9]+/g,
+                ''
+              )
+              .trim()
+          }
+
+          function tokenize(value) {
+            return String(value || '')
+              .normalize('NFD')
+              .replace(
+                /[\u0300-\u036f]/g,
+                ''
+              )
+              .toLowerCase()
+              .replace(
+                /[ᴿᴬᵂ]/g,
+                ''
+              )
+              .replace(
+                /\bprime\b/g,
+                ''
+              )
+              .replace(
+                /\b(raw|hd|sd|fhd|uhd|4k)\b/g,
+                ''
+              )
+              .replace(
+                /[^a-z0-9]+/g,
+                ' '
+              )
+              .split(
+                /\s+/
+              )
+              .filter(
+                Boolean
+              )
+          }
+
+          function levenshtein(
+            a,
+            b
+          ) {
+            const previous =
+              Array.from(
+                {
+                  length:
+                    b.length + 1
+                },
+                (
+                  _,
+                  index
+                ) =>
+                  index
+              )
+
+            for (
+              let i = 1;
+              i <= a.length;
+              i++
+            ) {
+              const current =
+                [
+                  i
+                ]
+
+              for (
+                let j = 1;
+                j <= b.length;
+                j++
+              ) {
+                const insert =
+                  current[j - 1] +
+                  1
+
+                const remove =
+                  previous[j] +
+                  1
+
+                const replace =
+                  previous[j - 1] +
+                  (
+                    a[i - 1] ===
+                    b[j - 1]
+                      ? 0
+                      : 1
+                  )
+
+                current.push(
+                  Math.min(
+                    insert,
+                    remove,
+                    replace
+                  )
+                )
+              }
+
+              for (
+                let j = 0;
+                j < current.length;
+                j++
+              ) {
+                previous[j] =
+                  current[j]
+              }
+            }
+
+            return previous[b.length]
+          }
+
+          function similarity(
+            a,
+            b
+          ) {
+            if (
+              a === b
+            ) {
+              return 100
+            }
+
+            if (
+              !a ||
+              !b
+            ) {
+              return 0
+            }
+
+            const distance =
+              levenshtein(
+                a,
+                b
+              )
+
+            const maxLength =
+              Math.max(
+                a.length,
+                b.length
+              )
+
+            return (
+              (
+                1 -
+                distance /
+                  maxLength
+              ) *
+              100
+            )
+          }
+
+          function tokenSimilarity(
+            a,
+            b
+          ) {
+            const aTokens =
+              tokenize(
+                a
+              )
+
+            const bTokens =
+              tokenize(
+                b
+              )
+
+            if (
+              !aTokens.length ||
+              !bTokens.length
+            ) {
+              return 0
+            }
+
+            const aSet =
+              new Set(
+                aTokens
+              )
+
+            const bSet =
+              new Set(
+                bTokens
+              )
+
+            let shared =
+              0
+
+            for (
+              const token of aSet
+            ) {
+              if (
+                bSet.has(
+                  token
+                )
+              ) {
+                shared++
+              }
+            }
+
+            const union =
+              new Set(
+                [
+                  ...aSet,
+                  ...bSet
+                ]
+              ).size
+
+            return (
+              shared /
+              union *
+              100
+            )
+          }
+
+          function calculateScore(
+            providerName,
+            jessmanName
+          ) {
+            const providerClean =
+              cleanText(
+                providerName
+              )
+
+            const jessmanClean =
+              cleanText(
+                jessmanName
+              )
+
+            const directScore =
+              similarity(
+                providerClean,
+                jessmanClean
+              )
+
+            const tokenScore =
+              tokenSimilarity(
+                providerName,
+                jessmanName
+              )
+
+            const providerTokens =
+              tokenize(
+                providerName
+              )
+
+            const jessmanTokens =
+              tokenize(
+                jessmanName
+              )
+
+            const providerSet =
+              new Set(
+                providerTokens
+              )
+
+            const jessmanSet =
+              new Set(
+                jessmanTokens
+              )
+
+            let containmentScore =
+              0
+
+            if (
+              providerClean &&
+              jessmanClean &&
+              (
+                providerClean.includes(
+                  jessmanClean
+                ) ||
+                jessmanClean.includes(
+                  providerClean
+                )
+              )
+            ) {
+              containmentScore =
+                100
+            }
+
+            return Math.max(
+              directScore,
+              tokenScore,
+              containmentScore
+            )
+          }
+
+          function parseProviderChannels(
+            text
+          ) {
+            const channels =
+              []
+
+            const lines =
+              text.split(
+                /\r?\n/
+              )
+
+            for (
+              const line of lines
+            ) {
+              const trimmed =
+                line.trim()
+
+              if (
+                !trimmed
+              ) {
+                continue
+              }
+
+              try {
+                const channel =
+                  JSON.parse(
+                    trimmed
+                  )
+
+                if (
+                  channel &&
+                  channel.num !==
+                    undefined &&
+                  channel.name
+                ) {
+                  channels.push(
+                    channel
+                  )
+                }
+              } catch (
+                error
+              ) {
+                console.log(
+                  'Skipping non-JSON provider line'
+                )
+              }
+            }
+
+            return channels
+          }
+
+          function parseJessmanChannels(
+            text
+          ) {
+            const channels =
+              []
+
+            const lines =
+              text.split(
+                /\r?\n/
+              )
+
+            for (
+              const line of lines
+            ) {
+              const trimmed =
+                line.trim()
+
+              if (
+                !trimmed ||
+                !trimmed.includes(
+                  ' | '
+                )
+              ) {
+                continue
+              }
+
+              const parts =
+                trimmed.split(
+                  ' | '
+                )
+
+              if (
+                parts.length <
+                  2
+              ) {
+                continue
+              }
+
+              const name =
+                parts[0]
+                  .trim()
+
+              const id =
+                parts[1]
+                  .trim()
+
+              if (
+                !name ||
+                !id ||
+                !id.endsWith(
+                  '.us'
+                )
+              ) {
+                continue
+              }
+
+              channels.push(
+                {
+                  name,
+                  id
+                }
+              )
+            }
+
+            return channels
+          }
+
+          const providerChannels =
+            parseProviderChannels(
+              providerText
+            )
+
+          const jessmanChannels =
+            parseJessmanChannels(
+              jessmanText
+            )
+
+          const results =
+            []
+
+          const usedJessmanIds =
+            new Set()
+
+          let exactMatches =
+            0
+
+          let fuzzyMatches =
+            0
+
+          let unmatched =
+            0
+
+          let ambiguous =
+            0
+
+          for (
+            const provider of
+              providerChannels
+          ) {
+            const candidates =
+              []
+
+            for (
+              const jessman of
+                jessmanChannels
+            ) {
+              const score =
+                calculateScore(
+                  provider.name,
+                  jessman.name
+                )
+
+              if (
+                score >=
+                90
+              ) {
+                candidates.push(
+                  {
+                    jessman,
+                    score
+                  }
+                )
+              }
+            }
+
+            candidates.sort(
+              (
+                a,
+                b
+              ) =>
+                b.score -
+                a.score
+            )
+
+            if (
+              !candidates.length
+            ) {
+              unmatched++
+
+              continue
+            }
+
+            const best =
+              candidates[0]
+
+            const second =
+              candidates[1]
+
+            if (
+              second &&
+              best.score ===
+                second.score &&
+              best.jessman.id !==
+                second.jessman.id
+            ) {
+              ambiguous++
+
+              console.log(
+                'Ambiguous match skipped: ' +
+                provider.name
+              )
+
+              continue
+            }
+
+            if (
+              usedJessmanIds.has(
+                best.jessman.id
+              )
+            ) {
+              continue
+            }
+
+            usedJessmanIds.add(
+              best.jessman.id
+            )
+
+            if (
+              best.score ===
+              100
+            ) {
+              exactMatches++
+            } else {
+              fuzzyMatches++
+            }
+
+            results.push(
+              {
+                providerNum:
+                  provider.num,
+                providerName:
+                  provider.name,
+                providerStreamId:
+                  provider.stream_id ||
+                  '',
+                jessmanName:
+                  best.jessman.name,
+                jessmanId:
+                  best.jessman.id,
+                score:
+                  best.score
+              }
+            )
+          }
+
+          results.sort(
+            (
+              a,
+              b
+            ) =>
+              Number(
+                a.providerNum
+              ) -
+              Number(
+                b.providerNum
+              )
+          )
+
+          const lines =
+            []
+
+          lines.push(
+            'FAST CROSS-CHECKED CHANNELS'
+          )
+
+          lines.push(
+            'Generated: ' +
+              new Date().toISOString()
+          )
+
+          lines.push(
+            'Provider channels checked: ' +
+              providerChannels.length
+          )
+
+          lines.push(
+            'Strong matches: ' +
+              results.length
+          )
+
+          lines.push(
+            'Exact matches: ' +
+              exactMatches
+          )
+
+          lines.push(
+            'Fuzzy matches 90%+: ' +
+              fuzzyMatches
+          )
+
+          lines.push(
+            'Unmatched: ' +
+              unmatched
+          )
+
+          lines.push(
+            'Ambiguous skipped: ' +
+              ambiguous
+          )
+
+          lines.push(
+            ''
+          )
+
+          for (
+            const result of
+              results
+          ) {
+            lines.push(
+              [
+                result.providerNum,
+                result.providerName,
+                result.jessmanName,
+                result.jessmanId,
+                result.providerStreamId,
+                'MATCH: ' +
+                  result.score.toFixed(
+                    2
+                  ) +
+                  '%'
+              ].join(
+                ' | '
+              )
+            )
+          }
+
+          fs.writeFileSync(
+            outputPath,
+            lines.join(
+              '\n'
+            ) +
+              '\n',
+            'utf8'
+          )
+
+          console.log(
+            'FAST cross-check complete'
+          )
+
+          console.log(
+            'Provider channels checked: ' +
+              providerChannels.length
+          )
+
+          console.log(
+            'Strong matches: ' +
+              results.length
+          )
+
+          console.log(
+            'Exact matches: ' +
+              exactMatches
+          )
+
+          console.log(
+            'Fuzzy matches 90%+: ' +
+              fuzzyMatches
+          )
+
+          console.log(
+            'Unmatched: ' +
+              unmatched
+          )
+
+          console.log(
+            'Ambiguous skipped: ' +
+              ambiguous
+          )
+
+          console.log(
+            'Output: ' +
+              outputPath
+          )
+          EOF
+
+      - name: Validate FASTCROSSCHECKED
+        run: |
+          test -s FASTCROSSCHECKED.txt
+
+          MATCH_COUNT=$(grep -c ' | MATCH: ' FASTCROSSCHECKED.txt || true)
+
+          echo "Strong matches written: $MATCH_COUNT"
+
+          if [ "$MATCH_COUNT" -lt 1 ]; then
+            echo "No strong matches were found"
+            exit 1
+          fi
+
+      - name: Show FASTCROSSCHECKED preview
+        run: |
+          echo "First 30 matches:"
+          head -n 40 FASTCROSSCHECKED.txt
+
+          echo ""
+
+          echo "File size:"
+          ls -lh FASTCROSSCHECKED.txt
+
+      - name: Commit FASTCROSSCHECKED
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add FASTCROSSCHECKED.txt
+
+          if git diff --cached --quiet; then
+            echo "No FASTCROSSCHECKED changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update FASTCROSSCHECKED"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed. Fetching latest remote changes..."
+
+            git fetch origin main
+
+            git rebase origin/main || {
+              git rebase --abort || true
+            }
+
+            sleep 10
+          done
+
+          echo "Push failed after all retries"
+
+          exit 1
