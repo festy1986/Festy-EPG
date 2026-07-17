@@ -1,4 +1,4 @@
-name: Test
+name: Test Provider Channels
 
 on:
   workflow_dispatch:
@@ -6,13 +6,9 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: epg-test
-  cancel-in-progress: false
-
 jobs:
 
-  test-provider:
+  test-provider-channels:
 
     runs-on: ubuntu-latest
 
@@ -21,9 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-
       - name: Verify provider credentials
-
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -52,22 +46,14 @@ jobs:
           echo "XTREAM_USERNAME exists"
           echo "XTREAM_PASSWORD exists"
 
-
       - name: Install Python requirements
-
         run: |
-
           python -m pip install requests
 
-
       - name: Download provider channel list
-
         env:
-
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
-
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
-
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
@@ -77,186 +63,55 @@ jobs:
           import os
           import re
           import html
-          import time
           import requests
 
-
           XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
-
           USERNAME = os.environ["XTREAM_USERNAME"]
-
           PASSWORD = os.environ["XTREAM_PASSWORD"]
 
+          OUTPUT_FILE = "fast/fastchannels.txt"
 
-          # ---------------------------------
-          # Normalize Xtream URL
-          # ---------------------------------
-
-          if XTREAM_URL.startswith("https://"):
-
-              XTREAM_URL = XTREAM_URL.replace(
-                  "https://",
-                  "http://"
-              )
-
-
-          if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
-
-              XTREAM_URL += ":80"
-
-
-          print("Provider URL normalized")
-
-          print(
-              "Provider host:",
-              re.sub(
-                  r"^https?://",
-                  "",
-                  XTREAM_URL
-              )
-          )
-
-
-          # ---------------------------------
-          # Session
-          # ---------------------------------
+          os.makedirs("fast", exist_ok=True)
 
           session = requests.Session()
 
-          session.headers.update(
-              {
-                  "User-Agent": "Mozilla/5.0"
-              }
-          )
+          session.headers.update({
+              "User-Agent": "Mozilla/5.0"
+          })
 
-
-          # ---------------------------------
-          # Provider API
-          # ---------------------------------
+          print("Downloading provider live channel list...")
 
           streams_url = (
-
               f"{XTREAM_URL}/player_api.php"
-
               f"?username={USERNAME}"
-
               f"&password={PASSWORD}"
-
               f"&action=get_live_streams"
-
           )
 
+          response = session.get(
+              streams_url,
+              timeout=(30, 300)
+          )
 
-          streams = None
+          print(f"HTTP status: {response.status_code}")
 
+          response.raise_for_status()
 
-          for attempt in range(1, 6):
-
-              try:
-
-                  print(
-                      f"Downloading provider channels "
-                      f"(attempt {attempt}/5)..."
-                  )
-
-
-                  response = session.get(
-
-                      streams_url,
-
-                      timeout=(30, 300)
-
-                  )
-
-
-                  print(
-                      "HTTP status:",
-                      response.status_code
-                  )
-
-
-                  response.raise_for_status()
-
-
-                  streams = response.json()
-
-
-                  break
-
-
-              except Exception as error:
-
-                  print(
-                      "Provider request failed:",
-                      error
-                  )
-
-
-                  if attempt < 5:
-
-                      print(
-                          "Retrying in 10 seconds..."
-                      )
-
-
-                      time.sleep(10)
-
-
-          if streams is None:
-
-              raise SystemExit(
-                  "Provider channel download failed"
-              )
-
+          streams = response.json()
 
           if not isinstance(streams, list):
-
-              raise SystemExit(
+              raise RuntimeError(
                   "Provider response was not a channel list"
               )
 
+          print(f"Provider channels received: {len(streams)}")
 
-          print(
-              "Provider channels received:",
-              len(streams)
-          )
+          def clean_name(name):
 
+              if not name:
+                  return ""
 
-          # ---------------------------------
-          # Create channel list
-          # ---------------------------------
-
-          os.makedirs(
-              "fast",
-              exist_ok=True
-          )
-
-
-          output_file = (
-              "fast/fastchannels.txt"
-          )
-
-
-          channels = []
-
-
-          for stream in streams:
-
-              if not isinstance(stream, dict):
-
-                  continue
-
-
-              name = stream.get(
-                  "name",
-                  ""
-              )
-
-
-              name = html.unescape(
-                  str(name)
-              )
-
+              name = html.unescape(str(name))
 
               name = re.sub(
                   r"<.*?>",
@@ -264,154 +119,88 @@ jobs:
                   name
               )
 
-
               name = re.sub(
                   r"\s+",
                   " ",
                   name
               )
 
+              return name.strip()
 
-              name = name.strip()
+          channels = []
 
+          for stream in streams:
 
-              if not name:
+              stream_id = str(
+                  stream.get(
+                      "stream_id",
+                      ""
+                  )
+              ).strip()
 
+              name = clean_name(
+                  stream.get(
+                      "name",
+                      ""
+                  )
+              )
+
+              if not stream_id or not name:
                   continue
 
-
-              channels.append(name)
-
-
-          channels = sorted(
-              set(channels),
-              key=lambda value: value.lower()
-          )
-
-
-          if not channels:
-
-              raise SystemExit(
-                  "No channel names were found"
+              channels.append(
+                  (
+                      stream_id,
+                      name
+                  )
               )
 
+          channels.sort(
+              key=lambda item: item[1].lower()
+          )
 
           with open(
-              output_file,
+              OUTPUT_FILE,
               "w",
               encoding="utf-8"
-          ) as file:
+          ) as output:
 
-              for channel in channels:
+              for stream_id, name in channels:
 
-                  file.write(
-                      channel + "\n"
+                  output.write(
+                      f"{stream_id}|{name}\n"
                   )
 
-
           print("")
-
-          print(
-              "Channel dump complete"
-          )
-
-
-          print(
-              "Total unique channels:",
-              len(channels)
-          )
-
-
-          print(
-              "Created:",
-              output_file
-          )
-
-
-          print("")
-
-          print(
-              "First 25 channels:"
-          )
-
-
-          for channel in channels[:25]:
-
-              print(
-                  channel
-              )
-
+          print("Provider channel dump complete")
+          print(f"Channels written: {len(channels)}")
+          print(f"Output file: {OUTPUT_FILE}")
 
           PY
 
-
-      - name: Validate provider channel list
-
+      - name: Show channel dump
         run: |
 
-          if [ ! -f fast/fastchannels.txt ]; then
-
-            echo "fast/fastchannels.txt was not created"
-
-            exit 1
-
-          fi
-
-
-          CHANNELS=$(
-
-            grep -cve '^[[:space:]]*$' \
-
-            fast/fastchannels.txt \
-
-            || true
-
-          )
-
-
-          echo ""
-
-          echo "Provider channels written: $CHANNELS"
-
-
-          if [ "$CHANNELS" -lt 1 ]; then
-
-            echo "Channel list is empty"
-
-            exit 1
-
-          fi
-
-
-          echo ""
-
-          echo "Channel list file:"
-
+          echo "Channel file created:"
           ls -lh fast/fastchannels.txt
 
+          echo ""
+          echo "First 20 channels:"
+          head -20 fast/fastchannels.txt
+
+          echo ""
+          echo "Total channels:"
+          wc -l fast/fastchannels.txt
 
       - name: Commit and push channel list
-
         run: |
 
           git config --global user.name "github-actions"
 
           git config --global user.email "github-actions@github.com"
 
-
           git add fast/fastchannels.txt
 
-
-          if git diff --cached --quiet; then
-
-            echo "No channel list changes"
-
-            exit 0
-
-          fi
-
-
-          git commit -m "Update FAST provider channel list"
-
+          git diff --cached --quiet && echo "No changes" || git commit -m "Update FAST provider channel list"
 
           git push
