@@ -41,7 +41,7 @@ jobs:
           echo "Channels: $(grep -c '<channel ' fast/source.xml || true)"
           echo "Programmes: $(grep -c '<programme ' fast/source.xml || true)"
 
-      - name: Process FAST metadata
+      - name: Process FAST metadata and keep 3 days
         run: |
           node <<'EOF'
           const fs = require('fs')
@@ -49,6 +49,48 @@ jobs:
 
           const inputPath = 'fast/source.xml'
           const outputPath = 'fast/processed.xml'
+
+          const now = new Date()
+          const cutoff = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000)
+
+          function parseXmltvDate(value) {
+            if (!value) return null
+
+            const match = String(value).match(
+              /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+            )
+
+            if (!match) return null
+
+            const [, year, month, day, hour, minute, second] = match
+
+            return new Date(
+              Date.UTC(
+                Number(year),
+                Number(month) - 1,
+                Number(day),
+                Number(hour),
+                Number(minute),
+                Number(second)
+              )
+            )
+          }
+
+          function programmeIsWithinThreeDays(block) {
+            const match = block.match(
+              /<programme\b[^>]*\bstart="([^"]+)"/i
+            )
+
+            if (!match) return false
+
+            const start = parseXmltvDate(match[1])
+
+            if (!start || Number.isNaN(start.getTime())) {
+              return false
+            }
+
+            return start >= now && start < cutoff
+          }
 
           if (!fs.existsSync(inputPath)) {
             console.error(`Missing ${inputPath}`)
@@ -71,6 +113,8 @@ jobs:
           let programmeBuffer = ''
           let insideProgramme = false
           let programmeCount = 0
+          let keptProgrammes = 0
+          let skippedProgrammes = 0
           let changedTitles = 0
           let cleanedDescriptions = 0
 
@@ -109,7 +153,10 @@ jobs:
 
           function cleanDescription(value) {
             return cleanSpaces(value)
-              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(
+                /\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i,
+                ' ($1)'
+              )
               .replace(
                 /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
                 ' ($2)'
@@ -119,22 +166,36 @@ jobs:
 
           function getTag(block, tag) {
             const match = block.match(
-              new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i')
+              new RegExp(
+                `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
+                'i'
+              )
             )
 
             return match
-              ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim())
+              ? decodeXml(
+                  match[1]
+                    .replace(/<[^>]+>/g, '')
+                    .trim()
+                )
               : ''
           }
 
           function getTags(block, tag) {
             return [
               ...block.matchAll(
-                new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi')
+                new RegExp(
+                  `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
+                  'gi'
+                )
               )
             ]
               .map(match =>
-                decodeXml(match[1].replace(/<[^>]+>/g, '').trim())
+                decodeXml(
+                  match[1]
+                    .replace(/<[^>]+>/g, '')
+                    .trim()
+                )
               )
               .filter(Boolean)
           }
@@ -184,7 +245,9 @@ jobs:
               return `S${Number(xmltvMatch[1]) + 1}E${Number(xmltvMatch[2]) + 1}`
             }
 
-            const directMatch = episodeNum.match(/\bS(\d+)E(\d+)\b/i)
+            const directMatch = episodeNum.match(
+              /\bS(\d+)E(\d+)\b/i
+            )
 
             if (directMatch) {
               return `S${directMatch[1]}E${directMatch[2]}`
@@ -242,6 +305,13 @@ jobs:
 
           function processProgramme(block) {
             programmeCount++
+
+            if (!programmeIsWithinThreeDays(block)) {
+              skippedProgrammes++
+              return ''
+            }
+
+            keptProgrammes++
 
             const originalTitle = getTag(block, 'title')
             const originalDescription = getTag(block, 'desc')
@@ -368,9 +438,14 @@ jobs:
 
                   if (line.includes('</programme>')) {
                     insideProgramme = false
-                    await writeOutput(
+
+                    const processed =
                       processProgramme(programmeBuffer)
-                    )
+
+                    if (processed) {
+                      await writeOutput(processed)
+                    }
+
                     programmeBuffer = ''
                   }
                 } else {
@@ -382,9 +457,12 @@ jobs:
                 if (line.includes('</programme>')) {
                   insideProgramme = false
 
-                  await writeOutput(
+                  const processed =
                     processProgramme(programmeBuffer)
-                  )
+
+                  if (processed) {
+                    await writeOutput(processed)
+                  }
 
                   programmeBuffer = ''
                 }
@@ -392,7 +470,12 @@ jobs:
             }
 
             if (programmeBuffer) {
-              await writeOutput(programmeBuffer)
+              const processed =
+                processProgramme(programmeBuffer)
+
+              if (processed) {
+                await writeOutput(processed)
+              }
             }
 
             await new Promise((resolve, reject) => {
@@ -401,7 +484,9 @@ jobs:
             })
 
             console.log('FAST metadata processing complete')
-            console.log(`Programmes processed: ${programmeCount}`)
+            console.log(`Programmes scanned: ${programmeCount}`)
+            console.log(`Programmes kept: ${keptProgrammes}`)
+            console.log(`Programmes skipped: ${skippedProgrammes}`)
             console.log(`Titles cleaned: ${changedTitles}`)
             console.log(`Descriptions cleaned: ${cleanedDescriptions}`)
             console.log(`Output: ${outputPath}`)
@@ -438,196 +523,24 @@ jobs:
           ls -lh fast/source.xml
           ls -lh fast/processed.xml
 
-      - name: Split FAST guide into GitHub-safe files
+      - name: Compress FAST guide
         run: |
-          node <<'EOF'
-          const fs = require('fs')
-          const readline = require('readline')
+          gzip -c fast/processed.xml > fast/FAST.xml.gz
 
-          const inputPath = 'fast/processed.xml'
-          const outputDir = 'fast/chunks'
-
-          fs.rmSync(outputDir, { recursive: true, force: true })
-          fs.mkdirSync(outputDir, { recursive: true })
-
-          const input = fs.createReadStream(inputPath, {
-            encoding: 'utf8'
-          })
-
-          const rl = readline.createInterface({
-            input,
-            crlfDelay: Infinity
-          })
-
-          const MAX_BYTES = 75 * 1024 * 1024
-
-          let header = ''
-          let channels = []
-          let programmes = []
-          let currentProgramme = ''
-          let insideProgramme = false
-          let chunkNumber = 1
-          let chunkBytes = 0
-          let channelCount = 0
-          let programmeCount = 0
-
-          function getChannelId(block) {
-            const match = block.match(
-              /<channel\b[^>]*\bid="([^"]+)"/i
-            )
-
-            return match ? match[1] : ''
-          }
-
-          function getProgrammeChannel(block) {
-            const match = block.match(
-              /<programme\b[^>]*\bchannel="([^"]+)"/i
-            )
-
-            return match ? match[1] : ''
-          }
-
-          const channelMap = new Map()
-
-          function writeChunk() {
-            if (!channels.length && !programmes.length) return
-
-            const content =
-              `${header}` +
-              channels.join('') +
-              programmes.join('') +
-              '</tv>\n'
-
-            const outputPath =
-              `${outputDir}/FAST-${String(chunkNumber).padStart(3, '0')}.xml`
-
-            fs.writeFileSync(outputPath, content)
-
-            console.log(
-              `Created ${outputPath} | ` +
-              `${(Buffer.byteLength(content) / 1024 / 1024).toFixed(2)} MB | ` +
-              `channels=${channels.length} | ` +
-              `programmes=${programmes.length}`
-            )
-
-            chunkNumber++
-            channels = []
-            programmes = []
-            chunkBytes = 0
-          }
-
-          function addChannel(block) {
-            const id = getChannelId(block)
-
-            if (!id) return
-
-            if (
-              chunkBytes > 0 &&
-              chunkBytes + Buffer.byteLength(block) > MAX_BYTES
-            ) {
-              writeChunk()
-            }
-
-            channelMap.set(id, chunkNumber)
-
-            channels.push(block)
-            chunkBytes += Buffer.byteLength(block)
-            channelCount++
-          }
-
-          async function main() {
-            for await (const line of rl) {
-              if (!insideProgramme) {
-                if (line.includes('<tv')) {
-                  header += line + '\n'
-                  continue
-                }
-
-                if (line.includes('<channel ')) {
-                  addChannel(line + '\n')
-                  continue
-                }
-
-                if (line.includes('<programme ')) {
-                  insideProgramme = true
-                  currentProgramme = line + '\n'
-
-                  if (line.includes('</programme>')) {
-                    insideProgramme = false
-                    programmes.push(currentProgramme)
-                    programmeCount++
-                    currentProgramme = ''
-                  }
-
-                  continue
-                }
-
-                if (line.includes('</tv>')) {
-                  continue
-                }
-
-                if (line.trim()) {
-                  header += line + '\n'
-                }
-              } else {
-                currentProgramme += line + '\n'
-
-                if (line.includes('</programme>')) {
-                  insideProgramme = false
-                  programmes.push(currentProgramme)
-                  programmeCount++
-                  currentProgramme = ''
-                }
-              }
-            }
-
-            writeChunk()
-
-            console.log(`Total channels: ${channelCount}`)
-            console.log(`Total programmes: ${programmeCount}`)
-            console.log(`Total chunks: ${chunkNumber - 1}`)
-          }
-
-          main().catch(error => {
-            console.error(error)
-            process.exit(1)
-          })
-          EOF
-
-      - name: Compress FAST chunks
+      - name: Validate compressed FAST guide
         run: |
-          for file in fast/chunks/*.xml; do
-            gzip -c "$file" > "$file.gz"
-          done
+          ls -lh fast/FAST.xml.gz
 
-          rm -f fast/chunks/*.xml
+          SIZE=$(stat -c%s fast/FAST.xml.gz)
 
-          echo "Compressed FAST chunks:"
-          ls -lh fast/chunks
+          echo "Compressed FAST size: $SIZE bytes"
 
-      - name: Validate FAST chunks
-        run: |
-          COUNT=$(find fast/chunks -name '*.xml.gz' | wc -l)
-
-          echo "FAST chunk count: $COUNT"
-
-          if [ "$COUNT" -lt 1 ]; then
-            echo "No FAST chunks were created"
+          if [ "$SIZE" -ge 100000000 ]; then
+            echo "FAST guide is still too large for GitHub"
             exit 1
           fi
 
-          for file in fast/chunks/*.xml.gz; do
-            SIZE=$(stat -c%s "$file")
-
-            echo "$(basename "$file"): $SIZE bytes"
-
-            if [ "$SIZE" -ge 100000000 ]; then
-              echo "ERROR: $file is too large for GitHub"
-              exit 1
-            fi
-          done
-
-      - name: Commit FAST chunks
+      - name: Commit FAST guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -635,14 +548,14 @@ jobs:
           git fetch origin main
           git rebase origin/main
 
-          git add fast/chunks
+          git add fast/FAST.xml.gz
 
           if git diff --cached --quiet; then
-            echo "No FAST changes to commit"
+            echo "No FAST guide changes to commit"
             exit 0
           fi
 
-          git commit -m "Update FAST guide chunks"
+          git commit -m "Update 3-day FAST guide"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
