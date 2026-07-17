@@ -50,7 +50,7 @@ jobs:
         run: |
           python -m pip install requests
 
-      - name: Download provider channel list
+      - name: Download US UK CA provider channels
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -71,110 +71,256 @@ jobs:
 
           OUTPUT_FILE = "fast/fastchannels.txt"
 
-          os.makedirs("fast", exist_ok=True)
+          os.makedirs(
+              "fast",
+              exist_ok=True
+          )
 
           session = requests.Session()
 
-          session.headers.update({
-              "User-Agent": "Mozilla/5.0"
-          })
+          session.headers.update(
+              {
+                  "User-Agent": "Mozilla/5.0"
+              }
+          )
 
-          print("Downloading provider live channel list...")
+          print(
+              "Downloading complete provider live channel list..."
+          )
 
           streams_url = (
+
               f"{XTREAM_URL}/player_api.php"
+
               f"?username={USERNAME}"
+
               f"&password={PASSWORD}"
+
               f"&action=get_live_streams"
+
           )
 
           response = session.get(
+
               streams_url,
+
               timeout=(30, 300)
+
           )
 
-          print(f"HTTP status: {response.status_code}")
+          print(
+              f"HTTP status: {response.status_code}"
+          )
 
           response.raise_for_status()
 
           streams = response.json()
 
           if not isinstance(streams, list):
+
               raise RuntimeError(
+
                   "Provider response was not a channel list"
+
               )
 
-          print(f"Provider channels received: {len(streams)}")
+          print(
+
+              f"Total provider channels received: "
+
+              f"{len(streams)}"
+
+          )
 
           def clean_name(name):
 
               if not name:
+
                   return ""
 
-              name = html.unescape(str(name))
+              name = html.unescape(
 
-              name = re.sub(
-                  r"<.*?>",
-                  "",
-                  name
+                  str(name)
+
               )
 
               name = re.sub(
-                  r"\s+",
-                  " ",
+
+                  r"<.*?>",
+
+                  "",
+
                   name
+
+              )
+
+              name = re.sub(
+
+                  r"\s+",
+
+                  " ",
+
+                  name
+
               )
 
               return name.strip()
 
           channels = []
 
+          country_counts = {
+
+              "US": 0,
+
+              "UK": 0,
+
+              "CA": 0
+
+          }
+
           for stream in streams:
 
               stream_id = str(
+
                   stream.get(
+
                       "stream_id",
+
                       ""
+
                   )
+
               ).strip()
 
               name = clean_name(
+
                   stream.get(
+
                       "name",
+
                       ""
+
                   )
+
               )
 
               if not stream_id or not name:
+
                   continue
 
+              match = re.match(
+
+                  r"^(US|UK|CA):\s*",
+
+                  name,
+
+                  re.IGNORECASE
+
+              )
+
+              if not match:
+
+                  continue
+
+              country = match.group(
+
+                  1
+
+              ).upper()
+
+              country_counts[country] += 1
+
               channels.append(
+
                   (
+
                       stream_id,
+
                       name
+
                   )
+
               )
 
           channels.sort(
-              key=lambda item: item[1].lower()
+
+              key=lambda item:
+
+              item[1].lower()
+
           )
 
           with open(
+
               OUTPUT_FILE,
+
               "w",
+
               encoding="utf-8"
+
           ) as output:
 
               for stream_id, name in channels:
 
                   output.write(
+
                       f"{stream_id}|{name}\n"
+
                   )
 
           print("")
-          print("Provider channel dump complete")
-          print(f"Channels written: {len(channels)}")
-          print(f"Output file: {OUTPUT_FILE}")
+
+          print(
+
+              "Filtered provider channel dump complete"
+
+          )
+
+          print("")
+
+          print(
+
+              f"US channels: "
+
+              f"{country_counts['US']}"
+
+          )
+
+          print(
+
+              f"UK channels: "
+
+              f"{country_counts['UK']}"
+
+          )
+
+          print(
+
+              f"CA channels: "
+
+              f"{country_counts['CA']}"
+
+          )
+
+          print("")
+
+          print(
+
+              "Total US/UK/CA channels written: "
+
+              f"{len(channels)}"
+
+          )
+
+          print("")
+
+          print(
+
+              f"Output file: "
+
+              f"{OUTPUT_FILE}"
+
+          )
 
           PY
 
@@ -182,14 +328,19 @@ jobs:
         run: |
 
           echo "Channel file created:"
+
           ls -lh fast/fastchannels.txt
 
           echo ""
+
           echo "First 20 channels:"
+
           head -20 fast/fastchannels.txt
 
           echo ""
+
           echo "Total channels:"
+
           wc -l fast/fastchannels.txt
 
       - name: Commit and push channel list
@@ -201,6 +352,14 @@ jobs:
 
           git add fast/fastchannels.txt
 
-          git diff --cached --quiet && echo "No changes" || git commit -m "Update FAST provider channel list"
+          if git diff --cached --quiet; then
 
-          git push
+            echo "No changes"
+
+          else
+
+            git commit -m "Update FAST provider channel list"
+
+            git push
+
+          fi
