@@ -1,131 +1,135 @@
 name: IPTV Org Channel Discovery
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '15 6 * * *'
-    - cron: '15 18 * * *'
+workflow_dispatch:
+schedule:
+- cron: '15 6 * * *'
+- cron: '15 18 * * *'
 
 permissions:
-  contents: write
+contents: write
 
 concurrency:
-  group: iptvorg-discovery
-  cancel-in-progress: false
+group: iptvorg-discovery
+cancel-in-progress: false
 
 jobs:
-  discover-channels:
-    runs-on: ubuntu-latest
+discover-channels:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+```
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
 
-      - name: Download IPTV-org EPG source
-        run: |
-          mkdir -p /tmp/iptvorg
+  - name: Download IPTV-org EPG source
+    run: |
+      mkdir -p /tmp/iptvorg
 
-          curl -L --fail --retry 5 --retry-delay 10 \
-            https://iptv-epg.org/files/epg-us.xml.gz \
-            -o /tmp/iptvorg/source.xml.gz
+      curl -L --fail --retry 5 --retry-delay 10 \
+        https://iptv-epg.org/files/epg-us.xml.gz \
+        -o /tmp/iptvorg/source.xml.gz
 
-          test -s /tmp/iptvorg/source.xml.gz
+      test -s /tmp/iptvorg/source.xml.gz
 
-          echo "IPTV-org EPG source downloaded successfully"
+      echo "IPTV-org EPG source downloaded successfully"
 
-      - name: Build channel inventory
-        run: |
-          mkdir -p guides
+  - name: Build channel inventory
+    run: |
+      mkdir -p guides
 
-          gzip -dc /tmp/iptvorg/source.xml.gz |
-          awk '
-            /<channel[[:space:]]/ {
-              match($0, /id="[^"]+"/)
-              id = substr($0, RSTART + 4, RLENGTH - 5)
-              in_channel = 1
-              name = ""
-              next
-            }
+      gzip -dc /tmp/iptvorg/source.xml.gz |
+      awk '
+        /<channel[[:space:]]/ {
+          match($0, /id="[^"]+"/)
+          id = substr($0, RSTART + 4, RLENGTH - 5)
+          in_channel = 1
+          name = ""
+          next
+        }
 
-            in_channel && /<display-name/ {
-              line = $0
-              sub(/.*<display-name[^>]*>/, "", line)
-              sub(/<\/display-name>.*/, "", line)
-              gsub(/&amp;/, "\\&", line)
-              gsub(/&quot;/, "\"", line)
-              gsub(/&apos;/, "'", line)
-              gsub(/&lt;/, "<", line)
-              gsub(/&gt;/, ">", line)
+        in_channel && /<display-name/ {
+          line = $0
 
-              if (name == "") {
-                name = line
-              }
+          sub(/.*<display-name[^>]*>/, "", line)
+          sub(/<\/display-name>.*/, "", line)
 
-              next
-            }
+          gsub(/&amp;/, "\\&", line)
+          gsub(/&quot;/, "\"", line)
+          gsub(/&apos;/, "&#39;", line)
+          gsub(/&lt;/, "<", line)
+          gsub(/&gt;/, ">", line)
 
-            in_channel && /<\/channel>/ {
-              print id " | " name
-              in_channel = 0
-            }
-          ' |
-          sort -f > guides/iptvorg-channels.txt
+          if (name == "") {
+            name = line
+          }
 
-          test -s guides/iptvorg-channels.txt
+          next
+        }
 
-          echo "Channel inventory created:"
-          wc -l guides/iptvorg-channels.txt
+        in_channel && /<\/channel>/ {
+          print id " | " name
+          in_channel = 0
+        }
+      ' |
+      sort -f > guides/iptvorg-channels.txt
 
-          echo
-          echo "Searching for MGM Presents channels:"
-          grep -i "MGM Presents" guides/iptvorg-channels.txt || true
+      test -s guides/iptvorg-channels.txt
 
-      - name: Commit and push channel inventory
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+      echo "Channel inventory created:"
+      wc -l guides/iptvorg-channels.txt
 
-          git fetch origin main
-          git reset --hard origin/main
+      echo
+      echo "Searching for MGM Presents channels:"
+      grep -i "MGM Presents" guides/iptvorg-channels.txt || true
 
-          git add guides/iptvorg-channels.txt
+  - name: Commit and push channel inventory
+    run: |
+      git config user.name "github-actions"
+      git config user.email "github-actions@github.com"
 
-          if git diff --cached --quiet; then
-            echo "No channel inventory changes"
-            exit 0
-          fi
+      git fetch origin main
+      git reset --hard origin/main
 
-          git commit -m "Update IPTV-org channel inventory"
+      git add guides/iptvorg-channels.txt
 
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
+      if git diff --cached --quiet; then
+        echo "No channel inventory changes"
+        exit 0
+      fi
 
-            git fetch origin main
-            git reset --hard origin/main
+      git commit -m "Update IPTV-org channel inventory"
 
-            git add guides/iptvorg-channels.txt
+      for attempt in 1 2 3 4 5; do
+        echo "Push attempt $attempt"
 
-            if git diff --cached --quiet; then
-              echo "Channel inventory already up to date"
-              exit 0
-            fi
+        git fetch origin main
+        git reset --hard origin/main
 
-            git commit -m "Update IPTV-org channel inventory" || true
+        git add guides/iptvorg-channels.txt
 
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
+        if git diff --cached --quiet; then
+          echo "Channel inventory already up to date"
+          exit 0
+        fi
 
-            echo "Push failed. Synchronizing with remote before retry..."
+        git commit -m "Update IPTV-org channel inventory" || true
 
-            git fetch origin main
-            git reset --hard origin/main
+        if git push origin HEAD:main; then
+          echo "Push succeeded"
+          exit 0
+        fi
 
-            sleep 10
-          done
+        echo "Push failed. Synchronizing with remote before retry..."
 
-          echo "Push failed after all retries"
-          exit 1
+        git fetch origin main
+        git reset --hard origin/main
+
+        sleep 10
+      done
+
+      echo "Push failed after all retries"
+      exit 1
+```
