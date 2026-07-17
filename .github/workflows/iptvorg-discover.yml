@@ -1,107 +1,105 @@
 name: IPTV Org Channel Discovery
 
-'on':
-workflow_dispatch:
-schedule:
-- cron: '15 6 * * *'
-- cron: '15 18 * * *'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 6 * * *'
+    - cron: '15 18 * * *'
 
 permissions:
-contents: write
+  contents: write
 
 concurrency:
-group: iptvorg-discovery
-cancel-in-progress: false
+  group: iptvorg-discovery
+  cancel-in-progress: false
 
 jobs:
-discover-channels:
-runs-on: ubuntu-latest
+  discover-channels:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-    with:
-      fetch-depth: 0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  - name: Download IPTV-org EPG source
-    shell: bash
-    run: |
-      mkdir -p /tmp/iptvorg
+      - name: Download IPTV-org EPG source
+        shell: bash
+        run: |
+          mkdir -p /tmp/iptvorg
 
-      curl -L --fail --retry 5 --retry-delay 10 \
-        "https://iptv-epg.org/files/epg-us.xml.gz" \
-        -o "/tmp/iptvorg/source.xml.gz"
+          curl -L --fail --retry 5 --retry-delay 10 \
+            "https://iptv-epg.org/files/epg-us.xml.gz" \
+            -o "/tmp/iptvorg/source.xml.gz"
 
-      test -s "/tmp/iptvorg/source.xml.gz"
+          test -s "/tmp/iptvorg/source.xml.gz"
 
-      echo "IPTV-org EPG source downloaded successfully"
+          echo "IPTV-org EPG source downloaded successfully"
 
-  - name: Build channel inventory
-    shell: bash
-    run: |
-      mkdir -p guides
+      - name: Build channel inventory
+        shell: bash
+        run: |
+          mkdir -p guides
 
-      gzip -dc "/tmp/iptvorg/source.xml.gz" |
-      grep '<channel ' |
-      sed -E 's/.*id="([^"]+)".*<display-name[^>]*>([^<]+)<\/display-name>.*/\1 | \2/' |
-      sort -f > "guides/iptvorg-channels.txt"
+          gzip -dc "/tmp/iptvorg/source.xml.gz" |
+          grep '<channel ' |
+          sed -E 's/.*id="([^"]+)".*<display-name[^>]*>([^<]+)<\/display-name>.*/\1 | \2/' |
+          sort -f > "guides/iptvorg-channels.txt"
 
-      test -s "guides/iptvorg-channels.txt"
+          test -s "guides/iptvorg-channels.txt"
 
-      echo "Channel inventory created:"
-      wc -l "guides/iptvorg-channels.txt"
+          echo "Channel inventory created:"
+          wc -l "guides/iptvorg-channels.txt"
 
-      echo
-      echo "Searching for MGM Presents channels:"
-      grep -i "MGM Presents" "guides/iptvorg-channels.txt" || true
+          echo
+          echo "Searching for MGM Presents channels:"
+          grep -i "MGM Presents" "guides/iptvorg-channels.txt" || true
 
-  - name: Commit and push channel inventory
-    shell: bash
-    run: |
-      git config user.name "github-actions"
-      git config user.email "github-actions@github.com"
+      - name: Commit and push channel inventory
+        shell: bash
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-      git fetch origin main
-      git reset --hard origin/main
+          git fetch origin main
+          git reset --hard origin/main
 
-      git add "guides/iptvorg-channels.txt"
+          git add "guides/iptvorg-channels.txt"
 
-      if git diff --cached --quiet; then
-        echo "No channel inventory changes"
-        exit 0
-      fi
+          if git diff --cached --quiet; then
+            echo "No channel inventory changes"
+            exit 0
+          fi
 
-      git commit -m "Update IPTV-org channel inventory"
+          git commit -m "Update IPTV-org channel inventory"
 
-      for attempt in 1 2 3 4 5; do
-        echo "Push attempt $attempt"
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
 
-        git fetch origin main
-        git reset --hard origin/main
+            git fetch origin main
+            git reset --hard origin/main
 
-        git add "guides/iptvorg-channels.txt"
+            git add "guides/iptvorg-channels.txt"
 
-        if git diff --cached --quiet; then
-          echo "Channel inventory already up to date"
-          exit 0
-        fi
+            if git diff --cached --quiet; then
+              echo "Channel inventory already up to date"
+              exit 0
+            fi
 
-        git commit -m "Update IPTV-org channel inventory" || true
+            git commit -m "Update IPTV-org channel inventory" || true
 
-        if git push origin HEAD:main; then
-          echo "Push succeeded"
-          exit 0
-        fi
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
 
-        echo "Push failed. Synchronizing with remote before retry..."
+            echo "Push failed. Synchronizing with remote before retry..."
 
-        git fetch origin main
-        git reset --hard origin/main
+            git fetch origin main
+            git reset --hard origin/main
 
-        sleep 10
-      done
+            sleep 10
+          done
 
-      echo "Push failed after all retries"
-      exit 1
-```
+          echo "Push failed after all retries"
+          exit 1
