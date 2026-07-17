@@ -56,7 +56,7 @@ jobs:
           python -m pip install requests
 
 
-      - name: Download provider channels from selected groups
+      - name: Download selected provider channels
 
         env:
 
@@ -90,11 +90,8 @@ jobs:
           if XTREAM_URL.startswith("https://"):
 
               XTREAM_URL = XTREAM_URL.replace(
-
                   "https://",
-
                   "http://"
-
               )
 
 
@@ -112,10 +109,7 @@ jobs:
 
 
           # ---------------------------------
-          # EXACT GROUP NAMES
-          #
-          # These are the provider group names
-          # to keep.
+          # Exact groups requested
           # ---------------------------------
 
           selected_groups = {
@@ -247,7 +241,7 @@ jobs:
 
 
           # ---------------------------------
-          # Session
+          # Create session
           # ---------------------------------
 
           session = requests.Session()
@@ -261,99 +255,107 @@ jobs:
 
 
           # ---------------------------------
-          # Provider API
+          # API helper
           # ---------------------------------
 
-          api_url = (
+          def provider_request(action):
 
-              f"{XTREAM_URL}/player_api.php"
+              url = (
 
-              f"?username={USERNAME}"
+                  f"{XTREAM_URL}/player_api.php"
 
-              f"&password={PASSWORD}"
+                  f"?username={USERNAME}"
 
-              f"&action=get_live_streams"
+                  f"&password={PASSWORD}"
 
-          )
-
-
-          streams = None
-
-
-          for attempt in range(1, 6):
-
-              try:
-
-                  print("")
-
-                  print(
-
-                      f"Downloading provider channels "
-
-                      f"(attempt {attempt}/5)..."
-
-                  )
-
-
-                  response = session.get(
-
-                      api_url,
-
-                      timeout=(30, 600)
-
-                  )
-
-
-                  print(
-
-                      f"HTTP status: "
-
-                      f"{response.status_code}"
-
-                  )
-
-
-                  response.raise_for_status()
-
-
-                  streams = response.json()
-
-
-                  break
-
-
-              except Exception as error:
-
-                  print("")
-
-                  print(
-
-                      f"Attempt {attempt} failed: "
-
-                      f"{error}"
-
-                  )
-
-
-                  if attempt < 5:
-
-                      time.sleep(15)
-
-
-          if streams is None:
-
-              raise SystemExit(
-
-                  "Provider channel download failed"
+                  f"&action={action}"
 
               )
 
 
-          if not isinstance(streams, list):
+              for attempt in range(1, 6):
+
+                  try:
+
+                      print("")
+
+                      print(
+
+                          f"Downloading {action} "
+
+                          f"(attempt {attempt}/5)..."
+
+                      )
+
+
+                      response = session.get(
+
+                          url,
+
+                          timeout=(30, 600)
+
+                      )
+
+
+                      print(
+
+                          f"HTTP status: "
+
+                          f"{response.status_code}"
+
+                      )
+
+
+                      response.raise_for_status()
+
+
+                      data = response.json()
+
+
+                      return data
+
+
+                  except Exception as error:
+
+                      print("")
+
+                      print(
+
+                          f"Attempt {attempt} failed: "
+
+                          f"{error}"
+
+                      )
+
+
+                      if attempt < 5:
+
+                          time.sleep(15)
+
 
               raise SystemExit(
 
-                  "Provider response was not a list"
+                  f"Provider request failed: {action}"
+
+              )
+
+
+          # ---------------------------------
+          # Download categories
+          # ---------------------------------
+
+          categories = provider_request(
+
+              "get_live_categories"
+
+          )
+
+
+          if not isinstance(categories, list):
+
+              raise SystemExit(
+
+                  "Provider categories response was not a list"
 
               )
 
@@ -362,26 +364,40 @@ jobs:
 
           print(
 
-              f"Total provider channels: "
+              f"Total provider categories: "
 
-              f"{len(streams)}"
+              f"{len(categories)}"
 
           )
 
 
           # ---------------------------------
-          # Count every category exactly as
-          # returned by the provider
+          # Match selected category names
           # ---------------------------------
 
-          category_counts = {}
+          selected_category_ids = set()
+
+          matched_category_names = {}
 
 
-          for stream in streams:
+          for category in categories:
 
-              category = str(
+              category_id = str(
 
-                  stream.get(
+                  category.get(
+
+                      "category_id",
+
+                      ""
+
+                  )
+
+              )
+
+
+              category_name = str(
+
+                  category.get(
 
                       "category_name",
 
@@ -392,97 +408,68 @@ jobs:
               )
 
 
-              category_counts[category] = (
+              if category_name in selected_groups:
 
-                  category_counts.get(
+                  selected_category_ids.add(
 
-                      category,
-
-                      0
+                      category_id
 
                   )
 
-                  + 1
 
-              )
+                  matched_category_names[
 
+                      category_id
 
-          # ---------------------------------
-          # Show exact matching groups
-          # ---------------------------------
-
-          print("")
-
-          print(
-
-              "Exact group matches found:"
-
-          )
-
-
-          found_groups = set()
-
-
-          for category in category_counts:
-
-              if category in selected_groups:
-
-                  found_groups.add(category)
-
-                  print(
-
-                      f"{category}: "
-
-                      f"{category_counts[category]} channels"
-
-                  )
+                  ] = category_name
 
 
           print("")
 
           print(
 
-              f"Matching groups: "
-
-              f"{len(found_groups)}"
+              "Matching categories:"
 
           )
 
 
-          # ---------------------------------
-          # Pull every channel from the groups
-          # ---------------------------------
+          for category_id in sorted(
 
-          matched_channels = []
+              matched_category_names,
 
+              key=lambda value:
 
-          for stream in streams:
+                  matched_category_names[value].casefold()
 
-              category = str(
+          ):
 
-                  stream.get(
+              print(
 
-                      "category_name",
+                  f"{matched_category_names[category_id]}"
 
-                      ""
-
-                  )
+                  f" | category_id={category_id}"
 
               )
 
 
-              if category in selected_groups:
+          print("")
 
-                  matched_channels.append(stream)
+          print(
+
+              f"Matched categories: "
+
+              f"{len(selected_category_ids)}"
+
+          )
 
 
-          if not matched_channels:
+          if not selected_category_ids:
 
               print("")
 
               print(
 
-                  "No channels matched."
+                  "No categories matched."
 
               )
 
@@ -491,31 +478,36 @@ jobs:
 
               print(
 
-                  "The provider returned these actual "
+                  "Provider categories containing "
 
-                  "group names containing sport-related "
-
-                  "content:"
+                  "sport-related terms:"
 
               )
 
 
-              for category in sorted(
+              for category in categories:
 
-                  category_counts,
+                  name = str(
 
-                  key=lambda value: value.casefold()
+                      category.get(
 
-              ):
+                          "category_name",
 
-                  upper = category.upper()
+                          ""
+
+                      )
+
+                  )
+
+
+                  upper = name.upper()
 
 
                   if any(
 
-                      keyword in upper
+                      term in upper
 
-                      for keyword in [
+                      for term in [
 
                           "SPORT",
 
@@ -547,35 +539,119 @@ jobs:
 
                       print(
 
-                          repr(category)
+                          repr(name)
 
                       )
 
 
               raise SystemExit(
 
-                  "No channels matched the selected groups"
+                  "No provider categories matched"
 
               )
 
 
           # ---------------------------------
-          # Sort by group, then channel name
+          # Download all live channels
+          # ---------------------------------
+
+          streams = provider_request(
+
+              "get_live_streams"
+
+          )
+
+
+          if not isinstance(streams, list):
+
+              raise SystemExit(
+
+                  "Provider streams response was not a list"
+
+              )
+
+
+          print("")
+
+          print(
+
+              f"Total provider channels: "
+
+              f"{len(streams)}"
+
+          )
+
+
+          # ---------------------------------
+          # Match channels by category_id
+          # ---------------------------------
+
+          matched_channels = []
+
+
+          for stream in streams:
+
+              category_id = str(
+
+                  stream.get(
+
+                      "category_id",
+
+                      ""
+
+                  )
+
+              )
+
+
+              if category_id in selected_category_ids:
+
+                  matched_channels.append(stream)
+
+
+          print("")
+
+          print(
+
+              f"Channels from selected groups: "
+
+              f"{len(matched_channels)}"
+
+          )
+
+
+          if not matched_channels:
+
+              raise SystemExit(
+
+                  "No channels matched selected category IDs"
+
+              )
+
+
+          # ---------------------------------
+          # Sort channels
           # ---------------------------------
 
           matched_channels.sort(
 
               key=lambda stream: (
 
-                  str(
+                  matched_category_names.get(
 
-                      stream.get(
+                      str(
 
-                          "category_name",
+                          stream.get(
 
-                          ""
+                              "category_id",
 
-                      )
+                              ""
+
+                          )
+
+                      ),
+
+                      ""
 
                   ).casefold(),
 
@@ -609,7 +685,7 @@ jobs:
 
 
           # ---------------------------------
-          # Create output directory
+          # Create fast directory
           # ---------------------------------
 
           os.makedirs(
@@ -625,22 +701,7 @@ jobs:
 
 
           # ---------------------------------
-          # Save every provider record
-          #
-          # Each line contains the complete
-          # provider JSON record, including:
-          #
-          # stream_id
-          # name
-          # category_id
-          # category_name
-          # stream_type
-          # stream_icon
-          # epg_channel_id
-          # tv_archive
-          # tv_archive_duration
-          # and all other identifiers
-          # returned by the provider.
+          # Write complete provider records
           # ---------------------------------
 
           with open(
@@ -680,7 +741,53 @@ jobs:
 
 
           # ---------------------------------
-          # Final results
+          # Count channels by group
+          # ---------------------------------
+
+          group_counts = {}
+
+
+          for stream in matched_channels:
+
+              category_id = str(
+
+                  stream.get(
+
+                      "category_id",
+
+                      ""
+
+                  )
+
+              )
+
+
+              group_name = matched_category_names.get(
+
+                  category_id,
+
+                  category_id
+
+              )
+
+
+              group_counts[group_name] = (
+
+                  group_counts.get(
+
+                      group_name,
+
+                      0
+
+                  )
+
+                  + 1
+
+              )
+
+
+          # ---------------------------------
+          # Results
           # ---------------------------------
 
           print("")
@@ -719,58 +826,14 @@ jobs:
 
           print(
 
-              f"Output file: "
-
-              f"{output_file}"
-
-          )
-
-
-          print("")
-
-          print(
-
               "Channels by group:"
 
           )
 
 
-          final_counts = {}
-
-
-          for stream in matched_channels:
-
-              group = str(
-
-                  stream.get(
-
-                      "category_name",
-
-                      ""
-
-                  )
-
-              )
-
-
-              final_counts[group] = (
-
-                  final_counts.get(
-
-                      group,
-
-                      0
-
-                  )
-
-                  + 1
-
-              )
-
-
           for group in sorted(
 
-              final_counts,
+              group_counts,
 
               key=lambda value: value.casefold()
 
@@ -780,9 +843,20 @@ jobs:
 
                   f"{group}: "
 
-                  f"{final_counts[group]}"
+                  f"{group_counts[group]}"
 
               )
+
+
+          print("")
+
+          print(
+
+              f"Created: "
+
+              f"{output_file}"
+
+          )
 
 
           print("")
