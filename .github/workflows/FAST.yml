@@ -1,800 +1,660 @@
 name: FAST
 
 on:
-workflow_dispatch:
-schedule:
-- cron: '45 5 * * *'
+  workflow_dispatch:
+  schedule:
+    - cron: '45 5 * * *'
 
 permissions:
-contents: write
+  contents: write
 
 concurrency:
-group: epg-fast
-cancel-in-progress: false
+  group: epg-fast
+  cancel-in-progress: false
 
 jobs:
-build-fast:
-runs-on: ubuntu-latest
+  build-fast:
+    runs-on: ubuntu-latest
 
-```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-    with:
-      fetch-depth: 0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  - name: Download FAST source
-    run: |
-      mkdir -p fast
+      - name: Download FAST source
+        run: |
+          mkdir -p fast
 
-      curl -L --fail --retry 5 --retry-delay 10 \
-        https://epg.guru/7dayiptv/USFast.xml \
-        -o fast/source.xml
+          curl -L --fail --retry 5 --retry-delay 10 \
+            https://epg.guru/7dayiptv/USFast.xml \
+            -o fast/source.xml
 
-      test -s fast/source.xml
+          test -s fast/source.xml
 
-      echo "FAST source downloaded successfully"
+          echo "FAST source downloaded successfully"
 
-  - name: Process FAST guide
-    run: |
-      cat > /tmp/process_fast.js <<'EOF'
-      const fs = require('fs')
-      const readline = require('readline')
+      - name: Process FAST guide
+        run: |
+          cat > /tmp/process_fast.js <<'EOF'
+          const fs = require('fs')
+          const readline = require('readline')
 
-      const inputPath = 'fast/source.xml'
-      const outputPath = 'fast/processed.xml'
+          const inputPath = 'fast/source.xml'
+          const outputPath = 'fast/processed.xml'
 
-      const now = new Date()
+          const now = new Date()
 
-      const cutoff = new Date(
-        now.getTime() +
-        3 * 24 * 60 * 60 * 1000
-      )
-
-      let programmesScanned = 0
-      let programmesKept = 0
-      let programmesSkipped = 0
-      let titlesCleaned = 0
-      let descriptionsChanged = 0
-      let actorsRemoved = 0
-      let episodeNumbersConverted = 0
-      let originalAirDatesUsed = 0
-
-      function decodeXml(value) {
-        return String(value || '')
-          .replace(/&amp;/g, '&')
-          .replace(/&quot;/g, '"')
-          .replace(/&apos;/g, "'")
-          .replace(/&lt;/g, '<')
-          .replace(/&gt;/g, '>')
-      }
-
-      function escapeXml(value) {
-        return String(value || '')
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-      }
-
-      function cleanSpaces(value) {
-        return String(value || '')
-          .replace(/\s+/g, ' ')
-          .trim()
-      }
-
-      function getTag(block, tag) {
-        const regex = new RegExp(
-          '<' +
-          tag +
-          '\\b[^>]*>([\\s\\S]*?)</' +
-          tag +
-          '>',
-          'i'
-        )
-
-        const match = block.match(regex)
-
-        if (!match) {
-          return ''
-        }
-
-        return decodeXml(
-          match[1]
-            .replace(/<[^>]+>/g, '')
-            .trim()
-        )
-      }
-
-      function getTagByAttribute(
-        block,
-        tag,
-        attribute,
-        value
-      ) {
-        const regex = new RegExp(
-          '<' +
-          tag +
-          '\\b[^>]*\\b' +
-          attribute +
-          '=["\']' +
-          value +
-          '["\'][^>]*>([\\s\\S]*?)</' +
-          tag +
-          '>',
-          'i'
-        )
-
-        const match =
-          block.match(
-            regex
+          const cutoff = new Date(
+            now.getTime() +
+            3 * 24 * 60 * 60 * 1000
           )
 
-        if (!match) {
-          return ''
-        }
+          let programmesScanned = 0
+          let programmesKept = 0
+          let programmesSkipped = 0
+          let titlesCleaned = 0
+          let descriptionsChanged = 0
+          let actorsRemoved = 0
+          let episodeNumbersConverted = 0
+          let originalAirDatesUsed = 0
 
-        return decodeXml(
-          match[1]
-            .replace(
-              /<[^>]+>/g,
-              ''
-            )
-            .trim()
-        )
-      }
-
-      function getStart(block) {
-        const match =
-          block.match(
-            /<programme\b[^>]*\bstart="([^"]+)"/i
-          )
-
-        return match
-          ? match[1]
-          : ''
-      }
-
-      function parseXmltvDate(value) {
-        const match =
-          String(value || '').match(
-            /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
-          )
-
-        if (!match) {
-          return null
-        }
-
-        return new Date(
-          Date.UTC(
-            Number(match[1]),
-            Number(match[2]) - 1,
-            Number(match[3]),
-            Number(match[4]),
-            Number(match[5]),
-            Number(match[6])
-          )
-        )
-      }
-
-      function formatOriginalAirDate(value) {
-        const match =
-          String(value || '').match(
-            /^(\d{4})-(\d{2})-(\d{2})/
-          )
-
-        if (!match) {
-          return ''
-        }
-
-        return (
-          match[2] +
-          '/' +
-          match[3] +
-          '/' +
-          match[1]
-        )
-      }
-
-      function replaceTag(
-        block,
-        tag,
-        value
-      ) {
-        const regex =
-          new RegExp(
-            '<' +
-            tag +
-            '\\b[^>]*>[\\s\\S]*?</' +
-            tag +
-            '>',
-            'i'
-          )
-
-        const replacement =
-          '<' +
-          tag +
-          ' lang="en">' +
-          escapeXml(value) +
-          '</' +
-          tag +
-          '>'
-
-        if (
-          regex.test(
-            block
-          )
-        ) {
-          return block.replace(
-            regex,
-            replacement
-          )
-        }
-
-        return block.replace(
-          /<\/programme>\s*$/i,
-          '  ' +
-          replacement +
-          '\n</programme>'
-        )
-      }
-
-      function removeTag(
-        block,
-        tag
-      ) {
-        const regex =
-          new RegExp(
-            '\\s*<' +
-            tag +
-            '\\b[^>]*>[\\s\\S]*?</' +
-            tag +
-            '>',
-            'gi'
-          )
-
-        return block.replace(
-          regex,
-          ''
-        )
-      }
-
-      function parseFallbackTitle(
-        title
-      ) {
-        const cleanTitle =
-          cleanSpaces(
-            title
-          )
-
-        const match =
-          cleanTitle.match(
-            /^(.*?)\s+\bS\s*(\d{1,3})\s*E\s*(\d{1,3})\b\s*[:：\-–—|]?\s*(.*)$/i
-          )
-
-        if (!match) {
-          return {
-            showTitle:
-              cleanTitle,
-            episodeTitle:
-              ''
+          function decodeXml(value) {
+            return String(value || '')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
           }
-        }
 
-        return {
-          showTitle:
-            cleanSpaces(
+          function escapeXml(value) {
+            return String(value || '')
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+          }
+
+          function cleanSpaces(value) {
+            return String(value || '')
+              .replace(/\s+/g, ' ')
+              .trim()
+          }
+
+          function getTag(block, tag) {
+            const regex = new RegExp(
+              '<' +
+              tag +
+              '\\b[^>]*>([\\s\\S]*?)</' +
+              tag +
+              '>',
+              'i'
+            )
+
+            const match = block.match(regex)
+
+            if (!match) {
+              return ''
+            }
+
+            return decodeXml(
               match[1]
-            ),
-          episodeTitle:
-            cleanSpaces(
-              match[4]
+                .replace(/<[^>]+>/g, '')
+                .trim()
             )
-        }
-      }
-
-      function cleanDescription(
-        value
-      ) {
-        return cleanSpaces(
-          String(value || '')
-            .replace(
-              /^.*?\bS\d{1,3}\s*E\d{1,3}\b\s*[\-:|–—]\s*/i,
-              ''
-            )
-            .replace(
-              /^.*?\bS\d{1,3}\s*E\d{1,3}\b\s+/i,
-              ''
-            )
-            .replace(
-              /^.*?\bEP\d{6,}\.\d+\b\s*[\-:|–—.]?\s*/i,
-              ''
-            )
-        )
-      }
-
-      function ensurePeriod(
-        value
-      ) {
-        const text =
-          cleanSpaces(
-            value
-          )
-
-        if (!text) {
-          return ''
-        }
-
-        if (
-          /[.!?]$/.test(
-            text
-          )
-        ) {
-          return text
-        }
-
-        return text + '.'
-      }
-
-      function processProgramme(
-        block
-      ) {
-        programmesScanned++
-
-        const start =
-          getStart(
-            block
-          )
-
-        const startDate =
-          parseXmltvDate(
-            start
-          )
-
-        if (
-          !startDate ||
-          startDate < now ||
-          startDate >= cutoff
-        ) {
-          programmesSkipped++
-
-          return ''
-        }
-
-        programmesKept++
-
-        const originalTitle =
-          getTag(
-            block,
-            'title'
-          )
-
-        const originalSubtitle =
-          getTag(
-            block,
-            'sub-title'
-          )
-
-        const originalDescription =
-          getTag(
-            block,
-            'desc'
-          )
-
-        const commonEpisode =
-          getTagByAttribute(
-            block,
-            'episode-num',
-            'system',
-            'common'
-          )
-
-        const onscreenEpisode =
-          getTagByAttribute(
-            block,
-            'episode-num',
-            'system',
-            'onscreen'
-          )
-
-        const originalAirDate =
-          getTagByAttribute(
-            block,
-            'episode-num',
-            'system',
-            'original-air-date'
-          )
-
-        const fallback =
-          parseFallbackTitle(
-            originalTitle
-          )
-
-        const newTitle =
-          cleanSpaces(
-            fallback.showTitle
-          )
-
-        let episodeTitle =
-          cleanSpaces(
-            originalSubtitle
-          )
-
-        if (
-          !episodeTitle
-        ) {
-          episodeTitle =
-            fallback.episodeTitle
-        }
-
-        let episodeCode =
-          cleanSpaces(
-            commonEpisode
-          )
-
-        if (
-          !episodeCode
-        ) {
-          episodeCode =
-            cleanSpaces(
-              onscreenEpisode
-            )
-        }
-
-        let description =
-          cleanDescription(
-            originalDescription
-          )
-
-        const airDate =
-          formatOriginalAirDate(
-            originalAirDate
-          )
-
-        let newDescription =
-          ''
-
-        if (
-          episodeTitle &&
-          episodeCode
-        ) {
-          newDescription =
-            episodeTitle +
-            ' - ' +
-            episodeCode
-
-          episodeNumbersConverted++
-        }
-
-        if (
-          description
-        ) {
-          if (
-            newDescription
-          ) {
-            newDescription +=
-              '. ' +
-              ensurePeriod(
-                description
-              )
-          } else {
-            newDescription =
-              ensurePeriod(
-                description
-              )
           }
-        }
 
-        if (
-          airDate
-        ) {
-          newDescription +=
-            ' (' +
-            airDate +
-            ')'
+          function getTagBySystem(block, tag, system) {
+            const regex = new RegExp(
+              '<' +
+              tag +
+              '\\b[^>]*\\bsystem="' +
+              system +
+              '"[^>]*>([\\s\\S]*?)</' +
+              tag +
+              '>',
+              'i'
+            )
 
-          originalAirDatesUsed++
-        }
+            const match = block.match(regex)
 
-        if (
-          newTitle !==
-          cleanSpaces(
-            originalTitle
-          )
-        ) {
-          titlesCleaned++
-        }
-
-        if (
-          newDescription !==
-          cleanSpaces(
-            originalDescription
-          )
-        ) {
-          descriptionsChanged++
-        }
-
-        let output =
-          block
-
-        output =
-          replaceTag(
-            output,
-            'title',
-            newTitle
-          )
-
-        output =
-          replaceTag(
-            output,
-            'desc',
-            newDescription
-          )
-
-        if (
-          /<actor\b/i.test(
-            output
-          )
-        ) {
-          actorsRemoved++
-        }
-
-        output =
-          removeTag(
-            output,
-            'actor'
-          )
-
-        output =
-          removeTag(
-            output,
-            'credits'
-          )
-
-        output =
-          removeTag(
-            output,
-            'sub-title'
-          )
-
-        output =
-          removeTag(
-            output,
-            'episode-num'
-          )
-
-        output =
-          removeTag(
-            output,
-            'date'
-          )
-
-        return output
-      }
-
-      async function main() {
-        const input =
-          fs.createReadStream(
-            inputPath,
-            {
-              encoding:
-                'utf8'
+            if (!match) {
+              return ''
             }
-          )
 
-        const output =
-          fs.createWriteStream(
-            outputPath,
-            {
-              encoding:
-                'utf8'
+            return decodeXml(
+              match[1]
+                .replace(/<[^>]+>/g, '')
+                .trim()
+            )
+          }
+
+          function getStart(block) {
+            const match = block.match(
+              /<programme\b[^>]*\bstart="([^"]+)"/i
+            )
+
+            return match
+              ? match[1]
+              : ''
+          }
+
+          function parseXmltvDate(value) {
+            const match = String(value || '').match(
+              /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+            )
+
+            if (!match) {
+              return null
             }
-          )
 
-        const rl =
-          readline.createInterface(
-            {
-              input,
-              crlfDelay:
-                Infinity
+            return new Date(
+              Date.UTC(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                Number(match[3]),
+                Number(match[4]),
+                Number(match[5]),
+                Number(match[6])
+              )
+            )
+          }
+
+          function parseOriginalAirDate(value) {
+            const match = String(value || '').match(
+              /^(\d{4})-(\d{2})-(\d{2})/
+            )
+
+            if (!match) {
+              return ''
             }
-          )
 
-        let insideProgramme =
-          false
+            return (
+              match[2] +
+              '/' +
+              match[3] +
+              '/' +
+              match[1]
+            )
+          }
 
-        let programmeBuffer =
-          ''
+          function replaceTag(block, tag, value) {
+            const regex = new RegExp(
+              '<' +
+              tag +
+              '\\b[^>]*>[\\s\\S]*?</' +
+              tag +
+              '>',
+              'i'
+            )
 
-        function write(
-          value
-        ) {
-          return new Promise(
-            (
-              resolve,
-              reject
-            ) => {
+            const replacement =
+              '<' +
+              tag +
+              ' lang="en">' +
+              escapeXml(value) +
+              '</' +
+              tag +
+              '>'
+
+            if (regex.test(block)) {
+              return block.replace(
+                regex,
+                replacement
+              )
+            }
+
+            return block.replace(
+              /<\/programme>\s*$/i,
+              '  ' +
+              replacement +
+              '\n</programme>'
+            )
+          }
+
+          function removeTag(block, tag) {
+            const regex = new RegExp(
+              '\\s*<' +
+              tag +
+              '\\b[^>]*>[\\s\\S]*?</' +
+              tag +
+              '>',
+              'gi'
+            )
+
+            return block.replace(
+              regex,
+              ''
+            )
+          }
+
+          function getEpisodeNumber(block) {
+            let episodeNumber =
+              getTagBySystem(
+                block,
+                'episode-num',
+                'common'
+              )
+
+            if (
+              !episodeNumber
+            ) {
+              episodeNumber =
+                getTagBySystem(
+                  block,
+                  'episode-num',
+                  'onscreen'
+                )
+            }
+
+            const match =
+              episodeNumber.match(
+                /^S\s*(\d{1,3})\s*E\s*(\d{1,3})$/i
+              )
+
+            if (!match) {
+              return ''
+            }
+
+            return (
+              'S' +
+              Number(match[1]) +
+              'E' +
+              Number(match[2])
+            )
+          }
+
+          function processProgramme(block) {
+            programmesScanned++
+
+            const start =
+              getStart(
+                block
+              )
+
+            const startDate =
+              parseXmltvDate(
+                start
+              )
+
+            if (
+              !startDate ||
+              startDate < now ||
+              startDate >= cutoff
+            ) {
+              programmesSkipped++
+
+              return ''
+            }
+
+            programmesKept++
+
+            const originalTitle =
+              cleanSpaces(
+                getTag(
+                  block,
+                  'title'
+                )
+              )
+
+            const episodeTitle =
+              cleanSpaces(
+                getTag(
+                  block,
+                  'sub-title'
+                )
+              )
+
+            const originalDescription =
+              cleanSpaces(
+                getTag(
+                  block,
+                  'desc'
+                )
+              )
+
+            const episodeNumber =
+              getEpisodeNumber(
+                block
+              )
+
+            const originalAirDate =
+              parseOriginalAirDate(
+                getTagBySystem(
+                  block,
+                  'episode-num',
+                  'original-air-date'
+                )
+              )
+
+            let newTitle =
+              originalTitle
+
+            let newDescription =
+              originalDescription
+
+            if (
+              episodeTitle &&
+              episodeNumber
+            ) {
+              newDescription =
+                episodeTitle +
+                ' - ' +
+                episodeNumber +
+                (
+                  originalDescription
+                    ? '. ' +
+                      originalDescription
+                    : ''
+                )
+
+              episodeNumbersConverted++
+            }
+
+            if (
+              originalAirDate
+            ) {
+              newDescription =
+                newDescription
+                  ? newDescription +
+                    ' (' +
+                    originalAirDate +
+                    ')'
+                  : '(' +
+                    originalAirDate +
+                    ')'
+
+              originalAirDatesUsed++
+            }
+
+            if (
+              newTitle !==
+              originalTitle
+            ) {
+              titlesCleaned++
+            }
+
+            if (
+              newDescription !==
+              originalDescription
+            ) {
+              descriptionsChanged++
+            }
+
+            let output =
+              block
+
+            output =
+              replaceTag(
+                output,
+                'title',
+                newTitle
+              )
+
+            output =
+              replaceTag(
+                output,
+                'desc',
+                newDescription
+              )
+
+            if (
+              /<actor\b/i.test(
+                output
+              )
+            ) {
+              actorsRemoved++
+            }
+
+            output =
+              removeTag(
+                output,
+                'actor'
+              )
+
+            output =
+              removeTag(
+                output,
+                'credits'
+              )
+
+            output =
+              removeTag(
+                output,
+                'sub-title'
+              )
+
+            output =
+              removeTag(
+                output,
+                'episode-num'
+              )
+
+            output =
+              removeTag(
+                output,
+                'date'
+              )
+
+            return output
+          }
+
+          async function main() {
+            const input =
+              fs.createReadStream(
+                inputPath,
+                {
+                  encoding: 'utf8'
+                }
+              )
+
+            const output =
+              fs.createWriteStream(
+                outputPath,
+                {
+                  encoding: 'utf8'
+                }
+              )
+
+            const rl =
+              readline.createInterface(
+                {
+                  input,
+                  crlfDelay: Infinity
+                }
+              )
+
+            let insideProgramme =
+              false
+
+            let programmeBuffer =
+              ''
+
+            function write(value) {
+              return new Promise(
+                (
+                  resolve,
+                  reject
+                ) => {
+                  if (
+                    output.write(
+                      value
+                    )
+                  ) {
+                    resolve()
+                  } else {
+                    output.once(
+                      'drain',
+                      resolve
+                    )
+
+                    output.once(
+                      'error',
+                      reject
+                    )
+                  }
+                }
+              )
+            }
+
+            for await (
+              const line of rl
+            ) {
               if (
-                output.write(
-                  value
-                )
+                !insideProgramme
               ) {
-                resolve()
-              } else {
-                output.once(
-                  'drain',
-                  resolve
-                )
+                if (
+                  line.includes(
+                    '<programme '
+                  )
+                ) {
+                  insideProgramme =
+                    true
 
+                  programmeBuffer =
+                    line +
+                    '\n'
+
+                  if (
+                    line.includes(
+                      '</programme>'
+                    )
+                  ) {
+                    insideProgramme =
+                      false
+
+                    const processed =
+                      processProgramme(
+                        programmeBuffer
+                      )
+
+                    if (
+                      processed
+                    ) {
+                      await write(
+                        processed
+                      )
+                    }
+
+                    programmeBuffer =
+                      ''
+                  }
+                } else {
+                  await write(
+                    line +
+                    '\n'
+                  )
+                }
+              } else {
+                programmeBuffer +=
+                  line +
+                  '\n'
+
+                if (
+                  line.includes(
+                    '</programme>'
+                  )
+                ) {
+                  insideProgramme =
+                    false
+
+                  const processed =
+                    processProgramme(
+                      programmeBuffer
+                    )
+
+                  if (
+                    processed
+                  ) {
+                    await write(
+                      processed
+                    )
+                  }
+
+                  programmeBuffer =
+                    ''
+                }
+              }
+            }
+
+            await new Promise(
+              (
+                resolve,
+                reject
+              ) => {
                 output.once(
                   'error',
                   reject
                 )
-              }
-            }
-          )
-        }
 
-        for await (
-          const line of rl
-        ) {
-          if (
-            !insideProgramme
-          ) {
-            if (
-              line.includes(
-                '<programme '
-              )
-            ) {
-              insideProgramme =
-                true
-
-              programmeBuffer =
-                line +
-                '\n'
-
-              if (
-                line.includes(
-                  '</programme>'
-                )
-              ) {
-                insideProgramme =
-                  false
-
-                const processed =
-                  processProgramme(
-                    programmeBuffer
-                  )
-
-                if (
-                  processed
-                ) {
-                  await write(
-                    processed
-                  )
-                }
-
-                programmeBuffer =
-                  ''
-              }
-            } else {
-              await write(
-                line +
-                '\n'
-              )
-            }
-          } else {
-            programmeBuffer +=
-              line +
-              '\n'
-
-            if (
-              line.includes(
-                '</programme>'
-              )
-            ) {
-              insideProgramme =
-                false
-
-              const processed =
-                processProgramme(
-                  programmeBuffer
-                )
-
-              if (
-                processed
-              ) {
-                await write(
-                  processed
+                output.end(
+                  resolve
                 )
               }
-
-              programmeBuffer =
-                ''
-            }
-          }
-        }
-
-        await new Promise(
-          (
-            resolve,
-            reject
-          ) => {
-            output.once(
-              'error',
-              reject
             )
 
-            output.end(
-              resolve
+            console.log(
+              'FAST processing complete'
+            )
+
+            console.log(
+              'Programmes scanned: ' +
+              programmesScanned
+            )
+
+            console.log(
+              'Programmes kept: ' +
+              programmesKept
+            )
+
+            console.log(
+              'Programmes skipped: ' +
+              programmesSkipped
+            )
+
+            console.log(
+              'Titles cleaned: ' +
+              titlesCleaned
+            )
+
+            console.log(
+              'Descriptions changed: ' +
+              descriptionsChanged
+            )
+
+            console.log(
+              'Actors removed: ' +
+              actorsRemoved
+            )
+
+            console.log(
+              'Episode numbers converted: ' +
+              episodeNumbersConverted
+            )
+
+            console.log(
+              'Original air dates used: ' +
+              originalAirDatesUsed
+            )
+
+            console.log(
+              'Output: ' +
+              outputPath
             )
           }
-        )
 
-        console.log(
-          'FAST processing complete'
-        )
+          main().catch(
+            error => {
+              console.error(
+                error
+              )
 
-        console.log(
-          'Programmes scanned: ' +
-          programmesScanned
-        )
-
-        console.log(
-          'Programmes kept: ' +
-          programmesKept
-        )
-
-        console.log(
-          'Programmes skipped: ' +
-          programmesSkipped
-        )
-
-        console.log(
-          'Titles cleaned: ' +
-          titlesCleaned
-        )
-
-        console.log(
-          'Descriptions changed: ' +
-          descriptionsChanged
-        )
-
-        console.log(
-          'Actors removed: ' +
-          actorsRemoved
-        )
-
-        console.log(
-          'Episode numbers converted: ' +
-          episodeNumbersConverted
-        )
-
-        console.log(
-          'Original air dates used: ' +
-          originalAirDatesUsed
-        )
-
-        console.log(
-          'Output: ' +
-          outputPath
-        )
-      }
-
-      main().catch(
-        error => {
-          console.error(
-            error
+              process.exit(
+                1
+              )
+            }
           )
-
-          process.exit(
-            1
-          )
-        }
-      )
-      EOF
-
-      node /tmp/process_fast.js
-                EOF
+          EOF
 
           node /tmp/process_fast.js
 
@@ -869,4 +729,5 @@ steps:
           done
 
           echo "Push failed after all retries"
+
           exit 1
