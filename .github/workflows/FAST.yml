@@ -34,9 +34,6 @@ jobs:
       - name: Download FAST source
         run: |
           curl -L --fail \
-            --retry 5 \
-            --retry-delay 10 \
-            --retry-all-errors \
             https://epg.guru/7dayiptv/USFast.xml \
             -o fast/source.xml
 
@@ -98,36 +95,6 @@ jobs:
               .trim()
           }
 
-          function cleanTitle(value) {
-            return cleanSpaces(value)
-              .replace(
-                /^\s*(New|Live|Repeat)\s*[:\-]\s*/i,
-                ''
-              )
-              .replace(
-                /\s*\((New|Live|Repeat)\)\s*$/i,
-                ''
-              )
-              .replace(
-                /\s*[-–—]\s*(New|Live|Repeat)\s*$/i,
-                ''
-              )
-              .trim()
-          }
-
-          function cleanDescription(value) {
-            return cleanSpaces(value)
-              .replace(
-                /\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i,
-                ' ($1)'
-              )
-              .replace(
-                /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
-                ' ($2)'
-              )
-              .trim()
-          }
-
           function getTag(block, tag) {
             const match = block.match(
               new RegExp(
@@ -136,32 +103,15 @@ jobs:
               )
             )
 
-            return match
-              ? decodeXml(
-                  match[1]
-                    .replace(/<[^>]+>/g, '')
-                    .trim()
-                )
-              : ''
-          }
+            if (!match) {
+              return ''
+            }
 
-          function getTags(block, tag) {
-            return [
-              ...block.matchAll(
-                new RegExp(
-                  `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
-                  'gi'
-                )
-              )
-            ]
-              .map(match =>
-                decodeXml(
-                  match[1]
-                    .replace(/<[^>]+>/g, '')
-                    .trim()
-                )
-              )
-              .filter(Boolean)
+            return decodeXml(
+              match[1]
+                .replace(/<[^>]+>/g, '')
+                .trim()
+            )
           }
 
           function parseXmltvDate(value) {
@@ -201,7 +151,7 @@ jobs:
 
           function programmeIsWithinThreeDays(block) {
             const match = block.match(
-              /<programme\b[^>]*\bstart="([^"]+)"/i
+              /<programme\\b[^>]*\\bstart="([^"]+)"/i
             )
 
             if (!match) {
@@ -210,10 +160,7 @@ jobs:
 
             const start = parseXmltvDate(match[1])
 
-            if (
-              !start ||
-              Number.isNaN(start.getTime())
-            ) {
+            if (!start || Number.isNaN(start.getTime())) {
               return false
             }
 
@@ -223,107 +170,10 @@ jobs:
             )
           }
 
-          function getProgrammeType(block) {
-            const categories =
-              getTags(block, 'category')
-                .map(value =>
-                  value.toLowerCase()
-                )
-
-            if (
-              categories.includes('movie') ||
-              categories.includes('film')
-            ) {
-              return 'movie'
-            }
-
-            if (
-              categories.includes('series') ||
-              categories.includes('tv series') ||
-              categories.includes('miniseries')
-            ) {
-              return 'series'
-            }
-
-            const title =
-              getTag(
-                block,
-                'title'
-              ).toLowerCase()
-
-            const subtitle =
-              getTag(
-                block,
-                'sub-title'
-              )
-
-            const episodeNum =
-              block.match(
-                /<episode-num\b/i
-              )
-
-            if (
-              subtitle ||
-              episodeNum ||
-              /\b(series|episode|season)\b/i.test(title)
-            ) {
-              return 'series'
-            }
-
-            return 'program'
-          }
-
-          function getEpisodeCode(block) {
-            const episodeNum =
-              getTag(
-                block,
-                'episode-num'
-              )
-
-            if (!episodeNum) {
-              return ''
-            }
-
-            const xmltvMatch =
-              episodeNum.match(
-                /^(\d+)\.(\d+)\.$/
-              )
-
-            if (xmltvMatch) {
-              return (
-                `S${String(
-                  Number(xmltvMatch[1]) + 1
-                ).padStart(2, '0')}` +
-                `E${String(
-                  Number(xmltvMatch[2]) + 1
-                ).padStart(2, '0')}`
-              )
-            }
-
-            const directMatch =
-              episodeNum.match(
-                /\bS(\d+)E(\d+)\b/i
-              )
-
-            if (directMatch) {
-              return (
-                `S${String(
-                  Number(directMatch[1])
-                ).padStart(2, '0')}` +
-                `E${String(
-                  Number(directMatch[2])
-                ).padStart(2, '0')}`
-              )
-            }
-
-            return episodeNum
-          }
-
           function getDisplayDate(block) {
-            const match =
-              block.match(
-                /<programme\b[^>]*start="(\d{8})/
-              )
+            const match = block.match(
+              /<programme\\b[^>]*start="(\\d{8})/
+            )
 
             if (!match) {
               return ''
@@ -338,32 +188,18 @@ jobs:
             )
           }
 
-          function hasTrailingDate(value) {
-            return (
-              /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/
-            ).test(value)
-          }
-
-          function replaceTag(
-            block,
-            tag,
-            value
-          ) {
-            const escaped =
-              escapeXml(value)
+          function replaceTag(block, tag, value) {
+            const escaped = escapeXml(value)
 
             const replacement =
               `<${tag} lang="en">${escaped}</${tag}>`
 
-            const regex =
-              new RegExp(
-                `<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
-                'i'
-              )
+            const regex = new RegExp(
+              `<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
+              'i'
+            )
 
-            if (
-              regex.test(block)
-            ) {
+            if (regex.test(block)) {
               return block.replace(
                 regex,
                 replacement
@@ -376,10 +212,7 @@ jobs:
             )
           }
 
-          function removeTag(
-            block,
-            tag
-          ) {
+          function removeTag(block, tag) {
             return block.replace(
               new RegExp(
                 `\\s*<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
@@ -389,22 +222,120 @@ jobs:
             )
           }
 
-          function removeActors(block) {
-            const matches =
-              block.match(
-                /\s*<actor\b[^>]*>[\s\S]*?<\/actor>/gi
+          function cleanTitle(value) {
+            return cleanSpaces(value)
+              .replace(
+                /^\s*(New|Live|Repeat)\s*[:\-]\s*/i,
+                ''
               )
+              .replace(
+                /\s*\((New|Live|Repeat)\)\s*$/i,
+                ''
+              )
+              .replace(
+                /\s*[-–—]\s*(New|Live|Repeat)\s*$/i,
+                ''
+              )
+              .trim()
+          }
 
-            if (!matches) {
-              return block
+          function cleanDescription(value) {
+            return cleanSpaces(value)
+              .replace(
+                /\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i,
+                ' ($1)'
+              )
+              .replace(
+                /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
+                ' ($2)'
+              )
+              .trim()
+          }
+
+          function parseJessmanTitle(sourceTitle) {
+            const title = cleanSpaces(sourceTitle)
+
+            if (!title) {
+              return {
+                showTitle: '',
+                episodeTitle: '',
+                episodeCode: ''
+              }
             }
 
-            actorsRemoved += matches.length
-
-            return block.replace(
-              /\s*<actor\b[^>]*>[\s\S]*?<\/actor>/gi,
-              ''
+            const episodeMatch = title.match(
+              /\b(S\d{1,3}E\d{1,3})\b/i
             )
+
+            const episodeCode = episodeMatch
+              ? episodeMatch[1].toUpperCase()
+              : ''
+
+            let workingTitle = title
+
+            if (episodeMatch) {
+              workingTitle = workingTitle.replace(
+                episodeMatch[0],
+                ''
+              )
+            }
+
+            workingTitle = workingTitle
+              .replace(
+                /\s*[-–—]\s*$/,
+                ''
+              )
+              .trim()
+
+            let showTitle = workingTitle
+            let episodeTitle = ''
+
+            const separator = workingTitle.indexOf(':')
+
+            if (separator !== -1) {
+              showTitle =
+                workingTitle
+                  .slice(0, separator)
+                  .trim()
+
+              episodeTitle =
+                workingTitle
+                  .slice(separator + 1)
+                  .trim()
+            }
+
+            showTitle = cleanTitle(showTitle)
+
+            episodeTitle = cleanSpaces(
+              episodeTitle
+            )
+
+            return {
+              showTitle,
+              episodeTitle,
+              episodeCode
+            }
+          }
+
+          function removeRawTmsIdentifier(value) {
+            return cleanSpaces(value)
+              .replace(
+                /\bEP\d{8}\.\d+\b/gi,
+                ''
+              )
+              .replace(
+                /\s+-\s+\./g,
+                '.'
+              )
+              .replace(
+                /\s+\./g,
+                '.'
+              )
+              .replace(
+                /\.{2,}/g,
+                '.'
+              )
+              .trim()
           }
 
           function processProgramme(block) {
@@ -434,35 +365,32 @@ jobs:
                 'desc'
               )
 
-            const originalEpisodeNum =
-              getTag(
-                block,
-                'episode-num'
-              )
-
-            const episodeTitle =
-              getTag(
-                block,
-                'sub-title'
-              )
-
-            const episodeCode =
-              getEpisodeCode(
-                block
-              )
-
-            const programmeType =
-              getProgrammeType(
-                block
-              )
-
-            const title =
-              cleanTitle(
+            const parsed =
+              parseJessmanTitle(
                 originalTitle
               )
 
+            let showTitle =
+              parsed.showTitle
+
+            let episodeTitle =
+              parsed.episodeTitle
+
+            const episodeCode =
+              parsed.episodeCode
+
             if (
-              title !== originalTitle
+              !showTitle
+            ) {
+              showTitle =
+                cleanTitle(
+                  originalTitle
+                )
+            }
+
+            if (
+              showTitle !==
+              originalTitle
             ) {
               titlesCleaned++
             }
@@ -472,31 +400,20 @@ jobs:
                 originalDescription
               )
 
-            if (
-              description !==
-              originalDescription
-            ) {
-              descriptionsChanged++
-            }
+            description =
+              removeRawTmsIdentifier(
+                description
+              )
+
+            const originalCleanDescription =
+              description
 
             if (
-              episodeCode &&
-              episodeCode !== originalEpisodeNum
-            ) {
-              episodeNumbersConverted++
-            }
-
-            if (
-              (
-                programmeType === 'series' ||
-                episodeTitle ||
-                episodeCode
-              ) &&
               episodeTitle &&
               episodeCode
             ) {
               const prefix =
-                `${cleanSpaces(episodeTitle)} - ${episodeCode}`
+                `${episodeTitle} - ${episodeCode}`
 
               if (
                 !description.startsWith(
@@ -508,12 +425,9 @@ jobs:
                     ? `${prefix}. ${description}`
                     : prefix
               }
+
+              episodeNumbersConverted++
             } else if (
-              (
-                programmeType === 'series' ||
-                episodeTitle ||
-                episodeCode
-              ) &&
               episodeTitle
             ) {
               if (
@@ -523,99 +437,51 @@ jobs:
               ) {
                 description =
                   description
-                    ? `${cleanSpaces(episodeTitle)}. ${description}`
-                    : cleanSpaces(episodeTitle)
-              }
-            } else if (
-              (
-                programmeType === 'series' ||
-                episodeCode
-              ) &&
-              episodeCode
-            ) {
-              if (
-                !new RegExp(
-                  `\\b${episodeCode}\\b`,
-                  'i'
-                ).test(
-                  description
-                )
-              ) {
-                description =
-                  description
-                    ? `${episodeCode}. ${description}`
-                    : episodeCode
+                    ? `${episodeTitle}. ${description}`
+                    : episodeTitle
               }
             }
 
+            const displayDate =
+              getDisplayDate(
+                block
+              )
+
             if (
-              programmeType === 'movie' &&
-              !hasTrailingDate(
+              displayDate &&
+              !/\(\d{1,2}\/\d{1,2}\/\d{4}\)\s*$/.test(
                 description
               )
             ) {
-              const yearMatch =
-                originalDescription.match(
-                  /\b(19|20)\d{2}\b/
-                )
-
-              if (
-                yearMatch
-              ) {
-                description =
-                  description
-                    ? `${description} (${yearMatch[0]})`
-                    : `(${yearMatch[0]})`
-              }
-            }
-
-            if (
-              programmeType !== 'movie' &&
-              !hasTrailingDate(
+              description =
                 description
-              )
-            ) {
-              const displayDate =
-                getDisplayDate(
-                  block
-                )
-
-              if (
-                displayDate
-              ) {
-                description =
-                  description
-                    ? `${description} (${displayDate})`
-                    : `(${displayDate})`
-              }
-            }
-
-            let output =
-              block
-
-            if (
-              title &&
-              title !== originalTitle
-            ) {
-              output =
-                replaceTag(
-                  output,
-                  'title',
-                  title
-                )
+                  ? `${description} (${displayDate})`
+                  : `(${displayDate})`
             }
 
             if (
               description !==
               originalDescription
             ) {
-              output =
-                replaceTag(
-                  output,
-                  'desc',
-                  description
-                )
+              descriptionsChanged++
             }
+
+            let output =
+              block
+
+            output =
+              replaceTag(
+                output,
+                'title',
+                showTitle
+              )
+
+            output =
+              replaceTag(
+                output,
+                'desc',
+                description
+              )
 
             output =
               removeTag(
@@ -635,9 +501,22 @@ jobs:
                 'date'
               )
 
+            const actorMatches =
+              output.match(
+                /<actor\b[^>]*>[\s\S]*?<\/actor>/gi
+              )
+
+            if (
+              actorMatches
+            ) {
+              actorsRemoved +=
+                actorMatches.length
+            }
+
             output =
-              removeActors(
-                output
+              removeTag(
+                output,
+                'credits'
               )
 
             return output
@@ -668,10 +547,10 @@ jobs:
                 }
               )
 
-            let insideProgramme = false
-            let programmeBuffer = ''
+            let inside = false
+            let buffer = ''
 
-            async function write(value) {
+            function write(value) {
               return new Promise(
                 (
                   resolve,
@@ -702,16 +581,16 @@ jobs:
               const line of rl
             ) {
               if (
-                !insideProgramme
+                !inside
               ) {
                 if (
                   line.includes(
                     '<programme '
                   )
                 ) {
-                  insideProgramme = true
+                  inside = true
 
-                  programmeBuffer =
+                  buffer =
                     line + '\n'
 
                   if (
@@ -719,11 +598,11 @@ jobs:
                       '</programme>'
                     )
                   ) {
-                    insideProgramme = false
+                    inside = false
 
                     const processed =
                       processProgramme(
-                        programmeBuffer
+                        buffer
                       )
 
                     if (
@@ -734,7 +613,7 @@ jobs:
                       )
                     }
 
-                    programmeBuffer = ''
+                    buffer = ''
                   }
                 } else {
                   await write(
@@ -742,7 +621,7 @@ jobs:
                   )
                 }
               } else {
-                programmeBuffer +=
+                buffer +=
                   line + '\n'
 
                 if (
@@ -750,11 +629,11 @@ jobs:
                     '</programme>'
                   )
                 ) {
-                  insideProgramme = false
+                  inside = false
 
                   const processed =
                     processProgramme(
-                      programmeBuffer
+                      buffer
                     )
 
                   if (
@@ -765,25 +644,8 @@ jobs:
                     )
                   }
 
-                  programmeBuffer = ''
+                  buffer = ''
                 }
-              }
-            }
-
-            if (
-              programmeBuffer
-            ) {
-              const processed =
-                processProgramme(
-                  programmeBuffer
-                )
-
-              if (
-                processed
-              ) {
-                await write(
-                  processed
-                )
               }
             }
 
@@ -884,7 +746,11 @@ jobs:
           SIZE=$(stat -c%s fast/FAST.xml.gz)
 
           echo "Compressed FAST size: $SIZE bytes"
-          echo "Compressed FAST size in MB: $((SIZE / 1024 / 1024)) MB"
+
+          if [ "$SIZE" -le 0 ]; then
+            echo "FAST guide is empty"
+            exit 1
+          fi
 
           echo "FAST guide size is valid for upload"
 
@@ -905,17 +771,25 @@ jobs:
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
 
+            git fetch origin main
+
+            git reset --soft origin/main
+
+            git add fast/FAST.xml.gz
+
+            if git diff --cached --quiet; then
+              echo "No changes to push"
+              exit 0
+            fi
+
+            git commit -m "Update FAST guide"
+
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed, refreshing branch..."
-
-            git fetch origin main
-
-            git reset --hard origin/main
-
+            echo "Push failed, retrying..."
             sleep 5
           done
 
