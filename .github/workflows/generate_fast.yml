@@ -341,8 +341,6 @@ jobs:
               output = replaceTag(output, 'desc', description)
             }
 
-            // Keep the title display clean.
-            // Metadata remains packed into <desc>.
             output = removeTag(output, 'sub-title')
             output = removeTag(output, 'episode-num')
             output = removeTag(output, 'date')
@@ -439,3 +437,228 @@ jobs:
         run: |
           ls -lh fast/source.xml
           ls -lh fast/processed.xml
+
+      - name: Split FAST guide into GitHub-safe files
+        run: |
+          node <<'EOF'
+          const fs = require('fs')
+          const readline = require('readline')
+
+          const inputPath = 'fast/processed.xml'
+          const outputDir = 'fast/chunks'
+
+          fs.rmSync(outputDir, { recursive: true, force: true })
+          fs.mkdirSync(outputDir, { recursive: true })
+
+          const input = fs.createReadStream(inputPath, {
+            encoding: 'utf8'
+          })
+
+          const rl = readline.createInterface({
+            input,
+            crlfDelay: Infinity
+          })
+
+          const MAX_BYTES = 75 * 1024 * 1024
+
+          let header = ''
+          let channels = []
+          let programmes = []
+          let currentProgramme = ''
+          let insideProgramme = false
+          let chunkNumber = 1
+          let chunkBytes = 0
+          let channelCount = 0
+          let programmeCount = 0
+
+          function getChannelId(block) {
+            const match = block.match(
+              /<channel\b[^>]*\bid="([^"]+)"/i
+            )
+
+            return match ? match[1] : ''
+          }
+
+          function getProgrammeChannel(block) {
+            const match = block.match(
+              /<programme\b[^>]*\bchannel="([^"]+)"/i
+            )
+
+            return match ? match[1] : ''
+          }
+
+          const channelMap = new Map()
+
+          function writeChunk() {
+            if (!channels.length && !programmes.length) return
+
+            const content =
+              `${header}` +
+              channels.join('') +
+              programmes.join('') +
+              '</tv>\n'
+
+            const outputPath =
+              `${outputDir}/FAST-${String(chunkNumber).padStart(3, '0')}.xml`
+
+            fs.writeFileSync(outputPath, content)
+
+            console.log(
+              `Created ${outputPath} | ` +
+              `${(Buffer.byteLength(content) / 1024 / 1024).toFixed(2)} MB | ` +
+              `channels=${channels.length} | ` +
+              `programmes=${programmes.length}`
+            )
+
+            chunkNumber++
+            channels = []
+            programmes = []
+            chunkBytes = 0
+          }
+
+          function addChannel(block) {
+            const id = getChannelId(block)
+
+            if (!id) return
+
+            if (
+              chunkBytes > 0 &&
+              chunkBytes + Buffer.byteLength(block) > MAX_BYTES
+            ) {
+              writeChunk()
+            }
+
+            channelMap.set(id, chunkNumber)
+
+            channels.push(block)
+            chunkBytes += Buffer.byteLength(block)
+            channelCount++
+          }
+
+          async function main() {
+            for await (const line of rl) {
+              if (!insideProgramme) {
+                if (line.includes('<tv')) {
+                  header += line + '\n'
+                  continue
+                }
+
+                if (line.includes('<channel ')) {
+                  addChannel(line + '\n')
+                  continue
+                }
+
+                if (line.includes('<programme ')) {
+                  insideProgramme = true
+                  currentProgramme = line + '\n'
+
+                  if (line.includes('</programme>')) {
+                    insideProgramme = false
+                    programmes.push(currentProgramme)
+                    programmeCount++
+                    currentProgramme = ''
+                  }
+
+                  continue
+                }
+
+                if (line.includes('</tv>')) {
+                  continue
+                }
+
+                if (line.trim()) {
+                  header += line + '\n'
+                }
+              } else {
+                currentProgramme += line + '\n'
+
+                if (line.includes('</programme>')) {
+                  insideProgramme = false
+                  programmes.push(currentProgramme)
+                  programmeCount++
+                  currentProgramme = ''
+                }
+              }
+            }
+
+            writeChunk()
+
+            console.log(`Total channels: ${channelCount}`)
+            console.log(`Total programmes: ${programmeCount}`)
+            console.log(`Total chunks: ${chunkNumber - 1}`)
+          }
+
+          main().catch(error => {
+            console.error(error)
+            process.exit(1)
+          })
+          EOF
+
+      - name: Compress FAST chunks
+        run: |
+          for file in fast/chunks/*.xml; do
+            gzip -c "$file" > "$file.gz"
+          done
+
+          rm -f fast/chunks/*.xml
+
+          echo "Compressed FAST chunks:"
+          ls -lh fast/chunks
+
+      - name: Validate FAST chunks
+        run: |
+          COUNT=$(find fast/chunks -name '*.xml.gz' | wc -l)
+
+          echo "FAST chunk count: $COUNT"
+
+          if [ "$COUNT" -lt 1 ]; then
+            echo "No FAST chunks were created"
+            exit 1
+          fi
+
+          for file in fast/chunks/*.xml.gz; do
+            SIZE=$(stat -c%s "$file")
+
+            echo "$(basename "$file"): $SIZE bytes"
+
+            if [ "$SIZE" -ge 100000000 ]; then
+              echo "ERROR: $file is too large for GitHub"
+              exit 1
+            fi
+          done
+
+      - name: Commit FAST chunks
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin main
+          git rebase origin/main
+
+          git add fast/chunks
+
+          if git diff --cached --quiet; then
+            echo "No FAST changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update FAST guide chunks"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, refreshing branch..."
+
+            git fetch origin main
+            git rebase origin/main
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
