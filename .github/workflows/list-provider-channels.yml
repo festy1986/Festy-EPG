@@ -1,18 +1,22 @@
-name: List Provider Channels
+name: Provider Channel Test
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  list-provider-channels:
+
+  test-provider-channels:
+
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
 
       - name: Verify provider credentials
         env:
@@ -21,7 +25,7 @@ jobs:
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
-          echo "Checking provider credentials..."
+          echo "Provider credentials loaded"
 
           if [ -z "$XTREAM_URL" ]; then
             echo "XTREAM_URL missing"
@@ -38,13 +42,74 @@ jobs:
             exit 1
           fi
 
-          echo "Provider credentials loaded successfully"
+          echo "XTREAM_URL exists"
+          echo "XTREAM_USERNAME exists"
+          echo "XTREAM_PASSWORD exists"
+
 
       - name: Install Python requirements
         run: |
           python -m pip install requests
 
-      - name: Create provider channel list
+
+      - name: Test provider connection
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
+        run: |
+          python - <<'PY'
+          import os
+          import requests
+          from urllib.parse import urlparse
+
+          base_url = os.environ["XTREAM_URL"].strip().rstrip("/")
+          username = os.environ["XTREAM_USERNAME"]
+          password = os.environ["XTREAM_PASSWORD"]
+
+          parsed = urlparse(base_url)
+
+          if not parsed.scheme:
+              base_url = "http://" + base_url
+
+          print("Testing provider API...")
+
+          url = (
+              f"{base_url}/player_api.php"
+              f"?username={username}"
+              f"&password={password}"
+          )
+
+          response = requests.get(
+              url,
+              timeout=60
+          )
+
+          print(f"HTTP status: {response.status_code}")
+
+          response.raise_for_status()
+
+          data = response.json()
+
+          if "user_info" not in data:
+              print("Unexpected provider response:")
+              print(data)
+              raise SystemExit(1)
+
+          user_info = data["user_info"]
+          server_info = data.get("server_info", {})
+
+          print("Provider connection successful")
+          print(f"Account status: {user_info.get('status')}")
+          print(f"Active connections: {user_info.get('active_cons')}")
+          print(f"Maximum connections: {user_info.get('max_connections')}")
+          print(f"Server: {server_info.get('url')}")
+          print(f"Server time: {server_info.get('time_now')}")
+          PY
+
+
+      - name: Download complete provider channel list
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -57,109 +122,70 @@ jobs:
           import json
           from urllib.parse import urlparse
 
-          base_url = os.environ["XTREAM_URL"].rstrip("/")
+          base_url = os.environ["XTREAM_URL"].strip().rstrip("/")
           username = os.environ["XTREAM_USERNAME"]
           password = os.environ["XTREAM_PASSWORD"]
 
-          params = {
-              "username": username,
-              "password": password,
-              "action": "get_live_streams"
-          }
+          parsed = urlparse(base_url)
+
+          if not parsed.scheme:
+              base_url = "http://" + base_url
+
+          url = (
+              f"{base_url}/player_api.php"
+              f"?username={username}"
+              f"&password={password}"
+              f"&action=get_live_streams"
+          )
 
           print("Requesting provider channel list...")
 
           response = requests.get(
-              base_url,
-              params=params,
+              url,
               timeout=120
           )
 
-          print("HTTP status:", response.status_code)
+          print(f"HTTP status: {response.status_code}")
 
           response.raise_for_status()
 
-          data = response.json()
+          channels = response.json()
 
-          if not isinstance(data, list):
-              print("Unexpected provider response:")
-              print(json.dumps(data, indent=2)[:5000])
-              raise SystemExit("Provider did not return a channel list")
+          if not isinstance(channels, list):
+              print("Unexpected response:")
+              print(channels)
+              raise SystemExit(1)
 
-          os.makedirs("provider_channels", exist_ok=True)
+          print(f"Provider channels found: {len(channels)}")
 
-          with open(
-              "provider_channels/channels.json",
-              "w",
-              encoding="utf-8"
-          ) as f:
-              json.dump(data, f, indent=2)
+          with open("fastchannels.txt", "w", encoding="utf-8") as file:
+              for channel in channels:
+                  file.write(json.dumps(channel, ensure_ascii=False) + "\n")
 
-          with open(
-              "provider_channels/channels.txt",
-              "w",
-              encoding="utf-8"
-          ) as f:
-
-              for channel in sorted(
-                  data,
-                  key=lambda x: (
-                      str(x.get("category_name", "")).lower(),
-                      str(x.get("name", "")).lower()
-                  )
-              ):
-
-                  name = str(channel.get("name", "")).strip()
-                  stream_id = channel.get("stream_id", "")
-                  category = str(
-                      channel.get("category_name", "")
-                  ).strip()
-
-                  f.write(
-                      f"{category} | {name} | "
-                      f"stream_id={stream_id}\n"
-                  )
-
-          categories = {}
-
-          for channel in data:
-              category = str(
-                  channel.get("category_name", "")
-              ).strip() or "Uncategorized"
-
-              categories[category] = categories.get(category, 0) + 1
-
-          with open(
-              "provider_channels/category_summary.txt",
-              "w",
-              encoding="utf-8"
-          ) as f:
-
-              for category, count in sorted(
-                  categories.items(),
-                  key=lambda x: x[0].lower()
-              ):
-
-                  f.write(f"{count:5} | {category}\n")
-
-          print()
-          print("Provider channel list retrieved successfully")
-          print("Total channels:", len(data))
-          print("Total categories:", len(categories))
-          print()
-          print("Category summary:")
-
-          for category, count in sorted(
-              categories.items(),
-              key=lambda x: x[0].lower()
-          ):
-
-              print(f"{count:5} | {category}")
+          print("Saved complete provider channel list to fastchannels.txt")
           PY
 
-      - name: Upload provider channel list
-        uses: actions/upload-artifact@v4
-        with:
-          name: provider-channel-list
-          path: provider_channels/
-          retention-days: 7
+
+      - name: Display channel summary
+        run: |
+          echo "fastchannels.txt created"
+
+          wc -l fastchannels.txt
+
+          echo
+          echo "First 10 channels:"
+          head -n 10 fastchannels.txt
+
+
+      - name: Commit provider channel list
+        run: |
+
+          git config --global user.name "github-actions"
+
+          git config --global user.email "github-actions@github.com"
+
+          git add fastchannels.txt
+
+          git commit -m "Update FAST provider channel list" || echo "No changes"
+
+          git push
