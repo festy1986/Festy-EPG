@@ -45,8 +45,10 @@ steps:
       const outputPath = 'fast/processed.xml'
 
       const now = new Date()
+
       const cutoff = new Date(
-        now.getTime() + 3 * 24 * 60 * 60 * 1000
+        now.getTime() +
+        3 * 24 * 60 * 60 * 1000
       )
 
       let programmesScanned = 0
@@ -82,32 +84,9 @@ steps:
 
       function getTag(block, tag) {
         const regex = new RegExp(
-          '<' + tag + '\\b[^>]*>([\\s\\S]*?)</' + tag + '>',
-          'i'
-        )
-
-        const match = block.match(regex)
-
-        if (!match) {
-          return ''
-        }
-
-        return decodeXml(
-          match[1]
-            .replace(/<[^>]+>/g, '')
-            .trim()
-        )
-      }
-
-      function getTagByAttribute(block, tag, attribute, value) {
-        const regex = new RegExp(
           '<' +
           tag +
-          '\\b[^>]*\\b' +
-          attribute +
-          '=["\']' +
-          value +
-          '["\'][^>]*>([\\s\\S]*?)</' +
+          '\\b[^>]*>([\\s\\S]*?)</' +
           tag +
           '>',
           'i'
@@ -126,10 +105,49 @@ steps:
         )
       }
 
-      function getStart(block) {
-        const match = block.match(
-          /<programme\b[^>]*\bstart="([^"]+)"/i
+      function getTagByAttribute(
+        block,
+        tag,
+        attribute,
+        value
+      ) {
+        const regex = new RegExp(
+          '<' +
+          tag +
+          '\\b[^>]*\\b' +
+          attribute +
+          '=["\']' +
+          value +
+          '["\'][^>]*>([\\s\\S]*?)</' +
+          tag +
+          '>',
+          'i'
         )
+
+        const match =
+          block.match(
+            regex
+          )
+
+        if (!match) {
+          return ''
+        }
+
+        return decodeXml(
+          match[1]
+            .replace(
+              /<[^>]+>/g,
+              ''
+            )
+            .trim()
+        )
+      }
+
+      function getStart(block) {
+        const match =
+          block.match(
+            /<programme\b[^>]*\bstart="([^"]+)"/i
+          )
 
         return match
           ? match[1]
@@ -137,9 +155,10 @@ steps:
       }
 
       function parseXmltvDate(value) {
-        const match = String(value || '').match(
-          /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
-        )
+        const match =
+          String(value || '').match(
+            /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+          )
 
         if (!match) {
           return null
@@ -158,9 +177,10 @@ steps:
       }
 
       function formatOriginalAirDate(value) {
-        const match = String(value || '').match(
-          /^(\d{4})-(\d{2})-(\d{2})/
-        )
+        const match =
+          String(value || '').match(
+            /^(\d{4})-(\d{2})-(\d{2})/
+          )
 
         if (!match) {
           return ''
@@ -175,15 +195,20 @@ steps:
         )
       }
 
-      function replaceTag(block, tag, value) {
-        const regex = new RegExp(
-          '<' +
-          tag +
-          '\\b[^>]*>[\\s\\S]*?</' +
-          tag +
-          '>',
-          'i'
-        )
+      function replaceTag(
+        block,
+        tag,
+        value
+      ) {
+        const regex =
+          new RegExp(
+            '<' +
+            tag +
+            '\\b[^>]*>[\\s\\S]*?</' +
+            tag +
+            '>',
+            'i'
+          )
 
         const replacement =
           '<' +
@@ -194,7 +219,11 @@ steps:
           tag +
           '>'
 
-        if (regex.test(block)) {
+        if (
+          regex.test(
+            block
+          )
+        ) {
           return block.replace(
             regex,
             replacement
@@ -209,15 +238,19 @@ steps:
         )
       }
 
-      function removeTag(block, tag) {
-        const regex = new RegExp(
-          '\\s*<' +
-          tag +
-          '\\b[^>]*>[\\s\\S]*?</' +
-          tag +
-          '>',
-          'gi'
-        )
+      function removeTag(
+        block,
+        tag
+      ) {
+        const regex =
+          new RegExp(
+            '\\s*<' +
+            tag +
+            '\\b[^>]*>[\\s\\S]*?</' +
+            tag +
+            '>',
+            'gi'
+          )
 
         return block.replace(
           regex,
@@ -225,9 +258,13 @@ steps:
         )
       }
 
-      function parseFallbackTitle(title) {
+      function parseFallbackTitle(
+        title
+      ) {
         const cleanTitle =
-          cleanSpaces(title)
+          cleanSpaces(
+            title
+          )
 
         const match =
           cleanTitle.match(
@@ -236,46 +273,28 @@ steps:
 
         if (!match) {
           return {
-            showTitle: cleanTitle,
-            episodeTitle: ''
+            showTitle:
+              cleanTitle,
+            episodeTitle:
+              ''
           }
         }
 
         return {
-          showTitle: cleanSpaces(match[1]),
-          episodeTitle: cleanSpaces(match[4])
+          showTitle:
+            cleanSpaces(
+              match[1]
+            ),
+          episodeTitle:
+            cleanSpaces(
+              match[4]
+            )
         }
       }
 
-      function extractFallbackEpisodeCode(block) {
-        const common =
-          getTagByAttribute(
-            block,
-            'episode-num',
-            'system',
-            'common'
-          )
-
-        if (common) {
-          return cleanSpaces(common)
-        }
-
-        const onscreen =
-          getTagByAttribute(
-            block,
-            'episode-num',
-            'system',
-            'onscreen'
-          )
-
-        if (onscreen) {
-          return cleanSpaces(onscreen)
-        }
-
-        return ''
-      }
-
-      function cleanDescription(value) {
+      function cleanDescription(
+        value
+      ) {
         return cleanSpaces(
           String(value || '')
             .replace(
@@ -293,29 +312,43 @@ steps:
         )
       }
 
-      function ensurePeriod(value) {
+      function ensurePeriod(
+        value
+      ) {
         const text =
-          cleanSpaces(value)
+          cleanSpaces(
+            value
+          )
 
         if (!text) {
           return ''
         }
 
-        if (/[.!?]$/.test(text)) {
+        if (
+          /[.!?]$/.test(
+            text
+          )
+        ) {
           return text
         }
 
         return text + '.'
       }
 
-      function processProgramme(block) {
+      function processProgramme(
+        block
+      ) {
         programmesScanned++
 
         const start =
-          getStart(block)
+          getStart(
+            block
+          )
 
         const startDate =
-          parseXmltvDate(start)
+          parseXmltvDate(
+            start
+          )
 
         if (
           !startDate ||
@@ -323,19 +356,29 @@ steps:
           startDate >= cutoff
         ) {
           programmesSkipped++
+
           return ''
         }
 
         programmesKept++
 
         const originalTitle =
-          getTag(block, 'title')
+          getTag(
+            block,
+            'title'
+          )
 
         const originalSubtitle =
-          getTag(block, 'sub-title')
+          getTag(
+            block,
+            'sub-title'
+          )
 
         const originalDescription =
-          getTag(block, 'desc')
+          getTag(
+            block,
+            'desc'
+          )
 
         const commonEpisode =
           getTagByAttribute(
@@ -376,7 +419,9 @@ steps:
             originalSubtitle
           )
 
-        if (!episodeTitle) {
+        if (
+          !episodeTitle
+        ) {
           episodeTitle =
             fallback.episodeTitle
         }
@@ -386,7 +431,9 @@ steps:
             commonEpisode
           )
 
-        if (!episodeCode) {
+        if (
+          !episodeCode
+        ) {
           episodeCode =
             cleanSpaces(
               onscreenEpisode
@@ -418,8 +465,12 @@ steps:
           episodeNumbersConverted++
         }
 
-        if (description) {
-          if (newDescription) {
+        if (
+          description
+        ) {
+          if (
+            newDescription
+          ) {
             newDescription +=
               '. ' +
               ensurePeriod(
@@ -433,7 +484,9 @@ steps:
           }
         }
 
-        if (airDate) {
+        if (
+          airDate
+        ) {
           newDescription +=
             ' (' +
             airDate +
@@ -523,7 +576,8 @@ steps:
           fs.createReadStream(
             inputPath,
             {
-              encoding: 'utf8'
+              encoding:
+                'utf8'
             }
           )
 
@@ -531,7 +585,8 @@ steps:
           fs.createWriteStream(
             outputPath,
             {
-              encoding: 'utf8'
+              encoding:
+                'utf8'
             }
           )
 
@@ -539,7 +594,8 @@ steps:
           readline.createInterface(
             {
               input,
-              crlfDelay: Infinity
+              crlfDelay:
+                Infinity
             }
           )
 
@@ -549,7 +605,9 @@ steps:
         let programmeBuffer =
           ''
 
-        function write(value) {
+        function write(
+          value
+        ) {
           return new Promise(
             (
               resolve,
@@ -579,7 +637,9 @@ steps:
         for await (
           const line of rl
         ) {
-          if (!insideProgramme) {
+          if (
+            !insideProgramme
+          ) {
             if (
               line.includes(
                 '<programme '
@@ -605,8 +665,12 @@ steps:
                     programmeBuffer
                   )
 
-                if (processed) {
-                  await write(processed)
+                if (
+                  processed
+                ) {
+                  await write(
+                    processed
+                  )
                 }
 
                 programmeBuffer =
@@ -631,17 +695,21 @@ steps:
               insideProgramme =
                 false
 
-                const processed =
-                  processProgramme(
-                    programmeBuffer
-                  )
+              const processed =
+                processProgramme(
+                  programmeBuffer
+                )
 
-                if (processed) {
-                  await write(processed)
-                }
+              if (
+                processed
+              ) {
+                await write(
+                  processed
+                )
+              }
 
-                programmeBuffer =
-                  ''
+              programmeBuffer =
+                ''
             }
           }
         }
@@ -714,86 +782,91 @@ steps:
 
       main().catch(
         error => {
-          console.error(error)
-          process.exit(1)
+          console.error(
+            error
+          )
+
+          process.exit(
+            1
+          )
         }
       )
       EOF
 
       node /tmp/process_fast.js
-```
-```
-  - name: Validate processed FAST guide
-    run: |
-      CHANNELS=$(grep -c '<channel ' fast/processed.xml || true)
-      PROGRAMMES=$(grep -c '<programme ' fast/processed.xml || true)
+                EOF
 
-      echo "Processed FAST channels: $CHANNELS"
-      echo "Processed FAST programmes: $PROGRAMMES"
+          node /tmp/process_fast.js
 
-      if [ "$CHANNELS" -lt 1 ]; then
-        echo "Processed FAST guide contains no channels"
-        exit 1
-      fi
+      - name: Validate processed FAST guide
+        run: |
+          CHANNELS=$(grep -c '<channel ' fast/processed.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' fast/processed.xml || true)
 
-      if [ "$PROGRAMMES" -lt 1 ]; then
-        echo "Processed FAST guide contains no programmes"
-        exit 1
-      fi
+          echo "Processed FAST channels: $CHANNELS"
+          echo "Processed FAST programmes: $PROGRAMMES"
 
-      test -s fast/processed.xml
+          if [ "$CHANNELS" -lt 1 ]; then
+            echo "Processed FAST guide contains no channels"
+            exit 1
+          fi
 
-  - name: Compress FAST guide
-    run: |
-      gzip -c fast/processed.xml > fast/FAST.xml.gz
+          if [ "$PROGRAMMES" -lt 1 ]; then
+            echo "Processed FAST guide contains no programmes"
+            exit 1
+          fi
 
-      test -s fast/FAST.xml.gz
+          test -s fast/processed.xml
 
-      ls -lh fast/FAST.xml.gz
+      - name: Compress FAST guide
+        run: |
+          gzip -c fast/processed.xml > fast/FAST.xml.gz
 
-  - name: Commit and push FAST guide
-    run: |
-      git config user.name "github-actions"
-      git config user.email "github-actions@github.com"
+          test -s fast/FAST.xml.gz
 
-      git fetch origin main
-      git reset --hard origin/main
+          ls -lh fast/FAST.xml.gz
 
-      git add fast/FAST.xml.gz
+      - name: Commit and push FAST guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-      if git diff --cached --quiet; then
-        echo "No FAST guide changes to commit"
-        exit 0
-      fi
+          git fetch origin main
+          git reset --hard origin/main
 
-      git commit -m "Update FAST guide"
+          git add fast/FAST.xml.gz
 
-      for attempt in 1 2 3 4 5; do
-        echo "Push attempt $attempt"
+          if git diff --cached --quiet; then
+            echo "No FAST guide changes to commit"
+            exit 0
+          fi
 
-        git fetch origin main
-        git reset --hard origin/main
+          git commit -m "Update FAST guide"
 
-        git add fast/FAST.xml.gz
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
 
-        if git diff --cached --quiet; then
-          echo "FAST guide already up to date"
-          exit 0
-        fi
+            git fetch origin main
+            git reset --hard origin/main
 
-        git commit -m "Update FAST guide" || true
+            git add fast/FAST.xml.gz
 
-        if git push origin HEAD:main; then
-          echo "Push succeeded"
-          exit 0
-        fi
+            if git diff --cached --quiet; then
+              echo "FAST guide already up to date"
+              exit 0
+            fi
 
-        echo "Push failed. Waiting before retry..."
+            git commit -m "Update FAST guide" || true
 
-        sleep 10
-      done
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
 
-      echo "Push failed after all retries"
+            echo "Push failed. Waiting before retry..."
 
-      exit 1
-```
+            sleep 10
+          done
+
+          echo "Push failed after all retries"
+          exit 1
