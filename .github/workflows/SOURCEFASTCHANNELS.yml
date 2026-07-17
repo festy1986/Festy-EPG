@@ -93,7 +93,9 @@ steps:
           )
 
         return match
-          ? decodeXml(match[1])
+          ? decodeXml(
+              match[1]
+            )
           : ''
       }
 
@@ -145,12 +147,14 @@ steps:
           id ||
           displayName
         ) {
-          channels.push({
-            id,
-            displayName,
-            icon,
-            url
-          })
+          channels.push(
+            {
+              id,
+              displayName,
+              icon,
+              url
+            }
+          )
         }
       }
 
@@ -171,7 +175,7 @@ steps:
       const lines = []
 
       lines.push(
-        `SOURCE FAST CHANNELS`
+        'SOURCE FAST CHANNELS'
       )
 
       lines.push(
