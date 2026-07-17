@@ -1,4 +1,4 @@
-name: FAST Channel Source
+name: FAST Channel Source Test
 
 on:
   workflow_dispatch:
@@ -56,7 +56,7 @@ jobs:
           python -m pip install requests
 
 
-      - name: Download selected provider channels
+      - name: Download provider channels from selected groups
 
         env:
 
@@ -72,8 +72,8 @@ jobs:
 
           import os
           import json
-          import requests
           import time
+          import requests
 
 
           XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
@@ -90,18 +90,32 @@ jobs:
           if XTREAM_URL.startswith("https://"):
 
               XTREAM_URL = XTREAM_URL.replace(
+
                   "https://",
+
                   "http://"
+
               )
 
 
-          if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+          if (
+
+              ":80" not in XTREAM_URL
+
+              and
+
+              ":443" not in XTREAM_URL
+
+          ):
 
               XTREAM_URL += ":80"
 
 
           # ---------------------------------
-          # Selected groups
+          # EXACT GROUP NAMES
+          #
+          # These are the provider group names
+          # to keep.
           # ---------------------------------
 
           selected_groups = {
@@ -221,6 +235,8 @@ jobs:
           }
 
 
+          print("")
+
           print(
 
               f"Selected groups: "
@@ -231,7 +247,7 @@ jobs:
 
 
           # ---------------------------------
-          # Create session
+          # Session
           # ---------------------------------
 
           session = requests.Session()
@@ -337,7 +353,7 @@ jobs:
 
               raise SystemExit(
 
-                  "Provider response was not a channel list"
+                  "Provider response was not a list"
 
               )
 
@@ -354,22 +370,16 @@ jobs:
 
 
           # ---------------------------------
-          # Filter by selected groups
+          # Count every category exactly as
+          # returned by the provider
           # ---------------------------------
 
-          matched_channels = []
-
-          group_counts = {}
+          category_counts = {}
 
 
           for stream in streams:
 
-              if not isinstance(stream, dict):
-
-                  continue
-
-
-              category_name = str(
+              category = str(
 
                   stream.get(
 
@@ -379,22 +389,14 @@ jobs:
 
                   )
 
-              ).strip()
+              )
 
 
-              if category_name not in selected_groups:
+              category_counts[category] = (
 
-                  continue
+                  category_counts.get(
 
-
-              matched_channels.append(stream)
-
-
-              group_counts[category_name] = (
-
-                  group_counts.get(
-
-                      category_name,
+                      category,
 
                       0
 
@@ -405,7 +407,150 @@ jobs:
               )
 
 
+          # ---------------------------------
+          # Show exact matching groups
+          # ---------------------------------
+
+          print("")
+
+          print(
+
+              "Exact group matches found:"
+
+          )
+
+
+          found_groups = set()
+
+
+          for category in category_counts:
+
+              if category in selected_groups:
+
+                  found_groups.add(category)
+
+                  print(
+
+                      f"{category}: "
+
+                      f"{category_counts[category]} channels"
+
+                  )
+
+
+          print("")
+
+          print(
+
+              f"Matching groups: "
+
+              f"{len(found_groups)}"
+
+          )
+
+
+          # ---------------------------------
+          # Pull every channel from the groups
+          # ---------------------------------
+
+          matched_channels = []
+
+
+          for stream in streams:
+
+              category = str(
+
+                  stream.get(
+
+                      "category_name",
+
+                      ""
+
+                  )
+
+              )
+
+
+              if category in selected_groups:
+
+                  matched_channels.append(stream)
+
+
           if not matched_channels:
+
+              print("")
+
+              print(
+
+                  "No channels matched."
+
+              )
+
+
+              print("")
+
+              print(
+
+                  "The provider returned these actual "
+
+                  "group names containing sport-related "
+
+                  "content:"
+
+              )
+
+
+              for category in sorted(
+
+                  category_counts,
+
+                  key=lambda value: value.casefold()
+
+              ):
+
+                  upper = category.upper()
+
+
+                  if any(
+
+                      keyword in upper
+
+                      for keyword in [
+
+                          "SPORT",
+
+                          "PPV",
+
+                          "DAZN",
+
+                          "NHL",
+
+                          "NFL",
+
+                          "NBA",
+
+                          "MLB",
+
+                          "TSN",
+
+                          "TNT",
+
+                          "UFC",
+
+                          "PRIME",
+
+                          "ESPN"
+
+                      ]
+
+                  ):
+
+                      print(
+
+                          repr(category)
+
+                      )
+
 
               raise SystemExit(
 
@@ -415,16 +560,16 @@ jobs:
 
 
           # ---------------------------------
-          # Sort channels
+          # Sort by group, then channel name
           # ---------------------------------
 
           matched_channels.sort(
 
-              key=lambda channel: (
+              key=lambda stream: (
 
                   str(
 
-                      channel.get(
+                      stream.get(
 
                           "category_name",
 
@@ -432,11 +577,11 @@ jobs:
 
                       )
 
-                  ).lower(),
+                  ).casefold(),
 
                   str(
 
-                      channel.get(
+                      stream.get(
 
                           "name",
 
@@ -444,11 +589,11 @@ jobs:
 
                       )
 
-                  ).lower(),
+                  ).casefold(),
 
                   str(
 
-                      channel.get(
+                      stream.get(
 
                           "stream_id",
 
@@ -464,7 +609,7 @@ jobs:
 
 
           # ---------------------------------
-          # Save provider source list
+          # Create output directory
           # ---------------------------------
 
           os.makedirs(
@@ -479,6 +624,25 @@ jobs:
           output_file = "fast/fast.txt"
 
 
+          # ---------------------------------
+          # Save every provider record
+          #
+          # Each line contains the complete
+          # provider JSON record, including:
+          #
+          # stream_id
+          # name
+          # category_id
+          # category_name
+          # stream_type
+          # stream_icon
+          # epg_channel_id
+          # tv_archive
+          # tv_archive_duration
+          # and all other identifiers
+          # returned by the provider.
+          # ---------------------------------
+
           with open(
 
               output_file,
@@ -490,13 +654,13 @@ jobs:
           ) as file:
 
 
-              for channel in matched_channels:
+              for stream in matched_channels:
 
                   file.write(
 
                       json.dumps(
 
-                          channel,
+                          stream,
 
                           ensure_ascii=False,
 
@@ -516,7 +680,7 @@ jobs:
 
 
           # ---------------------------------
-          # Display results
+          # Final results
           # ---------------------------------
 
           print("")
@@ -529,7 +693,7 @@ jobs:
 
           print(
 
-              "FAST SOURCE CHANNEL RESULTS"
+              "FAST SOURCE CHANNEL LIST CREATED"
 
           )
 
@@ -544,9 +708,20 @@ jobs:
 
           print(
 
-              f"Matched channels: "
+              f"Channels written: "
 
               f"{len(matched_channels)}"
+
+          )
+
+
+          print("")
+
+          print(
+
+              f"Output file: "
+
+              f"{output_file}"
 
           )
 
@@ -560,11 +735,44 @@ jobs:
           )
 
 
+          final_counts = {}
+
+
+          for stream in matched_channels:
+
+              group = str(
+
+                  stream.get(
+
+                      "category_name",
+
+                      ""
+
+                  )
+
+              )
+
+
+              final_counts[group] = (
+
+                  final_counts.get(
+
+                      group,
+
+                      0
+
+                  )
+
+                  + 1
+
+              )
+
+
           for group in sorted(
 
-              group_counts,
+              final_counts,
 
-              key=lambda value: value.lower()
+              key=lambda value: value.casefold()
 
           ):
 
@@ -572,7 +780,7 @@ jobs:
 
                   f"{group}: "
 
-                  f"{group_counts[group]}"
+                  f"{final_counts[group]}"
 
               )
 
@@ -581,37 +789,22 @@ jobs:
 
           print(
 
-              f"Created: "
-
-              f"{output_file}"
+              "File size:"
 
           )
 
-
-          print("")
 
           print(
 
-              "First 5 channels:"
+              os.path.getsize(
+
+                  output_file
+
+              ),
+
+              "bytes"
 
           )
-
-
-          for channel in matched_channels[:5]:
-
-              print(
-
-                  json.dumps(
-
-                      channel,
-
-                      ensure_ascii=False,
-
-                      indent=2
-
-                  )
-
-              )
 
           PY
 
