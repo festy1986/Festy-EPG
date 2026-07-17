@@ -1,17 +1,19 @@
-name: CROSSCHECKFASTCHANNELS
+name: PRIMECROSSCHECK
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '30 6 * * *'
 
 permissions:
   contents: write
 
 concurrency:
-  group: crosscheck-fast-channels
+  group: primecrosscheck
   cancel-in-progress: false
 
 jobs:
-  crosscheck-fast-channels:
+  prime-crosscheck:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,19 +22,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cross-check provider channels against Jessman FAST channels
+      - name: Verify input files
+        run: |
+          test -s fastchannels.txt
+          test -s SOURCEFASTCHANNELS2.txt
+
+          echo "fastchannels.txt found"
+          echo "SOURCEFASTCHANNELS2.txt found"
+
+      - name: Match PRIME provider channels to Jessman FAST channels
         run: |
           node <<'EOF'
           const fs = require('fs')
 
-          const providerPath =
-            'fastchannels.txt'
-
-          const jessmanPath =
-            'SOURCEFASTCHANNELS2.txt'
-
-          const outputPath =
-            'FASTCROSSCHECKED.txt'
+          const providerPath = 'fastchannels.txt'
+          const sourcePath = 'SOURCEFASTCHANNELS2.txt'
+          const outputPath = 'PRIMECROSSCHECK.txt'
 
           const providerText =
             fs.readFileSync(
@@ -40,580 +45,254 @@ jobs:
               'utf8'
             )
 
-          const jessmanText =
+          const sourceText =
             fs.readFileSync(
-              jessmanPath,
+              sourcePath,
               'utf8'
             )
 
           function cleanText(value) {
             return String(value || '')
-              .normalize('NFD')
-              .replace(
-                /[\u0300-\u036f]/g,
-                ''
-              )
-              .toLowerCase()
-              .replace(
-                /[ᴿᴬᵂ]/g,
-                ''
-              )
-              .replace(
-                /\bprime\b/g,
-                ''
-              )
-              .replace(
-                /\b(raw|hd|sd|fhd|uhd|4k)\b/g,
-                ''
-              )
-              .replace(
-                /[^a-z0-9]+/g,
-                ''
-              )
+              .normalize('NFKC')
+              .replace(/[ᴿᴬᵂ]/g, '')
+              .replace(/\[FAST\]/gi, '')
+              .replace(/\s+/g, ' ')
               .trim()
           }
 
-          function tokenize(value) {
-            return String(value || '')
-              .normalize('NFD')
-              .replace(
-                /[\u0300-\u036f]/g,
-                ''
-              )
+          function normalizeTitle(value) {
+            return cleanText(value)
               .toLowerCase()
-              .replace(
-                /[ᴿᴬᵂ]/g,
-                ''
-              )
-              .replace(
-                /\bprime\b/g,
-                ''
-              )
-              .replace(
-                /\b(raw|hd|sd|fhd|uhd|4k)\b/g,
-                ''
-              )
-              .replace(
-                /[^a-z0-9]+/g,
-                ' '
-              )
-              .split(
-                /\s+/
-              )
-              .filter(
-                Boolean
-              )
+              .replace(/&/g, ' and ')
+              .replace(/[’']/g, '')
+              .replace(/[^a-z0-9]+/g, '')
           }
 
-          function levenshtein(
-            a,
-            b
-          ) {
-            const previous =
-              Array.from(
-                {
-                  length:
-                    b.length + 1
-                },
-                (
-                  _,
-                  index
-                ) =>
-                  index
-              )
+          function providerTitle(value) {
+            return cleanText(value)
+              .replace(/^PRIME\s*:\s*/i, '')
+          }
+
+          function sourceTitle(value) {
+            return cleanText(value)
+          }
+
+          function extractPrimeChannels(text) {
+            const channels = []
 
             for (
-              let i = 1;
-              i <= a.length;
-              i++
+              const rawLine of text.split(/\r?\n/)
             ) {
-              const current =
-                [
-                  i
-                ]
-
-              for (
-                let j = 1;
-                j <= b.length;
-                j++
-              ) {
-                const insert =
-                  current[j - 1] +
-                  1
-
-                const remove =
-                  previous[j] +
-                  1
-
-                const replace =
-                  previous[j - 1] +
-                  (
-                    a[i - 1] ===
-                    b[j - 1]
-                      ? 0
-                      : 1
-                  )
-
-                current.push(
-                  Math.min(
-                    insert,
-                    remove,
-                    replace
-                  )
-                )
-              }
-
-              for (
-                let j = 0;
-                j < current.length;
-                j++
-              ) {
-                previous[j] =
-                  current[j]
-              }
-            }
-
-            return previous[b.length]
-          }
-
-          function similarity(
-            a,
-            b
-          ) {
-            if (
-              a === b
-            ) {
-              return 100
-            }
-
-            if (
-              !a ||
-              !b
-            ) {
-              return 0
-            }
-
-            const distance =
-              levenshtein(
-                a,
-                b
-              )
-
-            const maxLength =
-              Math.max(
-                a.length,
-                b.length
-              )
-
-            return (
-              (
-                1 -
-                distance /
-                  maxLength
-              ) *
-              100
-            )
-          }
-
-          function tokenSimilarity(
-            a,
-            b
-          ) {
-            const aTokens =
-              tokenize(
-                a
-              )
-
-            const bTokens =
-              tokenize(
-                b
-              )
-
-            if (
-              !aTokens.length ||
-              !bTokens.length
-            ) {
-              return 0
-            }
-
-            const aSet =
-              new Set(
-                aTokens
-              )
-
-            const bSet =
-              new Set(
-                bTokens
-              )
-
-            let shared =
-              0
-
-            for (
-              const token of aSet
-            ) {
-              if (
-                bSet.has(
-                  token
-                )
-              ) {
-                shared++
-              }
-            }
-
-            const union =
-              new Set(
-                [
-                  ...aSet,
-                  ...bSet
-                ]
-              ).size
-
-            return (
-              shared /
-              union *
-              100
-            )
-          }
-
-          function calculateScore(
-            providerName,
-            jessmanName
-          ) {
-            const providerClean =
-              cleanText(
-                providerName
-              )
-
-            const jessmanClean =
-              cleanText(
-                jessmanName
-              )
-
-            const directScore =
-              similarity(
-                providerClean,
-                jessmanClean
-              )
-
-            const tokenScore =
-              tokenSimilarity(
-                providerName,
-                jessmanName
-              )
-
-            const providerTokens =
-              tokenize(
-                providerName
-              )
-
-            const jessmanTokens =
-              tokenize(
-                jessmanName
-              )
-
-            const providerSet =
-              new Set(
-                providerTokens
-              )
-
-            const jessmanSet =
-              new Set(
-                jessmanTokens
-              )
-
-            let containmentScore =
-              0
-
-            if (
-              providerClean &&
-              jessmanClean &&
-              (
-                providerClean.includes(
-                  jessmanClean
-                ) ||
-                jessmanClean.includes(
-                  providerClean
-                )
-              )
-            ) {
-              containmentScore =
-                100
-            }
-
-            return Math.max(
-              directScore,
-              tokenScore,
-              containmentScore
-            )
-          }
-
-          function parseProviderChannels(
-            text
-          ) {
-            const channels =
-              []
-
-            const lines =
-              text.split(
-                /\r?\n/
-              )
-
-            for (
-              const line of lines
-            ) {
-              const trimmed =
-                line.trim()
+              const line =
+                rawLine.trim()
 
               if (
-                !trimmed
+                !line ||
+                !/^PRIME\s*:/i.test(line)
               ) {
                 continue
               }
 
-              try {
-                const channel =
-                  JSON.parse(
-                    trimmed
-                  )
+              const parts =
+                line.split('|')
 
-                if (
-                  channel &&
-                  channel.num !==
-                    undefined &&
-                  channel.name
-                ) {
-                  channels.push(
-                    channel
+              const providerNumber =
+                parts[0]
+                  ? parts[0].trim()
+                  : ''
+
+              const providerName =
+                parts[1]
+                  ? parts[1].trim()
+                  : line
+
+              const providerId =
+                parts[2]
+                  ? parts[2].trim()
+                  : ''
+
+              channels.push({
+                providerNumber,
+                providerName,
+                providerId,
+                title: providerTitle(
+                  providerName
+                ),
+                normalizedTitle:
+                  normalizeTitle(
+                    providerTitle(
+                      providerName
+                    )
                   )
-                }
-              } catch (
-                error
-              ) {
-                console.log(
-                  'Skipping non-JSON provider line'
-                )
-              }
+              })
             }
 
             return channels
           }
 
-          function parseJessmanChannels(
-            text
-          ) {
-            const channels =
-              []
-
-            const lines =
-              text.split(
-                /\r?\n/
-              )
+          function extractSourceChannels(text) {
+            const channels = []
 
             for (
-              const line of lines
+              const rawLine of text.split(/\r?\n/)
             ) {
-              const trimmed =
-                line.trim()
+              const line =
+                rawLine.trim()
 
               if (
-                !trimmed ||
-                !trimmed.includes(
-                  ' | '
+                !line ||
+                line.startsWith(
+                  'SOURCE FAST CHANNELS'
+                ) ||
+                line.startsWith(
+                  'Generated:'
+                ) ||
+                line.startsWith(
+                  'Total channels:'
                 )
               ) {
                 continue
               }
 
               const parts =
-                trimmed.split(
-                  ' | '
-                )
+                line.split('|')
 
               if (
-                parts.length <
-                  2
+                parts.length < 2
               ) {
                 continue
               }
 
-              const name =
+              const displayName =
                 parts[0]
                   .trim()
 
-              const id =
+              const channelId =
                 parts[1]
                   .trim()
 
               if (
-                !name ||
-                !id ||
-                !id.endsWith(
+                !channelId.endsWith(
                   '.us'
                 )
               ) {
                 continue
               }
 
-              channels.push(
-                {
-                  name,
-                  id
-                }
-              )
+              channels.push({
+                displayName,
+                channelId,
+                normalizedTitle:
+                  normalizeTitle(
+                    sourceTitle(
+                      displayName
+                    )
+                  )
+              })
             }
 
             return channels
           }
 
           const providerChannels =
-            parseProviderChannels(
+            extractPrimeChannels(
               providerText
             )
 
-          const jessmanChannels =
-            parseJessmanChannels(
-              jessmanText
+          const sourceChannels =
+            extractSourceChannels(
+              sourceText
             )
 
-          const results =
+          const output =
             []
 
-          const usedJessmanIds =
+          const matchedProviderNumbers =
+            new Set()
+
+          const matchedSourceIds =
             new Set()
 
           let exactMatches =
             0
 
-          let fuzzyMatches =
-            0
-
-          let unmatched =
-            0
-
-          let ambiguous =
+          let totalMatches =
             0
 
           for (
-            const provider of
-              providerChannels
+            const provider
+              of providerChannels
           ) {
-            const candidates =
-              []
+            const matches =
+              sourceChannels.filter(
+                source =>
+                  source.normalizedTitle ===
+                  provider.normalizedTitle
+              )
+
+            if (
+              matches.length === 0
+            ) {
+              continue
+            }
 
             for (
-              const jessman of
-                jessmanChannels
+              const match
+                of matches
             ) {
-              const score =
-                calculateScore(
-                  provider.name,
-                  jessman.name
-                )
+              const key =
+                [
+                  provider.providerNumber,
+                  provider.providerId,
+                  match.channelId
+                ].join('|')
 
               if (
-                score >=
-                90
-              ) {
-                candidates.push(
-                  {
-                    jessman,
-                    score
-                  }
+                matchedSourceIds.has(
+                  key
                 )
+              ) {
+                continue
               }
-            }
 
-            candidates.sort(
-              (
-                a,
-                b
-              ) =>
-                b.score -
-                a.score
-            )
-
-            if (
-              !candidates.length
-            ) {
-              unmatched++
-
-              continue
-            }
-
-            const best =
-              candidates[0]
-
-            const second =
-              candidates[1]
-
-            if (
-              second &&
-              best.score ===
-                second.score &&
-              best.jessman.id !==
-                second.jessman.id
-            ) {
-              ambiguous++
-
-              console.log(
-                'Ambiguous match skipped: ' +
-                provider.name
+              matchedSourceIds.add(
+                key
               )
 
-              continue
-            }
-
-            if (
-              usedJessmanIds.has(
-                best.jessman.id
+              output.push(
+                [
+                  provider.providerNumber,
+                  provider.providerName,
+                  provider.providerId,
+                  match.displayName,
+                  match.channelId,
+                  'MATCH: 100%'
+                ].join(
+                  ' | '
+                )
               )
-            ) {
-              continue
-            }
 
-            usedJessmanIds.add(
-              best.jessman.id
-            )
+              matchedProviderNumbers.add(
+                provider.providerNumber
+              )
 
-            if (
-              best.score ===
-              100
-            ) {
+              totalMatches++
               exactMatches++
-            } else {
-              fuzzyMatches++
             }
-
-            results.push(
-              {
-                providerNum:
-                  provider.num,
-                providerName:
-                  provider.name,
-                providerStreamId:
-                  provider.stream_id ||
-                  '',
-                jessmanName:
-                  best.jessman.name,
-                jessmanId:
-                  best.jessman.id,
-                score:
-                  best.score
-              }
-            )
           }
 
-          results.sort(
+          output.sort(
             (
               a,
               b
             ) =>
-              Number(
-                a.providerNum
-              ) -
-              Number(
-                b.providerNum
+              a.localeCompare(
+                b,
+                undefined,
+                {
+                  numeric: true,
+                  sensitivity: 'base'
+                }
               )
           )
 
@@ -621,175 +300,130 @@ jobs:
             []
 
           lines.push(
-            'FAST CROSS-CHECKED CHANNELS'
+            'PRIME CROSS-CHECKED CHANNELS'
           )
 
           lines.push(
-            'Generated: ' +
-              new Date().toISOString()
+            `Generated: ${new Date().toISOString()}`
           )
 
           lines.push(
-            'Provider channels checked: ' +
-              providerChannels.length
+            `PRIME provider channels checked: ${providerChannels.length}`
           )
 
           lines.push(
-            'Strong matches: ' +
-              results.length
+            `PRIME provider channels matched: ${matchedProviderNumbers.size}`
           )
 
           lines.push(
-            'Exact matches: ' +
-              exactMatches
+            `Total Jessman matches: ${totalMatches}`
           )
 
           lines.push(
-            'Fuzzy matches 90%+: ' +
-              fuzzyMatches
+            `Exact matches: ${exactMatches}`
           )
 
           lines.push(
-            'Unmatched: ' +
-              unmatched
-          )
-
-          lines.push(
-            'Ambiguous skipped: ' +
-              ambiguous
+            `Unmatched PRIME provider channels: ${
+              providerChannels.length -
+              matchedProviderNumbers.size
+            }`
           )
 
           lines.push(
             ''
           )
 
-          for (
-            const result of
-              results
-          ) {
-            lines.push(
-              [
-                result.providerNum,
-                result.providerName,
-                result.jessmanName,
-                result.jessmanId,
-                result.providerStreamId,
-                'MATCH: ' +
-                  result.score.toFixed(
-                    2
-                  ) +
-                  '%'
-              ].join(
-                ' | '
-              )
-            )
-          }
+          lines.push(
+            ...output
+          )
 
           fs.writeFileSync(
             outputPath,
-            lines.join(
-              '\n'
-            ) +
+            lines.join('\n') +
               '\n',
             'utf8'
           )
 
           console.log(
-            'FAST cross-check complete'
+            `PRIME provider channels checked: ${providerChannels.length}`
           )
 
           console.log(
-            'Provider channels checked: ' +
-              providerChannels.length
+            `PRIME provider channels matched: ${matchedProviderNumbers.size}`
           )
 
           console.log(
-            'Strong matches: ' +
-              results.length
+            `Total Jessman matches: ${totalMatches}`
           )
 
           console.log(
-            'Exact matches: ' +
-              exactMatches
+            `Exact matches: ${exactMatches}`
           )
 
           console.log(
-            'Fuzzy matches 90%+: ' +
-              fuzzyMatches
-          )
-
-          console.log(
-            'Unmatched: ' +
-              unmatched
-          )
-
-          console.log(
-            'Ambiguous skipped: ' +
-              ambiguous
-          )
-
-          console.log(
-            'Output: ' +
-              outputPath
+            `Output: ${outputPath}`
           )
           EOF
 
-      - name: Validate FASTCROSSCHECKED
+      - name: Validate PRIME cross-check
         run: |
-          test -s FASTCROSSCHECKED.txt
+          test -s PRIMECROSSCHECK.txt
 
-          MATCH_COUNT=$(grep -c ' | MATCH: ' FASTCROSSCHECKED.txt || true)
+          MATCH_COUNT=$(grep -c ' | MATCH: 100%' PRIMECROSSCHECK.txt || true)
 
-          echo "Strong matches written: $MATCH_COUNT"
+          echo "Total matches written: $MATCH_COUNT"
 
           if [ "$MATCH_COUNT" -lt 1 ]; then
-            echo "No strong matches were found"
+            echo "No PRIME matches were found"
             exit 1
           fi
 
-      - name: Show FASTCROSSCHECKED preview
+      - name: Show PRIME cross-check summary
         run: |
-          echo "First 30 matches:"
-          head -n 40 FASTCROSSCHECKED.txt
+          head -n 25 PRIMECROSSCHECK.txt
 
           echo ""
-
           echo "File size:"
-          ls -lh FASTCROSSCHECKED.txt
+          ls -lh PRIMECROSSCHECK.txt
 
-      - name: Commit FASTCROSSCHECKED
+      - name: Commit and push PRIME cross-check
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add FASTCROSSCHECKED.txt
+          git add PRIMECROSSCHECK.txt
 
           if git diff --cached --quiet; then
-            echo "No FASTCROSSCHECKED changes to commit"
+            echo "No PRIMECROSSCHECK changes to commit"
             exit 0
           fi
 
-          git commit -m "Update FASTCROSSCHECKED"
+          git commit -m "Update PRIMECROSSCHECK"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            git add PRIMECROSSCHECK.txt
+
+            if git diff --cached --quiet; then
+              echo "PRIMECROSSCHECK already up to date"
+              exit 0
+            fi
+
+            git commit -m "Update PRIMECROSSCHECK" || true
 
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed. Fetching latest remote changes..."
-
-            git fetch origin main
-
-            git rebase origin/main || {
-              git rebase --abort || true
-            }
-
+            echo "Push failed. Waiting before retry..."
             sleep 10
           done
 
           echo "Push failed after all retries"
-
           exit 1
