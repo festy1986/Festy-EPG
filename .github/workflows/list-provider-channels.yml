@@ -1,4 +1,4 @@
-name: Test Provider Channels
+name: FAST Group List
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
 
-  test-provider-channels:
+  get-fast-groups:
 
     runs-on: ubuntu-latest
 
@@ -17,7 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+
       - name: Verify provider credentials
+
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -46,15 +48,22 @@ jobs:
           echo "XTREAM_USERNAME exists"
           echo "XTREAM_PASSWORD exists"
 
+
       - name: Install Python requirements
+
         run: |
 
           python -m pip install requests
 
-      - name: Download provider channels with groups
+
+      - name: Download provider groups
+
         env:
+
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
+
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
@@ -62,34 +71,35 @@ jobs:
           python - <<'PY'
 
           import os
-          import re
-          import html
           import requests
+          import time
+
 
           XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
+
           USERNAME = os.environ["XTREAM_USERNAME"]
+
           PASSWORD = os.environ["XTREAM_PASSWORD"]
 
-          OUTPUT_FILE = "fast/fastchannels.txt"
 
-          os.makedirs(
-              "fast",
-              exist_ok=True
-          )
+          # ---------------------------------
+          # Normalize provider URL
+          # ---------------------------------
 
-          session = requests.Session()
+          if XTREAM_URL.startswith("https://"):
 
-          session.headers.update(
-              {
-                  "User-Agent": "Mozilla/5.0"
-              }
-          )
+              XTREAM_URL = XTREAM_URL.replace(
+                  "https://",
+                  "http://"
+              )
 
-          print(
-              "Downloading complete provider channel list..."
-          )
 
-          streams_url = (
+          if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+
+              XTREAM_URL += ":80"
+
+
+          API_URL = (
 
               f"{XTREAM_URL}/player_api.php"
 
@@ -101,308 +111,275 @@ jobs:
 
           )
 
-          response = session.get(
 
-              streams_url,
+          session = requests.Session()
 
-              timeout=(30, 300)
+          session.headers.update({
 
-          )
+              "User-Agent": "Mozilla/5.0"
 
-          print(
+          })
 
-              f"HTTP status: "
 
-              f"{response.status_code}"
+          streams = None
 
-          )
 
-          response.raise_for_status()
+          # ---------------------------------
+          # Download complete provider list
+          # ---------------------------------
 
-          streams = response.json()
+          for attempt in range(1, 6):
 
-          if not isinstance(
+              try:
 
-              streams,
+                  print(
 
-              list
+                      f"Downloading provider channel list "
 
-          ):
+                      f"(attempt {attempt}/5)..."
 
-              raise RuntimeError(
+                  )
+
+
+                  response = session.get(
+
+                      API_URL,
+
+                      timeout=(30, 600)
+
+                  )
+
+
+                  print(
+
+                      f"HTTP status: "
+
+                      f"{response.status_code}"
+
+                  )
+
+
+                  response.raise_for_status()
+
+
+                  streams = response.json()
+
+
+                  break
+
+
+              except Exception as error:
+
+                  print(
+
+                      f"Attempt {attempt} failed: "
+
+                      f"{error}"
+
+                  )
+
+
+                  if attempt < 5:
+
+                      time.sleep(15)
+
+
+          if streams is None:
+
+              raise SystemExit(
+
+                  "Provider channel download failed"
+
+              )
+
+
+          if not isinstance(streams, list):
+
+              raise SystemExit(
 
                   "Provider response was not a channel list"
 
               )
 
+
+          print("")
+
           print(
 
-              f"Total provider channels received: "
+              f"Total provider channels: "
 
               f"{len(streams)}"
 
           )
 
-          def clean_name(name):
 
-              if not name:
+          # ---------------------------------
+          # Extract unique group names
+          # ---------------------------------
 
-                  return ""
+          groups = set()
 
-              name = html.unescape(
-
-                  str(name)
-
-              )
-
-              name = re.sub(
-
-                  r"<.*?>",
-
-                  "",
-
-                  name
-
-              )
-
-              name = re.sub(
-
-                  r"\s+",
-
-                  " ",
-
-                  name
-
-              )
-
-              return name.strip()
-
-          channels = []
-
-          groups = {}
 
           for stream in streams:
 
-              stream_id = str(
-
-                  stream.get(
-
-                      "stream_id",
-
-                      ""
-
-                  )
-
-              ).strip()
-
-              name = clean_name(
-
-                  stream.get(
-
-                      "name",
-
-                      ""
-
-                  )
-
-              )
-
-              group = clean_name(
-
-                  stream.get(
-
-                      "category_name",
-
-                      ""
-
-                  )
-
-              )
-
-              if not stream_id or not name:
+              if not isinstance(stream, dict):
 
                   continue
 
-              if not group:
 
-                  group = "NO GROUP"
+              group = (
 
-              channels.append(
+                  stream.get("category_name")
 
-                  {
+                  or stream.get("group_title")
 
-                      "id": stream_id,
+                  or stream.get("group")
 
-                      "name": name,
-
-                      "group": group
-
-                  }
+                  or ""
 
               )
 
-              if group not in groups:
 
-                  groups[group] = 0
+              group = str(group).strip()
 
-              groups[group] += 1
 
-          channels.sort(
+              if group:
 
-              key=lambda item: (
+                  groups.add(group)
 
-                  item["group"].lower(),
 
-                  item["name"].lower()
+          if not groups:
+
+              raise SystemExit(
+
+                  "No channel groups were found"
 
               )
+
+
+          # ---------------------------------
+          # Sort groups
+          # ---------------------------------
+
+          sorted_groups = sorted(
+
+              groups,
+
+              key=lambda value: value.lower()
 
           )
 
+
+          # ---------------------------------
+          # Save group list
+          # ---------------------------------
+
+          output_file = "fast/fastgroups.txt"
+
+
+          os.makedirs(
+
+              "fast",
+
+              exist_ok=True
+
+          )
+
+
           with open(
 
-              OUTPUT_FILE,
+              output_file,
 
               "w",
 
               encoding="utf-8"
 
-          ) as output:
+          ) as file:
 
-              current_group = None
+              for group in sorted_groups:
 
-              for channel in channels:
+                  file.write(
 
-                  group = channel["group"]
+                      group
 
-                  if group != current_group:
-
-                      output.write("\n")
-
-                      output.write(
-
-                          f"# ===== {group} =====\n"
-
-                      )
-
-                      current_group = group
-
-                  output.write(
-
-                      f"{channel['id']}|"
-
-                      f"{channel['name']}|"
-
-                      f"{group}\n"
+                      + "\n"
 
                   )
 
-          print("")
-
-          print(
-
-              "Provider channel dump complete"
-
-          )
 
           print("")
 
           print(
 
-              f"Total channels written: "
+              f"Unique groups found: "
 
-              f"{len(channels)}"
+              f"{len(sorted_groups)}"
 
           )
+
 
           print("")
 
           print(
 
-              f"Total groups found: "
+              f"Created: "
 
-              f"{len(groups)}"
+              f"{output_file}"
 
           )
+
 
           print("")
 
-          print(
+          print("First 25 groups:")
 
-              "GROUP SUMMARY"
 
-          )
-
-          print(
-
-              "============="
-
-          )
-
-          for group, count in sorted(
-
-              groups.items(),
-
-              key=lambda item:
-
-              item[0].lower()
-
-          ):
+          for group in sorted_groups[:25]:
 
               print(
 
-                  f"{count:6}  {group}"
+                  f"  {group}"
 
               )
 
-          print("")
-
-          print(
-
-              f"Output file: "
-
-              f"{OUTPUT_FILE}"
-
-          )
-
           PY
 
-      - name: Show channel dump
+
+      - name: Show group list
+
         run: |
 
-          echo "Channel file created:"
+          echo "======================================"
 
-          ls -lh fast/fastchannels.txt
+          echo "FAST GROUP LIST"
 
-          echo ""
-
-          echo "Total lines:"
-
-          wc -l fast/fastchannels.txt
+          echo "======================================"
 
           echo ""
 
-          echo "First 100 lines:"
+          cat fast/fastgroups.txt
 
-          head -100 fast/fastchannels.txt
+          echo ""
 
-      - name: Commit and push channel list
+          echo "======================================"
+
+          echo "Total groups:"
+
+          wc -l fast/fastgroups.txt
+
+          echo "======================================"
+
+
+      - name: Commit and push group list
+
         run: |
 
           git config --global user.name "github-actions"
 
           git config --global user.email "github-actions@github.com"
 
-          git add fast/fastchannels.txt
+          git add fast/fastgroups.txt
 
-          if git diff --cached --quiet; then
+          git commit -m "Update FAST group list" || echo "No changes"
 
-            echo "No changes"
-
-          else
-
-            git commit -m "Update FAST provider channel list"
-
-            git push
-
-          fi
+          git push
