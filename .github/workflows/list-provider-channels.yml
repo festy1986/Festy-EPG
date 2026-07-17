@@ -1,4 +1,4 @@
-name: FAST Channel List
+name: FAST Channel Source
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
 
-  get-fast-channels:
+  get-fast-source-channels:
 
     runs-on: ubuntu-latest
 
@@ -56,7 +56,7 @@ jobs:
           python -m pip install requests
 
 
-      - name: Download selected FAST channels
+      - name: Download selected provider channels
 
         env:
 
@@ -75,10 +75,6 @@ jobs:
           import requests
           import time
 
-
-          # ---------------------------------
-          # Provider credentials
-          # ---------------------------------
 
           XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 
@@ -105,60 +101,125 @@ jobs:
 
 
           # ---------------------------------
-          # Input and output
+          # Selected groups
           # ---------------------------------
 
-          GROUP_FILE = "fast/fastgroups.txt"
+          selected_groups = {
 
-          OUTPUT_FILE = "fast/fastchannels.txt"
+              "CA| CANADA WEST PPV",
 
+              "CA| CANADA ᴴᴰ/ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
 
-          # ---------------------------------
-          # Load selected groups
-          # ---------------------------------
+              "CA| CBC PPV",
 
-          if not os.path.exists(GROUP_FILE):
+              "CA| CFL PPV",
 
-              raise SystemExit(
+              "CA| DAZN PPV",
 
-                  f"Missing {GROUP_FILE}"
+              "CA| DAZN PPV ⱽᴵᴾ",
 
-              )
+              "CA| FUBO PPV ᴿᴬᵂ",
 
+              "CA| PRIME ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
 
-          selected_groups = set()
+              "CA| ROGERS SUPER SPORTS PACK EN",
 
+              "CA| SPORTS EN",
 
-          with open(
+              "CA| SPORTSNET PPV",
 
-              GROUP_FILE,
+              "CA| SPORTSNET+ PPV",
 
-              "r",
+              "CA| TSN SPORT ᴴᴰ/ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
 
-              encoding="utf-8"
+              "CA| TSN+ PPV",
 
-          ) as file:
+              "CA| VICTORY+ PPV",
 
-              for line in file:
+              "UK| AMAZON PRIME PPV",
 
-                  group = line.strip()
+              "UK| DAZN PPV",
 
+              "UK| DAZN PPV VIP",
 
-                  if group:
+              "UK| ESPN+ PPV",
 
-                      selected_groups.add(group)
+              "UK| MC VIDEO ᴴᴰ",
 
+              "UK| MUSIC ᴴᴰ/ᴿᴬᵂ",
 
-          if not selected_groups:
+              "UK| PPV EVENT",
 
-              raise SystemExit(
+              "UK| PPV EVENT ⁽ᴮᴷ⁾",
 
-                  "No groups found in fast/fastgroups.txt"
+              "UK| PRIME VIDEO SERIES ᴿᴬᵂ",
 
-              )
+              "UK| PRIME ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
 
+              "UK| SPORT SD",
 
-          print("")
+              "UK| SPORT SD ⱽᴵᴾ",
+
+              "UK| SPORT ʰᵉᵛᶜ",
+
+              "UK| SPORT ᴴᴰ",
+
+              "UK| SPORT ᴴᴰ ⱽᴵᴾ",
+
+              "UK| SPORT ᴿᴬᵂ",
+
+              "UK| SPORT ᴿᴬᵂ ⱽᴵᴾ ᴰᴼᴸᴮᵞ ᴬᵁᴰᴵᴼ",
+
+              "UK| TNT SPORT EVENT",
+
+              "UK| TNT SPORT SD ⱽᴵᴾ",
+
+              "UK| TNT SPORT ᴴᴰ ⱽᴵᴾ",
+
+              "UK| TNT SPORT ᴿᴬᵂ ⱽᴵᴾ ᴰᴼᴸᴮᵞ ᴬᵁᴰᴵᴼ",
+
+              "UK| UFC PPV",
+
+              "US| DAZN PPV",
+
+              "US| ESPN+ PPV",
+
+              "US| ESPN+ PPV ⱽᴵᴾ",
+
+              "US| MLB PPV",
+
+              "US| MLB TEAM PPV",
+
+              "US| NBA PPV",
+
+              "US| NBA TEAM PPV",
+
+              "US| NFL PPV",
+
+              "US| NFL REPLAY",
+
+              "US| NHL PPV",
+
+              "US| NHL REPLAY",
+
+              "US| NHL TEAM PPV",
+
+              "US| PPV EVENT",
+
+              "US| PPV EVENT ⁽ᴮᴷ⁾",
+
+              "US| PRIME ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
+
+              "US| ROKU ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
+
+              "US| SPORT ᴴᴰ/ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
+
+              "US| TUBI ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
+
+              "US| UFC PPV"
+
+          }
+
 
           print(
 
@@ -170,7 +231,7 @@ jobs:
 
 
           # ---------------------------------
-          # Session
+          # Create session
           # ---------------------------------
 
           session = requests.Session()
@@ -184,10 +245,10 @@ jobs:
 
 
           # ---------------------------------
-          # Download provider channels
+          # Provider API
           # ---------------------------------
 
-          API_URL = (
+          api_url = (
 
               f"{XTREAM_URL}/player_api.php"
 
@@ -220,7 +281,7 @@ jobs:
 
                   response = session.get(
 
-                      API_URL,
+                      api_url,
 
                       timeout=(30, 600)
 
@@ -293,17 +354,15 @@ jobs:
 
 
           # ---------------------------------
-          # Filter channels by selected groups
+          # Filter by selected groups
           # ---------------------------------
 
           matched_channels = []
-
 
           group_counts = {}
 
 
           for stream in streams:
-
 
               if not isinstance(stream, dict):
 
@@ -405,7 +464,7 @@ jobs:
 
 
           # ---------------------------------
-          # Save complete provider records
+          # Save provider source list
           # ---------------------------------
 
           os.makedirs(
@@ -417,9 +476,12 @@ jobs:
           )
 
 
+          output_file = "fast/fast.txt"
+
+
           with open(
 
-              OUTPUT_FILE,
+              output_file,
 
               "w",
 
@@ -467,7 +529,7 @@ jobs:
 
           print(
 
-              "FAST CHANNEL RESULTS"
+              "FAST SOURCE CHANNEL RESULTS"
 
           )
 
@@ -521,7 +583,7 @@ jobs:
 
               f"Created: "
 
-              f"{OUTPUT_FILE}"
+              f"{output_file}"
 
           )
 
@@ -530,12 +592,12 @@ jobs:
 
           print(
 
-              "First 10 channels:"
+              "First 5 channels:"
 
           )
 
 
-          for channel in matched_channels[:10]:
+          for channel in matched_channels[:5]:
 
               print(
 
@@ -554,32 +616,36 @@ jobs:
           PY
 
 
-      - name: Show FAST channel file information
+      - name: Show FAST source file
 
         run: |
 
           echo "======================================"
 
-          echo "FAST CHANNEL FILE"
+          echo "FAST SOURCE FILE"
 
           echo "======================================"
 
           echo ""
 
-          wc -l fast/fastchannels.txt
+          echo "Channel records:"
+
+          wc -l fast/fast.txt
 
           echo ""
 
-          ls -lh fast/fastchannels.txt
+          echo "File size:"
+
+          ls -lh fast/fast.txt
 
           echo ""
 
           echo "First 5 records:"
 
-          head -n 5 fast/fastchannels.txt
+          head -n 5 fast/fast.txt
 
 
-      - name: Commit and push FAST channel list
+      - name: Commit and push FAST source list
 
         run: |
 
@@ -587,8 +653,8 @@ jobs:
 
           git config --global user.email "github-actions@github.com"
 
-          git add fast/fastchannels.txt
+          git add fast/fast.txt
 
-          git commit -m "Update FAST channel list" || echo "No changes"
+          git commit -m "Update FAST source channel list" || echo "No changes"
 
           git push
