@@ -1,0 +1,131 @@
+name: IPTV Org Channel Discovery
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 6 * * *'
+    - cron: '15 18 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: iptvorg-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover-channels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download IPTV-org EPG source
+        run: |
+          mkdir -p /tmp/iptvorg
+
+          curl -L --fail --retry 5 --retry-delay 10 \
+            https://iptv-epg.org/files/epg-us.xml.gz \
+            -o /tmp/iptvorg/source.xml.gz
+
+          test -s /tmp/iptvorg/source.xml.gz
+
+          echo "IPTV-org EPG source downloaded successfully"
+
+      - name: Build channel inventory
+        run: |
+          mkdir -p guides
+
+          gzip -dc /tmp/iptvorg/source.xml.gz |
+          awk '
+            /<channel[[:space:]]/ {
+              match($0, /id="[^"]+"/)
+              id = substr($0, RSTART + 4, RLENGTH - 5)
+              in_channel = 1
+              name = ""
+              next
+            }
+
+            in_channel && /<display-name/ {
+              line = $0
+              sub(/.*<display-name[^>]*>/, "", line)
+              sub(/<\/display-name>.*/, "", line)
+              gsub(/&amp;/, "\\&", line)
+              gsub(/&quot;/, "\"", line)
+              gsub(/&apos;/, "'", line)
+              gsub(/&lt;/, "<", line)
+              gsub(/&gt;/, ">", line)
+
+              if (name == "") {
+                name = line
+              }
+
+              next
+            }
+
+            in_channel && /<\/channel>/ {
+              print id " | " name
+              in_channel = 0
+            }
+          ' |
+          sort -f > guides/iptvorg-channels.txt
+
+          test -s guides/iptvorg-channels.txt
+
+          echo "Channel inventory created:"
+          wc -l guides/iptvorg-channels.txt
+
+          echo
+          echo "Searching for MGM Presents channels:"
+          grep -i "MGM Presents" guides/iptvorg-channels.txt || true
+
+      - name: Commit and push channel inventory
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git fetch origin main
+          git reset --hard origin/main
+
+          git add guides/iptvorg-channels.txt
+
+          if git diff --cached --quiet; then
+            echo "No channel inventory changes"
+            exit 0
+          fi
+
+          git commit -m "Update IPTV-org channel inventory"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            git add guides/iptvorg-channels.txt
+
+            if git diff --cached --quiet; then
+              echo "Channel inventory already up to date"
+              exit 0
+            fi
+
+            git commit -m "Update IPTV-org channel inventory" || true
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed. Synchronizing with remote before retry..."
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            sleep 10
+          done
+
+          echo "Push failed after all retries"
+          exit 1
