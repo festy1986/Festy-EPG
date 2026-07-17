@@ -48,9 +48,10 @@ jobs:
 
       - name: Install Python requirements
         run: |
+
           python -m pip install requests
 
-      - name: Download US UK CA provider channels
+      - name: Download provider channels with groups
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -85,7 +86,7 @@ jobs:
           )
 
           print(
-              "Downloading complete provider live channel list..."
+              "Downloading complete provider channel list..."
           )
 
           streams_url = (
@@ -109,14 +110,24 @@ jobs:
           )
 
           print(
-              f"HTTP status: {response.status_code}"
+
+              f"HTTP status: "
+
+              f"{response.status_code}"
+
           )
 
           response.raise_for_status()
 
           streams = response.json()
 
-          if not isinstance(streams, list):
+          if not isinstance(
+
+              streams,
+
+              list
+
+          ):
 
               raise RuntimeError(
 
@@ -168,15 +179,7 @@ jobs:
 
           channels = []
 
-          country_counts = {
-
-              "US": 0,
-
-              "UK": 0,
-
-              "CA": 0
-
-          }
+          groups = {}
 
           for stream in streams:
 
@@ -204,49 +207,55 @@ jobs:
 
               )
 
-              if not stream_id or not name:
+              group = clean_name(
 
-                  continue
+                  stream.get(
 
-              match = re.match(
+                      "category_name",
 
-                  r"^(US|UK|CA):\s*",
-
-                  name,
-
-                  re.IGNORECASE
-
-              )
-
-              if not match:
-
-                  continue
-
-              country = match.group(
-
-                  1
-
-              ).upper()
-
-              country_counts[country] += 1
-
-              channels.append(
-
-                  (
-
-                      stream_id,
-
-                      name
+                      ""
 
                   )
 
               )
 
+              if not stream_id or not name:
+
+                  continue
+
+              if not group:
+
+                  group = "NO GROUP"
+
+              channels.append(
+
+                  {
+
+                      "id": stream_id,
+
+                      "name": name,
+
+                      "group": group
+
+                  }
+
+              )
+
+              if group not in groups:
+
+                  groups[group] = 0
+
+              groups[group] += 1
+
           channels.sort(
 
-              key=lambda item:
+              key=lambda item: (
 
-              item[1].lower()
+                  item["group"].lower(),
+
+                  item["name"].lower()
+
+              )
 
           )
 
@@ -260,11 +269,31 @@ jobs:
 
           ) as output:
 
-              for stream_id, name in channels:
+              current_group = None
+
+              for channel in channels:
+
+                  group = channel["group"]
+
+                  if group != current_group:
+
+                      output.write("\n")
+
+                      output.write(
+
+                          f"# ===== {group} =====\n"
+
+                      )
+
+                      current_group = group
 
                   output.write(
 
-                      f"{stream_id}|{name}\n"
+                      f"{channel['id']}|"
+
+                      f"{channel['name']}|"
+
+                      f"{group}\n"
 
                   )
 
@@ -272,7 +301,7 @@ jobs:
 
           print(
 
-              "Filtered provider channel dump complete"
+              "Provider channel dump complete"
 
           )
 
@@ -280,37 +309,51 @@ jobs:
 
           print(
 
-              f"US channels: "
-
-              f"{country_counts['US']}"
-
-          )
-
-          print(
-
-              f"UK channels: "
-
-              f"{country_counts['UK']}"
-
-          )
-
-          print(
-
-              f"CA channels: "
-
-              f"{country_counts['CA']}"
-
-          )
-
-          print("")
-
-          print(
-
-              "Total US/UK/CA channels written: "
+              f"Total channels written: "
 
               f"{len(channels)}"
 
           )
+
+          print("")
+
+          print(
+
+              f"Total groups found: "
+
+              f"{len(groups)}"
+
+          )
+
+          print("")
+
+          print(
+
+              "GROUP SUMMARY"
+
+          )
+
+          print(
+
+              "============="
+
+          )
+
+          for group, count in sorted(
+
+              groups.items(),
+
+              key=lambda item:
+
+              item[0].lower()
+
+          ):
+
+              print(
+
+                  f"{count:6}  {group}"
+
+              )
 
           print("")
 
@@ -333,15 +376,15 @@ jobs:
 
           echo ""
 
-          echo "First 20 channels:"
+          echo "Total lines:"
 
-          head -20 fast/fastchannels.txt
+          wc -l fast/fastchannels.txt
 
           echo ""
 
-          echo "Total channels:"
+          echo "First 100 lines:"
 
-          wc -l fast/fastchannels.txt
+          head -100 fast/fastchannels.txt
 
       - name: Commit and push channel list
         run: |
