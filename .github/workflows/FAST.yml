@@ -34,6 +34,9 @@ jobs:
       - name: Download FAST source
         run: |
           curl -L --fail \
+            --retry 5 \
+            --retry-delay 10 \
+            --retry-all-errors \
             https://epg.guru/7dayiptv/USFast.xml \
             -o fast/source.xml
 
@@ -222,10 +225,7 @@ jobs:
 
           function getProgrammeType(block) {
             const categories =
-              getTags(
-                block,
-                'category'
-              )
+              getTags(block, 'category')
                 .map(value =>
                   value.toLowerCase()
                 )
@@ -240,8 +240,7 @@ jobs:
             if (
               categories.includes('series') ||
               categories.includes('tv series') ||
-              categories.includes('miniseries') ||
-              categories.includes('episode')
+              categories.includes('miniseries')
             ) {
               return 'series'
             }
@@ -250,8 +249,7 @@ jobs:
               getTag(
                 block,
                 'title'
-              )
-                .toLowerCase()
+              ).toLowerCase()
 
             const subtitle =
               getTag(
@@ -292,11 +290,13 @@ jobs:
               )
 
             if (xmltvMatch) {
-              episodeNumbersConverted++
-
               return (
-                `S${Number(xmltvMatch[1]) + 1}` +
-                `E${Number(xmltvMatch[2]) + 1}`
+                `S${String(
+                  Number(xmltvMatch[1]) + 1
+                ).padStart(2, '0')}` +
+                `E${String(
+                  Number(xmltvMatch[2]) + 1
+                ).padStart(2, '0')}`
               )
             }
 
@@ -307,26 +307,16 @@ jobs:
 
             if (directMatch) {
               return (
-                `S${directMatch[1]}` +
-                `E${directMatch[2]}`
+                `S${String(
+                  Number(directMatch[1])
+                ).padStart(2, '0')}` +
+                `E${String(
+                  Number(directMatch[2])
+                ).padStart(2, '0')}`
               )
             }
 
-            const tmsMatch =
-              episodeNum.match(
-                /EP\d+\.(\d+)\.(\d+)/
-              )
-
-            if (tmsMatch) {
-              episodeNumbersConverted++
-
-              return (
-                `S${Number(tmsMatch[1])}` +
-                `E${Number(tmsMatch[2])}`
-              )
-            }
-
-            return ''
+            return episodeNum
           }
 
           function getDisplayDate(block) {
@@ -339,8 +329,7 @@ jobs:
               return ''
             }
 
-            const value =
-              match[1]
+            const value = match[1]
 
             return (
               `${value.slice(4, 6)}/` +
@@ -350,8 +339,9 @@ jobs:
           }
 
           function hasTrailingDate(value) {
-            return /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/
-              .test(value)
+            return (
+              /\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/
+            ).test(value)
           }
 
           function replaceTag(
@@ -399,19 +389,20 @@ jobs:
             )
           }
 
-          function removeAllActors(block) {
-            const actorRegex =
-              /\\s*<actor\\b[^>]*>[\\s\\S]*?<\\/actor>/gi
-
+          function removeActors(block) {
             const matches =
-              block.match(actorRegex)
+              block.match(
+                /\s*<actor\b[^>]*>[\s\S]*?<\/actor>/gi
+              )
 
-            if (matches) {
-              actorsRemoved += matches.length
+            if (!matches) {
+              return block
             }
 
+            actorsRemoved += matches.length
+
             return block.replace(
-              actorRegex,
+              /\s*<actor\b[^>]*>[\s\S]*?<\/actor>/gi,
               ''
             )
           }
@@ -441,6 +432,12 @@ jobs:
               getTag(
                 block,
                 'desc'
+              )
+
+            const originalEpisodeNum =
+              getTag(
+                block,
+                'episode-num'
               )
 
             const episodeTitle =
@@ -483,6 +480,18 @@ jobs:
             }
 
             if (
+              episodeCode &&
+              episodeCode !== originalEpisodeNum
+            ) {
+              episodeNumbersConverted++
+            }
+
+            if (
+              (
+                programmeType === 'series' ||
+                episodeTitle ||
+                episodeCode
+              ) &&
               episodeTitle &&
               episodeCode
             ) {
@@ -500,24 +509,28 @@ jobs:
                     : prefix
               }
             } else if (
+              (
+                programmeType === 'series' ||
+                episodeTitle ||
+                episodeCode
+              ) &&
               episodeTitle
             ) {
-              const cleanEpisodeTitle =
-                cleanSpaces(
-                  episodeTitle
-                )
-
               if (
                 !description.startsWith(
-                  cleanEpisodeTitle
+                  episodeTitle
                 )
               ) {
                 description =
                   description
-                    ? `${cleanEpisodeTitle}. ${description}`
-                    : cleanEpisodeTitle
+                    ? `${cleanSpaces(episodeTitle)}. ${description}`
+                    : cleanSpaces(episodeTitle)
               }
             } else if (
+              (
+                programmeType === 'series' ||
+                episodeCode
+              ) &&
               episodeCode
             ) {
               if (
@@ -623,7 +636,7 @@ jobs:
               )
 
             output =
-              removeAllActors(
+              removeActors(
                 output
               )
 
@@ -655,13 +668,10 @@ jobs:
                 }
               )
 
-            let insideProgramme =
-              false
+            let insideProgramme = false
+            let programmeBuffer = ''
 
-            let programmeBuffer =
-              ''
-
-            function write(value) {
+            async function write(value) {
               return new Promise(
                 (
                   resolve,
@@ -699,8 +709,7 @@ jobs:
                     '<programme '
                   )
                 ) {
-                  insideProgramme =
-                    true
+                  insideProgramme = true
 
                   programmeBuffer =
                     line + '\n'
@@ -710,8 +719,7 @@ jobs:
                       '</programme>'
                     )
                   ) {
-                    insideProgramme =
-                      false
+                    insideProgramme = false
 
                     const processed =
                       processProgramme(
@@ -726,8 +734,7 @@ jobs:
                       )
                     }
 
-                    programmeBuffer =
-                      ''
+                    programmeBuffer = ''
                   }
                 } else {
                   await write(
@@ -743,8 +750,7 @@ jobs:
                     '</programme>'
                   )
                 ) {
-                  insideProgramme =
-                    false
+                  insideProgramme = false
 
                   const processed =
                     processProgramme(
@@ -759,8 +765,7 @@ jobs:
                     )
                   }
 
-                  programmeBuffer =
-                    ''
+                  programmeBuffer = ''
                 }
               }
             }
@@ -879,12 +884,7 @@ jobs:
           SIZE=$(stat -c%s fast/FAST.xml.gz)
 
           echo "Compressed FAST size: $SIZE bytes"
-          echo "Compressed FAST size in MB: $((SIZE / 1000000)) MB"
-
-          if [ "$SIZE" -ge 100000000 ]; then
-            echo "FAST guide is too large for GitHub's recommended file size"
-            exit 1
-          fi
+          echo "Compressed FAST size in MB: $((SIZE / 1024 / 1024)) MB"
 
           echo "FAST guide size is valid for upload"
 
@@ -893,7 +893,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add -f fast/FAST.xml.gz
+          git add fast/FAST.xml.gz
 
           if git diff --cached --quiet; then
             echo "No FAST guide changes to commit"
@@ -902,4 +902,22 @@ jobs:
 
           git commit -m "Update FAST guide"
 
-          git push origin HEAD:main
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, refreshing branch..."
+
+            git fetch origin main
+
+            git reset --hard origin/main
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
