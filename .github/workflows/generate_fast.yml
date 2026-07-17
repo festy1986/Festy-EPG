@@ -58,27 +58,3 @@ jobs:
             echo "FAST source contains no programmes"
             exit 1
           fi
-
-      - name: Delete old oversized FAST files if present
-        run: |
-          rm -f guides/FAST.xml
-          rm -f guides/FAST.xml.gz
-
-      - name: Commit cleanup
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add -u guides/FAST.xml guides/FAST.xml.gz
-
-          if git diff --cached --quiet; then
-            echo "No oversized FAST files to remove"
-            exit 0
-          fi
-
-          git commit -m "Remove oversized FAST source files"
-
-          git fetch origin main
-          git rebase origin/main
-
-          git push origin HEAD:main
