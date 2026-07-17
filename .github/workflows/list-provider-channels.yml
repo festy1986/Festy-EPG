@@ -75,86 +75,277 @@ jobs:
           python - <<'PY'
 
           import os
+          import re
+          import html
+          import time
           import requests
-          from urllib.parse import urlparse
 
-          base_url = os.environ["XTREAM_URL"].strip().rstrip("/")
-          username = os.environ["XTREAM_USERNAME"]
-          password = os.environ["XTREAM_PASSWORD"]
 
-          print("Downloading provider channel list...")
+          XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 
-          # Use the same provider credentials as the working 24/7 workflow.
-          # The M3U endpoint is used here instead of player_api.php because
-          # the provider is returning HTTP 520 to direct API requests.
+          USERNAME = os.environ["XTREAM_USERNAME"]
 
-          url = (
-              f"{base_url}/get.php"
-              f"?username={username}"
-              f"&password={password}"
-              f"&type=m3u_plus"
-              f"&output=ts"
+          PASSWORD = os.environ["XTREAM_PASSWORD"]
+
+
+          # ---------------------------------
+          # Normalize Xtream URL
+          # ---------------------------------
+
+          if XTREAM_URL.startswith("https://"):
+
+              XTREAM_URL = XTREAM_URL.replace(
+                  "https://",
+                  "http://"
+              )
+
+
+          if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+
+              XTREAM_URL += ":80"
+
+
+          print("Provider URL normalized")
+
+          print(
+              "Provider host:",
+              re.sub(
+                  r"^https?://",
+                  "",
+                  XTREAM_URL
+              )
           )
 
-          print(f"Provider host: {urlparse(base_url).netloc}")
 
-          response = requests.get(
-              url,
-              timeout=300,
-              stream=True,
-              headers={
-                  "User-Agent": "VLC/3.0.20 LibVLC/3.0.20"
+          # ---------------------------------
+          # Session
+          # ---------------------------------
+
+          session = requests.Session()
+
+          session.headers.update(
+              {
+                  "User-Agent": "Mozilla/5.0"
               }
           )
 
-          print(f"HTTP status: {response.status_code}")
 
-          response.raise_for_status()
+          # ---------------------------------
+          # Provider API
+          # ---------------------------------
 
-          os.makedirs("fast", exist_ok=True)
+          streams_url = (
 
-          output_path = "fast/fastchannels.txt"
+              f"{XTREAM_URL}/player_api.php"
 
-          channel_names = set()
+              f"?username={USERNAME}"
 
-          current_name = ""
+              f"&password={PASSWORD}"
 
-          for raw_line in response.iter_lines(decode_unicode=True):
+              f"&action=get_live_streams"
 
-              if not raw_line:
-                  continue
+          )
 
-              line = raw_line.strip()
 
-              if line.startswith("#EXTINF:"):
+          streams = None
 
-                  current_name = line.split(",", 1)[1].strip()
 
-                  if current_name:
-                      channel_names.add(current_name)
+          for attempt in range(1, 6):
 
-          if not channel_names:
-              raise RuntimeError(
-                  "No channels were found in the provider M3U response"
+              try:
+
+                  print(
+                      f"Downloading provider channels "
+                      f"(attempt {attempt}/5)..."
+                  )
+
+
+                  response = session.get(
+
+                      streams_url,
+
+                      timeout=(30, 300)
+
+                  )
+
+
+                  print(
+                      "HTTP status:",
+                      response.status_code
+                  )
+
+
+                  response.raise_for_status()
+
+
+                  streams = response.json()
+
+
+                  break
+
+
+              except Exception as error:
+
+                  print(
+                      "Provider request failed:",
+                      error
+                  )
+
+
+                  if attempt < 5:
+
+                      print(
+                          "Retrying in 10 seconds..."
+                      )
+
+
+                      time.sleep(10)
+
+
+          if streams is None:
+
+              raise SystemExit(
+                  "Provider channel download failed"
               )
 
-          sorted_channels = sorted(
-              channel_names,
+
+          if not isinstance(streams, list):
+
+              raise SystemExit(
+                  "Provider response was not a channel list"
+              )
+
+
+          print(
+              "Provider channels received:",
+              len(streams)
+          )
+
+
+          # ---------------------------------
+          # Create channel list
+          # ---------------------------------
+
+          os.makedirs(
+              "fast",
+              exist_ok=True
+          )
+
+
+          output_file = (
+              "fast/fastchannels.txt"
+          )
+
+
+          channels = []
+
+
+          for stream in streams:
+
+              if not isinstance(stream, dict):
+
+                  continue
+
+
+              name = stream.get(
+                  "name",
+                  ""
+              )
+
+
+              name = html.unescape(
+                  str(name)
+              )
+
+
+              name = re.sub(
+                  r"<.*?>",
+                  "",
+                  name
+              )
+
+
+              name = re.sub(
+                  r"\s+",
+                  " ",
+                  name
+              )
+
+
+              name = name.strip()
+
+
+              if not name:
+
+                  continue
+
+
+              channels.append(name)
+
+
+          channels = sorted(
+              set(channels),
               key=lambda value: value.lower()
           )
 
-          with open(output_path, "w", encoding="utf-8") as file:
 
-              for channel in sorted_channels:
-                  file.write(channel + "\n")
+          if not channels:
 
-          print(f"Provider channels found: {len(sorted_channels)}")
-          print(f"Written to: {output_path}")
+              raise SystemExit(
+                  "No channel names were found"
+              )
+
+
+          with open(
+              output_file,
+              "w",
+              encoding="utf-8"
+          ) as file:
+
+              for channel in channels:
+
+                  file.write(
+                      channel + "\n"
+                  )
+
+
+          print("")
+
+          print(
+              "Channel dump complete"
+          )
+
+
+          print(
+              "Total unique channels:",
+              len(channels)
+          )
+
+
+          print(
+              "Created:",
+              output_file
+          )
+
+
+          print("")
+
+          print(
+              "First 25 channels:"
+          )
+
+
+          for channel in channels[:25]:
+
+              print(
+                  channel
+              )
+
 
           PY
 
 
-      - name: Validate provider channel dump
+      - name: Validate provider channel list
 
         run: |
 
@@ -167,15 +358,25 @@ jobs:
           fi
 
 
-          CHANNELS=$(grep -cve '^[[:space:]]*$' fast/fastchannels.txt || true)
+          CHANNELS=$(
 
+            grep -cve '^[[:space:]]*$' \
+
+            fast/fastchannels.txt \
+
+            || true
+
+          )
+
+
+          echo ""
 
           echo "Provider channels written: $CHANNELS"
 
 
           if [ "$CHANNELS" -lt 1 ]; then
 
-            echo "No provider channels were found"
+            echo "Channel list is empty"
 
             exit 1
 
@@ -184,12 +385,12 @@ jobs:
 
           echo ""
 
-          echo "First 20 channels:"
+          echo "Channel list file:"
 
-          head -20 fast/fastchannels.txt
+          ls -lh fast/fastchannels.txt
 
 
-      - name: Commit provider channel list
+      - name: Commit and push channel list
 
         run: |
 
