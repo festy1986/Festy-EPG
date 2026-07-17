@@ -1,4 +1,4 @@
-name: FAST Channel Source Test
+name: FAST Channel Matching Test
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
 
-  get-fast-source-channels:
+  match-fast-channels:
 
     runs-on: ubuntu-latest
 
@@ -18,646 +18,310 @@ jobs:
         uses: actions/checkout@v4
 
 
-      - name: Verify provider credentials
-
-        env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
-          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
-          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+      - name: Verify fastchannels.txt
 
         run: |
 
-          echo "Provider credentials loaded"
+          if [ ! -f "fastchannels.txt" ]; then
 
-          if [ -z "$XTREAM_URL" ]; then
-            echo "XTREAM_URL missing"
+            echo "fastchannels.txt was not found"
+
             exit 1
+
           fi
 
-          if [ -z "$XTREAM_USERNAME" ]; then
-            echo "XTREAM_USERNAME missing"
-            exit 1
-          fi
 
-          if [ -z "$XTREAM_PASSWORD" ]; then
-            echo "XTREAM_PASSWORD missing"
-            exit 1
-          fi
+          echo "fastchannels.txt found"
 
-          echo "XTREAM_URL exists"
-          echo "XTREAM_USERNAME exists"
-          echo "XTREAM_PASSWORD exists"
+          echo "Provider channel records:"
+
+          wc -l fastchannels.txt
 
 
-      - name: Install Python requirements
+          echo ""
+
+          echo "File size:"
+
+          ls -lh fastchannels.txt
+
+
+      - name: Download Jessman FAST guide
 
         run: |
 
-          python -m pip install requests
+          mkdir -p fast
 
 
-      - name: Download selected provider channels
+          echo "Downloading Jessman FAST guide..."
 
-        env:
 
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          curl -L --fail --retry 5 --retry-delay 10 \
 
-          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+            https://epg.guru/7dayiptv/USFast.xml \
 
-          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+            -o fast/source.xml
+
+
+          test -s fast/source.xml
+
+
+          echo ""
+
+          echo "Jessman FAST guide downloaded"
+
+          ls -lh fast/source.xml
+
+
+      - name: Match provider channels against FAST guide
 
         run: |
 
           python - <<'PY'
 
-          import os
           import json
-          import time
-          import requests
+          import re
+          import unicodedata
+          import xml.etree.ElementTree as ET
 
+          from collections import defaultdict
 
-          XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 
-          USERNAME = os.environ["XTREAM_USERNAME"]
+          PROVIDER_FILE = "fastchannels.txt"
 
-          PASSWORD = os.environ["XTREAM_PASSWORD"]
+          GUIDE_FILE = "fast/source.xml"
 
+          REPORT_FILE = "fast/match-report.txt"
 
-          # ---------------------------------
-          # Normalize provider URL
-          # ---------------------------------
 
-          if XTREAM_URL.startswith("https://"):
+          # --------------------------------------------------
+          # Normalize text
+          # --------------------------------------------------
 
-              XTREAM_URL = XTREAM_URL.replace(
-                  "https://",
-                  "http://"
-              )
+          def normalize_text(value):
 
+              if not value:
 
-          if (
+                  return ""
 
-              ":80" not in XTREAM_URL
 
-              and
+              value = str(value)
 
-              ":443" not in XTREAM_URL
 
-          ):
+              value = unicodedata.normalize(
 
-              XTREAM_URL += ":80"
+                  "NFKC",
 
-
-          # ---------------------------------
-          # Exact groups requested
-          # ---------------------------------
-
-          selected_groups = {
-
-              "CA| CANADA WEST PPV",
-
-              "CA| CANADA ᴴᴰ/ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "CA| CBC PPV",
-
-              "CA| CFL PPV",
-
-              "CA| DAZN PPV",
-
-              "CA| DAZN PPV ⱽᴵᴾ",
-
-              "CA| FUBO PPV ᴿᴬᵂ",
-
-              "CA| PRIME ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "CA| ROGERS SUPER SPORTS PACK EN",
-
-              "CA| SPORTS EN",
-
-              "CA| SPORTSNET PPV",
-
-              "CA| SPORTSNET+ PPV",
-
-              "CA| TSN SPORT ᴴᴰ/ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "CA| TSN+ PPV",
-
-              "CA| VICTORY+ PPV",
-
-              "UK| AMAZON PRIME PPV",
-
-              "UK| DAZN PPV",
-
-              "UK| DAZN PPV VIP",
-
-              "UK| ESPN+ PPV",
-
-              "UK| MC VIDEO ᴴᴰ",
-
-              "UK| MUSIC ᴴᴰ/ᴿᴬᵂ",
-
-              "UK| PPV EVENT",
-
-              "UK| PPV EVENT ⁽ᴮᴷ⁾",
-
-              "UK| PRIME VIDEO SERIES ᴿᴬᵂ",
-
-              "UK| PRIME ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "UK| SPORT SD",
-
-              "UK| SPORT SD ⱽᴵᴾ",
-
-              "UK| SPORT ʰᵉᵛᶜ",
-
-              "UK| SPORT ᴴᴰ",
-
-              "UK| SPORT ᴴᴰ ⱽᴵᴾ",
-
-              "UK| SPORT ᴿᴬᵂ",
-
-              "UK| SPORT ᴿᴬᵂ ⱽᴵᴾ ᴰᴼᴸᴮᵞ ᴬᵁᴰᴵᴼ",
-
-              "UK| TNT SPORT EVENT",
-
-              "UK| TNT SPORT SD ⱽᴵᴾ",
-
-              "UK| TNT SPORT ᴴᴰ ⱽᴵᴾ",
-
-              "UK| TNT SPORT ᴿᴬᵂ ⱽᴵᴾ ᴰᴼᴸᴮᵞ ᴬᵁᴰᴵᴼ",
-
-              "UK| UFC PPV",
-
-              "US| DAZN PPV",
-
-              "US| ESPN+ PPV",
-
-              "US| ESPN+ PPV ⱽᴵᴾ",
-
-              "US| MLB PPV",
-
-              "US| MLB TEAM PPV",
-
-              "US| NBA PPV",
-
-              "US| NBA TEAM PPV",
-
-              "US| NFL PPV",
-
-              "US| NFL REPLAY",
-
-              "US| NHL PPV",
-
-              "US| NHL REPLAY",
-
-              "US| NHL TEAM PPV",
-
-              "US| PPV EVENT",
-
-              "US| PPV EVENT ⁽ᴮᴷ⁾",
-
-              "US| PRIME ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "US| ROKU ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "US| SPORT ᴴᴰ/ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "US| TUBI ᴿᴬᵂ ⁶⁰ᶠᵖˢ",
-
-              "US| UFC PPV"
-
-          }
-
-
-          print("")
-
-          print(
-
-              f"Selected groups: "
-
-              f"{len(selected_groups)}"
-
-          )
-
-
-          # ---------------------------------
-          # Create session
-          # ---------------------------------
-
-          session = requests.Session()
-
-
-          session.headers.update({
-
-              "User-Agent": "Mozilla/5.0"
-
-          })
-
-
-          # ---------------------------------
-          # API helper
-          # ---------------------------------
-
-          def provider_request(action):
-
-              url = (
-
-                  f"{XTREAM_URL}/player_api.php"
-
-                  f"?username={USERNAME}"
-
-                  f"&password={PASSWORD}"
-
-                  f"&action={action}"
+                  value
 
               )
 
 
-              for attempt in range(1, 6):
+              value = value.replace(
+
+                  "&",
+
+                  " AND "
+
+              )
+
+
+              value = value.upper()
+
+
+              # Remove common provider country prefixes
+
+              value = re.sub(
+
+                  r"^\s*(US|UK|CA|AU)\s*:\s*",
+
+                  "",
+
+                  value
+
+              )
+
+
+              # Remove common provider-only prefixes
+
+              value = re.sub(
+
+                  r"^\s*-\s*NO EVENT STREAMING\s*-\s*\|\s*",
+
+                  "",
+
+                  value
+
+              )
+
+
+              value = re.sub(
+
+                  r"^\s*8K EXCLUSIVE\s*\|\s*",
+
+                  "",
+
+                  value
+
+              )
+
+
+              value = re.sub(
+
+                  r"^\s*HD\s*\|\s*",
+
+                  "",
+
+                  value
+
+              )
+
+
+              # Remove common quality markers
+
+              value = re.sub(
+
+                  r"\b(HD|FHD|UHD|SD|4K|8K)\b",
+
+                  "",
+
+                  value
+
+              )
+
+
+              # Remove RAW / FPS / codec markers
+
+              value = re.sub(
+
+                  r"\bRAW\b",
+
+                  "",
+
+                  value
+
+              )
+
+
+              value = re.sub(
+
+                  r"\b\d+\s*FPS\b",
+
+                  "",
+
+                  value
+
+              )
+
+
+              value = re.sub(
+
+                  r"\b(HEVC|H265|H\.265|H264|H\.264)\b",
+
+                  "",
+
+                  value
+
+              )
+
+
+              # Remove audio markers
+
+              value = re.sub(
+
+                  r"\b(DOLBY|AUDIO|ATMOS)\b",
+
+                  "",
+
+                  value
+
+              )
+
+
+              # Normalize punctuation
+
+              value = re.sub(
+
+                  r"[^A-Z0-9]+",
+
+                  " ",
+
+                  value
+
+              )
+
+
+              # Remove standalone duplicate spaces
+
+              value = re.sub(
+
+                  r"\s+",
+
+                  " ",
+
+                  value
+
+              )
+
+
+              return value.strip()
+
+
+          # --------------------------------------------------
+          # Extract provider channel name
+          # --------------------------------------------------
+
+          provider_channels = []
+
+
+          with open(
+
+              PROVIDER_FILE,
+
+              "r",
+
+              encoding="utf-8"
+
+          ) as file:
+
+
+              for line_number, line in enumerate(
+
+                  file,
+
+                  1
+
+              ):
+
+
+                  line = line.strip()
+
+
+                  if not line:
+
+                      continue
+
 
                   try:
 
-                      print("")
-
-                      print(
-
-                          f"Downloading {action} "
-
-                          f"(attempt {attempt}/5)..."
-
-                      )
-
-
-                      response = session.get(
-
-                          url,
-
-                          timeout=(30, 600)
-
-                      )
-
-
-                      print(
-
-                          f"HTTP status: "
-
-                          f"{response.status_code}"
-
-                      )
-
-
-                      response.raise_for_status()
-
-
-                      data = response.json()
-
-
-                      return data
+                      channel = json.loads(line)
 
 
                   except Exception as error:
 
-                      print("")
-
                       print(
 
-                          f"Attempt {attempt} failed: "
+                          f"WARNING: Could not parse line "
 
-                          f"{error}"
+                          f"{line_number}: {error}"
 
                       )
 
+                      continue
 
-                      if attempt < 5:
-
-                          time.sleep(15)
-
-
-              raise SystemExit(
-
-                  f"Provider request failed: {action}"
-
-              )
-
-
-          # ---------------------------------
-          # Download categories
-          # ---------------------------------
-
-          categories = provider_request(
-
-              "get_live_categories"
-
-          )
-
-
-          if not isinstance(categories, list):
-
-              raise SystemExit(
-
-                  "Provider categories response was not a list"
-
-              )
-
-
-          print("")
-
-          print(
-
-              f"Total provider categories: "
-
-              f"{len(categories)}"
-
-          )
-
-
-          # ---------------------------------
-          # Match selected category names
-          # ---------------------------------
-
-          selected_category_ids = set()
-
-          matched_category_names = {}
-
-
-          for category in categories:
-
-              category_id = str(
-
-                  category.get(
-
-                      "category_id",
-
-                      ""
-
-                  )
-
-              )
-
-
-              category_name = str(
-
-                  category.get(
-
-                      "category_name",
-
-                      ""
-
-                  )
-
-              )
-
-
-              if category_name in selected_groups:
-
-                  selected_category_ids.add(
-
-                      category_id
-
-                  )
-
-
-                  matched_category_names[
-
-                      category_id
-
-                  ] = category_name
-
-
-          print("")
-
-          print(
-
-              "Matching categories:"
-
-          )
-
-
-          for category_id in sorted(
-
-              matched_category_names,
-
-              key=lambda value:
-
-                  matched_category_names[value].casefold()
-
-          ):
-
-              print(
-
-                  f"{matched_category_names[category_id]}"
-
-                  f" | category_id={category_id}"
-
-              )
-
-
-          print("")
-
-          print(
-
-              f"Matched categories: "
-
-              f"{len(selected_category_ids)}"
-
-          )
-
-
-          if not selected_category_ids:
-
-              print("")
-
-              print(
-
-                  "No categories matched."
-
-              )
-
-
-              print("")
-
-              print(
-
-                  "Provider categories containing "
-
-                  "sport-related terms:"
-
-              )
-
-
-              for category in categories:
 
                   name = str(
 
-                      category.get(
-
-                          "category_name",
-
-                          ""
-
-                      )
-
-                  )
-
-
-                  upper = name.upper()
-
-
-                  if any(
-
-                      term in upper
-
-                      for term in [
-
-                          "SPORT",
-
-                          "PPV",
-
-                          "DAZN",
-
-                          "NHL",
-
-                          "NFL",
-
-                          "NBA",
-
-                          "MLB",
-
-                          "TSN",
-
-                          "TNT",
-
-                          "UFC",
-
-                          "PRIME",
-
-                          "ESPN"
-
-                      ]
-
-                  ):
-
-                      print(
-
-                          repr(name)
-
-                      )
-
-
-              raise SystemExit(
-
-                  "No provider categories matched"
-
-              )
-
-
-          # ---------------------------------
-          # Download all live channels
-          # ---------------------------------
-
-          streams = provider_request(
-
-              "get_live_streams"
-
-          )
-
-
-          if not isinstance(streams, list):
-
-              raise SystemExit(
-
-                  "Provider streams response was not a list"
-
-              )
-
-
-          print("")
-
-          print(
-
-              f"Total provider channels: "
-
-              f"{len(streams)}"
-
-          )
-
-
-          # ---------------------------------
-          # Match channels by category_id
-          # ---------------------------------
-
-          matched_channels = []
-
-
-          for stream in streams:
-
-              category_id = str(
-
-                  stream.get(
-
-                      "category_id",
-
-                      ""
-
-                  )
-
-              )
-
-
-              if category_id in selected_category_ids:
-
-                  matched_channels.append(stream)
-
-
-          print("")
-
-          print(
-
-              f"Channels from selected groups: "
-
-              f"{len(matched_channels)}"
-
-          )
-
-
-          if not matched_channels:
-
-              raise SystemExit(
-
-                  "No channels matched selected category IDs"
-
-              )
-
-
-          # ---------------------------------
-          # Sort channels
-          # ---------------------------------
-
-          matched_channels.sort(
-
-              key=lambda stream: (
-
-                  matched_category_names.get(
-
-                      str(
-
-                          stream.get(
-
-                              "category_id",
-
-                              ""
-
-                          )
-
-                      ),
-
-                      ""
-
-                  ).casefold(),
-
-                  str(
-
-                      stream.get(
+                      channel.get(
 
                           "name",
 
@@ -665,11 +329,12 @@ jobs:
 
                       )
 
-                  ).casefold(),
+                  ).strip()
 
-                  str(
 
-                      stream.get(
+                  stream_id = str(
+
+                      channel.get(
 
                           "stream_id",
 
@@ -679,116 +344,418 @@ jobs:
 
                   )
 
+
+                  if not name:
+
+                      continue
+
+
+                  provider_channels.append(
+
+                      {
+
+                          "name": name,
+
+                          "normalized": normalize_text(name),
+
+                          "stream_id": stream_id,
+
+                          "num": channel.get(
+
+                              "num",
+
+                              ""
+
+                          ),
+
+                          "category_id": channel.get(
+
+                              "category_id",
+
+                              ""
+
+                          )
+
+                      }
+
+                  )
+
+
+          print("")
+
+          print(
+
+              f"Provider channels loaded: "
+
+              f"{len(provider_channels)}"
+
+          )
+
+
+          if not provider_channels:
+
+              raise SystemExit(
+
+                  "No provider channels were loaded"
+
               )
 
+
+          # --------------------------------------------------
+          # Read Jessman channel list
+          # --------------------------------------------------
+
+          guide_channels = {}
+
+          guide_channel_names = defaultdict(list)
+
+
+          print("")
+
+          print(
+
+              "Reading Jessman FAST channel list..."
+
           )
 
 
-          # ---------------------------------
-          # Create fast directory
-          # ---------------------------------
+          for event, element in ET.iterparse(
 
-          os.makedirs(
+              GUIDE_FILE,
 
-              "fast",
+              events=(
 
-              exist_ok=True
+                  "end",
+
+              )
+
+          ):
+
+
+              if element.tag == "channel":
+
+
+                  channel_id = element.get(
+
+                      "id",
+
+                      ""
+
+                  ).strip()
+
+
+                  display_names = []
+
+
+                  for display_name in element.findall(
+
+                      "display-name"
+
+                  ):
+
+
+                      if display_name.text:
+
+                          display_names.append(
+
+                              display_name.text.strip()
+
+                          )
+
+
+                  for name in display_names:
+
+
+                      normalized = normalize_text(
+
+                          name
+
+                      )
+
+
+                      if normalized:
+
+
+                          guide_channel_names[
+
+                              normalized
+
+                          ].append(
+
+                              {
+
+                                  "id": channel_id,
+
+                                  "name": name
+
+                              }
+
+                          )
+
+
+                          guide_channels[
+
+                              channel_id
+
+                          ] = {
+
+                              "id": channel_id,
+
+                              "name": name,
+
+                              "normalized": normalized
+
+                          }
+
+
+                  element.clear()
+
+
+          print("")
+
+          print(
+
+              f"Jessman guide channels loaded: "
+
+              f"{len(guide_channels)}"
 
           )
 
 
-          output_file = "fast/fast.txt"
+          # --------------------------------------------------
+          # Match channels
+          # --------------------------------------------------
+
+          matched = []
+
+          unmatched = []
 
 
-          # ---------------------------------
-          # Write complete provider records
-          # ---------------------------------
+          for provider in provider_channels:
+
+
+              normalized = provider["normalized"]
+
+
+              matches = guide_channel_names.get(
+
+                  normalized,
+
+                  []
+
+              )
+
+
+              if matches:
+
+
+                  matched.append(
+
+                      {
+
+                          "provider": provider,
+
+                          "guide_matches": matches
+
+                      }
+
+                  )
+
+
+              else:
+
+
+                  unmatched.append(
+
+                      provider
+
+                  )
+
+
+          # --------------------------------------------------
+          # Write report
+          # --------------------------------------------------
 
           with open(
 
-              output_file,
+              REPORT_FILE,
 
               "w",
 
               encoding="utf-8"
 
-          ) as file:
+          ) as report:
 
 
-              for stream in matched_channels:
+              report.write(
 
-                  file.write(
+                  "FAST CHANNEL MATCH REPORT\n"
 
-                      json.dumps(
+              )
 
-                          stream,
 
-                          ensure_ascii=False,
+              report.write(
 
-                          separators=(
+                  "=========================\n\n"
 
-                              ",",
+              )
 
-                              ":"
 
-                          )
+              report.write(
+
+                  f"Provider channels: "
+
+                  f"{len(provider_channels)}\n"
+
+              )
+
+
+              report.write(
+
+                  f"Matched channels: "
+
+                  f"{len(matched)}\n"
+
+              )
+
+
+              report.write(
+
+                  f"Unmatched channels: "
+
+                  f"{len(unmatched)}\n\n"
+
+              )
+
+
+              report.write(
+
+                  "\n"
+
+              )
+
+
+              report.write(
+
+                  "MATCHED CHANNELS\n"
+
+              )
+
+
+              report.write(
+
+                  "================\n\n"
+
+              )
+
+
+              for item in matched:
+
+
+                  provider = item["provider"]
+
+
+                  report.write(
+
+                      f"PROVIDER: "
+
+                      f"{provider['name']}\n"
+
+                  )
+
+
+                  report.write(
+
+                      f"STREAM ID: "
+
+                      f"{provider['stream_id']}\n"
+
+                  )
+
+
+                  report.write(
+
+                      f"NORMALIZED: "
+
+                      f"{provider['normalized']}\n"
+
+                  )
+
+
+                  report.write(
+
+                      "GUIDE MATCHES:\n"
+
+                  )
+
+
+                  for guide in item[
+
+                      "guide_matches"
+
+                  ]:
+
+
+                      report.write(
+
+                          f"  {guide['name']}"
+
+                          f" | ID: "
+
+                          f"{guide['id']}\n"
 
                       )
 
-                      + "\n"
+
+                  report.write(
+
+                      "\n"
 
                   )
 
 
-          # ---------------------------------
-          # Count channels by group
-          # ---------------------------------
+              report.write(
 
-          group_counts = {}
+                  "\n"
+
+              )
 
 
-          for stream in matched_channels:
+              report.write(
 
-              category_id = str(
+                  "UNMATCHED CHANNELS\n"
 
-                  stream.get(
+              )
 
-                      "category_id",
 
-                      ""
+              report.write(
+
+                  "==================\n\n"
+
+              )
+
+
+              for provider in unmatched:
+
+
+                  report.write(
+
+                      f"{provider['name']}"
+
+                      f" | STREAM ID: "
+
+                      f"{provider['stream_id']}"
+
+                      f" | NORMALIZED: "
+
+                      f"{provider['normalized']}\n"
 
                   )
 
-              )
 
-
-              group_name = matched_category_names.get(
-
-                  category_id,
-
-                  category_id
-
-              )
-
-
-              group_counts[group_name] = (
-
-                  group_counts.get(
-
-                      group_name,
-
-                      0
-
-                  )
-
-                  + 1
-
-              )
-
-
-          # ---------------------------------
-          # Results
-          # ---------------------------------
+          # --------------------------------------------------
+          # Console summary
+          # --------------------------------------------------
 
           print("")
 
@@ -800,7 +767,7 @@ jobs:
 
           print(
 
-              "FAST SOURCE CHANNEL LIST CREATED"
+              "FAST MATCHING COMPLETE"
 
           )
 
@@ -815,9 +782,27 @@ jobs:
 
           print(
 
-              f"Channels written: "
+              f"Provider channels: "
 
-              f"{len(matched_channels)}"
+              f"{len(provider_channels)}"
+
+          )
+
+
+          print(
+
+              f"Matched channels: "
+
+              f"{len(matched)}"
+
+          )
+
+
+          print(
+
+              f"Unmatched channels: "
+
+              f"{len(unmatched)}"
 
           )
 
@@ -826,93 +811,55 @@ jobs:
 
           print(
 
-              "Channels by group:"
+              f"Report created: "
+
+              f"{REPORT_FILE}"
 
           )
 
 
-          for group in sorted(
+          print("")
 
-              group_counts,
+          print(
 
-              key=lambda value: value.casefold()
+              "First 25 unmatched channels:"
 
-          ):
+          )
+
+
+          for provider in unmatched[:25]:
 
               print(
 
-                  f"{group}: "
-
-                  f"{group_counts[group]}"
+                  f"  {provider['name']}"
 
               )
-
-
-          print("")
-
-          print(
-
-              f"Created: "
-
-              f"{output_file}"
-
-          )
-
-
-          print("")
-
-          print(
-
-              "File size:"
-
-          )
-
-
-          print(
-
-              os.path.getsize(
-
-                  output_file
-
-              ),
-
-              "bytes"
-
-          )
 
           PY
 
 
-      - name: Show FAST source file
+      - name: Show matching results
 
         run: |
 
           echo "======================================"
 
-          echo "FAST SOURCE FILE"
+          echo "FAST MATCHING RESULTS"
 
           echo "======================================"
 
           echo ""
 
-          echo "Channel records:"
-
-          wc -l fast/fast.txt
+          ls -lh fast/match-report.txt
 
           echo ""
 
-          echo "File size:"
+          echo "Report preview:"
 
-          ls -lh fast/fast.txt
-
-          echo ""
-
-          echo "First 5 records:"
-
-          head -n 5 fast/fast.txt
+          head -n 100 fast/match-report.txt
 
 
-      - name: Commit and push FAST source list
+      - name: Commit matching report
 
         run: |
 
@@ -920,8 +867,11 @@ jobs:
 
           git config --global user.email "github-actions@github.com"
 
-          git add fast/fast.txt
 
-          git commit -m "Update FAST source channel list" || echo "No changes"
+          git add fast/match-report.txt
+
+
+          git commit -m "Add FAST channel match report" || echo "No changes"
+
 
           git push
