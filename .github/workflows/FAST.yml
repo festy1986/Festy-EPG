@@ -15,15 +15,14 @@ cancel-in-progress: false
 jobs:
 build-fast:
 runs-on: ubuntu-latest
+steps:
+- name: Checkout repository
+uses: actions/checkout@v4
+with:
+fetch-depth: 0
 
 ```
-steps:
-  - name: Checkout repository
-    uses: actions/checkout@v4
-    with:
-      fetch-depth: 0
-
-  - name: Download Jessman FAST source
+  - name: Download FAST source
     run: |
       mkdir -p fast
 
@@ -33,7 +32,7 @@ steps:
 
       test -s fast/source.xml
 
-      echo "Jessman FAST source downloaded successfully"
+      echo "FAST source downloaded successfully"
       ls -lh fast/source.xml
 
   - name: Process FAST guide
@@ -46,10 +45,8 @@ steps:
       const outputPath = 'fast/processed.xml'
 
       const now = new Date()
-
       const cutoff = new Date(
-        now.getTime() +
-        3 * 24 * 60 * 60 * 1000
+        now.getTime() + 3 * 24 * 60 * 60 * 1000
       )
 
       let programmesScanned = 0
@@ -259,42 +256,22 @@ steps:
         let episodeTitle =
           after
 
-        const separatorIndex =
-          showTitle.search(
-            /[:\-–—]/
+        const separator =
+          showTitle.match(
+            /^(.+?)\s*[:\-–—]\s*(.+)$/
           )
 
         if (
-          separatorIndex !== -1
+          separator
         ) {
-          const possibleShow =
-            showTitle
-              .slice(
-                0,
-                separatorIndex
-              )
-              .trim()
-
-          const possibleEpisode =
-            showTitle
-              .slice(
-                separatorIndex + 1
-              )
-              .trim()
+          showTitle =
+            separator[1].trim()
 
           if (
-            possibleShow &&
-            possibleEpisode
+            !episodeTitle
           ) {
-            showTitle =
-              possibleShow
-
-            if (
-              !episodeTitle
-            ) {
-              episodeTitle =
-                possibleEpisode
-            }
+            episodeTitle =
+              separator[2].trim()
           }
         }
 
@@ -725,9 +702,7 @@ steps:
   - name: Compress FAST guide
     run: |
       gzip -c fast/processed.xml > fast/FAST.xml.gz
-
       test -s fast/FAST.xml.gz
-
       ls -lh fast/FAST.xml.gz
 
   - name: Commit and push FAST guide
