@@ -2,7 +2,6 @@ name: FAST
 
 on:
 workflow_dispatch:
-
 schedule:
 - cron: '45 5 * * *'
 
@@ -29,21 +28,13 @@ steps:
     with:
       node-version: 24
 
-  - name: Restore TVMaze cache
-    uses: actions/cache@v4
-    with:
-      path: fast/tvmaze-cache.json
-      key: tvmaze-fast-cache-${{ github.run_id }}
-      restore-keys: |
-        tvmaze-fast-cache-
-
   - name: Create FAST working directory
     run: |
       mkdir -p fast
 
   - name: Download FAST source
     run: |
-      curl -L --fail --retry 5 --retry-delay 10 \
+      curl -L --fail \
         https://epg.guru/7dayiptv/USFast.xml \
         -o fast/source.xml
 
@@ -67,10 +58,8 @@ steps:
       const cachePath = 'fast/tvmaze-cache.json'
 
       const now = new Date()
-
       const cutoff = new Date(
-        now.getTime() +
-        2 * 24 * 60 * 60 * 1000
+        now.getTime() + 3 * 24 * 60 * 60 * 1000
       )
 
       const stats = {
@@ -90,10 +79,7 @@ steps:
       if (fs.existsSync(cachePath)) {
         try {
           cache = JSON.parse(
-            fs.readFileSync(
-              cachePath,
-              'utf8'
-            )
+            fs.readFileSync(cachePath, 'utf8')
           )
         } catch {
           cache = {}
@@ -101,9 +87,7 @@ steps:
       }
 
       function sleep(ms) {
-        return new Promise(
-          resolve => setTimeout(resolve, ms)
-        )
+        return new Promise(resolve => setTimeout(resolve, ms))
       }
 
       function decodeXml(value) {
@@ -133,18 +117,9 @@ steps:
 
       function cleanTitle(value) {
         return cleanSpaces(value)
-          .replace(
-            /^\s*(New|Live|Repeat)\s*[:\-]\s*/i,
-            ''
-          )
-          .replace(
-            /\s*\((New|Live|Repeat)\)\s*$/i,
-            ''
-          )
-          .replace(
-            /\s*[-–—]\s*(New|Live|Repeat)\s*$/i,
-            ''
-          )
+          .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
+          .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
+          .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
           .trim()
       }
 
@@ -236,7 +211,7 @@ steps:
         )
       }
 
-      function programmeIsWithinTwoDays(block) {
+      function programmeIsWithinThreeDays(block) {
         const match = block.match(
           /<programme\b[^>]*\bstart="([^"]+)"/i
         )
@@ -245,28 +220,17 @@ steps:
 
         const start = parseXmltvDate(match[1])
 
-        if (
-          !start ||
-          Number.isNaN(start.getTime())
-        ) {
+        if (!start || Number.isNaN(start.getTime())) {
           return false
         }
 
-        return (
-          start >= now &&
-          start < cutoff
-        )
+        return start >= now && start < cutoff
       }
 
       function getProgrammeType(block) {
         const categories =
-          getTags(
-            block,
-            'category'
-          ).map(
-            value =>
-              value.toLowerCase()
-          )
+          getTags(block, 'category')
+            .map(value => value.toLowerCase())
 
         if (
           categories.includes('movie') ||
@@ -284,21 +248,13 @@ steps:
         }
 
         const title =
-          getTag(
-            block,
-            'title'
-          ).toLowerCase()
+          getTag(block, 'title').toLowerCase()
 
         const subtitle =
-          getTag(
-            block,
-            'sub-title'
-          )
+          getTag(block, 'sub-title')
 
         const episodeNum =
-          block.match(
-            /<episode-num\b/i
-          )
+          block.match(/<episode-num\b/i)
 
         if (
           subtitle ||
@@ -313,17 +269,12 @@ steps:
 
       function getEpisodeCode(block) {
         const episodeNum =
-          getTag(
-            block,
-            'episode-num'
-          )
+          getTag(block, 'episode-num')
 
         if (!episodeNum) return ''
 
         const xmltvMatch =
-          episodeNum.match(
-            /^(\d+)\.(\d+)\.$/
-          )
+          episodeNum.match(/^(\d+)\.(\d+)\.$/)
 
         if (xmltvMatch) {
           return (
@@ -333,9 +284,7 @@ steps:
         }
 
         const directMatch =
-          episodeNum.match(
-            /\bS(\d+)E(\d+)\b/i
-          )
+          episodeNum.match(/\bS(\d+)E(\d+)\b/i)
 
         if (directMatch) {
           return (
@@ -355,8 +304,7 @@ steps:
 
         if (!match) return ''
 
-        const value =
-          match[1]
+        const value = match[1]
 
         return (
           `${value.slice(4, 6)}/` +
@@ -370,11 +318,7 @@ steps:
           .test(value)
       }
 
-      function replaceTag(
-        block,
-        tag,
-        value
-      ) {
+      function replaceTag(block, tag, value) {
         const escaped =
           escapeXml(value)
 
@@ -400,10 +344,7 @@ steps:
         )
       }
 
-      function removeTag(
-        block,
-        tag
-      ) {
+      function removeTag(block, tag) {
         return block.replace(
           new RegExp(
             `\\s*<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
@@ -413,30 +354,16 @@ steps:
         )
       }
 
-      function scoreShow(
-        title,
-        show
-      ) {
+      function scoreShow(title, show) {
         const a =
           normalize(title)
 
         const b =
-          normalize(
-            show?.name
-          )
+          normalize(show?.name)
 
-        if (
-          !a ||
-          !b
-        ) {
-          return 0
-        }
+        if (!a || !b) return 0
 
-        if (
-          a === b
-        ) {
-          return 100
-        }
+        if (a === b) return 100
 
         if (
           a.includes(b) ||
@@ -448,13 +375,10 @@ steps:
         return 0
       }
 
-      function tvmazeShowIsMovieLike(
-        show
-      ) {
+      function tvmazeShowIsMovieLike(show) {
         const type =
-          String(
-            show?.type || ''
-          ).toLowerCase()
+          String(show?.type || '')
+            .toLowerCase()
 
         return (
           type === 'movie' ||
@@ -485,9 +409,7 @@ steps:
                 }
               )
 
-            if (
-              response.status === 404
-            ) {
+            if (response.status === 404) {
               return null
             }
 
@@ -500,19 +422,13 @@ steps:
               )
             }
 
-            if (
-              !response.ok
-            ) {
+            if (!response.ok) {
               return null
             }
 
             return await response.json()
-          } catch (
-            error
-          ) {
-            if (
-              attempt === attempts
-            ) {
+          } catch (error) {
+            if (attempt === attempts) {
               console.log(
                 `[FAIL] ${label} | ${error.message}`
               )
@@ -537,9 +453,7 @@ steps:
         return null
       }
 
-      async function searchShow(
-        title
-      ) {
+      async function searchShow(title) {
         const key =
           `show:${normalize(title)}`
 
@@ -566,26 +480,18 @@ steps:
         const candidates =
           Array.isArray(result)
             ? result
-                .map(
-                  item =>
-                    item.show
-                )
+                .map(item => item.show)
                 .filter(Boolean)
             : []
 
-        let best =
-          null
-
-        let bestScore =
-          0
+        let best = null
+        let bestScore = 0
 
         for (
           const show of candidates
         ) {
           if (
-            tvmazeShowIsMovieLike(
-              show
-            )
+            tvmazeShowIsMovieLike(show)
           ) {
             continue
           }
@@ -599,34 +505,23 @@ steps:
           if (
             score > bestScore
           ) {
-            best =
-              show
-
-            bestScore =
-              score
+            best = show
+            bestScore = score
           }
         }
 
-        if (
-          bestScore < 80
-        ) {
-          best =
-            null
+        if (bestScore < 80) {
+          best = null
         }
 
-        cache[key] =
-          best
+        cache[key] = best
 
-        await sleep(
-          250
-        )
+        await sleep(250)
 
         return best
       }
 
-      async function getEpisodes(
-        showId
-      ) {
+      async function getEpisodes(showId) {
         const key =
           `episodes:${showId}`
 
@@ -649,20 +544,15 @@ steps:
           )
 
         const result =
-          Array.isArray(
-            episodes
-          )
+          Array.isArray(episodes)
             ? episodes
             : []
 
-        cache[key] =
-          result
+        cache[key] = result
 
         stats.episodesLoaded++
 
-        await sleep(
-          250
-        )
+        await sleep(250)
 
         return result
       }
@@ -672,9 +562,7 @@ steps:
         block
       ) {
         const existingCode =
-          getEpisodeCode(
-            block
-          )
+          getEpisodeCode(block)
 
         const subtitle =
           getTag(
@@ -682,17 +570,13 @@ steps:
             'sub-title'
           )
 
-        if (
-          existingCode
-        ) {
+        if (existingCode) {
           const match =
             existingCode.match(
               /^S(\d+)E(\d+)$/i
             )
 
-          if (
-            match
-          ) {
+          if (match) {
             const found =
               episodes.find(
                 episode =>
@@ -710,17 +594,13 @@ steps:
                   )
               )
 
-            if (
-              found
-            ) {
+            if (found) {
               return found
             }
           }
         }
 
-        if (
-          subtitle
-        ) {
+        if (subtitle) {
           const wanted =
             normalize(
               subtitle
@@ -734,9 +614,7 @@ steps:
                 ) === wanted
             )
 
-          if (
-            found
-          ) {
+          if (found) {
             return found
           }
         }
@@ -751,7 +629,7 @@ steps:
         stats.programmes++
 
         if (
-          !programmeIsWithinTwoDays(
+          !programmeIsWithinThreeDays(
             block
           )
         ) {
@@ -796,8 +674,7 @@ steps:
           )
 
         if (
-          title !==
-          originalTitle
+          title !== originalTitle
         ) {
           stats.titlesCleaned++
         }
@@ -814,9 +691,7 @@ steps:
           stats.descriptionsChanged++
         }
 
-        if (
-          episode
-        ) {
+        if (episode) {
           const tvmazeEpisodeTitle =
             cleanSpaces(
               episode.name
@@ -857,8 +732,7 @@ steps:
 
           const summary =
             cleanDescription(
-              episode.summary ||
-              ''
+              episode.summary || ''
             )
               .replace(
                 /^<[^>]+>/,
@@ -940,9 +814,7 @@ steps:
               /\b(19|20)\d{2}\b/
             )
 
-          if (
-            yearMatch
-          ) {
+          if (yearMatch) {
             description =
               description
                 ? `${description} (${yearMatch[0]})`
@@ -961,9 +833,7 @@ steps:
               block
             )
 
-          if (
-            displayDate
-          ) {
+          if (displayDate) {
             description =
               description
                 ? `${description} (${displayDate})`
@@ -1039,26 +909,19 @@ steps:
             }
           )
 
-        let inside =
-          false
-
-        let buffer =
-          ''
+        let inside = false
+        let buffer = ''
 
         for await (
           const line of rl
         ) {
-          if (
-            !inside
-          ) {
+          if (!inside) {
             if (
               line.includes(
                 '<programme '
               )
             ) {
-              inside =
-                true
-
+              inside = true
               buffer =
                 line + '\n'
 
@@ -1067,11 +930,10 @@ steps:
                   '</programme>'
                 )
               ) {
-                inside =
-                  false
+                inside = false
 
                 if (
-                  programmeIsWithinTwoDays(
+                  programmeIsWithinThreeDays(
                     buffer
                   )
                 ) {
@@ -1083,17 +945,14 @@ steps:
                       )
                     )
 
-                  if (
-                    title
-                  ) {
+                  if (title) {
                     uniqueTitles.add(
                       title
                     )
                   }
                 }
 
-                buffer =
-                  ''
+                buffer = ''
               }
             }
           } else {
@@ -1105,11 +964,10 @@ steps:
                 '</programme>'
               )
             ) {
-              inside =
-                false
+              inside = false
 
               if (
-                programmeIsWithinTwoDays(
+                programmeIsWithinThreeDays(
                   buffer
                 )
               ) {
@@ -1121,17 +979,14 @@ steps:
                     )
                   )
 
-                if (
-                  title
-                ) {
+                if (title) {
                   uniqueTitles.add(
                     title
                   )
                 }
               }
 
-              buffer =
-                ''
+              buffer = ''
             }
           }
         }
@@ -1146,20 +1001,14 @@ steps:
           new Map()
 
         const titles =
-          [
-            ...uniqueTitles
-          ]
+          [...uniqueTitles]
 
-        let index =
-          0
+        const concurrency = 8
 
-        const concurrency =
-          8
+        let index = 0
 
         async function worker() {
-          while (
-            true
-          ) {
+          while (true) {
             const current =
               index++
 
@@ -1179,9 +1028,7 @@ steps:
                   title
                 )
 
-              if (
-                !show
-              ) {
+              if (!show) {
                 enrichmentMap.set(
                   title,
                   null
@@ -1204,9 +1051,7 @@ steps:
               )
 
               stats.showsMatched++
-            } catch (
-              error
-            ) {
+            } catch (error) {
               console.log(
                 `[ENRICHMENT ERROR] ${title} | ${error.message}`
               )
@@ -1219,8 +1064,7 @@ steps:
           }
         }
 
-        const workers =
-          []
+        const workers = []
 
         for (
           let i = 0;
@@ -1266,20 +1110,12 @@ steps:
             }
           )
 
-        let inside =
-          false
+        let inside = false
+        let buffer = ''
 
-        let buffer =
-          ''
-
-        function write(
-          value
-        ) {
+        function write(value) {
           return new Promise(
-            (
-              resolve,
-              reject
-            ) => {
+            (resolve, reject) => {
               if (
                 output.write(
                   value
@@ -1304,17 +1140,13 @@ steps:
         for await (
           const line of rl
         ) {
-          if (
-            !inside
-          ) {
+          if (!inside) {
             if (
               line.includes(
                 '<programme '
               )
             ) {
-              inside =
-                true
-
+              inside = true
               buffer =
                 line + '\n'
 
@@ -1323,8 +1155,7 @@ steps:
                   '</programme>'
                 )
               ) {
-                inside =
-                  false
+                inside = false
 
                 const title =
                   cleanTitle(
@@ -1335,7 +1166,7 @@ steps:
                   )
 
                 if (
-                  programmeIsWithinTwoDays(
+                  programmeIsWithinThreeDays(
                     buffer
                   )
                 ) {
@@ -1366,8 +1197,7 @@ steps:
                   stats.skipped++
                 }
 
-                buffer =
-                  ''
+                buffer = ''
               }
             } else {
               await write(
@@ -1383,8 +1213,7 @@ steps:
                 '</programme>'
               )
             ) {
-              inside =
-                false
+              inside = false
 
               const title =
                 cleanTitle(
@@ -1395,7 +1224,7 @@ steps:
                 )
 
               if (
-                programmeIsWithinTwoDays(
+                programmeIsWithinThreeDays(
                   buffer
                 )
               ) {
@@ -1426,24 +1255,20 @@ steps:
                 stats.skipped++
               }
 
-              buffer =
-                ''
+              buffer = ''
             }
           }
         }
 
         await new Promise(
-          (
-            resolve,
-            reject
-          ) => {
+          (resolve, reject) => {
+            output.end(
+              resolve
+            )
+
             output.on(
               'error',
               reject
-            )
-
-            output.end(
-              resolve
             )
           }
         )
@@ -1558,10 +1383,7 @@ steps:
 
   - name: Show processed FAST size
     run: |
-      echo "Source:"
       ls -lh fast/source.xml
-
-      echo "Processed:"
       ls -lh fast/processed.xml
 
   - name: Compress FAST guide
@@ -1577,7 +1399,7 @@ steps:
       echo "Compressed FAST size: $SIZE bytes"
 
       if [ "$SIZE" -ge 53000000 ]; then
-        echo "FAST guide is over 53 MB"
+        echo "FAST guide is 53 MB or larger"
         exit 1
       fi
 
@@ -1589,14 +1411,14 @@ steps:
       git fetch origin main
       git rebase origin/main
 
-      git add fast/FAST.xml.gz
+      git add fast/FAST.xml.gz fast/tvmaze-cache.json
 
       if git diff --cached --quiet; then
         echo "No FAST guide changes to commit"
         exit 0
       fi
 
-      git commit -m "Update 2-day FAST guide"
+      git commit -m "Update FAST guide"
 
       for attempt in 1 2 3 4 5; do
         echo "Push attempt $attempt"
@@ -1609,7 +1431,6 @@ steps:
         echo "Push failed, refreshing branch..."
 
         git fetch origin main
-
         git rebase origin/main
 
         sleep 5
