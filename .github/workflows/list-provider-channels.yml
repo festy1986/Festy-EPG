@@ -1,4 +1,4 @@
-name: FAST Group List
+name: FAST Channel List
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
 
-  get-fast-groups:
+  get-fast-channels:
 
     runs-on: ubuntu-latest
 
@@ -56,7 +56,7 @@ jobs:
           python -m pip install requests
 
 
-      - name: Download provider groups
+      - name: Download selected FAST channels
 
         env:
 
@@ -71,9 +71,14 @@ jobs:
           python - <<'PY'
 
           import os
+          import json
           import requests
           import time
 
+
+          # ---------------------------------
+          # Provider credentials
+          # ---------------------------------
 
           XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 
@@ -99,7 +104,77 @@ jobs:
               XTREAM_URL += ":80"
 
 
+          # ---------------------------------
+          # Input and output
+          # ---------------------------------
+
+          GROUP_FILE = "fast/fastgroups.txt"
+
+          OUTPUT_FILE = "fast/fastchannels.txt"
+
+
+          # ---------------------------------
+          # Load selected groups
+          # ---------------------------------
+
+          if not os.path.exists(GROUP_FILE):
+
+              raise SystemExit(
+
+                  f"Missing {GROUP_FILE}"
+
+              )
+
+
+          selected_groups = set()
+
+
+          with open(
+
+              GROUP_FILE,
+
+              "r",
+
+              encoding="utf-8"
+
+          ) as file:
+
+              for line in file:
+
+                  group = line.strip()
+
+
+                  if group:
+
+                      selected_groups.add(group)
+
+
+          if not selected_groups:
+
+              raise SystemExit(
+
+                  "No groups found in fast/fastgroups.txt"
+
+              )
+
+
+          print("")
+
+          print(
+
+              f"Selected groups: "
+
+              f"{len(selected_groups)}"
+
+          )
+
+
+          # ---------------------------------
+          # Session
+          # ---------------------------------
+
           session = requests.Session()
+
 
           session.headers.update({
 
@@ -108,182 +183,102 @@ jobs:
           })
 
 
-          def download_api(action):
+          # ---------------------------------
+          # Download provider channels
+          # ---------------------------------
 
-              url = (
+          API_URL = (
 
-                  f"{XTREAM_URL}/player_api.php"
+              f"{XTREAM_URL}/player_api.php"
 
-                  f"?username={USERNAME}"
+              f"?username={USERNAME}"
 
-                  f"&password={PASSWORD}"
+              f"&password={PASSWORD}"
 
-                  f"&action={action}"
+              f"&action=get_live_streams"
 
-              )
-
-
-              for attempt in range(1, 6):
-
-                  try:
-
-                      print(
-
-                          f"Downloading {action} "
-
-                          f"(attempt {attempt}/5)..."
-
-                      )
+          )
 
 
-                      response = session.get(
-
-                          url,
-
-                          timeout=(30, 600)
-
-                      )
+          streams = None
 
 
-                      print(
+          for attempt in range(1, 6):
 
-                          f"{action} HTTP status: "
+              try:
 
-                          f"{response.status_code}"
+                  print("")
 
-                      )
+                  print(
 
+                      f"Downloading provider channels "
 
-                      response.raise_for_status()
+                      f"(attempt {attempt}/5)..."
 
-
-                      data = response.json()
-
-
-                      if not isinstance(data, list):
-
-                          raise RuntimeError(
-
-                              f"{action} did not return a list"
-
-                          )
+                  )
 
 
-                      print(
+                  response = session.get(
 
-                          f"{action} returned "
+                      API_URL,
 
-                          f"{len(data)} records"
+                      timeout=(30, 600)
 
-                      )
-
-
-                      return data
+                  )
 
 
-                  except Exception as error:
+                  print(
 
-                      print(
+                      f"HTTP status: "
 
-                          f"{action} attempt {attempt} failed: "
+                      f"{response.status_code}"
 
-                          f"{error}"
-
-                      )
+                  )
 
 
-                      if attempt < 5:
+                  response.raise_for_status()
 
-                          time.sleep(15)
 
+                  streams = response.json()
+
+
+                  break
+
+
+              except Exception as error:
+
+                  print("")
+
+                  print(
+
+                      f"Attempt {attempt} failed: "
+
+                      f"{error}"
+
+                  )
+
+
+                  if attempt < 5:
+
+                      time.sleep(15)
+
+
+          if streams is None:
 
               raise SystemExit(
 
-                  f"Failed to download {action}"
+                  "Provider channel download failed"
 
               )
 
 
-          # ---------------------------------
-          # Download all provider categories
-          # ---------------------------------
+          if not isinstance(streams, list):
 
-          categories = download_api(
+              raise SystemExit(
 
-              "get_live_categories"
+                  "Provider response was not a channel list"
 
-          )
-
-
-          # ---------------------------------
-          # Build category ID -> name lookup
-          # ---------------------------------
-
-          category_names = {}
-
-
-          for category in categories:
-
-              if not isinstance(category, dict):
-
-                  continue
-
-
-              category_id = str(
-
-                  category.get(
-
-                      "category_id",
-
-                      ""
-
-                  )
-
-              ).strip()
-
-
-              category_name = str(
-
-                  category.get(
-
-                      "category_name",
-
-                      ""
-
-                  )
-
-              ).strip()
-
-
-              if category_id and category_name:
-
-                  category_names[
-
-                      category_id
-
-                  ] = category_name
-
-
-          print("")
-
-          print(
-
-              f"Category names found: "
-
-              f"{len(category_names)}"
-
-          )
-
-
-          # ---------------------------------
-          # Download all live channels
-          # ---------------------------------
-
-          streams = download_api(
-
-              "get_live_streams"
-
-          )
+              )
 
 
           print("")
@@ -298,26 +293,28 @@ jobs:
 
 
           # ---------------------------------
-          # Match every channel to its group
+          # Filter channels by selected groups
           # ---------------------------------
 
-          groups = set()
+          matched_channels = []
 
-          channels_without_group = 0
+
+          group_counts = {}
 
 
           for stream in streams:
+
 
               if not isinstance(stream, dict):
 
                   continue
 
 
-              category_id = str(
+              category_name = str(
 
                   stream.get(
 
-                      "category_id",
+                      "category_name",
 
                       ""
 
@@ -326,66 +323,90 @@ jobs:
               ).strip()
 
 
-              if category_id in category_names:
+              if category_name not in selected_groups:
 
-                  groups.add(
+                  continue
 
-                      category_names[category_id]
+
+              matched_channels.append(stream)
+
+
+              group_counts[category_name] = (
+
+                  group_counts.get(
+
+                      category_name,
+
+                      0
 
                   )
 
-              else:
-
-                  channels_without_group += 1
-
-
-          # ---------------------------------
-          # Save unique groups
-          # ---------------------------------
-
-          if not groups:
-
-              print("")
-
-              print(
-
-                  "No groups were matched."
+                  + 1
 
               )
 
 
-              print("")
-
-              print(
-
-                  "Sample channel data:"
-
-              )
-
-
-              for stream in streams[:3]:
-
-                  print(stream)
-
+          if not matched_channels:
 
               raise SystemExit(
 
-                  "No channel groups were found"
+                  "No channels matched the selected groups"
 
               )
 
 
-          sorted_groups = sorted(
+          # ---------------------------------
+          # Sort channels
+          # ---------------------------------
 
-              groups,
+          matched_channels.sort(
 
-              key=lambda value: value.lower()
+              key=lambda channel: (
+
+                  str(
+
+                      channel.get(
+
+                          "category_name",
+
+                          ""
+
+                      )
+
+                  ).lower(),
+
+                  str(
+
+                      channel.get(
+
+                          "name",
+
+                          ""
+
+                      )
+
+                  ).lower(),
+
+                  str(
+
+                      channel.get(
+
+                          "stream_id",
+
+                          ""
+
+                      )
+
+                  )
+
+              )
 
           )
 
 
-          output_file = "fast/fastgroups.txt"
-
+          # ---------------------------------
+          # Save complete provider records
+          # ---------------------------------
 
           os.makedirs(
 
@@ -398,7 +419,7 @@ jobs:
 
           with open(
 
-              output_file,
+              OUTPUT_FILE,
 
               "w",
 
@@ -406,35 +427,92 @@ jobs:
 
           ) as file:
 
-              for group in sorted_groups:
+
+              for channel in matched_channels:
 
                   file.write(
 
-                      group
+                      json.dumps(
+
+                          channel,
+
+                          ensure_ascii=False,
+
+                          separators=(
+
+                              ",",
+
+                              ":"
+
+                          )
+
+                      )
 
                       + "\n"
 
                   )
 
 
+          # ---------------------------------
+          # Display results
+          # ---------------------------------
+
           print("")
 
           print(
 
-              f"Unique groups found: "
-
-              f"{len(sorted_groups)}"
+              "======================================"
 
           )
-
 
           print(
 
-              f"Channels without a matched group: "
-
-              f"{channels_without_group}"
+              "FAST CHANNEL RESULTS"
 
           )
+
+          print(
+
+              "======================================"
+
+          )
+
+
+          print("")
+
+          print(
+
+              f"Matched channels: "
+
+              f"{len(matched_channels)}"
+
+          )
+
+
+          print("")
+
+          print(
+
+              "Channels by group:"
+
+          )
+
+
+          for group in sorted(
+
+              group_counts,
+
+              key=lambda value: value.lower()
+
+          ):
+
+              print(
+
+                  f"{group}: "
+
+                  f"{group_counts[group]}"
+
+              )
 
 
           print("")
@@ -443,7 +521,7 @@ jobs:
 
               f"Created: "
 
-              f"{output_file}"
+              f"{OUTPUT_FILE}"
 
           )
 
@@ -452,48 +530,56 @@ jobs:
 
           print(
 
-              "First 25 groups:"
+              "First 10 channels:"
 
           )
 
 
-          for group in sorted_groups[:25]:
+          for channel in matched_channels[:10]:
 
               print(
 
-                  f"  {group}"
+                  json.dumps(
+
+                      channel,
+
+                      ensure_ascii=False,
+
+                      indent=2
+
+                  )
 
               )
 
           PY
 
 
-      - name: Show group list
+      - name: Show FAST channel file information
 
         run: |
 
           echo "======================================"
 
-          echo "FAST GROUP LIST"
+          echo "FAST CHANNEL FILE"
 
           echo "======================================"
 
           echo ""
 
-          cat fast/fastgroups.txt
+          wc -l fast/fastchannels.txt
 
           echo ""
 
-          echo "======================================"
+          ls -lh fast/fastchannels.txt
 
-          echo "Total groups:"
+          echo ""
 
-          wc -l fast/fastgroups.txt
+          echo "First 5 records:"
 
-          echo "======================================"
+          head -n 5 fast/fastchannels.txt
 
 
-      - name: Commit and push group list
+      - name: Commit and push FAST channel list
 
         run: |
 
@@ -501,8 +587,8 @@ jobs:
 
           git config --global user.email "github-actions@github.com"
 
-          git add fast/fastgroups.txt
+          git add fast/fastchannels.txt
 
-          git commit -m "Update FAST group list" || echo "No changes"
+          git commit -m "Update FAST channel list" || echo "No changes"
 
           git push
