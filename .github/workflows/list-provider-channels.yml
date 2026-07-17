@@ -1,4 +1,4 @@
-name: FAST Channel List
+name: Test
 
 on:
   workflow_dispatch:
@@ -7,11 +7,12 @@ permissions:
   contents: write
 
 concurrency:
-  group: fast-channel-list
+  group: epg-test
   cancel-in-progress: false
 
 jobs:
-  get-fast-channels:
+
+  test-provider:
 
     runs-on: ubuntu-latest
 
@@ -20,7 +21,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+
       - name: Verify provider credentials
+
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -49,14 +52,22 @@ jobs:
           echo "XTREAM_USERNAME exists"
           echo "XTREAM_PASSWORD exists"
 
+
       - name: Install Python requirements
+
         run: |
+
           python -m pip install requests
 
-      - name: Get provider channel list
+
+      - name: Download provider channel list
+
         env:
+
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
+
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
@@ -67,89 +78,139 @@ jobs:
           import requests
           from urllib.parse import urlparse
 
-          XTREAM_URL = os.environ["XTREAM_URL"]
-          USERNAME = os.environ["XTREAM_USERNAME"]
-          PASSWORD = os.environ["XTREAM_PASSWORD"]
+          base_url = os.environ["XTREAM_URL"].strip().rstrip("/")
+          username = os.environ["XTREAM_USERNAME"]
+          password = os.environ["XTREAM_PASSWORD"]
 
-          print("Requesting provider channel list...")
+          print("Downloading provider channel list...")
 
-          parsed = urlparse(XTREAM_URL)
+          # Use the same provider credentials as the working 24/7 workflow.
+          # The M3U endpoint is used here instead of player_api.php because
+          # the provider is returning HTTP 520 to direct API requests.
 
-          print(f"Provider host: {parsed.netloc}")
+          url = (
+              f"{base_url}/get.php"
+              f"?username={username}"
+              f"&password={password}"
+              f"&type=m3u_plus"
+              f"&output=ts"
+          )
 
-          params = {
-              "username": USERNAME,
-              "password": PASSWORD,
-              "action": "get_live_streams"
-          }
+          print(f"Provider host: {urlparse(base_url).netloc}")
 
           response = requests.get(
-              XTREAM_URL,
-              params=params,
-              timeout=120
+              url,
+              timeout=300,
+              stream=True,
+              headers={
+                  "User-Agent": "VLC/3.0.20 LibVLC/3.0.20"
+              }
           )
 
           print(f"HTTP status: {response.status_code}")
 
           response.raise_for_status()
 
-          data = response.json()
-
-          if not isinstance(data, list):
-              print("Unexpected provider response:")
-              print(str(data)[:1000])
-              raise SystemExit(1)
-
-          print(f"Provider channels returned: {len(data)}")
-
           os.makedirs("fast", exist_ok=True)
 
-          with open("fast/fastchannels.txt", "w", encoding="utf-8") as output:
+          output_path = "fast/fastchannels.txt"
 
-              for channel in data:
+          channel_names = set()
 
-                  name = str(
-                      channel.get("name")
-                      or channel.get("stream_display_name")
-                      or ""
-                  ).strip()
+          current_name = ""
 
-                  if not name:
-                      continue
+          for raw_line in response.iter_lines(decode_unicode=True):
 
-                  output.write(name + "\n")
+              if not raw_line:
+                  continue
 
-          print("Created fast/fastchannels.txt")
+              line = raw_line.strip()
+
+              if line.startswith("#EXTINF:"):
+
+                  current_name = line.split(",", 1)[1].strip()
+
+                  if current_name:
+                      channel_names.add(current_name)
+
+          if not channel_names:
+              raise RuntimeError(
+                  "No channels were found in the provider M3U response"
+              )
+
+          sorted_channels = sorted(
+              channel_names,
+              key=lambda value: value.lower()
+          )
+
+          with open(output_path, "w", encoding="utf-8") as file:
+
+              for channel in sorted_channels:
+                  file.write(channel + "\n")
+
+          print(f"Provider channels found: {len(sorted_channels)}")
+          print(f"Written to: {output_path}")
 
           PY
 
-      - name: Show generated channel list
+
+      - name: Validate provider channel dump
+
         run: |
 
-          echo "Channel list file:"
+          if [ ! -f fast/fastchannels.txt ]; then
 
-          wc -l fast/fastchannels.txt
+            echo "fast/fastchannels.txt was not created"
 
-          echo
+            exit 1
+
+          fi
+
+
+          CHANNELS=$(grep -cve '^[[:space:]]*$' fast/fastchannels.txt || true)
+
+
+          echo "Provider channels written: $CHANNELS"
+
+
+          if [ "$CHANNELS" -lt 1 ]; then
+
+            echo "No provider channels were found"
+
+            exit 1
+
+          fi
+
+
+          echo ""
 
           echo "First 20 channels:"
 
           head -20 fast/fastchannels.txt
 
-          echo
 
-          echo "Last 20 channels:"
+      - name: Commit provider channel list
 
-          tail -20 fast/fastchannels.txt
-
-      - name: Commit and push channel list
         run: |
 
           git config --global user.name "github-actions"
+
           git config --global user.email "github-actions@github.com"
+
 
           git add fast/fastchannels.txt
 
-          git commit -m "Update FAST channel list" || echo "No changes"
+
+          if git diff --cached --quiet; then
+
+            echo "No channel list changes"
+
+            exit 0
+
+          fi
+
+
+          git commit -m "Update FAST provider channel list"
+
 
           git push
