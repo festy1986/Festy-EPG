@@ -15,25 +15,22 @@ cancel-in-progress: false
 jobs:
 build-fast:
 runs-on: ubuntu-latest
-steps:
-- name: Checkout repository
-uses: actions/checkout@v4
-with:
-fetch-depth: 0
 
 ```
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
+
   - name: Download FAST source
     run: |
       mkdir -p fast
-
       curl -L --fail --retry 5 --retry-delay 10 \
         https://epg.guru/7dayiptv/USFast.xml \
         -o fast/source.xml
-
       test -s fast/source.xml
-
       echo "FAST source downloaded successfully"
-      ls -lh fast/source.xml
 
   - name: Process FAST guide
     run: |
@@ -218,7 +215,7 @@ fetch-depth: 0
           'E' +
           Number(episodeMatch[2])
 
-        let before =
+        const before =
           title
             .slice(
               0,
@@ -226,7 +223,7 @@ fetch-depth: 0
             )
             .trim()
 
-        let after =
+        const after =
           title
             .slice(
               episodeMatch.index +
@@ -234,32 +231,16 @@ fetch-depth: 0
             )
             .trim()
 
-        before =
-          before
-            .replace(
-              /\s*[:\-–—]\s*$/,
-              ''
-            )
-            .trim()
-
-        after =
-          after
-            .replace(
-              /^\s*[:\-–—]\s*/,
-              ''
-            )
-            .trim()
+        const separator =
+          before.match(
+            /^(.+?)\s*[:\-–—]\s*(.+)$/
+          )
 
         let showTitle =
           before
 
         let episodeTitle =
           after
-
-        const separator =
-          showTitle.match(
-            /^(.+?)\s*[:\-–—]\s*(.+)$/
-          )
 
         if (
           separator
