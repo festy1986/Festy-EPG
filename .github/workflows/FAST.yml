@@ -23,7 +23,7 @@ steps:
     with:
       fetch-depth: 0
 
-  - name: Download FAST source
+  - name: Download Jessman FAST source
     run: |
       mkdir -p fast
 
@@ -33,7 +33,7 @@ steps:
 
       test -s fast/source.xml
 
-      echo "FAST source downloaded successfully"
+      echo "Jessman FAST source downloaded successfully"
       ls -lh fast/source.xml
 
   - name: Process FAST guide
@@ -42,233 +42,130 @@ steps:
       const fs = require('fs')
       const readline = require('readline')
 
-      const inputPath =
-        'fast/source.xml'
+      const inputPath = 'fast/source.xml'
+      const outputPath = 'fast/processed.xml'
 
-      const outputPath =
-        'fast/processed.xml'
+      const now = new Date()
 
-      const now =
-        new Date()
+      const cutoff = new Date(
+        now.getTime() +
+        3 * 24 * 60 * 60 * 1000
+      )
 
-      const cutoff =
-        new Date(
-          now.getTime() +
-          3 * 24 * 60 * 60 * 1000
-        )
+      let programmesScanned = 0
+      let programmesKept = 0
+      let programmesSkipped = 0
+      let titlesCleaned = 0
+      let descriptionsChanged = 0
+      let actorsRemoved = 0
+      let episodeNumbersConverted = 0
 
-      let programmesScanned =
-        0
-
-      let programmesKept =
-        0
-
-      let programmesSkipped =
-        0
-
-      let titlesCleaned =
-        0
-
-      let descriptionsChanged =
-        0
-
-      let actorsRemoved =
-        0
-
-      let episodeNumbersConverted =
-        0
-
-      function decodeXml(
-        value
-      ) {
-        return String(
-          value ||
-          ''
-        )
-          .replace(
-            /&amp;/g,
-            '&'
-          )
-          .replace(
-            /&quot;/g,
-            '"'
-          )
-          .replace(
-            /&apos;/g,
-            "'"
-          )
-          .replace(
-            /&lt;/g,
-            '<'
-          )
-          .replace(
-            /&gt;/g,
-            '>'
-          )
+      function decodeXml(value) {
+        return String(value || '')
+          .replace(/&amp;/g, '&')
+          .replace(/&quot;/g, '"')
+          .replace(/&apos;/g, "'")
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
       }
 
-      function escapeXml(
-        value
-      ) {
-        return String(
-          value ||
-          ''
-        )
-          .replace(
-            /&/g,
-            '&amp;'
-          )
-          .replace(
-            /</g,
-            '&lt;'
-          )
-          .replace(
-            />/g,
-            '&gt;'
-          )
+      function escapeXml(value) {
+        return String(value || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
       }
 
-      function cleanSpaces(
-        value
-      ) {
-        return String(
-          value ||
-          ''
-        )
-          .replace(
-            /\s+/g,
-            ' '
-          )
+      function cleanSpaces(value) {
+        return String(value || '')
+          .replace(/\s+/g, ' ')
           .trim()
       }
 
-      function getTag(
-        block,
-        tag
-      ) {
-        const match =
-          block.match(
-            new RegExp(
-              `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
-              'i'
-            )
-          )
+      function getTag(block, tag) {
+        const regex = new RegExp(
+          '<' + tag + '\\b[^>]*>([\\s\\S]*?)</' + tag + '>',
+          'i'
+        )
 
-        if (
-          !match
-        ) {
+        const match = block.match(regex)
+
+        if (!match) {
           return ''
         }
 
         return decodeXml(
           match[1]
-            .replace(
-              /<[^>]+>/g,
-              ''
-            )
+            .replace(/<[^>]+>/g, '')
             .trim()
         )
       }
 
-      function getStart(
-        block
-      ) {
-        const match =
-          block.match(
-            /<programme\b[^>]*\bstart="([^"]+)"/i
-          )
+      function getStart(block) {
+        const match = block.match(
+          /<programme\b[^>]*\bstart="([^"]+)"/i
+        )
 
         return match
           ? match[1]
           : ''
       }
 
-      function parseXmltvDate(
-        value
-      ) {
-        const match =
-          String(
-            value ||
-            ''
-          ).match(
-            /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
-          )
+      function parseXmltvDate(value) {
+        const match = String(value || '').match(
+          /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+        )
 
-        if (
-          !match
-        ) {
+        if (!match) {
           return null
         }
 
         return new Date(
           Date.UTC(
-            Number(
-              match[1]
-            ),
-            Number(
-              match[2]
-            ) - 1,
-            Number(
-              match[3]
-            ),
-            Number(
-              match[4]
-            ),
-            Number(
-              match[5]
-            ),
-            Number(
-              match[6]
-            )
+            Number(match[1]),
+            Number(match[2]) - 1,
+            Number(match[3]),
+            Number(match[4]),
+            Number(match[5]),
+            Number(match[6])
           )
         )
       }
 
-      function formatAirDate(
-        start
-      ) {
-        const match =
-          String(
-            start ||
-            ''
-          ).match(
-            /^(\d{4})(\d{2})(\d{2})/
-          )
+      function formatAirDate(start) {
+        const match = String(start || '').match(
+          /^(\d{4})(\d{2})(\d{2})/
+        )
 
-        if (
-          !match
-        ) {
+        if (!match) {
           return ''
         }
 
         return (
-          `${match[2]}/` +
-          `${match[3]}/` +
-          `${match[1]}`
+          match[2] +
+          '/' +
+          match[3] +
+          '/' +
+          match[1]
         )
       }
 
-      function replaceTag(
-        block,
-        tag,
-        value
-      ) {
+      function replaceTag(block, tag, value) {
+        const regex = new RegExp(
+          '<' + tag + '\\b[^>]*>[\\s\\S]*?</' + tag + '>',
+          'i'
+        )
+
         const replacement =
-          `<${tag} lang="en">` +
-          `${escapeXml(value)}` +
-          `</${tag}>`
+          '<' +
+          tag +
+          ' lang="en">' +
+          escapeXml(value) +
+          '</' +
+          tag +
+          '>'
 
-        const regex =
-          new RegExp(
-            `<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
-            'i'
-          )
-
-        if (
-          regex.test(
-            block
-          )
-        ) {
+        if (regex.test(block)) {
           return block.replace(
             regex,
             replacement
@@ -277,50 +174,30 @@ steps:
 
         return block.replace(
           /<\/programme>\s*$/i,
-          `  ${replacement}\n</programme>`
+          '  ' +
+          replacement +
+          '\n</programme>'
         )
       }
 
-      function removeTag(
-        block,
-        tag
-      ) {
+      function removeTag(block, tag) {
+        const regex = new RegExp(
+          '\\s*<' +
+          tag +
+          '\\b[^>]*>[\\s\\S]*?</' +
+          tag +
+          '>',
+          'gi'
+        )
+
         return block.replace(
-          new RegExp(
-            `\\s*<${tag}\\b[^>]*>[\\s\\S]*?<\\/${tag}>`,
-            'gi'
-          ),
+          regex,
           ''
         )
       }
 
-      function removeActors(
-        block
-      ) {
-        const actorRegex =
-          /<actor\b[^>]*>[\s\S]*?<\/actor>/gi
-
-        const hadActors =
-          actorRegex.test(
-            block
-          )
-
-        const cleaned =
-          block.replace(
-            actorRegex,
-            ''
-          )
-
-        return {
-          cleaned,
-          hadActors
-        }
-      }
-
-      function parseTitle(
-        originalTitle
-      ) {
-        let title =
+      function parseTitle(originalTitle) {
+        const title =
           cleanSpaces(
             originalTitle
           )
@@ -330,26 +207,19 @@ steps:
             /\bS(\d{1,3})\s*E(\d{1,3})\b/i
           )
 
-        if (
-          !episodeMatch
-        ) {
+        if (!episodeMatch) {
           return {
-            showTitle:
-              title,
-            episodeTitle:
-              '',
-            episodeCode:
-              ''
+            showTitle: title,
+            episodeTitle: '',
+            episodeCode: ''
           }
         }
 
         const episodeCode =
-          `S${Number(
-            episodeMatch[1]
-          )}` +
-          `E${Number(
-            episodeMatch[2]
-          )}`
+          'S' +
+          Number(episodeMatch[1]) +
+          'E' +
+          Number(episodeMatch[2])
 
         let before =
           title
@@ -368,16 +238,20 @@ steps:
             .trim()
 
         before =
-          before.replace(
-            /\s*[:\-–—]\s*$/,
-            ''
-          ).trim()
+          before
+            .replace(
+              /\s*[:\-–—]\s*$/,
+              ''
+            )
+            .trim()
 
         after =
-          after.replace(
-            /^\s*[:\-–—]\s*/,
-            ''
-          ).trim()
+          after
+            .replace(
+              /^\s*[:\-–—]\s*/,
+              ''
+            )
+            .trim()
 
         let showTitle =
           before
@@ -385,60 +259,43 @@ steps:
         let episodeTitle =
           after
 
-        if (
-          showTitle.includes(
-            ':'
+        const separatorIndex =
+          showTitle.search(
+            /[:\-–—]/
           )
+
+        if (
+          separatorIndex !== -1
         ) {
-          const parts =
-            showTitle.split(
-              ':'
-            )
+          const possibleShow =
+            showTitle
+              .slice(
+                0,
+                separatorIndex
+              )
+              .trim()
+
+          const possibleEpisode =
+            showTitle
+              .slice(
+                separatorIndex + 1
+              )
+              .trim()
 
           if (
-            parts.length >
-            1
+            possibleShow &&
+            possibleEpisode
           ) {
             showTitle =
-              parts
-                .shift()
-                .trim()
+              possibleShow
 
             if (
               !episodeTitle
             ) {
               episodeTitle =
-                parts
-                  .join(
-                    ':'
-                  )
-                  .trim()
+                possibleEpisode
             }
           }
-        }
-
-        if (
-          !episodeTitle &&
-          showTitle.includes(
-            ' - '
-          )
-        ) {
-          const parts =
-            showTitle.split(
-              ' - '
-            )
-
-          showTitle =
-            parts
-              .shift()
-              .trim()
-
-          episodeTitle =
-            parts
-              .join(
-                ' - '
-              )
-              .trim()
         }
 
         return {
@@ -448,18 +305,14 @@ steps:
         }
       }
 
-      function hasDate(
-        description
-      ) {
+      function hasAirDate(description) {
         return /\(\d{1,2}\/\d{1,2}\/\d{4}\)\s*$/
           .test(
             description
           )
       }
 
-      function processProgramme(
-        block
-      ) {
+      function processProgramme(block) {
         programmesScanned++
 
         const start =
@@ -474,10 +327,8 @@ steps:
 
         if (
           !startDate ||
-          startDate <
-          now ||
-          startDate >=
-          cutoff
+          startDate < now ||
+          startDate >= cutoff
         ) {
           programmesSkipped++
 
@@ -518,8 +369,9 @@ steps:
           parsed.episodeCode
         ) {
           const prefix =
-            `${parsed.episodeTitle} - ` +
-            `${parsed.episodeCode}`
+            parsed.episodeTitle +
+            ' - ' +
+            parsed.episodeCode
 
           if (
             !newDescription.startsWith(
@@ -528,8 +380,9 @@ steps:
           ) {
             newDescription =
               newDescription
-                ? `${prefix}. ` +
-                  `${newDescription}`
+                ? prefix +
+                  '. ' +
+                  newDescription
                 : prefix
 
             episodeNumbersConverted++
@@ -537,7 +390,7 @@ steps:
         }
 
         if (
-          !hasDate(
+          !hasAirDate(
             newDescription
           )
         ) {
@@ -551,9 +404,13 @@ steps:
           ) {
             newDescription =
               newDescription
-                ? `${newDescription} ` +
-                  `(${airDate})`
-                : `(${airDate})`
+                ? newDescription +
+                  ' (' +
+                  airDate +
+                  ')'
+                : '(' +
+                  airDate +
+                  ')'
           }
         }
 
@@ -592,19 +449,19 @@ steps:
             newDescription
           )
 
-        const actorResult =
-          removeActors(
+        if (
+          /<actor\b/i.test(
             output
           )
-
-        output =
-          actorResult.cleaned
-
-        if (
-          actorResult.hadActors
         ) {
           actorsRemoved++
         }
+
+        output =
+          removeTag(
+            output,
+            'actor'
+          )
 
         output =
           removeTag(
@@ -638,8 +495,7 @@ steps:
           fs.createReadStream(
             inputPath,
             {
-              encoding:
-                'utf8'
+              encoding: 'utf8'
             }
           )
 
@@ -647,8 +503,7 @@ steps:
           fs.createWriteStream(
             outputPath,
             {
-              encoding:
-                'utf8'
+              encoding: 'utf8'
             }
           )
 
@@ -656,8 +511,7 @@ steps:
           readline.createInterface(
             {
               input,
-              crlfDelay:
-                Infinity
+              crlfDelay: Infinity
             }
           )
 
@@ -667,9 +521,7 @@ steps:
         let programmeBuffer =
           ''
 
-        function write(
-          value
-        ) {
+        function write(value) {
           return new Promise(
             (
               resolve,
@@ -797,43 +649,43 @@ steps:
         )
 
         console.log(
-          `Programmes scanned: ` +
-          `${programmesScanned}`
+          'Programmes scanned: ' +
+          programmesScanned
         )
 
         console.log(
-          `Programmes kept: ` +
-          `${programmesKept}`
+          'Programmes kept: ' +
+          programmesKept
         )
 
         console.log(
-          `Programmes skipped: ` +
-          `${programmesSkipped}`
+          'Programmes skipped: ' +
+          programmesSkipped
         )
 
         console.log(
-          `Titles cleaned: ` +
-          `${titlesCleaned}`
+          'Titles cleaned: ' +
+          titlesCleaned
         )
 
         console.log(
-          `Descriptions changed: ` +
-          `${descriptionsChanged}`
+          'Descriptions changed: ' +
+          descriptionsChanged
         )
 
         console.log(
-          `Actors removed: ` +
-          `${actorsRemoved}`
+          'Actors removed: ' +
+          actorsRemoved
         )
 
         console.log(
-          `Episode numbers converted: ` +
-          `${episodeNumbersConverted}`
+          'Episode numbers converted: ' +
+          episodeNumbersConverted
         )
 
         console.log(
-          `Output: ` +
-          `${outputPath}`
+          'Output: ' +
+          outputPath
         )
       }
 
@@ -878,7 +730,7 @@ steps:
 
       ls -lh fast/FAST.xml.gz
 
-  - name: Commit FAST guide
+  - name: Commit and push FAST guide
     run: |
       git config user.name "github-actions"
       git config user.email "github-actions@github.com"
