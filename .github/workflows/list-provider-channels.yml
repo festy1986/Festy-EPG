@@ -1,4 +1,4 @@
-name: Provider Channel Test
+name: Test FAST Provider Channels
 
 on:
   workflow_dispatch:
@@ -16,21 +16,17 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
 
       - name: Verify provider credentials
         env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
           echo "Provider credentials loaded"
-
-          if [ -z "$XTREAM_URL" ]; then
-            echo "XTREAM_URL missing"
-            exit 1
-          fi
 
           if [ -z "$XTREAM_USERNAME" ]; then
             echo "XTREAM_USERNAME missing"
@@ -42,7 +38,6 @@ jobs:
             exit 1
           fi
 
-          echo "XTREAM_URL exists"
           echo "XTREAM_USERNAME exists"
           echo "XTREAM_PASSWORD exists"
 
@@ -54,7 +49,6 @@ jobs:
 
       - name: Test provider connection
         env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
@@ -62,24 +56,20 @@ jobs:
           python - <<'PY'
           import os
           import requests
-          from urllib.parse import urlparse
 
-          base_url = os.environ["XTREAM_URL"].strip().rstrip("/")
           username = os.environ["XTREAM_USERNAME"]
           password = os.environ["XTREAM_PASSWORD"]
 
-          parsed = urlparse(base_url)
-
-          if not parsed.scheme:
-              base_url = "http://" + base_url
-
-          print("Testing provider API...")
+          base_url = "http://cf.shop4uu.xyz:80"
 
           url = (
               f"{base_url}/player_api.php"
               f"?username={username}"
               f"&password={password}"
           )
+
+          print("Testing provider API...")
+          print("Provider host: cf.shop4uu.xyz")
 
           response = requests.get(
               url,
@@ -106,12 +96,10 @@ jobs:
           print(f"Maximum connections: {user_info.get('max_connections')}")
           print(f"Server: {server_info.get('url')}")
           print(f"Server time: {server_info.get('time_now')}")
-          PY
 
 
       - name: Download complete provider channel list
         env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
@@ -120,16 +108,11 @@ jobs:
           import os
           import requests
           import json
-          from urllib.parse import urlparse
 
-          base_url = os.environ["XTREAM_URL"].strip().rstrip("/")
           username = os.environ["XTREAM_USERNAME"]
           password = os.environ["XTREAM_PASSWORD"]
 
-          parsed = urlparse(base_url)
-
-          if not parsed.scheme:
-              base_url = "http://" + base_url
+          base_url = "http://cf.shop4uu.xyz:80"
 
           url = (
               f"{base_url}/player_api.php"
@@ -138,7 +121,7 @@ jobs:
               f"&action=get_live_streams"
           )
 
-          print("Requesting provider channel list...")
+          print("Requesting complete provider channel list...")
 
           response = requests.get(
               url,
@@ -152,7 +135,7 @@ jobs:
           channels = response.json()
 
           if not isinstance(channels, list):
-              print("Unexpected response:")
+              print("Unexpected provider response:")
               print(channels)
               raise SystemExit(1)
 
@@ -160,7 +143,13 @@ jobs:
 
           with open("fastchannels.txt", "w", encoding="utf-8") as file:
               for channel in channels:
-                  file.write(json.dumps(channel, ensure_ascii=False) + "\n")
+                  file.write(
+                      json.dumps(
+                          channel,
+                          ensure_ascii=False
+                      )
+                      + "\n"
+                  )
 
           print("Saved complete provider channel list to fastchannels.txt")
           PY
@@ -168,12 +157,15 @@ jobs:
 
       - name: Display channel summary
         run: |
+
           echo "fastchannels.txt created"
 
+          echo
+          echo "Total provider channel records:"
           wc -l fastchannels.txt
 
           echo
-          echo "First 10 channels:"
+          echo "First 10 provider channel records:"
           head -n 10 fastchannels.txt
 
 
