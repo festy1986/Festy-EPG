@@ -35,27 +35,43 @@ jobs:
 
           ls -lh "/tmp/iptvorg/source.xml.gz"
 
-      - name: Extract IPTV-org inspection guide
+      - name: Create inspection channel list
         shell: bash
         run: |
           mkdir -p guides
 
+          head -n 10 \
+            "guides/iptvorg-channels.txt" \
+            > "guides/iptvorg-inspect-channels.txt"
+
+          test -s "guides/iptvorg-inspect-channels.txt"
+
+          echo "Channels selected for inspection:"
+          cat "guides/iptvorg-inspect-channels.txt"
+
+      - name: Extract selected IPTV-org channels
+        shell: bash
+        run: |
           gzip -dc \
             "/tmp/iptvorg/source.xml.gz" |
           awk '
             BEGIN {
-              while ((getline line < "guides/iptvorg-channels.txt") > 0) {
+              while (
+                (getline line <
+                "guides/iptvorg-inspect-channels.txt") > 0
+              ) {
                 split(line, parts, " | ")
                 wanted[parts[1]] = 1
               }
 
-              close("guides/iptvorg-channels.txt")
+              close(
+                "guides/iptvorg-inspect-channels.txt"
+              )
 
               in_channel = 0
               in_programme = 0
               keep_channel = 0
               keep_programme = 0
-              channel_id = ""
               buffer = ""
             }
 
@@ -149,10 +165,12 @@ jobs:
       - name: Validate IPTV-org inspection guide
         shell: bash
         run: |
-          CHANNELS=$(grep -c '<channel ' \
+          CHANNELS=$(grep -c \
+            '<channel ' \
             "guides/iptvorg-inspection.xml" || true)
 
-          PROGRAMMES=$(grep -c '<programme ' \
+          PROGRAMMES=$(grep -c \
+            '<programme ' \
             "guides/iptvorg-inspection.xml" || true)
 
           echo "Inspection channels: $CHANNELS"
@@ -174,14 +192,17 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add "guides/iptvorg-inspection.xml"
+          git add \
+            "guides/iptvorg-inspection.xml" \
+            "guides/iptvorg-inspect-channels.txt"
 
           if git diff --cached --quiet; then
-            echo "No IPTV-org inspection guide changes to commit"
+            echo "No IPTV-org inspection changes to commit"
             exit 0
           fi
 
-          git commit -m "Update IPTV-org inspection guide"
+          git commit \
+            -m "Update IPTV-org inspection guide"
 
       - name: Push IPTV-org inspection guide
         shell: bash
