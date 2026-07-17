@@ -24,15 +24,16 @@ jobs:
 
       - name: Download FAST source
         run: |
-          mkdir -p fast
+          mkdir -p guides
 
           curl -L --fail --retry 5 --retry-delay 10 \
-            https://epg.guru/7dayiptv/USFast.xml \
-            -o fast/source.xml
+            https://epg.guru/7daygracenote/USFast.xml \
+            -o guides/festyfast.xml
 
-          test -s fast/source.xml
+          test -s guides/festyfast.xml
 
           echo "FAST source downloaded successfully"
+          ls -lh guides/festyfast.xml
 
       - name: Process FAST guide
         run: |
@@ -40,8 +41,8 @@ jobs:
           const fs = require('fs')
           const readline = require('readline')
 
-          const inputPath = 'fast/source.xml'
-          const outputPath = 'fast/processed.xml'
+          const inputPath = 'guides/festyfast.xml'
+          const outputPath = 'guides/FAST.xml'
 
           const now = new Date()
 
@@ -53,11 +54,13 @@ jobs:
           let programmesScanned = 0
           let programmesKept = 0
           let programmesSkipped = 0
-          let titlesCleaned = 0
-          let descriptionsChanged = 0
-          let actorsRemoved = 0
-          let episodeNumbersConverted = 0
+          let episodeNumbersUsed = 0
           let originalAirDatesUsed = 0
+          let actorsRemoved = 0
+          let creditsRemoved = 0
+          let subtitlesRemoved = 0
+          let episodeTagsRemoved = 0
+          let datesRemoved = 0
 
           function decodeXml(value) {
             return String(value || '')
@@ -73,6 +76,8 @@ jobs:
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&apos;')
           }
 
           function cleanSpaces(value) {
@@ -178,6 +183,40 @@ jobs:
             )
           }
 
+          function getEpisodeNumber(block) {
+            let episodeNumber =
+              getTagBySystem(
+                block,
+                'episode-num',
+                'common'
+              )
+
+            if (!episodeNumber) {
+              episodeNumber =
+                getTagBySystem(
+                  block,
+                  'episode-num',
+                  'onscreen'
+                )
+            }
+
+            const match =
+              episodeNumber.match(
+                /^S\s*(\d{1,3})\s*E\s*(\d{1,3})$/i
+              )
+
+            if (!match) {
+              return ''
+            }
+
+            return (
+              'S' +
+              Number(match[1]) +
+              'E' +
+              Number(match[2])
+            )
+          }
+
           function replaceTag(block, tag, value) {
             const regex = new RegExp(
               '<' +
@@ -228,42 +267,6 @@ jobs:
             )
           }
 
-          function getEpisodeNumber(block) {
-            let episodeNumber =
-              getTagBySystem(
-                block,
-                'episode-num',
-                'common'
-              )
-
-            if (
-              !episodeNumber
-            ) {
-              episodeNumber =
-                getTagBySystem(
-                  block,
-                  'episode-num',
-                  'onscreen'
-                )
-            }
-
-            const match =
-              episodeNumber.match(
-                /^S\s*(\d{1,3})\s*E\s*(\d{1,3})$/i
-              )
-
-            if (!match) {
-              return ''
-            }
-
-            return (
-              'S' +
-              Number(match[1]) +
-              'E' +
-              Number(match[2])
-            )
-          }
-
           function processProgramme(block) {
             programmesScanned++
 
@@ -289,7 +292,7 @@ jobs:
 
             programmesKept++
 
-            const originalTitle =
+            const title =
               cleanSpaces(
                 getTag(
                   block,
@@ -305,7 +308,7 @@ jobs:
                 )
               )
 
-            const originalDescription =
+            const description =
               cleanSpaces(
                 getTag(
                   block,
@@ -327,11 +330,8 @@ jobs:
                 )
               )
 
-            let newTitle =
-              originalTitle
-
             let newDescription =
-              originalDescription
+              description
 
             if (
               episodeTitle &&
@@ -342,13 +342,13 @@ jobs:
                 ' - ' +
                 episodeNumber +
                 (
-                  originalDescription
+                  description
                     ? '. ' +
-                      originalDescription
+                      description
                     : ''
                 )
 
-              episodeNumbersConverted++
+              episodeNumbersUsed++
             }
 
             if (
@@ -367,20 +367,6 @@ jobs:
               originalAirDatesUsed++
             }
 
-            if (
-              newTitle !==
-              originalTitle
-            ) {
-              titlesCleaned++
-            }
-
-            if (
-              newDescription !==
-              originalDescription
-            ) {
-              descriptionsChanged++
-            }
-
             let output =
               block
 
@@ -388,7 +374,7 @@ jobs:
               replaceTag(
                 output,
                 'title',
-                newTitle
+                title
               )
 
             output =
@@ -404,6 +390,38 @@ jobs:
               )
             ) {
               actorsRemoved++
+            }
+
+            if (
+              /<credits\b/i.test(
+                output
+              )
+            ) {
+              creditsRemoved++
+            }
+
+            if (
+              /<sub-title\b/i.test(
+                output
+              )
+            ) {
+              subtitlesRemoved++
+            }
+
+            if (
+              /<episode-num\b/i.test(
+                output
+              )
+            ) {
+              episodeTagsRemoved++
+            }
+
+            if (
+              /<date\b/i.test(
+                output
+              )
+            ) {
+              datesRemoved++
             }
 
             output =
@@ -613,13 +631,13 @@ jobs:
             )
 
             console.log(
-              'Titles cleaned: ' +
-              titlesCleaned
+              'Episode numbers used: ' +
+              episodeNumbersUsed
             )
 
             console.log(
-              'Descriptions changed: ' +
-              descriptionsChanged
+              'Original air dates used: ' +
+              originalAirDatesUsed
             )
 
             console.log(
@@ -628,13 +646,23 @@ jobs:
             )
 
             console.log(
-              'Episode numbers converted: ' +
-              episodeNumbersConverted
+              'Credits removed: ' +
+              creditsRemoved
             )
 
             console.log(
-              'Original air dates used: ' +
-              originalAirDatesUsed
+              'Subtitles removed: ' +
+              subtitlesRemoved
+            )
+
+            console.log(
+              'Episode tags removed: ' +
+              episodeTagsRemoved
+            )
+
+            console.log(
+              'Date tags removed: ' +
+              datesRemoved
             )
 
             console.log(
@@ -660,8 +688,8 @@ jobs:
 
       - name: Validate processed FAST guide
         run: |
-          CHANNELS=$(grep -c '<channel ' fast/processed.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' fast/processed.xml || true)
+          CHANNELS=$(grep -c '<channel ' guides/FAST.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' guides/FAST.xml || true)
 
           echo "Processed FAST channels: $CHANNELS"
           echo "Processed FAST programmes: $PROGRAMMES"
@@ -676,15 +704,16 @@ jobs:
             exit 1
           fi
 
-          test -s fast/processed.xml
+          test -s guides/FAST.xml
 
       - name: Compress FAST guide
         run: |
-          gzip -c fast/processed.xml > fast/FAST.xml.gz
+          gzip -c guides/FAST.xml > guides/FAST.xml.gz
 
-          test -s fast/FAST.xml.gz
+          test -s guides/FAST.xml.gz
 
-          ls -lh fast/FAST.xml.gz
+          ls -lh guides/festyfast.xml
+          ls -lh guides/FAST.xml.gz
 
       - name: Commit and push FAST guide
         run: |
@@ -694,7 +723,7 @@ jobs:
           git fetch origin main
           git reset --hard origin/main
 
-          git add fast/FAST.xml.gz
+          git add guides/festyfast.xml guides/FAST.xml.gz
 
           if git diff --cached --quiet; then
             echo "No FAST guide changes to commit"
@@ -709,7 +738,7 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
 
-            git add fast/FAST.xml.gz
+            git add guides/festyfast.xml guides/FAST.xml.gz
 
             if git diff --cached --quiet; then
               echo "FAST guide already up to date"
