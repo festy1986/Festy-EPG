@@ -1,0 +1,111 @@
+name: IPTV Org Guide Inspection
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: iptvorg-inspection
+  cancel-in-progress: false
+
+jobs:
+  download-guide:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download IPTV-org EPG source
+        shell: bash
+        run: |
+          mkdir -p /tmp/iptvorg
+
+          curl -L --fail --retry 5 --retry-delay 10 \
+            "https://iptv-epg.org/files/epg-us.xml.gz" \
+            -o "/tmp/iptvorg/source.xml.gz"
+
+          test -s "/tmp/iptvorg/source.xml.gz"
+
+          echo "IPTV-org EPG source downloaded successfully"
+
+          ls -lh "/tmp/iptvorg/source.xml.gz"
+
+      - name: Decompress IPTV-org EPG
+        shell: bash
+        run: |
+          mkdir -p guides
+
+          gzip -dc \
+            "/tmp/iptvorg/source.xml.gz" \
+            > "guides/iptvorg.xml"
+
+          test -s "guides/iptvorg.xml"
+
+          echo "IPTV-org EPG decompressed successfully"
+
+          ls -lh "guides/iptvorg.xml"
+
+      - name: Validate IPTV-org EPG
+        shell: bash
+        run: |
+          CHANNELS=$(grep -c '<channel ' "guides/iptvorg.xml" || true)
+          PROGRAMMES=$(grep -c '<programme ' "guides/iptvorg.xml" || true)
+
+          echo "IPTV-org channels: $CHANNELS"
+          echo "IPTV-org programmes: $PROGRAMMES"
+
+          if [ "$CHANNELS" -lt 1 ]; then
+            echo "IPTV-org guide contains no channels"
+            exit 1
+          fi
+
+          if [ "$PROGRAMMES" -lt 1 ]; then
+            echo "IPTV-org guide contains no programmes"
+            exit 1
+          fi
+
+      - name: Commit IPTV-org inspection guide
+        shell: bash
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add "guides/iptvorg.xml"
+
+          if git diff --cached --quiet; then
+            echo "No IPTV-org guide changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Add IPTV-org guide for inspection"
+
+      - name: Push IPTV-org inspection guide
+        shell: bash
+        run: |
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed. Synchronizing with remote before retry..."
+
+            git fetch origin main
+
+            git rebase origin/main
+
+            echo "Waiting before retry..."
+
+            sleep 10
+          done
+
+          echo "Push failed after all retries"
+
+          exit 1
