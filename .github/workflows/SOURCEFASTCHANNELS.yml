@@ -1,0 +1,288 @@
+name: SOURCEFASTCHANNELS
+
+on:
+workflow_dispatch:
+schedule:
+- cron: '15 6 * * *'
+
+permissions:
+contents: write
+
+concurrency:
+group: sourcefastchannels
+cancel-in-progress: false
+
+jobs:
+extract-source-fast-channels:
+runs-on: ubuntu-latest
+
+```
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
+
+  - name: Download Jessman FAST source
+    run: |
+      mkdir -p sourcefastchannels
+
+      curl -L --fail --retry 5 --retry-delay 10 \
+        https://epg.guru/7dayiptv/USFast.xml \
+        -o sourcefastchannels/USFast.xml
+
+      test -s sourcefastchannels/USFast.xml
+
+      echo "Jessman FAST source downloaded successfully"
+      ls -lh sourcefastchannels/USFast.xml
+
+  - name: Extract every source FAST channel
+    run: |
+      node <<'EOF'
+      const fs = require('fs')
+
+      const inputPath =
+        'sourcefastchannels/USFast.xml'
+
+      const outputPath =
+        'SOURCEFASTCHANNELS.txt'
+
+      const xml =
+        fs.readFileSync(
+          inputPath,
+          'utf8'
+        )
+
+      function decodeXml(value) {
+        return String(value || '')
+          .replace(/&amp;/g, '&')
+          .replace(/&quot;/g, '"')
+          .replace(/&apos;/g, "'")
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+      }
+
+      function getTag(block, tag) {
+        const match =
+          block.match(
+            new RegExp(
+              `<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`,
+              'i'
+            )
+          )
+
+        return match
+          ? decodeXml(
+              match[1]
+                .replace(/<[^>]+>/g, '')
+                .trim()
+            )
+          : ''
+      }
+
+      function getAttribute(
+        block,
+        attribute
+      ) {
+        const match =
+          block.match(
+            new RegExp(
+              `${attribute}="([^"]*)"`,
+              'i'
+            )
+          )
+
+        return match
+          ? decodeXml(match[1])
+          : ''
+      }
+
+      const channels = []
+
+      const channelMatches =
+        xml.matchAll(
+          /<channel\b[\s\S]*?<\/channel>/gi
+        )
+
+      for (
+        const match of channelMatches
+      ) {
+        const block =
+          match[0]
+
+        const id =
+          getAttribute(
+            block,
+            'id'
+          )
+
+        const displayName =
+          getTag(
+            block,
+            'display-name'
+          )
+
+        const iconBlock =
+          block.match(
+            /<icon\b[^>]*>/i
+          )
+
+        const icon =
+          iconBlock
+            ? getAttribute(
+                iconBlock[0],
+                'src'
+              )
+            : ''
+
+        const url =
+          getTag(
+            block,
+            'url'
+          )
+
+        if (
+          id ||
+          displayName
+        ) {
+          channels.push({
+            id,
+            displayName,
+            icon,
+            url
+          })
+        }
+      }
+
+      channels.sort(
+        (
+          a,
+          b
+        ) =>
+          a.displayName.localeCompare(
+            b.displayName,
+            undefined,
+            {
+              sensitivity: 'base'
+            }
+          )
+      )
+
+      const lines = []
+
+      lines.push(
+        `SOURCE FAST CHANNELS`
+      )
+
+      lines.push(
+        `Generated: ${new Date().toISOString()}`
+      )
+
+      lines.push(
+        `Total channels: ${channels.length}`
+      )
+
+      lines.push(
+        ''
+      )
+
+      for (
+        const channel of channels
+      ) {
+        lines.push(
+          [
+            channel.displayName ||
+              '(no display name)',
+            channel.id ||
+              '(no channel id)',
+            channel.icon ||
+              '(no icon)',
+            channel.url ||
+              '(no url)'
+          ].join(
+            ' | '
+          )
+        )
+      }
+
+      fs.writeFileSync(
+        outputPath,
+        lines.join('\n') + '\n',
+        'utf8'
+      )
+
+      console.log(
+        `SOURCE FAST channels found: ${channels.length}`
+      )
+
+      console.log(
+        `Output: ${outputPath}`
+      )
+      EOF
+
+  - name: Validate SOURCEFASTCHANNELS
+    run: |
+      test -s SOURCEFASTCHANNELS.txt
+
+      CHANNEL_COUNT=$(grep -c ' | ' SOURCEFASTCHANNELS.txt || true)
+
+      echo "Channels written: $CHANNEL_COUNT"
+
+      if [ "$CHANNEL_COUNT" -lt 1 ]; then
+        echo "No channels were extracted"
+        exit 1
+      fi
+
+  - name: Show SOURCEFASTCHANNELS preview
+    run: |
+      echo "First 25 channels:"
+      head -n 30 SOURCEFASTCHANNELS.txt
+
+      echo ""
+      echo "File size:"
+      ls -lh SOURCEFASTCHANNELS.txt
+
+  - name: Commit SOURCEFASTCHANNELS
+    run: |
+      git config user.name "github-actions"
+      git config user.email "github-actions@github.com"
+
+      git fetch origin main
+      git reset --hard origin/main
+
+      git add SOURCEFASTCHANNELS.txt
+
+      if git diff --cached --quiet; then
+        echo "No SOURCEFASTCHANNELS changes to commit"
+        exit 0
+      fi
+
+      git commit -m "Update SOURCEFASTCHANNELS"
+
+      for attempt in 1 2 3 4 5; do
+        echo "Push attempt $attempt"
+
+        git fetch origin main
+        git reset --hard origin/main
+
+        git add SOURCEFASTCHANNELS.txt
+
+        if git diff --cached --quiet; then
+          echo "SOURCEFASTCHANNELS already up to date"
+          exit 0
+        fi
+
+        git commit -m "Update SOURCEFASTCHANNELS" || true
+
+        if git push origin HEAD:main; then
+          echo "Push succeeded"
+          exit 0
+        fi
+
+        echo "Push failed. Waiting before retry..."
+        sleep 10
+      done
+
+      echo "Push failed after all retries"
+      exit 1
+```
