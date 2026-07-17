@@ -45,6 +45,7 @@ jobs:
         run: |
           node <<'EOF'
           const fs = require('fs')
+          const readline = require('readline')
 
           const inputPath = 'fast/source.xml'
           const outputPath = 'fast/processed.xml'
@@ -54,8 +55,21 @@ jobs:
             process.exit(1)
           }
 
-          const xml = fs.readFileSync(inputPath, 'utf8')
+          const input = fs.createReadStream(inputPath, {
+            encoding: 'utf8'
+          })
 
+          const output = fs.createWriteStream(outputPath, {
+            encoding: 'utf8'
+          })
+
+          const rl = readline.createInterface({
+            input,
+            crlfDelay: Infinity
+          })
+
+          let programmeBuffer = ''
+          let insideProgramme = false
           let programmeCount = 0
           let changedTitles = 0
           let cleanedDescriptions = 0
@@ -96,7 +110,10 @@ jobs:
           function cleanDescription(value) {
             return cleanSpaces(value)
               .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
-              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .replace(
+                /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
+                ' ($2)'
+              )
               .trim()
           }
 
@@ -105,7 +122,9 @@ jobs:
               new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'i')
             )
 
-            return match ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim()) : ''
+            return match
+              ? decodeXml(match[1].replace(/<[^>]+>/g, '').trim())
+              : ''
           }
 
           function getTags(block, tag) {
@@ -114,13 +133,15 @@ jobs:
                 new RegExp(`<${tag}\\b[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'gi')
               )
             ]
-              .map(match => decodeXml(match[1].replace(/<[^>]+>/g, '').trim()))
+              .map(match =>
+                decodeXml(match[1].replace(/<[^>]+>/g, '').trim())
+              )
               .filter(Boolean)
           }
 
           function getProgrammeType(block) {
             const categories = getTags(block, 'category')
-              .map(x => x.toLowerCase())
+              .map(value => value.toLowerCase())
 
             if (
               categories.includes('movie') ||
@@ -157,17 +178,13 @@ jobs:
 
             if (!episodeNum) return ''
 
-            const xmltvMatch = episodeNum.match(
-              /^(\d+)\.(\d+)\.$/
-            )
+            const xmltvMatch = episodeNum.match(/^(\d+)\.(\d+)\.$/)
 
             if (xmltvMatch) {
               return `S${Number(xmltvMatch[1]) + 1}E${Number(xmltvMatch[2]) + 1}`
             }
 
-            const directMatch = episodeNum.match(
-              /\bS(\d+)E(\d+)\b/i
-            )
+            const directMatch = episodeNum.match(/\bS(\d+)E(\d+)\b/i)
 
             if (directMatch) {
               return `S${directMatch[1]}E${directMatch[2]}`
@@ -245,11 +262,14 @@ jobs:
             }
 
             if (
-              (programmeType === 'series' || episodeTitle || episodeCode) &&
+              (programmeType === 'series' ||
+                episodeTitle ||
+                episodeCode) &&
               episodeTitle &&
               episodeCode
             ) {
-              const prefix = `${cleanSpaces(episodeTitle)} - ${episodeCode}`
+              const prefix =
+                `${cleanSpaces(episodeTitle)} - ${episodeCode}`
 
               if (!description.startsWith(prefix)) {
                 description = description
@@ -257,7 +277,9 @@ jobs:
                   : prefix
               }
             } else if (
-              (programmeType === 'series' || episodeTitle || episodeCode) &&
+              (programmeType === 'series' ||
+                episodeTitle ||
+                episodeCode) &&
               episodeTitle
             ) {
               if (!description.startsWith(episodeTitle)) {
@@ -269,7 +291,12 @@ jobs:
               (programmeType === 'series' || episodeCode) &&
               episodeCode
             ) {
-              if (!new RegExp(`\\b${episodeCode}\\b`, 'i').test(description)) {
+              if (
+                !new RegExp(
+                  `\\b${episodeCode}\\b`,
+                  'i'
+                ).test(description)
+              ) {
                 description = description
                   ? `${episodeCode}. ${description}`
                   : episodeCode
@@ -314,7 +341,7 @@ jobs:
               output = replaceTag(output, 'desc', description)
             }
 
-            // Keep the final display clean.
+            // Keep the title display clean.
             // Metadata remains packed into <desc>.
             output = removeTag(output, 'sub-title')
             output = removeTag(output, 'episode-num')
@@ -323,18 +350,69 @@ jobs:
             return output
           }
 
-          const output = xml.replace(
-            /<programme\b[\s\S]*?<\/programme>/gi,
-            processProgramme
-          )
+          function writeOutput(value) {
+            return new Promise((resolve, reject) => {
+              if (output.write(value)) {
+                resolve()
+              } else {
+                output.once('drain', resolve)
+                output.once('error', reject)
+              }
+            })
+          }
 
-          fs.writeFileSync(outputPath, output)
+          async function main() {
+            for await (const line of rl) {
+              if (!insideProgramme) {
+                if (line.includes('<programme ')) {
+                  insideProgramme = true
+                  programmeBuffer = line + '\n'
 
-          console.log('FAST metadata processing complete')
-          console.log(`Programmes processed: ${programmeCount}`)
-          console.log(`Titles cleaned: ${changedTitles}`)
-          console.log(`Descriptions cleaned: ${cleanedDescriptions}`)
-          console.log(`Output: ${outputPath}`)
+                  if (line.includes('</programme>')) {
+                    insideProgramme = false
+                    await writeOutput(
+                      processProgramme(programmeBuffer)
+                    )
+                    programmeBuffer = ''
+                  }
+                } else {
+                  await writeOutput(line + '\n')
+                }
+              } else {
+                programmeBuffer += line + '\n'
+
+                if (line.includes('</programme>')) {
+                  insideProgramme = false
+
+                  await writeOutput(
+                    processProgramme(programmeBuffer)
+                  )
+
+                  programmeBuffer = ''
+                }
+              }
+            }
+
+            if (programmeBuffer) {
+              await writeOutput(programmeBuffer)
+            }
+
+            await new Promise((resolve, reject) => {
+              output.end(resolve)
+              output.on('error', reject)
+            })
+
+            console.log('FAST metadata processing complete')
+            console.log(`Programmes processed: ${programmeCount}`)
+            console.log(`Titles cleaned: ${changedTitles}`)
+            console.log(`Descriptions cleaned: ${cleanedDescriptions}`)
+            console.log(`Output: ${outputPath}`)
+          }
+
+          main().catch(error => {
+            console.error(error)
+            process.exit(1)
+          })
           EOF
 
       - name: Validate processed FAST guide
