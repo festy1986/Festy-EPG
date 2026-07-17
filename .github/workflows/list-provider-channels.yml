@@ -1,4 +1,4 @@
-name: Test FAST Provider Channels
+name: FAST Channel List
 
 on:
   workflow_dispatch:
@@ -6,9 +6,12 @@ on:
 permissions:
   contents: write
 
-jobs:
+concurrency:
+  group: fast-channel-list
+  cancel-in-progress: false
 
-  test-provider-channels:
+jobs:
+  get-fast-channels:
 
     runs-on: ubuntu-latest
 
@@ -16,9 +19,6 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
 
       - name: Verify provider credentials
         env:
@@ -27,6 +27,7 @@ jobs:
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
+
           echo "Provider credentials loaded"
 
           if [ -z "$XTREAM_URL" ]; then
@@ -48,45 +49,44 @@ jobs:
           echo "XTREAM_USERNAME exists"
           echo "XTREAM_PASSWORD exists"
 
-
       - name: Install Python requirements
         run: |
           python -m pip install requests
 
-
-      - name: Test provider connection
+      - name: Get provider channel list
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
 
         run: |
+
           python - <<'PY'
+
           import os
           import requests
+          from urllib.parse import urlparse
 
-          base_url = os.environ["XTREAM_URL"].strip()
+          XTREAM_URL = os.environ["XTREAM_URL"]
+          USERNAME = os.environ["XTREAM_USERNAME"]
+          PASSWORD = os.environ["XTREAM_PASSWORD"]
 
-          username = os.environ["XTREAM_USERNAME"]
-          password = os.environ["XTREAM_PASSWORD"]
+          print("Requesting provider channel list...")
 
-          if not base_url.startswith(("http://", "https://")):
-              base_url = "http://" + base_url
+          parsed = urlparse(XTREAM_URL)
 
-          separator = "&" if "?" in base_url else "?"
+          print(f"Provider host: {parsed.netloc}")
 
-          url = (
-              f"{base_url}"
-              f"{separator}username={username}"
-              f"&password={password}"
-          )
-
-          print("Testing provider API using XTREAM_URL secret...")
-          print(f"Provider endpoint: {base_url}")
+          params = {
+              "username": USERNAME,
+              "password": PASSWORD,
+              "action": "get_live_streams"
+          }
 
           response = requests.get(
-              url,
-              timeout=60
+              XTREAM_URL,
+              params=params,
+              timeout=120
           )
 
           print(f"HTTP status: {response.status_code}")
@@ -95,110 +95,61 @@ jobs:
 
           data = response.json()
 
-          if "user_info" not in data:
+          if not isinstance(data, list):
               print("Unexpected provider response:")
-              print(data)
+              print(str(data)[:1000])
               raise SystemExit(1)
 
-          user_info = data["user_info"]
-          server_info = data.get("server_info", {})
+          print(f"Provider channels returned: {len(data)}")
 
-          print("Provider connection successful")
-          print(f"Account status: {user_info.get('status')}")
-          print(f"Active connections: {user_info.get('active_cons')}")
-          print(f"Maximum connections: {user_info.get('max_connections')}")
-          print(f"Server: {server_info.get('url')}")
-          print(f"Server time: {server_info.get('time_now')}")
+          os.makedirs("fast", exist_ok=True)
 
+          with open("fast/fastchannels.txt", "w", encoding="utf-8") as output:
 
-      - name: Download complete provider channel list
-        env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
-          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
-          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+              for channel in data:
 
-        run: |
-          python - <<'PY'
-          import os
-          import requests
-          import json
+                  name = str(
+                      channel.get("name")
+                      or channel.get("stream_display_name")
+                      or ""
+                  ).strip()
 
-          base_url = os.environ["XTREAM_URL"].strip()
+                  if not name:
+                      continue
 
-          username = os.environ["XTREAM_USERNAME"]
-          password = os.environ["XTREAM_PASSWORD"]
+                  output.write(name + "\n")
 
-          if not base_url.startswith(("http://", "https://")):
-              base_url = "http://" + base_url
+          print("Created fast/fastchannels.txt")
 
-          separator = "&" if "?" in base_url else "?"
+          PY
 
-          url = (
-              f"{base_url}"
-              f"{separator}username={username}"
-              f"&password={password}"
-              f"&action=get_live_streams"
-          )
-
-          print("Requesting complete provider channel list...")
-          print(f"Provider endpoint: {base_url}")
-
-          response = requests.get(
-              url,
-              timeout=120
-          )
-
-          print(f"HTTP status: {response.status_code}")
-
-          response.raise_for_status()
-
-          channels = response.json()
-
-          if not isinstance(channels, list):
-              print("Unexpected provider response:")
-              print(channels)
-              raise SystemExit(1)
-
-          print(f"Provider channels found: {len(channels)}")
-
-          with open("fastchannels.txt", "w", encoding="utf-8") as file:
-
-              for channel in channels:
-
-                  file.write(
-                      json.dumps(
-                          channel,
-                          ensure_ascii=False
-                      )
-                      + "\n"
-                  )
-
-          print("Saved complete provider channel list to fastchannels.txt")
-
-
-      - name: Display channel summary
+      - name: Show generated channel list
         run: |
 
-          echo "fastchannels.txt created"
+          echo "Channel list file:"
+
+          wc -l fast/fastchannels.txt
 
           echo
-          echo "Total provider channel records:"
-          wc -l fastchannels.txt
+
+          echo "First 20 channels:"
+
+          head -20 fast/fastchannels.txt
 
           echo
-          echo "First 10 provider channel records:"
-          head -n 10 fastchannels.txt
 
+          echo "Last 20 channels:"
 
-      - name: Commit provider channel list
+          tail -20 fast/fastchannels.txt
+
+      - name: Commit and push channel list
         run: |
 
           git config --global user.name "github-actions"
-
           git config --global user.email "github-actions@github.com"
 
-          git add fastchannels.txt
+          git add fast/fastchannels.txt
 
-          git commit -m "Update FAST provider channel list" || echo "No changes"
+          git commit -m "Update FAST channel list" || echo "No changes"
 
           git push
