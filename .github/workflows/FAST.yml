@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '45 5 * * *'
+    - cron: '45 17 * * *'
 
 permissions:
   contents: write
@@ -22,27 +23,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download Jessman FAST source
+      - name: Download FAST source
         run: |
+          mkdir -p fast
           mkdir -p guides
 
           curl -L --fail --retry 5 --retry-delay 10 \
             https://epg.guru/7daygracenote/USFast.xml \
-            -o guides/festyfast.xml
+            -o fast/source.xml
 
-          test -s guides/festyfast.xml
+          test -s fast/source.xml
 
-          echo "Jessman FAST source downloaded successfully"
-          ls -lh guides/festyfast.xml
+          echo "FAST source downloaded successfully"
+          ls -lh fast/source.xml
 
-      - name: Process Jessman source into FAST guide
+      - name: Process FAST guide
         run: |
           cat > /tmp/process_fast.js <<'EOF'
           const fs = require('fs')
           const readline = require('readline')
 
-          const inputPath = 'guides/festyfast.xml'
-          const outputPath = 'guides/FAST.xml'
+          const inputPath = 'fast/source.xml'
+          const outputPath = 'fast/processed.xml'
 
           const now = new Date()
 
@@ -54,10 +56,9 @@ jobs:
           let programmesScanned = 0
           let programmesKept = 0
           let programmesSkipped = 0
-          let titlesCleaned = 0
           let descriptionsChanged = 0
           let actorsRemoved = 0
-          let episodeNumbersUsed = 0
+          let episodeNumbersConverted = 0
           let originalAirDatesUsed = 0
 
           function decodeXml(value) {
@@ -74,6 +75,8 @@ jobs:
               .replace(/&/g, '&amp;')
               .replace(/</g, '&lt;')
               .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&apos;')
           }
 
           function cleanSpaces(value) {
@@ -237,7 +240,9 @@ jobs:
                 'common'
               )
 
-            if (!episodeNumber) {
+            if (
+              !episodeNumber
+            ) {
               episodeNumber =
                 getTagBySystem(
                   block,
@@ -326,9 +331,6 @@ jobs:
                 )
               )
 
-            let newTitle =
-              originalTitle
-
             let newDescription =
               originalDescription
 
@@ -347,7 +349,7 @@ jobs:
                     : ''
                 )
 
-              episodeNumbersUsed++
+              episodeNumbersConverted++
             }
 
             if (
@@ -367,13 +369,6 @@ jobs:
             }
 
             if (
-              newTitle !==
-              originalTitle
-            ) {
-              titlesCleaned++
-            }
-
-            if (
               newDescription !==
               originalDescription
             ) {
@@ -387,7 +382,7 @@ jobs:
               replaceTag(
                 output,
                 'title',
-                newTitle
+                originalTitle
               )
 
             output =
@@ -612,11 +607,6 @@ jobs:
             )
 
             console.log(
-              'Titles cleaned: ' +
-              titlesCleaned
-            )
-
-            console.log(
               'Descriptions changed: ' +
               descriptionsChanged
             )
@@ -627,8 +617,8 @@ jobs:
             )
 
             console.log(
-              'Episode numbers used: ' +
-              episodeNumbersUsed
+              'Episode numbers converted: ' +
+              episodeNumbersConverted
             )
 
             console.log(
@@ -659,8 +649,8 @@ jobs:
 
       - name: Validate processed FAST guide
         run: |
-          CHANNELS=$(grep -c '<channel ' guides/FAST.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' guides/FAST.xml || true)
+          CHANNELS=$(grep -c '<channel ' fast/processed.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' fast/processed.xml || true)
 
           echo "Processed FAST channels: $CHANNELS"
           echo "Processed FAST programmes: $PROGRAMMES"
@@ -675,17 +665,14 @@ jobs:
             exit 1
           fi
 
-          test -s guides/FAST.xml
-          test -s guides/festyfast.xml
+          test -s fast/processed.xml
 
       - name: Compress FAST guide
         run: |
-          gzip -c guides/FAST.xml > guides/FAST.xml.gz
+          gzip -c fast/processed.xml > guides/FAST.xml.gz
 
           test -s guides/FAST.xml.gz
 
-          ls -lh guides/festyfast.xml
-          ls -lh guides/FAST.xml
           ls -lh guides/FAST.xml.gz
 
       - name: Commit and push FAST guide
@@ -693,7 +680,6 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/festyfast.xml
           git add guides/FAST.xml.gz
 
           if git diff --cached --quiet; then
