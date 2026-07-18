@@ -828,7 +828,7 @@ jobs:
 
             const match =
               description.match(
-                /^S\s*\d{1,3}\s*E\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
+                /^S\s*\d{1,3}E\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
               )
 
             if (
@@ -1234,6 +1234,17 @@ jobs:
                 description
               )
 
+            /*
+             * IMPORTANT:
+             *
+             * <sub-title> is preserved.
+             * <episode-num> is preserved.
+             * <date> is preserved.
+             *
+             * These tags are used to build the preferred
+             * description format but are NOT removed.
+             */
+
             output =
               removeTag(
                 output,
@@ -1244,24 +1255,6 @@ jobs:
               removeTag(
                 output,
                 'credits'
-              )
-
-            output =
-              removeTag(
-                output,
-                'sub-title'
-              )
-
-            output =
-              removeTag(
-                output,
-                'episode-num'
-              )
-
-            output =
-              removeTag(
-                output,
-                'date'
               )
 
             const icon =
@@ -2048,22 +2041,22 @@ jobs:
                   programme
                 )
 
-                if (
-                  !jessmanIndex.has(
-                    key
-                  )
-                ) {
-                  jessmanIndex.set(
-                    key,
-                    []
-                  )
-                }
-
-                jessmanIndex.get(
+              if (
+                !jessmanIndex.has(
                   key
-                ).push(
-                  programme
                 )
+              ) {
+                jessmanIndex.set(
+                  key,
+                  []
+                )
+              }
+
+              jessmanIndex.get(
+                key
+              ).push(
+                programme
+              )
             }
 
             for (
@@ -2131,7 +2124,7 @@ jobs:
 
           /*
            * ============================================================
-           * TVMAZE ENRICHMENT
+           * ENRICHMENT
            * ============================================================
            */
 
@@ -2292,7 +2285,6 @@ jobs:
                 )
 
               tvmazeFieldsUsed++
-
               totalFieldsFilled++
 
               const stats =
@@ -2329,7 +2321,6 @@ jobs:
                 )
 
               tvmazeFieldsUsed++
-
               totalFieldsFilled++
 
               const stats =
@@ -2367,7 +2358,6 @@ jobs:
                   )
 
               tvmazeFieldsUsed++
-
               totalFieldsFilled++
 
               const stats =
@@ -2403,7 +2393,6 @@ jobs:
                 programme.icon
               ) {
                 tvmazeFieldsUsed++
-
                 totalFieldsFilled++
 
                 const stats =
@@ -2527,7 +2516,6 @@ jobs:
                 show.poster_path
 
               tmdbFieldsUsed++
-
               totalFieldsFilled++
 
               const stats =
@@ -2560,7 +2548,6 @@ jobs:
                 )
 
               tmdbFieldsUsed++
-
               totalFieldsFilled++
 
               const stats =
@@ -2629,7 +2616,31 @@ jobs:
           function buildChannelBlock(
             channel
           ) {
-            return channel.block
+            let block =
+              channel.block
+
+            const displayName =
+              channel.displayName
+
+            if (
+              getAllTags(
+                block,
+                'display-name'
+              ).length
+            ) {
+              block =
+                block.replace(
+                  /(<display-name\b[^>]*>)[\s\S]*?(<\/display-name>)/i,
+                  '$1' +
+                  escapeXml(
+                    displayName
+                  ) +
+                  '$2'
+                )
+            }
+
+            return block.trimEnd() +
+              '\n'
           }
 
           function buildProgrammeBlock(
@@ -2670,6 +2681,18 @@ jobs:
                 finalDescription
               )
 
+            /*
+             * IMPORTANT:
+             *
+             * The following tags remain in the final XMLTV:
+             *
+             * <sub-title>
+             * <episode-num>
+             * <date>
+             *
+             * They are NOT removed.
+             */
+
             if (
               programme.icon
             ) {
@@ -2688,7 +2711,7 @@ jobs:
                     escapeXml(
                       programme.icon
                     ) +
-                      '">'
+                    '">'
                   )
               }
             }
@@ -2766,46 +2789,28 @@ jobs:
               )
             }
 
-            const orderedJessman =
+            const allProgrammes =
               [
-                ...jessmanProgrammes
-              ].sort(
-                (
-                  a,
-                  b
-                ) =>
-                  a.start.localeCompare(
-                    b.start
-                  )
-              )
-
-            const orderedIptv =
-              [
+                ...jessmanProgrammes,
                 ...iptvOrgProgrammes
-              ].sort(
-                (
-                  a,
-                  b
-                ) =>
-                  a.start.localeCompare(
-                    b.start
-                  )
-              )
+              ]
 
-            for (
-              const programme of
-              orderedJessman
-            ) {
-              await write(
-                buildProgrammeBlock(
-                  programme
+            allProgrammes.sort(
+              (
+                a,
+                b
+              ) =>
+                parseXmltvDate(
+                  a.start
+                ) -
+                parseXmltvDate(
+                  b.start
                 )
-              )
-            }
+            )
 
             for (
               const programme of
-              orderedIptv
+              allProgrammes
             ) {
               await write(
                 buildProgrammeBlock(
@@ -3165,15 +3170,9 @@ jobs:
         run: |
           CHANNELS=$(grep -c '<channel ' combinedfast/work/combinedfast.xml || true)
           PROGRAMMES=$(grep -c '<programme ' combinedfast/work/combinedfast.xml || true)
-          CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
-          PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
-          DESCRIPTIONS=$(grep -c '<desc ' combinedfast/work/combinedfast.xml || true)
 
           echo "Combined FAST channels: $CHANNELS"
           echo "Combined FAST programmes: $PROGRAMMES"
-          echo "Channel logos: $CHANNEL_LOGOS"
-          echo "Programme icons: $PROGRAMME_ICONS"
-          echo "Description tags: $DESCRIPTIONS"
 
           if [ "$CHANNELS" -lt 1 ]; then
             echo "Combined FAST guide contains no channels"
