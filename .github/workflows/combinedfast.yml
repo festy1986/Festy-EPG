@@ -83,80 +83,72 @@ jobs:
               1000
             )
 
+          /*
+           * IMPORTANT:
+           *
+           * Jessman channel IDs are NOT hardcoded.
+           *
+           * The workflow scans the Jessman channel list and
+           * matches the actual display-name found in the feed.
+           *
+           * This prevents the previous problem where:
+           *
+           * Jessman channels found: 0
+           *
+           * happened because the assumed IDs did not match
+           * the IDs actually used by the current Jessman feed.
+           */
+
           const jessmanChannels = {
-            'MGMPresents(MGMPRES).us':
-              {
-                displayName:
-                  'MGM Presents 2'
-              },
+            'MGM Presents': {
+              displayName: 'MGM Presents 2'
+            },
 
-            'ScaresbyShudder(SBSHUDD).us':
-              {
-                displayName:
-                  'Scares by Shudder 2'
-              },
+            'Scares by Shudder': {
+              displayName: 'Scares by Shudder 2'
+            },
 
-            'ScreamboxTV(SBOXTV).us':
-              {
-                displayName:
-                  'Screambox TV 2'
-              },
+            'Screambox TV': {
+              displayName: 'Screambox TV 2'
+            },
 
-            'UniversalMonsters(UNIMON).us':
-              {
-                displayName:
-                  'Universal Monsters 2'
-              },
+            'Universal Monsters': {
+              displayName: 'Universal Monsters 2'
+            },
 
-            'MiramaxMovieChannel(MMC).us':
-              {
-                displayName:
-                  'Miramax Movie Channel 2'
-              }
+            'Miramax Movie Channel': {
+              displayName: 'Miramax Movie Channel 2'
+            }
           }
 
           const iptvOrgChannels = {
-            'MGMPresents.us':
-              {
-                displayName:
-                  'MGM Presents'
-              },
+            'MGMPresents.us': {
+              displayName: 'MGM Presents'
+            },
 
-            'MGMPresentsAction.us':
-              {
-                displayName:
-                  'MGM Presents Action'
-              },
+            'MGMPresentsAction.us': {
+              displayName: 'MGM Presents Action'
+            },
 
-            'MGMPresentsHorror.us':
-              {
-                displayName:
-                  'MGM Presents Horror'
-              },
+            'MGMPresentsHorror.us': {
+              displayName: 'MGM Presents Horror'
+            },
 
-            'ScaresbyShudder.us':
-              {
-                displayName:
-                  'Scares by Shudder'
-              },
+            'ScaresbyShudder.us': {
+              displayName: 'Scares by Shudder'
+            },
 
-            'ScreamboxTV.us':
-              {
-                displayName:
-                  'Screambox TV'
-              },
+            'ScreamboxTV.us': {
+              displayName: 'Screambox TV'
+            },
 
-            'UniversalMonsters.pluto':
-              {
-                displayName:
-                  'Universal Monsters'
-              },
+            'UniversalMonsters.pluto': {
+              displayName: 'Universal Monsters'
+            },
 
-            'MiramaxMovieChannel.us':
-              {
-                displayName:
-                  'Miramax Movie Channel'
-              }
+            'MiramaxMovieChannel.us': {
+              displayName: 'Miramax Movie Channel'
+            }
           }
 
           const jessman =
@@ -166,6 +158,9 @@ jobs:
             new Map()
 
           const channelHeaders =
+            new Map()
+
+          const jessmanIdToName =
             new Map()
 
           let jessmanChannelsFound =
@@ -303,6 +298,19 @@ jobs:
               .trim()
           }
 
+          function normalizeChannelName(
+            value
+          ) {
+            return cleanSpaces(
+              value
+            )
+              .toLowerCase()
+              .replace(
+                /[^a-z0-9]+/g,
+                ''
+              )
+          }
+
           function getAttribute(
             block,
             attribute
@@ -362,6 +370,40 @@ jobs:
                     ''
                   )
               )
+            )
+          }
+
+          function getAllTags(
+            block,
+            tag
+          ) {
+            const regex =
+              new RegExp(
+                '<' +
+                tag +
+                '\\b[^>]*>' +
+                '([\\s\\S]*?)' +
+                '</' +
+                tag +
+                '>',
+                'gi'
+              )
+
+            return [
+              ...block.matchAll(
+                regex
+              )
+            ].map(
+              match =>
+                cleanSpaces(
+                  decodeXml(
+                    match[1]
+                      .replace(
+                        /<[^>]+>/g,
+                        ''
+                      )
+                  )
+                )
             )
           }
 
@@ -1224,29 +1266,79 @@ jobs:
                       'id'
                     )
 
-                  if (
-                    jessmanChannels[id]
-                  ) {
-                    jessmanChannelsFound++
-
-                    const channel =
-                      jessmanChannels[id]
-
-                    channelHeaders.set(
-                      id,
-                      {
-                        source:
-                          'jessman',
-
-                        id,
-
-                        displayName:
-                          channel.displayName,
-
-                        block
-                      }
+                  const displayNames =
+                    getAllTags(
+                      block,
+                      'display-name'
                     )
+
+                  const normalizedNames =
+                    displayNames.map(
+                      normalizeChannelName
+                    )
+
+                  let matchedName =
+                    ''
+
+                  for (
+                    const targetName of
+                    Object.keys(
+                      jessmanChannels
+                    )
+                  ) {
+                    const normalizedTarget =
+                      normalizeChannelName(
+                        targetName
+                      )
+
+                    if (
+                      normalizedNames.includes(
+                        normalizedTarget
+                      )
+                    ) {
+                      matchedName =
+                        targetName
+
+                      break
+                    }
                   }
+
+                  if (
+                    !matchedName
+                  ) {
+                    return
+                  }
+
+                  jessmanChannelsFound++
+
+                  jessmanIdToName.set(
+                    id,
+                    matchedName
+                  )
+
+                  channelHeaders.set(
+                    id,
+                    {
+                      source:
+                        'jessman',
+
+                      id,
+
+                      displayName:
+                        jessmanChannels[
+                          matchedName
+                        ].displayName,
+
+                      block
+                    }
+                  )
+
+                  console.log(
+                    'Jessman channel matched: ' +
+                    matchedName +
+                    ' -> ' +
+                    id
+                  )
 
                   return
                 }
@@ -1258,7 +1350,9 @@ jobs:
                   )
 
                 if (
-                  !jessmanChannels[channel]
+                  !jessmanIdToName.has(
+                    channel
+                  )
                 ) {
                   return
                 }
@@ -1327,28 +1421,30 @@ jobs:
                     )
 
                   if (
-                    iptvOrgChannels[id]
+                    !iptvOrgChannels[id]
                   ) {
-                    iptvOrgChannelsFound++
-
-                    const channel =
-                      iptvOrgChannels[id]
-
-                    channelHeaders.set(
-                      id,
-                      {
-                        source:
-                          'iptvorg',
-
-                        id,
-
-                        displayName:
-                          channel.displayName,
-
-                        block
-                      }
-                    )
+                    return
                   }
+
+                  iptvOrgChannelsFound++
+
+                  const channel =
+                    iptvOrgChannels[id]
+
+                  channelHeaders.set(
+                    id,
+                    {
+                      source:
+                        'iptvorg',
+
+                      id,
+
+                      displayName:
+                        channel.displayName,
+
+                      block
+                    }
+                  )
 
                   return
                 }
@@ -1489,12 +1585,6 @@ jobs:
               '</programme>\n'
 
             return output
-          }
-
-          function getEnrichmentKey(
-            programme
-          ) {
-            return programme.key
           }
 
           async function main() {
@@ -1754,9 +1844,7 @@ jobs:
               jessmanEnrichmentMatches +
               iptvOrgEnrichmentMatches
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
               '========================================'
@@ -1770,9 +1858,7 @@ jobs:
               '========================================'
             )
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
               'CHANNELS'
@@ -1793,9 +1879,7 @@ jobs:
               channelHeaders.size
             )
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
               'JESSMAN PROGRAMMES'
@@ -1846,9 +1930,7 @@ jobs:
               jessmanEnrichmentMatches
             )
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
               'IPTV-ORG PROGRAMMES'
@@ -1899,9 +1981,7 @@ jobs:
               iptvOrgEnrichmentMatches
             )
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
               'COMBINED TOTALS'
@@ -1957,14 +2037,18 @@ jobs:
               combinedProgrammes
             )
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
               'Output: ' +
               outputPath
             )
+          }
+
+          function getEnrichmentKey(
+            programme
+          ) {
+            return programme.key
           }
 
           main().catch(
