@@ -875,6 +875,37 @@ jobs:
 
           /*
            * ============================================================
+           * REMOVE PEOPLE/CREDIT INFORMATION FROM DESCRIPTION
+           *
+           * Parenthetical actor, director, cast, and similar credit
+           * information is removed from the description.
+           *
+           * The air date is added afterward by buildDescription() and
+           * is therefore preserved.
+           * ============================================================
+           */
+
+          function removeParentheticalCredits(
+            description
+          ) {
+            let result =
+              cleanSpaces(
+                description
+              )
+
+            result =
+              result.replace(
+                /\s*\((?=[^()]*\b(?:starring|star(?:s|red)?|with|featuring|feat\.?|cast|voice(?:s|d)?|directed by|director|directors|written by|writer|writers|produced by|producer|producers|guest starring|guest star|narrated by|narrator|narrators)\b)[^()]*\)/gi,
+                ''
+              )
+
+            return cleanSpaces(
+              result
+            )
+          }
+
+          /*
+           * ============================================================
            * CLEAN ONE PROGRAMME
            *
            * The source's actual fields are preserved.
@@ -910,11 +941,16 @@ jobs:
                 block
               )
 
+            const cleanedDescription =
+              removeParentheticalCredits(
+                originalDescription
+              )
+
             const description =
               buildDescription(
                 episodeTitle,
                 episodeNumber,
-                originalDescription,
+                cleanedDescription,
                 airDate
               )
 
@@ -1473,8 +1509,7 @@ jobs:
               jessmanProgrammes.length
             )
           }
-
-          /*
+                    /*
            * ============================================================
            * LOAD IPTV-ORG
            *
@@ -2477,8 +2512,7 @@ jobs:
             return block.trimEnd() +
               '\n'
           }
-
-          /*
+                    /*
            * ============================================================
            * MAIN
            * ============================================================
@@ -2621,15 +2655,19 @@ jobs:
             )
 
             console.log('')
+
             console.log(
               '========================================'
             )
+
             console.log(
               'COMBINED FAST PROCESSING COMPLETE'
             )
+
             console.log(
               '========================================'
             )
+
             console.log('')
 
             console.log(
