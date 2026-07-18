@@ -59,25 +59,14 @@ jobs:
           TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
         run: |
           cat > /tmp/build_combinedfast.js <<'EOF'
-          const fs =
-            require(
-              'fs'
-            )
+          const fs = require('fs')
+          const readline = require('readline')
+          const zlib = require('zlib')
 
-          const readline =
-            require(
-              'readline'
-            )
-
-          const zlib =
-            require(
-              'zlib'
-            )
-
-          const inputJessman =
+          const jessmanPath =
             'combinedfast/source/jessman.xml'
 
-          const inputIptv =
+          const iptvOrgPath =
             'combinedfast/source/iptvorg.xml.gz'
 
           const outputPath =
@@ -85,16 +74,6 @@ jobs:
 
           const now =
             new Date()
-
-          const pastCutoff =
-            new Date(
-              now.getTime() -
-              3 *
-              24 *
-              60 *
-              60 *
-              1000
-            )
 
           const cutoff =
             new Date(
@@ -113,42 +92,27 @@ jobs:
            */
 
           const jessmanChannels = {
-            '139574': {
-              canonicalChannel:
-                'MGM Presents',
-
+            'MGM Presents': {
               displayName:
                 'MGM Presents 2'
             },
 
-            '145846': {
-              canonicalChannel:
-                'Scares by Shudder',
-
+            'Scares by Shudder': {
               displayName:
                 'Scares by Shudder 2'
             },
 
-            '116607': {
-              canonicalChannel:
-                'Screambox TV',
-
+            'Screambox TV': {
               displayName:
                 'Screambox TV 2'
             },
 
-            '138450': {
-              canonicalChannel:
-                'Universal Monsters',
-
+            'Universal Monsters': {
               displayName:
                 'Universal Monsters 2'
             },
 
-            '157054': {
-              canonicalChannel:
-                'Miramax Movie Channel',
-
+            'Miramax Movie Channel': {
               displayName:
                 'Miramax Movie Channel 2'
             }
@@ -156,57 +120,36 @@ jobs:
 
           const iptvOrgChannels = {
             'MGMPresents.us': {
-              canonicalChannel:
-                'MGM Presents',
-
               displayName:
                 'MGM Presents'
             },
 
             'MGMPresentsAction.us': {
-              canonicalChannel:
-                'MGM Presents Action',
-
               displayName:
                 'MGM Presents Action'
             },
 
             'MGMPresentsHorror.us': {
-              canonicalChannel:
-                'MGM Presents Horror',
-
               displayName:
                 'MGM Presents Horror'
             },
 
             'ScaresbyShudder.us': {
-              canonicalChannel:
-                'Scares by Shudder',
-
               displayName:
                 'Scares by Shudder'
             },
 
             'ScreamboxTV.us': {
-              canonicalChannel:
-                'Screambox TV',
-
               displayName:
                 'Screambox TV'
             },
 
             'UniversalMonsters.pluto': {
-              canonicalChannel:
-                'Universal Monsters',
-
               displayName:
                 'Universal Monsters'
             },
 
             'MiramaxMovieChannel.us': {
-              canonicalChannel:
-                'Miramax Movie Channel',
-
               displayName:
                 'Miramax Movie Channel'
             }
@@ -214,7 +157,15 @@ jobs:
 
           /*
            * ============================================================
-           * STORAGE
+           * SEPARATE SOURCE STORAGE
+           *
+           * These are deliberately separate.
+           *
+           * Jessman records never become IPTV-org records.
+           * IPTV-org records never become Jessman records.
+           * No cross-source deduplication occurs.
+           * No source record is deleted because another source has a
+           * matching programme.
            * ============================================================
            */
 
@@ -232,113 +183,6 @@ jobs:
 
           /*
            * ============================================================
-           * PER-CHANNEL TALLY
-           * ============================================================
-           */
-
-          const jessmanChannelStats =
-            new Map()
-
-          const iptvOrgChannelStats =
-            new Map()
-
-          function createChannelStats(
-            source,
-            id,
-            canonicalChannel,
-            displayName
-          ) {
-            return {
-              source,
-
-              id,
-
-              canonicalChannel,
-
-              displayName,
-
-              found:
-                false,
-
-              programmesScanned:
-                0,
-
-              programmesSkipped:
-                0,
-
-              programmesRetained:
-                0,
-
-              descriptionsChanged:
-                0,
-
-              actorsRemoved:
-                0,
-
-              creditsRemoved:
-                0,
-
-              episodeNumbersConverted:
-                0,
-
-              originalAirDatesUsed:
-                0,
-
-              fieldsFilledFromOtherSource:
-                0,
-
-              tvmazeFieldsUsed:
-                0,
-
-              tmdbFieldsUsed:
-                0
-            }
-          }
-
-          for (
-            const [
-              id,
-              channel
-            ]
-            of
-            Object.entries(
-              jessmanChannels
-            )
-          ) {
-            jessmanChannelStats.set(
-              id,
-              createChannelStats(
-                'Jessman',
-                id,
-                channel.canonicalChannel,
-                channel.displayName
-              )
-            )
-          }
-
-          for (
-            const [
-              id,
-              channel
-            ]
-            of
-            Object.entries(
-              iptvOrgChannels
-            )
-          ) {
-            iptvOrgChannelStats.set(
-              id,
-              createChannelStats(
-                'IPTV-org',
-                id,
-                channel.canonicalChannel,
-                channel.displayName
-              )
-            )
-          }
-
-          /*
-           * ============================================================
            * COUNTERS
            * ============================================================
            */
@@ -347,6 +191,12 @@ jobs:
             0
 
           let iptvOrgProgrammesScanned =
+            0
+
+          let jessmanProgrammesKept =
+            0
+
+          let iptvOrgProgrammesKept =
             0
 
           let jessmanProgrammesSkipped =
@@ -404,6 +254,9 @@ jobs:
             0
 
           let totalFieldsFilled =
+            0
+
+          let combinedProgrammes =
             0
 
           /*
@@ -482,6 +335,19 @@ jobs:
                 ' '
               )
               .trim()
+          }
+
+          function normalizeChannelName(
+            value
+          ) {
+            return cleanSpaces(
+              value
+            )
+              .toLowerCase()
+              .replace(
+                /[^a-z0-9]+/g,
+                ''
+              )
           }
 
           function normalizeTitle(
@@ -772,7 +638,7 @@ jobs:
           function extractEpisodeNumber(
             block
           ) {
-            let value =
+            let episodeNumber =
               getTagBySystem(
                 block,
                 'episode-num',
@@ -780,9 +646,9 @@ jobs:
               )
 
             if (
-              !value
+              !episodeNumber
             ) {
-              value =
+              episodeNumber =
                 getTagBySystem(
                   block,
                   'episode-num',
@@ -791,9 +657,9 @@ jobs:
             }
 
             if (
-              !value
+              !episodeNumber
             ) {
-              value =
+              episodeNumber =
                 getTag(
                   block,
                   'episode-num'
@@ -801,7 +667,7 @@ jobs:
             }
 
             return normalizeEpisode(
-              value
+              episodeNumber
             )
           }
 
@@ -809,9 +675,11 @@ jobs:
             block
           ) {
             const subtitle =
-              getTag(
-                block,
-                'sub-title'
+              cleanSpaces(
+                getTag(
+                  block,
+                  'sub-title'
+                )
               )
 
             if (
@@ -821,14 +689,16 @@ jobs:
             }
 
             const description =
-              getTag(
-                block,
-                'desc'
+              cleanSpaces(
+                getTag(
+                  block,
+                  'desc'
+                )
               )
 
             const match =
               description.match(
-                /^S\s*\d{1,3}\s*E\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
+                /^S\s*\d{1,3}\s*E\s*\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
               )
 
             if (
@@ -852,15 +722,15 @@ jobs:
                 'original-air-date'
               )
 
-            const original =
+            const fromStructured =
               parseOriginalAirDate(
                 structured
               )
 
             if (
-              original
+              fromStructured
             ) {
-              return original
+              return fromStructured
             }
 
             return parseCompactAirDate(
@@ -868,108 +738,6 @@ jobs:
                 block,
                 'date'
               )
-            )
-          }
-
-          /*
-           * ============================================================
-           * FINAL DESCRIPTION CLEANUP
-           * ============================================================
-           */
-
-          function cleanEmbeddedCredits(
-            description
-          ) {
-            let result =
-              cleanSpaces(
-                description
-              )
-
-            const protectedDates =
-              []
-
-            result =
-              result.replace(
-                /\(\d{2}\/\d{2}\/\d{4}\)/g,
-                match => {
-                  const token =
-                    '__AIRDATE_' +
-                    protectedDates.length +
-                    '__'
-
-                  protectedDates.push(
-                    match
-                  )
-
-                  return token
-                }
-              )
-
-            /*
-             * Remove trailing actor/cast sentences.
-             *
-             * Examples:
-             *
-             * Vincent Price, Christopher Lee and Peter Cushing star.
-             *
-             * Vincent Price, Christopher Lee and Peter Cushing stars.
-             *
-             * Vincent Price, Christopher Lee and Peter Cushing starred.
-             *
-             * Starring Vincent Price, Christopher Lee and Peter Cushing.
-             *
-             * With Vincent Price, Christopher Lee and Peter Cushing.
-             *
-             * Only a trailing sentence is removed.
-             */
-
-            result =
-              result.replace(
-                /(?:^|[.!?]\s+)(?:starring|with)\s+[^.!?]+[.!?]?\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /(?:^|[.!?]\s+)[^.!?]+?\s+stars?\s*[.!?]?\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /(?:^|[.!?]\s+)[^.!?]+?\s+starred\s*[.!?]?\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s*\([^()]{2,200}\)/g,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s{2,}/g,
-                ' '
-              )
-
-            for (
-              let index = 0;
-              index <
-              protectedDates.length;
-              index++
-            ) {
-              result =
-                result.replace(
-                  '__AIRDATE_' +
-                  index +
-                  '__',
-                  protectedDates[index]
-                )
-            }
-
-            return cleanSpaces(
-              result
             )
           }
 
@@ -981,11 +749,6 @@ jobs:
           ) {
             let result =
               ''
-
-            const cleanedDescription =
-              cleanEmbeddedCredits(
-                description
-              )
 
             if (
               episodeTitle &&
@@ -1008,15 +771,15 @@ jobs:
             }
 
             if (
-              cleanedDescription
+              description
             ) {
               result =
                 result
                   ? result +
                     '. ' +
-                    cleanedDescription
+                    description
                   :
-                    cleanedDescription
+                    description
             }
 
             if (
@@ -1034,16 +797,14 @@ jobs:
                     ')'
             }
 
-            return cleanEmbeddedCredits(
-              cleanSpaces(
-                result
-              )
+            return cleanSpaces(
+              result
             )
           }
 
           /*
            * ============================================================
-           * XML TAG HELPERS
+           * XML TAG MODIFICATION HELPERS
            * ============================================================
            */
 
@@ -1114,19 +875,55 @@ jobs:
 
           /*
            * ============================================================
-           * CLEAN PROGRAMME
+           * REMOVE PEOPLE/CREDIT INFORMATION FROM DESCRIPTION
+           *
+           * Parenthetical actor, director, cast, and similar credit
+           * information is removed from the description.
+           *
+           * The air date is added afterward by buildDescription() and
+           * is therefore preserved.
+           * ============================================================
+           */
+
+          function removeParentheticalCredits(
+            description
+          ) {
+            let result =
+              cleanSpaces(
+                description
+              )
+
+            result =
+              result.replace(
+                /\s*\((?=[^()]*\b(?:starring|star(?:s|red)?|with|featuring|feat\.?|cast|voice(?:s|d)?|directed by|director|directors|written by|writer|writers|produced by|producer|producers|guest starring|guest star|narrated by|narrator|narrators)\b)[^()]*\)/gi,
+                ''
+              )
+
+            return cleanSpaces(
+              result
+            )
+          }
+
+          /*
+           * ============================================================
+           * CLEAN ONE PROGRAMME
+           *
+           * The source's actual fields are preserved.
+           * Cleanup creates the desired normalized metadata.
+           * The resulting fields become locked source information.
            * ============================================================
            */
 
           function cleanProgrammeBlock(
             block,
-            source,
-            channelId
+            source
           ) {
             const originalDescription =
-              getTag(
-                block,
-                'desc'
+              cleanSpaces(
+                getTag(
+                  block,
+                  'desc'
+                )
               )
 
             const episodeTitle =
@@ -1144,23 +941,18 @@ jobs:
                 block
               )
 
+            const cleanedDescription =
+              removeParentheticalCredits(
+                originalDescription
+              )
+
             const description =
               buildDescription(
                 episodeTitle,
                 episodeNumber,
-                originalDescription,
+                cleanedDescription,
                 airDate
               )
-
-            const stats =
-              source ===
-              'jessman'
-                ? jessmanChannelStats.get(
-                    channelId
-                  )
-                : iptvOrgChannelStats.get(
-                    channelId
-                  )
 
             if (
               description !==
@@ -1173,12 +965,6 @@ jobs:
                 jessmanDescriptionsChanged++
               } else {
                 iptvOrgDescriptionsChanged++
-              }
-
-              if (
-                stats
-              ) {
-                stats.descriptionsChanged++
               }
             }
 
@@ -1195,12 +981,6 @@ jobs:
               } else {
                 iptvOrgActorsRemoved++
               }
-
-              if (
-                stats
-              ) {
-                stats.actorsRemoved++
-              }
             }
 
             if (
@@ -1216,11 +996,31 @@ jobs:
               } else {
                 iptvOrgCreditsRemoved++
               }
+            }
 
+            if (
+              episodeNumber
+            ) {
               if (
-                stats
+                source ===
+                'jessman'
               ) {
-                stats.creditsRemoved++
+                jessmanEpisodeNumbersConverted++
+              } else {
+                iptvOrgEpisodeNumbersConverted++
+              }
+            }
+
+            if (
+              airDate
+            ) {
+              if (
+                source ===
+                'jessman'
+              ) {
+                jessmanOriginalAirDatesUsed++
+              } else {
+                iptvOrgOriginalAirDatesUsed++
               }
             }
 
@@ -1232,10 +1032,11 @@ jobs:
                 getTag(
                   block,
                   'title'
-                ).replace(
-                  /\s+\(\d{4}\)\s*$/,
-                  ''
                 )
+                  .replace(
+                    /\s+\(\d{4}\)\s*$/,
+                    ''
+                  )
               )
 
             output =
@@ -1313,7 +1114,36 @@ jobs:
 
           /*
            * ============================================================
+           * PROGRAMME MATCHING
+           *
+           * This is ONLY for finding missing metadata.
+           *
+           * It does NOT merge records.
+           * It does NOT remove records.
+           * It does NOT create a combined programme.
+           * ============================================================
+           */
+
+          function programmeMatchKey(
+            programme
+          ) {
+            return [
+              programme.canonicalChannel,
+              programme.start,
+              normalizeTitle(
+                programme.title
+              )
+            ].join(
+              '|'
+            )
+          }
+
+          /*
+           * ============================================================
            * STREAMING XML PARSER
+           *
+           * The entire file is processed sequentially.
+           * The complete XML is never loaded into one giant string.
            * ============================================================
            */
 
@@ -1345,8 +1175,7 @@ jobs:
               ''
 
             for await (
-              const line of
-              rl
+              const line of rl
             ) {
               if (
                 !insideChannel &&
@@ -1471,16 +1300,32 @@ jobs:
           /*
            * ============================================================
            * LOAD JESSMAN
+           *
+           * Entire source is streamed.
+           * Only requested channels are retained.
+           * Every retained programme remains a separate Jessman record.
            * ============================================================
            */
 
           async function loadJessman() {
+            console.log(
+              '========================================'
+            )
+
+            console.log(
+              'LOADING COMPLETE JESSMAN GUIDE'
+            )
+
+            console.log(
+              '========================================'
+            )
+
             const jessmanIdToName =
               new Map()
 
             await parseXmlStream(
               fs.createReadStream(
-                inputJessman
+                jessmanPath
               ),
 
               async (
@@ -1497,61 +1342,73 @@ jobs:
                       'id'
                     )
 
-                  const configured =
-                    jessmanChannels[
-                      id
-                    ]
+                  const displayNames =
+                    getAllTags(
+                      block,
+                      'display-name'
+                    )
+
+                  const normalizedNames =
+                    displayNames.map(
+                      normalizeChannelName
+                    )
+
+                  let matchedName =
+                    ''
+
+                  for (
+                    const targetName of
+                    Object.keys(
+                      jessmanChannels
+                    )
+                  ) {
+                    if (
+                      normalizedNames.includes(
+                        normalizeChannelName(
+                          targetName
+                        )
+                      )
+                    ) {
+                      matchedName =
+                        targetName
+
+                      break
+                    }
+                  }
 
                   if (
-                    !configured
+                    !matchedName
                   ) {
                     return
                   }
 
-                  const stats =
-                    jessmanChannelStats.get(
-                      id
-                    )
-
-                  if (
-                    stats
-                  ) {
-                    stats.found =
-                      true
-                  }
-
                   jessmanIdToName.set(
                     id,
-                    configured.canonicalChannel
+                    matchedName
                   )
 
-                  let outputChannel =
-                    block
-
-                  outputChannel =
-                    outputChannel.replace(
-                      /(<display-name\b[^>]*>)[\s\S]*?(<\/display-name>)/i,
-                      '$1' +
-                      escapeXml(
-                        configured.displayName
-                      ) +
-                      '$2'
-                    )
-
                   jessmanChannelsFound.set(
-                    configured.canonicalChannel,
+                    matchedName,
                     {
                       id,
 
                       canonicalChannel:
-                        configured.canonicalChannel,
+                        matchedName,
 
                       displayName:
-                        configured.displayName,
+                        jessmanChannels[
+                          matchedName
+                        ].displayName,
 
-                      block:
-                        outputChannel
+                      block
                     }
+                  )
+
+                  console.log(
+                    'Jessman channel found: ' +
+                    matchedName +
+                    ' -> ' +
+                    id
                   )
 
                   return
@@ -1576,17 +1433,6 @@ jobs:
 
                 jessmanProgrammesScanned++
 
-                const stats =
-                  jessmanChannelStats.get(
-                    channel
-                  )
-
-                if (
-                  stats
-                ) {
-                  stats.programmesScanned++
-                }
-
                 const start =
                   getAttribute(
                     block,
@@ -1600,18 +1446,10 @@ jobs:
 
                 if (
                   !startDate ||
-                  startDate <
-                  pastCutoff ||
-                  startDate >=
-                  cutoff
+                  startDate < now ||
+                  startDate >= cutoff
                 ) {
                   jessmanProgrammesSkipped++
-
-                  if (
-                    stats
-                  ) {
-                    stats.programmesSkipped++
-                  }
 
                   return
                 }
@@ -1619,9 +1457,10 @@ jobs:
                 const cleaned =
                   cleanProgrammeBlock(
                     block,
-                    'jessman',
-                    channel
+                    'jessman'
                   )
+
+                jessmanProgrammesKept++
 
                 jessmanProgrammes.push(
                   {
@@ -1662,26 +1501,40 @@ jobs:
                       cleaned.block
                   }
                 )
-
-                if (
-                  stats
-                ) {
-                  stats.programmesRetained++
-                }
               }
             )
-          }
 
-          /*
+            console.log(
+              'Jessman programmes retained: ' +
+              jessmanProgrammes.length
+            )
+          }
+                    /*
            * ============================================================
            * LOAD IPTV-ORG
+           *
+           * Entire source is streamed separately.
+           * Every retained programme remains an independent IPTV-org
+           * record.
            * ============================================================
            */
 
           async function loadIptvOrg() {
+            console.log(
+              '========================================'
+            )
+
+            console.log(
+              'LOADING COMPLETE IPTV-ORG GUIDE'
+            )
+
+            console.log(
+              '========================================'
+            )
+
             const input =
               fs.createReadStream(
-                inputIptv
+                iptvOrgPath
               )
 
             const gunzip =
@@ -1708,28 +1561,14 @@ jobs:
                       'id'
                     )
 
-                  const configured =
-                    iptvOrgChannels[
-                      id
-                    ]
-
                   if (
-                    !configured
+                    !iptvOrgChannels[id]
                   ) {
                     return
                   }
 
-                  const stats =
-                    iptvOrgChannelStats.get(
-                      id
-                    )
-
-                  if (
-                    stats
-                  ) {
-                    stats.found =
-                      true
-                  }
+                  const channel =
+                    iptvOrgChannels[id]
 
                   iptvOrgChannelsFound.set(
                     id,
@@ -1737,13 +1576,20 @@ jobs:
                       id,
 
                       canonicalChannel:
-                        configured.canonicalChannel,
+                        channel.displayName,
 
                       displayName:
-                        configured.displayName,
+                        channel.displayName,
 
                       block
                     }
+                  )
+
+                  console.log(
+                    'IPTV-org channel found: ' +
+                    id +
+                    ' -> ' +
+                    channel.displayName
                   )
 
                   return
@@ -1755,32 +1601,18 @@ jobs:
                     'channel'
                   )
 
-                const configured =
-                  iptvOrgChannels[
-                    channel
-                  ]
-
                 if (
-                  !configured
+                  !iptvOrgChannels[channel]
                 ) {
                   return
                 }
 
                 iptvOrgProgrammesScanned++
 
-                const stats =
-                  iptvOrgChannelStats.get(
-                    channel
-                  )
-
-                if (
-                  stats
-                ) {
-                  stats.programmesScanned++
-                }
-
                 const canonicalChannel =
-                  configured.canonicalChannel
+                  iptvOrgChannels[
+                    channel
+                  ].displayName
 
                 const start =
                   getAttribute(
@@ -1795,18 +1627,10 @@ jobs:
 
                 if (
                   !startDate ||
-                  startDate <
-                  pastCutoff ||
-                  startDate >=
-                  cutoff
+                  startDate < now ||
+                  startDate >= cutoff
                 ) {
                   iptvOrgProgrammesSkipped++
-
-                  if (
-                    stats
-                  ) {
-                    stats.programmesSkipped++
-                  }
 
                   return
                 }
@@ -1814,9 +1638,10 @@ jobs:
                 const cleaned =
                   cleanProgrammeBlock(
                     block,
-                    'iptvorg',
-                    channel
+                    'iptvorg'
                   )
+
+                iptvOrgProgrammesKept++
 
                 iptvOrgProgrammes.push(
                   {
@@ -1857,40 +1682,99 @@ jobs:
                       cleaned.block
                   }
                 )
-
-                if (
-                  stats
-                ) {
-                  stats.programmesRetained++
-                }
               }
+            )
+
+            console.log(
+              'IPTV-org programmes retained: ' +
+              iptvOrgProgrammes.length
             )
           }
 
           /*
            * ============================================================
-           * MATCHING
+           * CROSS-SOURCE MISSING-FIELD LOOKUP
+           *
+           * IMPORTANT:
+           *
+           * The target record remains its original source.
+           *
+           * Jessman never becomes IPTV-org.
+           * IPTV-org never becomes Jessman.
+           *
+           * Only empty fields are filled.
+           * Existing fields are never overwritten.
            * ============================================================
            */
 
-          function programmeMatchKey(
-            programme
+          function fillMissingFromSource(
+            target,
+            source
           ) {
-            return [
-              programme.canonicalChannel
-                .replace(
-                  /\s+2$/i,
-                  ''
-                ),
+            let filled =
+              0
 
-              programme.start,
+            const fields =
+              [
+                'episodeTitle',
+                'episodeNumber',
+                'description',
+                'airDate',
+                'icon'
+              ]
 
-              normalizeTitle(
-                programme.title
-              )
-            ].join(
-              '|'
-            )
+            for (
+              const field of
+              fields
+            ) {
+              if (
+                target[field]
+              ) {
+                continue
+              }
+
+              if (
+                !source[field]
+              ) {
+                continue
+              }
+
+              target[field] =
+                source[field]
+
+              filled++
+
+              totalFieldsFilled++
+
+              if (
+                target.source ===
+                'jessman'
+              ) {
+                jessmanFieldsFilledFromIptv++
+              } else {
+                iptvFieldsFilledFromJessman++
+              }
+            }
+
+            if (
+              filled
+            ) {
+              target.block =
+                replaceTag(
+                  target.block,
+                  'desc',
+                  buildDescription(
+                    target.episodeTitle,
+                    target.episodeNumber,
+                    extractDescriptionBody(
+                      target.description
+                    ),
+                    target.airDate
+                  )
+                )
+            }
+
+            return filled
           }
 
           function extractDescriptionBody(
@@ -1948,82 +1832,19 @@ jobs:
               )
           }
 
-          function fillMissingFromSource(
-            target,
-            source
-          ) {
-            const fields =
-              [
-                'episodeTitle',
-                'episodeNumber',
-                'description',
-                'airDate',
-                'icon'
-              ]
-
-            let filled =
-              false
-
-            for (
-              const field of
-              fields
-            ) {
-              if (
-                target[field]
-              ) {
-                continue
-              }
-
-              if (
-                !source[field]
-              ) {
-                continue
-              }
-
-              target[field] =
-                source[field]
-
-              filled =
-                true
-
-              totalFieldsFilled++
-
-              if (
-                target.source ===
-                'jessman'
-              ) {
-                jessmanFieldsFilledFromIptv++
-
-                const stats =
-                  jessmanChannelStats.get(
-                    target.channel
-                  )
-
-                if (
-                  stats
-                ) {
-                  stats.fieldsFilledFromOtherSource++
-                }
-              } else {
-                iptvFieldsFilledFromJessman++
-
-                const stats =
-                  iptvOrgChannelStats.get(
-                    target.channel
-                  )
-
-                if (
-                  stats
-                ) {
-                  stats.fieldsFilledFromOtherSource++
-                }
-              }
-            }
-
-            return filled
-          }
-
           function crossReferenceSources() {
+            console.log(
+              '========================================'
+            )
+
+            console.log(
+              'CROSS-REFERENCING MISSING FIELDS'
+            )
+
+            console.log(
+              '========================================'
+            )
+
             const iptvIndex =
               new Map()
 
@@ -2084,15 +1905,23 @@ jobs:
               )
             }
 
+            /*
+             * Jessman remains Jessman.
+             * IPTV-org is used only as a missing-field lookup.
+             */
+
             for (
               const jessman of
               jessmanProgrammes
             ) {
+              const key =
+                programmeMatchKey(
+                  jessman
+                )
+
               const matches =
                 iptvIndex.get(
-                  programmeMatchKey(
-                    jessman
-                  )
+                  key
                 ) ||
                 []
 
@@ -2115,15 +1944,23 @@ jobs:
               }
             }
 
+            /*
+             * IPTV-org remains IPTV-org.
+             * Jessman is used only as a missing-field lookup.
+             */
+
             for (
               const iptv of
               iptvOrgProgrammes
             ) {
+              const key =
+                programmeMatchKey(
+                  iptv
+                )
+
               const matches =
                 jessmanIndex.get(
-                  programmeMatchKey(
-                    iptv
-                  )
+                  key
                 ) ||
                 []
 
@@ -2145,11 +1982,24 @@ jobs:
                 }
               }
             }
+
+            console.log(
+              'Jessman fields filled from IPTV-org: ' +
+              jessmanFieldsFilledFromIptv
+            )
+
+            console.log(
+              'IPTV-org fields filled from Jessman: ' +
+              iptvFieldsFilledFromJessman
+            )
           }
 
           /*
            * ============================================================
-           * ENRICHMENT
+           * TVMAZE ENRICHMENT
+           *
+           * Only fills fields that are still missing.
+           * Never overwrites source information.
            * ============================================================
            */
 
@@ -2310,23 +2160,8 @@ jobs:
                 )
 
               tvmazeFieldsUsed++
+
               totalFieldsFilled++
-
-              const stats =
-                programme.source ===
-                'jessman'
-                  ? jessmanChannelStats.get(
-                      programme.channel
-                    )
-                  : iptvOrgChannelStats.get(
-                      programme.channel
-                    )
-
-              if (
-                stats
-              ) {
-                stats.tvmazeFieldsUsed++
-              }
 
               used =
                 true
@@ -2346,23 +2181,8 @@ jobs:
                 )
 
               tvmazeFieldsUsed++
+
               totalFieldsFilled++
-
-              const stats =
-                programme.source ===
-                'jessman'
-                  ? jessmanChannelStats.get(
-                      programme.channel
-                    )
-                  : iptvOrgChannelStats.get(
-                      programme.channel
-                    )
-
-              if (
-                stats
-              ) {
-                stats.tvmazeFieldsUsed++
-              }
 
               used =
                 true
@@ -2383,23 +2203,8 @@ jobs:
                   )
 
               tvmazeFieldsUsed++
+
               totalFieldsFilled++
-
-              const stats =
-                programme.source ===
-                'jessman'
-                  ? jessmanChannelStats.get(
-                      programme.channel
-                    )
-                  : iptvOrgChannelStats.get(
-                      programme.channel
-                    )
-
-              if (
-                stats
-              ) {
-                stats.tvmazeFieldsUsed++
-              }
 
               used =
                 true
@@ -2418,23 +2223,8 @@ jobs:
                 programme.icon
               ) {
                 tvmazeFieldsUsed++
+
                 totalFieldsFilled++
-
-                const stats =
-                  programme.source ===
-                  'jessman'
-                    ? jessmanChannelStats.get(
-                        programme.channel
-                      )
-                    : iptvOrgChannelStats.get(
-                        programme.channel
-                      )
-
-                if (
-                  stats
-                ) {
-                  stats.tvmazeFieldsUsed++
-                }
 
                 used =
                   true
@@ -2452,44 +2242,109 @@ jobs:
             }
           }
 
-          async function getTmdbShow(
-            title
+          /*
+           * ============================================================
+           * TMDB ENRICHMENT
+           *
+           * Final pass.
+           * Only fills fields still missing.
+           * ============================================================
+           */
+
+          async function enrichFromTmdb(
+            programme
           ) {
-            const token =
-              process.env.TMDB_API_TOKEN
-
             if (
-              !token
+              !process.env.TMDB_API_TOKEN
             ) {
-              return null
+              return
             }
 
-            const key =
+            if (
+              !programme.episodeNumber
+            ) {
+              return
+            }
+
+            const match =
+              programme.episodeNumber.match(
+                /^S(\d+)E(\d+)$/i
+              )
+
+            if (
+              !match
+            ) {
+              return
+            }
+
+            const cacheKey =
               normalizeTitle(
-                title
+                programme.title
+              )
+
+            let show =
+              tmdbCache.get(
+                cacheKey
               )
 
             if (
-              tmdbCache.has(
-                key
-              )
+              !show
             ) {
-              return tmdbCache.get(
-                key
+              const searchData =
+                await fetchJson(
+                  'https://api.themoviedb.org/3/search/tv?query=' +
+                  encodeURIComponent(
+                    programme.title
+                  ),
+                  {
+                    Authorization:
+                      'Bearer ' +
+                      process.env.TMDB_API_TOKEN,
+
+                    accept:
+                      'application/json'
+                  }
+                )
+
+              show =
+                searchData &&
+                searchData.results &&
+                searchData.results.length
+                  ? searchData.results[0]
+                  : null
+
+              tmdbCache.set(
+                cacheKey,
+                show
+              )
+
+              await sleep(
+                250
               )
             }
 
-            const data =
-              await fetchJson(
-                'https://api.themoviedb.org/3/search/tv?query=' +
-                encodeURIComponent(
-                  title
-                ),
+            if (
+              !show
+            ) {
+              return
+            }
 
+            const episodeData =
+              await fetchJson(
+                'https://api.themoviedb.org/3/tv/' +
+                show.id +
+                '/season/' +
+                Number(
+                  match[1]
+                ) +
+                '/episode/' +
+                Number(
+                  match[2]
+                ),
                 {
                   Authorization:
                     'Bearer ' +
-                    token,
+                    process.env.TMDB_API_TOKEN,
 
                   accept:
                     'application/json'
@@ -2500,31 +2355,8 @@ jobs:
               250
             )
 
-            const result =
-              data &&
-              data.results &&
-              data.results.length
-                ? data.results[0]
-                : null
-
-            tmdbCache.set(
-              key,
-              result
-            )
-
-            return result
-          }
-
-          async function enrichFromTmdb(
-            programme
-          ) {
-            const show =
-              await getTmdbShow(
-                programme.title
-              )
-
             if (
-              !show
+              !episodeData
             ) {
               return
             }
@@ -2533,31 +2365,17 @@ jobs:
               false
 
             if (
-              !programme.icon &&
-              show.poster_path
+              !programme.episodeTitle &&
+              episodeData.name
             ) {
-              programme.icon =
-                'https://image.tmdb.org/t/p/original' +
-                show.poster_path
+              programme.episodeTitle =
+                cleanSpaces(
+                  episodeData.name
+                )
 
               tmdbFieldsUsed++
+
               totalFieldsFilled++
-
-              const stats =
-                programme.source ===
-                'jessman'
-                  ? jessmanChannelStats.get(
-                      programme.channel
-                    )
-                  : iptvOrgChannelStats.get(
-                      programme.channel
-                    )
-
-              if (
-                stats
-              ) {
-                stats.tmdbFieldsUsed++
-              }
 
               used =
                 true
@@ -2565,31 +2383,38 @@ jobs:
 
             if (
               !programme.description &&
-              show.overview
+              episodeData.overview
             ) {
               programme.description =
                 cleanSpaces(
-                  show.overview
+                  episodeData.overview
                 )
 
               tmdbFieldsUsed++
+
               totalFieldsFilled++
 
-              const stats =
-                programme.source ===
-                'jessman'
-                  ? jessmanChannelStats.get(
-                      programme.channel
-                    )
-                  : iptvOrgChannelStats.get(
-                      programme.channel
-                    )
+              used =
+                true
+            }
 
-              if (
-                stats
-              ) {
-                stats.tmdbFieldsUsed++
-              }
+            if (
+              !programme.airDate &&
+              episodeData.air_date
+            ) {
+              programme.airDate =
+                episodeData.air_date
+                  .split(
+                    '-'
+                  )
+                  .reverse()
+                  .join(
+                    '/'
+                  )
+
+              tmdbFieldsUsed++
+
+              totalFieldsFilled++
 
               used =
                 true
@@ -2606,7 +2431,7 @@ jobs:
             }
           }
 
-          async function enrichAll() {
+          async function enrichAllProgrammes() {
             const allProgrammes =
               [
                 ...jessmanProgrammes,
@@ -2620,312 +2445,74 @@ jobs:
               await enrichFromTvmaze(
                 programme
               )
-
-              if (
-                !programme.description ||
-                !programme.icon
-              ) {
-                await enrichFromTmdb(
-                  programme
-                )
-              }
             }
-          }
-
-          /*
-           * ============================================================
-           * FINAL OUTPUT
-           * ============================================================
-           */
-
-          function buildChannelBlock(
-            channel
-          ) {
-            return channel.block
-          }
-
-          function buildProgrammeBlock(
-            programme
-          ) {
-            let finalDescription =
-              buildDescription(
-                programme.episodeTitle,
-                programme.episodeNumber,
-                extractDescriptionBody(
-                  programme.description
-                ),
-                programme.airDate
-              )
-
-            finalDescription =
-              cleanEmbeddedCredits(
-                finalDescription
-              )
-
-            programme.description =
-              finalDescription
-
-            let block =
-              programme.block
-
-            block =
-              replaceTag(
-                block,
-                'title',
-                programme.title
-              )
-
-            block =
-              replaceTag(
-                block,
-                'desc',
-                finalDescription
-              )
-
-            if (
-              programme.icon
-            ) {
-              const iconRegex =
-                /<icon\b[^>]*>/i
-
-              if (
-                iconRegex.test(
-                  block
-                )
-              ) {
-                block =
-                  block.replace(
-                    iconRegex,
-                    '<icon src="' +
-                    escapeXml(
-                      programme.icon
-                    ) +
-                    '">'
-                  )
-              }
-            }
-
-            return block
-          }
-
-          async function writeOutput() {
-            const output =
-              fs.createWriteStream(
-                outputPath,
-                {
-                  encoding:
-                    'utf8'
-                }
-              )
-
-            function write(
-              value
-            ) {
-              return new Promise(
-                (
-                  resolve,
-                  reject
-                ) => {
-                  if (
-                    output.write(
-                      value
-                    )
-                  ) {
-                    resolve()
-                  } else {
-                    output.once(
-                      'drain',
-                      resolve
-                    )
-
-                    output.once(
-                      'error',
-                      reject
-                    )
-                  }
-                }
-              )
-            }
-
-            await write(
-              '<?xml version="1.0" encoding="UTF-8"?>\n'
-            )
-
-            await write(
-              '<tv generator-info-name="Combined FAST">\n'
-            )
-
-            for (
-              const channel of
-              jessmanChannelsFound.values()
-            ) {
-              await write(
-                buildChannelBlock(
-                  channel
-                )
-              )
-            }
-
-            for (
-              const channel of
-              iptvOrgChannelsFound.values()
-            ) {
-              await write(
-                buildChannelBlock(
-                  channel
-                )
-              )
-            }
-
-            const allProgrammes =
-              [
-                ...jessmanProgrammes,
-                ...iptvOrgProgrammes
-              ]
-
-            allProgrammes.sort(
-              (
-                a,
-                b
-              ) =>
-                parseXmltvDate(
-                  a.start
-                ) -
-                parseXmltvDate(
-                  b.start
-                )
-            )
 
             for (
               const programme of
               allProgrammes
             ) {
-              await write(
-                buildProgrammeBlock(
-                  programme
-                )
+              await enrichFromTmdb(
+                programme
               )
             }
-
-            await write(
-              '</tv>\n'
-            )
-
-            await new Promise(
-              (
-                resolve,
-                reject
-              ) => {
-                output.once(
-                  'error',
-                  reject
-                )
-
-                output.end(
-                  resolve
-                )
-              }
-            )
           }
 
           /*
            * ============================================================
-           * TALLY OUTPUT
+           * CHANNEL OUTPUT
            * ============================================================
            */
 
-          function printChannelStats(
-            statsMap
+          function buildChannel(
+            channelHeader
           ) {
-            for (
-              const stats of
-              statsMap.values()
+            let block =
+              channelHeader.block
+
+            const displayName =
+              channelHeader.displayName
+
+            if (
+              getAllTags(
+                block,
+                'display-name'
+              ).length
             ) {
-              console.log(
-                ''
-              )
-
-              console.log(
-                stats.canonicalChannel
-              )
-
-              console.log(
-                '  Source ID: ' +
-                stats.id
-              )
-
-              console.log(
-                '  Output display name: ' +
-                stats.displayName
-              )
-
-              console.log(
-                '  Channel found: ' +
-                (
-                  stats.found
-                    ? 'YES'
-                    : 'NO'
+              block =
+                block.replace(
+                  /(<display-name\b[^>]*>)[\s\S]*?(<\/display-name>)/i,
+                  '$1' +
+                  escapeXml(
+                    displayName
+                  ) +
+                  '$2'
                 )
-              )
-
-              console.log(
-                '  Programmes scanned: ' +
-                stats.programmesScanned
-              )
-
-              console.log(
-                '  Programmes skipped: ' +
-                stats.programmesSkipped
-              )
-
-              console.log(
-                '  Programmes retained: ' +
-                stats.programmesRetained
-              )
-
-              console.log(
-                '  Descriptions changed: ' +
-                stats.descriptionsChanged
-              )
-
-              console.log(
-                '  Actors removed: ' +
-                stats.actorsRemoved
-              )
-
-              console.log(
-                '  Credits removed: ' +
-                stats.creditsRemoved
-              )
-
-              console.log(
-                '  Episode numbers converted: ' +
-                stats.episodeNumbersConverted
-              )
-
-              console.log(
-                '  Original air dates used: ' +
-                stats.originalAirDatesUsed
-              )
-
-              console.log(
-                '  Fields filled from other source: ' +
-                stats.fieldsFilledFromOtherSource
-              )
-
-              console.log(
-                '  TVMaze fields used: ' +
-                stats.tvmazeFieldsUsed
-              )
-
-              console.log(
-                '  TMDB fields used: ' +
-                stats.tmdbFieldsUsed
-              )
             }
+
+            return block.trimEnd() +
+              '\n'
           }
 
-          /*
+          function buildProgramme(
+            programme
+          ) {
+            let block =
+              programme.block
+
+            block =
+              block.replace(
+                /(\bchannel=")[^"]*(")/i,
+                '$1' +
+                escapeXml(
+                  programme.channel
+                ) +
+                '$2'
+              )
+
+            return block.trimEnd() +
+              '\n'
+          }
+                    /*
            * ============================================================
            * MAIN
            * ============================================================
@@ -2938,13 +2525,136 @@ jobs:
 
             crossReferenceSources()
 
-            await enrichAll()
+            await enrichAllProgrammes()
 
-            await writeOutput()
+            const output =
+              fs.createWriteStream(
+                outputPath,
+                {
+                  encoding:
+                    'utf8'
+                }
+              )
 
-            console.log(
-              ''
+            await new Promise(
+              (
+                resolve,
+                reject
+              ) => {
+                output.once(
+                  'error',
+                  reject
+                )
+
+                output.write(
+                  '<?xml version="1.0" encoding="UTF-8"?>\n'
+                )
+
+                output.write(
+                  '<tv generator-info-name="Combined FAST">\n'
+                )
+
+                /*
+                 * Jessman channels remain Jessman channels.
+                 */
+
+                for (
+                  const channelHeader of
+                  jessmanChannelsFound.values()
+                ) {
+                  output.write(
+                    buildChannel(
+                      channelHeader
+                    )
+                  )
+                }
+
+                /*
+                 * IPTV-org channels remain IPTV-org channels.
+                 */
+
+                for (
+                  const channelHeader of
+                  iptvOrgChannelsFound.values()
+                ) {
+                  output.write(
+                    buildChannel(
+                      channelHeader
+                    )
+                  )
+                }
+
+                /*
+                 * Jessman programmes remain separate.
+                 */
+
+                const orderedJessman =
+                  [
+                    ...jessmanProgrammes
+                  ].sort(
+                    (
+                      a,
+                      b
+                    ) =>
+                      a.start.localeCompare(
+                        b.start
+                      )
+                  )
+
+                for (
+                  const programme of
+                  orderedJessman
+                ) {
+                  output.write(
+                    buildProgramme(
+                      programme
+                    )
+                  )
+
+                  combinedProgrammes++
+                }
+
+                /*
+                 * IPTV-org programmes remain separate.
+                 */
+
+                const orderedIptv =
+                  [
+                    ...iptvOrgProgrammes
+                  ].sort(
+                    (
+                      a,
+                      b
+                    ) =>
+                      a.start.localeCompare(
+                        b.start
+                      )
+                  )
+
+                for (
+                  const programme of
+                  orderedIptv
+                ) {
+                  output.write(
+                    buildProgramme(
+                      programme
+                    )
+                  )
+
+                  combinedProgrammes++
+                }
+
+                output.write(
+                  '</tv>\n'
+                )
+
+                output.end(
+                  resolve
+                )
+              }
             )
+
+            console.log('')
 
             console.log(
               '========================================'
@@ -2958,62 +2668,20 @@ jobs:
               '========================================'
             )
 
-            console.log(
-              ''
-            )
+            console.log('')
 
             console.log(
-              'JESSMAN CHANNEL RESULTS'
+              'SOURCE SEPARATION'
             )
 
             console.log(
-              '========================================'
-            )
-
-            printChannelStats(
-              jessmanChannelStats
+              'Jessman channels found: ' +
+              jessmanChannelsFound.size
             )
 
             console.log(
-              ''
-            )
-
-            console.log(
-              'IPTV-ORG CHANNEL RESULTS'
-            )
-
-            console.log(
-              '========================================'
-            )
-
-            printChannelStats(
-              iptvOrgChannelStats
-            )
-
-            console.log(
-              ''
-            )
-
-            console.log(
-              '========================================'
-            )
-
-            console.log(
-              'OVERALL PROCESSING SUMMARY'
-            )
-
-            console.log(
-              '========================================'
-            )
-
-            console.log(
-              'Jessman programmes scanned: ' +
-              jessmanProgrammesScanned
-            )
-
-            console.log(
-              'Jessman programmes skipped: ' +
-              jessmanProgrammesSkipped
+              'IPTV-org channels found: ' +
+              iptvOrgChannelsFound.size
             )
 
             console.log(
@@ -3022,28 +2690,106 @@ jobs:
             )
 
             console.log(
-              'Jessman descriptions changed: ' +
+              'IPTV-org programmes retained: ' +
+              iptvOrgProgrammes.length
+            )
+
+            console.log('')
+
+            console.log(
+              'JESSMAN PROGRAMMES'
+            )
+
+            console.log(
+              'Programmes scanned: ' +
+              jessmanProgrammesScanned
+            )
+
+            console.log(
+              'Programmes kept: ' +
+              jessmanProgrammesKept
+            )
+
+            console.log(
+              'Programmes skipped: ' +
+              jessmanProgrammesSkipped
+            )
+
+            console.log(
+              'Descriptions changed: ' +
               jessmanDescriptionsChanged
             )
 
             console.log(
-              'Jessman actors removed: ' +
+              'Actors removed: ' +
               jessmanActorsRemoved
             )
 
             console.log(
-              'Jessman credits removed: ' +
+              'Credits removed: ' +
               jessmanCreditsRemoved
             )
 
             console.log(
-              'Jessman episode numbers converted: ' +
+              'Episode numbers converted: ' +
               jessmanEpisodeNumbersConverted
             )
 
             console.log(
-              'Jessman original air dates used: ' +
+              'Original air dates used: ' +
               jessmanOriginalAirDatesUsed
+            )
+
+            console.log('')
+
+            console.log(
+              'IPTV-ORG PROGRAMMES'
+            )
+
+            console.log(
+              'Programmes scanned: ' +
+              iptvOrgProgrammesScanned
+            )
+
+            console.log(
+              'Programmes kept: ' +
+              iptvOrgProgrammesKept
+            )
+
+            console.log(
+              'Programmes skipped: ' +
+              iptvOrgProgrammesSkipped
+            )
+
+            console.log(
+              'Descriptions changed: ' +
+              iptvOrgDescriptionsChanged
+            )
+
+            console.log(
+              'Actors removed: ' +
+              iptvOrgActorsRemoved
+            )
+
+            console.log(
+              'Credits removed: ' +
+              iptvOrgCreditsRemoved
+            )
+
+            console.log(
+              'Episode numbers converted: ' +
+              iptvOrgEpisodeNumbersConverted
+            )
+
+            console.log(
+              'Original air dates used: ' +
+              iptvOrgOriginalAirDatesUsed
+            )
+
+            console.log('')
+
+            console.log(
+              'MISSING-FIELD CROSS-REFERENCE'
             )
 
             console.log(
@@ -3052,60 +2798,18 @@ jobs:
             )
 
             console.log(
-              ''
-            )
-
-            console.log(
-              'IPTV-org programmes scanned: ' +
-              iptvOrgProgrammesScanned
-            )
-
-            console.log(
-              'IPTV-org programmes skipped: ' +
-              iptvOrgProgrammesSkipped
-            )
-
-            console.log(
-              'IPTV-org programmes retained: ' +
-              iptvOrgProgrammes.length
-            )
-
-            console.log(
-              'IPTV-org descriptions changed: ' +
-              iptvOrgDescriptionsChanged
-            )
-
-            console.log(
-              'IPTV-org actors removed: ' +
-              iptvOrgActorsRemoved
-            )
-
-            console.log(
-              'IPTV-org credits removed: ' +
-              iptvOrgCreditsRemoved
-            )
-
-            console.log(
-              'IPTV-org episode numbers converted: ' +
-              iptvOrgEpisodeNumbersConverted
-            )
-
-            console.log(
-              'IPTV-org original air dates used: ' +
-              iptvOrgOriginalAirDatesUsed
-            )
-
-            console.log(
               'IPTV-org fields filled from Jessman: ' +
               iptvFieldsFilledFromJessman
             )
 
+            console.log('')
+
             console.log(
-              ''
+              'TVMAZE FINAL ENRICHMENT'
             )
 
             console.log(
-              'TVMaze matches: ' +
+              'TVMaze matched programmes: ' +
               tvmazeMatches
             )
 
@@ -3114,8 +2818,14 @@ jobs:
               tvmazeFieldsUsed
             )
 
+            console.log('')
+
             console.log(
-              'TMDB matches: ' +
+              'TMDB FINAL ENRICHMENT'
+            )
+
+            console.log(
+              'TMDB matched programmes: ' +
               tmdbMatches
             )
 
@@ -3124,14 +2834,33 @@ jobs:
               tmdbFieldsUsed
             )
 
+            console.log('')
+
             console.log(
-              'Total fields filled: ' +
-              totalFieldsFilled
+              'FINAL OUTPUT'
             )
 
             console.log(
-              ''
+              'Jessman records written: ' +
+              jessmanProgrammes.length
             )
+
+            console.log(
+              'IPTV-org records written: ' +
+              iptvOrgProgrammes.length
+            )
+
+            console.log(
+              'Total records written: ' +
+              combinedProgrammes
+            )
+
+            console.log(
+              'Total missing fields filled: ' +
+              totalFieldsFilled
+            )
+
+            console.log('')
 
             console.log(
               'Output: ' +
@@ -3158,9 +2887,15 @@ jobs:
         run: |
           CHANNELS=$(grep -c '<channel ' combinedfast/work/combinedfast.xml || true)
           PROGRAMMES=$(grep -c '<programme ' combinedfast/work/combinedfast.xml || true)
+          CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
+          PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
+          DESCRIPTIONS=$(grep -c '<desc ' combinedfast/work/combinedfast.xml || true)
 
           echo "Combined FAST channels: $CHANNELS"
           echo "Combined FAST programmes: $PROGRAMMES"
+          echo "Channel logos: $CHANNEL_LOGOS"
+          echo "Programme icons: $PROGRAMME_ICONS"
+          echo "Description tags: $DESCRIPTIONS"
 
           if [ "$CHANNELS" -lt 1 ]; then
             echo "Combined FAST guide contains no channels"
@@ -3178,25 +2913,27 @@ jobs:
         run: |
           gzip -c \
             combinedfast/work/combinedfast.xml \
-            > guides/CombinedFAST.xml.gz
+            > guides/combinedfast.xml.gz
 
-          test -s guides/CombinedFAST.xml.gz
+          test -s guides/combinedfast.xml.gz
 
-          ls -lh guides/CombinedFAST.xml.gz
+          echo "Combined FAST guide:"
+          ls -lh guides/combinedfast.xml.gz
 
       - name: Commit and push Combined FAST guide
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add guides/CombinedFAST.xml.gz
+          git add guides/combinedfast.xml.gz
 
           if git diff --cached --quiet; then
             echo "No Combined FAST guide changes to commit"
             exit 0
           fi
 
-          git commit -m "Update Combined FAST guide"
+          git commit \
+            -m "Update Combined FAST guide"
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
