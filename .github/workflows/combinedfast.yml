@@ -1,401 +1,434 @@
 name: Combined FAST
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '45 5 * * *'
-    - cron: '45 17 * * *'
+workflow_dispatch:
+schedule:
+- cron: '45 5 * * *'
+- cron: '45 17 * * *'
 
 permissions:
-  contents: write
+contents: write
 
 concurrency:
-  group: combinedfast
-  cancel-in-progress: false
+group: combinedfast
+cancel-in-progress: false
 
 jobs:
-  build-combinedfast:
-    runs-on: ubuntu-latest
+build-combinedfast:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
 
-      - name: Wait for other repository workflows
-        run: |
-          echo "Waiting before starting Combined FAST processing..."
-          sleep 60
+  - name: Wait for other repository workflows
+    run: |
+      echo "Waiting before starting Combined FAST processing..."
+      sleep 60
 
-      - name: Download fresh Jessman FAST guide
-        run: |
-          mkdir -p combinedfast/source
-          mkdir -p combinedfast/work
-          mkdir -p guides
+  - name: Download fresh Jessman FAST guide
+    run: |
+      mkdir -p combinedfast/source
+      mkdir -p combinedfast/work
+      mkdir -p guides
 
-          curl -L --fail --retry 5 --retry-delay 10 \
-            https://epg.guru/7daygracenote/USFast.xml \
-            -o combinedfast/source/jessman.xml
+      curl -L --fail --retry 5 --retry-delay 10 \
+        https://epg.guru/7daygracenote/USFast.xml \
+        -o combinedfast/source/jessman.xml
 
-          test -s combinedfast/source/jessman.xml
+      test -s combinedfast/source/jessman.xml
 
-          echo "Fresh Jessman FAST guide downloaded"
-          ls -lh combinedfast/source/jessman.xml
+      echo "Fresh Jessman FAST guide downloaded"
+      ls -lh combinedfast/source/jessman.xml
 
-      - name: Download fresh IPTV-org guide
-        run: |
-          curl -L --fail --retry 5 --retry-delay 10 \
-            https://iptv-epg.org/files/epg-us.xml.gz \
-            -o combinedfast/source/iptvorg.xml.gz
+  - name: Download fresh IPTV-org guide
+    run: |
+      curl -L --fail --retry 5 --retry-delay 10 \
+        https://iptv-epg.org/files/epg-us.xml.gz \
+        -o combinedfast/source/iptvorg.xml.gz
 
-          test -s combinedfast/source/iptvorg.xml.gz
+      test -s combinedfast/source/iptvorg.xml.gz
 
-          echo "Fresh IPTV-org FAST guide downloaded"
-          ls -lh combinedfast/source/iptvorg.xml.gz
+      echo "Fresh IPTV-org FAST guide downloaded"
+      ls -lh combinedfast/source/iptvorg.xml.gz
 
-      - name: Process and rebuild Combined FAST guide
-        env:
-          TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
-        run: |
-          cat > /tmp/build_combinedfast.js <<'EOF'
-          const fs = require('fs')
-          const readline = require('readline')
-          const zlib = require('zlib')
+  - name: Process and rebuild Combined FAST guide
+    env:
+      TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+    run: |
+      cat > /tmp/build_combinedfast.js <<'EOF'
+      const fs = require('fs')
+      const readline = require('readline')
+      const zlib = require('zlib')
 
-          const jessmanPath =
-            'combinedfast/source/jessman.xml'
+      const jessmanPath =
+        'combinedfast/source/jessman.xml'
 
-          const iptvOrgPath =
-            'combinedfast/source/iptvorg.xml.gz'
+      const iptvOrgPath =
+        'combinedfast/source/iptvorg.xml.gz'
 
-          const outputPath =
-            'combinedfast/work/combinedfast.xml'
+      const outputPath =
+        'combinedfast/work/combinedfast.xml'
 
-          const now =
-            new Date()
+      const now =
+        new Date()
 
-          const cutoff =
-            new Date(
-              now.getTime() +
-              14 *
-              24 *
-              60 *
-              60 *
-              1000
+      const cutoff =
+        new Date(
+          now.getTime() +
+          14 *
+          24 *
+          60 *
+          60 *
+          1000
+        )
+
+      const jessmanChannels = {
+        'MGM Presents': {
+          displayName:
+            'MGM Presents 2'
+        },
+
+        'Scares by Shudder': {
+          displayName:
+            'Scares by Shudder 2'
+        },
+
+        'Screambox TV': {
+          displayName:
+            'Screambox TV 2'
+        },
+
+        'Universal Monsters': {
+          displayName:
+            'Universal Monsters 2'
+        },
+
+        'Miramax Movie Channel': {
+          displayName:
+            'Miramax Movie Channel 2'
+        }
+      }
+
+      const iptvOrgChannels = {
+        'MGMPresents.us': {
+          displayName:
+            'MGM Presents'
+        },
+
+        'MGMPresentsAction.us': {
+          displayName:
+            'MGM Presents Action'
+        },
+
+        'MGMPresentsHorror.us': {
+          displayName:
+            'MGM Presents Horror'
+        },
+
+        'ScaresbyShudder.us': {
+          displayName:
+            'Scares by Shudder'
+        },
+
+        'ScreamboxTV.us': {
+          displayName:
+            'Screambox TV'
+        },
+
+        'UniversalMonsters.pluto': {
+          displayName:
+            'Universal Monsters'
+        },
+
+        'MiramaxMovieChannel.us': {
+          displayName:
+            'Miramax Movie Channel'
+        }
+      }
+
+      const jessman =
+        new Map()
+
+      const iptvOrg =
+        new Map()
+
+      const channelHeaders =
+        new Map()
+
+      const jessmanIdToName =
+        new Map()
+
+      let jessmanChannelsFound =
+        0
+
+      let iptvOrgChannelsFound =
+        0
+
+      let jessmanProgrammesScanned =
+        0
+
+      let iptvOrgProgrammesScanned =
+        0
+
+      let jessmanProgrammesKept =
+        0
+
+      let iptvOrgProgrammesKept =
+        0
+
+      let jessmanProgrammesSkipped =
+        0
+
+      let iptvOrgProgrammesSkipped =
+        0
+
+      let jessmanDescriptionsChanged =
+        0
+
+      let iptvOrgDescriptionsChanged =
+        0
+
+      let jessmanActorsRemoved =
+        0
+
+      let iptvOrgActorsRemoved =
+        0
+
+      let jessmanCreditsRemoved =
+        0
+
+      let iptvOrgCreditsRemoved =
+        0
+
+      let jessmanEpisodeNumbersConverted =
+        0
+
+      let iptvOrgEpisodeNumbersConverted =
+        0
+
+      let jessmanOriginalAirDatesUsed =
+        0
+
+      let iptvOrgOriginalAirDatesUsed =
+        0
+
+      let jessmanIptvMatches =
+        0
+
+      let iptvOnlyProgrammes =
+        0
+
+      let jessmanOnlyProgrammes =
+        0
+
+      let iptvFieldsUsed =
+        0
+
+      let tvmazeMatches =
+        0
+
+      let tvmazeFieldsUsed =
+        0
+
+      let tmdbMatches =
+        0
+
+      let tmdbFieldsUsed =
+        0
+
+      let combinedProgrammes =
+        0
+
+      function decodeXml(
+        value
+      ) {
+        return String(
+          value ||
+          ''
+        )
+          .replace(
+            /&amp;/g,
+            '&'
+          )
+          .replace(
+            /&quot;/g,
+            '"'
+          )
+          .replace(
+            /&apos;/g,
+            "'"
+          )
+          .replace(
+            /&lt;/g,
+            '<'
+          )
+          .replace(
+            /&gt;/g,
+            '>'
+          )
+      }
+
+      function escapeXml(
+        value
+      ) {
+        return String(
+          value ||
+          ''
+        )
+          .replace(
+            /&/g,
+            '&amp;'
+          )
+          .replace(
+            /</g,
+            '&lt;'
+          )
+          .replace(
+            />/g,
+            '&gt;'
+          )
+          .replace(
+            /"/g,
+            '&quot;'
+          )
+          .replace(
+            /'/g,
+            '&apos;'
+          )
+      }
+
+      function cleanSpaces(
+        value
+      ) {
+        return String(
+          value ||
+          ''
+        )
+          .replace(
+            /\s+/g,
+            ' '
+          )
+          .trim()
+      }
+
+      function normalizeChannelName(
+        value
+      ) {
+        return cleanSpaces(
+          value
+        )
+          .toLowerCase()
+          .replace(
+            /[^a-z0-9]+/g,
+            ''
+          )
+      }
+
+      function normalizeTitle(
+        value
+      ) {
+        return cleanSpaces(
+          value
+        )
+          .replace(
+            /\s+\(\d{4}\)\s*$/,
+            ''
+          )
+          .toLowerCase()
+          .replace(
+            /[^a-z0-9]+/g,
+            ''
+          )
+      }
+
+      function getAttribute(
+        block,
+        attribute
+      ) {
+        const regex =
+          new RegExp(
+            '\\b' +
+            attribute +
+            '="([^"]*)"',
+            'i'
+          )
+
+        const match =
+          block.match(
+            regex
+          )
+
+        return match
+          ? decodeXml(
+              match[1]
             )
+          : ''
+      }
 
-          const jessmanChannels = {
-            'MGM Presents': {
-              displayName:
-                'MGM Presents 2'
-            },
+      function getTag(
+        block,
+        tag
+      ) {
+        const regex =
+          new RegExp(
+            '<' +
+            tag +
+            '\\b[^>]*>' +
+            '([\\s\\S]*?)' +
+            '</' +
+            tag +
+            '>',
+            'i'
+          )
 
-            'Scares by Shudder': {
-              displayName:
-                'Scares by Shudder 2'
-            },
+        const match =
+          block.match(
+            regex
+          )
 
-            'Screambox TV': {
-              displayName:
-                'Screambox TV 2'
-            },
+        if (
+          !match
+        ) {
+          return ''
+        }
 
-            'Universal Monsters': {
-              displayName:
-                'Universal Monsters 2'
-            },
-
-            'Miramax Movie Channel': {
-              displayName:
-                'Miramax Movie Channel 2'
-            }
-          }
-
-          const iptvOrgChannels = {
-            'MGMPresents.us': {
-              displayName:
-                'MGM Presents'
-            },
-
-            'MGMPresentsAction.us': {
-              displayName:
-                'MGM Presents Action'
-            },
-
-            'MGMPresentsHorror.us': {
-              displayName:
-                'MGM Presents Horror'
-            },
-
-            'ScaresbyShudder.us': {
-              displayName:
-                'Scares by Shudder'
-            },
-
-            'ScreamboxTV.us': {
-              displayName:
-                'Screambox TV'
-            },
-
-            'UniversalMonsters.pluto': {
-              displayName:
-                'Universal Monsters'
-            },
-
-            'MiramaxMovieChannel.us': {
-              displayName:
-                'Miramax Movie Channel'
-            }
-          }
-
-          const jessman =
-            new Map()
-
-          const iptvOrg =
-            new Map()
-
-          const channelHeaders =
-            new Map()
-
-          const jessmanIdToName =
-            new Map()
-
-          let jessmanChannelsFound =
-            0
-
-          let iptvOrgChannelsFound =
-            0
-
-          let jessmanProgrammesScanned =
-            0
-
-          let iptvOrgProgrammesScanned =
-            0
-
-          let jessmanProgrammesKept =
-            0
-
-          let iptvOrgProgrammesKept =
-            0
-
-          let jessmanProgrammesSkipped =
-            0
-
-          let iptvOrgProgrammesSkipped =
-            0
-
-          let jessmanDescriptionsChanged =
-            0
-
-          let iptvOrgDescriptionsChanged =
-            0
-
-          let jessmanActorsRemoved =
-            0
-
-          let iptvOrgActorsRemoved =
-            0
-
-          let jessmanCreditsRemoved =
-            0
-
-          let iptvOrgCreditsRemoved =
-            0
-
-          let jessmanEpisodeNumbersConverted =
-            0
-
-          let iptvOrgEpisodeNumbersConverted =
-            0
-
-          let jessmanOriginalAirDatesUsed =
-            0
-
-          let iptvOrgOriginalAirDatesUsed =
-            0
-
-          let jessmanIptvMatches =
-            0
-
-          let iptvOnlyProgrammes =
-            0
-
-          let jessmanOnlyProgrammes =
-            0
-
-          let iptvFieldsUsed =
-            0
-
-          let tvmazeMatches =
-            0
-
-          let tvmazeFieldsUsed =
-            0
-
-          let tmdbMatches =
-            0
-
-          let tmdbFieldsUsed =
-            0
-
-          let combinedProgrammes =
-            0
-
-          function decodeXml(
-            value
-          ) {
-            return String(
-              value ||
-              ''
-            )
+        return cleanSpaces(
+          decodeXml(
+            match[1]
               .replace(
-                /&amp;/g,
-                '&'
-              )
-              .replace(
-                /&quot;/g,
-                '"'
-              )
-              .replace(
-                /&apos;/g,
-                "'"
-              )
-              .replace(
-                /&lt;/g,
-                '<'
-              )
-              .replace(
-                /&gt;/g,
-                '>'
-              )
-          }
-
-          function escapeXml(
-            value
-          ) {
-            return String(
-              value ||
-              ''
-            )
-              .replace(
-                /&/g,
-                '&amp;'
-              )
-              .replace(
-                /</g,
-                '&lt;'
-              )
-              .replace(
-                />/g,
-                '&gt;'
-              )
-              .replace(
-                /"/g,
-                '&quot;'
-              )
-              .replace(
-                /'/g,
-                '&apos;'
-              )
-          }
-
-          function cleanSpaces(
-            value
-          ) {
-            return String(
-              value ||
-              ''
-            )
-              .replace(
-                /\s+/g,
-                ' '
-              )
-              .trim()
-          }
-
-          function normalizeChannelName(
-            value
-          ) {
-            return cleanSpaces(
-              value
-            )
-              .toLowerCase()
-              .replace(
-                /[^a-z0-9]+/g,
+                /<[^>]+>/g,
                 ''
               )
-          }
+          )
+        )
+      }
 
-          function normalizeTitle(
-            value
-          ) {
-            return cleanSpaces(
-              value
-            )
-              .replace(
-                /\s+\(\d{4}\)\s*$/,
-                ''
-              )
-              .toLowerCase()
-              .replace(
-                /[^a-z0-9]+/g,
-                ''
-              )
-          }
+      function getAllTags(
+        block,
+        tag
+      ) {
+        const regex =
+          new RegExp(
+            '<' +
+            tag +
+            '\\b[^>]*>' +
+            '([\\s\\S]*?)' +
+            '</' +
+            tag +
+            '>',
+            'gi'
+          )
 
-          function getAttribute(
-            block,
-            attribute
-          ) {
-            const regex =
-              new RegExp(
-                '\\b' +
-                attribute +
-                '="([^"]*)"',
-                'i'
-              )
-
-            const match =
-              block.match(
-                regex
-              )
-
-            return match
-              ? decodeXml(
-                  match[1]
-                )
-              : ''
-          }
-
-          function getTag(
-            block,
-            tag
-          ) {
-            const regex =
-              new RegExp(
-                '<' +
-                tag +
-                '\\b[^>]*>' +
-                '([\\s\\S]*?)' +
-                '</' +
-                tag +
-                '>',
-                'i'
-              )
-
-            const match =
-              block.match(
-                regex
-              )
-
-            if (
-              !match
-            ) {
-              return ''
-            }
-
-            return cleanSpaces(
+        return [
+          ...block.matchAll(
+            regex
+          )
+        ].map(
+          match =>
+            cleanSpaces(
               decodeXml(
                 match[1]
                   .replace(
@@ -404,424 +437,986 @@ jobs:
                   )
               )
             )
-          }
+        )
+      }
 
-          function getAllTags(
+      function getTagBySystem(
+        block,
+        tag,
+        system
+      ) {
+        const regex =
+          new RegExp(
+            '<' +
+            tag +
+            '\\b' +
+            '[^>]*\\bsystem="' +
+            system +
+            '"' +
+            '[^>]*>' +
+            '([\\s\\S]*?)' +
+            '</' +
+            tag +
+            '>',
+            'i'
+          )
+
+        const match =
+          block.match(
+            regex
+          )
+
+        if (
+          !match
+        ) {
+          return ''
+        }
+
+        return cleanSpaces(
+          decodeXml(
+            match[1]
+              .replace(
+                /<[^>]+>/g,
+                ''
+              )
+          )
+        )
+      }
+
+      function parseXmltvDate(
+        value
+      ) {
+        const match =
+          String(
+            value ||
+            ''
+          ).match(
+            /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+          )
+
+        if (
+          !match
+        ) {
+          return null
+        }
+
+        return new Date(
+          Date.UTC(
+            Number(
+              match[1]
+            ),
+            Number(
+              match[2]
+            ) -
+            1,
+            Number(
+              match[3]
+            ),
+            Number(
+              match[4]
+            ),
+            Number(
+              match[5]
+            ),
+            Number(
+              match[6]
+            )
+          )
+        )
+      }
+
+      function parseOriginalAirDate(
+        value
+      ) {
+        const match =
+          String(
+            value ||
+            ''
+          ).match(
+            /^(\d{4})-(\d{2})-(\d{2})/
+          )
+
+        if (
+          !match
+        ) {
+          return ''
+        }
+
+        return (
+          match[2] +
+          '/' +
+          match[3] +
+          '/' +
+          match[1]
+        )
+      }
+
+      function parseCompactAirDate(
+        value
+      ) {
+        const match =
+          String(
+            value ||
+            ''
+          ).match(
+            /^(\d{4})(\d{2})(\d{2})$/
+          )
+
+        if (
+          !match
+        ) {
+          return ''
+        }
+
+        return (
+          match[2] +
+          '/' +
+          match[3] +
+          '/' +
+          match[1]
+        )
+      }
+
+      function normalizeEpisode(
+        value
+      ) {
+        const match =
+          String(
+            value ||
+            ''
+          ).match(
+            /^S\s*(\d{1,3})\s*E\s*(\d{1,3})$/i
+          )
+
+        if (
+          !match
+        ) {
+          return ''
+        }
+
+        return (
+          'S' +
+          Number(
+            match[1]
+          ) +
+          'E' +
+          Number(
+            match[2]
+          )
+        )
+      }
+
+      function extractEpisodeNumber(
+        block
+      ) {
+        let episodeNumber =
+          getTagBySystem(
             block,
-            tag
-          ) {
-            const regex =
-              new RegExp(
-                '<' +
-                tag +
-                '\\b[^>]*>' +
-                '([\\s\\S]*?)' +
-                '</' +
-                tag +
-                '>',
-                'gi'
-              )
+            'episode-num',
+            'common'
+          )
 
-            return [
-              ...block.matchAll(
-                regex
-              )
-            ].map(
-              match =>
-                cleanSpaces(
-                  decodeXml(
-                    match[1]
-                      .replace(
-                        /<[^>]+>/g,
-                        ''
-                      )
-                  )
-                )
+        if (
+          !episodeNumber
+        ) {
+          episodeNumber =
+            getTagBySystem(
+              block,
+              'episode-num',
+              'onscreen'
             )
-          }
+        }
 
-          function getTagBySystem(
+        if (
+          !episodeNumber
+        ) {
+          episodeNumber =
+            getTag(
+              block,
+              'episode-num'
+            )
+        }
+
+        return normalizeEpisode(
+          episodeNumber
+        )
+      }
+
+      function extractEpisodeTitle(
+        block
+      ) {
+        const subtitle =
+          cleanSpaces(
+            getTag(
+              block,
+              'sub-title'
+            )
+          )
+
+        if (
+          subtitle
+        ) {
+          return subtitle
+        }
+
+        const description =
+          cleanSpaces(
+            getTag(
+              block,
+              'desc'
+            )
+          )
+
+        const match =
+          description.match(
+            /^S\s*\d{1,3}\
+```
+
+\s*E\s*\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
+)
+
+```
+        if (
+          !match
+        ) {
+          return ''
+        }
+
+        return cleanSpaces(
+          match[1]
+        )
+      }
+
+      function extractAirDate(
+        block
+      ) {
+        const structured =
+          getTagBySystem(
             block,
-            tag,
-            system
-          ) {
-            const regex =
-              new RegExp(
-                '<' +
-                tag +
-                '\\b' +
-                '[^>]*\\bsystem="' +
-                system +
-                '"' +
-                '[^>]*>' +
-                '([\\s\\S]*?)' +
-                '</' +
-                tag +
-                '>',
-                'i'
-              )
+            'episode-num',
+            'original-air-date'
+          )
 
-            const match =
-              block.match(
-                regex
-              )
+        const fromStructured =
+          parseOriginalAirDate(
+            structured
+          )
 
-            if (
-              !match
-            ) {
-              return ''
-            }
+        if (
+          fromStructured
+        ) {
+          return fromStructured
+        }
 
-            return cleanSpaces(
-              decodeXml(
-                match[1]
-                  .replace(
-                    /<[^>]+>/g,
-                    ''
-                  )
-              )
-            )
-          }
+        return parseCompactAirDate(
+          getTag(
+            block,
+            'date'
+          )
+        )
+      }
 
-          function parseXmltvDate(
+      function buildDescription(
+        episodeTitle,
+        episodeNumber,
+        description,
+        airDate
+      ) {
+        let result =
+          ''
+
+        if (
+          episodeTitle &&
+          episodeNumber
+        ) {
+          result =
+            episodeTitle +
+            ' - ' +
+            episodeNumber
+        } else if (
+          episodeTitle
+        ) {
+          result =
+            episodeTitle
+        } else if (
+          episodeNumber
+        ) {
+          result =
+            episodeNumber
+        }
+
+        if (
+          description
+        ) {
+          result =
+            result
+              ? result +
+                '. ' +
+                description
+              :
+                description
+        }
+
+        if (
+          airDate
+        ) {
+          result =
+            result
+              ? result +
+                ' (' +
+                airDate +
+                ')'
+              :
+                '(' +
+                airDate +
+                ')'
+        }
+
+        return cleanSpaces(
+          result
+        )
+      }
+
+      function replaceTag(
+        block,
+        tag,
+        value
+      ) {
+        const regex =
+          new RegExp(
+            '<' +
+            tag +
+            '\\b[^>]*>[\\s\\S]*?</' +
+            tag +
+            '>',
+            'i'
+          )
+
+        const replacement =
+          '<' +
+          tag +
+          ' lang="en">' +
+          escapeXml(
             value
-          ) {
-            const match =
-              String(
-                value ||
-                ''
-              ).match(
-                /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
-              )
+          ) +
+          '</' +
+          tag +
+          '>'
 
-            if (
-              !match
-            ) {
-              return null
-            }
-
-            return new Date(
-              Date.UTC(
-                Number(
-                  match[1]
-                ),
-                Number(
-                  match[2]
-                ) -
-                1,
-                Number(
-                  match[3]
-                ),
-                Number(
-                  match[4]
-                ),
-                Number(
-                  match[5]
-                ),
-                Number(
-                  match[6]
-                )
-              )
-            )
-          }
-
-          function parseOriginalAirDate(
-            value
-          ) {
-            const match =
-              String(
-                value ||
-                ''
-              ).match(
-                /^(\d{4})-(\d{2})-(\d{2})/
-              )
-
-            if (
-              !match
-            ) {
-              return ''
-            }
-
-            return (
-              match[2] +
-              '/' +
-              match[3] +
-              '/' +
-              match[1]
-            )
-          }
-
-          function parseCompactAirDate(
-            value
-          ) {
-            const match =
-              String(
-                value ||
-                ''
-              ).match(
-                /^(\d{4})(\d{2})(\d{2})$/
-              )
-
-            if (
-              !match
-            ) {
-              return ''
-            }
-
-            return (
-              match[2] +
-              '/' +
-              match[3] +
-              '/' +
-              match[1]
-            )
-          }
-
-          function normalizeEpisode(
-            value
-          ) {
-            const match =
-              String(
-                value ||
-                ''
-              ).match(
-                /^S\s*(\d{1,3})\s*E\s*(\d{1,3})$/i
-              )
-
-            if (
-              !match
-            ) {
-              return ''
-            }
-
-            return (
-              'S' +
-              Number(
-                match[1]
-              ) +
-              'E' +
-              Number(
-                match[2]
-              )
-            )
-          }
-
-          function extractEpisodeNumber(
+        if (
+          regex.test(
             block
-          ) {
-            let episodeNumber =
-              getTagBySystem(
-                block,
-                'episode-num',
-                'common'
-              )
+          )
+        ) {
+          return block.replace(
+            regex,
+            replacement
+          )
+        }
 
-            if (
-              !episodeNumber
-            ) {
-              episodeNumber =
-                getTagBySystem(
-                  block,
-                  'episode-num',
-                  'onscreen'
-                )
-            }
+        return block.replace(
+          /<\/programme>\s*$/i,
+          '  ' +
+          replacement +
+          '\n</programme>'
+        )
+      }
 
-            if (
-              !episodeNumber
-            ) {
-              episodeNumber =
-                getTag(
-                  block,
-                  'episode-num'
-                )
-            }
+      function removeTag(
+        block,
+        tag
+      ) {
+        const regex =
+          new RegExp(
+            '\\s*<' +
+            tag +
+            '\\b[^>]*>[\\s\\S]*?</' +
+            tag +
+            '>',
+            'gi'
+          )
 
-            return normalizeEpisode(
-              episodeNumber
+        return block.replace(
+          regex,
+          ''
+        )
+      }
+
+      function cleanProgrammeBlock(
+        block,
+        source
+      ) {
+        const originalDescription =
+          cleanSpaces(
+            getTag(
+              block,
+              'desc'
             )
-          }
+          )
 
-          function extractEpisodeTitle(
+        const episodeTitle =
+          extractEpisodeTitle(
             block
-          ) {
-            const subtitle =
-              cleanSpaces(
-                getTag(
-                  block,
-                  'sub-title'
-                )
-              )
+          )
 
-            if (
-              subtitle
-            ) {
-              return subtitle
-            }
-
-            const description =
-              cleanSpaces(
-                getTag(
-                  block,
-                  'desc'
-                )
-              )
-
-            const match =
-              description.match(
-                /^S\s*\d{1,3}\s*E\s*\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
-              )
-
-            if (
-              !match
-            ) {
-              return ''
-            }
-
-            return cleanSpaces(
-              match[1]
-            )
-          }
-
-          function extractAirDate(
+        const episodeNumber =
+          extractEpisodeNumber(
             block
-          ) {
-            const structured =
-              getTagBySystem(
-                block,
-                'episode-num',
-                'original-air-date'
-              )
+          )
 
-            const fromStructured =
-              parseOriginalAirDate(
-                structured
-              )
+        const airDate =
+          extractAirDate(
+            block
+          )
 
-            if (
-              fromStructured
-            ) {
-              return fromStructured
-            }
-
-            return parseCompactAirDate(
-              getTag(
-                block,
-                'date'
-              )
-            )
-          }
-
-          function buildDescription(
+        const description =
+          buildDescription(
             episodeTitle,
             episodeNumber,
-            description,
+            originalDescription,
             airDate
+          )
+
+        if (
+          description !==
+          originalDescription
+        ) {
+          if (
+            source ===
+            'jessman'
           ) {
-            let result =
-              ''
+            jessmanDescriptionsChanged++
+          } else {
+            iptvOrgDescriptionsChanged++
+          }
+        }
 
-            if (
-              episodeTitle &&
-              episodeNumber
-            ) {
-              result =
-                episodeTitle +
-                ' - ' +
-                episodeNumber
-            } else if (
-              episodeTitle
-            ) {
-              result =
-                episodeTitle
-            } else if (
-              episodeNumber
-            ) {
-              result =
-                episodeNumber
-            }
+        if (
+          /<actor\b/i.test(
+            block
+          )
+        ) {
+          if (
+            source ===
+            'jessman'
+          ) {
+            jessmanActorsRemoved++
+          } else {
+            iptvOrgActorsRemoved++
+          }
+        }
 
-            if (
-              description
-            ) {
-              result =
-                result
-                  ? result +
-                    '. ' +
-                    description
-                  :
-                    description
-            }
+        if (
+          /<credits\b/i.test(
+            block
+          )
+        ) {
+          if (
+            source ===
+            'jessman'
+          ) {
+            jessmanCreditsRemoved++
+          } else {
+            iptvOrgCreditsRemoved++
+          }
+        }
 
-            if (
-              airDate
-            ) {
-              result =
-                result
-                  ? result +
-                    ' (' +
-                    airDate +
-                    ')'
-                  :
-                    '(' +
-                    airDate +
-                    ')'
-            }
+        if (
+          episodeNumber
+        ) {
+          if (
+            source ===
+            'jessman'
+          ) {
+            jessmanEpisodeNumbersConverted++
+          } else {
+            iptvOrgEpisodeNumbersConverted++
+          }
+        }
 
-            return cleanSpaces(
-              result
+        if (
+          airDate
+        ) {
+          if (
+            source ===
+            'jessman'
+          ) {
+            jessmanOriginalAirDatesUsed++
+          } else {
+            iptvOrgOriginalAirDatesUsed++
+          }
+        }
+
+        let output =
+          block
+
+        output =
+          replaceTag(
+            output,
+            'title',
+            cleanSpaces(
+              getTag(
+                block,
+                'title'
+              )
+                .replace(
+                  /\s+\(\d{4}\)\s*$/,
+                  ''
+                )
             )
+          )
+
+        output =
+          replaceTag(
+            output,
+            'desc',
+            description
+          )
+
+        output =
+          removeTag(
+            output,
+            'actor'
+          )
+
+        output =
+          removeTag(
+            output,
+            'credits'
+          )
+
+        output =
+          removeTag(
+            output,
+            'sub-title'
+          )
+
+        output =
+          removeTag(
+            output,
+            'episode-num'
+          )
+
+        output =
+          removeTag(
+            output,
+            'date'
+          )
+
+        return {
+          block:
+            output,
+
+          title:
+            cleanSpaces(
+              getTag(
+                block,
+                'title'
+              )
+                .replace(
+                  /\s+\(\d{4}\)\s*$/,
+                  ''
+                )
+            ),
+
+          episodeTitle,
+
+          episodeNumber,
+
+          airDate,
+
+          description,
+
+          icon:
+            getAttribute(
+              block.match(
+                /<icon\b[^>]*>/i
+              )?.[0] ||
+              '',
+              'src'
+            )
+        }
+      }
+
+      function processProgramme(
+        block,
+        source,
+        canonicalChannel
+      ) {
+        if (
+          source ===
+          'jessman'
+        ) {
+          jessmanProgrammesScanned++
+        } else {
+          iptvOrgProgrammesScanned++
+        }
+
+        const start =
+          getAttribute(
+            block,
+            'start'
+          )
+
+        const startDate =
+          parseXmltvDate(
+            start
+          )
+
+        if (
+          !startDate ||
+          startDate < now ||
+          startDate >= cutoff
+        ) {
+          if (
+            source ===
+            'jessman'
+          ) {
+            jessmanProgrammesSkipped++
+          } else {
+            iptvOrgProgrammesSkipped++
           }
 
-          function processProgramme(
+          return null
+        }
+
+        if (
+          source ===
+          'jessman'
+        ) {
+          jessmanProgrammesKept++
+        } else {
+          iptvOrgProgrammesKept++
+        }
+
+        const cleaned =
+          cleanProgrammeBlock(
             block,
-            source,
-            canonicalChannel
-          ) {
-            if (
-              source ===
-              'jessman'
-            ) {
-              jessmanProgrammesScanned++
-            } else {
-              iptvOrgProgrammesScanned++
-            }
+            source
+          )
 
-            const start =
-              getAttribute(
-                block,
-                'start'
+        const channel =
+          getAttribute(
+            block,
+            'channel'
+          )
+
+        const key =
+          [
+            canonicalChannel,
+            start,
+            normalizeTitle(
+              cleaned.title
+            )
+          ].join(
+            '|'
+          )
+
+        return {
+          source,
+
+          channel,
+
+          canonicalChannel,
+
+          start,
+
+          stop:
+            getAttribute(
+              block,
+              'stop'
+            ),
+
+          title:
+            cleaned.title,
+
+          episodeTitle:
+            cleaned.episodeTitle,
+
+          episodeNumber:
+            cleaned.episodeNumber,
+
+          airDate:
+            cleaned.airDate,
+
+          description:
+            cleaned.description,
+
+          icon:
+            cleaned.icon,
+
+          block:
+            cleaned.block,
+
+          key
+        }
+      }
+
+      function parseXmlStream(
+        stream,
+        callback
+      ) {
+        return new Promise(
+          (
+            resolve,
+            reject
+          ) => {
+            const rl =
+              readline.createInterface(
+                {
+                  input:
+                    stream,
+
+                  crlfDelay:
+                    Infinity
+                }
               )
 
-            const startDate =
-              parseXmltvDate(
-                start
-              )
+            let insideChannel =
+              false
 
-            if (
-              !startDate ||
-              startDate < now ||
-              startDate >= cutoff
-            ) {
-              if (
-                source ===
-                'jessman'
+            let channelBuffer =
+              ''
+
+            let insideProgramme =
+              false
+
+            let programmeBuffer =
+              ''
+
+            ;(async () => {
+              try {
+                for await (
+                  const line of rl
+                ) {
+                  if (
+                    !insideChannel &&
+                    !insideProgramme &&
+                    line.includes(
+                      '<channel '
+                    )
+                  ) {
+                    insideChannel =
+                      true
+
+                    channelBuffer =
+                      line +
+                      '\n'
+
+                    if (
+                      line.includes(
+                        '</channel>'
+                      )
+                    ) {
+                      insideChannel =
+                        false
+
+                      await callback(
+                        'channel',
+                        channelBuffer
+                      )
+
+                      channelBuffer =
+                        ''
+                    }
+
+                    continue
+                  }
+
+                  if (
+                    insideChannel
+                  ) {
+                    channelBuffer +=
+                      line +
+                      '\n'
+
+                    if (
+                      line.includes(
+                        '</channel>'
+                      )
+                    ) {
+                      insideChannel =
+                        false
+
+                      await callback(
+                        'channel',
+                        channelBuffer
+                      )
+
+                      channelBuffer =
+                        ''
+                    }
+
+                    continue
+                  }
+
+                  if (
+                    line.includes(
+                      '<programme '
+                    )
+                  ) {
+                    insideProgramme =
+                      true
+
+                    programmeBuffer =
+                      line +
+                      '\n'
+
+                    if (
+                      line.includes(
+                        '</programme>'
+                      )
+                    ) {
+                      insideProgramme =
+                        false
+
+                      await callback(
+                        'programme',
+                        programmeBuffer
+                      )
+
+                      programmeBuffer =
+                        ''
+                    }
+
+                    continue
+                  }
+
+                  if (
+                    insideProgramme
+                  ) {
+                    programmeBuffer +=
+                      line +
+                      '\n'
+
+                    if (
+                      line.includes(
+                        '</programme>'
+                      )
+                    ) {
+                      insideProgramme =
+                        false
+
+                      await callback(
+                        'programme',
+                        programmeBuffer
+                      )
+
+                      programmeBuffer =
+                        ''
+                    }
+                  }
+                }
+
+                resolve()
+              } catch (
+                error
               ) {
-                jessmanProgrammesSkipped++
-              } else {
-                iptvOrgProgrammesSkipped++
+                reject(
+                  error
+                )
+              }
+            })()
+          }
+        )
+      }
+
+      async function loadJessman() {
+        await parseXmlStream(
+          fs.createReadStream(
+            jessmanPath
+          ),
+
+          async (
+            type,
+            block
+          ) => {
+            if (
+              type ===
+              'channel'
+            ) {
+              const id =
+                getAttribute(
+                  block,
+                  'id'
+                )
+
+              const displayNames =
+                getAllTags(
+                  block,
+                  'display-name'
+                )
+
+              const normalizedNames =
+                displayNames.map(
+                  normalizeChannelName
+                )
+
+              let matchedName =
+                ''
+
+              for (
+                const targetName of
+                Object.keys(
+                  jessmanChannels
+                )
+              ) {
+                if (
+                  normalizedNames.includes(
+                    normalizeChannelName(
+                      targetName
+                    )
+                  )
+                ) {
+                  matchedName =
+                    targetName
+
+                  break
+                }
               }
 
-              return null
-            }
+              if (
+                !matchedName
+              ) {
+                return
+              }
 
-            if (
-              source ===
-              'jessman'
-            ) {
-              jessmanProgrammesKept++
-            } else {
-              iptvOrgProgrammesKept++
+              jessmanChannelsFound++
+
+              jessmanIdToName.set(
+                id,
+                matchedName
+              )
+
+              channelHeaders.set(
+                'jessman:' +
+                matchedName,
+                {
+                  source:
+                    'jessman',
+
+                  id,
+
+                  canonicalChannel:
+                    matchedName,
+
+                  displayName:
+                    jessmanChannels[
+                      matchedName
+                    ].displayName,
+
+                  block
+                }
+              )
+
+              console.log(
+                'Jessman channel matched: ' +
+                matchedName +
+                ' -> ' +
+                id
+              )
+
+              return
             }
 
             const channel =
@@ -830,1662 +1425,1175 @@ jobs:
                 'channel'
               )
 
-            const title =
-              cleanSpaces(
-                getTag(
-                  block,
-                  'title'
-                )
-              )
-
-            const normalizedTitle =
-              title
-                .replace(
-                  /\s+\(\d{4}\)\s*$/,
-                  ''
-                )
-                .trim()
-
-            const episodeTitle =
-              extractEpisodeTitle(
-                block
-              )
-
-            const episodeNumber =
-              extractEpisodeNumber(
-                block
-              )
-
-            const originalDescription =
-              cleanSpaces(
-                getTag(
-                  block,
-                  'desc'
-                )
-              )
-
-            const airDate =
-              extractAirDate(
-                block
-              )
-
-            const description =
-              buildDescription(
-                episodeTitle,
-                episodeNumber,
-                originalDescription,
-                airDate
+            const canonicalChannel =
+              jessmanIdToName.get(
+                channel
               )
 
             if (
-              description !==
-              originalDescription
+              !canonicalChannel
             ) {
-              if (
-                source ===
-                'jessman'
-              ) {
-                jessmanDescriptionsChanged++
-              } else {
-                iptvOrgDescriptionsChanged++
-              }
+              return
             }
 
-            if (
-              /<actor\b/i.test(
-                block
-              )
-            ) {
-              if (
-                source ===
-                'jessman'
-              ) {
-                jessmanActorsRemoved++
-              } else {
-                iptvOrgActorsRemoved++
-              }
-            }
-
-            if (
-              /<credits\b/i.test(
-                block
-              )
-            ) {
-              if (
-                source ===
-                'jessman'
-              ) {
-                jessmanCreditsRemoved++
-              } else {
-                iptvOrgCreditsRemoved++
-              }
-            }
-
-            if (
-              episodeNumber
-            ) {
-              if (
-                source ===
-                'jessman'
-              ) {
-                jessmanEpisodeNumbersConverted++
-              } else {
-                iptvOrgEpisodeNumbersConverted++
-              }
-            }
-
-            if (
-              airDate
-            ) {
-              if (
-                source ===
-                'jessman'
-              ) {
-                jessmanOriginalAirDatesUsed++
-              } else {
-                iptvOrgOriginalAirDatesUsed++
-              }
-            }
-
-            const iconBlock =
-              block.match(
-                /<icon\b[^>]*>/i
+            const programme =
+              processProgramme(
+                block,
+                'jessman',
+                canonicalChannel
               )
 
-            const icon =
-              iconBlock
-                ? getAttribute(
-                    iconBlock[0],
-                    'src'
-                  )
-                : ''
+            if (
+              !programme
+            ) {
+              return
+            }
 
-            const key =
-              [
+            if (
+              !jessman.has(
+                canonicalChannel
+              )
+            ) {
+              jessman.set(
                 canonicalChannel,
-                start,
-                normalizeTitle(
-                  normalizedTitle
-                )
-              ].join(
-                '|'
+                new Map()
               )
+            }
 
-            return {
-              source,
+            jessman.get(
+              canonicalChannel
+            ).set(
+              programme.key,
+              programme
+            )
+          }
+        )
+      }
 
-              channel,
+      async function loadIptvOrg() {
+        const input =
+          fs.createReadStream(
+            iptvOrgPath
+          )
 
-              canonicalChannel,
+        const gunzip =
+          zlib.createGunzip()
 
-              start,
+        input.pipe(
+          gunzip
+        )
 
-              stop:
+        await parseXmlStream(
+          gunzip,
+
+          async (
+            type,
+            block
+          ) => {
+            if (
+              type ===
+              'channel'
+            ) {
+              const id =
                 getAttribute(
                   block,
-                  'stop'
-                ),
-
-              title:
-                normalizedTitle,
-
-              episodeTitle,
-
-              episodeNumber,
-
-              airDate,
-
-              description,
-
-              icon,
-
-              key
-            }
-          }
-
-          function parseXmlStream(
-            stream,
-            callback
-          ) {
-            return new Promise(
-              (
-                resolve,
-                reject
-              ) => {
-                const rl =
-                  readline.createInterface(
-                    {
-                      input:
-                        stream,
-
-                      crlfDelay:
-                        Infinity
-                    }
-                  )
-
-                let insideChannel =
-                  false
-
-                let channelBuffer =
-                  ''
-
-                let insideProgramme =
-                  false
-
-                let programmeBuffer =
-                  ''
-
-                ;(async () => {
-                  try {
-                    for await (
-                      const line of rl
-                    ) {
-                      if (
-                        !insideChannel &&
-                        !insideProgramme &&
-                        line.includes(
-                          '<channel '
-                        )
-                      ) {
-                        insideChannel =
-                          true
-
-                        channelBuffer =
-                          line +
-                          '\n'
-
-                        if (
-                          line.includes(
-                            '</channel>'
-                          )
-                        ) {
-                          insideChannel =
-                            false
-
-                          await callback(
-                            'channel',
-                            channelBuffer
-                          )
-
-                          channelBuffer =
-                            ''
-                        }
-
-                        continue
-                      }
-
-                      if (
-                        insideChannel
-                      ) {
-                        channelBuffer +=
-                          line +
-                          '\n'
-
-                        if (
-                          line.includes(
-                            '</channel>'
-                          )
-                        ) {
-                          insideChannel =
-                            false
-
-                          await callback(
-                            'channel',
-                            channelBuffer
-                          )
-
-                          channelBuffer =
-                            ''
-                        }
-
-                        continue
-                      }
-
-                      if (
-                        line.includes(
-                          '<programme '
-                        )
-                      ) {
-                        insideProgramme =
-                          true
-
-                        programmeBuffer =
-                          line +
-                          '\n'
-
-                        if (
-                          line.includes(
-                            '</programme>'
-                          )
-                        ) {
-                          insideProgramme =
-                            false
-
-                          await callback(
-                            'programme',
-                            programmeBuffer
-                          )
-
-                          programmeBuffer =
-                            ''
-                        }
-
-                        continue
-                      }
-
-                      if (
-                        insideProgramme
-                      ) {
-                        programmeBuffer +=
-                          line +
-                          '\n'
-
-                        if (
-                          line.includes(
-                            '</programme>'
-                          )
-                        ) {
-                          insideProgramme =
-                            false
-
-                          await callback(
-                            'programme',
-                            programmeBuffer
-                          )
-
-                          programmeBuffer =
-                            ''
-                        }
-                      }
-                    }
-
-                    resolve()
-                  } catch (
-                    error
-                  ) {
-                    reject(
-                      error
-                    )
-                  }
-                })()
-              }
-            )
-          }
-
-          async function loadJessman() {
-            await parseXmlStream(
-              fs.createReadStream(
-                jessmanPath
-              ),
-
-              async (
-                type,
-                block
-              ) => {
-                if (
-                  type ===
-                  'channel'
-                ) {
-                  const id =
-                    getAttribute(
-                      block,
-                      'id'
-                    )
-
-                  const displayNames =
-                    getAllTags(
-                      block,
-                      'display-name'
-                    )
-
-                  const normalizedNames =
-                    displayNames.map(
-                      normalizeChannelName
-                    )
-
-                  let matchedName =
-                    ''
-
-                  for (
-                    const targetName of
-                    Object.keys(
-                      jessmanChannels
-                    )
-                  ) {
-                    if (
-                      normalizedNames.includes(
-                        normalizeChannelName(
-                          targetName
-                        )
-                      )
-                    ) {
-                      matchedName =
-                        targetName
-
-                      break
-                    }
-                  }
-
-                  if (
-                    !matchedName
-                  ) {
-                    return
-                  }
-
-                  jessmanChannelsFound++
-
-                  jessmanIdToName.set(
-                    id,
-                    matchedName
-                  )
-
-                  channelHeaders.set(
-                    'jessman:' +
-                    matchedName,
-                    {
-                      source:
-                        'jessman',
-
-                      id,
-
-                      canonicalChannel:
-                        matchedName,
-
-                      displayName:
-                        jessmanChannels[
-                          matchedName
-                        ].displayName,
-
-                      icon:
-                        getAttribute(
-                          block.match(
-                            /<icon\b[^>]*>/i
-                          )?.[0] ||
-                          '',
-                          'src'
-                        )
-                    }
-                  )
-
-                  console.log(
-                    'Jessman channel matched: ' +
-                    matchedName +
-                    ' -> ' +
-                    id
-                  )
-
-                  return
-                }
-
-                const channel =
-                  getAttribute(
-                    block,
-                    'channel'
-                  )
-
-                const canonicalChannel =
-                  jessmanIdToName.get(
-                    channel
-                  )
-
-                if (
-                  !canonicalChannel
-                ) {
-                  return
-                }
-
-                const programme =
-                  processProgramme(
-                    block,
-                    'jessman',
-                    canonicalChannel
-                  )
-
-                if (
-                  !programme
-                ) {
-                  return
-                }
-
-                if (
-                  !jessman.has(
-                    canonicalChannel
-                  )
-                ) {
-                  jessman.set(
-                    canonicalChannel,
-                    new Map()
-                  )
-                }
-
-                jessman.get(
-                  canonicalChannel
-                ).set(
-                  programme.key,
-                  programme
-                )
-              }
-            )
-          }
-
-          async function loadIptvOrg() {
-            const input =
-              fs.createReadStream(
-                iptvOrgPath
-              )
-
-            const gunzip =
-              zlib.createGunzip()
-
-            input.pipe(
-              gunzip
-            )
-
-            await parseXmlStream(
-              gunzip,
-
-              async (
-                type,
-                block
-              ) => {
-                if (
-                  type ===
-                  'channel'
-                ) {
-                  const id =
-                    getAttribute(
-                      block,
-                      'id'
-                    )
-
-                  if (
-                    !iptvOrgChannels[id]
-                  ) {
-                    return
-                  }
-
-                  iptvOrgChannelsFound++
-
-                  const channel =
-                    iptvOrgChannels[id]
-
-                  const icon =
-                    getAttribute(
-                      block.match(
-                        /<icon\b[^>]*>/i
-                      )?.[0] ||
-                      '',
-                      'src'
-                    )
-
-                  channelHeaders.set(
-                    'iptv:' +
-                    id,
-                    {
-                      source:
-                        'iptvorg',
-
-                      id,
-
-                      canonicalChannel:
-                        channel.displayName,
-
-                      displayName:
-                        channel.displayName,
-
-                      icon
-                    }
-                  )
-
-                  return
-                }
-
-                const channel =
-                  getAttribute(
-                    block,
-                    'channel'
-                  )
-
-                if (
-                  !iptvOrgChannels[channel]
-                ) {
-                  return
-                }
-
-                const canonicalChannel =
-                  iptvOrgChannels[
-                    channel
-                  ].displayName
-
-                const programme =
-                  processProgramme(
-                    block,
-                    'iptvorg',
-                    canonicalChannel
-                  )
-
-                if (
-                  !programme
-                ) {
-                  return
-                }
-
-                if (
-                  !iptvOrg.has(
-                    canonicalChannel
-                  )
-                ) {
-                  iptvOrg.set(
-                    canonicalChannel,
-                    new Map()
-                  )
-                }
-
-                iptvOrg.get(
-                  canonicalChannel
-                ).set(
-                  programme.key,
-                  programme
-                )
-              }
-            )
-          }
-
-          function fillMissingField(
-            target,
-            field,
-            value,
-            source
-          ) {
-            if (
-              target[field]
-            ) {
-              return false
-            }
-
-            if (
-              !value
-            ) {
-              return false
-            }
-
-            target[field] =
-              value
-
-            if (
-              source ===
-              'iptvorg'
-            ) {
-              iptvFieldsUsed++
-            }
-
-            if (
-              source ===
-              'tvmaze'
-            ) {
-              tvmazeFieldsUsed++
-            }
-
-            if (
-              source ===
-              'tmdb'
-            ) {
-              tmdbFieldsUsed++
-            }
-
-            return true
-          }
-
-          function mergeMissingFields(
-            target,
-            source,
-            sourceName
-          ) {
-            fillMissingField(
-              target,
-              'episodeTitle',
-              source.episodeTitle,
-              sourceName
-            )
-
-            fillMissingField(
-              target,
-              'episodeNumber',
-              source.episodeNumber,
-              sourceName
-            )
-
-            fillMissingField(
-              target,
-              'description',
-              source.description,
-              sourceName
-            )
-
-            fillMissingField(
-              target,
-              'airDate',
-              source.airDate,
-              sourceName
-            )
-
-            fillMissingField(
-              target,
-              'icon',
-              source.icon,
-              sourceName
-            )
-          }
-
-          const tvmazeCache =
-            new Map()
-
-          const tmdbCache =
-            new Map()
-
-          function sleep(
-            milliseconds
-          ) {
-            return new Promise(
-              resolve =>
-                setTimeout(
-                  resolve,
-                  milliseconds
-                )
-            )
-          }
-
-          async function fetchJson(
-            url,
-            headers = {}
-          ) {
-            try {
-              const response =
-                await fetch(
-                  url,
-                  {
-                    headers
-                  }
+                  'id'
                 )
 
               if (
-                !response.ok
+                !iptvOrgChannels[id]
               ) {
-                return null
+                return
               }
 
-              return await response.json()
-            } catch (
-              error
-            ) {
-              return null
-            }
-          }
+              iptvOrgChannelsFound++
 
-          async function getTvmazeShow(
-            title
-          ) {
-            const key =
-              normalizeTitle(
-                title
-              )
+              const channel =
+                iptvOrgChannels[id]
 
-            if (
-              tvmazeCache.has(
-                key
-              )
-            ) {
-              return tvmazeCache.get(
-                key
-              )
-            }
-
-            const data =
-              await fetchJson(
-                'https://api.tvmaze.com/search/shows?q=' +
-                encodeURIComponent(
-                  title
-                )
-              )
-
-            await sleep(
-              250
-            )
-
-            const result =
-              data &&
-              data.length
-                ? data[0].show
-                : null
-
-            tvmazeCache.set(
-              key,
-              result
-            )
-
-            return result
-          }
-
-          async function enrichFromTvmaze(
-            programme
-          ) {
-            if (
-              !programme.episodeNumber
-            ) {
-              return
-            }
-
-            const match =
-              programme.episodeNumber.match(
-                /^S(\d+)E(\d+)$/i
-              )
-
-            if (
-              !match
-            ) {
-              return
-            }
-
-            const show =
-              await getTvmazeShow(
-                programme.title
-              )
-
-            if (
-              !show
-            ) {
-              return
-            }
-
-            const episodeData =
-              await fetchJson(
-                'https://api.tvmaze.com/shows/' +
-                show.id +
-                '/episodebynumber?season=' +
-                Number(
-                  match[1]
-                ) +
-                '&number=' +
-                Number(
-                  match[2]
-                )
-              )
-
-            await sleep(
-              250
-            )
-
-            if (
-              !episodeData
-            ) {
-              return
-            }
-
-            let used =
-              false
-
-            used =
-              fillMissingField(
-                programme,
-                'episodeTitle',
-                cleanSpaces(
-                  episodeData.name
-                ),
-                'tvmaze'
-              ) ||
-              used
-
-            used =
-              fillMissingField(
-                programme,
-                'description',
-                cleanSpaces(
-                  episodeData.summary
-                    ? episodeData.summary
-                      .replace(
-                        /<[^>]+>/g,
-                        ''
-                      )
-                    : ''
-                ),
-                'tvmaze'
-              ) ||
-              used
-
-            used =
-              fillMissingField(
-                programme,
-                'airDate',
-                episodeData.airdate
-                  ? episodeData.airdate
-                    .split(
-                      '-'
-                    )
-                    .reverse()
-                    .join(
-                      '/'
-                    )
-                  : '',
-                'tvmaze'
-              ) ||
-              used
-
-            used =
-              fillMissingField(
-                programme,
-                'icon',
-                episodeData.image
-                  ? (
-                    episodeData.image.original ||
-                    episodeData.image.medium
-                  )
-                  : '',
-                'tvmaze'
-              ) ||
-              used
-
-            if (
-              used
-            ) {
-              tvmazeMatches++
-            }
-          }
-
-          async function enrichFromTmdb(
-            programme
-          ) {
-            if (
-              !process.env.TMDB_API_TOKEN
-            ) {
-              return
-            }
-
-            if (
-              !programme.episodeNumber
-            ) {
-              return
-            }
-
-            const match =
-              programme.episodeNumber.match(
-                /^S(\d+)E(\d+)$/i
-              )
-
-            if (
-              !match
-            ) {
-              return
-            }
-
-            const cacheKey =
-              normalizeTitle(
-                programme.title
-              )
-
-            let show =
-              tmdbCache.get(
-                cacheKey
-              )
-
-            if (
-              !show
-            ) {
-              const searchData =
-                await fetchJson(
-                  'https://api.themoviedb.org/3/search/tv?query=' +
-                  encodeURIComponent(
-                    programme.title
-                  ),
-                  {
-                    Authorization:
-                      'Bearer ' +
-                      process.env.TMDB_API_TOKEN,
-
-                    accept:
-                      'application/json'
-                  }
-                )
-
-              show =
-                searchData &&
-                searchData.results &&
-                searchData.results.length
-                  ? searchData.results[0]
-                  : null
-
-              tmdbCache.set(
-                cacheKey,
-                show
-              )
-
-              await sleep(
-                250
-              )
-            }
-
-            if (
-              !show
-            ) {
-              return
-            }
-
-            const episodeData =
-              await fetchJson(
-                'https://api.themoviedb.org/3/tv/' +
-                show.id +
-                '/season/' +
-                Number(
-                  match[1]
-                ) +
-                '/episode/' +
-                Number(
-                  match[2]
-                ),
+              channelHeaders.set(
+                'iptv:' +
+                id,
                 {
-                  Authorization:
-                    'Bearer ' +
-                    process.env.TMDB_API_TOKEN,
+                  source:
+                    'iptvorg',
 
-                  accept:
-                    'application/json'
+                  id,
+
+                  canonicalChannel:
+                    channel.displayName,
+
+                  displayName:
+                    channel.displayName,
+
+                  block
                 }
               )
 
-            await sleep(
-              250
-            )
+              return
+            }
+
+            const channel =
+              getAttribute(
+                block,
+                'channel'
+              )
 
             if (
-              !episodeData
+              !iptvOrgChannels[channel]
             ) {
               return
             }
 
-            let used =
-              false
+            const canonicalChannel =
+              iptvOrgChannels[
+                channel
+              ].displayName
 
-            used =
-              fillMissingField(
-                programme,
-                'episodeTitle',
-                cleanSpaces(
-                  episodeData.name
-                ),
-                'tmdb'
-              ) ||
-              used
-
-            used =
-              fillMissingField(
-                programme,
-                'description',
-                cleanSpaces(
-                  episodeData.overview
-                ),
-                'tmdb'
-              ) ||
-              used
-
-            used =
-              fillMissingField(
-                programme,
-                'airDate',
-                episodeData.air_date
-                  ? episodeData.air_date
-                    .split(
-                      '-'
-                    )
-                    .reverse()
-                    .join(
-                      '/'
-                    )
-                  : '',
-                'tmdb'
-              ) ||
-              used
+            const programme =
+              processProgramme(
+                block,
+                'iptvorg',
+                canonicalChannel
+              )
 
             if (
-              used
+              !programme
             ) {
-              tmdbMatches++
-            }
-          }
-
-          async function buildFinalProgrammes() {
-            const finalProgrammes =
-              new Map()
-
-            for (
-              const programmes of
-              jessman.values()
-            ) {
-              for (
-                const programme of
-                programmes.values()
-              ) {
-                finalProgrammes.set(
-                  programme.key,
-                  {
-                    ...programme
-                  }
-                )
-              }
+              return
             }
 
-            for (
-              const programmes of
-              iptvOrg.values()
+            if (
+              !iptvOrg.has(
+                canonicalChannel
+              )
             ) {
-              for (
-                const programme of
-                programmes.values()
-              ) {
-                const existing =
-                  finalProgrammes.get(
-                    programme.key
-                  )
-
-                if (
-                  existing
-                ) {
-                  jessmanIptvMatches++
-
-                  mergeMissingFields(
-                    existing,
-                    programme,
-                    'iptvorg'
-                  )
-
-                  continue
-                }
-
-                finalProgrammes.set(
-                  programme.key,
-                  {
-                    ...programme
-                  }
-                )
-
-                iptvOnlyProgrammes++
-              }
-            }
-
-            for (
-              const programme of
-              finalProgrammes.values()
-            ) {
-              if (
-                programme.source ===
-                'jessman'
-              ) {
-                jessmanOnlyProgrammes++
-              }
-            }
-
-            for (
-              const programme of
-              finalProgrammes.values()
-            ) {
-              await enrichFromTvmaze(
-                programme
+              iptvOrg.set(
+                canonicalChannel,
+                new Map()
               )
             }
 
-            for (
-              const programme of
-              finalProgrammes.values()
-            ) {
-              await enrichFromTmdb(
-                programme
-              )
-            }
-
-            return finalProgrammes
+            iptvOrg.get(
+              canonicalChannel
+            ).set(
+              programme.key,
+              programme
+            )
           }
+        )
+      }
 
-          function buildChannel(
-            channelHeader
+      function fillMissingField(
+        target,
+        field,
+        value,
+        source
+      ) {
+        if (
+          target[field]
+        ) {
+          return false
+        }
+
+        if (
+          !value
+        ) {
+          return false
+        }
+
+        target[field] =
+          value
+
+        if (
+          source ===
+          'iptvorg'
+        ) {
+          iptvFieldsUsed++
+        }
+
+        if (
+          source ===
+          'tvmaze'
+        ) {
+          tvmazeFieldsUsed++
+        }
+
+        if (
+          source ===
+          'tmdb'
+        ) {
+          tmdbFieldsUsed++
+        }
+
+        return true
+      }
+
+      function mergeMissingFields(
+        target,
+        source,
+        sourceName
+      ) {
+        fillMissingField(
+          target,
+          'episodeTitle',
+          source.episodeTitle,
+          sourceName
+        )
+
+        fillMissingField(
+          target,
+          'episodeNumber',
+          source.episodeNumber,
+          sourceName
+        )
+
+        fillMissingField(
+          target,
+          'description',
+          source.description,
+          sourceName
+        )
+
+        fillMissingField(
+          target,
+          'airDate',
+          source.airDate,
+          sourceName
+        )
+
+        fillMissingField(
+          target,
+          'icon',
+          source.icon,
+          sourceName
+        )
+      }
+
+      const tvmazeCache =
+        new Map()
+
+      const tmdbCache =
+        new Map()
+
+      function sleep(
+        milliseconds
+      ) {
+        return new Promise(
+          resolve =>
+            setTimeout(
+              resolve,
+              milliseconds
+            )
+        )
+      }
+
+      async function fetchJson(
+        url,
+        headers = {}
+      ) {
+        try {
+          const response =
+            await fetch(
+              url,
+              {
+                headers
+              }
+            )
+
+          if (
+            !response.ok
           ) {
-            let output =
-              '<channel id="' +
+            return null
+          }
+
+          return await response.json()
+        } catch (
+          error
+        ) {
+          return null
+        }
+      }
+
+      async function getTvmazeShow(
+        title
+      ) {
+        const key =
+          normalizeTitle(
+            title
+          )
+
+        if (
+          tvmazeCache.has(
+            key
+          )
+        ) {
+          return tvmazeCache.get(
+            key
+          )
+        }
+
+        const data =
+          await fetchJson(
+            'https://api.tvmaze.com/search/shows?q=' +
+            encodeURIComponent(
+              title
+            )
+          )
+
+        await sleep(
+          250
+        )
+
+        const result =
+          data &&
+          data.length
+            ? data[0].show
+            : null
+
+        tvmazeCache.set(
+          key,
+          result
+        )
+
+        return result
+      }
+
+      async function enrichFromTvmaze(
+        programme
+      ) {
+        if (
+          !programme.episodeNumber
+        ) {
+          return
+        }
+
+        const match =
+          programme.episodeNumber.match(
+            /^S(\d+)E(\d+)$/i
+          )
+
+        if (
+          !match
+        ) {
+          return
+        }
+
+        const show =
+          await getTvmazeShow(
+            programme.title
+          )
+
+        if (
+          !show
+        ) {
+          return
+        }
+
+        const episodeData =
+          await fetchJson(
+            'https://api.tvmaze.com/shows/' +
+            show.id +
+            '/episodebynumber?season=' +
+            Number(
+              match[1]
+            ) +
+            '&number=' +
+            Number(
+              match[2]
+            )
+          )
+
+        await sleep(
+          250
+        )
+
+        if (
+          !episodeData
+        ) {
+          return
+        }
+
+        let used =
+          false
+
+        used =
+          fillMissingField(
+            programme,
+            'episodeTitle',
+            cleanSpaces(
+              episodeData.name
+            ),
+            'tvmaze'
+          ) ||
+          used
+
+        used =
+          fillMissingField(
+            programme,
+            'description',
+            cleanSpaces(
+              episodeData.summary
+                ? episodeData.summary
+                  .replace(
+                    /<[^>]+>/g,
+                    ''
+                  )
+                : ''
+            ),
+            'tvmaze'
+          ) ||
+          used
+
+        used =
+          fillMissingField(
+            programme,
+            'airDate',
+            episodeData.airdate
+              ? episodeData.airdate
+                .split(
+                  '-'
+                )
+                .reverse()
+                .join(
+                  '/'
+                )
+              : '',
+            'tvmaze'
+          ) ||
+          used
+
+        used =
+          fillMissingField(
+            programme,
+            'icon',
+            episodeData.image
+              ? (
+                episodeData.image.original ||
+                episodeData.image.medium
+              )
+              : '',
+            'tvmaze'
+          ) ||
+          used
+
+        if (
+          used
+        ) {
+          tvmazeMatches++
+        }
+      }
+
+      async function enrichFromTmdb(
+        programme
+      ) {
+        if (
+          !process.env.TMDB_API_TOKEN
+        ) {
+          return
+        }
+
+        if (
+          !programme.episodeNumber
+        ) {
+          return
+        }
+
+        const match =
+          programme.episodeNumber.match(
+            /^S(\d+)E(\d+)$/i
+          )
+
+        if (
+          !match
+        ) {
+          return
+        }
+
+        const cacheKey =
+          normalizeTitle(
+            programme.title
+          )
+
+        let show =
+          tmdbCache.get(
+            cacheKey
+          )
+
+        if (
+          !show
+        ) {
+          const searchData =
+            await fetchJson(
+              'https://api.themoviedb.org/3/search/tv?query=' +
+              encodeURIComponent(
+                programme.title
+              ),
+              {
+                Authorization:
+                  'Bearer ' +
+                  process.env.TMDB_API_TOKEN,
+
+                accept:
+                  'application/json'
+              }
+            )
+
+          show =
+            searchData &&
+            searchData.results &&
+            searchData.results.length
+              ? searchData.results[0]
+              : null
+
+          tmdbCache.set(
+            cacheKey,
+            show
+          )
+
+          await sleep(
+            250
+          )
+        }
+
+        if (
+          !show
+        ) {
+          return
+        }
+
+        const episodeData =
+          await fetchJson(
+            'https://api.themoviedb.org/3/tv/' +
+            show.id +
+            '/season/' +
+            Number(
+              match[1]
+            ) +
+            '/episode/' +
+            Number(
+              match[2]
+            ),
+            {
+              Authorization:
+                'Bearer ' +
+                process.env.TMDB_API_TOKEN,
+
+              accept:
+                'application/json'
+            }
+          )
+
+        await sleep(
+          250
+        )
+
+        if (
+          !episodeData
+        ) {
+          return
+        }
+
+        let used =
+          false
+
+        used =
+          fillMissingField(
+            programme,
+            'episodeTitle',
+            cleanSpaces(
+              episodeData.name
+            ),
+            'tmdb'
+          ) ||
+          used
+
+        used =
+          fillMissingField(
+            programme,
+            'description',
+            cleanSpaces(
+              episodeData.overview
+            ),
+            'tmdb'
+          ) ||
+          used
+
+        used =
+          fillMissingField(
+            programme,
+            'airDate',
+            episodeData.air_date
+              ? episodeData.air_date
+                .split(
+                  '-'
+                )
+                .reverse()
+                .join(
+                  '/'
+                )
+              : '',
+            'tmdb'
+          ) ||
+          used
+
+        if (
+          used
+        ) {
+          tmdbMatches++
+        }
+      }
+
+      async function buildFinalProgrammes() {
+        const finalProgrammes =
+          new Map()
+
+        for (
+          const programmes of
+          jessman.values()
+        ) {
+          for (
+            const programme of
+            programmes.values()
+          ) {
+            finalProgrammes.set(
+              programme.key,
+              {
+                ...programme
+              }
+            )
+          }
+        }
+
+        for (
+          const programmes of
+          iptvOrg.values()
+        ) {
+          for (
+            const programme of
+            programmes.values()
+          ) {
+            const existing =
+              finalProgrammes.get(
+                programme.key
+              )
+
+            if (
+              existing
+            ) {
+              jessmanIptvMatches++
+
+              mergeMissingFields(
+                existing,
+                programme,
+                'iptvorg'
+              )
+
+              continue
+            }
+
+            finalProgrammes.set(
+              programme.key,
+              {
+                ...programme
+              }
+            )
+
+            iptvOnlyProgrammes++
+          }
+        }
+
+        for (
+          const programme of
+          finalProgrammes.values()
+        ) {
+          if (
+            programme.source ===
+            'jessman'
+          ) {
+            jessmanOnlyProgrammes++
+          }
+        }
+
+        for (
+          const programme of
+          finalProgrammes.values()
+        ) {
+          await enrichFromTvmaze(
+            programme
+          )
+        }
+
+        for (
+          const programme of
+          finalProgrammes.values()
+        ) {
+          await enrichFromTmdb(
+            programme
+          )
+        }
+
+        return finalProgrammes
+      }
+
+      function buildChannel(
+        channelHeader
+      ) {
+        let block =
+          channelHeader.block
+
+        const originalId =
+          getAttribute(
+            block,
+            'id'
+          )
+
+        if (
+          originalId !==
+          channelHeader.id
+        ) {
+          block =
+            block.replace(
+              /(<channel\b[^>]*\bid=")[^"]*(")/i,
+              '$1' +
               escapeXml(
                 channelHeader.id
               ) +
-              '">' +
-              '\n'
+              '$2'
+            )
+        }
 
-            output +=
-              '  <display-name>' +
+        const displayName =
+          channelHeader.displayName
+
+        if (
+          getAllTags(
+            block,
+            'display-name'
+          ).length
+        ) {
+          block =
+            block.replace(
+              /(<display-name\b[^>]*>)[\s\S]*?(<\/display-name>)/i,
+              '$1' +
               escapeXml(
-                channelHeader.displayName
+                displayName
               ) +
-              '</display-name>\n'
-
-            if (
-              channelHeader.icon
-            ) {
-              output +=
-                '  <icon src="' +
-                escapeXml(
-                  channelHeader.icon
-                ) +
-                '" />\n'
-            }
-
-            output +=
-              '</channel>\n'
-
-            return output
-          }
-
-          function buildProgramme(
-            programme
-          ) {
-            const description =
-              buildDescription(
-                programme.episodeTitle,
-                programme.episodeNumber,
-                programme.description,
-                programme.airDate
-              )
-
-            let output =
-              '<programme ' +
-              'start="' +
-              escapeXml(
-                programme.start
-              ) +
-              '" ' +
-              'stop="' +
-              escapeXml(
-                programme.stop
-              ) +
-              '" ' +
-              'channel="' +
-              escapeXml(
-                programme.channel
-              ) +
-              '">' +
-              '\n'
-
-            if (
-              description
-            ) {
-              output +=
-                '  <desc lang="en">' +
-                escapeXml(
-                  description
-                ) +
-                '</desc>\n'
-            }
-
-            if (
-              programme.icon
-            ) {
-              output +=
-                '  <icon src="' +
-                escapeXml(
-                  programme.icon
-                ) +
-                '" />\n'
-            }
-
-            output +=
-              '  <title lang="en">' +
-              escapeXml(
-                programme.title
-              ) +
-              '</title>\n'
-
-            output +=
-              '</programme>\n'
-
-            return output
-          }
-
-          async function main() {
-            await loadJessman()
-
-            await loadIptvOrg()
-
-            const finalProgrammes =
-              await buildFinalProgrammes()
-
-            const output =
-              fs.createWriteStream(
-                outputPath,
-                {
-                  encoding:
-                    'utf8'
-                }
-              )
-
-            await new Promise(
-              (
-                resolve,
-                reject
-              ) => {
-                output.once(
-                  'error',
-                  reject
-                )
-
-                output.write(
-                  '<?xml version="1.0" encoding="UTF-8"?>\n'
-                )
-
-                output.write(
-                  '<tv generator-info-name="Combined FAST">\n'
-                )
-
-                for (
-                  const channelHeader of
-                  channelHeaders.values()
-                ) {
-                  output.write(
-                    buildChannel(
-                      channelHeader
-                    )
-                  )
-                }
-
-                const ordered =
-                  Array.from(
-                    finalProgrammes.values()
-                  ).sort(
-                    (
-                      a,
-                      b
-                    ) =>
-                      a.start.localeCompare(
-                        b.start
-                      )
-                  )
-
-                for (
-                  const programme of
-                  ordered
-                ) {
-                  output.write(
-                    buildProgramme(
-                      programme
-                    )
-                  )
-
-                  combinedProgrammes++
-                }
-
-                output.write(
-                  '</tv>\n'
-                )
-
-                output.end(
-                  resolve
-                )
-              }
+              '$2'
             )
+        }
 
-            const totalProgrammesScanned =
-              jessmanProgrammesScanned +
-              iptvOrgProgrammesScanned
+        return block.trimEnd() +
+          '\n'
+      }
 
-            const totalProgrammesKept =
-              jessmanProgrammesKept +
-              iptvOrgProgrammesKept
+      function buildProgramme(
+        programme
+      ) {
+        let block =
+          programme.block
 
-            const totalProgrammesSkipped =
-              jessmanProgrammesSkipped +
-              iptvOrgProgrammesSkipped
+        const channel =
+          programme.channel
 
-            const totalDescriptionsChanged =
-              jessmanDescriptionsChanged +
-              iptvOrgDescriptionsChanged
+        block =
+          block.replace(
+            /(\bchannel=")[^"]*(")/i,
+            '$1' +
+            escapeXml(
+              channel
+            ) +
+            '$2'
+          )
 
-            const totalActorsRemoved =
-              jessmanActorsRemoved +
-              iptvOrgActorsRemoved
+        return block.trimEnd() +
+          '\n'
+      }
 
-            const totalCreditsRemoved =
-              jessmanCreditsRemoved +
-              iptvOrgCreditsRemoved
+      async function main() {
+        await loadJessman()
 
-            const totalEpisodeNumbersConverted =
-              jessmanEpisodeNumbersConverted +
-              iptvOrgEpisodeNumbersConverted
+        await loadIptvOrg()
 
-            const totalOriginalAirDatesUsed =
-              jessmanOriginalAirDatesUsed +
-              iptvOrgOriginalAirDatesUsed
+        const finalProgrammes =
+          await buildFinalProgrammes()
 
-            console.log('')
-            console.log('========================================')
-            console.log('COMBINED FAST PROCESSING COMPLETE')
-            console.log('========================================')
-            console.log('')
-
-            console.log('CHANNELS')
-            console.log(
-              'Jessman channels found: ' +
-              jessmanChannelsFound
-            )
-            console.log(
-              'IPTV-org channels found: ' +
-              iptvOrgChannelsFound
-            )
-            console.log(
-              'Total channels written: ' +
-              channelHeaders.size
-            )
-
-            console.log('')
-            console.log('JESSMAN PROGRAMMES')
-            console.log(
-              'Programmes scanned: ' +
-              jessmanProgrammesScanned
-            )
-            console.log(
-              'Programmes kept: ' +
-              jessmanProgrammesKept
-            )
-            console.log(
-              'Programmes skipped: ' +
-              jessmanProgrammesSkipped
-            )
-            console.log(
-              'Descriptions changed: ' +
-              jessmanDescriptionsChanged
-            )
-            console.log(
-              'Actors removed: ' +
-              jessmanActorsRemoved
-            )
-            console.log(
-              'Credits removed: ' +
-              jessmanCreditsRemoved
-            )
-            console.log(
-              'Episode numbers converted: ' +
-              jessmanEpisodeNumbersConverted
-            )
-            console.log(
-              'Original air dates used: ' +
-              jessmanOriginalAirDatesUsed
-            )
-
-            console.log('')
-            console.log('IPTV-ORG PROGRAMMES')
-            console.log(
-              'Programmes scanned: ' +
-              iptvOrgProgrammesScanned
-            )
-            console.log(
-              'Programmes kept: ' +
-              iptvOrgProgrammesKept
-            )
-            console.log(
-              'Programmes skipped: ' +
-              iptvOrgProgrammesSkipped
-            )
-            console.log(
-              'Descriptions changed: ' +
-              iptvOrgDescriptionsChanged
-            )
-            console.log(
-              'Actors removed: ' +
-              iptvOrgActorsRemoved
-            )
-            console.log(
-              'Credits removed: ' +
-              iptvOrgCreditsRemoved
-            )
-            console.log(
-              'Episode numbers converted: ' +
-              iptvOrgEpisodeNumbersConverted
-            )
-            console.log(
-              'Original air dates used: ' +
-              iptvOrgOriginalAirDatesUsed
-            )
-
-            console.log('')
-            console.log('ENRICHMENT PIPELINE')
-            console.log(
-              'Jessman + IPTV-org unique matches: ' +
-              jessmanIptvMatches
-            )
-            console.log(
-              'Jessman-only programmes: ' +
-              jessmanOnlyProgrammes
-            )
-            console.log(
-              'IPTV-org-only programmes: ' +
-              iptvOnlyProgrammes
-            )
-            console.log(
-              'IPTV-org fields used to fill missing data: ' +
-              iptvFieldsUsed
-            )
-            console.log(
-              'TVMaze matched programmes: ' +
-              tvmazeMatches
-            )
-            console.log(
-              'TVMaze fields used to fill missing data: ' +
-              tvmazeFieldsUsed
-            )
-            console.log(
-              'TMDB matched programmes: ' +
-              tmdbMatches
-            )
-            console.log(
-              'TMDB fields used to fill missing data: ' +
-              tmdbFieldsUsed
-            )
-
-            console.log('')
-            console.log('COMBINED TOTALS')
-            console.log(
-              'Programmes scanned: ' +
-              totalProgrammesScanned
-            )
-            console.log(
-              'Programmes kept: ' +
-              totalProgrammesKept
-            )
-            console.log(
-              'Programmes skipped: ' +
-              totalProgrammesSkipped
-            )
-            console.log(
-              'Descriptions changed: ' +
-              totalDescriptionsChanged
-            )
-            console.log(
-              'Actors removed: ' +
-              totalActorsRemoved
-            )
-            console.log(
-              'Credits removed: ' +
-              totalCreditsRemoved
-            )
-            console.log(
-              'Episode numbers converted: ' +
-              totalEpisodeNumbersConverted
-            )
-            console.log(
-              'Original air dates used: ' +
-              totalOriginalAirDatesUsed
-            )
-            console.log(
-              'Total unique Jessman/IPTV-org matches: ' +
-              jessmanIptvMatches
-            )
-            console.log(
-              'Total enrichment fields filled: ' +
-              (
-                iptvFieldsUsed +
-                tvmazeFieldsUsed +
-                tmdbFieldsUsed
-              )
-            )
-            console.log(
-              'Combined programmes written: ' +
-              combinedProgrammes
-            )
-
-            console.log('')
-            console.log(
-              'Output: ' +
-              outputPath
-            )
-          }
-
-          main().catch(
-            error => {
-              console.error(
-                error
-              )
-
-              process.exit(
-                1
-              )
+        const output =
+          fs.createWriteStream(
+            outputPath,
+            {
+              encoding:
+                'utf8'
             }
           )
-          EOF
 
-          node /tmp/build_combinedfast.js
+        await new Promise(
+          (
+            resolve,
+            reject
+          ) => {
+            output.once(
+              'error',
+              reject
+            )
 
-      - name: Validate Combined FAST guide
-        run: |
-          CHANNELS=$(grep -c '<channel ' combinedfast/work/combinedfast.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' combinedfast/work/combinedfast.xml || true)
-          CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
-          PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
-          DESCRIPTIONS=$(grep -c '<desc ' combinedfast/work/combinedfast.xml || true)
+            output.write(
+              '<?xml version="1.0" encoding="UTF-8"?>\n'
+            )
 
-          echo "Combined FAST channels: $CHANNELS"
-          echo "Combined FAST programmes: $PROGRAMMES"
-          echo "Channel logos: $CHANNEL_LOGOS"
-          echo "Programme icons: $PROGRAMME_ICONS"
-          echo "Description tags: $DESCRIPTIONS"
+            output.write(
+              '<tv generator-info-name="Combined FAST">\n'
+            )
 
-          if [ "$CHANNELS" -lt 1 ]; then
-            echo "Combined FAST guide contains no channels"
-            exit 1
-          fi
+            for (
+              const channelHeader of
+              channelHeaders.values()
+            ) {
+              output.write(
+                buildChannel(
+                  channelHeader
+                )
+              )
+            }
 
-          if [ "$PROGRAMMES" -lt 1 ]; then
-            echo "Combined FAST guide contains no programmes"
-            exit 1
-          fi
+            const ordered =
+              Array.from(
+                finalProgrammes.values()
+              ).sort(
+                (
+                  a,
+                  b
+                ) =>
+                  a.start.localeCompare(
+                    b.start
+                  )
+              )
 
-          test -s combinedfast/work/combinedfast.xml
+            for (
+              const programme of
+              ordered
+            ) {
+              output.write(
+                buildProgramme(
+                  programme
+                )
+              )
 
-      - name: Compress Combined FAST guide
-        run: |
-          gzip -c \
-            combinedfast/work/combinedfast.xml \
-            > guides/combinedfast.xml.gz
+              combinedProgrammes++
+            }
 
-          test -s guides/combinedfast.xml.gz
+            output.write(
+              '</tv>\n'
+            )
 
-          echo "Combined FAST guide:"
-          ls -lh guides/combinedfast.xml.gz
+            output.end(
+              resolve
+            )
+          }
+        )
 
-      - name: Commit and push Combined FAST guide
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+        const totalProgrammesScanned =
+          jessmanProgrammesScanned +
+          iptvOrgProgrammesScanned
 
-          git add guides/combinedfast.xml.gz
+        const totalProgrammesKept =
+          jessmanProgrammesKept +
+          iptvOrgProgrammesKept
 
-          if git diff --cached --quiet; then
-            echo "No Combined FAST guide changes to commit"
-            exit 0
-          fi
+        const totalProgrammesSkipped =
+          jessmanProgrammesSkipped +
+          iptvOrgProgrammesSkipped
 
-          git commit \
-            -m "Update Combined FAST guide"
+        const totalDescriptionsChanged =
+          jessmanDescriptionsChanged +
+          iptvOrgDescriptionsChanged
 
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
+        const totalActorsRemoved =
+          jessmanActorsRemoved +
+          iptvOrgActorsRemoved
 
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
+        const totalCreditsRemoved =
+          jessmanCreditsRemoved +
+          iptvOrgCreditsRemoved
 
-            echo "Push failed. Synchronizing with remote before retry..."
+        const totalEpisodeNumbersConverted =
+          jessmanEpisodeNumbersConverted +
+          iptvOrgEpisodeNumbersConverted
 
-            git fetch origin main
+        const totalOriginalAirDatesUsed =
+          jessmanOriginalAirDatesUsed +
+          iptvOrgOriginalAirDatesUsed
 
-            git rebase origin/main
+        console.log('')
+        console.log('========================================')
+        console.log('COMBINED FAST PROCESSING COMPLETE')
+        console.log('========================================')
+        console.log('')
 
-            echo "Waiting before retry..."
+        console.log('CHANNELS')
+        console.log(
+          'Jessman channels found: ' +
+          jessmanChannelsFound
+        )
+        console.log(
+          'IPTV-org channels found: ' +
+          iptvOrgChannelsFound
+        )
+        console.log(
+          'Total channels written: ' +
+          channelHeaders.size
+        )
 
-            sleep 10
-          done
+        console.log('')
+        console.log('JESSMAN PROGRAMMES')
+        console.log(
+          'Programmes scanned: ' +
+          jessmanProgrammesScanned
+        )
+        console.log(
+          'Programmes kept: ' +
+          jessmanProgrammesKept
+        )
+        console.log(
+          'Programmes skipped: ' +
+          jessmanProgrammesSkipped
+        )
+        console.log(
+          'Descriptions changed: ' +
+          jessmanDescriptionsChanged
+        )
+        console.log(
+          'Actors removed: ' +
+          jessmanActorsRemoved
+        )
+        console.log(
+          'Credits removed: ' +
+          jessmanCreditsRemoved
+        )
+        console.log(
+          'Episode numbers converted: ' +
+          jessmanEpisodeNumbersConverted
+        )
+        console.log(
+          'Original air dates used: ' +
+          jessmanOriginalAirDatesUsed
+        )
 
-          echo "Push failed after all retries"
+        console.log('')
+        console.log('IPTV-ORG PROGRAMMES')
+        console.log(
+          'Programmes scanned: ' +
+          iptvOrgProgrammesScanned
+        )
+        console.log(
+          'Programmes kept: ' +
+          iptvOrgProgrammesKept
+        )
+        console.log(
+          'Programmes skipped: ' +
+          iptvOrgProgrammesSkipped
+        )
+        console.log(
+          'Descriptions changed: ' +
+          iptvOrgDescriptionsChanged
+        )
+        console.log(
+          'Actors removed: ' +
+          iptvOrgActorsRemoved
+        )
+        console.log(
+          'Credits removed: ' +
+          iptvOrgCreditsRemoved
+        )
+        console.log(
+          'Episode numbers converted: ' +
+          iptvOrgEpisodeNumbersConverted
+        )
+        console.log(
+          'Original air dates used: ' +
+          iptvOrgOriginalAirDatesUsed
+        )
 
-          exit 1
+        console.log('')
+        console.log('ENRICHMENT PIPELINE')
+        console.log(
+          'Jessman + IPTV-org unique matches: ' +
+          jessmanIptvMatches
+        )
+        console.log(
+          'Jessman-only programmes: ' +
+          jessmanOnlyProgrammes
+        )
+        console.log(
+          'IPTV-org-only programmes: ' +
+          iptvOnlyProgrammes
+        )
+        console.log(
+          'IPTV-org fields used to fill missing data: ' +
+          iptvFieldsUsed
+        )
+        console.log(
+          'TVMaze matched programmes: ' +
+          tvmazeMatches
+        )
+        console.log(
+          'TVMaze fields used to fill missing data: ' +
+          tvmazeFieldsUsed
+        )
+        console.log(
+          'TMDB matched programmes: ' +
+          tmdbMatches
+        )
+        console.log(
+          'TMDB fields used to fill missing data: ' +
+          tmdbFieldsUsed
+        )
+
+        console.log('')
+        console.log('COMBINED TOTALS')
+        console.log(
+          'Programmes scanned: ' +
+          totalProgrammesScanned
+        )
+        console.log(
+          'Programmes kept: ' +
+          totalProgrammesKept
+        )
+        console.log(
+          'Programmes skipped: ' +
+          totalProgrammesSkipped
+        )
+        console.log(
+          'Descriptions changed: ' +
+          totalDescriptionsChanged
+        )
+        console.log(
+          'Actors removed: ' +
+          totalActorsRemoved
+        )
+        console.log(
+          'Credits removed: ' +
+          totalCreditsRemoved
+        )
+        console.log(
+          'Episode numbers converted: ' +
+          totalEpisodeNumbersConverted
+        )
+        console.log(
+          'Original air dates used: ' +
+          totalOriginalAirDatesUsed
+        )
+        console.log(
+          'Total unique Jessman/IPTV-org matches: ' +
+          jessmanIptvMatches
+        )
+        console.log(
+          'Total enrichment fields filled: ' +
+          (
+            iptvFieldsUsed +
+            tvmazeFieldsUsed +
+            tmdbFieldsUsed
+          )
+        )
+        console.log(
+          'Combined programmes written: ' +
+          combinedProgrammes
+        )
+
+        console.log('')
+        console.log(
+          'Output: ' +
+          outputPath
+        )
+      }
+
+      main().catch(
+        error => {
+          console.error(
+            error
+          )
+
+          process.exit(
+            1
+          )
+        }
+      )
+      EOF
+
+      node /tmp/build_combinedfast.js
+
+  - name: Validate Combined FAST guide
+    run: |
+      CHANNELS=$(grep -c '<channel ' combinedfast/work/combinedfast.xml || true)
+      PROGRAMMES=$(grep -c '<programme ' combinedfast/work/combinedfast.xml || true)
+      CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
+      PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' combinedfast/work/combinedfast.xml | grep -c '<icon src=' || true)
+      DESCRIPTIONS=$(grep -c '<desc ' combinedfast/work/combinedfast.xml || true)
+
+      echo "Combined FAST channels: $CHANNELS"
+      echo "Combined FAST programmes: $PROGRAMMES"
+      echo "Channel logos: $CHANNEL_LOGOS"
+      echo "Programme icons: $PROGRAMME_ICONS"
+      echo "Description tags: $DESCRIPTIONS"
+
+      if [ "$CHANNELS" -lt 1 ]; then
+        echo "Combined FAST guide contains no channels"
+        exit 1
+      fi
+
+      if [ "$PROGRAMMES" -lt 1 ]; then
+        echo "Combined FAST guide contains no programmes"
+        exit 1
+      fi
+
+      test -s combinedfast/work/combinedfast.xml
+
+  - name: Compress Combined FAST guide
+    run: |
+      gzip -c \
+        combinedfast/work/combinedfast.xml \
+        > guides/combinedfast.xml.gz
+
+      test -s guides/combinedfast.xml.gz
+
+      echo "Combined FAST guide:"
+      ls -lh guides/combinedfast.xml.gz
+
+  - name: Commit and push Combined FAST guide
+    run: |
+      git config user.name "github-actions"
+      git config user.email "github-actions@github.com"
+
+      git add guides/combinedfast.xml.gz
+
+      if git diff --cached --quiet; then
+        echo "No Combined FAST guide changes to commit"
+        exit 0
+      fi
+
+      git commit \
+        -m "Update Combined FAST guide"
+
+      for attempt in 1 2 3 4 5; do
+        echo "Push attempt $attempt"
+
+        if git push origin HEAD:main; then
+          echo "Push succeeded"
+          exit 0
+        fi
+
+        echo "Push failed. Synchronizing with remote before retry..."
+
+        git fetch origin main
+
+        git rebase origin/main
+
+        echo "Waiting before retry..."
+
+        sleep 10
+      done
+
+      echo "Push failed after all retries"
+
+      exit 1
+```
