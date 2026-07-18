@@ -75,10 +75,20 @@ jobs:
           const now =
             new Date()
 
+          const pastCutoff =
+            new Date(
+              now.getTime() -
+              3 *
+              24 *
+              60 *
+              60 *
+              1000
+            )
+
           const cutoff =
             new Date(
               now.getTime() +
-              14 *
+              7 *
               24 *
               60 *
               60 *
@@ -284,6 +294,7 @@ jobs:
               )
               .replace(
                 /</g,
+                '&lt;/g,
                 '&lt;'
               )
               .replace(
@@ -312,6 +323,116 @@ jobs:
                 ' '
               )
               .trim()
+          }
+
+          function removeEmbeddedCredits(
+            value
+          ) {
+            let result =
+              cleanSpaces(
+                value
+              )
+
+            const protectedDates =
+              []
+
+            result =
+              result.replace(
+                /\(\d{2}\/\d{2}\/\d{4}\)/g,
+                match => {
+                  protectedDates.push(
+                    match
+                  )
+
+                  return '__PROTECTED_DATE_' +
+                    (
+                      protectedDates.length -
+                      1
+                    ) +
+                    '__'
+                }
+              )
+
+            result =
+              result.replace(
+                /\s*\([^()]*\b(?:star|stars|starring|with|featuring|cast|actors?|actresses?)\b[^()]*\)/gi,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s*\([^()]*\b(?:Christopher Lee|Vincent Price|Peter Cushing|Bela Lugosi|Boris Karloff|Lon Chaney|Lon Chaney Jr\.?|John Carradine|Barbara Steele|Caroline Munro|Peter Lorre|Ray Milland|Claude Rains|Elsa Lanchester|David Niven|Donald Pleasence|Joan Crawford|Klaus Kinski|Lee Van Cleef|Richard Widmark|Robert De Niro|Robert Englund|Rutger Hauer|Sam Neill|Sid Haig|Tony Todd|Udo Kier|Willem Dafoe)\b[^()]*\)/gi,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+(?:starring|stars|starred|with|featuring)\s+[^.!?]*(?:[.!?]|$)/gi,
+                match => {
+                  const cleaned =
+                    cleanSpaces(
+                      match
+                    )
+
+                  if (
+                    /\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,}(?:\s*,|\s+and\s+|\s*&\s*)/i.test(
+                      cleaned
+                    )
+                  ) {
+                    return ''
+                  }
+
+                  return match
+                }
+              )
+
+            result =
+              result.replace(
+                /(?:,?\s+)(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,})(?:,\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,})*(?:\s*,?\s+(?:and|&)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,})?\s+(?:star|stars|starring)\.?$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+(?:starring|stars|starred|with|featuring)\s+(?:[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*(?:\s*,\s*|\s+and\s+|\s*&\s*)?)+\.?$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+(?:and\s+)?(?:[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*)(?:\s*,\s*[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*)+(?:\s*,?\s*(?:and|&)\s+[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*)?\.?$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+\*+\s*$/g,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+$/g,
+                ''
+              )
+
+            result =
+              result.replace(
+                /__PROTECTED_DATE_(\d+)__/g,
+                (
+                  match,
+                  index
+                ) =>
+                  protectedDates[
+                    Number(
+                      index
+                    )
+                  ]
+              )
+
+            return cleanSpaces(
+              result
+            )
           }
 
           function normalizeChannelName(
@@ -865,11 +986,16 @@ jobs:
                 block
               )
 
+            const cleanedDescription =
+              removeEmbeddedCredits(
+                originalDescription
+              )
+
             const description =
               buildDescription(
                 episodeTitle,
                 episodeNumber,
-                originalDescription,
+                cleanedDescription,
                 airDate
               )
 
@@ -981,24 +1107,6 @@ jobs:
                 'credits'
               )
 
-            output =
-              removeTag(
-                output,
-                'sub-title'
-              )
-
-            output =
-              removeTag(
-                output,
-                'episode-num'
-              )
-
-            output =
-              removeTag(
-                output,
-                'date'
-              )
-
             return {
               block:
                 output,
@@ -1061,7 +1169,7 @@ jobs:
 
             if (
               !startDate ||
-              startDate < now ||
+              startDate < pastCutoff ||
               startDate >= cutoff
             ) {
               if (
