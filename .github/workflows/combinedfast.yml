@@ -2735,11 +2735,31 @@ jobs:
             let result =
               ''
 
-            const cleanedDescription =
-              removeEmbeddedCredits(
+          function buildDescription(
+            episodeTitle,
+            episodeNumber,
+            description,
+            airDate
+          ) {
+            let result =
+              ''
+          
+            let cleanedDescription =
+              cleanSpaces(
                 description
               )
-
+          
+            cleanedDescription =
+              cleanedDescription.replace(
+                /\s*\([^()]*\)/g,
+                ''
+              )
+          
+            cleanedDescription =
+              cleanSpaces(
+                cleanedDescription
+              )
+          
             if (
               episodeTitle &&
               episodeNumber
@@ -2759,7 +2779,7 @@ jobs:
               result =
                 episodeNumber
             }
-
+          
             if (
               cleanedDescription
             ) {
@@ -2771,7 +2791,7 @@ jobs:
                   :
                     cleanedDescription
             }
-
+          
             if (
               airDate
             ) {
@@ -2786,7 +2806,7 @@ jobs:
                     airDate +
                     ')'
             }
-
+          
             return cleanSpaces(
               result
             )
