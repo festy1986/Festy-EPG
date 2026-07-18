@@ -2,6 +2,7 @@ name: Combined FAST
 
 on:
   workflow_dispatch:
+
   schedule:
     - cron: '45 5 * * *'
     - cron: '45 17 * * *'
@@ -57,6 +58,7 @@ jobs:
       - name: Process and rebuild Combined FAST guide
         env:
           TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+
         run: |
           cat > /tmp/build_combinedfast.js <<'EOF'
           const fs =
@@ -109,13 +111,6 @@ jobs:
           /*
            * ============================================================
            * CHANNEL DEFINITIONS
-           *
-           * Jessman is matched by the actual Jessman channel ID.
-           *
-           * IPTV-org is matched by the actual IPTV-org channel ID.
-           *
-           * The canonicalChannel value is used only for cross-source
-           * matching and reporting.
            * ============================================================
            */
 
@@ -222,13 +217,6 @@ jobs:
           /*
            * ============================================================
            * STORAGE
-           *
-           * Jessman and IPTV-org remain separate.
-           *
-           * Existing metadata is never overwritten by cross-reference
-           * data from the other source.
-           *
-           * Cross-reference only fills missing fields.
            * ============================================================
            */
 
@@ -888,11 +876,6 @@ jobs:
           /*
            * ============================================================
            * FINAL DESCRIPTION CLEANUP
-           *
-           * This operates INSIDE <description>/<desc>.
-           *
-           * The generated air date is temporarily protected so it is
-           * never removed as embedded parenthetical credit text.
            * ============================================================
            */
 
@@ -1454,10 +1437,6 @@ jobs:
           /*
            * ============================================================
            * LOAD JESSMAN
-           *
-           * IMPORTANT:
-           * Jessman channels are matched by their actual channel IDs.
-           * Display names are not used to locate the channel.
            * ============================================================
            */
 
@@ -1858,28 +1837,131 @@ jobs:
            * ============================================================
            * MATCHING
            *
+           * Same canonical channel.
+           *
+           * Start times may differ by up to five minutes.
+           *
+           * Titles are compared using normalized title text.
+           *
+           * Existing metadata is never overwritten.
            * Only missing fields are filled.
-           * Existing source metadata is locked.
            * ============================================================
            */
 
-          function programmeMatchKey(
-            programme
+          function normalizeMatchTitle(
+            value
           ) {
-            return [
-              programme.canonicalChannel
+            return normalizeTitle(
+              value
+            )
+              .replace(
+                /^(the|a|an)/,
+                ''
+              )
+          }
+
+          function titlesMatch(
+            first,
+            second
+          ) {
+            const firstTitle =
+              normalizeMatchTitle(
+                first
+              )
+
+            const secondTitle =
+              normalizeMatchTitle(
+                second
+              )
+
+            if (
+              !firstTitle ||
+              !secondTitle
+            ) {
+              return false
+            }
+
+            if (
+              firstTitle ===
+              secondTitle
+            ) {
+              return true
+            }
+
+            if (
+              firstTitle.includes(
+                secondTitle
+              ) ||
+              secondTitle.includes(
+                firstTitle
+              )
+            ) {
+              return true
+            }
+
+            return false
+          }
+
+          function programmesMatch(
+            first,
+            second
+          ) {
+            const firstChannel =
+              first.canonicalChannel
                 .replace(
                   /\s+2$/i,
                   ''
-                ),
+                )
 
-              programme.start,
+            const secondChannel =
+              second.canonicalChannel
+                .replace(
+                  /\s+2$/i,
+                  ''
+                )
 
-              normalizeTitle(
-                programme.title
+            if (
+              firstChannel !==
+              secondChannel
+            ) {
+              return false
+            }
+
+            const firstDate =
+              parseXmltvDate(
+                first.start
               )
-            ].join(
-              '|'
+
+            const secondDate =
+              parseXmltvDate(
+                second.start
+              )
+
+            if (
+              !firstDate ||
+              !secondDate
+            ) {
+              return false
+            }
+
+            const difference =
+              Math.abs(
+                firstDate.getTime() -
+                secondDate.getTime()
+              )
+
+            if (
+              difference >
+              5 *
+              60 *
+              1000
+            ) {
+              return false
+            }
+
+            return titlesMatch(
+              first.title,
+              second.title
             )
           }
 
@@ -2014,126 +2096,58 @@ jobs:
           }
 
           function crossReferenceSources() {
-            const iptvIndex =
-              new Map()
-
-            for (
-              const programme of
-              iptvOrgProgrammes
-            ) {
-              const key =
-                programmeMatchKey(
-                  programme
-                )
-
-              if (
-                !iptvIndex.has(
-                  key
-                )
-              ) {
-                iptvIndex.set(
-                  key,
-                  []
-                )
-              }
-
-              iptvIndex.get(
-                key
-              ).push(
-                programme
+            const unmatchedIptv =
+              new Set(
+                iptvOrgProgrammes
               )
-            }
-
-            const jessmanIndex =
-              new Map()
-
-            for (
-              const programme of
-              jessmanProgrammes
-            ) {
-              const key =
-                programmeMatchKey(
-                  programme
-                )
-
-              if (
-                !jessmanIndex.has(
-                  key
-                )
-              ) {
-                jessmanIndex.set(
-                  key,
-                  []
-                )
-              }
-
-              jessmanIndex.get(
-                key
-              ).push(
-                programme
-              )
-            }
 
             for (
               const jessman of
               jessmanProgrammes
             ) {
-              const matches =
-                iptvIndex.get(
-                  programmeMatchKey(
-                    jessman
-                  )
-                ) ||
-                []
+              const match =
+                iptvOrgProgrammes.find(
+                  iptv =>
+                    unmatchedIptv.has(
+                      iptv
+                    ) &&
+                    programmesMatch(
+                      jessman,
+                      iptv
+                    )
+                )
 
-              for (
-                const iptv of
-                matches
+              if (
+                !match
               ) {
-                if (
-                  fillMissingFromSource(
-                    jessman,
-                    iptv
-                  )
-                ) {
-                  applyDescription(
-                    jessman
-                  )
-
-                  break
-                }
+                continue
               }
-            }
 
-            for (
-              const iptv of
-              iptvOrgProgrammes
-            ) {
-              const matches =
-                jessmanIndex.get(
-                  programmeMatchKey(
-                    iptv
-                  )
-                ) ||
-                []
-
-              for (
-                const jessman of
-                matches
+              if (
+                fillMissingFromSource(
+                  jessman,
+                  match
+                )
               ) {
-                if (
-                  fillMissingFromSource(
-                    iptv,
-                    jessman
-                  )
-                ) {
-                  applyDescription(
-                    iptv
-                  )
-
-                  break
-                }
+                applyDescription(
+                  jessman
+                )
               }
+
+              if (
+                fillMissingFromSource(
+                  match,
+                  jessman
+                )
+              ) {
+                applyDescription(
+                  match
+                )
+              }
+
+              unmatchedIptv.delete(
+                match
+              )
             }
           }
 
