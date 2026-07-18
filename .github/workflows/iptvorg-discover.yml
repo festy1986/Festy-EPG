@@ -1,4 +1,4 @@
-name: IPTV Org Targeted Inspection
+name: IPTV Org Guide Inspection
 
 on:
   workflow_dispatch:
@@ -7,11 +7,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: iptvorg-targeted-inspection
+  group: iptvorg-inspection
   cancel-in-progress: false
 
 jobs:
-  inspect-selected-channels:
+  download-guide:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,174 +35,73 @@ jobs:
 
           ls -lh "/tmp/iptvorg/source.xml.gz"
 
-      - name: Create small inspection channel list
-        shell: bash
-        run: |
-          mkdir -p guides
-
-          head -n 10 \
-            guides/iptvorg-channels.txt \
-            > guides/iptvorg-inspect-channels.txt
-
-          test -s guides/iptvorg-inspect-channels.txt
-
-          echo "Selected inspection channels:"
-          cat guides/iptvorg-inspect-channels.txt
-
-      - name: Extract selected channels and programmes
+      - name: Decompress IPTV-org EPG
         shell: bash
         run: |
           gzip -dc \
-            /tmp/iptvorg/source.xml.gz |
-          awk '
-            BEGIN {
-              while (
-                (getline line < "guides/iptvorg-inspect-channels.txt") > 0
-              ) {
-                split(line, parts, " | ")
-                wanted[parts[1]] = 1
-              }
+            "/tmp/iptvorg/source.xml.gz" \
+            > "/tmp/iptvorg/source.xml"
 
-              close("guides/iptvorg-inspect-channels.txt")
+          test -s "/tmp/iptvorg/source.xml"
 
-              in_channel = 0
-              in_programme = 0
-              keep_channel = 0
-              keep_programme = 0
-              buffer = ""
-            }
+          echo "IPTV-org EPG decompressed successfully"
 
-            /<channel[[:space:]]/ {
-              in_channel = 1
-              keep_channel = 0
-              buffer = $0 "\n"
+          ls -lh "/tmp/iptvorg/source.xml"
 
-              if (match($0, /id="[^"]+"/)) {
-                channel_id = substr(
-                  $0,
-                  RSTART + 4,
-                  RLENGTH - 5
-                )
-
-                if (channel_id in wanted) {
-                  keep_channel = 1
-                }
-              }
-
-              next
-            }
-
-            in_channel {
-              buffer = buffer $0 "\n"
-
-              if (/<\/channel>/) {
-                if (keep_channel) {
-                  print buffer > "guides/iptvorg-inspection.xml"
-                }
-
-                in_channel = 0
-                buffer = ""
-              }
-
-              next
-            }
-
-            /<programme[[:space:]]/ {
-              in_programme = 1
-              keep_programme = 0
-              buffer = $0 "\n"
-
-              if (match($0, /channel="[^"]+"/)) {
-                programme_channel = substr(
-                  $0,
-                  RSTART + 9,
-                  RLENGTH - 10
-                )
-
-                if (programme_channel in wanted) {
-                  keep_programme = 1
-                }
-              }
-
-              next
-            }
-
-            in_programme {
-              buffer = buffer $0 "\n"
-
-              if (/<\/programme>/) {
-                if (keep_programme) {
-                  print buffer >> "guides/iptvorg-inspection.xml"
-                }
-
-                in_programme = 0
-                buffer = ""
-              }
-
-              next
-            }
-          '
-
-          {
-            printf '%s\n' \
-              '<?xml version="1.0" encoding="UTF-8"?>'
-            printf '%s\n' '<tv>'
-            cat guides/iptvorg-inspection.xml
-            printf '%s\n' '</tv>'
-          } > /tmp/iptvorg-inspection-final.xml
-
-          mv \
-            /tmp/iptvorg-inspection-final.xml \
-            guides/iptvorg-inspection.xml
-
-          test -s guides/iptvorg-inspection.xml
-
-          echo "Targeted inspection guide created:"
-          ls -lh guides/iptvorg-inspection.xml
-
-      - name: Validate targeted inspection guide
+      - name: Validate complete IPTV-org EPG
         shell: bash
         run: |
-          CHANNELS=$(grep -c \
-            '<channel ' \
-            guides/iptvorg-inspection.xml || true)
+          CHANNELS=$(grep -c '<channel ' \
+            "/tmp/iptvorg/source.xml" || true)
 
-          PROGRAMMES=$(grep -c \
-            '<programme ' \
-            guides/iptvorg-inspection.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' \
+            "/tmp/iptvorg/source.xml" || true)
 
-          echo "Inspection channels: $CHANNELS"
-          echo "Inspection programmes: $PROGRAMMES"
+          echo "IPTV-org channels: $CHANNELS"
+          echo "IPTV-org programmes: $PROGRAMMES"
 
           if [ "$CHANNELS" -lt 1 ]; then
-            echo "Inspection guide contains no channels"
+            echo "IPTV-org guide contains no channels"
             exit 1
           fi
 
           if [ "$PROGRAMMES" -lt 1 ]; then
-            echo "Inspection guide contains no programmes"
+            echo "IPTV-org guide contains no programmes"
             exit 1
           fi
 
-      - name: Commit targeted inspection guide
+      - name: Compress complete IPTV-org guide
+        shell: bash
+        run: |
+          mkdir -p guides
+
+          gzip -c \
+            "/tmp/iptvorg/source.xml" \
+            > "guides/iptvorg-inspection.xml.gz"
+
+          test -s "guides/iptvorg-inspection.xml.gz"
+
+          echo "Complete compressed IPTV-org guide created:"
+          ls -lh "guides/iptvorg-inspection.xml.gz"
+
+      - name: Commit complete IPTV-org guide
         shell: bash
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
           git add \
-            guides/iptvorg-inspection.xml \
-            guides/iptvorg-inspect-channels.txt
+            "guides/iptvorg-inspection.xml.gz"
 
           if git diff --cached --quiet; then
-            echo "No targeted inspection changes to commit"
+            echo "No IPTV-org guide changes to commit"
             exit 0
           fi
 
           git commit \
-            -m "Add targeted IPTV-org inspection guide"
+            -m "Add complete IPTV-org guide for inspection"
 
-      - name: Push targeted inspection guide
+      - name: Push complete IPTV-org guide
         shell: bash
         run: |
           for attempt in 1 2 3 4 5; do
