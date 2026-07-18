@@ -294,7 +294,6 @@ jobs:
               )
               .replace(
                 /</g,
-                '&lt;/g,
                 '&lt;'
               )
               .replace(
@@ -323,116 +322,6 @@ jobs:
                 ' '
               )
               .trim()
-          }
-
-          function removeEmbeddedCredits(
-            value
-          ) {
-            let result =
-              cleanSpaces(
-                value
-              )
-
-            const protectedDates =
-              []
-
-            result =
-              result.replace(
-                /\(\d{2}\/\d{2}\/\d{4}\)/g,
-                match => {
-                  protectedDates.push(
-                    match
-                  )
-
-                  return '__PROTECTED_DATE_' +
-                    (
-                      protectedDates.length -
-                      1
-                    ) +
-                    '__'
-                }
-              )
-
-            result =
-              result.replace(
-                /\s*\([^()]*\b(?:star|stars|starring|with|featuring|cast|actors?|actresses?)\b[^()]*\)/gi,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s*\([^()]*\b(?:Christopher Lee|Vincent Price|Peter Cushing|Bela Lugosi|Boris Karloff|Lon Chaney|Lon Chaney Jr\.?|John Carradine|Barbara Steele|Caroline Munro|Peter Lorre|Ray Milland|Claude Rains|Elsa Lanchester|David Niven|Donald Pleasence|Joan Crawford|Klaus Kinski|Lee Van Cleef|Richard Widmark|Robert De Niro|Robert Englund|Rutger Hauer|Sam Neill|Sid Haig|Tony Todd|Udo Kier|Willem Dafoe)\b[^()]*\)/gi,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+(?:starring|stars|starred|with|featuring)\s+[^.!?]*(?:[.!?]|$)/gi,
-                match => {
-                  const cleaned =
-                    cleanSpaces(
-                      match
-                    )
-
-                  if (
-                    /\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,}(?:\s*,|\s+and\s+|\s*&\s*)/i.test(
-                      cleaned
-                    )
-                  ) {
-                    return ''
-                  }
-
-                  return match
-                }
-              )
-
-            result =
-              result.replace(
-                /(?:,?\s+)(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,})(?:,\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,})*(?:\s*,?\s+(?:and|&)\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,})?\s+(?:star|stars|starring)\.?$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+(?:starring|stars|starred|with|featuring)\s+(?:[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*(?:\s*,\s*|\s+and\s+|\s*&\s*)?)+\.?$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+(?:and\s+)?(?:[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*)(?:\s*,\s*[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*)+(?:\s*,?\s*(?:and|&)\s+[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+)*)?\.?$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+\*+\s*$/g,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+$/g,
-                ''
-              )
-
-            result =
-              result.replace(
-                /__PROTECTED_DATE_(\d+)__/g,
-                (
-                  match,
-                  index
-                ) =>
-                  protectedDates[
-                    Number(
-                      index
-                    )
-                  ]
-              )
-
-            return cleanSpaces(
-              result
-            )
           }
 
           function normalizeChannelName(
@@ -833,6 +722,95 @@ jobs:
             )
           }
 
+          function removeEmbeddedCredits(
+            value
+          ) {
+            let result =
+              cleanSpaces(
+                value
+              )
+
+            const protectedDates =
+              []
+
+            result =
+              result.replace(
+                /\(\d{2}\/\d{2}\/\d{4}\)/g,
+                match => {
+                  const token =
+                    '__AIRDATE_' +
+                    protectedDates.length +
+                    '__'
+
+                  protectedDates.push(
+                    match
+                  )
+
+                  return token
+                }
+              )
+
+            result =
+              result.replace(
+                /\([^()]*\)/g,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s*[*]+\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+(?:starring|stars|starred by|with)\s+[^.!?]*[.!?]?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+(?:featuring|featuring performances by|with performances by)\s+[^.!?]*[.!?]?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+[A-Z][A-Za-z.'-]*(?:\s*,\s*[A-Z][A-Za-z.'-]*)*(?:\s+(?:and|&)\s+[A-Z][A-Za-z.'-]*)?\s+(?:star|stars|starring)\s*\.?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s*[,;:]\s*(?:starring|stars|with|featuring)\s+[^.!?]*[.!?]?\s*$/i,
+                ''
+              )
+
+            result =
+              cleanSpaces(
+                result
+              )
+
+            for (
+              let index = 0;
+              index <
+              protectedDates.length;
+              index++
+            ) {
+              result =
+                result.replace(
+                  '__AIRDATE_' +
+                  index +
+                  '__',
+                  protectedDates[index]
+                )
+            }
+
+            return cleanSpaces(
+              result
+            )
+          }
+
           function buildDescription(
             episodeTitle,
             episodeNumber,
@@ -841,6 +819,11 @@ jobs:
           ) {
             let result =
               ''
+
+            const cleanedDescription =
+              removeEmbeddedCredits(
+                description
+              )
 
             if (
               episodeTitle &&
@@ -863,15 +846,15 @@ jobs:
             }
 
             if (
-              description
+              cleanedDescription
             ) {
               result =
                 result
                   ? result +
                     '. ' +
-                    description
+                    cleanedDescription
                   :
-                    description
+                    cleanedDescription
             }
 
             if (
@@ -986,16 +969,11 @@ jobs:
                 block
               )
 
-            const cleanedDescription =
-              removeEmbeddedCredits(
-                originalDescription
-              )
-
             const description =
               buildDescription(
                 episodeTitle,
                 episodeNumber,
-                cleanedDescription,
+                originalDescription,
                 airDate
               )
 
@@ -1169,8 +1147,10 @@ jobs:
 
             if (
               !startDate ||
-              startDate < pastCutoff ||
-              startDate >= cutoff
+              startDate <
+              pastCutoff ||
+              startDate >=
+              cutoff
             ) {
               if (
                 source ===
