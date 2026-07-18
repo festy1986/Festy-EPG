@@ -60,6 +60,7 @@ jobs:
         run: |
           cat > /tmp/build_combinedfast.js <<'EOF'
           const fs = require('fs')
+          const readline = require('readline')
           const zlib = require('zlib')
 
           const jessmanPath =
@@ -155,6 +156,9 @@ jobs:
             new Map()
 
           const channelHeaders =
+            new Map()
+
+          const jessmanIdToName =
             new Map()
 
           let jessmanChannelsFound =
@@ -445,11 +449,9 @@ jobs:
               new RegExp(
                 '<' +
                 tag +
-                '\\b' +
-                '[^>]*\\bsystem="' +
+                '\\b[^>]*\\bsystem="' +
                 system +
-                '"' +
-                '[^>]*>' +
+                '"[^>]*>' +
                 '([\\s\\S]*?)' +
                 '</' +
                 tag +
@@ -1144,335 +1146,499 @@ jobs:
             }
           }
 
-          function getBlocks(
-            xml,
-            tag
+          async function parseXmlStream(
+            stream,
+            callback
           ) {
-            const regex =
-              new RegExp(
-                '<' +
-                tag +
-                '\\b[^>]*>[\\s\\S]*?</' +
-                tag +
-                '>',
-                'gi'
-              )
+            return new Promise(
+              (
+                resolve,
+                reject
+              ) => {
+                const rl =
+                  readline.createInterface(
+                    {
+                      input:
+                        stream,
 
-            return [
-              ...xml.matchAll(
-                regex
-              )
-            ].map(
-              match =>
-                match[0]
+                      crlfDelay:
+                        Infinity
+                    }
+                  )
+
+                let insideChannel =
+                  false
+
+                let channelBuffer =
+                  ''
+
+                let insideProgramme =
+                  false
+
+                let programmeBuffer =
+                  ''
+
+                ;(async () => {
+                  try {
+                    for await (
+                      const line of rl
+                    ) {
+                      if (
+                        !insideChannel &&
+                        !insideProgramme &&
+                        line.includes(
+                          '<channel '
+                        )
+                      ) {
+                        insideChannel =
+                          true
+
+                        channelBuffer =
+                          line +
+                          '\n'
+
+                        if (
+                          line.includes(
+                            '</channel>'
+                          )
+                        ) {
+                          insideChannel =
+                            false
+
+                          await callback(
+                            'channel',
+                            channelBuffer
+                          )
+
+                          channelBuffer =
+                            ''
+                        }
+
+                        continue
+                      }
+
+                      if (
+                        insideChannel
+                      ) {
+                        channelBuffer +=
+                          line +
+                          '\n'
+
+                        if (
+                          line.includes(
+                            '</channel>'
+                          )
+                        ) {
+                          insideChannel =
+                            false
+
+                          await callback(
+                            'channel',
+                            channelBuffer
+                          )
+
+                          channelBuffer =
+                            ''
+                        }
+
+                        continue
+                      }
+
+                      if (
+                        line.includes(
+                          '<programme '
+                        )
+                      ) {
+                        insideProgramme =
+                          true
+
+                        programmeBuffer =
+                          line +
+                          '\n'
+
+                        if (
+                          line.includes(
+                            '</programme>'
+                          )
+                        ) {
+                          insideProgramme =
+                            false
+
+                          await callback(
+                            'programme',
+                            programmeBuffer
+                          )
+
+                          programmeBuffer =
+                            ''
+                        }
+
+                        continue
+                      }
+
+                      if (
+                        insideProgramme
+                      ) {
+                        programmeBuffer +=
+                          line +
+                          '\n'
+
+                        if (
+                          line.includes(
+                            '</programme>'
+                          )
+                        ) {
+                          insideProgramme =
+                            false
+
+                          await callback(
+                            'programme',
+                            programmeBuffer
+                          )
+
+                          programmeBuffer =
+                            ''
+                        }
+                      }
+                    }
+
+                    resolve()
+                  } catch (
+                    error
+                  ) {
+                    reject(
+                      error
+                    )
+                  }
+                })()
+              }
             )
           }
 
-          function loadJessman() {
+          async function loadJessman() {
+            console.log(
+              '========================================'
+            )
+
+            console.log(
+              'LOADING COMPLETE JESSMAN SOURCE GUIDE'
+            )
+
+            console.log(
+              '========================================'
+            )
+
             console.log(
               'Reading the entire Jessman guide before selecting channels...'
             )
 
-            const xml =
-              fs.readFileSync(
-                jessmanPath,
-                'utf8'
-              )
+            const selectedChannelIds =
+              new Set()
 
-            const channels =
-              getBlocks(
-                xml,
-                'channel'
-              )
+            await parseXmlStream(
+              fs.createReadStream(
+                jessmanPath
+              ),
 
-            const programmes =
-              getBlocks(
-                xml,
-                'programme'
-              )
-
-            const selectedIds =
-              new Map()
-
-            for (
-              const block of
-              channels
-            ) {
-              const id =
-                getAttribute(
-                  block,
-                  'id'
-                )
-
-              const displayNames =
-                getAllTags(
-                  block,
-                  'display-name'
-                )
-
-              const normalizedNames =
-                displayNames.map(
-                  normalizeChannelName
-                )
-
-              let matchedName =
-                ''
-
-              for (
-                const targetName of
-                Object.keys(
-                  jessmanChannels
-                )
-              ) {
+              async (
+                type,
+                block
+              ) => {
                 if (
-                  normalizedNames.includes(
-                    normalizeChannelName(
-                      targetName
-                    )
+                  type !==
+                  'channel'
+                ) {
+                  return
+                }
+
+                const id =
+                  getAttribute(
+                    block,
+                    'id'
+                  )
+
+                const displayNames =
+                  getAllTags(
+                    block,
+                    'display-name'
+                  )
+
+                const normalizedNames =
+                  displayNames.map(
+                    normalizeChannelName
+                  )
+
+                let matchedName =
+                  ''
+
+                for (
+                  const targetName of
+                  Object.keys(
+                    jessmanChannels
                   )
                 ) {
-                  matchedName =
-                    targetName
+                  if (
+                    normalizedNames.includes(
+                      normalizeChannelName(
+                        targetName
+                      )
+                    )
+                  ) {
+                    matchedName =
+                      targetName
 
-                  break
+                    break
+                  }
                 }
-              }
 
-              if (
-                !matchedName
-              ) {
-                continue
-              }
+                if (
+                  !matchedName
+                ) {
+                  return
+                }
 
-              jessmanChannelsFound++
+                selectedChannelIds.add(
+                  id
+                )
 
-              selectedIds.set(
-                id,
-                matchedName
-              )
+                jessmanChannelsFound++
 
-              channelHeaders.set(
-                'jessman:' +
-                matchedName,
-                {
-                  source:
-                    'jessman',
-
+                jessmanIdToName.set(
                   id,
-
-                  canonicalChannel:
-                    matchedName,
-
-                  displayName:
-                    jessmanChannels[
-                      matchedName
-                    ].displayName,
-
-                  block
-                }
-              )
-
-              console.log(
-                'Jessman channel matched: ' +
-                matchedName +
-                ' -> ' +
-                id
-              )
-            }
-
-            for (
-              const block of
-              programmes
-            ) {
-              const channel =
-                getAttribute(
-                  block,
-                  'channel'
+                  matchedName
                 )
 
-              const canonicalChannel =
-                selectedIds.get(
-                  channel
+                channelHeaders.set(
+                  'jessman:' +
+                  matchedName,
+                  {
+                    source:
+                      'jessman',
+
+                    id,
+
+                    canonicalChannel:
+                      matchedName,
+
+                    displayName:
+                      jessmanChannels[
+                        matchedName
+                      ].displayName,
+
+                    block
+                  }
                 )
 
-              if (
-                !canonicalChannel
-              ) {
-                continue
-              }
-
-              const programme =
-                processProgramme(
-                  block,
-                  'jessman',
-                  canonicalChannel
-                )
-
-              if (
-                !programme
-              ) {
-                continue
-              }
-
-              if (
-                !jessman.has(
-                  canonicalChannel
-                )
-              ) {
-                jessman.set(
-                  canonicalChannel,
-                  new Map()
+                console.log(
+                  'Jessman channel matched: ' +
+                  matchedName +
+                  ' -> ' +
+                  id
                 )
               }
-
-              jessman.get(
-                canonicalChannel
-              ).set(
-                programme.key,
-                programme
-              )
-            }
+            )
 
             console.log(
-              'Entire Jessman guide read before channel programme extraction'
+              'Complete Jessman guide scan finished.'
+            )
+
+            console.log(
+              'Selected Jessman channels: ' +
+              selectedChannelIds.size
+            )
+
+            console.log(
+              'Reading the complete Jessman guide again to collect programmes and metadata for the selected channels...'
+            )
+
+            await parseXmlStream(
+              fs.createReadStream(
+                jessmanPath
+              ),
+
+              async (
+                type,
+                block
+              ) => {
+                if (
+                  type !==
+                  'programme'
+                ) {
+                  return
+                }
+
+                const channel =
+                  getAttribute(
+                    block,
+                    'channel'
+                  )
+
+                if (
+                  !selectedChannelIds.has(
+                    channel
+                  )
+                ) {
+                  return
+                }
+
+                const canonicalChannel =
+                  jessmanIdToName.get(
+                    channel
+                  )
+
+                if (
+                  !canonicalChannel
+                ) {
+                  return
+                }
+
+                const programme =
+                  processProgramme(
+                    block,
+                    'jessman',
+                    canonicalChannel
+                  )
+
+                if (
+                  !programme
+                ) {
+                  return
+                }
+
+                if (
+                  !jessman.has(
+                    canonicalChannel
+                  )
+                ) {
+                  jessman.set(
+                    canonicalChannel,
+                    new Map()
+                  )
+                }
+
+                jessman.get(
+                  canonicalChannel
+                ).set(
+                  programme.key,
+                  programme
+                )
+              }
+            )
+
+            console.log(
+              'Jessman selected-channel programme scan finished.'
             )
           }
 
-          function loadIptvOrg() {
-            console.log(
-              'Reading the entire IPTV-org guide before selecting channels...'
-            )
-
-            const compressed =
-              fs.readFileSync(
-                iptvOrgPath
-              )
-
-            const xml =
-              zlib.gunzipSync(
-                compressed
-              ).toString(
-                'utf8'
-              )
-
-            const channels =
-              getBlocks(
-                xml,
-                'channel'
-              )
-
-            const programmes =
-              getBlocks(
-                xml,
-                'programme'
-              )
-
-            const selectedIds =
-              new Map()
-
-            for (
-              const block of
-              channels
-            ) {
-              const id =
-                getAttribute(
-                  block,
-                  'id'
-                )
-
-              if (
-                !iptvOrgChannels[id]
-              ) {
-                continue
-              }
-
-              iptvOrgChannelsFound++
-
-              const channel =
-                iptvOrgChannels[
-                  id
-                ]
-
-              selectedIds.set(
-                id,
-                channel.displayName
-              )
-
-              channelHeaders.set(
-                'iptv:' +
-                id,
+          async function loadIptvOrg() {
+            await parseXmlStream(
+              zlib.createGunzip(
                 {
-                  source:
-                    'iptvorg',
-
-                  id,
-
-                  canonicalChannel:
-                    channel.displayName,
-
-                  displayName:
-                    channel.displayName,
-
-                  block
+                  flush:
+                    zlib.constants.Z_SYNC_FLUSH
                 }
-              )
-            }
+              ).on(
+                'error',
+                error => {
+                  throw error
+                }
+              ),
 
-            for (
-              const block of
-              programmes
-            ) {
-              const channel =
-                getAttribute(
-                  block,
+              async (
+                type,
+                block
+              ) => {
+                if (
+                  type ===
                   'channel'
-                )
+                ) {
+                  const id =
+                    getAttribute(
+                      block,
+                      'id'
+                    )
 
-              const canonicalChannel =
-                selectedIds.get(
-                  channel
-                )
+                  if (
+                    !iptvOrgChannels[id]
+                  ) {
+                    return
+                  }
 
-              if (
-                !canonicalChannel
-              ) {
-                continue
-              }
+                  iptvOrgChannelsFound++
 
-              const programme =
-                processProgramme(
-                  block,
-                  'iptvorg',
+                  const channel =
+                    iptvOrgChannels[id]
+
+                  channelHeaders.set(
+                    'iptv:' +
+                    id,
+                    {
+                      source:
+                        'iptvorg',
+
+                      id,
+
+                      canonicalChannel:
+                        channel.displayName,
+
+                      displayName:
+                        channel.displayName,
+
+                      block
+                    }
+                  )
+
+                  return
+                }
+
+                const channel =
+                  getAttribute(
+                    block,
+                    'channel'
+                  )
+
+                if (
+                  !iptvOrgChannels[channel]
+                ) {
+                  return
+                }
+
+                const canonicalChannel =
+                  iptvOrgChannels[
+                    channel
+                  ].displayName
+
+                const programme =
+                  processProgramme(
+                    block,
+                    'iptvorg',
+                    canonicalChannel
+                  )
+
+                if (
+                  !programme
+                ) {
+                  return
+                }
+
+                if (
+                  !iptvOrg.has(
+                    canonicalChannel
+                  )
+                ) {
+                  iptvOrg.set(
+                    canonicalChannel,
+                    new Map()
+                  )
+                }
+
+                iptvOrg.get(
                   canonicalChannel
-                )
-
-              if (
-                !programme
-              ) {
-                continue
-              }
-
-              if (
-                !iptvOrg.has(
-                  canonicalChannel
-                )
-              ) {
-                iptvOrg.set(
-                  canonicalChannel,
-                  new Map()
+                ).set(
+                  programme.key,
+                  programme
                 )
               }
-
-              iptvOrg.get(
-                canonicalChannel
-              ).set(
-                programme.key,
-                programme
-              )
-            }
-
-            console.log(
-              'Entire IPTV-org guide read before channel programme extraction'
             )
           }
 
@@ -2034,6 +2200,27 @@ jobs:
             let block =
               channelHeader.block
 
+            const originalId =
+              getAttribute(
+                block,
+                'id'
+              )
+
+            if (
+              originalId !==
+              channelHeader.id
+            ) {
+              block =
+                block.replace(
+                  /(<channel\b[^>]*\bid=")[^"]*(")/i,
+                  '$1' +
+                  escapeXml(
+                    channelHeader.id
+                  ) +
+                  '$2'
+                )
+            }
+
             const displayName =
               channelHeader.displayName
 
@@ -2064,12 +2251,15 @@ jobs:
             let block =
               programme.block
 
+            const channel =
+              programme.channel
+
             block =
               block.replace(
                 /(\bchannel=")[^"]*(")/i,
                 '$1' +
                 escapeXml(
-                  programme.channel
+                  channel
                 ) +
                 '$2'
               )
@@ -2078,22 +2268,124 @@ jobs:
               '\n'
           }
 
+          async function loadIptvOrg() {
+            const input =
+              fs.createReadStream(
+                iptvOrgPath
+              )
+
+            const gunzip =
+              zlib.createGunzip()
+
+            input.pipe(
+              gunzip
+            )
+
+            await parseXmlStream(
+              gunzip,
+
+              async (
+                type,
+                block
+              ) => {
+                if (
+                  type ===
+                  'channel'
+                ) {
+                  const id =
+                    getAttribute(
+                      block,
+                      'id'
+                    )
+
+                  if (
+                    !iptvOrgChannels[id]
+                  ) {
+                    return
+                  }
+
+                  iptvOrgChannelsFound++
+
+                  const channel =
+                    iptvOrgChannels[id]
+
+                  channelHeaders.set(
+                    'iptv:' +
+                    id,
+                    {
+                      source:
+                        'iptvorg',
+
+                      id,
+
+                      canonicalChannel:
+                        channel.displayName,
+
+                      displayName:
+                        channel.displayName,
+
+                      block
+                    }
+                  )
+
+                  return
+                }
+
+                const channel =
+                  getAttribute(
+                    block,
+                    'channel'
+                  )
+
+                if (
+                  !iptvOrgChannels[channel]
+                ) {
+                  return
+                }
+
+                const canonicalChannel =
+                  iptvOrgChannels[
+                    channel
+                  ].displayName
+
+                const programme =
+                  processProgramme(
+                    block,
+                    'iptvorg',
+                    canonicalChannel
+                  )
+
+                if (
+                  !programme
+                ) {
+                  return
+                }
+
+                if (
+                  !iptvOrg.has(
+                    canonicalChannel
+                  )
+                ) {
+                  iptvOrg.set(
+                    canonicalChannel,
+                    new Map()
+                  )
+                }
+
+                iptvOrg.get(
+                  canonicalChannel
+                ).set(
+                  programme.key,
+                  programme
+                )
+              }
+            )
+          }
+
           async function main() {
-            console.log(
-              '========================================'
-            )
+            await loadJessman()
 
-            console.log(
-              'LOADING COMPLETE SOURCE GUIDES'
-            )
-
-            console.log(
-              '========================================'
-            )
-
-            loadJessman()
-
-            loadIptvOrg()
+            await loadIptvOrg()
 
             const finalProgrammes =
               await buildFinalProgrammes()
@@ -2205,15 +2497,9 @@ jobs:
               iptvOrgOriginalAirDatesUsed
 
             console.log('')
-            console.log(
-              '========================================'
-            )
-            console.log(
-              'COMBINED FAST PROCESSING COMPLETE'
-            )
-            console.log(
-              '========================================'
-            )
+            console.log('========================================')
+            console.log('COMBINED FAST PROCESSING COMPLETE')
+            console.log('========================================')
             console.log('')
 
             console.log('CHANNELS')
