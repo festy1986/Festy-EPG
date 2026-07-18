@@ -2666,17 +2666,17 @@ jobs:
            * ============================================================
            */
 
-          function removeEmbeddedCredits(
-            value
+          function cleanEmbeddedCredits(
+            description
           ) {
             let result =
               cleanSpaces(
-                value
+                description
               )
-
+          
             const protectedDates =
               []
-
+          
             result =
               result.replace(
                 /\(\d{2}\/\d{2}\/\d{4}\)/g,
@@ -2685,27 +2685,27 @@ jobs:
                     '__AIRDATE_' +
                     protectedDates.length +
                     '__'
-
+          
                   protectedDates.push(
                     match
                   )
-
+          
                   return token
                 }
               )
-
+          
             result =
               result.replace(
                 /\s*\([^()]{2,200}\)/g,
                 ''
               )
-
+          
             result =
               result.replace(
                 /\s{2,}/g,
                 ' '
               )
-
+          
             for (
               let index = 0;
               index <
@@ -2720,7 +2720,7 @@ jobs:
                   protectedDates[index]
                 )
             }
-
+          
             return cleanSpaces(
               result
             )
