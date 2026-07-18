@@ -7,6 +7,7 @@ permissions:
   contents: write
 
 jobs:
+
   match-every-channel:
 
     runs-on: ubuntu-latest
@@ -61,7 +62,7 @@ jobs:
 
           python -m pip install requests
 
-      - name: Generate matched channel groups
+      - name: Generate matched provider groups
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -72,128 +73,356 @@ jobs:
           python - <<'PY'
 
           import os
+          import re
+          import time
           import requests
-          from urllib.parse import urljoin
 
-          xtream_url = os.environ["XTREAM_URL"].strip()
-          username = os.environ["XTREAM_USERNAME"]
-          password = os.environ["XTREAM_PASSWORD"]
 
-          if not xtream_url.endswith("/"):
-              xtream_url += "/"
+          XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 
-          api_url = urljoin(
-              xtream_url,
-              "player_api.php"
+          USERNAME = os.environ["XTREAM_USERNAME"]
+
+          PASSWORD = os.environ["XTREAM_PASSWORD"]
+
+
+          # ---------------------------------
+          # Normalize Xtream URL
+          # ---------------------------------
+
+          if XTREAM_URL.startswith("https://"):
+
+              XTREAM_URL = XTREAM_URL.replace(
+                  "https://",
+                  "http://"
+              )
+
+
+          if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+
+              XTREAM_URL += ":80"
+
+
+          # ---------------------------------
+          # Session
+          # ---------------------------------
+
+          session = requests.Session()
+
+
+          session.headers.update(
+
+              {
+
+                  "User-Agent": "Mozilla/5.0"
+
+              }
+
           )
 
-          params = {
-              "username": username,
-              "password": password,
-              "action": "get_live_categories"
-          }
 
-          print("Connecting to provider...")
-          print(f"Provider URL: {xtream_url}")
+          # ---------------------------------
+          # Download provider categories
+          # ---------------------------------
 
-          response = requests.get(
-              api_url,
-              params=params,
-              timeout=60
+          categories_url = (
+
+              f"{XTREAM_URL}/player_api.php"
+
+              f"?username={USERNAME}"
+
+              f"&password={PASSWORD}"
+
+              f"&action=get_live_categories"
+
           )
 
-          response.raise_for_status()
 
-          categories = response.json()
+          categories = None
+
+
+          for attempt in range(1, 6):
+
+              try:
+
+
+                  print(
+
+                      f"Downloading provider groups "
+
+                      f"(attempt {attempt}/5)..."
+
+                  )
+
+
+                  response = session.get(
+
+                      categories_url,
+
+                      timeout=(30, 300)
+
+                  )
+
+
+                  response.raise_for_status()
+
+
+                  categories = response.json()
+
+
+                  break
+
+
+              except Exception as e:
+
+
+                  print(e)
+
+
+                  time.sleep(10)
+
+
+          if categories is None:
+
+              raise SystemExit(
+
+                  "Provider group download failed"
+
+              )
+
 
           if not isinstance(categories, list):
-              print("Unexpected provider response:")
+
+              print(
+
+                  "Unexpected provider response:"
+
+              )
+
+
               print(categories)
+
+
               raise SystemExit(1)
+
+
+          print("")
+
+          print(
+
+              f"Provider groups: "
+
+              f"{len(categories)}"
+
+          )
+
+
+          # ---------------------------------
+          # Match CA / UK / US groups
+          # ---------------------------------
 
           matched_categories = []
 
+
           for category in categories:
 
-              category_name = str(
-                  category.get("category_name", "")
-              ).strip()
 
               category_id = str(
-                  category.get("category_id", "")
+
+                  category.get(
+
+                      "category_id",
+
+                      ""
+
+                  )
+
               ).strip()
+
+
+              category_name = str(
+
+                  category.get(
+
+                      "category_name",
+
+                      ""
+
+                  )
+
+              ).strip()
+
+
+              if not category_id or not category_name:
+
+                  continue
+
 
               name_upper = category_name.upper()
 
+
+              # Match country prefixes or names
+
               if (
-                  "CA" in name_upper
-                  or "UK" in name_upper
-                  or "US" in name_upper
+
+                  re.search(
+
+                      r"(^|[^A-Z])CA([^A-Z]|$)",
+
+                      name_upper
+
+                  )
+
+                  or re.search(
+
+                      r"(^|[^A-Z])UK([^A-Z]|$)",
+
+                      name_upper
+
+                  )
+
+                  or re.search(
+
+                      r"(^|[^A-Z])US([^A-Z]|$)",
+
+                      name_upper
+
+                  )
+
+                  or "CANADA" in name_upper
+
+                  or "UNITED KINGDOM" in name_upper
+
+                  or "UNITED STATES" in name_upper
+
               ):
 
-                  matched_categories.append({
-                      "category_id": category_id,
-                      "category_name": category_name
-                  })
+
+                  matched_categories.append(
+
+                      {
+
+                          "category_id":
+
+                          category_id,
+
+
+                          "category_name":
+
+                          category_name
+
+                      }
+
+                  )
+
 
           matched_categories.sort(
-              key=lambda item: (
+
+              key=lambda item:
+
+              (
+
                   item["category_name"].upper(),
+
                   item["category_id"]
+
               )
+
           )
 
+
+          # ---------------------------------
+          # Write output
+          # ---------------------------------
+
           with open(
+
               "matcheverychannel.txt",
+
               "w",
+
               encoding="utf-8"
+
           ) as file:
 
+
               file.write(
+
                   "MATCHED PROVIDER CHANNEL GROUPS\n"
+
               )
 
+
               file.write(
+
                   "================================\n\n"
+
               )
 
+
               file.write(
-                  "Groups matching CA, UK, or US:\n\n"
+
+                  "CA / UK / US GROUPS\n"
+
               )
+
+
+              file.write(
+
+                  "==================\n\n"
+
+              )
+
 
               for category in matched_categories:
 
+
                   file.write(
+
                       f'[{category["category_id"]}] '
+
                       f'{category["category_name"]}\n'
+
                   )
 
-          print()
-          print(
-              f"Total provider categories found: "
-              f"{len(categories)}"
-          )
+
+          print("")
 
           print(
-              f"Matched CA / UK / US categories: "
+
+              f"Matched CA / UK / US groups: "
+
               f"{len(matched_categories)}"
+
           )
 
-          print()
+
+          print("")
+
           print(
-              "Matched categories:"
+
+              "Matched groups:"
+
           )
+
 
           for category in matched_categories:
 
+
               print(
+
                   f'[{category["category_id"]}] '
+
                   f'{category["category_name"]}'
+
               )
 
-          print()
+
+          print("")
+
           print(
+
               "Created matcheverychannel.txt"
+
           )
 
           PY
