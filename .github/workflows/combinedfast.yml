@@ -59,9 +59,20 @@ jobs:
           TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
         run: |
           cat > /tmp/build_combinedfast.js <<'EOF'
-          const fs = require('fs')
-          const readline = require('readline')
-          const zlib = require('zlib')
+          const fs =
+            require(
+              'fs'
+            )
+
+          const readline =
+            require(
+              'readline'
+            )
+
+          const zlib =
+            require(
+              'zlib'
+            )
 
           const inputJessman =
             'combinedfast/source/jessman.xml'
@@ -98,31 +109,53 @@ jobs:
           /*
            * ============================================================
            * CHANNEL DEFINITIONS
+           *
+           * Jessman is matched by the actual Jessman channel ID.
+           *
+           * IPTV-org is matched by the actual IPTV-org channel ID.
+           *
+           * The canonicalChannel value is used only for cross-source
+           * matching and reporting.
            * ============================================================
            */
 
           const jessmanChannels = {
-            'MGM Presents': {
+            'MGMPresents(MGMPRES).us': {
+              canonicalChannel:
+                'MGM Presents',
+
               displayName:
                 'MGM Presents 2'
             },
 
-            'Scares by Shudder': {
+            'ScaresbyShudder(SBSHUDD).us': {
+              canonicalChannel:
+                'Scares by Shudder',
+
               displayName:
                 'Scares by Shudder 2'
             },
 
-            'Screambox TV': {
+            'ScreamboxTV(SBOXTV).us': {
+              canonicalChannel:
+                'Screambox TV',
+
               displayName:
                 'Screambox TV 2'
             },
 
-            'Universal Monsters': {
+            'UniversalMonsters(UNIMON).us': {
+              canonicalChannel:
+                'Universal Monsters',
+
               displayName:
                 'Universal Monsters 2'
             },
 
-            'Miramax Movie Channel': {
+            'MiramaxMovieChannel(MMC).us': {
+              canonicalChannel:
+                'Miramax Movie Channel',
+
               displayName:
                 'Miramax Movie Channel 2'
             }
@@ -130,36 +163,57 @@ jobs:
 
           const iptvOrgChannels = {
             'MGMPresents.us': {
+              canonicalChannel:
+                'MGM Presents',
+
               displayName:
                 'MGM Presents'
             },
 
             'MGMPresentsAction.us': {
+              canonicalChannel:
+                'MGM Presents Action',
+
               displayName:
                 'MGM Presents Action'
             },
 
             'MGMPresentsHorror.us': {
+              canonicalChannel:
+                'MGM Presents Horror',
+
               displayName:
                 'MGM Presents Horror'
             },
 
             'ScaresbyShudder.us': {
+              canonicalChannel:
+                'Scares by Shudder',
+
               displayName:
                 'Scares by Shudder'
             },
 
             'ScreamboxTV.us': {
+              canonicalChannel:
+                'Screambox TV',
+
               displayName:
                 'Screambox TV'
             },
 
             'UniversalMonsters.pluto': {
+              canonicalChannel:
+                'Universal Monsters',
+
               displayName:
                 'Universal Monsters'
             },
 
             'MiramaxMovieChannel.us': {
+              canonicalChannel:
+                'Miramax Movie Channel',
+
               displayName:
                 'Miramax Movie Channel'
             }
@@ -178,11 +232,124 @@ jobs:
            * ============================================================
            */
 
-          const jessmanProgrammes = []
-          const iptvOrgProgrammes = []
+          const jessmanProgrammes =
+            []
 
-          const jessmanChannelsFound = new Map()
-          const iptvOrgChannelsFound = new Map()
+          const iptvOrgProgrammes =
+            []
+
+          const jessmanChannelsFound =
+            new Map()
+
+          const iptvOrgChannelsFound =
+            new Map()
+
+          /*
+           * ============================================================
+           * PER-CHANNEL TALLY
+           * ============================================================
+           */
+
+          const jessmanChannelStats =
+            new Map()
+
+          const iptvOrgChannelStats =
+            new Map()
+
+          function createChannelStats(
+            source,
+            id,
+            canonicalChannel,
+            displayName
+          ) {
+            return {
+              source,
+
+              id,
+
+              canonicalChannel,
+
+              displayName,
+
+              found:
+                false,
+
+              programmesScanned:
+                0,
+
+              programmesSkipped:
+                0,
+
+              programmesRetained:
+                0,
+
+              descriptionsChanged:
+                0,
+
+              actorsRemoved:
+                0,
+
+              creditsRemoved:
+                0,
+
+              episodeNumbersConverted:
+                0,
+
+              originalAirDatesUsed:
+                0,
+
+              fieldsFilledFromOtherSource:
+                0,
+
+              tvmazeFieldsUsed:
+                0,
+
+              tmdbFieldsUsed:
+                0
+            }
+          }
+
+          for (
+            const [
+              id,
+              channel
+            ]
+            of
+            Object.entries(
+              jessmanChannels
+            )
+          ) {
+            jessmanChannelStats.set(
+              id,
+              createChannelStats(
+                'Jessman',
+                id,
+                channel.canonicalChannel,
+                channel.displayName
+              )
+            )
+          }
+
+          for (
+            const [
+              id,
+              channel
+            ]
+            of
+            Object.entries(
+              iptvOrgChannels
+            )
+          ) {
+            iptvOrgChannelStats.set(
+              id,
+              createChannelStats(
+                'IPTV-org',
+                id,
+                channel.canonicalChannel,
+                channel.displayName
+              )
+            )
+          }
 
           /*
            * ============================================================
@@ -190,37 +357,68 @@ jobs:
            * ============================================================
            */
 
-          let jessmanProgrammesScanned = 0
-          let iptvOrgProgrammesScanned = 0
+          let jessmanProgrammesScanned =
+            0
 
-          let jessmanProgrammesSkipped = 0
-          let iptvOrgProgrammesSkipped = 0
+          let iptvOrgProgrammesScanned =
+            0
 
-          let jessmanDescriptionsChanged = 0
-          let iptvOrgDescriptionsChanged = 0
+          let jessmanProgrammesSkipped =
+            0
 
-          let jessmanActorsRemoved = 0
-          let iptvOrgActorsRemoved = 0
+          let iptvOrgProgrammesSkipped =
+            0
 
-          let jessmanCreditsRemoved = 0
-          let iptvOrgCreditsRemoved = 0
+          let jessmanDescriptionsChanged =
+            0
 
-          let jessmanEpisodeNumbersConverted = 0
-          let iptvOrgEpisodeNumbersConverted = 0
+          let iptvOrgDescriptionsChanged =
+            0
 
-          let jessmanOriginalAirDatesUsed = 0
-          let iptvOrgOriginalAirDatesUsed = 0
+          let jessmanActorsRemoved =
+            0
 
-          let jessmanFieldsFilledFromIptv = 0
-          let iptvFieldsFilledFromJessman = 0
+          let iptvOrgActorsRemoved =
+            0
 
-          let tvmazeMatches = 0
-          let tvmazeFieldsUsed = 0
+          let jessmanCreditsRemoved =
+            0
 
-          let tmdbMatches = 0
-          let tmdbFieldsUsed = 0
+          let iptvOrgCreditsRemoved =
+            0
 
-          let totalFieldsFilled = 0
+          let jessmanEpisodeNumbersConverted =
+            0
+
+          let iptvOrgEpisodeNumbersConverted =
+            0
+
+          let jessmanOriginalAirDatesUsed =
+            0
+
+          let iptvOrgOriginalAirDatesUsed =
+            0
+
+          let jessmanFieldsFilledFromIptv =
+            0
+
+          let iptvFieldsFilledFromJessman =
+            0
+
+          let tvmazeMatches =
+            0
+
+          let tvmazeFieldsUsed =
+            0
+
+          let tmdbMatches =
+            0
+
+          let tmdbFieldsUsed =
+            0
+
+          let totalFieldsFilled =
+            0
 
           /*
            * ============================================================
@@ -298,19 +496,6 @@ jobs:
                 ' '
               )
               .trim()
-          }
-
-          function normalizeChannelName(
-            value
-          ) {
-            return cleanSpaces(
-              value
-            )
-              .toLowerCase()
-              .replace(
-                /[^a-z0-9]+/g,
-                ''
-              )
           }
 
           function normalizeTitle(
@@ -918,7 +1103,8 @@ jobs:
 
           function cleanProgrammeBlock(
             block,
-            source
+            source,
+            channelId
           ) {
             const originalDescription =
               getTag(
@@ -949,6 +1135,16 @@ jobs:
                 airDate
               )
 
+            const stats =
+              source ===
+              'jessman'
+                ? jessmanChannelStats.get(
+                    channelId
+                  )
+                : iptvOrgChannelStats.get(
+                    channelId
+                  )
+
             if (
               description !==
               originalDescription
@@ -960,6 +1156,12 @@ jobs:
                 jessmanDescriptionsChanged++
               } else {
                 iptvOrgDescriptionsChanged++
+              }
+
+              if (
+                stats
+              ) {
+                stats.descriptionsChanged++
               }
             }
 
@@ -976,6 +1178,12 @@ jobs:
               } else {
                 iptvOrgActorsRemoved++
               }
+
+              if (
+                stats
+              ) {
+                stats.actorsRemoved++
+              }
             }
 
             if (
@@ -990,6 +1198,12 @@ jobs:
                 jessmanCreditsRemoved++
               } else {
                 iptvOrgCreditsRemoved++
+              }
+
+              if (
+                stats
+              ) {
+                stats.creditsRemoved++
               }
             }
 
@@ -1114,7 +1328,8 @@ jobs:
               ''
 
             for await (
-              const line of rl
+              const line of
+              rl
             ) {
               if (
                 !insideChannel &&
@@ -1239,6 +1454,10 @@ jobs:
           /*
            * ============================================================
            * LOAD JESSMAN
+           *
+           * IMPORTANT:
+           * Jessman channels are matched by their actual channel IDs.
+           * Display names are not used to locate the channel.
            * ============================================================
            */
 
@@ -1265,54 +1484,32 @@ jobs:
                       'id'
                     )
 
-                  const displayNames =
-                    getAllTags(
-                      block,
-                      'display-name'
-                    )
-
-                  const normalizedNames =
-                    displayNames.map(
-                      normalizeChannelName
-                    )
-
-                  let matchedName =
-                    ''
-
-                  for (
-                    const targetName of
-                    Object.keys(
-                      jessmanChannels
-                    )
-                  ) {
-                    if (
-                      normalizedNames.includes(
-                        normalizeChannelName(
-                          targetName
-                        )
-                      )
-                    ) {
-                      matchedName =
-                        targetName
-
-                      break
-                    }
-                  }
+                  const configured =
+                    jessmanChannels[
+                      id
+                    ]
 
                   if (
-                    !matchedName
+                    !configured
                   ) {
                     return
                   }
 
-                  const configured =
-                    jessmanChannels[
-                      matchedName
-                    ]
+                  const stats =
+                    jessmanChannelStats.get(
+                      id
+                    )
+
+                  if (
+                    stats
+                  ) {
+                    stats.found =
+                      true
+                  }
 
                   jessmanIdToName.set(
                     id,
-                    matchedName
+                    configured.canonicalChannel
                   )
 
                   let outputChannel =
@@ -1329,12 +1526,12 @@ jobs:
                     )
 
                   jessmanChannelsFound.set(
-                    matchedName,
+                    configured.canonicalChannel,
                     {
                       id,
 
                       canonicalChannel:
-                        matchedName,
+                        configured.canonicalChannel,
 
                       displayName:
                         configured.displayName,
@@ -1366,6 +1563,17 @@ jobs:
 
                 jessmanProgrammesScanned++
 
+                const stats =
+                  jessmanChannelStats.get(
+                    channel
+                  )
+
+                if (
+                  stats
+                ) {
+                  stats.programmesScanned++
+                }
+
                 const start =
                   getAttribute(
                     block,
@@ -1386,13 +1594,20 @@ jobs:
                 ) {
                   jessmanProgrammesSkipped++
 
+                  if (
+                    stats
+                  ) {
+                    stats.programmesSkipped++
+                  }
+
                   return
                 }
 
                 const cleaned =
                   cleanProgrammeBlock(
                     block,
-                    'jessman'
+                    'jessman',
+                    channel
                   )
 
                 jessmanProgrammes.push(
@@ -1434,6 +1649,12 @@ jobs:
                       cleaned.block
                   }
                 )
+
+                if (
+                  stats
+                ) {
+                  stats.programmesRetained++
+                }
               }
             )
           }
@@ -1474,14 +1695,28 @@ jobs:
                       'id'
                     )
 
+                  const configured =
+                    iptvOrgChannels[
+                      id
+                    ]
+
                   if (
-                    !iptvOrgChannels[id]
+                    !configured
                   ) {
                     return
                   }
 
-                  const channel =
-                    iptvOrgChannels[id]
+                  const stats =
+                    iptvOrgChannelStats.get(
+                      id
+                    )
+
+                  if (
+                    stats
+                  ) {
+                    stats.found =
+                      true
+                  }
 
                   iptvOrgChannelsFound.set(
                     id,
@@ -1489,10 +1724,10 @@ jobs:
                       id,
 
                       canonicalChannel:
-                        channel.displayName,
+                        configured.canonicalChannel,
 
                       displayName:
-                        channel.displayName,
+                        configured.displayName,
 
                       block
                     }
@@ -1507,18 +1742,32 @@ jobs:
                     'channel'
                   )
 
+                const configured =
+                  iptvOrgChannels[
+                    channel
+                  ]
+
                 if (
-                  !iptvOrgChannels[channel]
+                  !configured
                 ) {
                   return
                 }
 
                 iptvOrgProgrammesScanned++
 
-                const canonicalChannel =
-                  iptvOrgChannels[
+                const stats =
+                  iptvOrgChannelStats.get(
                     channel
-                  ].displayName
+                  )
+
+                if (
+                  stats
+                ) {
+                  stats.programmesScanned++
+                }
+
+                const canonicalChannel =
+                  configured.canonicalChannel
 
                 const start =
                   getAttribute(
@@ -1540,13 +1789,20 @@ jobs:
                 ) {
                   iptvOrgProgrammesSkipped++
 
+                  if (
+                    stats
+                  ) {
+                    stats.programmesSkipped++
+                  }
+
                   return
                 }
 
                 const cleaned =
                   cleanProgrammeBlock(
                     block,
-                    'iptvorg'
+                    'iptvorg',
+                    channel
                   )
 
                 iptvOrgProgrammes.push(
@@ -1588,6 +1844,12 @@ jobs:
                       cleaned.block
                   }
                 )
+
+                if (
+                  stats
+                ) {
+                  stats.programmesRetained++
+                }
               }
             )
           }
@@ -1721,8 +1983,30 @@ jobs:
                 'jessman'
               ) {
                 jessmanFieldsFilledFromIptv++
+
+                const stats =
+                  jessmanChannelStats.get(
+                    target.channel
+                  )
+
+                if (
+                  stats
+                ) {
+                  stats.fieldsFilledFromOtherSource++
+                }
               } else {
                 iptvFieldsFilledFromJessman++
+
+                const stats =
+                  iptvOrgChannelStats.get(
+                    target.channel
+                  )
+
+                if (
+                  stats
+                ) {
+                  stats.fieldsFilledFromOtherSource++
+                }
               }
             }
 
@@ -2018,6 +2302,22 @@ jobs:
               tvmazeFieldsUsed++
               totalFieldsFilled++
 
+              const stats =
+                programme.source ===
+                'jessman'
+                  ? jessmanChannelStats.get(
+                      programme.channel
+                    )
+                  : iptvOrgChannelStats.get(
+                      programme.channel
+                    )
+
+              if (
+                stats
+              ) {
+                stats.tvmazeFieldsUsed++
+              }
+
               used =
                 true
             }
@@ -2037,6 +2337,22 @@ jobs:
 
               tvmazeFieldsUsed++
               totalFieldsFilled++
+
+              const stats =
+                programme.source ===
+                'jessman'
+                  ? jessmanChannelStats.get(
+                      programme.channel
+                    )
+                  : iptvOrgChannelStats.get(
+                      programme.channel
+                    )
+
+              if (
+                stats
+              ) {
+                stats.tvmazeFieldsUsed++
+              }
 
               used =
                 true
@@ -2059,6 +2375,22 @@ jobs:
               tvmazeFieldsUsed++
               totalFieldsFilled++
 
+              const stats =
+                programme.source ===
+                'jessman'
+                  ? jessmanChannelStats.get(
+                      programme.channel
+                    )
+                  : iptvOrgChannelStats.get(
+                      programme.channel
+                    )
+
+              if (
+                stats
+              ) {
+                stats.tvmazeFieldsUsed++
+              }
+
               used =
                 true
             }
@@ -2077,6 +2409,22 @@ jobs:
               ) {
                 tvmazeFieldsUsed++
                 totalFieldsFilled++
+
+                const stats =
+                  programme.source ===
+                  'jessman'
+                    ? jessmanChannelStats.get(
+                        programme.channel
+                      )
+                    : iptvOrgChannelStats.get(
+                        programme.channel
+                      )
+
+                if (
+                  stats
+                ) {
+                  stats.tvmazeFieldsUsed++
+                }
 
                 used =
                   true
@@ -2185,6 +2533,22 @@ jobs:
               tmdbFieldsUsed++
               totalFieldsFilled++
 
+              const stats =
+                programme.source ===
+                'jessman'
+                  ? jessmanChannelStats.get(
+                      programme.channel
+                    )
+                  : iptvOrgChannelStats.get(
+                      programme.channel
+                    )
+
+              if (
+                stats
+              ) {
+                stats.tmdbFieldsUsed++
+              }
+
               used =
                 true
             }
@@ -2200,6 +2564,22 @@ jobs:
 
               tmdbFieldsUsed++
               totalFieldsFilled++
+
+              const stats =
+                programme.source ===
+                'jessman'
+                  ? jessmanChannelStats.get(
+                      programme.channel
+                    )
+                  : iptvOrgChannelStats.get(
+                      programme.channel
+                    )
+
+              if (
+                stats
+              ) {
+                stats.tmdbFieldsUsed++
+              }
 
               used =
                 true
@@ -2245,9 +2625,6 @@ jobs:
           /*
            * ============================================================
            * FINAL OUTPUT
-           *
-           * The description is cleaned one final time immediately before
-           * being written into the newly rebuilt guide.
            * ============================================================
            */
 
@@ -2443,6 +2820,103 @@ jobs:
 
           /*
            * ============================================================
+           * TALLY OUTPUT
+           * ============================================================
+           */
+
+          function printChannelStats(
+            statsMap
+          ) {
+            for (
+              const stats of
+              statsMap.values()
+            ) {
+              console.log(
+                ''
+              )
+
+              console.log(
+                stats.canonicalChannel
+              )
+
+              console.log(
+                '  Source ID: ' +
+                stats.id
+              )
+
+              console.log(
+                '  Output display name: ' +
+                stats.displayName
+              )
+
+              console.log(
+                '  Channel found: ' +
+                (
+                  stats.found
+                    ? 'YES'
+                    : 'NO'
+                )
+              )
+
+              console.log(
+                '  Programmes scanned: ' +
+                stats.programmesScanned
+              )
+
+              console.log(
+                '  Programmes skipped: ' +
+                stats.programmesSkipped
+              )
+
+              console.log(
+                '  Programmes retained: ' +
+                stats.programmesRetained
+              )
+
+              console.log(
+                '  Descriptions changed: ' +
+                stats.descriptionsChanged
+              )
+
+              console.log(
+                '  Actors removed: ' +
+                stats.actorsRemoved
+              )
+
+              console.log(
+                '  Credits removed: ' +
+                stats.creditsRemoved
+              )
+
+              console.log(
+                '  Episode numbers converted: ' +
+                stats.episodeNumbersConverted
+              )
+
+              console.log(
+                '  Original air dates used: ' +
+                stats.originalAirDatesUsed
+              )
+
+              console.log(
+                '  Fields filled from other source: ' +
+                stats.fieldsFilledFromOtherSource
+              )
+
+              console.log(
+                '  TVMaze fields used: ' +
+                stats.tvmazeFieldsUsed
+              )
+
+              console.log(
+                '  TMDB fields used: ' +
+                stats.tmdbFieldsUsed
+              )
+            }
+          }
+
+          /*
+           * ============================================================
            * MAIN
            * ============================================================
            */
@@ -2459,11 +2933,63 @@ jobs:
             await writeOutput()
 
             console.log(
+              ''
+            )
+
+            console.log(
               '========================================'
             )
 
             console.log(
               'COMBINED FAST PROCESSING COMPLETE'
+            )
+
+            console.log(
+              '========================================'
+            )
+
+            console.log(
+              ''
+            )
+
+            console.log(
+              'JESSMAN CHANNEL RESULTS'
+            )
+
+            console.log(
+              '========================================'
+            )
+
+            printChannelStats(
+              jessmanChannelStats
+            )
+
+            console.log(
+              ''
+            )
+
+            console.log(
+              'IPTV-ORG CHANNEL RESULTS'
+            )
+
+            console.log(
+              '========================================'
+            )
+
+            printChannelStats(
+              iptvOrgChannelStats
+            )
+
+            console.log(
+              ''
+            )
+
+            console.log(
+              '========================================'
+            )
+
+            console.log(
+              'OVERALL PROCESSING SUMMARY'
             )
 
             console.log(
@@ -2486,6 +3012,40 @@ jobs:
             )
 
             console.log(
+              'Jessman descriptions changed: ' +
+              jessmanDescriptionsChanged
+            )
+
+            console.log(
+              'Jessman actors removed: ' +
+              jessmanActorsRemoved
+            )
+
+            console.log(
+              'Jessman credits removed: ' +
+              jessmanCreditsRemoved
+            )
+
+            console.log(
+              'Jessman episode numbers converted: ' +
+              jessmanEpisodeNumbersConverted
+            )
+
+            console.log(
+              'Jessman original air dates used: ' +
+              jessmanOriginalAirDatesUsed
+            )
+
+            console.log(
+              'Jessman fields filled from IPTV-org: ' +
+              jessmanFieldsFilledFromIptv
+            )
+
+            console.log(
+              ''
+            )
+
+            console.log(
               'IPTV-org programmes scanned: ' +
               iptvOrgProgrammesScanned
             )
@@ -2501,13 +3061,37 @@ jobs:
             )
 
             console.log(
-              'Jessman fields filled from IPTV-org: ' +
-              jessmanFieldsFilledFromIptv
+              'IPTV-org descriptions changed: ' +
+              iptvOrgDescriptionsChanged
+            )
+
+            console.log(
+              'IPTV-org actors removed: ' +
+              iptvOrgActorsRemoved
+            )
+
+            console.log(
+              'IPTV-org credits removed: ' +
+              iptvOrgCreditsRemoved
+            )
+
+            console.log(
+              'IPTV-org episode numbers converted: ' +
+              iptvOrgEpisodeNumbersConverted
+            )
+
+            console.log(
+              'IPTV-org original air dates used: ' +
+              iptvOrgOriginalAirDatesUsed
             )
 
             console.log(
               'IPTV-org fields filled from Jessman: ' +
               iptvFieldsFilledFromJessman
+            )
+
+            console.log(
+              ''
             )
 
             console.log(
@@ -2533,6 +3117,10 @@ jobs:
             console.log(
               'Total fields filled: ' +
               totalFieldsFilled
+            )
+
+            console.log(
+              ''
             )
 
             console.log(
