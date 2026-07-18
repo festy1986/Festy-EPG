@@ -1,0 +1,212 @@
+name: Match Every Channel
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  match-every-channel:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify provider credentials
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
+        run: |
+
+          echo "Provider credentials loaded"
+
+          if [ -z "$XTREAM_URL" ]; then
+
+            echo "XTREAM_URL missing"
+
+            exit 1
+
+          fi
+
+          if [ -z "$XTREAM_USERNAME" ]; then
+
+            echo "XTREAM_USERNAME missing"
+
+            exit 1
+
+          fi
+
+          if [ -z "$XTREAM_PASSWORD" ]; then
+
+            echo "XTREAM_PASSWORD missing"
+
+            exit 1
+
+          fi
+
+          echo "XTREAM_URL exists"
+
+          echo "XTREAM_USERNAME exists"
+
+          echo "XTREAM_PASSWORD exists"
+
+      - name: Install Python requirements
+        run: |
+
+          python -m pip install requests
+
+      - name: Generate matched channel groups
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
+        run: |
+
+          python - <<'PY'
+
+          import os
+          import requests
+          from urllib.parse import urljoin
+
+          xtream_url = os.environ["XTREAM_URL"].strip()
+          username = os.environ["XTREAM_USERNAME"]
+          password = os.environ["XTREAM_PASSWORD"]
+
+          if not xtream_url.endswith("/"):
+              xtream_url += "/"
+
+          api_url = urljoin(
+              xtream_url,
+              "player_api.php"
+          )
+
+          params = {
+              "username": username,
+              "password": password,
+              "action": "get_live_categories"
+          }
+
+          print("Connecting to provider...")
+          print(f"Provider URL: {xtream_url}")
+
+          response = requests.get(
+              api_url,
+              params=params,
+              timeout=60
+          )
+
+          response.raise_for_status()
+
+          categories = response.json()
+
+          if not isinstance(categories, list):
+              print("Unexpected provider response:")
+              print(categories)
+              raise SystemExit(1)
+
+          matched_categories = []
+
+          for category in categories:
+
+              category_name = str(
+                  category.get("category_name", "")
+              ).strip()
+
+              category_id = str(
+                  category.get("category_id", "")
+              ).strip()
+
+              name_upper = category_name.upper()
+
+              if (
+                  "CA" in name_upper
+                  or "UK" in name_upper
+                  or "US" in name_upper
+              ):
+
+                  matched_categories.append({
+                      "category_id": category_id,
+                      "category_name": category_name
+                  })
+
+          matched_categories.sort(
+              key=lambda item: (
+                  item["category_name"].upper(),
+                  item["category_id"]
+              )
+          )
+
+          with open(
+              "matcheverychannel.txt",
+              "w",
+              encoding="utf-8"
+          ) as file:
+
+              file.write(
+                  "MATCHED PROVIDER CHANNEL GROUPS\n"
+              )
+
+              file.write(
+                  "================================\n\n"
+              )
+
+              file.write(
+                  "Groups matching CA, UK, or US:\n\n"
+              )
+
+              for category in matched_categories:
+
+                  file.write(
+                      f'[{category["category_id"]}] '
+                      f'{category["category_name"]}\n'
+                  )
+
+          print()
+          print(
+              f"Total provider categories found: "
+              f"{len(categories)}"
+          )
+
+          print(
+              f"Matched CA / UK / US categories: "
+              f"{len(matched_categories)}"
+          )
+
+          print()
+          print(
+              "Matched categories:"
+          )
+
+          for category in matched_categories:
+
+              print(
+                  f'[{category["category_id"]}] '
+                  f'{category["category_name"]}'
+              )
+
+          print()
+          print(
+              "Created matcheverychannel.txt"
+          )
+
+          PY
+
+      - name: Commit and push matched groups
+        run: |
+
+          git config --global user.name "github-actions"
+
+          git config --global user.email "github-actions@github.com"
+
+          git add matcheverychannel.txt
+
+          git commit -m "Update matched provider channel groups" || echo "No changes"
+
+          git push
