@@ -17,7 +17,6 @@ jobs:
 build-combinedfast:
 runs-on: ubuntu-latest
 
-```
 steps:
   - name: Checkout repository
     uses: actions/checkout@v4
@@ -52,7 +51,7 @@ steps:
 
       test -s combinedfast/source/iptvorg.xml.gz
 
-      echo "Fresh IPTV-org guide downloaded"
+      echo "Fresh IPTV-org FAST guide downloaded"
       ls -lh combinedfast/source/iptvorg.xml.gz
 
   - name: Process selected channels and combine metadata
@@ -84,12 +83,6 @@ steps:
           1000
         )
 
-      /*
-       * SELECTED CHANNELS
-       *
-       * Jessman / FAST
-       */
-
       const jessmanChannels = {
         'MGMPresents(MGMPRES).us':
           'MGM Presents',
@@ -106,10 +99,6 @@ steps:
         'MiramaxMovieChannel(MMC).us':
           'Miramax Movie Channel'
       }
-
-      /*
-       * IPTV-org
-       */
 
       const iptvOrgChannels = {
         'MGMPresents.us':
@@ -595,9 +584,11 @@ steps:
           normalizeTitle(
             title
           ).toLowerCase(),
+
           cleanSpaces(
             episodeTitle
           ).toLowerCase(),
+
           normalizeEpisode(
             episodeNumber
           ).toLowerCase()
@@ -704,8 +695,7 @@ steps:
               title,
               episodeTitle,
               episodeNumber
-            ),
-          block
+            )
         }
       }
 
@@ -799,8 +789,7 @@ steps:
               title,
               episodeTitle,
               episodeNumber
-            ),
-          block
+            )
         }
       }
 
@@ -1457,18 +1446,23 @@ steps:
                     key,
                     {
                       ...existing,
+
                       episodeTitle:
                         existing.episodeTitle ||
                         programme.episodeTitle,
+
                       episodeNumber:
                         existing.episodeNumber ||
                         programme.episodeNumber,
+
                       airDate:
                         existing.airDate ||
                         programme.airDate,
+
                       description:
                         existing.description ||
                         programme.description,
+
                       icon:
                         existing.icon ||
                         programme.icon
