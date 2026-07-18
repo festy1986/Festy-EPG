@@ -1,4 +1,4 @@
-name: IPTV Org Guide Inspection
+name: IPTV Org Full Guide Inspection
 
 on:
   workflow_dispatch:
@@ -7,11 +7,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: iptvorg-inspection
+  group: iptvorg-full-inspection
   cancel-in-progress: false
 
 jobs:
-  download-guide:
+  download-full-guide:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,42 +20,39 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download IPTV-org EPG source
+      - name: Download complete IPTV-org guide
         shell: bash
         run: |
-          mkdir -p /tmp/iptvorg
+          mkdir -p guides
 
           curl -L --fail --retry 5 --retry-delay 10 \
             "https://iptv-epg.org/files/epg-us.xml.gz" \
-            -o "/tmp/iptvorg/source.xml.gz"
+            -o "guides/iptvorg-inspection.xml.gz"
 
-          test -s "/tmp/iptvorg/source.xml.gz"
+          test -s "guides/iptvorg-inspection.xml.gz"
 
-          echo "IPTV-org EPG source downloaded successfully"
+          echo "Complete IPTV-org guide downloaded"
 
-          ls -lh "/tmp/iptvorg/source.xml.gz"
+          ls -lh "guides/iptvorg-inspection.xml.gz"
 
-      - name: Decompress IPTV-org EPG
+      - name: Verify compressed guide
         shell: bash
         run: |
-          gzip -dc \
-            "/tmp/iptvorg/source.xml.gz" \
-            > "/tmp/iptvorg/source.xml"
+          gzip -t \
+            "guides/iptvorg-inspection.xml.gz"
 
-          test -s "/tmp/iptvorg/source.xml"
+          echo "GZIP validation passed"
 
-          echo "IPTV-org EPG decompressed successfully"
-
-          ls -lh "/tmp/iptvorg/source.xml"
-
-      - name: Validate complete IPTV-org EPG
+      - name: Inspect guide counts without creating an uncompressed file
         shell: bash
         run: |
-          CHANNELS=$(grep -c '<channel ' \
-            "/tmp/iptvorg/source.xml" || true)
+          CHANNELS=$(gzip -dc \
+            "guides/iptvorg-inspection.xml.gz" |
+            grep -c '<channel ' || true)
 
-          PROGRAMMES=$(grep -c '<programme ' \
-            "/tmp/iptvorg/source.xml" || true)
+          PROGRAMMES=$(gzip -dc \
+            "guides/iptvorg-inspection.xml.gz" |
+            grep -c '<programme ' || true)
 
           echo "IPTV-org channels: $CHANNELS"
           echo "IPTV-org programmes: $PROGRAMMES"
@@ -70,33 +67,30 @@ jobs:
             exit 1
           fi
 
-      - name: Compress complete IPTV-org guide
+      - name: Confirm only compressed guide is staged
         shell: bash
         run: |
-          mkdir -p guides
+          git add \
+            "guides/iptvorg-inspection.xml.gz"
 
-          gzip -c \
-            "/tmp/iptvorg/source.xml" \
-            > "guides/iptvorg-inspection.xml.gz"
+          git status --short
 
-          test -s "guides/iptvorg-inspection.xml.gz"
-
-          echo "Complete compressed IPTV-org guide created:"
-          ls -lh "guides/iptvorg-inspection.xml.gz"
+          if git diff --cached --name-only | grep -q \
+            "guides/iptvorg.xml"; then
+            echo "ERROR: Old uncompressed IPTV-org guide detected"
+            exit 1
+          fi
 
       - name: Commit complete IPTV-org guide
         shell: bash
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add \
-            "guides/iptvorg-inspection.xml.gz"
-
           if git diff --cached --quiet; then
             echo "No IPTV-org guide changes to commit"
             exit 0
           fi
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
           git commit \
             -m "Add complete IPTV-org guide for inspection"
