@@ -1,0 +1,465 @@
+name: IPTV Org
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 6 * * *'
+    - cron: '15 18 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: iptvorg
+  cancel-in-progress: false
+
+jobs:
+  build-iptvorg:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download IPTV-org source
+        shell: bash
+        run: |
+          mkdir -p iptvorg
+          mkdir -p guides
+
+          curl -L --fail --retry 5 --retry-delay 10 \
+            "https://iptv-epg.org/files/epg-us.xml.gz" \
+            -o "iptvorg/source.xml.gz"
+
+          test -s "iptvorg/source.xml.gz"
+
+          echo "IPTV-org source downloaded successfully"
+          ls -lh "iptvorg/source.xml.gz"
+
+      - name: Process IPTV-org guide
+        shell: bash
+        run: |
+          cat > /tmp/process_iptvorg.js <<'EOF'
+          const fs = require('fs')
+          const readline = require('readline')
+          const zlib = require('zlib')
+
+          const inputPath = 'iptvorg/source.xml.gz'
+          const outputPath = 'iptvorg/processed.xml'
+
+          const now = new Date()
+
+          const cutoff = new Date(
+            now.getTime() +
+            3 * 24 * 60 * 60 * 1000
+          )
+
+          let channelsScanned = 0
+          let programmesScanned = 0
+          let programmesKept = 0
+          let programmesSkipped = 0
+
+          function getStart(block) {
+            const match = block.match(
+              /<programme\b[^>]*\bstart="([^"]+)"/i
+            )
+
+            return match
+              ? match[1]
+              : ''
+          }
+
+          function parseXmltvDate(value) {
+            const match = String(value || '').match(
+              /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/
+            )
+
+            if (!match) {
+              return null
+            }
+
+            return new Date(
+              Date.UTC(
+                Number(match[1]),
+                Number(match[2]) - 1,
+                Number(match[3]),
+                Number(match[4]),
+                Number(match[5]),
+                Number(match[6])
+              )
+            )
+          }
+
+          async function main() {
+            const input = fs.createReadStream(
+              inputPath
+            )
+
+            const gunzip = zlib.createGunzip()
+
+            input.pipe(gunzip)
+
+            const rl = readline.createInterface({
+              input: gunzip,
+              crlfDelay: Infinity
+            })
+
+            const output = fs.createWriteStream(
+              outputPath,
+              {
+                encoding: 'utf8'
+              }
+            )
+
+            let insideChannel = false
+            let channelBuffer = ''
+
+            let insideProgramme = false
+            let programmeBuffer = ''
+
+            function write(value) {
+              return new Promise(
+                (
+                  resolve,
+                  reject
+                ) => {
+                  if (
+                    output.write(
+                      value
+                    )
+                  ) {
+                    resolve()
+                  } else {
+                    output.once(
+                      'drain',
+                      resolve
+                    )
+
+                    output.once(
+                      'error',
+                      reject
+                    )
+                  }
+                }
+              )
+            }
+
+            for await (
+              const line of rl
+            ) {
+              if (
+                insideChannel
+              ) {
+                channelBuffer +=
+                  line +
+                  '\n'
+
+                if (
+                  line.includes(
+                    '</channel>'
+                  )
+                ) {
+                  insideChannel = false
+
+                  channelsScanned++
+
+                  await write(
+                    channelBuffer
+                  )
+
+                  channelBuffer = ''
+                }
+
+                continue
+              }
+
+              if (
+                insideProgramme
+              ) {
+                programmeBuffer +=
+                  line +
+                  '\n'
+
+                if (
+                  line.includes(
+                    '</programme>'
+                  )
+                ) {
+                  insideProgramme = false
+
+                  programmesScanned++
+
+                  const start =
+                    getStart(
+                      programmeBuffer
+                    )
+
+                  const startDate =
+                    parseXmltvDate(
+                      start
+                    )
+
+                  if (
+                    startDate &&
+                    startDate >= now &&
+                    startDate < cutoff
+                  ) {
+                    programmesKept++
+
+                    await write(
+                      programmeBuffer
+                    )
+                  } else {
+                    programmesSkipped++
+                  }
+
+                  programmeBuffer = ''
+                }
+
+                continue
+              }
+
+              if (
+                line.includes(
+                  '<channel '
+                )
+              ) {
+                insideChannel = true
+
+                channelBuffer =
+                  line +
+                  '\n'
+
+                if (
+                  line.includes(
+                    '</channel>'
+                  )
+                ) {
+                  insideChannel = false
+
+                  channelsScanned++
+
+                  await write(
+                    channelBuffer
+                  )
+
+                  channelBuffer = ''
+                }
+
+                continue
+              }
+
+              if (
+                line.includes(
+                  '<programme '
+                )
+              ) {
+                insideProgramme = true
+
+                programmeBuffer =
+                  line +
+                  '\n'
+
+                if (
+                  line.includes(
+                    '</programme>'
+                  )
+                ) {
+                  insideProgramme = false
+
+                  programmesScanned++
+
+                  const start =
+                    getStart(
+                      programmeBuffer
+                    )
+
+                  const startDate =
+                    parseXmltvDate(
+                      start
+                    )
+
+                  if (
+                    startDate &&
+                    startDate >= now &&
+                    startDate < cutoff
+                  ) {
+                    programmesKept++
+
+                    await write(
+                      programmeBuffer
+                    )
+                  } else {
+                    programmesSkipped++
+                  }
+
+                  programmeBuffer = ''
+                }
+
+                continue
+              }
+
+              await write(
+                line +
+                '\n'
+              )
+            }
+
+            await new Promise(
+              (
+                resolve,
+                reject
+              ) => {
+                output.once(
+                  'error',
+                  reject
+                )
+
+                output.end(
+                  resolve
+                )
+              }
+            )
+
+            console.log(
+              'IPTV-org processing complete'
+            )
+
+            console.log(
+              'Channels scanned: ' +
+              channelsScanned
+            )
+
+            console.log(
+              'Programmes scanned: ' +
+              programmesScanned
+            )
+
+            console.log(
+              'Programmes kept: ' +
+              programmesKept
+            )
+
+            console.log(
+              'Programmes skipped: ' +
+              programmesSkipped
+            )
+
+            console.log(
+              'Output: ' +
+              outputPath
+            )
+          }
+
+          main().catch(
+            error => {
+              console.error(
+                error
+              )
+
+              process.exit(
+                1
+              )
+            }
+          )
+          EOF
+
+          node /tmp/process_iptvorg.js
+
+      - name: Validate processed IPTV-org guide
+        shell: bash
+        run: |
+          CHANNELS=$(
+            grep -c '<channel ' \
+            "iptvorg/processed.xml" || true
+          )
+
+          PROGRAMMES=$(
+            grep -c '<programme ' \
+            "iptvorg/processed.xml" || true
+          )
+
+          echo "Processed IPTV-org channels: $CHANNELS"
+          echo "Processed IPTV-org programmes: $PROGRAMMES"
+
+          if [ "$CHANNELS" -lt 1 ]; then
+            echo "Processed IPTV-org guide contains no channels"
+            exit 1
+          fi
+
+          if [ "$PROGRAMMES" -lt 1 ]; then
+            echo "Processed IPTV-org guide contains no programmes"
+            exit 1
+          fi
+
+          test -s "iptvorg/processed.xml"
+
+      - name: Compress IPTV-org guide
+        shell: bash
+        run: |
+          gzip -c \
+            "iptvorg/processed.xml" \
+            > "guides/iptvorg.xml.gz"
+
+          test -s "guides/iptvorg.xml.gz"
+
+          echo "Processed XML size:"
+          ls -lh "iptvorg/processed.xml"
+
+          echo "Compressed guide size:"
+          ls -lh "guides/iptvorg.xml.gz"
+
+      - name: Verify guide is below GitHub file limit
+        shell: bash
+        run: |
+          SIZE=$(stat -c%s "guides/iptvorg.xml.gz")
+
+          echo "Compressed guide size in bytes: $SIZE"
+
+          if [ "$SIZE" -ge 100000000 ]; then
+            echo "ERROR: Compressed guide is 100 MB or larger"
+            exit 1
+          fi
+
+          echo "Compressed guide is below GitHub's 100 MB file limit"
+
+      - name: Commit and push IPTV-org guide
+        shell: bash
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add "guides/iptvorg.xml.gz"
+
+          if git diff --cached --quiet; then
+            echo "No IPTV-org guide changes to commit"
+            exit 0
+          fi
+
+          git commit \
+            -m "Update IPTV-org guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed. Synchronizing with remote before retry..."
+
+            git fetch origin main
+
+            git rebase origin/main
+
+            echo "Waiting before retry..."
+
+            sleep 10
+          done
+
+          echo "Push failed after all retries"
+
+          exit 1
