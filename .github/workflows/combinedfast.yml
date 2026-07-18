@@ -324,6 +324,91 @@ jobs:
               .trim()
           }
 
+          function removeEmbeddedCredits(
+            value
+          ) {
+            let result =
+              cleanSpaces(
+                value
+              )
+
+            const protectedDates =
+              []
+
+            result =
+              result.replace(
+                /\(\d{2}\/\d{2}\/\d{4}\)/g,
+                match => {
+                  const token =
+                    '__AIRDATE_' +
+                    protectedDates.length +
+                    '__'
+
+                  protectedDates.push(
+                    match
+                  )
+
+                  return token
+                }
+              )
+
+            result =
+              result.replace(
+                /\([^()]*\)/g,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+[A-Z][A-Za-z.'-]*(?:\s*,\s*[A-Z][A-Za-z.'-]*)*(?:\s+(?:and|&)\s+[A-Z][A-Za-z.'-]*)\s+(?:star|stars|starring)\.?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+(?:with|featuring|featuring performances by|with performances by)\s+[^.!?]*[.!?]?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+\*+\s*$/g,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s+\.\s*$/g,
+                ''
+              )
+
+            result =
+              result.replace(
+                /\s{2,}/g,
+                ' '
+              )
+                .trim()
+
+            result =
+              result.replace(
+                /__AIRDATE_(\d+)__/g,
+                (
+                  match,
+                  index
+                ) =>
+                  protectedDates[
+                    Number(
+                      index
+                    )
+                  ] ||
+                  ''
+              )
+
+            return cleanSpaces(
+              result
+            )
+          }
+
           function normalizeChannelName(
             value
           ) {
@@ -722,95 +807,6 @@ jobs:
             )
           }
 
-          function removeEmbeddedCredits(
-            value
-          ) {
-            let result =
-              cleanSpaces(
-                value
-              )
-
-            const protectedDates =
-              []
-
-            result =
-              result.replace(
-                /\(\d{2}\/\d{2}\/\d{4}\)/g,
-                match => {
-                  const token =
-                    '__AIRDATE_' +
-                    protectedDates.length +
-                    '__'
-
-                  protectedDates.push(
-                    match
-                  )
-
-                  return token
-                }
-              )
-
-            result =
-              result.replace(
-                /\([^()]*\)/g,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s*[*]+\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+(?:starring|stars|starred by|with)\s+[^.!?]*[.!?]?\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+(?:featuring|featuring performances by|with performances by)\s+[^.!?]*[.!?]?\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s+[A-Z][A-Za-z.'-]*(?:\s*,\s*[A-Z][A-Za-z.'-]*)*(?:\s+(?:and|&)\s+[A-Z][A-Za-z.'-]*)?\s+(?:star|stars|starring)\s*\.?\s*$/i,
-                ''
-              )
-
-            result =
-              result.replace(
-                /\s*[,;:]\s*(?:starring|stars|with|featuring)\s+[^.!?]*[.!?]?\s*$/i,
-                ''
-              )
-
-            result =
-              cleanSpaces(
-                result
-              )
-
-            for (
-              let index = 0;
-              index <
-              protectedDates.length;
-              index++
-            ) {
-              result =
-                result.replace(
-                  '__AIRDATE_' +
-                  index +
-                  '__',
-                  protectedDates[index]
-                )
-            }
-
-            return cleanSpaces(
-              result
-            )
-          }
-
           function buildDescription(
             episodeTitle,
             episodeNumber,
@@ -819,11 +815,6 @@ jobs:
           ) {
             let result =
               ''
-
-            const cleanedDescription =
-              removeEmbeddedCredits(
-                description
-              )
 
             if (
               episodeTitle &&
@@ -846,15 +837,15 @@ jobs:
             }
 
             if (
-              cleanedDescription
+              description
             ) {
               result =
                 result
                   ? result +
                     '. ' +
-                    cleanedDescription
+                    description
                   :
-                    cleanedDescription
+                    description
             }
 
             if (
@@ -969,11 +960,16 @@ jobs:
                 block
               )
 
+            const cleanedOriginalDescription =
+              removeEmbeddedCredits(
+                originalDescription
+              )
+
             const description =
               buildDescription(
                 episodeTitle,
                 episodeNumber,
-                originalDescription,
+                cleanedOriginalDescription,
                 airDate
               )
 
@@ -1147,10 +1143,8 @@ jobs:
 
             if (
               !startDate ||
-              startDate <
-              pastCutoff ||
-              startDate >=
-              cutoff
+              startDate < pastCutoff ||
+              startDate >= cutoff
             ) {
               if (
                 source ===
