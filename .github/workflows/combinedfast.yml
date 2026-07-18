@@ -109,13 +109,6 @@ jobs:
           /*
            * ============================================================
            * CHANNEL DEFINITIONS
-           *
-           * Jessman is matched by the actual Jessman channel ID.
-           *
-           * IPTV-org is matched by the actual IPTV-org channel ID.
-           *
-           * The canonicalChannel value is used only for cross-source
-           * matching and reporting.
            * ============================================================
            */
 
@@ -222,13 +215,6 @@ jobs:
           /*
            * ============================================================
            * STORAGE
-           *
-           * Jessman and IPTV-org remain separate.
-           *
-           * Existing metadata is never overwritten by cross-reference
-           * data from the other source.
-           *
-           * Cross-reference only fills missing fields.
            * ============================================================
            */
 
@@ -842,7 +828,7 @@ jobs:
 
             const match =
               description.match(
-                /^S\s*\d{1,3}\s*E\s*\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
+                /^S\s*\d{1,3}\s*E\d{1,3}\s*[—-]\s*(.+?)(?:\n|$)/i
               )
 
             if (
@@ -917,6 +903,42 @@ jobs:
 
                   return token
                 }
+              )
+
+            /*
+             * Remove trailing actor/cast sentences.
+             *
+             * Examples:
+             *
+             * Vincent Price, Christopher Lee and Peter Cushing star.
+             *
+             * Vincent Price, Christopher Lee and Peter Cushing stars.
+             *
+             * Vincent Price, Christopher Lee and Peter Cushing starred.
+             *
+             * Starring Vincent Price, Christopher Lee and Peter Cushing.
+             *
+             * With Vincent Price, Christopher Lee and Peter Cushing.
+             *
+             * Only a trailing sentence is removed.
+             */
+
+            result =
+              result.replace(
+                /(?:^|[.!?]\s+)(?:starring|with)\s+[^.!?]+[.!?]?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /(?:^|[.!?]\s+)[^.!?]+?\s+stars?\s*[.!?]?\s*$/i,
+                ''
+              )
+
+            result =
+              result.replace(
+                /(?:^|[.!?]\s+)[^.!?]+?\s+starred\s*[.!?]?\s*$/i,
+                ''
               )
 
             result =
