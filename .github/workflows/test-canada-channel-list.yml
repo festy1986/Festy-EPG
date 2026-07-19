@@ -1,0 +1,388 @@
+name: TEST Canada Channel List
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+
+  test-canada-channel-list:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify provider credentials
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+        run: |
+
+          test -n "$XTREAM_URL"
+          test -n "$XTREAM_USERNAME"
+          test -n "$XTREAM_PASSWORD"
+
+          echo "Provider credentials found"
+
+      - name: TEST Get all provider groups and channels
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+        run: |
+
+          mkdir -p config
+          mkdir -p test
+
+          BASE_URL="${XTREAM_URL%/}"
+
+          echo "Getting all provider live categories..."
+
+          curl \
+            --fail \
+            --retry 5 \
+            --retry-delay 5 \
+            --silent \
+            --show-error \
+            --get \
+            --data-urlencode "username=$XTREAM_USERNAME" \
+            --data-urlencode "password=$XTREAM_PASSWORD" \
+            --data-urlencode "action=get_live_categories" \
+            "$BASE_URL/player_api.php" \
+            -o test/canada_categories_test.json
+
+          test -s test/canada_categories_test.json
+
+          echo "Getting all provider live channels..."
+
+          curl \
+            --fail \
+            --retry 5 \
+            --retry-delay 5 \
+            --silent \
+            --show-error \
+            --get \
+            --data-urlencode "username=$XTREAM_USERNAME" \
+            --data-urlencode "password=$XTREAM_PASSWORD" \
+            --data-urlencode "action=get_live_streams" \
+            "$BASE_URL/player_api.php" \
+            -o test/canada_live_streams_test.json
+
+          test -s test/canada_live_streams_test.json
+
+          echo "Building Canada / CA channel list..."
+
+          python3 - <<'PY'
+
+          import json
+          import re
+
+          with open(
+              "test/canada_categories_test.json",
+              "r",
+              encoding="utf-8"
+          ) as file:
+
+              categories = json.load(file)
+
+          with open(
+              "test/canada_live_streams_test.json",
+              "r",
+              encoding="utf-8"
+          ) as file:
+
+              streams = json.load(file)
+
+          canada_categories = {}
+
+          for category in categories:
+
+              category_id = str(
+                  category.get(
+                      "category_id",
+                      ""
+                  )
+              )
+
+              category_name = str(
+                  category.get(
+                      "category_name",
+                      ""
+                  )
+              ).strip()
+
+              if not category_id or not category_name:
+                  continue
+
+              normalized_name = re.sub(
+                  r"[^a-z0-9]+",
+                  " ",
+                  category_name.lower()
+              ).strip()
+
+              words = set(
+                  normalized_name.split()
+              )
+
+              is_canada_category = (
+                  "canada" in words
+                  or "ca" in words
+                  or normalized_name == "canada"
+                  or normalized_name == "ca"
+                  or normalized_name.startswith("ca ")
+                  or normalized_name.startswith("ca-")
+                  or normalized_name.startswith("ca:")
+                  or normalized_name.startswith("ca/")
+                  or normalized_name.startswith("ca|")
+              )
+
+              if is_canada_category:
+
+                  canada_categories[
+                      category_id
+                  ] = category_name
+
+          grouped_channels = {}
+
+          for category_id, category_name in canada_categories.items():
+
+              grouped_channels[
+                  category_name
+              ] = []
+
+          for stream in streams:
+
+              category_id = str(
+                  stream.get(
+                      "category_id",
+                      ""
+                  )
+              )
+
+              if category_id not in canada_categories:
+                  continue
+
+              category_name = canada_categories[
+                  category_id
+              ]
+
+              channel_name = str(
+                  stream.get(
+                      "name",
+                      ""
+                  )
+              ).strip()
+
+              stream_id = str(
+                  stream.get(
+                      "stream_id",
+                      ""
+                  )
+              ).strip()
+
+              epg_channel_id = str(
+                  stream.get(
+                      "epg_channel_id",
+                      ""
+                  )
+              ).strip()
+
+              if not channel_name:
+                  continue
+
+              grouped_channels[
+                  category_name
+              ].append(
+                  {
+                      "name":
+                          channel_name,
+
+                      "stream_id":
+                          stream_id,
+
+                      "epg_channel_id":
+                          epg_channel_id
+                  }
+              )
+
+          with open(
+              "config/canada_channels.txt",
+              "w",
+              encoding="utf-8"
+          ) as file:
+
+              file.write(
+                  "# CANADA / CA CHANNEL LIST\n"
+              )
+
+              file.write(
+                  "# TEST OUTPUT - MANUALLY DELETE ANY CHANNELS OR GROUPS YOU DO NOT WANT\n"
+              )
+
+              file.write(
+                  "#\n"
+              )
+
+              for category_name in sorted(
+                  grouped_channels,
+                  key=lambda value:
+                      value.lower()
+              ):
+
+                  channels = grouped_channels[
+                      category_name
+                  ]
+
+                  if not channels:
+                      continue
+
+                  file.write(
+                      "\n"
+                  )
+
+                  file.write(
+                      "# ==================================================\n"
+                  )
+
+                  file.write(
+                      "# GROUP: "
+                      + category_name
+                      + "\n"
+                  )
+
+                  file.write(
+                      "# ==================================================\n"
+                  )
+
+                  seen = set()
+
+                  for channel in sorted(
+                      channels,
+                      key=lambda item:
+                          item["name"].lower()
+                  ):
+
+                      channel_name = channel[
+                          "name"
+                      ]
+
+                      normalized_channel = (
+                          channel_name
+                          .strip()
+                          .lower()
+                      )
+
+                      if normalized_channel in seen:
+                          continue
+
+                      seen.add(
+                          normalized_channel
+                      )
+
+                      file.write(
+                          channel_name
+                          + "\n"
+                      )
+
+          print()
+          print(
+              "Canada / CA groups found:",
+              len(
+                  grouped_channels
+              )
+          )
+
+          total_channels = sum(
+              len(
+                  channels
+              )
+              for channels in
+              grouped_channels.values()
+          )
+
+          print(
+              "Canada / CA channels found:",
+              total_channels
+          )
+
+          print()
+          print(
+              "Output:",
+              "config/canada_channels.txt"
+          )
+
+          print()
+          print(
+              "Matched groups:"
+          )
+
+          for category_name in sorted(
+              grouped_channels,
+              key=lambda value:
+                  value.lower()
+          ):
+
+              channel_count = len(
+                  grouped_channels[
+                      category_name
+                  ]
+              )
+
+              if channel_count:
+
+                  print(
+                      " -",
+                      category_name,
+                      "(",
+                      channel_count,
+                      "channels)"
+                  )
+
+          PY
+
+          echo
+          echo "TEST Canada channel list complete"
+
+          echo
+          echo "Generated file:"
+          ls -lh config/canada_channels.txt
+
+          echo
+          echo "Preview:"
+          cat config/canada_channels.txt
+
+      - name: Commit TEST Canada channel list
+        run: |
+
+          git config --global user.name "github-actions"
+
+          git config --global user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add config/canada_channels.txt
+
+          if git diff --cached --quiet; then
+
+            echo "No changes to commit"
+
+          else
+
+            git commit \
+              -m "TEST Canada channel list"
+
+            git pull \
+              --rebase \
+              origin main
+
+            git push \
+              origin HEAD:main
+
+          fi
