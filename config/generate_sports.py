@@ -11,7 +11,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-CHANNEL_FILE = "sports_channels.txt"
+CHANNEL_FILE = "config/sports_channels.txt"
 OUTPUT_FILE = "guides/sports.xml"
 
 
