@@ -105,7 +105,7 @@ jobs:
           from difflib import SequenceMatcher
 
 
-          CHANNEL_FILE = "sports_channels.txt"
+          CHANNEL_FILE = "config/sports_channels.txt"
 
           OUTPUT_FILE = "guides/sports.xml"
 
