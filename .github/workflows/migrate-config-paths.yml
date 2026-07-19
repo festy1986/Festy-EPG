@@ -1,4 +1,4 @@
-name: Fix Workflow Config Paths
+name: Migrate Files To Config
 
 on:
   workflow_dispatch:
@@ -6,373 +6,282 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: workflow-path-migration
-  cancel-in-progress: false
-
 jobs:
-  fix-workflow-config-paths:
+  migrate-config-paths:
+
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Scan and fix all workflow paths
+      - name: Move files to config and update all workflows
         run: |
           node <<'EOF'
           const fs = require('fs')
           const path = require('path')
 
-          const workflowsDir = '.github/workflows'
-          const reportPath = 'config/workflow-path-migration-report.txt'
+          const configDir = 'config'
+          const reportPath = 'config/workflow-migration-report.txt'
 
-          fs.mkdirSync('config', { recursive: true })
+          fs.mkdirSync(configDir, { recursive: true })
 
-          const replacements = [
+          const migrations = [
+            {
+              oldPath: '.tvmaze-fast-cache.json',
+              newPath: 'config/.tvmaze-fast-cache.json'
+            },
             {
               oldPath: 'guides/.tvmaze-fast-cache.json',
-              newPath: 'config/.tvmaze-fast-cache.json',
-              type: 'exact'
+              newPath: 'config/.tvmaze-fast-cache.json'
+            },
+            {
+              oldPath: '.tvmaze-tivimate-cache.json',
+              newPath: 'config/.tvmaze-tivimate-cache.json'
+            },
+            {
+              oldPath: 'guides/.tvmaze-tivimate-cache.json',
+              newPath: 'config/.tvmaze-tivimate-cache.json'
+            },
+            {
+              oldPath: '.tvmaze-ota-cache.json',
+              newPath: 'config/.tvmaze-ota-cache.json'
+            },
+            {
+              oldPath: 'guides/.tvmaze-ota-cache.json',
+              newPath: 'config/.tvmaze-ota-cache.json'
+            },
+            {
+              oldPath: '24-7-channel-list.txt',
+              newPath: 'config/24-7-channel-list.txt'
             },
             {
               oldPath: 'guides/24-7-channel-list.txt',
-              newPath: 'config/24-7-channel-list.txt',
-              type: 'exact'
-            },
-            {
-              oldPath: 'guides/iptvorg-channels.txt',
-              newPath: 'config/iptvorg-channels.txt',
-              type: 'exact'
+              newPath: 'config/24-7-channel-list.txt'
             },
             {
               oldPath: 'fastchannels.txt',
-              newPath: 'config/fastchannels.txt',
-              type: 'bare'
+              newPath: 'config/fastchannels.txt'
             },
             {
               oldPath: 'channels.txt',
-              newPath: 'config/channels.txt',
-              type: 'bare'
+              newPath: 'config/channels.txt'
             },
             {
               oldPath: 'iptvorg-channels.txt',
-              newPath: 'config/iptvorg-channels.txt',
-              type: 'bare'
+              newPath: 'config/iptvorg-channels.txt'
+            },
+            {
+              oldPath: 'guides/iptvorg-channels.txt',
+              newPath: 'config/iptvorg-channels.txt'
             },
             {
               oldPath: 'generate_247.py',
-              newPath: 'config/generate_247.py',
-              type: 'bare'
+              newPath: 'config/generate_247.py'
             },
             {
               oldPath: 'generate_matched_guide.py',
-              newPath: 'config/generate_matched_guide.py',
-              type: 'bare'
+              newPath: 'config/generate_matched_guide.py'
             },
             {
               oldPath: 'generate_sports.py',
-              newPath: 'config/generate_sports.py',
-              type: 'bare'
+              newPath: 'config/generate_sports.py'
             },
             {
               oldPath: 'matcheverychannel.txt',
-              newPath: 'config/matcheverychannel.txt',
-              type: 'bare'
+              newPath: 'config/matcheverychannel.txt'
+            },
+            {
+              oldPath: 'matcheverychannel.tx',
+              newPath: 'config/matcheverychannel.tx'
             },
             {
               oldPath: 'metadata_cache.json',
-              newPath: 'config/metadata_cache.json',
-              type: 'bare'
+              newPath: 'config/metadata_cache.json'
             },
             {
               oldPath: 'sports_channels.txt',
-              newPath: 'config/sports_channels.txt',
-              type: 'bare'
+              newPath: 'config/sports_channels.txt'
             }
           ]
 
           const report = []
 
-          let workflowFiles = []
-          let totalFilesScanned = 0
-          let totalFilesChanged = 0
-          let totalReplacements = 0
-          let totalNotFound = 0
-          let totalAlreadyCorrect = 0
-
-          const replacementResults = new Map()
-
-          for (const item of replacements) {
-            replacementResults.set(item.oldPath, {
-              oldPath: item.oldPath,
-              newPath: item.newPath,
-              occurrences: 0,
-              files: [],
-              found: false,
-              alreadyCorrect: false
-            })
-          }
-
-          function getWorkflowFiles(dir) {
-            if (!fs.existsSync(dir)) return []
-
-            return fs.readdirSync(dir)
-              .filter(file => /\.(yml|yaml)$/i.test(file))
-              .map(file => path.join(dir, file))
-          }
-
-          function escapeRegExp(value) {
-            return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-          }
-
-          function countOccurrences(text, regex) {
-            const matches = text.match(regex)
-            return matches ? matches.length : 0
-          }
-
-          workflowFiles = getWorkflowFiles(workflowsDir)
-          totalFilesScanned = workflowFiles.length
-
           report.push('============================================================')
           report.push('WORKFLOW CONFIG PATH MIGRATION REPORT')
           report.push('============================================================')
-          report.push('')
           report.push(`Generated: ${new Date().toISOString()}`)
           report.push('')
-          report.push(`Workflow files scanned: ${totalFilesScanned}`)
-          report.push('')
 
-          if (workflowFiles.length === 0) {
-            report.push('[ERROR] No workflow files were found.')
-            report.push('')
+          const workflowDir = '.github/workflows'
+
+          if (!fs.existsSync(workflowDir)) {
+            report.push('ERROR: .github/workflows directory does not exist.')
             fs.writeFileSync(reportPath, report.join('\n') + '\n')
-            console.error(report.join('\n'))
             process.exit(1)
           }
 
-          for (const workflowFile of workflowFiles) {
-            let content = fs.readFileSync(workflowFile, 'utf8')
+          const workflowFiles = fs.readdirSync(workflowDir)
+            .filter(file => /\.(yml|yaml)$/i.test(file))
+
+          report.push(`Workflows found: ${workflowFiles.length}`)
+          report.push('')
+
+          const workflowChanges = []
+
+          for (const file of workflowFiles) {
+            const filePath = path.join(workflowDir, file)
+            let content = fs.readFileSync(filePath, 'utf8')
             const originalContent = content
-            const fileChanges = []
+            const changes = []
 
-            for (const item of replacements) {
-              const result = replacementResults.get(item.oldPath)
+            for (const migration of migrations) {
+              const oldPath = migration.oldPath
+              const newPath = migration.newPath
 
-              const exactRegex = new RegExp(
-                escapeRegExp(item.oldPath),
+              const escapedOldPath = oldPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+              const regex = new RegExp(
+                `(?<![A-Za-z0-9_./-])${escapedOldPath}(?![A-Za-z0-9_./-])`,
                 'g'
               )
 
-              const alreadyCorrectRegex = new RegExp(
-                escapeRegExp(item.newPath),
-                'g'
-              )
+              const matches = content.match(regex)
 
-              const alreadyCorrectCount = countOccurrences(
-                content,
-                alreadyCorrectRegex
-              )
+              if (matches && matches.length > 0) {
+                content = content.replace(regex, newPath)
 
-              if (alreadyCorrectCount > 0) {
-                result.alreadyCorrect = true
-                totalAlreadyCorrect += alreadyCorrectCount
-              }
-
-              let oldRegex
-
-              if (item.type === 'exact') {
-                oldRegex = exactRegex
-              } else {
-                oldRegex = new RegExp(
-                  `(?<![A-Za-z0-9_./-])${escapeRegExp(item.oldPath)}(?![A-Za-z0-9_./-])`,
-                  'g'
-                )
-              }
-
-              const matches = content.match(oldRegex)
-              const count = matches ? matches.length : 0
-
-              if (count > 0) {
-                content = content.replace(oldRegex, item.newPath)
-
-                result.found = true
-                result.occurrences += count
-                result.files.push(workflowFile)
-
-                totalReplacements += count
-
-                fileChanges.push({
-                  oldPath: item.oldPath,
-                  newPath: item.newPath,
-                  count
+                changes.push({
+                  oldPath,
+                  newPath,
+                  count: matches.length
                 })
               }
             }
 
             if (content !== originalContent) {
-              fs.writeFileSync(workflowFile, content)
-              totalFilesChanged++
+              fs.writeFileSync(filePath, content)
 
-              report.push(`[CHANGED] ${workflowFile}`)
-              report.push('')
+              workflowChanges.push({
+                file,
+                changes
+              })
 
-              for (const change of fileChanges) {
-                report.push(`  [REPLACED ${change.count} TIME(S)]`)
-                report.push(`    OLD: ${change.oldPath}`)
-                report.push(`    NEW: ${change.newPath}`)
-                report.push('')
+              report.push(`UPDATED WORKFLOW: ${file}`)
+
+              for (const change of changes) {
+                report.push(
+                  `  REPLACED ${change.count} time(s): ${change.oldPath} -> ${change.newPath}`
+                )
               }
+
+              report.push('')
             } else {
-              report.push(`[UNCHANGED] ${workflowFile}`)
-              report.push('  No old paths required replacement.')
+              report.push(`NO PATH CHANGES NEEDED: ${file}`)
               report.push('')
             }
           }
 
           report.push('============================================================')
-          report.push('REPLACEMENTS MADE')
+          report.push('FILE MIGRATION STATUS')
           report.push('============================================================')
           report.push('')
 
-          let foundAny = false
+          for (const migration of migrations) {
+            const oldPath = migration.oldPath
+            const newPath = migration.newPath
 
-          for (const item of replacements) {
-            const result = replacementResults.get(item.oldPath)
+            const oldExists = fs.existsSync(oldPath)
+            const newExists = fs.existsSync(newPath)
 
-            if (!result.found) continue
-
-            foundAny = true
-
-            report.push(`[REPLACED] ${result.oldPath}`)
-            report.push(`    → ${result.newPath}`)
-            report.push(`    Occurrences: ${result.occurrences}`)
-            report.push('    Workflow files:')
-
-            for (const file of [...new Set(result.files)]) {
-              report.push(`      - ${file}`)
-            }
-
-            report.push('')
-          }
-
-          if (!foundAny) {
-            report.push('No old paths were found and replaced.')
-            report.push('')
-          }
-
-          report.push('============================================================')
-          report.push('NOT FOUND / MISSED OLD PATHS')
-          report.push('============================================================')
-          report.push('')
-
-          for (const item of replacements) {
-            const result = replacementResults.get(item.oldPath)
-
-            if (!result.found) {
-              totalNotFound++
-
-              report.push(`[NOT FOUND] ${result.oldPath}`)
-              report.push(`    Expected replacement: ${result.newPath}`)
+            if (oldExists && newExists) {
+              report.push(`SKIPPED - BOTH EXIST:`)
+              report.push(`  OLD: ${oldPath}`)
+              report.push(`  NEW: ${newPath}`)
+              report.push('  REASON: Destination already exists. Nothing was moved.')
               report.push('')
+              continue
             }
-          }
 
-          report.push('============================================================')
-          report.push('ALREADY CORRECT / SKIPPED')
-          report.push('============================================================')
-          report.push('')
+            if (oldExists && !newExists) {
+              fs.mkdirSync(path.dirname(newPath), { recursive: true })
 
-          let alreadyCorrectAny = false
+              fs.renameSync(oldPath, newPath)
 
-          for (const item of replacements) {
-            const result = replacementResults.get(item.oldPath)
+              report.push(`MOVED:`)
+              report.push(`  OLD: ${oldPath}`)
+              report.push(`  NEW: ${newPath}`)
+              report.push('')
+              continue
+            }
 
-            if (!result.alreadyCorrect) continue
+            if (!oldExists && newExists) {
+              report.push(`ALREADY IN NEW LOCATION:`)
+              report.push(`  ${newPath}`)
+              report.push('')
+              continue
+            }
 
-            alreadyCorrectAny = true
-
-            report.push(`[ALREADY CORRECT] ${result.newPath}`)
-            report.push('    Existing config path was detected.')
+            report.push(`NOT FOUND / SKIPPED:`)
+            report.push(`  OLD: ${oldPath}`)
+            report.push(`  NEW: ${newPath}`)
             report.push('')
           }
 
-          if (!alreadyCorrectAny) {
-            report.push('No already-correct paths were detected.')
-            report.push('')
+          report.push('============================================================')
+          report.push('FINAL SUMMARY')
+          report.push('============================================================')
+          report.push('')
+          report.push(`Workflow files scanned: ${workflowFiles.length}`)
+          report.push(`Workflows changed: ${workflowChanges.length}`)
+          report.push('')
+
+          if (workflowChanges.length > 0) {
+            report.push('WORKFLOWS THAT WERE CHANGED:')
+
+            for (const workflow of workflowChanges) {
+              report.push(`  ${workflow.file}`)
+
+              for (const change of workflow.changes) {
+                report.push(
+                  `    ${change.oldPath} -> ${change.newPath} (${change.count} replacement(s))`
+                )
+              }
+            }
+          } else {
+            report.push('No workflow files required path changes.')
           }
 
-          report.push('============================================================')
-          report.push('SUMMARY')
-          report.push('============================================================')
           report.push('')
-          report.push(`Workflow files scanned: ${totalFilesScanned}`)
-          report.push(`Workflow files changed: ${totalFilesChanged}`)
-          report.push(`Workflow files unchanged: ${totalFilesScanned - totalFilesChanged}`)
-          report.push(`Total replacements made: ${totalReplacements}`)
-          report.push(`Old paths not found: ${totalNotFound}`)
-          report.push(`Already-correct path detections: ${totalAlreadyCorrect}`)
-          report.push('Errors: 0')
-          report.push('')
+          report.push('============================================================')
+          report.push('END OF REPORT')
           report.push('============================================================')
 
-          fs.writeFileSync(reportPath, report.join('\n') + '\n')
+          fs.writeFileSync(
+            reportPath,
+            report.join('\n') + '\n'
+          )
 
           console.log(report.join('\n'))
-          console.log('')
-          console.log(`Report written to: ${reportPath}`)
           EOF
 
-      - name: Show migration report
-        run: |
-          echo "============================================================"
-          echo "FINAL WORKFLOW PATH MIGRATION REPORT"
-          echo "============================================================"
-          cat config/workflow-path-migration-report.txt
-
-      - name: Commit and push workflow changes and report
+      - name: Commit migration changes and report
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add .github/workflows/*.yml
-          git add .github/workflows/*.yaml
-          git add config/workflow-path-migration-report.txt
+          git add .github/workflows
+          git add config
+          git add -A
 
           if git diff --cached --quiet; then
-            echo "No workflow path changes or report changes to commit"
+            echo "No changes to commit"
             exit 0
           fi
 
-          git commit -m "Update workflow paths for config files"
+          git commit -m "Move configuration files to config directory"
 
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
-
-            echo "Push failed, fetching latest main and rebasing..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            git add .github/workflows/*.yml
-            git add .github/workflows/*.yaml
-            git add config/workflow-path-migration-report.txt
-
-            if git diff --cached --quiet; then
-              echo "No new changes after rebase"
-            else
-              git commit -m "Update workflow paths for config files"
-            fi
-
-            sleep 5
-          done
-
-          echo "Push failed after all retries"
-          exit 1
+          git push origin HEAD:main
