@@ -1,0 +1,1896 @@
+name: Sports Guide
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron: '45 0 * * *'
+    - cron: '45 4 * * *'
+    - cron: '45 8 * * *'
+    - cron: '45 12 * * *'
+    - cron: '45 16 * * *'
+    - cron: '45 20 * * *'
+
+
+permissions:
+  contents: write
+
+
+concurrency:
+  group: festy-epg-build-queue
+  cancel-in-progress: false
+
+
+jobs:
+
+  sports-guide:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+
+      - name: Checkout repository
+
+        uses: actions/checkout@v4
+
+
+      - name: Verify provider credentials
+
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
+        run: |
+
+          echo "Provider credentials loaded"
+
+
+          if [ -z "$XTREAM_URL" ]; then
+
+            echo "XTREAM_URL is missing"
+
+            exit 1
+
+          fi
+
+
+          if [ -z "$XTREAM_USERNAME" ]; then
+
+            echo "XTREAM_USERNAME is missing"
+
+            exit 1
+
+          fi
+
+
+          if [ -z "$XTREAM_PASSWORD" ]; then
+
+            echo "XTREAM_PASSWORD is missing"
+
+            exit 1
+
+          fi
+
+
+          echo "XTREAM_URL exists"
+
+          echo "XTREAM_USERNAME exists"
+
+          echo "XTREAM_PASSWORD exists"
+
+
+      - name: Generate sports guide
+
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
+        run: |
+
+          cat > /tmp/generate_sports.py <<'PYTHON'
+
+          import os
+          import requests
+          import xml.etree.ElementTree as ET
+
+          from datetime import datetime, timedelta, timezone
+          from zoneinfo import ZoneInfo
+
+          import re
+          import html
+          import time
+          from difflib import SequenceMatcher
+
+
+          CHANNEL_FILE = "sports_channels.txt"
+
+          OUTPUT_FILE = "guides/sports.xml"
+
+
+          XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
+
+          USERNAME = os.environ["XTREAM_USERNAME"]
+
+          PASSWORD = os.environ["XTREAM_PASSWORD"]
+
+
+          # --------------------------------------------------
+          # Normalize Xtream URL
+          # --------------------------------------------------
+
+          if XTREAM_URL.startswith("https://"):
+
+              XTREAM_URL = XTREAM_URL.replace(
+                  "https://",
+                  "http://",
+                  1
+              )
+
+
+          if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+
+              XTREAM_URL += ":80"
+
+
+          os.makedirs(
+              "guides",
+              exist_ok=True
+          )
+
+
+          # --------------------------------------------------
+          # HTTP session
+          # --------------------------------------------------
+
+          session = requests.Session()
+
+
+          session.headers.update(
+              {
+                  "User-Agent":
+                  "Mozilla/5.0"
+              }
+          )
+
+
+          # --------------------------------------------------
+          # Text cleanup
+          # --------------------------------------------------
+
+          def clean_text(
+              text
+          ):
+
+              if not text:
+
+                  return ""
+
+
+              text = html.unescape(
+                  str(text)
+              )
+
+
+              text = re.sub(
+                  r"<[^>]+>",
+                  "",
+                  text
+              )
+
+
+              text = text.replace(
+                  "\n",
+                  " "
+              )
+
+
+              text = text.replace(
+                  "\r",
+                  " "
+              )
+
+
+              text = re.sub(
+                  r"\s+",
+                  " ",
+                  text
+              )
+
+
+              return text.strip()
+
+
+          # --------------------------------------------------
+          # Convert 24-hour time to regular time
+          # --------------------------------------------------
+
+          def format_time(
+              dt
+          ):
+
+              return dt.strftime(
+                  "%-I:%M %p"
+              )
+
+
+          # --------------------------------------------------
+          # Normalize matchup separator
+          # --------------------------------------------------
+
+          def normalize_matchup(
+              text
+          ):
+
+              if not text:
+
+                  return ""
+
+
+              text = clean_text(
+                  text
+              )
+
+
+              text = re.sub(
+                  r"\s+[xX]\s+",
+                  " vs. ",
+                  text
+              )
+
+
+              text = re.sub(
+                  r"\s+@\s+",
+                  " vs. ",
+                  text
+              )
+
+
+              text = re.sub(
+                  r"\s+v\s+",
+                  " vs. ",
+                  text,
+                  flags=re.IGNORECASE
+              )
+
+
+              text = re.sub(
+                  r"\s+vs\s*\.?\s+",
+                  " vs. ",
+                  text,
+                  flags=re.IGNORECASE
+              )
+
+
+              text = re.sub(
+                  r"\s+",
+                  " ",
+                  text
+              )
+
+
+              return text.strip(
+                  " -|:;"
+              )
+
+
+          # --------------------------------------------------
+          # Clean provider channel names
+          # --------------------------------------------------
+
+          def clean_channel_name(
+              name
+          ):
+
+              name = clean_text(
+                  name
+              )
+
+
+              def convert_time(
+                  match
+              ):
+
+                  hour = int(
+                      match.group(1)
+                  )
+
+
+                  minute = int(
+                      match.group(2)
+                  )
+
+
+                  suffix = (
+                      "AM"
+                      if hour < 12
+                      else "PM"
+                  )
+
+
+                  display_hour = hour % 12
+
+
+                  if display_hour == 0:
+
+                      display_hour = 12
+
+
+                  return (
+                      f"{display_hour}:"
+                      f"{minute:02d} "
+                      f"{suffix}"
+                  )
+
+
+              name = re.sub(
+                  r"\b([01]?\d|2[0-3]):([0-5]\d)\b",
+                  convert_time,
+                  name
+              )
+
+
+              name = re.sub(
+                  r"\s+[xX]\s+",
+                  " vs. ",
+                  name
+              )
+
+
+              name = re.sub(
+                  r"\s+@\s+",
+                  " vs. ",
+                  name
+              )
+
+
+              name = re.sub(
+                  r"\s+vs\s*\.?\s+",
+                  " vs. ",
+                  name,
+                  flags=re.IGNORECASE
+              )
+
+
+              name = re.sub(
+                  r"\s*\|\s*",
+                  " | ",
+                  name
+              )
+
+
+              name = re.sub(
+                  r"\s*;\s*",
+                  " ; ",
+                  name
+              )
+
+
+              name = re.sub(
+                  r"\s+",
+                  " ",
+                  name
+              )
+
+
+              return name.strip(
+                  " -|:;"
+              )
+
+
+          # --------------------------------------------------
+          # Remove provider event metadata
+          # --------------------------------------------------
+
+          def remove_event_metadata(
+              text
+          ):
+
+              if not text:
+
+                  return ""
+
+
+              text = clean_text(
+                  text
+              )
+
+
+              text = re.split(
+                  r"\bStart\s*:",
+                  text,
+                  maxsplit=1,
+                  flags=re.IGNORECASE
+              )[0]
+
+
+              text = re.split(
+                  r"\bStop\s*:",
+                  text,
+                  maxsplit=1,
+                  flags=re.IGNORECASE
+              )[0]
+
+
+              text = re.sub(
+                  r"\s*\|\s*$",
+                  "",
+                  text
+              )
+
+
+              text = re.sub(
+                  r"\s*;\s*$",
+                  "",
+                  text
+              )
+
+
+              return normalize_matchup(
+                  text
+              )
+
+
+          # --------------------------------------------------
+          # Extract provider start timestamp
+          # --------------------------------------------------
+
+          def extract_start_datetime(
+              text
+          ):
+
+              if not text:
+
+                  return None
+
+
+              text = clean_text(
+                  text
+              )
+
+
+              patterns = [
+
+                  r"Start\s*:\s*"
+                  r"(\d{4}-\d{2}-\d{2})"
+                  r"\s+"
+                  r"(\d{2}:\d{2}(?::\d{2})?)",
+
+                  r"start\s*=\s*"
+                  r"(\d{4}-\d{2}-\d{2})"
+                  r"\s+"
+                  r"(\d{2}:\d{2}(?::\d{2})?)",
+
+                  r"(\d{4}-\d{2}-\d{2})"
+                  r"\s+"
+                  r"(\d{2}:\d{2}:\d{2})"
+
+              ]
+
+
+              for pattern in patterns:
+
+                  match = re.search(
+                      pattern,
+                      text,
+                      flags=re.IGNORECASE
+                  )
+
+
+                  if not match:
+
+                      continue
+
+
+                  date_part = match.group(
+                      1
+                  )
+
+
+                  time_part = match.group(
+                      2
+                  )
+
+
+                  if len(time_part) == 5:
+
+                      time_part += ":00"
+
+
+                  try:
+
+                      return datetime.strptime(
+                          f"{date_part} "
+                          f"{time_part}",
+                          "%Y-%m-%d %H:%M:%S"
+                      )
+
+
+                  except ValueError:
+
+                      continue
+
+
+              return None
+
+
+          # --------------------------------------------------
+          # Get server timezone
+          # --------------------------------------------------
+
+          def get_server_timezone():
+
+              url = (
+                  f"{XTREAM_URL}/player_api.php"
+                  f"?username={USERNAME}"
+                  f"&password={PASSWORD}"
+              )
+
+
+              response = session.get(
+                  url,
+                  timeout=60
+              )
+
+
+              response.raise_for_status()
+
+
+              data = response.json()
+
+
+              server_info = data.get(
+                  "server_info",
+                  {}
+              )
+
+
+              timezone_name = server_info.get(
+                  "timezone"
+              )
+
+
+              if not timezone_name:
+
+                  print(
+                      "Provider did not return a timezone."
+                  )
+
+
+                  print(
+                      "Using UTC."
+                  )
+
+
+                  return "UTC"
+
+
+              print(
+                  f"Provider timezone: "
+                  f"{timezone_name}"
+              )
+
+
+              return timezone_name
+
+
+          # --------------------------------------------------
+          # Convert provider timestamp to Eastern Time
+          # --------------------------------------------------
+
+          def convert_to_eastern(
+              naive_datetime,
+              provider_timezone
+          ):
+
+              if not naive_datetime:
+
+                  return None
+
+
+              try:
+
+                  source_zone = ZoneInfo(
+                      provider_timezone
+                  )
+
+
+              except Exception:
+
+                  print(
+                      f"Invalid provider timezone: "
+                      f"{provider_timezone}"
+                  )
+
+
+                  print(
+                      "Falling back to UTC."
+                  )
+
+
+                  source_zone = timezone.utc
+
+
+              eastern_zone = ZoneInfo(
+                  "America/New_York"
+              )
+
+
+              source_datetime = (
+                  naive_datetime.replace(
+                      tzinfo=source_zone
+                  )
+              )
+
+
+              return source_datetime.astimezone(
+                  eastern_zone
+              )
+
+
+          # --------------------------------------------------
+          # Load requested channels
+          # --------------------------------------------------
+
+          wanted = {}
+
+
+          with open(
+              CHANNEL_FILE,
+              "r",
+              encoding="utf-8"
+          ) as f:
+
+              for line in f:
+
+                  line = line.strip()
+
+
+                  if not line:
+
+                      continue
+
+
+                  parts = [
+                      x.strip()
+                      for x in line.split("|")
+                  ]
+
+
+                  if len(parts) < 2:
+
+                      continue
+
+
+                  channel_id = parts[0]
+
+
+                  display_name = " ".join(
+                      parts[1:]
+                  )
+
+
+                  wanted[channel_id] = display_name
+
+
+          print(
+              f"Requested channels: "
+              f"{len(wanted)}"
+          )
+
+
+          # --------------------------------------------------
+          # Get provider timezone
+          # --------------------------------------------------
+
+          provider_timezone = (
+              get_server_timezone()
+          )
+
+
+          # --------------------------------------------------
+          # Download provider channels
+          # --------------------------------------------------
+
+          print(
+              "Downloading provider channels..."
+          )
+
+
+          url = (
+              f"{XTREAM_URL}/player_api.php"
+              f"?username={USERNAME}"
+              f"&password={PASSWORD}"
+              f"&action=get_live_streams"
+          )
+
+
+          streams = None
+
+
+          for attempt in range(
+              1,
+              6
+          ):
+
+              try:
+
+                  print(
+                      f"Downloading provider channels "
+                      f"(attempt {attempt}/5)..."
+                  )
+
+
+                  response = session.get(
+                      url,
+                      timeout=(30, 600)
+                  )
+
+
+                  response.raise_for_status()
+
+
+                  streams = response.json()
+
+
+                  break
+
+
+              except Exception as e:
+
+                  print(
+                      "Download failed:"
+                  )
+
+
+                  print(
+                      e
+                  )
+
+
+                  if attempt < 5:
+
+                      time.sleep(
+                          10
+                      )
+
+
+          if streams is None:
+
+              print(
+                  "Unable to download provider channels."
+              )
+
+
+              raise SystemExit(
+                  1
+              )
+
+
+          print(
+              f"Provider channels: "
+              f"{len(streams)}"
+          )
+
+
+          provider = {}
+
+
+          for stream in streams:
+
+              stream_id = str(
+                  stream.get(
+                      "stream_id"
+                  )
+              )
+
+
+              provider[stream_id] = stream
+
+
+          # --------------------------------------------------
+          # ESPN schedule lookup
+          # --------------------------------------------------
+
+          ESPN_LEAGUES = [
+
+              "mlb",
+              "nfl",
+              "nba",
+              "nhl",
+              "wnba",
+              "ncaaf",
+              "ncaab",
+              "ncaaw",
+              "mls",
+              "eng.1",
+              "esp.1",
+              "ger.1",
+              "ita.1",
+              "fra.1",
+              "usa.1",
+              "usa.nwsl",
+              "ufc",
+              "boxing"
+          ]
+
+
+          def normalize_team_name(
+              text
+          ):
+
+              text = clean_text(
+                  text
+              ).lower()
+
+
+              text = re.sub(
+                  r"[^a-z0-9 ]",
+                  " ",
+                  text
+              )
+
+
+              stop_words = {
+
+                  "live",
+                  "hd",
+                  "sd",
+                  "fhd",
+                  "4k",
+                  "channel",
+                  "tv",
+                  "network",
+                  "sports",
+                  "sport",
+                  "event",
+                  "game",
+                  "match",
+                  "today",
+                  "tomorrow"
+
+              }
+
+
+              words = [
+
+                  word
+
+                  for word in text.split()
+
+                  if word not in stop_words
+
+              ]
+
+
+              return " ".join(
+                  words
+              )
+
+
+          def extract_matchup(
+              text
+          ):
+
+              text = clean_text(
+                  text
+              )
+
+
+              text = re.sub(
+                  r"\b(Start|Stop)\s*:.*$",
+                  "",
+                  text,
+                  flags=re.IGNORECASE
+              )
+
+
+              text = re.sub(
+                  r"\b\d{4}-\d{2}-\d{2}\b",
+                  "",
+                  text
+              )
+
+
+              text = re.sub(
+                  r"\b\d{1,2}:\d{2}(?::\d{2})?\s*(AM|PM)?\b",
+                  "",
+                  text,
+                  flags=re.IGNORECASE
+              )
+
+
+              return normalize_matchup(
+                  text
+              )
+
+
+          def matchup_parts(
+              text
+          ):
+
+              text = extract_matchup(
+                  text
+              )
+
+
+              parts = re.split(
+                  r"\s+vs\.\s+",
+                  text,
+                  flags=re.IGNORECASE
+              )
+
+
+              if len(parts) != 2:
+
+                  return []
+
+
+              return [
+
+                  normalize_team_name(
+                      parts[0]
+                  ),
+
+                  normalize_team_name(
+                      parts[1]
+                  )
+
+              ]
+
+
+          def team_matches(
+              wanted_team,
+              actual_team
+          ):
+
+              wanted_team = normalize_team_name(
+                  wanted_team
+              )
+
+
+              actual_team = normalize_team_name(
+                  actual_team
+              )
+
+
+              if not wanted_team or not actual_team:
+
+                  return False
+
+
+              if (
+                  wanted_team in actual_team
+                  or actual_team in wanted_team
+              ):
+
+                  return True
+
+
+              return (
+                  SequenceMatcher(
+                      None,
+                      wanted_team,
+                      actual_team
+                  ).ratio()
+                  >=
+                  0.72
+              )
+
+
+          def get_espn_events(
+              date_value
+          ):
+
+              events = []
+
+
+              date_text = date_value.strftime(
+                  "%Y%m%d"
+              )
+
+
+              for league in ESPN_LEAGUES:
+
+                  url = (
+                      "https://site.api.espn.com/apis/site/v2/"
+                      f"sports/{league}/scoreboard"
+                      f"?dates={date_text}"
+                  )
+
+
+                  try:
+
+                      response = session.get(
+                          url,
+                          timeout=30
+                      )
+
+
+                      if response.status_code != 200:
+
+                          continue
+
+
+                      data = response.json()
+
+
+                      for event in data.get(
+                          "events",
+                          []
+                      ):
+
+                          events.append(
+                              event
+                          )
+
+
+                  except Exception:
+
+                      continue
+
+
+              return events
+
+
+          def find_real_game(
+              provider_text,
+              preferred_date
+          ):
+
+              provider_matchup = (
+                  matchup_parts(
+                      provider_text
+                  )
+              )
+
+
+              if len(provider_matchup) != 2:
+
+                  return None
+
+
+              dates = [
+
+                  preferred_date,
+
+                  preferred_date - timedelta(
+                      days=1
+                  ),
+
+                  preferred_date + timedelta(
+                      days=1
+                  )
+
+              ]
+
+
+              for date_value in dates:
+
+                  events = get_espn_events(
+                      date_value
+                  )
+
+
+                  for event in events:
+
+                      competitions = event.get(
+                          "competitions",
+                          []
+                      )
+
+
+                      if not competitions:
+
+                          continue
+
+
+                      competition = (
+                          competitions[0]
+                      )
+
+
+                      competitors = (
+                          competition.get(
+                              "competitors",
+                              []
+                          )
+                      )
+
+
+                      if len(competitors) < 2:
+
+                          continue
+
+
+                      names = []
+
+
+                      for competitor in competitors:
+
+                          team = competitor.get(
+                              "team",
+                              {}
+                          )
+
+
+                          names.append(
+                              team.get(
+                                  "displayName",
+                                  ""
+                              )
+                          )
+
+
+                      if len(names) < 2:
+
+                          continue
+
+
+                      if (
+
+                          (
+                              team_matches(
+                                  provider_matchup[0],
+                                  names[0]
+                              )
+
+                              and
+
+                              team_matches(
+                                  provider_matchup[1],
+                                  names[1]
+                              )
+
+                          )
+
+                          or
+
+                          (
+
+                              team_matches(
+                                  provider_matchup[0],
+                                  names[1]
+                              )
+
+                              and
+
+                              team_matches(
+                                  provider_matchup[1],
+                                  names[0]
+                              )
+
+                          )
+
+                      ):
+
+                          event_date = None
+
+
+                          event_date_text = (
+                              event.get(
+                                  "date"
+                              )
+                          )
+
+
+                          if event_date_text:
+
+                              try:
+
+                                  event_date = (
+                                      datetime.fromisoformat(
+                                          event_date_text
+                                          .replace(
+                                              "Z",
+                                              "+00:00"
+                                          )
+                                      ).astimezone(
+                                          ZoneInfo(
+                                              "America/New_York"
+                                          )
+                                      )
+                                  )
+
+
+                              except Exception:
+
+                                  event_date = None
+
+
+                          if not event_date:
+
+                              continue
+
+
+                          return {
+
+                              "away":
+
+                              names[0],
+
+                              "home":
+
+                              names[1],
+
+                              "datetime":
+
+                              event_date
+
+                          }
+
+
+              return None
+
+
+          def get_day_label(
+              event_datetime
+          ):
+
+              eastern_now = datetime.now(
+                  ZoneInfo(
+                      "America/New_York"
+                  )
+              )
+
+
+              event_date = (
+                  event_datetime.date()
+              )
+
+
+              today = (
+                  eastern_now.date()
+              )
+
+
+              tomorrow = (
+                  today + timedelta(
+                      days=1
+                  )
+              )
+
+
+              if event_date == today:
+
+                  return "Today"
+
+
+              if event_date == tomorrow:
+
+                  return "Tomorrow"
+
+
+              return event_datetime.strftime(
+                  "%A"
+              )
+
+
+          # --------------------------------------------------
+          # EPG lookup
+          # --------------------------------------------------
+
+          def get_epg(
+              stream_id
+          ):
+
+              epg_url = (
+
+                  f"{XTREAM_URL}/player_api.php"
+
+                  f"?username={USERNAME}"
+
+                  f"&password={PASSWORD}"
+
+                  f"&action=get_short_epg"
+
+                  f"&stream_id={stream_id}"
+
+                  f"&limit=5"
+
+              )
+
+
+              try:
+
+                  response = session.get(
+                      epg_url,
+                      timeout=30
+                  )
+
+
+                  if response.status_code != 200:
+
+                      return None
+
+
+                  data = response.json()
+
+
+                  listings = data.get(
+                      "epg_listings",
+                      []
+                  )
+
+
+                  if listings:
+
+                      return listings[0]
+
+
+              except Exception:
+
+                  return None
+
+
+              return None
+
+
+          # --------------------------------------------------
+          # Build event information
+          # --------------------------------------------------
+
+          def build_event_info(
+              stream,
+              epg
+          ):
+
+              title_text = ""
+
+
+              description_text = ""
+
+
+              provider_name = clean_text(
+                  stream.get(
+                      "name",
+                      ""
+                  )
+              )
+
+
+              if epg:
+
+                  title_text = clean_text(
+                      epg.get(
+                          "title",
+                          ""
+                      )
+                  )
+
+
+                  description_text = clean_text(
+                      epg.get(
+                          "description",
+                          ""
+                      )
+                  )
+
+
+              if not title_text:
+
+                  title_text = provider_name
+
+
+                  description_text = provider_name
+
+
+              original_provider_datetime = (
+                  extract_start_datetime(
+                      title_text
+                  )
+              )
+
+
+              if not original_provider_datetime:
+
+                  original_provider_datetime = (
+                      extract_start_datetime(
+                          provider_name
+                      )
+                  )
+
+
+              original_eastern = None
+
+
+              if original_provider_datetime:
+
+                  original_eastern = (
+                      convert_to_eastern(
+                          original_provider_datetime,
+                          provider_timezone
+                      )
+                  )
+
+
+              # --------------------------------------------------
+              # Use public schedule lookup
+              # --------------------------------------------------
+
+              lookup_text = title_text
+
+
+              if not lookup_text:
+
+                  lookup_text = provider_name
+
+
+              lookup_date = (
+
+                  original_eastern.date()
+
+                  if original_eastern
+
+                  else datetime.now(
+                      ZoneInfo(
+                          "America/New_York"
+                      )
+                  ).date()
+
+              )
+
+
+              real_game = find_real_game(
+                  lookup_text,
+                  lookup_date
+              )
+
+
+              if real_game:
+
+                  away = real_game["away"]
+
+
+                  home = real_game["home"]
+
+
+                  event_datetime = (
+                      real_game["datetime"]
+                  )
+
+
+                  matchup = (
+                      f"{away} vs. {home}"
+                  )
+
+
+                  title_text = (
+                      f"{matchup} "
+                      f"({format_time(event_datetime)})"
+                  )
+
+
+                  day_label = get_day_label(
+                      event_datetime
+                  )
+
+
+                  date_text = (
+                      event_datetime.strftime(
+                          "%m/%d/%Y"
+                      )
+                  )
+
+
+                  description_text = (
+                      f"{matchup} — "
+                      f"{day_label}, "
+                      f"{date_text}"
+                  )
+
+
+                  return (
+
+                      title_text,
+
+                      description_text,
+
+                      event_datetime
+
+                  )
+
+
+              # --------------------------------------------------
+              # Provider fallback
+              # --------------------------------------------------
+
+              cleaned_title = (
+                  remove_event_metadata(
+                      title_text
+                  )
+              )
+
+
+              if not cleaned_title:
+
+                  cleaned_title = (
+                      remove_event_metadata(
+                          provider_name
+                      )
+                  )
+
+
+              start_eastern = None
+
+
+              if original_provider_datetime:
+
+                  start_eastern = (
+                      convert_to_eastern(
+                          original_provider_datetime,
+                          provider_timezone
+                      )
+                  )
+
+
+              if start_eastern:
+
+                  cleaned_title = (
+
+                      f"{cleaned_title} "
+
+                      f"({format_time(start_eastern)})"
+
+                  )
+
+
+              cleaned_description = (
+                  remove_event_metadata(
+                      description_text
+                  )
+              )
+
+
+              if not cleaned_description:
+
+                  cleaned_description = (
+                      cleaned_title
+                  )
+
+
+              return (
+
+                  cleaned_title,
+
+                  cleaned_description,
+
+                  start_eastern
+
+              )
+
+
+          # --------------------------------------------------
+          # Create XMLTV root
+          # --------------------------------------------------
+
+          tv = ET.Element(
+              "tv",
+              {
+                  "generator-info-name":
+                  "Festy Sports Guide"
+              }
+          )
+
+
+          # --------------------------------------------------
+          # Calculate guide period
+          # --------------------------------------------------
+
+          eastern_zone = ZoneInfo(
+              "America/New_York"
+          )
+
+
+          guide_start = datetime.now(
+              timezone.utc
+          ).astimezone(
+              eastern_zone
+          ).replace(
+              hour=0,
+              minute=0,
+              second=0,
+              microsecond=0
+          )
+
+
+          guide_end = (
+              guide_start
+              + timedelta(
+                  days=1
+              )
+          )
+
+
+          # --------------------------------------------------
+          # Create channels
+          # --------------------------------------------------
+
+          matched = 0
+
+
+          for channel_id, requested_name in wanted.items():
+
+              if channel_id not in provider:
+
+                  continue
+
+
+              matched += 1
+
+
+              stream = provider[
+                  channel_id
+              ]
+
+
+              provider_name = clean_channel_name(
+                  stream.get(
+                      "name",
+                      requested_name
+                  )
+              )
+
+
+              channel = ET.SubElement(
+                  tv,
+                  "channel",
+                  {
+                      "id":
+                      channel_id
+                  }
+              )
+
+
+              display = ET.SubElement(
+                  channel,
+                  "display-name"
+              )
+
+
+              display.text = provider_name
+
+
+          # --------------------------------------------------
+          # Create 2-hour programme blocks
+          # --------------------------------------------------
+
+          print(
+              "Creating 2-hour programme blocks..."
+          )
+
+
+          for channel_id, requested_name in wanted.items():
+
+              if channel_id not in provider:
+
+                  continue
+
+
+              stream = provider[
+                  channel_id
+              ]
+
+
+              print(
+                  f"Processing {channel_id}"
+              )
+
+
+              epg = get_epg(
+                  channel_id
+              )
+
+
+              (
+
+                  title_text,
+
+                  description_text,
+
+                  event_time
+
+              ) = build_event_info(
+                  stream,
+                  epg
+              )
+
+
+              current_start = guide_start
+
+
+              while current_start < guide_end:
+
+
+                  current_stop = (
+
+                      current_start
+
+                      + timedelta(
+                          hours=2
+                      )
+
+                  )
+
+
+                  if current_stop > guide_end:
+
+                      current_stop = guide_end
+
+
+                  programme = ET.SubElement(
+                      tv,
+                      "programme",
+                      {
+
+                          "start":
+
+                          current_start.strftime(
+                              "%Y%m%d%H%M%S %z"
+                          ),
+
+
+                          "stop":
+
+                          current_stop.strftime(
+                              "%Y%m%d%H%M%S %z"
+                          ),
+
+
+                          "channel":
+
+                          channel_id
+
+                      }
+                  )
+
+
+                  title = ET.SubElement(
+                      programme,
+                      "title"
+                  )
+
+
+                  title.text = title_text
+
+
+                  desc = ET.SubElement(
+                      programme,
+                      "desc"
+                  )
+
+
+                  desc.text = description_text
+
+
+                  current_start = current_stop
+
+
+          # --------------------------------------------------
+          # Save XMLTV file
+          # --------------------------------------------------
+
+          print(
+              "Writing XMLTV file..."
+          )
+
+
+          tree = ET.ElementTree(
+              tv
+          )
+
+
+          ET.indent(
+              tree,
+              space="  "
+          )
+
+
+          tree.write(
+              OUTPUT_FILE,
+              encoding="utf-8",
+              xml_declaration=True
+          )
+
+
+          print("")
+
+
+          print(
+              "Created:"
+          )
+
+
+          print(
+              OUTPUT_FILE
+          )
+
+
+          print(
+              f"Matched channels: "
+              f"{matched}"
+          )
+
+
+          print(
+              "Guide blocks: "
+              "2 hours each"
+          )
+
+          PYTHON
+
+
+          python /tmp/generate_sports.py
+
+
+      - name: Validate sports guide
+
+        run: |
+
+          test -s guides/sports.xml
+
+
+          CHANNELS=$(grep -c '<channel ' guides/sports.xml || true)
+
+          PROGRAMMES=$(grep -c '<programme ' guides/sports.xml || true)
+
+          TITLES=$(grep -c '<title>' guides/sports.xml || true)
+
+          DESCRIPTIONS=$(grep -c '<desc>' guides/sports.xml || true)
+
+
+          echo "Sports channels: $CHANNELS"
+
+          echo "Sports programmes: $PROGRAMMES"
+
+          echo "Sports titles: $TITLES"
+
+          echo "Sports descriptions: $DESCRIPTIONS"
+
+
+          if [ "$CHANNELS" -lt 1 ]; then
+
+            echo "Sports guide contains no channels"
+
+            exit 1
+
+          fi
+
+
+          if [ "$PROGRAMMES" -lt 1 ]; then
+
+            echo "Sports guide contains no programmes"
+
+            exit 1
+
+          fi
+
+
+      - name: Commit and push sports guide
+
+        run: |
+
+          git config --global user.name "github-actions"
+
+          git config --global user.email "github-actions@github.com"
+
+
+          git add guides/sports.xml
+
+
+          if git diff --cached --quiet; then
+
+            echo "No changes to commit"
+
+            exit 0
+
+          fi
+
+
+          git commit \
+            -m "Update sports guide"
+
+
+          git push
