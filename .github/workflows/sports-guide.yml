@@ -63,7 +63,7 @@ jobs:
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-          python test_xtream.py
+          python config/test_xtream.py
 
       - name: Test provider EPG
         env:
@@ -71,7 +71,7 @@ jobs:
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-          python test_epg.py
+          python config/test_epg.py
 
       - name: Generate sports guide
         env:
@@ -79,7 +79,7 @@ jobs:
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-          python generate_sports.py
+          python config/generate_sports.py
 
       - name: Commit and push sports guide
         run: |
