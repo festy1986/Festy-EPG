@@ -1,4 +1,4 @@
-name: TEST TVPassport Canada Raw Extraction
+name: TVPassport Canada Raw
 
 on:
   workflow_dispatch:
@@ -6,44 +6,42 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: test-tvpassport-canada-extraction
-  cancel-in-progress: false
-
 jobs:
+
   extract-canada-channels:
+
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract TEST Canadian channels from TVPassport RAW
+      - name: Extract Canadian TVPassport channels
         run: |
+
           mkdir -p config/TVPassportCanada
 
           python3 - <<'PY'
+
           import re
           from pathlib import Path
 
-          source_path = Path("guides/TVPassportRAW.xml")
-          output_path = Path(
-              "config/TVPassportCanada/TEST_TVPassportCanada.xml"
+          input_file = Path(
+              "guides/TVPassportRAW.xml"
           )
 
-          if not source_path.exists():
-              raise SystemExit(
-                  f"ERROR: Source file not found: {source_path}"
-              )
+          output_file = Path(
+              "config/TVPassportCanada/TVPassportCanadaRAW.xml"
+          )
 
-          source = source_path.read_text(
-              encoding="utf-8",
-              errors="replace"
+          text = input_file.read_text(
+              encoding="utf-8"
           )
 
           channel_blocks = re.findall(
               r"<channel\b[^>]*>.*?</channel>",
-              source,
+              text,
               flags=re.IGNORECASE | re.DOTALL
           )
 
@@ -63,9 +61,135 @@ jobs:
               "YT"
           }
 
-          canadian_matches = []
+          canadian_places = [
+              "alberta",
+              "british columbia",
+              "manitoba",
+              "new brunswick",
+              "newfoundland",
+              "newfoundland and labrador",
+              "nova scotia",
+              "northwest territories",
+              "nunavut",
+              "ontario",
+              "prince edward island",
+              "quebec",
+              "saskatchewan",
+              "yukon",
+
+              "calgary",
+              "edmonton",
+              "vancouver",
+              "victoria",
+              "winnipeg",
+              "toronto",
+              "ottawa",
+              "montreal",
+              "montréal",
+              "quebec city",
+              "québec",
+              "halifax",
+              "saskatoon",
+              "regina",
+              "brampton",
+              "mississauga",
+              "hamilton",
+              "london",
+              "windsor",
+              "kingston",
+              "sudbury",
+              "thunder bay",
+              "st. john's",
+              "saint john",
+              "moncton",
+              "fredericton",
+              "charlottetown",
+              "yellowknife",
+              "whitehorse",
+              "iqaluit",
+
+              "canada"
+          ]
+
+          canadian_networks = [
+              "cbc",
+              "cbc news",
+              "ctv",
+              "ctv news",
+              "global",
+              "citytv",
+              "city tv",
+              "tvontario",
+              "tvo",
+              "tfo",
+              "crave",
+              "sportsnet",
+              "tsn",
+              "bell",
+              "shaw",
+              "rogers",
+              "sci-fi channel canada",
+              "amc canada",
+              "peachtree tv canada",
+              "penthouse tv canada",
+              "food network canada",
+              "history canada",
+              "discovery canada",
+              "muchmusic",
+              "much music",
+              "yacht club canada",
+              "weather network",
+              "teletoon",
+              "treehouse",
+              "slice",
+              "showcase",
+              "w network",
+              "space",
+              "super channel",
+              "ami-télé",
+              "ami tele",
+              "télé québec",
+              "tele quebec",
+              "ici",
+              "tfo"
+          ]
+
+          province_pattern = re.compile(
+              r"(?:^|[\s,(\-/])("
+              + "|".join(
+                  re.escape(code)
+                  for code in canadian_provinces
+              )
+              + r")(?:$|[\s,)\-/])",
+              re.IGNORECASE
+          )
+
+          output_channels = []
+
+          matched_by_name = 0
+          matched_by_site_id = 0
+          matched_by_xmltv_id = 0
+          matched_by_province = 0
+          matched_by_place = 0
+          matched_by_network = 0
 
           for block in channel_blocks:
+
+              name_match = re.search(
+                  r"<channel\b[^>]*>(.*?)</channel>",
+                  block,
+                  flags=re.IGNORECASE | re.DOTALL
+              )
+
+              if not name_match:
+                  continue
+
+              channel_name = re.sub(
+                  r"\s+",
+                  " ",
+                  name_match.group(1)
+              ).strip()
+
               site_id_match = re.search(
                   r'\bsite_id="([^"]*)"',
                   block,
@@ -78,181 +202,157 @@ jobs:
                   flags=re.IGNORECASE
               )
 
-              channel_name_match = re.search(
-                  r">([^<>]+)</channel>",
-                  block,
-                  flags=re.IGNORECASE
-              )
-
               site_id = (
-                  site_id_match.group(1).strip()
+                  site_id_match.group(1)
                   if site_id_match
                   else ""
               )
 
               xmltv_id = (
-                  xmltv_id_match.group(1).strip()
+                  xmltv_id_match.group(1)
                   if xmltv_id_match
-                  else ""
-              )
-
-              channel_name = (
-                  channel_name_match.group(1).strip()
-                  if channel_name_match
                   else ""
               )
 
               searchable_text = " ".join(
                   [
+                      channel_name,
                       site_id,
-                      xmltv_id,
-                      channel_name
+                      xmltv_id
                   ]
-              )
+              ).lower()
 
-              searchable_lower = searchable_text.lower()
-
-              is_canadian = False
-              match_reason = ""
+              matched = False
 
               if re.search(
                   r"\bcanada\b",
-                  searchable_lower
+                  channel_name,
+                  flags=re.IGNORECASE
+              ) or re.search(
+                  r"\bcanada\b",
+                  site_id,
+                  flags=re.IGNORECASE
               ):
-                  is_canadian = True
-                  match_reason = "Canada"
+                  matched = True
+                  matched_by_name += 1
 
-              elif re.search(
-                  r"\.ca(?:@|$|\b)",
-                  xmltv_id.lower()
+              if ".ca" in xmltv_id.lower():
+                  matched = True
+                  matched_by_xmltv_id += 1
+
+              if province_pattern.search(
+                  searchable_text
               ):
-                  is_canadian = True
-                  match_reason = ".ca XMLTV ID"
+                  matched = True
+                  matched_by_province += 1
 
+              if any(
+                  place in searchable_text
+                  for place in canadian_places
+              ):
+                  matched = True
+                  matched_by_place += 1
+
+              if any(
+                  network in searchable_text
+                  for network in canadian_networks
+              ):
+                  matched = True
+                  matched_by_network += 1
+
+              if matched:
+                  output_channels.append(
+                      block.strip()
+                  )
+
+          unique_channels = []
+
+          seen = set()
+
+          for block in output_channels:
+
+              channel_key = re.search(
+                  r'<channel\b[^>]*\bsite_id="([^"]*)"',
+                  block,
+                  flags=re.IGNORECASE
+              )
+
+              if channel_key:
+                  key = channel_key.group(1)
               else:
-                  province_pattern = (
-                      r"(?<![A-Za-z])"
-                      r"("
-                      + "|".join(
-                          sorted(
-                              canadian_provinces,
-                              key=len,
-                              reverse=True
-                          )
-                      )
-                      + r")"
-                      r"(?![A-Za-z])"
-                  )
+                  key = block
 
-                  province_match = re.search(
-                      province_pattern,
-                      searchable_text,
-                      flags=re.IGNORECASE
-                  )
+              if key not in seen:
+                  seen.add(key)
+                  unique_channels.append(block)
 
-                  if province_match:
-                      is_canadian = True
-                      match_reason = (
-                          "Canadian province "
-                          + province_match.group(1).upper()
-                      )
-
-              if is_canadian:
-                  canadian_matches.append(
-                      (
-                          channel_name,
-                          site_id,
-                          match_reason,
-                          block.strip()
-                      )
-                  )
-
-          output_lines = [
-              '<?xml version="1.0" encoding="UTF-8"?>',
-              "<!--",
-              "  TEST TVPassport Canada channel extraction",
-              "",
-              "  Source:",
-              "  guides/TVPassportRAW.xml",
-              "",
-              "  This file contains complete channel blocks",
-              "  identified as Canadian / Canada / Canadian province",
-              "  / .ca XMLTV channels by the TEST extraction.",
-              "-->",
-              "<tv>"
-          ]
-
-          for (
-              channel_name,
-              site_id,
-              match_reason,
-              block
-          ) in canadian_matches:
-              output_lines.append(
-                  f"  <!-- TEST MATCH: {match_reason} -->"
+          output = (
+              '<?xml version="1.0" encoding="UTF-8"?>\n'
+              '<tv>\n'
+              + "\n".join(
+                  unique_channels
               )
+              + "\n</tv>\n"
+          )
 
-              output_lines.append(
-                  "  " +
-                  block.replace(
-                      "\n",
-                      "\n  "
-                  )
-              )
-
-          output_lines.append("</tv>")
-
-          output_path.write_text(
-              "\n".join(output_lines) + "\n",
+          output_file.write_text(
+              output,
               encoding="utf-8"
           )
 
           print(
-              "TEST TVPassport Canada extraction complete"
+              "TVPassport Canada extraction complete"
           )
 
           print(
-              f"Total channel blocks scanned: "
+              f"Raw channel blocks scanned: "
               f"{len(channel_blocks)}"
           )
 
           print(
-              f"Canadian channel blocks extracted: "
-              f"{len(canadian_matches)}"
+              f"Canadian channels written: "
+              f"{len(unique_channels)}"
           )
 
           print(
-              f"Output: {output_path}"
+              f"Matched by Canada name/site_id: "
+              f"{matched_by_name}"
           )
-
-          print("")
 
           print(
-              "Extracted Canadian channels:"
+              f"Matched by .ca XMLTV ID: "
+              f"{matched_by_xmltv_id}"
           )
 
-          for (
-              channel_name,
-              site_id,
-              match_reason,
-              block
-          ) in canadian_matches:
-              print(
-                  f"  {channel_name} "
-                  f"[{site_id}] "
-                  f"({match_reason})"
-              )
+          print(
+              f"Matched by province/territory code: "
+              f"{matched_by_province}"
+          )
+
+          print(
+              f"Matched by Canadian place/region: "
+              f"{matched_by_place}"
+          )
+
+          print(
+              f"Matched by Canadian network/service: "
+              f"{matched_by_network}"
+          )
+
+          print(
+              f"Output: {output_file}"
+          )
+
           PY
 
-      - name: Commit TEST Canadian channel extraction
+      - name: Commit Canadian TVPassport channel list
         run: |
+
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add config/TVPassportCanada/TEST_TVPassportCanada.xml
+          git add config/TVPassportCanada/TVPassportCanadaRAW.xml
 
-          git diff --cached --quiet || \
-            git commit -m "TEST TVPassport Canada channel extraction"
+          git commit -m "Update TVPassport Canada raw channel list" || echo "No changes to commit"
 
-          git pull --rebase origin main
-          git push origin main
+          git push
