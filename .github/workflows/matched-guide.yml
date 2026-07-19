@@ -73,7 +73,7 @@ jobs:
 
         run: |
 
-          python generate_matched_guide.py
+          python config/generate_matched_guide.py
 
       - name: Commit and push guide
         run: |
