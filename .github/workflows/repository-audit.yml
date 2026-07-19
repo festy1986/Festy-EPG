@@ -19,16 +19,17 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Install PyYAML
-        run: pip install pyyaml
-
       - name: Run repository audit
-        run: python repo_audit.py
+        run: |
+          python repo_audit.py
 
       - name: Commit audit report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add repo_audit_report.txt
-          git commit -m "Update repository audit report" || exit 0
+
+          git diff --cached --quiet || git commit -m "Update repository audit report"
+
           git push
