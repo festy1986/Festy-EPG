@@ -8,7 +8,6 @@ from zoneinfo import ZoneInfo
 import re
 import html
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 CHANNEL_FILE = "config/sports_channels.txt"
@@ -55,6 +54,17 @@ session.headers.update(
         "Mozilla/5.0"
     }
 )
+
+
+# --------------------------------------------------
+# Public API statistics
+# --------------------------------------------------
+
+public_api_lookups = 0
+public_api_matches = 0
+verified_public_times_used = 0
+provider_fallbacks = 0
+no_public_match = 0
 
 
 # --------------------------------------------------
@@ -857,7 +867,8 @@ def team_matches(
         and actual_words
         and (
             wanted_words
-            & actual_words
+            &
+            actual_words
         )
     )
 
@@ -869,6 +880,12 @@ def team_matches(
 def get_public_events(
     date_value
 ):
+
+    global public_api_lookups
+
+
+    public_api_lookups += 1
+
 
     date_text = date_value.strftime(
         "%Y-%m-%d"
@@ -930,6 +947,9 @@ def find_public_event(
     provider_matchup,
     preferred_date
 ):
+
+    global public_api_matches
+
 
     parts = matchup_parts(
         provider_matchup
@@ -1076,6 +1096,9 @@ def find_public_event(
             )
 
 
+            public_api_matches += 1
+
+
             return {
 
                 "away":
@@ -1149,6 +1172,11 @@ def build_event_info(
     stream,
     epg
 ):
+
+    global verified_public_times_used
+    global provider_fallbacks
+    global no_public_match
+
 
     provider_name = clean_text(
         stream.get(
@@ -1250,6 +1278,9 @@ def build_event_info(
 
     if public_event:
 
+        verified_public_times_used += 1
+
+
         away = public_event[
             "away"
         ]
@@ -1281,11 +1312,6 @@ def build_event_info(
         )
 
 
-        day_label = get_day_label(
-            event_datetime
-        )
-
-
         date_text = (
             event_datetime.strftime(
                 "%m/%d/%Y"
@@ -1293,13 +1319,22 @@ def build_event_info(
         )
 
 
+        day_text = (
+            event_datetime.strftime(
+                "%A"
+            )
+        )
+
+
         description_text = (
 
-            f"{matchup} — "
+            f"{matchup}\n"
 
-            f"{day_label}, "
+            f"{day_text} "
 
-            f"{date_text}"
+            f"{date_text} - "
+
+            f"{format_time(event_datetime)}"
 
         )
 
@@ -1321,8 +1356,18 @@ def build_event_info(
     # Fallback when public schedule does not match
     # --------------------------------------------------
 
+    no_public_match += 1
+
+
+    if provider_start_eastern:
+
+        provider_fallbacks += 1
+
+
     cleaned_title = (
+
         provider_event
+
     )
 
 
@@ -1339,23 +1384,28 @@ def build_event_info(
         )
 
 
-    cleaned_description = (
+    if provider_start_eastern:
 
-        f"{provider_event} — "
+        cleaned_description = (
 
-        f"{get_day_label(
-            provider_start_eastern
-        )}, "
+            f"{provider_event}\n"
 
-        f"{provider_start_eastern.strftime(
-            '%m/%d/%Y'
-        )}"
+            f"{provider_start_eastern.strftime('%A')} "
 
-        if provider_start_eastern
+            f"{provider_start_eastern.strftime('%m/%d/%Y')} - "
 
-        else provider_event
+            f"{format_time(provider_start_eastern)}"
 
-    )
+        )
+
+
+    else:
+
+        cleaned_description = (
+
+            provider_event
+
+        )
 
 
     return (
@@ -1405,7 +1455,7 @@ guide_start = datetime.now(
 guide_end = (
     guide_start
     + timedelta(
-        days=1
+        days=3
     )
 )
 
@@ -1465,11 +1515,11 @@ for channel_id, requested_name in wanted.items():
 
 
 # --------------------------------------------------
-# Create 2-hour programme blocks
+# Create 6-hour programme blocks
 # --------------------------------------------------
 
 print(
-    "Creating 2-hour programme blocks..."
+    "Creating 6-hour programme blocks..."
 )
 
 
@@ -1520,7 +1570,7 @@ for channel_id, requested_name in wanted.items():
             current_start
 
             + timedelta(
-                hours=2
+                hours=6
             )
 
         )
@@ -1631,5 +1681,51 @@ print(
 
 print(
     "Guide blocks: "
-    "2 hours each"
+    "6 hours each"
+)
+
+
+print(
+    "Guide duration: "
+    "3 days"
+)
+
+
+print(
+    ""
+)
+
+
+print(
+    "Public API statistics:"
+)
+
+
+print(
+    f"Schedule API lookups: "
+    f"{public_api_lookups}"
+)
+
+
+print(
+    f"Verified public event matches: "
+    f"{public_api_matches}"
+)
+
+
+print(
+    f"Verified public times used: "
+    f"{verified_public_times_used}"
+)
+
+
+print(
+    f"Provider time fallbacks: "
+    f"{provider_fallbacks}"
+)
+
+
+print(
+    f"No public schedule match: "
+    f"{no_public_match}"
 )
