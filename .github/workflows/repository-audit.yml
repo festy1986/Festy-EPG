@@ -1,0 +1,1137 @@
+name: Repository Audit
+
+on:
+workflow_dispatch:
+
+permissions:
+contents: write
+
+jobs:
+
+audit:
+
+```
+runs-on: ubuntu-latest
+
+steps:
+
+  - name: Checkout repository
+    uses: actions/checkout@v4
+
+  - name: Create repository audit script
+    run: |
+
+      cat > repo_audit.py <<'PY'
+
+      import os
+      import re
+      import json
+      import gzip
+      from pathlib import Path
+      from datetime import datetime
+
+
+      ROOT = Path.cwd()
+
+      OUTPUT_TXT = ROOT / "repo_audit_report.txt"
+
+      OUTPUT_JSON = ROOT / "repo_audit.json"
+
+
+      IGNORE_DIRS = {
+
+          ".git",
+
+          "node_modules",
+
+          "__pycache__",
+
+          ".venv",
+
+          "venv"
+
+      }
+
+
+      TEXT_EXTENSIONS = {
+
+          ".yml",
+
+          ".yaml",
+
+          ".py",
+
+          ".js",
+
+          ".sh",
+
+          ".txt",
+
+          ".json",
+
+          ".xml",
+
+          ".md",
+
+          ".html",
+
+          ".css",
+
+          ".m3u",
+
+          ".m3u8"
+
+      }
+
+
+      def relative(path):
+
+          return str(
+
+              path.relative_to(ROOT)
+
+          ).replace("\\", "/")
+
+
+      def scan_files():
+
+          files = []
+
+
+          for path in ROOT.rglob("*"):
+
+
+              if not path.is_file():
+
+                  continue
+
+
+              if any(
+
+                  part in IGNORE_DIRS
+
+                  for part in path.parts
+
+              ):
+
+                  continue
+
+
+              files.append(path)
+
+
+          return files
+
+
+      def read_text(path):
+
+          try:
+
+
+              if path.suffix.lower() == ".gz":
+
+
+                  with gzip.open(
+
+                      path,
+
+                      "rt",
+
+                      errors="ignore"
+
+                  ) as f:
+
+
+                      return f.read()
+
+
+              return path.read_text(
+
+                  errors="ignore"
+
+              )
+
+
+          except Exception:
+
+
+              return ""
+
+
+      def get_age(path):
+
+          try:
+
+
+              modified = datetime.fromtimestamp(
+
+                  path.stat().st_mtime
+
+              )
+
+
+              return (
+
+                  datetime.now() - modified
+
+              ).days
+
+
+          except Exception:
+
+
+              return None
+
+
+      def extract_workflow_name(text):
+
+          match = re.search(
+
+              r"(?m)^name:\s*(.+)$",
+
+              text
+
+          )
+
+
+          if match:
+
+
+              return match.group(1).strip()
+
+
+          return "Unknown"
+
+
+      def extract_workflow_references(text):
+
+          references = set()
+
+
+          patterns = [
+
+              r"[\w./-]+\.py",
+
+              r"[\w./-]+\.js",
+
+              r"[\w./-]+\.sh",
+
+              r"[\w./-]+\.xml",
+
+              r"[\w./-]+\.xml\.gz",
+
+              r"[\w./-]+\.txt",
+
+              r"[\w./-]+\.json",
+
+              r"[\w./-]+\.m3u",
+
+              r"[\w./-]+\.m3u8",
+
+              r"scripts/[\w./-]+",
+
+              r"guides/[\w./-]+",
+
+              r"channels/[\w./-]+",
+
+              r"config/[\w./-]+"
+
+          ]
+
+
+          for pattern in patterns:
+
+
+              matches = re.findall(
+
+                  pattern,
+
+                  text
+
+              )
+
+
+              for match in matches:
+
+
+                  references.add(match)
+
+
+          return sorted(references)
+
+
+      def extract_secrets(text):
+
+          return sorted(
+
+              set(
+
+                  re.findall(
+
+                      r"secrets\.([A-Z0-9_]+)",
+
+                      text
+
+                  )
+
+              )
+
+          )
+
+
+      def find_workflows(files):
+
+          workflows = []
+
+
+          for path in files:
+
+
+              if ".github/workflows/" not in relative(path):
+
+                  continue
+
+
+              if path.suffix.lower() not in {
+
+                  ".yml",
+
+                  ".yaml"
+
+              }:
+
+                  continue
+
+
+              text = read_text(path)
+
+
+              workflows.append({
+
+                  "file": relative(path),
+
+                  "name": extract_workflow_name(text),
+
+                  "references": extract_workflow_references(text),
+
+                  "secrets": extract_secrets(text)
+
+              })
+
+
+          return workflows
+
+
+      def build_text_database(files):
+
+          database = {}
+
+
+          for path in files:
+
+
+              if path.suffix.lower() not in TEXT_EXTENSIONS:
+
+                  continue
+
+
+              text = read_text(path)
+
+
+              if text:
+
+
+                  database[relative(path)] = text
+
+
+          return database
+
+
+      def find_references(files, database):
+
+          references = {}
+
+
+          for target in files:
+
+
+              target_name = relative(target)
+
+
+              references[target_name] = []
+
+
+              possible_names = {
+
+                  target_name,
+
+                  target.name,
+
+                  "./" + target_name
+
+              }
+
+
+              for source, text in database.items():
+
+
+                  if source == target_name:
+
+                      continue
+
+
+                  if any(
+
+                      name in text
+
+                      for name in possible_names
+
+                  ):
+
+
+                      references[target_name].append(
+
+                          source
+
+                      )
+
+
+              references[target_name] = sorted(
+
+                  set(
+
+                      references[target_name]
+
+                  )
+
+              )
+
+
+          return references
+
+
+      def find_generated_files(files, database):
+
+          generated = []
+
+
+          for path in files:
+
+
+              name = relative(path)
+
+
+              if (
+
+                  "guides/" in name
+
+                  or "output/" in name
+
+                  or "generated/" in name
+
+              ):
+
+
+                  generated.append({
+
+                      "file": name,
+
+                      "referenced_by": []
+
+                  })
+
+
+          return generated
+
+
+      def find_xml_gzip_pairs(files):
+
+          pairs = []
+
+
+          file_names = {
+
+              relative(path)
+
+              for path in files
+
+          }
+
+
+          for name in sorted(file_names):
+
+
+              if not name.endswith(".xml"):
+
+                  continue
+
+
+              gz_name = name + ".gz"
+
+
+              if gz_name in file_names:
+
+
+                  pairs.append({
+
+                      "xml": name,
+
+                      "gzip": gz_name,
+
+                      "possible_duplicate": True
+
+                  })
+
+
+          return pairs
+
+
+      def classify_files(files, references):
+
+          classified = []
+
+
+          for path in files:
+
+
+              name = relative(path)
+
+
+              refs = references.get(
+
+                  name,
+
+                  []
+
+              )
+
+
+              age = get_age(path)
+
+
+              if refs:
+
+
+                  status = "REFERENCED"
+
+
+              elif (
+
+                  name.startswith(
+
+                      ".github/workflows/"
+
+                  )
+
+              ):
+
+
+                  status = "WORKFLOW"
+
+
+              elif (
+
+                  "guides/" in name
+
+                  or "output/" in name
+
+                  or "generated/" in name
+
+              ):
+
+
+                  status = "GENERATED_OR_OUTPUT"
+
+
+              else:
+
+
+                  status = "NOT_REFERENCED"
+
+
+              classified.append({
+
+                  "file": name,
+
+                  "status": status,
+
+                  "days_since_modified": age,
+
+                  "referenced_by": refs
+
+              })
+
+
+          return classified
+
+
+      def write_report(data):
+
+
+          with open(
+
+              OUTPUT_JSON,
+
+              "w",
+
+              encoding="utf-8"
+
+          ) as f:
+
+
+              json.dump(
+
+                  data,
+
+                  f,
+
+                  indent=2
+
+              )
+
+
+          with open(
+
+              OUTPUT_TXT,
+
+              "w",
+
+              encoding="utf-8"
+
+          ) as f:
+
+
+              f.write(
+
+                  "REPOSITORY AUDIT REPORT\n"
+
+              )
+
+
+              f.write(
+
+                  "=======================\n\n"
+
+              )
+
+
+              f.write(
+
+                  "Generated: "
+
+                  + data["generated"]
+
+                  + "\n\n"
+
+              )
+
+
+              f.write(
+
+                  "SUMMARY\n"
+
+              )
+
+
+              f.write(
+
+                  "-------\n"
+
+              )
+
+
+              f.write(
+
+                  "Total files: "
+
+                  + str(
+
+                      data["summary"]["total_files"]
+
+                  )
+
+                  + "\n"
+
+              )
+
+
+              f.write(
+
+                  "Workflows: "
+
+                  + str(
+
+                      data["summary"]["workflows"]
+
+                  )
+
+                  + "\n"
+
+              )
+
+
+              f.write(
+
+                  "Referenced files: "
+
+                  + str(
+
+                      data["summary"]["referenced_files"]
+
+                  )
+
+                  + "\n"
+
+              )
+
+
+              f.write(
+
+                  "Not referenced: "
+
+                  + str(
+
+                      data["summary"]["not_referenced"]
+
+                  )
+
+                  + "\n"
+
+              )
+
+
+              f.write(
+
+                  "XML/GZIP pairs: "
+
+                  + str(
+
+                      data["summary"]["xml_gzip_pairs"]
+
+                  )
+
+                  + "\n\n"
+
+              )
+
+
+              f.write(
+
+                  "WORKFLOWS\n"
+
+              )
+
+              f.write(
+
+                  "=========\n"
+
+              )
+
+
+              for workflow in data["workflows"]:
+
+
+                  f.write(
+
+                      "\n"
+
+                      + workflow["name"]
+
+                      + "\n"
+
+                  )
+
+
+                  f.write(
+
+                      "File: "
+
+                      + workflow["file"]
+
+                      + "\n"
+
+                  )
+
+
+                  f.write(
+
+                      "Secrets:\n"
+
+                  )
+
+
+                  for secret in workflow["secrets"]:
+
+
+                      f.write(
+
+                          "  - "
+
+                          + secret
+
+                          + "\n"
+
+                      )
+
+
+                  f.write(
+
+                      "References:\n"
+
+                  )
+
+
+                  for reference in workflow["references"]:
+
+
+                      f.write(
+
+                          "  - "
+
+                          + reference
+
+                          + "\n"
+
+                      )
+
+
+              f.write(
+
+                  "\n\nXML/GZIP PAIRS\n"
+
+              )
+
+
+              f.write(
+
+                  "===============\n"
+
+              )
+
+
+              for pair in data["xml_gzip_pairs"]:
+
+
+                  f.write(
+
+                      "\n"
+
+                      + pair["xml"]
+
+                      + "\n"
+
+                  )
+
+
+                  f.write(
+
+                      "  compressed: "
+
+                      + pair["gzip"]
+
+                      + "\n"
+
+                  )
+
+
+                  f.write(
+
+                      "  status: POSSIBLE DUPLICATE\n"
+
+                  )
+
+
+              f.write(
+
+                  "\n\nNOT REFERENCED FILES\n"
+
+              )
+
+
+              f.write(
+
+                  "====================\n"
+
+              )
+
+
+              for item in data["files"]:
+
+
+                  if item["status"] == "NOT_REFERENCED":
+
+
+                      f.write(
+
+                          "\n"
+
+                          + item["file"]
+
+                      )
+
+
+                      f.write(
+
+                          "\n  age: "
+
+                          + str(
+
+                              item["days_since_modified"]
+
+                          )
+
+                          + " days"
+
+                      )
+
+
+                      f.write(
+
+                          "\n  recommendation: REVIEW"
+
+                      )
+
+
+                      f.write(
+
+                          "\n  DO NOT DELETE AUTOMATICALLY"
+
+                      )
+
+
+                      f.write(
+
+                          "\n"
+
+                      )
+
+
+              f.write(
+
+                  "\n\nGENERATED / OUTPUT FILES\n"
+
+              )
+
+
+              f.write(
+
+                  "========================\n"
+
+              )
+
+
+              for item in data["files"]:
+
+
+                  if item["status"] == "GENERATED_OR_OUTPUT":
+
+
+                      f.write(
+
+                          "\n"
+
+                          + item["file"]
+
+                      )
+
+
+                      f.write(
+
+                          "\n  referenced by: "
+
+                          + str(
+
+                              len(
+
+                                  item["referenced_by"]
+
+                              )
+
+                          )
+
+                      )
+
+
+                      f.write(
+
+                          "\n"
+
+                      )
+
+
+      def main():
+
+
+          print(
+
+              "Scanning repository..."
+
+          )
+
+
+          files = scan_files()
+
+
+          database = build_text_database(
+
+              files
+
+          )
+
+
+          workflows = find_workflows(
+
+              files
+
+          )
+
+
+          references = find_references(
+
+              files,
+
+              database
+
+          )
+
+
+          xml_gzip_pairs = find_xml_gzip_pairs(
+
+              files
+
+          )
+
+
+          classified = classify_files(
+
+              files,
+
+              references
+
+          )
+
+
+          summary = {
+
+
+              "total_files": len(files),
+
+
+              "workflows": len(workflows),
+
+
+              "referenced_files": sum(
+
+                  1
+
+                  for item in classified
+
+                  if item["status"] == "REFERENCED"
+
+              ),
+
+
+              "not_referenced": sum(
+
+                  1
+
+                  for item in classified
+
+                  if item["status"] == "NOT_REFERENCED"
+
+              ),
+
+
+              "xml_gzip_pairs": len(
+
+                  xml_gzip_pairs
+
+              )
+
+          }
+
+
+          data = {
+
+
+              "generated": datetime.now().isoformat(),
+
+
+              "summary": summary,
+
+
+              "workflows": workflows,
+
+
+              "xml_gzip_pairs": xml_gzip_pairs,
+
+
+              "files": classified
+
+          }
+
+
+          write_report(data)
+
+
+          print(
+
+              "Audit complete"
+
+          )
+
+
+          print(
+
+              "Files scanned:",
+
+              len(files)
+
+          )
+
+
+          print(
+
+              "Workflows found:",
+
+              len(workflows)
+
+          )
+
+
+          print(
+
+              "Report:",
+
+              OUTPUT_TXT
+
+          )
+
+
+      if __name__ == "__main__":
+
+
+          main()
+
+      PY
+
+  - name: Run repository audit
+    run: |
+
+      python repo_audit.py
+
+  - name: Commit audit report
+    run: |
+
+      git config user.name "github-actions[bot]"
+
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      git add repo_audit_report.txt
+
+      git add repo_audit.json
+
+      git commit -m "Add repository audit report" || echo "No changes to commit"
+
+      git push
+```
