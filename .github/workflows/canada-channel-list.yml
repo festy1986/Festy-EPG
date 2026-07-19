@@ -1,4 +1,4 @@
-name: Canada Channel IDs
+name: Update Canada Channel IDs
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
 
-  canada-channel-ids:
+  update-canada-channel-ids:
 
     runs-on: ubuntu-latest
 
@@ -32,7 +32,7 @@ jobs:
 
           echo "Provider credentials found"
 
-      - name: Get all provider groups and channels
+      - name: Get provider live channels and match Canada list
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -44,23 +44,6 @@ jobs:
           mkdir -p test
 
           BASE_URL="${XTREAM_URL%/}"
-
-          echo "Getting all provider live categories..."
-
-          curl \
-            --fail \
-            --retry 5 \
-            --retry-delay 5 \
-            --silent \
-            --show-error \
-            --get \
-            --data-urlencode "username=$XTREAM_USERNAME" \
-            --data-urlencode "password=$XTREAM_PASSWORD" \
-            --data-urlencode "action=get_live_categories" \
-            "$BASE_URL/player_api.php" \
-            -o test/canada_categories.json
-
-          test -s test/canada_categories.json
 
           echo "Getting all provider live channels..."
 
@@ -75,69 +58,55 @@ jobs:
             --data-urlencode "password=$XTREAM_PASSWORD" \
             --data-urlencode "action=get_live_streams" \
             "$BASE_URL/player_api.php" \
-            -o test/canada_live_streams.json
+            -o test/live_streams.json
 
-          test -s test/canada_live_streams.json
+          test -s test/live_streams.json
 
-          echo "Matching channels from config/canada_channels.txt..."
+          echo "Matching config/canada_channels.txt against provider channels..."
 
           python3 - <<'PY'
 
           import json
           import re
-          from collections import defaultdict
+          import unicodedata
 
-          CHANNEL_FILE = "config/canada_channels.txt"
+          INPUT_FILE = "config/canada_channels.txt"
+          STREAM_FILE = "test/live_streams.json"
+          OUTPUT_FILE = "config/canada_channels.txt"
 
-          with open(
-              "test/canada_categories.json",
-              "r",
-              encoding="utf-8"
-          ) as file:
-
-              categories = json.load(file)
-
-          with open(
-              "test/canada_live_streams.json",
-              "r",
-              encoding="utf-8"
-          ) as file:
-
-              streams = json.load(file)
 
           def normalize(value):
 
-              value = str(
-                  value
-                  or ""
-              ).upper()
+              value = str(value or "")
 
-              value = value.replace(
-                  "&",
-                  " AND "
+              value = unicodedata.normalize(
+                  "NFKC",
+                  value
               )
+
+              value = value.strip().lower()
 
               value = re.sub(
-                  r"[^A-Z0-9]+",
-                  " ",
-                  value
-              )
-
-              return re.sub(
                   r"\s+",
                   " ",
                   value
-              ).strip()
+              )
 
-          def clean_requested_name(value):
+              return value
 
-              value = str(
-                  value
-                  or ""
-              ).strip()
+
+          def clean_name(value):
+
+              value = str(value or "").strip()
 
               value = re.sub(
-                  r"^\s*CA\s*:\s*",
+                  r"^\s*\d+\s*\|\s*",
+                  "",
+                  value
+              )
+
+              value = re.sub(
+                  r"^\s*id\s*=\s*['\"]?[^'\"]+['\"]?\s*",
                   "",
                   value,
                   flags=re.IGNORECASE
@@ -145,23 +114,22 @@ jobs:
 
               return value.strip()
 
-          def similarity_tokens(value):
 
-              return set(
-                  normalize(value).split()
-              )
+          print(
+              "Reading existing Canada channel list..."
+          )
 
           requested_channels = []
 
           with open(
-              CHANNEL_FILE,
+              INPUT_FILE,
               "r",
               encoding="utf-8"
           ) as file:
 
-              for line in file:
+              for raw_line in file:
 
-                  line = line.strip()
+                  line = raw_line.strip()
 
                   if not line:
                       continue
@@ -169,81 +137,50 @@ jobs:
                   if line.startswith("#"):
                       continue
 
-                  if "|" in line:
-
-                      left, right = line.split(
-                          "|",
-                          1
-                      )
-
-                      line = right.strip()
-
-                  channel_name = clean_requested_name(
+                  channel_name = clean_name(
                       line
                   )
 
                   if not channel_name:
                       continue
 
+                  if not channel_name.upper().startswith(
+                      "CA:"
+                  ):
+
+                      continue
+
                   requested_channels.append(
                       channel_name
                   )
 
-          unique_requested = []
 
-          seen_requested = set()
+          print(
+              "Canada channels requested:",
+              len(
+                  requested_channels
+              )
+          )
 
-          for channel_name in requested_channels:
 
-              normalized = normalize(
-                  channel_name
+          print(
+              "Reading provider channels..."
+          )
+
+          with open(
+              STREAM_FILE,
+              "r",
+              encoding="utf-8"
+          ) as file:
+
+              provider_streams = json.load(
+                  file
               )
 
-              if normalized in seen_requested:
-                  continue
 
-              seen_requested.add(
-                  normalized
-              )
+          provider_channels = []
 
-              unique_requested.append(
-                  channel_name
-              )
-
-          category_names = {}
-
-          for category in categories:
-
-              category_id = str(
-                  category.get(
-                      "category_id",
-                      ""
-                  )
-              ).strip()
-
-              category_name = str(
-                  category.get(
-                      "category_name",
-                      ""
-                  )
-              ).strip()
-
-              if category_id:
-
-                  category_names[
-                      category_id
-                  ] = category_name
-
-          all_channels = []
-
-          for stream in streams:
-
-              channel_name = str(
-                  stream.get(
-                      "name",
-                      ""
-                  )
-              ).strip()
+          for stream in provider_streams:
 
               stream_id = str(
                   stream.get(
@@ -252,285 +189,142 @@ jobs:
                   )
               ).strip()
 
-              category_id = str(
+              provider_name = str(
                   stream.get(
-                      "category_id",
+                      "name",
                       ""
                   )
               ).strip()
 
-              if not channel_name:
-                  continue
-
               if not stream_id:
                   continue
 
-              all_channels.append(
-                  {
-                      "name":
-                          channel_name,
+              if not provider_name:
+                  continue
 
+              provider_channels.append(
+                  {
                       "stream_id":
                           stream_id,
 
-                      "category_id":
-                          category_id,
+                      "name":
+                          provider_name,
 
-                      "category_name":
-                          category_names.get(
-                              category_id,
-                              ""
+                      "normalized":
+                          normalize(
+                              provider_name
                           )
                   }
               )
 
-          def score_match(
-              requested,
-              provider
-          ):
 
-              requested_normalized = normalize(
-                  requested
-              )
+          exact_matches = {}
 
-              provider_normalized = normalize(
-                  provider
-              )
+          for provider_channel in provider_channels:
 
-              if not requested_normalized:
-                  return 0
+              normalized_name = provider_channel[
+                  "normalized"
+              ]
 
-              if not provider_normalized:
-                  return 0
+              if normalized_name not in exact_matches:
 
-              if requested_normalized == provider_normalized:
+                  exact_matches[
+                      normalized_name
+                  ] = provider_channel
 
-                  return 1000
 
-              requested_tokens = similarity_tokens(
-                  requested
-              )
-
-              provider_tokens = similarity_tokens(
-                  provider
-              )
-
-              if not requested_tokens:
-                  return 0
-
-              intersection = (
-                  requested_tokens
-                  &
-                  provider_tokens
-              )
-
-              score = (
-                  len(intersection)
-                  * 100
-              )
-
-              if requested_normalized in provider_normalized:
-
-                  score += 300
-
-              if provider_normalized in requested_normalized:
-
-                  score += 200
-
-              requested_without_hd = re.sub(
-                  r"\bHD\b",
-                  "",
-                  requested_normalized
-              ).strip()
-
-              provider_without_hd = re.sub(
-                  r"\bHD\b",
-                  "",
-                  provider_normalized
-              ).strip()
-
-              if (
-                  requested_without_hd
-                  and
-                  requested_without_hd
-                  ==
-                  provider_without_hd
-              ):
-
-                  score += 500
-
-              return score
-
-          matches = {}
+          matched = []
 
           unmatched = []
 
-          for requested in unique_requested:
+          seen_output = set()
 
-              best_channel = None
 
-              best_score = 0
+          for requested_name in requested_channels:
 
-              for provider_channel in all_channels:
+              normalized_requested = normalize(
+                  requested_name
+              )
 
-                  current_score = score_match(
-                      requested,
-                      provider_channel[
-                          "name"
-                      ]
+              match = exact_matches.get(
+                  normalized_requested
+              )
+
+
+              if match:
+
+                  output_line = (
+                      match["stream_id"]
+                      + " | "
+                      + requested_name
                   )
 
-                  if current_score > best_score:
+                  output_key = normalize(
+                      output_line
+                  )
 
-                      best_score = current_score
+                  if output_key not in seen_output:
 
-                      best_channel = provider_channel
-
-              if best_channel is not None and best_score >= 100:
-
-                  matches[
-                      normalize(
-                          requested
+                      matched.append(
+                          output_line
                       )
-                  ] = {
-                      "requested":
-                          requested,
 
-                      "provider":
-                          best_channel,
-
-                      "score":
-                          best_score
-                  }
+                      seen_output.add(
+                          output_key
+                      )
 
               else:
 
                   unmatched.append(
-                      requested
+                      requested_name
                   )
 
-          output_lines = []
-
-          output_lines.append(
-              "# CANADA / CA CHANNEL LIST"
-          )
-
-          output_lines.append(
-              "# MATCHED AGAINST ALL PROVIDER GROUPS AND CHANNELS"
-          )
-
-          output_lines.append(
-              "# FORMAT: STREAM_ID | FULL PROVIDER CHANNEL NAME"
-          )
-
-          output_lines.append(
-              "#"
-          )
-
-          output_lines.append(
-              "# Original requested channel names are preserved as comments"
-          )
-
-          output_lines.append(
-              "# so the list can be cross-checked and manually edited."
-          )
-
-          output_lines.append(
-              ""
-          )
-
-          for requested in unique_requested:
-
-              key = normalize(
-                  requested
-              )
-
-              match = matches.get(
-                  key
-              )
-
-              if not match:
-
-                  output_lines.append(
-                      "# UNMATCHED: "
-                      + requested
-                  )
-
-                  continue
-
-              provider = match[
-                  "provider"
-              ]
-
-              category_name = provider[
-                  "category_name"
-              ]
-
-              if category_name:
-
-                  output_lines.append(
-                      "# GROUP: "
-                      + category_name
-                  )
-
-              output_lines.append(
-                  "# REQUESTED: CA: "
-                  + requested
-              )
-
-              output_lines.append(
-                  provider[
-                      "stream_id"
-                  ]
-                  + " | "
-                  + provider[
-                      "name"
-                  ]
-              )
-
-              output_lines.append(
-                  ""
-              )
 
           with open(
-              CHANNEL_FILE,
+              OUTPUT_FILE,
               "w",
               encoding="utf-8"
           ) as file:
 
               file.write(
-                  "\n".join(
-                      output_lines
-                  )
-                  + "\n"
+                  "# CANADA CHANNEL LIST\n"
               )
+
+              file.write(
+                  "# FORMAT: PROVIDER STREAM ID | CHANNEL NAME\n"
+              )
+
+              file.write(
+                  "#\n"
+              )
+
+              for line in matched:
+
+                  file.write(
+                      line
+                      + "\n"
+                  )
+
 
           print()
           print(
-              "Requested channels:",
+              "Canada channels matched:",
               len(
-                  unique_requested
+                  matched
               )
           )
 
           print(
-              "Matched channels:",
-              len(
-                  matches
-              )
-          )
-
-          print(
-              "Unmatched channels:",
+              "Canada channels NOT matched:",
               len(
                   unmatched
               )
           )
 
-          print()
 
           if unmatched:
 
+              print()
               print(
                   "UNMATCHED CHANNELS:"
               )
@@ -542,29 +336,24 @@ jobs:
                       channel_name
                   )
 
+
           print()
           print(
               "Updated:",
-              CHANNEL_FILE
+              OUTPUT_FILE
           )
 
           PY
 
           echo
-          echo "Canada channel ID matching complete"
-
-          echo
-          echo "Updated file:"
-          ls -lh config/canada_channels.txt
-
-          echo
-          echo "Preview:"
+          echo "Updated Canada channel list:"
           cat config/canada_channels.txt
 
-      - name: Commit Canada channel IDs
+      - name: Commit updated Canada channel IDs
         run: |
 
-          git config --global user.name "github-actions"
+          git config --global user.name \
+            "github-actions"
 
           git config --global user.email \
             "41898282+github-actions[bot]@users.noreply.github.com"
