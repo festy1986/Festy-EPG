@@ -22,7 +22,7 @@
     <display-name>End | Le Castellet - Race 2 | Italian Formula 4 Championship | 2026-07-19 | 08:55 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 6</display-name>
   </channel>
   <channel id="1899995">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 7</display-name>
+    <display-name>End | Paul Ricard Race 2 | GT Cup Europe | 2026-07-19 | 10:10 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 7</display-name>
   </channel>
   <channel id="1899994">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 8</display-name>
@@ -37,7 +37,7 @@
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 11</display-name>
   </channel>
   <channel id="1899990">
-    <display-name>Next | Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</display-name>
+    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 12</display-name>
   </channel>
   <channel id="1899989">
     <display-name>Next | Ekhaya FC vs. FCB Nyasa Big Bullets | FDH Bank Premiership - Malawi | 2026-07-19 | 12:30 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 13</display-name>
@@ -1765,7 +1765,7 @@
     <display-name>End | Le Castellet - Race 2 | Italian Formula 4 Championship | 2026-07-19 | 08:55 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 7</display-name>
   </channel>
   <channel id="1912595">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 8</display-name>
+    <display-name>End | Paul Ricard Race 2 | GT Cup Europe | 2026-07-19 | 10:10 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 8</display-name>
   </channel>
   <channel id="1912594">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 9</display-name>
@@ -1774,7 +1774,7 @@
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 10</display-name>
   </channel>
   <channel id="1912592">
-    <display-name>Next | Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</display-name>
+    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 11</display-name>
   </channel>
   <channel id="1912591">
     <display-name>Next | Ekhaya FC vs. FCB Nyasa Big Bullets | FDH Bank Premiership - Malawi | 2026-07-19 | 12:30 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 12</display-name>
@@ -3055,7 +3055,7 @@
     <display-name>End | Le Castellet - Race 2 | Italian Formula 4 Championship | 2026-07-19 | 08:55 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 8</display-name>
   </channel>
   <channel id="1899893">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 9</display-name>
+    <display-name>End | Paul Ricard Race 2 | GT Cup Europe | 2026-07-19 | 10:10 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</display-name>
   </channel>
   <channel id="1899892">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 10</display-name>
@@ -3067,7 +3067,7 @@
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 12</display-name>
   </channel>
   <channel id="1899889">
-    <display-name>Next | Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</display-name>
+    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 13</display-name>
   </channel>
   <channel id="1899888">
     <display-name>Next | Ekhaya FC vs. FCB Nyasa Big Bullets | FDH Bank Premiership - Malawi | 2026-07-19 | 12:30 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 14</display-name>
@@ -3665,51 +3665,67 @@
   </channel>
   <channel id="762779">
     <display-name>MLB 01 | White Sox x Blue Jays start:2026-07-19 17:15:00 stop:2026-07-20 00:28:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Toronto_Blue_Jays/Toronto_Blue_Jays_vs_Chicago_White_Sox.png" />
   </channel>
   <channel id="762778">
     <display-name>MLB 02 | Dodgers x Yankees start:2026-07-19 17:35:00 stop:2026-07-20 00:48:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/New_York_Yankees/New_York_Yankees_vs_Los_Angeles_Dodgers.png" />
   </channel>
   <channel id="762777">
     <display-name>MLB 03 | Dodgers x Yankees start:2026-07-20 00:20:00 stop:2026-07-20 07:33:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/New_York_Yankees/New_York_Yankees_vs_Los_Angeles_Dodgers.png" />
   </channel>
   <channel id="762776">
     <display-name>MLB 04 | Rays x Red Sox start:2026-07-19 18:35:00 stop:2026-07-20 01:48:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Tampa_Bay_Rays/Tampa_Bay_Rays_vs_Boston_Red_Sox.png" />
   </channel>
   <channel id="762775">
     <display-name>MLB 05 | Mets x Phillies start:2026-07-19 18:35:00 stop:2026-07-20 01:48:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/New_York_Mets/New_York_Mets_vs_Philadelphia_Phillies.png" />
   </channel>
   <channel id="762774">
     <display-name>MLB 06 | Rangers x Braves start:2026-07-19 18:35:00 stop:2026-07-20 01:48:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Texas_Rangers/Texas_Rangers_vs_Atlanta_Braves.png" />
   </channel>
   <channel id="762773">
     <display-name>MLB 07 | Pirates x Guardians start:2026-07-19 18:40:00 stop:2026-07-20 01:53:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Cleveland_Guardians/Cleveland_Guardians_vs_Pittsburgh_Pirates.png" />
   </channel>
   <channel id="762772">
     <display-name>MLB 08 | Orioles x Astros start:2026-07-19 19:10:00 stop:2026-07-20 02:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Houston_Astros/Houston_Astros_vs_Baltimore_Orioles.png" />
   </channel>
   <channel id="762771">
     <display-name>MLB 09 | Padres x Royals start:2026-07-19 19:10:00 stop:2026-07-20 02:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/San_Diego_Padres/San_Diego_Padres_vs_Kansas_City_Royals.png" />
   </channel>
   <channel id="762770">
     <display-name>MLB 10 | Marlins x Brewers start:2026-07-19 19:10:00 stop:2026-07-20 02:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Miami_Marlins/Miami_Marlins_vs_Milwaukee_Brewers.png" />
   </channel>
   <channel id="762769">
     <display-name>MLB 11 | Twins x Cubs start:2026-07-19 19:20:00 stop:2026-07-20 02:33:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Minnesota_Twins/Minnesota_Twins_vs_Chicago_Cubs.png" />
   </channel>
   <channel id="762768">
     <display-name>MLB 12 | Reds x Rockies start:2026-07-19 20:10:00 stop:2026-07-20 03:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Colorado_Rockies/Colorado_Rockies_vs_Cincinnati_Reds.png" />
   </channel>
   <channel id="762767">
     <display-name>MLB 13 | Nationals x Athletics start:2026-07-19 21:05:00 stop:2026-07-20 04:18:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Washington_Nationals/Washington_Nationals_vs_Athletics.png" />
   </channel>
   <channel id="762766">
     <display-name>MLB 14 | Tigers x Angels start:2026-07-19 21:07:00 stop:2026-07-20 04:20:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Detroit_Tigers/Detroit_Tigers_vs_Los_Angeles_Angels.png" />
   </channel>
   <channel id="762765">
     <display-name>MLB 15 | Giants x Mariners start:2026-07-19 21:10:00 stop:2026-07-20 04:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/San_Francisco_Giants/San_Francisco_Giants_vs_Seattle_Mariners.png" />
   </channel>
   <channel id="762764">
     <display-name>MLB 16 | Cardinals x D-backs start:2026-07-19 21:10:00 stop:2026-07-20 04:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Arizona_Diamondbacks/Arizona_Diamondbacks_vs_St_Louis_Cardinals.png" />
   </channel>
   <channel id="762763">
     <display-name>MLB 17 |</display-name>
@@ -3833,12 +3849,15 @@
   </channel>
   <channel id="1634335">
     <display-name>NEXT | OKC - THUNDER VS BKN - NETS | Sun 19 Jul 15:30 EDT (US) | 8K EXCLUSIVE | US: NBA PASS PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Brooklyn_Nets/Brooklyn_Nets_vs_Oklahoma_City_Thunder.png" />
   </channel>
   <channel id="1634334">
     <display-name>NEXT | TOR - RAPTORS VS DEN - NUGGETS | Sun 19 Jul 17:30 EDT (US) | 8K EXCLUSIVE | US: NBA PASS PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Denver_Nuggets/Denver_Nuggets_vs_Toronto_Raptors.png" />
   </channel>
   <channel id="1634333">
     <display-name>NEXT | MEM - GRIZZLIES VS GSW - WARRIORS | Sun 19 Jul 20:00 EDT (US) | 8K EXCLUSIVE | US: NBA PASS PPV 3</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Golden_State_Warriors/Golden_State_Warriors_vs_Memphis_Grizzlies.png" />
   </channel>
   <channel id="1634332">
     <display-name>- NO EVENT STREAMING - | 8K EXCLUSIVE | US: NBA PASS PPV 4</display-name>
@@ -4366,7 +4385,7 @@
     <display-name>ENDED | TARANAKI MOUNTAINAIRS VS. FRANKLIN BULLS (ROUND 15) | Sun 19 Jul 02:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 1</display-name>
   </channel>
   <channel id="1924728">
-    <display-name>NEXT | 2026 WORLD MATCHPLAY (FIRST ROUND) | Sun 19 Jul 08:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 2</display-name>
+    <display-name>LIVE | 2026 WORLD MATCHPLAY (FIRST ROUND) | Sun 19 Jul 08:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 2</display-name>
   </channel>
   <channel id="1924727">
     <display-name>NEXT | OMAHA, NE VS. COLUMBIA, MO | Sun 19 Jul 09:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 3</display-name>
@@ -7433,6 +7452,7 @@
   </channel>
   <channel id="1601696">
     <display-name>US (ESPN+ 023) | MLB: Giants vs. Mariners (ESP) (2026-07-19 15:30:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/San_Francisco_Giants/San_Francisco_Giants_vs_Seattle_Mariners.png" />
   </channel>
   <channel id="1601695">
     <display-name>US (ESPN+ 024) | Premier Lacrosse League: Atlas vs. Cannons • SF vs. SEA (2026-07-19 15:30:15)</display-name>
@@ -7448,6 +7468,7 @@
   </channel>
   <channel id="1601691">
     <display-name>US (ESPN+ 028) | NBA: Nets vs. Thunder (2026-07-19 16:30:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Brooklyn_Nets/Brooklyn_Nets_vs_Oklahoma_City_Thunder.png" />
   </channel>
   <channel id="1601690">
     <display-name>US (ESPN+ 029) | Little League Softball: Illinois vs. Kentucky (2026-07-19 16:30:10)</display-name>
@@ -7469,6 +7490,7 @@
   </channel>
   <channel id="1601684">
     <display-name>US (ESPN+ 035) | NBA: Nuggets vs. Raptors (2026-07-19 18:30:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Denver_Nuggets/Denver_Nuggets_vs_Toronto_Raptors.png" />
   </channel>
   <channel id="1601683">
     <display-name>US (ESPN+ 036) | Basketball: Sun vs. Mercury (2026-07-19 19:00:00)</display-name>
@@ -7484,9 +7506,11 @@
   </channel>
   <channel id="1601679">
     <display-name>US (ESPN+ 040) | NBA: Warriors vs. Grizzlies (2026-07-19 21:00:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Golden_State_Warriors/Golden_State_Warriors_vs_Memphis_Grizzlies.png" />
   </channel>
   <channel id="1601678">
     <display-name>US (ESPN+ 041) | NBA: Warriors vs. Grizzlies (ESP) (2026-07-19 21:00:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Golden_State_Warriors/Golden_State_Warriors_vs_Memphis_Grizzlies.png" />
   </channel>
   <channel id="1601677">
     <display-name>US (ESPN+ 042) | World Long Drive: World Long Drive (2026-07-19 22:00:00)</display-name>
@@ -7547,15 +7571,19 @@
   </channel>
   <channel id="1601658">
     <display-name>US (ESPN+ 061) | MLB: Dodgers vs. Phillies (2026-07-20 19:00:00)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Los_Angeles_Dodgers/Los_Angeles_Dodgers_vs_Philadelphia_Phillies.png" />
   </channel>
   <channel id="1601657">
     <display-name>US (ESPN+ 062) | MLB: Dodgers vs. Phillies (ESP) (2026-07-20 19:00:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Los_Angeles_Dodgers/Los_Angeles_Dodgers_vs_Philadelphia_Phillies.png" />
   </channel>
   <channel id="1601656">
     <display-name>US (ESPN+ 063) | MLB: Cardinals vs. Angels (2026-07-20 22:00:00)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/St_Louis_Cardinals/St_Louis_Cardinals_vs_Los_Angeles_Angels.png" />
   </channel>
   <channel id="1601655">
     <display-name>US (ESPN+ 064) | MLB: Cardinals vs. Angels (ESP) (2026-07-20 22:00:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/St_Louis_Cardinals/St_Louis_Cardinals_vs_Los_Angeles_Angels.png" />
   </channel>
   <channel id="1601654">
     <display-name>US (ESPN+ 065) | Baseball: ESPN Beisbol (2026-07-21 08:00:00)</display-name>
@@ -7652,6 +7680,7 @@
   </channel>
   <channel id="1601623">
     <display-name>US (ESPN+ 096) | MLB: Athletics vs. Diamondbacks (ESP) (2026-07-22 15:00:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Arizona_Diamondbacks/Arizona_Diamondbacks_vs_Athletics.png" />
   </channel>
   <channel id="1601622">
     <display-name>US (ESPN+ 097) | Sources Tell Jeff Passan: Sources Tell Jeff Passan (2026-07-22 17:00:00)</display-name>
@@ -7691,9 +7720,11 @@
   </channel>
   <channel id="1601610">
     <display-name>US (ESPN+ 109) | MLB: Tigers vs. Cubs (2026-07-22 20:00:00)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Chicago_Cubs/Chicago_Cubs_vs_Detroit_Tigers.png" />
   </channel>
   <channel id="1601609">
     <display-name>US (ESPN+ 110) | MLB: Tigers vs. Cubs (ESP) (2026-07-22 20:00:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Chicago_Cubs/Chicago_Cubs_vs_Detroit_Tigers.png" />
   </channel>
   <channel id="1601608">
     <display-name>US (ESPN+ 111) | Northern Super League: Calgary vs. Ottawa (2026-07-22 20:55:00)</display-name>
@@ -7733,6 +7764,7 @@
   </channel>
   <channel id="1601596">
     <display-name>US (ESPN+ 123) | MLB: Twins vs. Guardians (ESP) (2026-07-23 12:30:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Minnesota_Twins/Minnesota_Twins_vs_Cleveland_Guardians.png" />
   </channel>
   <channel id="1601595">
     <display-name>US (ESPN+ 124) | NCAA Football: 2026 SECMD _ Jeff Lebby (2026-07-23 13:30:00)</display-name>
@@ -7814,6 +7846,7 @@
   </channel>
   <channel id="1601569">
     <display-name>US (ESPN+ 150) | MLB: Dodgers vs. Mets (ESP) (2026-07-24 18:30:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/New_York_Mets/New_York_Mets_vs_Los_Angeles_Dodgers.png" />
   </channel>
   <channel id="1601568">
     <display-name>US (ESPN+ 151) | The New England Collegiate Baseball League: Bristol vs. Newport (2026-07-24 18:30:15)</display-name>
@@ -7841,6 +7874,7 @@
   </channel>
   <channel id="1601560">
     <display-name>US (ESPN+ 159) | MLB: Angels vs. Giants (ESP) (2026-07-24 21:30:00)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/San_Francisco_Giants/San_Francisco_Giants_vs_Los_Angeles_Angels.png" />
   </channel>
   <channel id="1601559">
     <display-name>US (ESPN+ 160) | Life In The W: Life In The W: Episode 1 (2026-07-24 22:00:00)</display-name>
@@ -7877,6 +7911,7 @@
   </channel>
   <channel id="1601548">
     <display-name>US (ESPN+ 171) | MLB: Royals vs. Tigers (ESP) (2026-07-25 12:30:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Detroit_Tigers/Detroit_Tigers_vs_Kansas_City_Royals.png" />
   </channel>
   <channel id="1601547">
     <display-name>US (ESPN+ 172) | PGA TOUR: 3M Open: Featured Hole #13 (2026-07-25 13:00:00)</display-name>
@@ -7949,6 +7984,7 @@
   </channel>
   <channel id="1601524">
     <display-name>US (ESPN+ 195) | MLB: Astros vs. White Sox (ESP) (2026-07-26 13:30:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Houston_Astros/Houston_Astros_vs_Chicago_White_Sox.png" />
   </channel>
   <channel id="1601523">
     <display-name>US (ESPN+ 196) | Boys High School Lacrosse: Adrenaline Lacrosse Boys All American Futures (2026-07-26 14:30:00)</display-name>
@@ -7976,9 +8012,11 @@
   </channel>
   <channel id="1601515">
     <display-name>US (ESPN+ 204) | MLB: Mariners vs. Rangers (ESP) (2026-07-27 14:00:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Texas_Rangers/Texas_Rangers_vs_Seattle_Mariners.png" />
   </channel>
   <channel id="1601514">
     <display-name>US (ESPN+ 205) | MLB: Astros vs. Angels (ESP) (2026-07-27 14:00:10)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Houston_Astros/Houston_Astros_vs_Los_Angeles_Angels.png" />
   </channel>
   <channel id="1601513">
     <display-name>US (ESPN+ 206) | MLB: ESPN Baseball (2026-07-27 19:00:00)</display-name>
@@ -8009,6 +8047,7 @@
   </channel>
   <channel id="1601504">
     <display-name>US (ESPN+ 215) | MLB: Guardians vs. Reds (ESP) (2026-07-29 18:30:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Cleveland_Guardians/Cleveland_Guardians_vs_Cincinnati_Reds.png" />
   </channel>
   <channel id="1601503">
     <display-name>US (ESPN+ 216) | MLB: ESPN`s Major League Baseball (2026-07-30 04:00:00)</display-name>
@@ -8027,6 +8066,7 @@
   </channel>
   <channel id="1601498">
     <display-name>US (ESPN+ 221) | MLB: Cubs vs. Cardinals (ESP) (2026-07-30 13:30:05)</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/St_Louis_Cardinals/St_Louis_Cardinals_vs_Chicago_Cubs.png" />
   </channel>
   <channel id="1601497">
     <display-name>US (ESPN+ 222) | PGA TOUR: Rocket Classic: Featured Group 1 (2026-07-30 15:00:00)</display-name>
@@ -9886,63 +9926,63 @@ Sunday 07/19/2026</desc>
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719000000 -0400" stop="20260719060000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719060000 -0400" stop="20260719120000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719120000 -0400" stop="20260719180000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719180000 -0400" stop="20260720000000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720000000 -0400" stop="20260720060000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720060000 -0400" stop="20260720120000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720120000 -0400" stop="20260720180000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720180000 -0400" stop="20260721000000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721000000 -0400" stop="20260721060000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721060000 -0400" stop="20260721120000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721120000 -0400" stop="20260721180000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721180000 -0400" stop="20260722000000 -0400" channel="1899990">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 12
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719000000 -0400" stop="20260719060000 -0400" channel="1899989">
@@ -44626,63 +44666,63 @@ Sunday 07/19/2026</desc>
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719000000 -0400" stop="20260719060000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719060000 -0400" stop="20260719120000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719120000 -0400" stop="20260719180000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719180000 -0400" stop="20260720000000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720000000 -0400" stop="20260720060000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720060000 -0400" stop="20260720120000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720120000 -0400" stop="20260720180000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720180000 -0400" stop="20260721000000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721000000 -0400" stop="20260721060000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721060000 -0400" stop="20260721120000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721120000 -0400" stop="20260721180000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721180000 -0400" stop="20260722000000 -0400" channel="1912592">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 11
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719000000 -0400" stop="20260719060000 -0400" channel="1912591">
@@ -70486,63 +70526,63 @@ Sunday 07/19/2026</desc>
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719000000 -0400" stop="20260719060000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719060000 -0400" stop="20260719120000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719120000 -0400" stop="20260719180000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719180000 -0400" stop="20260720000000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720000000 -0400" stop="20260720060000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720060000 -0400" stop="20260720120000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720120000 -0400" stop="20260720180000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260720180000 -0400" stop="20260721000000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721000000 -0400" stop="20260721060000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721060000 -0400" stop="20260721120000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721120000 -0400" stop="20260721180000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260721180000 -0400" stop="20260722000000 -0400" channel="1899889">
-    <title>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13</title>
-    <desc>Macau Chiba FC vs. G. Universe | Primeira Divisão - Macau | 2026-07-19 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 13
+    <title>Sports Event</title>
+    <desc>Sports event
 Sunday 07/19/2026</desc>
   </programme>
   <programme start="20260719000000 -0400" stop="20260719060000 -0400" channel="1899888">
