@@ -860,7 +860,7 @@ jobs:
           const fs = require('fs')
 
           const guidePath = 'guides/tvguidetivimateguide.xml'
-          const cachePath = 'guides/.tvmaze-tivimate-cache.json'
+          const cachePath = 'config/.tvmaze-tivimate-cache.json'
 
           if (!fs.existsSync(guidePath)) {
             console.error(`Missing ${guidePath}`)
