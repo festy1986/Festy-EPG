@@ -1,0 +1,2109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  TEST TVPassport Canada channel extraction
+
+  Source:
+  guides/TVPassportRAW.xml
+
+  This file contains complete channel blocks
+  identified as Canadian / Canada / Canadian province
+  / .ca XMLTV channels by the TEST extraction.
+-->
+<tv>
+  <!-- TEST MATCH: Canadian province NT -->
+  <channel site="tvpassport.com" site_id="3abn-latino-k47nt-d3-mineral-wells-tx/16596" lang="en" xmltv_id="">3ABN Latino (K47NT-D3) Mineral Wells, TX</channel>
+  <!-- TEST MATCH: Canadian province NT -->
+  <channel site="tvpassport.com" site_id="3abn-radio-k47nt-d5-mineral-wells-tx/17808" lang="en" xmltv_id="">3ABN Radio (K47NT-D5) Mineral Wells, TX</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="abc-spark-hd/10282" lang="en" xmltv_id="ABCSpark.ca@SD">ABC Spark HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="abc-spark-on-demand/10817" lang="en" xmltv_id="">ABC Spark On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="abc-spark/10281" lang="en" xmltv_id="ABCSpark.ca@SD">ABC Spark</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="abc-wcvb-boston-ma--canada/4035" lang="en" xmltv_id="WCVBTV501.us@SD">ABC (WCVB) Boston, MA - Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="abc-wxyz-detroit-mi--canada-dv/3944" lang="en" xmltv_id="WXYZTV71.us@HD">ABC (WXYZ) Detroit, MI - Canada DV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="abc-wxyz-detroit-mi--canada-hd/2811" lang="en" xmltv_id="WXYZTV71.us@HD">ABC (WXYZ) Detroit, MI - Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="abc-wxyz-detroit-mi--canada/7" lang="en" xmltv_id="WXYZTV71.us@HD">ABC (WXYZ) Detroit, MI - Canada</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="addik-tv/2033" lang="en" xmltv_id="addikTV.ca@SD">Addik TV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-on-demand-hd/7136" lang="en" xmltv_id="">Adult On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-on-demand/6480" lang="en" xmltv_id="">Adult On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-swin-on-demand/6664" lang="en" xmltv_id="">Adult Swin On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-value-on-demand-1/10786" lang="en" xmltv_id="">Adult Value On Demand 1</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-value-on-demand-2/14279" lang="en" xmltv_id="">Adult Value On Demand 2</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-value-on-demand-3/14280" lang="en" xmltv_id="">Adult Value On Demand 3</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="adult-value-on-demand-4/14281" lang="en" xmltv_id="">Adult Value On Demand 4</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ae-canada-hd/3886" lang="en" xmltv_id="">A&amp;E Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ae-canada/4311" lang="en" xmltv_id="">A&amp;E Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ae-on-demand/4663" lang="en" xmltv_id="">A&amp;E on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="al-nahar-canada/10248" lang="en" xmltv_id="">Al Nahar Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="amc--canada-hd/8368" lang="en" xmltv_id="">AMC - Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="amc--canada/3822" lang="en" xmltv_id="">AMC - Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="amc-on-demand/9311" lang="en" xmltv_id="">AMC On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="animal-planet-canada-hd/10044" lang="en" xmltv_id="AnimalPlanet.ca@HD">CTV Wild Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="animal-planet-canada/472" lang="en" xmltv_id="AnimalPlanet.ca@SD">CTV Wild Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="anime-network-on-demand/3632" lang="en" xmltv_id="">Anime Network On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="artv/459" lang="en" xmltv_id="IciARTV.ca@SD">ARTV</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="ary-musik/13698" lang="en" xmltv_id="ATNARYMusik.ca@SD">ARY Musik</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="ary-zauq/13701" lang="en" xmltv_id="ATNARYZauq.ca@SD">ARY Zauq</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="assemblee-nationale-du-quebec/431" lang="en" xmltv_id="AssembleenationaleduQuebec.ca@SD">Assemblee nationale du Quebec</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="atn--ary-digital-canada/13626" lang="en" xmltv_id="">ATN - ARY Digital (Canada)</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="automotive-tv-on-demand/8992" lang="en" xmltv_id="">Automotive TV On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="baby-first-tv-on-demand/14272" lang="en" xmltv_id="">Baby First TV On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="bally-sports-great-lakes-on-demand/7434" lang="en" xmltv_id="">Bally Sports Great Lakes On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bbc-arabic-canada/13670" lang="en" xmltv_id="">BBC Arabic Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bbc-canada-east/415" lang="en" xmltv_id="">BBC Canada East</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="bc-legislature/420" lang="en" xmltv_id="">BC Legislature</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bein-sport-canada-hd/13247" lang="en" xmltv_id="beINSports.qa@Canada">beIN Sport Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bein-sport-canada/13246" lang="en" xmltv_id="">beIN Sport Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bein-sport-espanol-canada-hd/13249" lang="en" xmltv_id="">beIN Sport Espanol Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bein-sport-espanol-canada/13248" lang="en" xmltv_id="">beIN Sport Espanol Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bet--canada-hd/33448" lang="en" xmltv_id="">BET - Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bet--canada/4386" lang="en" xmltv_id="">BET - Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="biography-channel-canada-on-demand/13613" lang="en" xmltv_id="">Biography Channel Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bloomberg-tv-canada-hd/17193" lang="en" xmltv_id="">Bloomberg TV Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="bloomberg-tv-canada/17045" lang="en" xmltv_id="">Bloomberg TV Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="bollywood-hits-on-demand/8916" lang="en" xmltv_id="">Bollywood Hits On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="bollywood-on-demand/8115" lang="en" xmltv_id="">Bollywood On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="boomerang-canada-hd/10691" lang="en" xmltv_id="">Boomerang Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="boomerang-canada/10613" lang="en" xmltv_id="">Boomerang Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="boomerang-on-demand/6796" lang="en" xmltv_id="">Boomerang On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="canal-d/108" lang="en" xmltv_id="CanalD.ca@SD">Canal D</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="canal-m/5955" lang="en" xmltv_id="CanalM.ca@SD">Canal M</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="canal-vie/307" lang="en" xmltv_id="CanalVie.ca@SD">Canal Vie</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="capital-networks-city-toronto-on/13732" lang="en" xmltv_id="">Capital Networks: CITY Toronto, ON</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-cmt-canada/9858" lang="en" xmltv_id="">Capital Networks: CMT Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="capital-networks-ctv-toronto-cfto-on/13726" lang="en" xmltv_id="">Capital Networks: CTV Toronto (CFTO), ON</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-e-canada/13737" lang="en" xmltv_id="">Capital Networks: E! Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-history-canada/13733" lang="en" xmltv_id="">Capital Networks: History Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-mtv-canada-2/13754" lang="en" xmltv_id="">Capital Networks: MTV Canada (2)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-mtv-canada/2962" lang="en" xmltv_id="">Capital Networks: MTV Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-oprah-winfrey-network-canada/13734" lang="en" xmltv_id="">Capital Networks: Oprah Winfrey Network Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="capital-networks-showcase-canada/13735" lang="en" xmltv_id="">Capital Networks: Showcase Canada</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="capital-networks-src-cjbr-rimouski-qc/13729" lang="en" xmltv_id="">Capital Networks: SRC (CJBR) Rimouski, QC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="capital-networks-yes-tv-cits-burlington-on/13730" lang="en" xmltv_id="">Capital Networks: Yes TV (CITS) Burlington, ON</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cartoon-network-canada--east-dv/3964" lang="en" xmltv_id="">Cartoon Network Canada - East DV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cartoon-network-canada--east-hd/10331" lang="en" xmltv_id="">Cartoon Network Canada - East HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cartoon-network-canada--east/162" lang="en" xmltv_id="">Cartoon Network Canada - East</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cartoon-network-canada--west-dv/3965" lang="en" xmltv_id="">Cartoon Network Canada - West DV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cartoon-network-canada--west-hd/10332" lang="en" xmltv_id="">Cartoon Network Canada - West HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cartoon-network-canada--west/1020" lang="en" xmltv_id="">Cartoon Network Canada - West</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cartoon-network-on-demand/4783" lang="en" xmltv_id="">Cartoon Network on Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="casa/5484" lang="en" xmltv_id="Casa.ca@SD">CASA</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="cbc-cbat-2-moncton-nb-hd/10883" lang="en" xmltv_id="">CBC (CBAT-2) Moncton, NB HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="cbc-cbat-2-moncton-nb/3321" lang="en" xmltv_id="">CBC (CBAT-2) Moncton, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="cbc-cbat-3-chatham-nb/3322" lang="en" xmltv_id="">CBC (CBAT-3) Chatham, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="cbc-cbat-4-campbellton-nb/3323" lang="en" xmltv_id="">CBC (CBAT-4) Campbellton, NB</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbat-fredericton-nb-hd/3942" lang="en" xmltv_id="CBATDT.ca@SD">CBC (CBAT) Fredericton, NB HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="cbc-cbat-fredericton-nb/114" lang="en" xmltv_id="">CBC (CBAT) Fredericton, NB</channel>
+  <!-- TEST MATCH: Canadian province PE -->
+  <channel site="tvpassport.com" site_id="cbc-cbct-charlottetown-pe-hd/6803" lang="en" xmltv_id="">CBC (CBCT) Charlottetown, PE HD</channel>
+  <!-- TEST MATCH: Canadian province PE -->
+  <channel site="tvpassport.com" site_id="cbc-cbct-charlottetown-pe/119" lang="en" xmltv_id="">CBC (CBCT) Charlottetown, PE</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cbet-windsor-on-hd/6804" lang="en" xmltv_id="">CBC (CBET) Windsor, ON HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbet-windsor-on/132" lang="en" xmltv_id="CBETDT.ca@SD">CBC (CBET) Windsor, ON</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="cbc-cbht-halifax-ns-dv/8376" lang="en" xmltv_id="">CBC (CBHT) Halifax, NS DV</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="cbc-cbht-halifax-ns-hd/6805" lang="en" xmltv_id="">CBC (CBHT) Halifax, NS HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbht-halifax-ns/121" lang="en" xmltv_id="CBHTDT.ca@SD">CBC (CBHT) Halifax, NS</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="cbc-cbjet-chicoutimi-qc/4885" lang="en" xmltv_id="">CBC (CBJET) Chicoutimi, QC</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-cbkst-saskatoon-sk-dv/7588" lang="en" xmltv_id="">CBC (CBKST) Saskatoon, SK DV</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-cbkst-saskatoon-sk/7389" lang="en" xmltv_id="">CBC (CBKST) Saskatoon, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-cbkt-regina-sk-hd/6806" lang="en" xmltv_id="">CBC (CBKT) Regina, SK HD</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-cbkt-regina-sk/225" lang="en" xmltv_id="">CBC (CBKT) Regina, SK</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cbln-london-on/2720" lang="en" xmltv_id="">CBC (CBLN) London, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cblt-dt4-north-bay-on/14858" lang="en" xmltv_id="">CBC (CBLT-DT4) North Bay, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cblt-dt6-sudbury-on/610" lang="en" xmltv_id="">CBC (CBLT-DT6) Sudbury, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cblt-toronto-on-dv/3929" lang="en" xmltv_id="">CBC (CBLT) Toronto, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cblt-toronto-on-hd/2826" lang="en" xmltv_id="">CBC (CBLT) Toronto, ON HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cblt-toronto-on/34" lang="en" xmltv_id="CBLTDT.ca@SD">CBC (CBLT) Toronto, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cblt-tv-1-toronto-on/13588" lang="en" xmltv_id="">CBC (CBLT-TV-1) Toronto, ON</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="cbc-cbmt-montreal-qc-hd/4022" lang="en" xmltv_id="">CBC (CBMT) Montreal, QC HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbmt-montreal-qc/107" lang="en" xmltv_id="CBMTDT.ca@SD">CBC (CBMT) Montreal, QC</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="cbc-cbnt-st-johns-nl-hd/6807" lang="en" xmltv_id="">CBC (CBNT) St-John&apos;s, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="cbc-cbnt-st-johns-nl/200" lang="en" xmltv_id="">CBC (CBNT) St-John&apos;s, NL</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-cbot-ottawa-on-hd/6808" lang="en" xmltv_id="">CBC (CBOT) Ottawa, ON HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbot-ottawa-on/49" lang="en" xmltv_id="CBOTDT.ca@SD">CBC (CBOT) Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="cbc-cbrt-calgary-ab-hd/6809" lang="en" xmltv_id="">CBC (CBRT) Calgary, AB HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbrt-calgary-ab/147" lang="en" xmltv_id="CBRTDT.ca@SD">CBC (CBRT) Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cbc-cbut-vancouver-bc-dv/3930" lang="en" xmltv_id="">CBC (CBUT) Vancouver, BC DV</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cbc-cbut-vancouver-bc-hd/6257" lang="en" xmltv_id="">CBC (CBUT) Vancouver, BC HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbut-vancouver-bc/180" lang="en" xmltv_id="CBUTDT.ca@SD">CBC (CBUT) Vancouver, BC</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="cbc-cbwt-winnipeg-mb-dv/3941" lang="en" xmltv_id="">CBC (CBWT) Winnipeg, MB DV</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="cbc-cbwt-winnipeg-mb-hd/6810" lang="en" xmltv_id="">CBC (CBWT) Winnipeg, MB HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbwt-winnipeg-mb/110" lang="en" xmltv_id="CBWTDT.ca@SD">CBC (CBWT) Winnipeg, MB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="cbc-cbxt-edmonton-ab-dv/8385" lang="en" xmltv_id="">CBC (CBXT) Edmonton, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="cbc-cbxt-edmonton-ab-hd/6811" lang="en" xmltv_id="">CBC (CBXT) Edmonton, AB HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-cbxt-edmonton-ab/146" lang="en" xmltv_id="CBXTDT.ca@SD">CBC (CBXT) Edmonton, AB</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="cbc-cfla-goose-bay-nl/7369" lang="en" xmltv_id="">CBC (CFLA) Goose Bay, NL</channel>
+  <!-- TEST MATCH: Canadian province YT -->
+  <channel site="tvpassport.com" site_id="cbc-cfwh-whitehorse-yt/202" lang="en" xmltv_id="">CBC (CFWH) Whitehorse, YT</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="cbc-chsj-saint-john-nb/3320" lang="en" xmltv_id="">CBC (CHSJ) Saint John, NB</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-cjfb-swift-current-sk/572" lang="en" xmltv_id="">CBC (CJFB) Swift Current, Sk</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-ckbi-prince-albert-sk/231" lang="en" xmltv_id="">CBC (CKBI) Prince Albert, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="cbc-ckos-yorkton-sk/485" lang="en" xmltv_id="">CBC (CKOS) Yorkton, SK</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbc-news-network/74" lang="en" xmltv_id="CBCNewsNetwork.ca@SD">CBC News Network</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cbc-on-demand/6787" lang="en" xmltv_id="">CBC On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cbn-commonwealth-broadcasting-network/4016" lang="en" xmltv_id="CBN.ca@SD">CBN (Commonwealth Broadcasting Network)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cbs-kiro-seattle-wa--canada/11415" lang="en" xmltv_id="">CBS (KIRO) Seattle, WA - Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cbs-sports-network-canada-hd/10711" lang="en" xmltv_id="CBSSportsNetworkCanada.ca@SD">CBS Sports Network Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cbs-sports-network-canada/10708" lang="en" xmltv_id="CBSSportsNetworkCanada.ca@SD">CBS Sports Network Canada</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="cfem-dt-1-val-dor-qc/28468" lang="en" xmltv_id="">(CFEM-DT-1) Val D&apos;Or, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="cfer-dt-rimouski-qc/30230" lang="en" xmltv_id="">(CFER-DT) Rimouski, QC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-kamloops-bc-hd/6600" lang="en" xmltv_id="">CFJC Kamloops, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-kamloops-bc/452" lang="en" xmltv_id="">CFJC Kamloops, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-3-merritt-bc/13989" lang="en" xmltv_id="">CFJC-TV-3 Merritt, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-4-clinton-bc/13990" lang="en" xmltv_id="">CFJC-TV-4 Clinton, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-5-williams-lake-bc/13991" lang="en" xmltv_id="">CFJC-TV-5 Williams Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-6-100-mile-house-bc/13992" lang="en" xmltv_id="">CFJC-TV-6 100 Mile House, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-8-chase-bc/13993" lang="en" xmltv_id="">CFJC-TV-8 Chase, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-11-quesnel-bc/13986" lang="en" xmltv_id="">CFJC-TV-11 Quesnel, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-12-nicola-bc/13987" lang="en" xmltv_id="">CFJC-TV-12 Nicola, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cfjc-tv-19-pritchard-bc/13988" lang="en" xmltv_id="">CFJC-TV-19 Pritchard, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cftv-leamington-on/3834" lang="en" xmltv_id="">CFTV Leamington, ON</channel>
+  <!-- TEST MATCH: Canadian province NT -->
+  <channel site="tvpassport.com" site_id="ch4127-yellowknife-nt/30081" lang="en" xmltv_id="">(CH4127) Yellowknife, NT</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="chat-medicine-hat-ab-hd/10861" lang="en" xmltv_id="">CHAT Medicine Hat, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="chat-medicine-hat-ab/571" lang="en" xmltv_id="">CHAT Medicine Hat, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="chat-tv-1-pivot-ab/14085" lang="en" xmltv_id="">CHAT-TV-1 Pivot, AB</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="chat-tv-2-maple-creek-sk/14086" lang="en" xmltv_id="">CHAT-TV-2 Maple Creek, SK</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-dt-1-ottawa-on/13859" lang="en" xmltv_id="">CHCH-DT-1 Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-dt-2-london-on/13860" lang="en" xmltv_id="">CHCH-DT-2 London, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-dt-3-muskoka-on/13861" lang="en" xmltv_id="">CHCH-DT-3 Muskoka, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-hamilton-on-dv/7594" lang="en" xmltv_id="">CHCH Hamilton, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-hamilton-on-hd/5870" lang="en" xmltv_id="">CHCH Hamilton, ON HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="chch-hamilton-on/43" lang="en" xmltv_id="CHCHDT.ca@SD">CHCH Hamilton, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-tv-4-sudbury-on/13862" lang="en" xmltv_id="">CHCH-TV-4 Sudbury, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-tv-5-sault-ste-marie-on/13863" lang="en" xmltv_id="">CHCH-TV-5 Sault Ste. Marie, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-tv-6-north-bay-on/13864" lang="en" xmltv_id="">CHCH-TV-6 North Bay, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chch-tv-7-timmins-on/13865" lang="en" xmltv_id="">CHCH-TV-7 Timmins, ON</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="chco-tv-st-andrews-nb-hd/9323" lang="en" xmltv_id="">CHCO-TV, St. Andrews, NB HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="chco-tv-st-andrews-nb/9322" lang="en" xmltv_id="">CHCO-TV, St. Andrews, NB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="chek-vancouver-island-bc-hd/9689" lang="en" xmltv_id="">CHEK Vancouver Island, BC HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="chek-vancouver-island-bc/183" lang="en" xmltv_id="CHEK.ca@SD">CHEK Vancouver Island, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chfd-thunder-bay-on-hd/8864" lang="en" xmltv_id="">CHFD Thunder Bay, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="chfd-thunder-bay-on/78" lang="en" xmltv_id="">CHFD Thunder Bay, ON</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="chmg-tv-quebec-qc/28562" lang="en" xmltv_id="">(CHMG-TV) Québec, QC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="chnu-tv-joy10-fraser-valley-bc/5867" lang="en" xmltv_id="">CHNU-TV</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="chwm-tv-1-whistler-bc/13866" lang="en" xmltv_id="">CHWM-TV-1 Whistler, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cinemax-on-demand-hd/8609" lang="en" xmltv_id="">Cinemax on Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cinemax-on-demand/4657" lang="en" xmltv_id="">Cinemax on Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cinepop/2325" lang="en" xmltv_id="Cinepop.ca@SD">Cinépop</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="city-calgary-ab-hd/8488" lang="en" xmltv_id="">CITY Calgary, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="city-calgary-ab/257" lang="en" xmltv_id="">CITY Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-dt-2-woodstock-on/13869" lang="en" xmltv_id="">CITY-DT-2 Woodstock, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-dt-3-ottawa-on-hd/19890" lang="en" xmltv_id="">CITY-DT-3 Ottawa, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-dt-3-ottawa-on/13870" lang="en" xmltv_id="">CITY-DT-3 Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="city-edmonton-ab-dv/7595" lang="en" xmltv_id="">CITY Edmonton, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="city-edmonton-ab-hd/2813" lang="en" xmltv_id="">CITY Edmonton, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="city-edmonton-ab/240" lang="en" xmltv_id="">CITY Edmonton, AB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="city-montreal-qc-hd/6603" lang="en" xmltv_id="">CITY Montreal, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="city-montreal-qc/1171" lang="en" xmltv_id="">CITY Montreal, QC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-on-demand/10811" lang="en" xmltv_id="">CITY On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-toronto-on-dv/3935" lang="en" xmltv_id="">CITY Toronto, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-toronto-on-hd/2825" lang="en" xmltv_id="">CITY Toronto, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="city-toronto-on/42" lang="en" xmltv_id="">CITY Toronto, ON</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="city-vancouver-bc-dv/8374" lang="en" xmltv_id="">CITY Vancouver, BC DV</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="city-vancouver-bc-hd/3936" lang="en" xmltv_id="">CITY Vancouver, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="city-vancouver-bc/187" lang="en" xmltv_id="">CITY Vancouver, BC</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="city-winnipeg-mb-hd/6799" lang="en" xmltv_id="">CITY Winnipeg. MB HD</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="city-winnipeg-mb/230" lang="en" xmltv_id="">CITY Winnipeg, MB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cjdc-tv-dawson-creek-bc-hd/9154" lang="en" xmltv_id="">CJDC TV Dawson Creek, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cjdc-tv-dawson-creek-bc/337" lang="en" xmltv_id="">CJDC TV Dawson Creek, BC</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="cjil-tv-1-bow-island-ab/13874" lang="en" xmltv_id="">CJIL-TV-1 Bow Island, AB</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="cjon-ntv-st-john-nl-hd/9737" lang="en" xmltv_id="">CJON (NTV) St-John, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="cjon-ntv-st-john-nl/199" lang="en" xmltv_id="">CJON (NTV) St-John, NL</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="cjwm-tv-whistler-bc/13873" lang="en" xmltv_id="">CJWM-TV Whistler, BC</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ckal-dt-1-lethbridge-ab/13867" lang="en" xmltv_id="">CKAL-DT-1 Lethbridge, AB</channel>
+  <!-- TEST MATCH: Canadian province PE -->
+  <channel site="tvpassport.com" site_id="ckcw-dt-1-charlottetown-pe/26634" lang="en" xmltv_id="">(CKCW-DT-1) Charlottetown, PE</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ckem-tv-1-red-deer-ab/13868" lang="en" xmltv_id="">CKEM-TV-1 Red Deer, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckpg-prince-george-bc-hd/7388" lang="en" xmltv_id="">CKPG Prince George, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckpg-prince-george-bc/546" lang="en" xmltv_id="">CKPG Prince George, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckpg-tv-1-hixon-bc/13875" lang="en" xmltv_id="">CKPG-TV-1 Hixon, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckpg-tv-4-mackenzie-bc/13876" lang="en" xmltv_id="">CKPG-TV-4 Mackenzie, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckpg-tv-5-quesnel-bc/13877" lang="en" xmltv_id="">CKPG-TV-5 Quesnel, BC</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="cksa-lloydminster-ab-hd/10701" lang="en" xmltv_id="">CKSA Lloydminster, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="cksa-lloydminster-ab/484" lang="en" xmltv_id="">CKSA Lloydminster, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckvu-dt-2-victoria-bc/13872" lang="en" xmltv_id="">CKVU-DT-2 Victoria, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ckvu-tv-1-courtenay-bc/13871" lang="en" xmltv_id="">CKVU-TV-1 Courtenay, BC</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cmt-canada-hd/11325" lang="en" xmltv_id="">CMT Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cmt-canada/120" lang="en" xmltv_id="CMT.ca@SD">CMT Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cmt-us-on-demand/7948" lang="en" xmltv_id="">CMT US On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cnbc-canada-hd/8429" lang="en" xmltv_id="">CNBC Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cnbc-canada/3561" lang="en" xmltv_id="">CNBC Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cnn-international-on-demand/9553" lang="en" xmltv_id="">CNN International on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cnn-on-demand/4690" lang="en" xmltv_id="">CNN on demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cnn-showcase-on-demand/7487" lang="en" xmltv_id="">CNN Showcase On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="comedy-central-on-demand/4781" lang="en" xmltv_id="">Comedy Central on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cooking-channel-canada-hd/10210" lang="en" xmltv_id="">Cooking Channel Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="cooking-channel-canada/7406" lang="en" xmltv_id="">Cooking Channel Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cottage-life-on-demand/6792" lang="en" xmltv_id="">Cottage Life On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cottage-life/455" lang="en" xmltv_id="CottageLife.ca@SD">Cottage Life</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cp24-cablepulse-24/321" lang="en" xmltv_id="CP24.ca@SD">CP24 (CablePulse 24)</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="cpac-ottawa/127" lang="en" xmltv_id="CPACEnglish.ca@SD">CPAC Ottawa</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="crave4/320" lang="en" xmltv_id="Crave4.ca@SD">Crave4</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="crave-movies--hbo-on-demand-hd/7748" lang="en" xmltv_id="">Crave Movies &amp; HBO on Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="crave-movies--hbo-on-demand/2746" lang="en" xmltv_id="">Crave Movies &amp; HBO on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="crime--investigation-canada-hd/13784" lang="en" xmltv_id="">Crime + Investigation Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="crime--investigation-canada/451" lang="en" xmltv_id="">Crime + Investigation Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-barrie-on-ckvr-hd/31841" lang="en" xmltv_id="">CTV2 Barrie, ON (CKVR) HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-barrie-on-ckvr/14229" lang="en" xmltv_id="">CTV2 Barrie, ON (CKVR)</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv2-cftk-terrace-bc/584" lang="en" xmltv_id="">CTV2 (CFTK) Terrace, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-chro-dt-43-ottawa-on-hd/19889" lang="en" xmltv_id="">CTV2 (CHRO-DT-43) Ottawa, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-chro-dt-43-ottawa-on/13791" lang="en" xmltv_id="">CTV2 (CHRO-DT-43) Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-chwi-dt-60-windsor-on/29453" lang="en" xmltv_id="">CTV2 (CHWI-DT-60) Windsor, ON</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv2-civi-dt2-vancouver-bc/13841" lang="en" xmltv_id="">CTV2 (CIVI-DT2) Vancouver, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-london-on-hd/9701" lang="en" xmltv_id="">CTV2 London, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-london-on/139" lang="en" xmltv_id="">CTV2 London, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-ottawa-on-hd/9698" lang="en" xmltv_id="">CTV2 Ottawa, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-ottawa-on/51" lang="en" xmltv_id="">CTV2 Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-toronto-on-chcj/13543" lang="en" xmltv_id="">CTV2 Toronto, ON (CHCJ)</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-toronto-on-ckvp/13544" lang="en" xmltv_id="">CTV2 Toronto, ON (CKVP)</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-toronto-on-dv/8377" lang="en" xmltv_id="">CTV2 Toronto, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-toronto-on-hd/7901" lang="en" xmltv_id="">CTV2 Toronto, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-toronto-on/36" lang="en" xmltv_id="">CTV2 Toronto, ON</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv2-vancouver-island-bc-dv/8378" lang="en" xmltv_id="">CTV2 Vancouver Island. BC DV</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv2-vancouver-island-bc-hd/8379" lang="en" xmltv_id="">CTV2 Vancouver Island. BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv2-vancouver-island-bc/454" lang="en" xmltv_id="">CTV2 Vancouver Island. BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-windsor-on-hd/9702" lang="en" xmltv_id="">CTV2 Windsor, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv2-windsor-on/3401" lang="en" xmltv_id="">CTV2 Windsor, ON</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-calgary-ab-dv/3956" lang="en" xmltv_id="">CTV (CFCN) Calgary, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-calgary-ab-hd/6454" lang="en" xmltv_id="">CTV (CFCN) Calgary, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-calgary-ab/258" lang="en" xmltv_id="">CTV (CFCN) Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-dt5-lethbridge-ab-hd/9662" lang="en" xmltv_id="">CTV (CFCN-DT5) Lethbridge, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-dt5-lethbridge-ab/9661" lang="en" xmltv_id="">CTV (CFCN-DT5) Lethbridge, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv1-drumheller-ab/13792" lang="en" xmltv_id="">CTV (CFCN-TV1) Drumheller, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv2-banff-ab/13794" lang="en" xmltv_id="">CTV (CFCN-TV2) Banff, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv3-brooks-ab/13793" lang="en" xmltv_id="">CTV (CFCN-TV3) Brooks, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv4-burmis-ab/13795" lang="en" xmltv_id="">CTV (CFCN-TV4) Burmis, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv6-drumheller-ab/13796" lang="en" xmltv_id="">CTV (CFCN-TV6) Drumheller, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv8-medicine-hat-ab/13797" lang="en" xmltv_id="">CTV (CFCN-TV8) Medicine Hat, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv9-cranbrook-bc/13798" lang="en" xmltv_id="">CTV (CFCN-TV9) Cranbrook, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv10-fernie-bc/13799" lang="en" xmltv_id="">CTV (CFCN-TV10) Fernie, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv11-sparwood-bc/13800" lang="en" xmltv_id="">CTV (CFCN-TV11) Sparwood, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv12-moyie-bc/13801" lang="en" xmltv_id="">CTV (CFCN-TV12) Moyie, BC</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv13-pigeon-mountain-ab/13802" lang="en" xmltv_id="">CTV (CFCN-TV13) Pigeon Mountain, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv14-canmore-ab/13803" lang="en" xmltv_id="">CTV (CFCN-TV14) Canmore, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv15-mount-goldie-bc/13804" lang="en" xmltv_id="">CTV (CFCN-TV15) Mount Goldie, BC</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv16-oyen-ab/13805" lang="en" xmltv_id="">CTV (CFCN-TV16) Oyen, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv17-waterton-park-ab/13806" lang="en" xmltv_id="">CTV (CFCN-TV17) Waterton Park, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfcn-tv18-coleman-ab/13807" lang="en" xmltv_id="">CTV (CFCN-TV18) Coleman, AB</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cfqc-saskatoon-sk-dv/7589" lang="en" xmltv_id="">CTV (CFQC) Saskatoon, SK DV</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cfqc-saskatoon-sk-hd/9657" lang="en" xmltv_id="">CTV (CFQC) Saskatoon, SK HD</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cfqc-saskatoon-sk/227" lang="en" xmltv_id="">CTV (CFQC) Saskatoon, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cfqc-tv-2-north-battleford-sk/13858" lang="en" xmltv_id="">CTV (CFQC-TV-2) North Battleford, SK</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-edmonton-ab-dv/3955" lang="en" xmltv_id="">CTV (CFRN) Edmonton, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-edmonton-ab-hd/7175" lang="en" xmltv_id="">CTV (CFRN) Edmonton, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-edmonton-ab/145" lang="en" xmltv_id="">CTV (CFRN) Edmonton, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-1-grande-prairie-ab/13842" lang="en" xmltv_id="">CTV (CFRN-TV-1) Grande Prairie, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-2-peace-river-ab/13843" lang="en" xmltv_id="">CTV (CFRN-TV-2) Peace River, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-3-whitecourt-ab/13844" lang="en" xmltv_id="">CTV (CFRN-TV-3) Whitecourt, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-4-ashmont-ab/13845" lang="en" xmltv_id="">CTV (CFRN-TV-4) Ashmont, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-5-lac-la-biche-ab/13846" lang="en" xmltv_id="">CTV (CFRN-TV-5) Lac La Biche, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-6-red-deer-ab/13847" lang="en" xmltv_id="">CTV (CFRN-TV-6) Red Deer, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-7-lougheed-ab/13848" lang="en" xmltv_id="">CTV (CFRN-TV-7) Lougheed, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-8-grouard-mission-ab/13849" lang="en" xmltv_id="">CTV (CFRN-TV-8) Grouard Mission, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-9-slave-lake-ab/13850" lang="en" xmltv_id="">CTV (CFRN-TV-9) Slave Lake, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-10-rocky-mountain-ab/13851" lang="en" xmltv_id="">CTV (CFRN-TV-10) Rocky Mountain, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-11-jasper-ab/13852" lang="en" xmltv_id="">CTV (CFRN-TV-11) Jasper, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-cfrn-tv-12-athabasca-ab/13853" lang="en" xmltv_id="">CTV (CFRN-TV-12) Athabasca, AB</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cfto-toronto-on-dv/3931" lang="en" xmltv_id="">CTV (CFTO) Toronto, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cfto-toronto-on-hd/2814" lang="en" xmltv_id="">CTV (CFTO) Toronto, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cfto-toronto-on/39" lang="en" xmltv_id="">CTV (CFTO) Toronto, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-chbx-sault-ste-marie-on-hd/33564" lang="en" xmltv_id="">CTV (CHBX) Sault Ste. Marie, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-chbx-sault-ste-marie-on/1634" lang="en" xmltv_id="">CTV (CHBX) Sault Ste. Marie, ON</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cicc-yorkton-sk/2250" lang="en" xmltv_id="">CTV (CICC) Yorkton, SK</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cici-sudbury-on-dv/8375" lang="en" xmltv_id="">CTV (CICI) Sudbury, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cici-sudbury-on-hd/31846" lang="en" xmltv_id="">CTV (CICI) Sudbury, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cici-sudbury-on/1635" lang="en" xmltv_id="">CTV (CICI) Sudbury, ON</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cipa-prince-albert-sk/276" lang="en" xmltv_id="">CTV (CIPA) Prince Albert, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cipa-tv-1-alticane-sk/13854" lang="en" xmltv_id="">CTV (CIPA-TV-1) Alticane, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-cipa-tv-2-big-river-sk/13855" lang="en" xmltv_id="">CTV (CIPA-TV-2) Big River, SK</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-citl-lloydminster-ab-hd/10700" lang="en" xmltv_id="">CTV (CITL) Lloydminster, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ctv-citl-lloydminster-ab/357" lang="en" xmltv_id="">CTV (CITL) Lloydminster, AB</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cito-timmins-on-hd/33563" lang="en" xmltv_id="">CTV (CITO) Timmins, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cito-timmins-on/1633" lang="en" xmltv_id="">CTV (CITO) Timmins, ON</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjcb-sydney-cape-breton-ns-hd/6813" lang="en" xmltv_id="">CTV (CJCB) Sydney/ Cape Breton, NS HD</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjcb-sydney-cape-breton-ns/3318" lang="en" xmltv_id="">CTV (CJCB) Sydney/ Cape Breton, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-1-canning-ns/14087" lang="en" xmltv_id="">CTV (CJCH-TV-1) Canning, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-2-truro-ns/14088" lang="en" xmltv_id="">CTV (CJCH-TV-2) Truro, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-3-valley-ns/14089" lang="en" xmltv_id="">CTV (CJCH-TV-3) Valley, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-4-bridgetown-ns/14090" lang="en" xmltv_id="">CTV (CJCH-TV-4) Bridgetown, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-5-sheet-harbour-ns/14091" lang="en" xmltv_id="">CTV (CJCH-TV-5) Sheet Harbour, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-6-caledonia-ns/14092" lang="en" xmltv_id="">CTV (CJCH-TV-6) Caledonia, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-7-yarmouth-ns/14093" lang="en" xmltv_id="">CTV (CJCH-TV-7) Yarmouth, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ctv-cjch-tv-8-marinette-ns/14094" lang="en" xmltv_id="">CTV (CJCH-TV-8) Marinette, NS</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-cjoh-ottawa-on-local-news/4093" lang="en" xmltv_id="">CTV (CJOH) Ottawa, ON Local News</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-ckam-tv-1-newcastle-nb/14096" lang="en" xmltv_id="">CTV (CKAM-TV-1) Newcastle, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-ckam-tv-2-chatham-nb/14097" lang="en" xmltv_id="">CTV (CKAM-TV-2) Chatham, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-ckam-tv-3-blackville-nb/14098" lang="en" xmltv_id="">CTV (CKAM-TV-3) Blackville, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-ckam-tv-4-doaktown-nb/14099" lang="en" xmltv_id="">CTV (CKAM-TV-4) Doaktown, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-ckam-tv-upsalquitch-nb/14095" lang="en" xmltv_id="">CTV (CKAM-TV) Upsalquitch, NB</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-ckbq-tv-1-nipawin-sk/13857" lang="en" xmltv_id="">CTV (CKBQ-TV-1) Nipawin, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-ckbq-tv-melfort-sk/13856" lang="en" xmltv_id="">CTV (CKBQ-TV) Melfort, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-ckck-regina-sk-hd/9660" lang="en" xmltv_id="">CTV (CKCK) Regina, SK HD</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ctv-ckck-regina-sk/537" lang="en" xmltv_id="">CTV (CKCK) Regina, SK</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ckco-kitchener-on-hd/9690" lang="en" xmltv_id="">CTV (CKCO) Kitchener, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ckco-kitchener-on/69" lang="en" xmltv_id="">CTV (CKCO) Kitchener, ON</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-cklt-saint-john-nb-hd/6815" lang="en" xmltv_id="">CTV (CKLT) Saint John, NB HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ctv-cklt-saint-john-nb/3319" lang="en" xmltv_id="">CTV (CKLT) Saint John, NB</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ckny-north-bay-on-hd/31847" lang="en" xmltv_id="">CTV (CKNY) North Bay, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ckny-north-bay-on/1632" lang="en" xmltv_id="">CTV (CKNY) North Bay, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ckpr-thunder-bay-on-hd/9664" lang="en" xmltv_id="">CTV (CKPR) Thunder Bay, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ckpr-thunder-bay-on/77" lang="en" xmltv_id="">CTV (CKPR) Thunder Bay, ON</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-cky-winnipeg-mb-dv/3940" lang="en" xmltv_id="">CTV (CKY) Winnipeg, MB DV</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-cky-winnipeg-mb-hd/7950" lang="en" xmltv_id="">CTV (CKY) Winnipeg, MB HD</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-cky-winnipeg-mb/143" lang="en" xmltv_id="">CTV (CKY) Winnipeg, MB</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-ckyb-tv-1-mccreary-mb/14045" lang="en" xmltv_id="">CTV (CKYB-TV-1) Mccreary, MB</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-ckyf-tv-flin-flon-mb/14046" lang="en" xmltv_id="">CTV (CKYF-TV) Flin Flon, MB</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-ckyp-tv-the-pas-mb/14047" lang="en" xmltv_id="">CTV (CKYP-TV) The Pas, MB</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-ckys-tv-snow-lake-mb/14048" lang="en" xmltv_id="">CTV (CKYS-TV) Snow Lake, MB</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ctv-ckyt-tv-thompson-mb/14049" lang="en" xmltv_id="">CTV (CKYT-TV) Thompson, MB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ctv-montreal-cfcf-qc-dv/8380" lang="en" xmltv_id="">CTV Montreal (CFCF), QC DV</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ctv-montreal-cfcf-qc-hd/7176" lang="en" xmltv_id="">CTV Montreal (CFCF), QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ctv-montreal-cfcf-qc/50" lang="en" xmltv_id="">CTV Montreal (CFCF), QC</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="ctv-news-channel/416" lang="en" xmltv_id="CTVNewsChannel.ca@SD">CTV News Channel</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ottawa-cjoh-on-hd/7174" lang="en" xmltv_id="">CTV Ottawa (CJOH), ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ottawa-cjoh-on-local-news-hd/9695" lang="en" xmltv_id="">CTV Ottawa (CJOH), ON Local News HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ctv-ottawa-cjoh-on/38" lang="en" xmltv_id="">CTV Ottawa (CJOH), ON</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-vancouver-bc-dv/3932" lang="en" xmltv_id="">CTV Vancouver, BC DV</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-vancouver-bc-hd/3905" lang="en" xmltv_id="">CTV Vancouver, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ctv-vancouver-bc/185" lang="en" xmltv_id="">CTV Vancouver, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cult-movies-on-demand/7745" lang="en" xmltv_id="">Cult Movies On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cutting-edge-on-demand-hd/10382" lang="en" xmltv_id="">Cutting Edge on Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="cutting-edge-on-demand/4667" lang="en" xmltv_id="">Cutting Edge on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="daystar-canada-hd/35543" lang="en" xmltv_id="">Daystar Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="daystar-canada/3431" lang="en" xmltv_id="">Daystar Canada</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="deja-view/448" lang="en" xmltv_id="DejaView.ca@SD">Deja View</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="discovery-channel-can/16" lang="en" xmltv_id="DiscoveryChannel.ca@SD">USA Network (CAN)</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="discovery-channel-us-on-demand/4782" lang="en" xmltv_id="">Discovery Channel (US) on demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="discovery-science-canada-hd/10769" lang="en" xmltv_id="">CTV Nature Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="discovery-science-canada/1188" lang="en" xmltv_id="DiscoveryScience.ca@SD">CTV Nature Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-channel-canada--east/16682" lang="en" xmltv_id="DisneyChannel.ca@East">Disney Channel Canada - East</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-channel-canada--west/16831" lang="en" xmltv_id="DisneyChannel.ca@West">Disney Channel Canada - West</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-channel-canada-hd--east/16683" lang="en" xmltv_id="DisneyChannel.ca@East">Disney Channel Canada HD - East</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-channel-canada-hd--west/16832" lang="en" xmltv_id="DisneyChannel.ca@West">Disney Channel Canada HD - West</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-channel-canada-on-demand/16771" lang="en" xmltv_id="">Disney Channel Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-junior-canada-hd/17225" lang="en" xmltv_id="DisneyJunior.ca@SD">Disney Junior Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-junior-canada/17224" lang="en" xmltv_id="DisneyJunior.ca@SD">Disney Junior Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="disney-on-demand/5260" lang="en" xmltv_id="">Disney on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-xd-canada-hd/17173" lang="en" xmltv_id="DisneyXD.ca@SD">Disney XD Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="disney-xd-canada/17172" lang="en" xmltv_id="DisneyXD.ca@SD">Disney XD Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="documentary-channel-canada-hd/9116" lang="en" xmltv_id="">Documentary Channel (Canada) HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="documentary-channel-canada/462" lang="en" xmltv_id="DocumentaryChannel.ca@SD">Documentary Channel (Canada)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="dsi-cmt-canada-west/33295" lang="en" xmltv_id="">DSI: CMT Canada West</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="dtour-on-demand/10885" lang="en" xmltv_id="">DTOUR On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="dtour/11143" lang="en" xmltv_id="DTour.ca@SD">DTOUR</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="duck-tv-on-demand/11318" lang="en" xmltv_id="">Duck TV On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="e-canada-dv/8396" lang="en" xmltv_id="">E! Canada DV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="e-canada-hd/8558" lang="en" xmltv_id="">E! Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="e-canada/295" lang="en" xmltv_id="E.ca@SD">E! Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="e-entertainment-usa-on-demand/4712" lang="en" xmltv_id="">E! Entertainment USA on demand</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--amherst-ns/3846" lang="en" xmltv_id="">Eastlink - Amherst, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--aylesford-ns/17052" lang="en" xmltv_id="">Eastlink - Aylesford, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--bridgewater-ns/3850" lang="en" xmltv_id="">Eastlink - Bridgewater, NS</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--clarenvillegloverton-nl-hd/32653" lang="en" xmltv_id="">Eastlink - Clarenville/Gloverton, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--clarenvillegloverton-nl/8419" lang="en" xmltv_id="">Eastlink - Clarenville/Gloverton, NL</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--goderich-on/14131" lang="en" xmltv_id="">Eastlink - Goderich, On</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--halifax-ns/4158" lang="en" xmltv_id="">Eastlink - Halifax, NS</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--hanoverlistowelpaisley-on/8342" lang="en" xmltv_id="">Eastlink - Hanover/Listowel/Paisley, ON</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--harbour-grace-nl-hd/32654" lang="en" xmltv_id="">Eastlink - Harbour Grace, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--harbour-grace-nl/8351" lang="en" xmltv_id="">Eastlink - Harbour Grace, NL</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--lewisportetwillingate-nl-hd/32655" lang="en" xmltv_id="">Eastlink - Lewisporte/Twillingate, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--lewisportetwillingate-nl/8352" lang="en" xmltv_id="">Eastlink - Lewisporte/Twillingate, NL</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--marysvalefreshwater-nl-hd/32656" lang="en" xmltv_id="">Eastlink - Marysvale/Freshwater, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--marysvalefreshwater-nl/8353" lang="en" xmltv_id="">Eastlink - Marysvale/Freshwater, NL</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--milford-ns/9878" lang="en" xmltv_id="">Eastlink - Milford, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--new-glasgow-ns/3852" lang="en" xmltv_id="">Eastlink - New Glasgow, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--new-minas-ns/3876" lang="en" xmltv_id="">Eastlink - New Minas, NS</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="eastlink--oliver-bc/8349" lang="en" xmltv_id="">Eastlink - Oliver, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--port-elgin-on/10098" lang="en" xmltv_id="">Eastlink - Port Elgin, ON</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--shelburne-ns/3853" lang="en" xmltv_id="">Eastlink - Shelburne, NS</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--simcoe-on/8973" lang="en" xmltv_id="">Eastlink - Simcoe, ON</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--springdale-baie-verte-nl-hd/32657" lang="en" xmltv_id="">Eastlink - Springdale/ Baie Verte, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--springdale-baie-verte-nl/8354" lang="en" xmltv_id="">Eastlink - Springdale/ Baie Verte, NL</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--stephenville-nl-hd/32658" lang="en" xmltv_id="">Eastlink - Stephenville, NL HD</channel>
+  <!-- TEST MATCH: Canadian province NL -->
+  <channel site="tvpassport.com" site_id="eastlink--stephenville-nl/8355" lang="en" xmltv_id="">Eastlink - Stephenville, NL</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--sturgeon-falls-on/3870" lang="en" xmltv_id="">Eastlink - Sturgeon Falls, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--sudbury-news-10-on/3780" lang="en" xmltv_id="">Eastlink - Sudbury</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--sydney-ns/3855" lang="en" xmltv_id="">Eastlink - Sydney, NS</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="eastlink--timmins-on/3869" lang="en" xmltv_id="">Eastlink - Timmins, ON</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--truro-ns/3856" lang="en" xmltv_id="">Eastlink - Truro, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--windsor-ns/3857" lang="en" xmltv_id="">Eastlink - Windsor, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="eastlink--yarmouth-ns/3858" lang="en" xmltv_id="">Eastlink - Yarmouth, NS</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="education-channel-on-demand/10378" lang="en" xmltv_id="">Education Channel On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="erotic-on-demand-hd/9002" lang="en" xmltv_id="">Erotic On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="erotic-on-demand/9001" lang="en" xmltv_id="">Erotic On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ert-world-canada/3419" lang="en" xmltv_id="ERTWorld.ca@SD">ERT World (Canada)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="espn-classic-canada/1154" lang="en" xmltv_id="ESPNClassic.ca@SD">ESPN Classic Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="espn-deportes-on-demand/6667" lang="en" xmltv_id="">ESPN Deportes On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="espn-on-demand/6665" lang="en" xmltv_id="">ESPN On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="espnu-on-demand/6666" lang="en" xmltv_id="">ESPNU On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ewtn-canada/619" lang="en" xmltv_id="">EWTN Canada</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="explora/10298" lang="en" xmltv_id="IciExplora.ca@SD">Explora</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="fairchild-tv-2-hd/11398" lang="en" xmltv_id="FairchildTV2.ca@SD">Fairchild TV 2 HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="family-channel-canada--east-hd/8777" lang="en" xmltv_id="">Family Channel Canada - East HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="family-channel-canada--east/53" lang="en" xmltv_id="">Family Channel Canada - East</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="family-channel-canada--west-hd/8778" lang="en" xmltv_id="">Family Channel Canada - West HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="family-channel-canada--west/1018" lang="en" xmltv_id="">Family Channel Canada - West</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="family-channel-on-demand/5629" lang="en" xmltv_id="">Family Channel on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="family-jr-on-demand-hd/9194" lang="en" xmltv_id="">Family Jr. On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="family-jr-on-demand/10239" lang="en" xmltv_id="">Family Jr. On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="family-jr/5330" lang="en" xmltv_id="FamilyJr.ca@SD">Family Jr.</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fight-network-canada-hd/10984" lang="en" xmltv_id="">Fight Network Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fight-network-canada/3433" lang="en" xmltv_id="FightNetwork.ca@SD">Fight Network Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="filipino-on-demand/5712" lang="en" xmltv_id="">Filipino on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="fitness-on-demand/6800" lang="en" xmltv_id="">Fitness On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="flix-on-demand/6483" lang="en" xmltv_id="">FLIX On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="food-network-canada-dv/8388" lang="en" xmltv_id="FoodNetwork.ca@SD">Flavour Network DV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="food-network-canada-hd/8389" lang="en" xmltv_id="FoodNetwork.ca@SD">Flavour Network HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="food-network-canada-on-demand/4336" lang="en" xmltv_id="">Food Network Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="food-network-canada/169" lang="en" xmltv_id="FoodNetwork.ca@SD">Flavour Network</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fox-kcpq-tacoma-wa--canada/189" lang="en" xmltv_id="">FOX (KCPQ) Tacoma, WA - Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fox-kcpq-tacoma-wa-dv--canada/3952" lang="en" xmltv_id="">FOX (KCPQ) Tacoma, WA DV - Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fox-kcpq-tacoma-wa-hd--canada/2832" lang="en" xmltv_id="">FOX (KCPQ) Tacoma, WA HD - Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="fox-sports-1-on-demand-hd/9745" lang="en" xmltv_id="">Fox Sports 1 On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="fox-sports-1-on-demand/4644" lang="en" xmltv_id="">Fox Sports 1 On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fox-sports-world-canada/449" lang="en" xmltv_id="">Fox Sports World Canada</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="fptv-festival-portuguese-tv/2465" lang="en" xmltv_id="FPTV.ca@SD">FPTV (Festival Portuguese TV)</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-hd-movies-on-demand/9182" lang="en" xmltv_id="">Free HD Movies On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-movies-on-demand/9056" lang="en" xmltv_id="">Free Movies On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-on-demand-hd/7645" lang="en" xmltv_id="">Free On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-tv-on-demand2/14254" lang="en" xmltv_id="">Free TV On Demand2</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-tv-on-demand3/14255" lang="en" xmltv_id="">Free TV On Demand3</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-tv-on-demand4/14256" lang="en" xmltv_id="">Free TV On Demand4</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="free-tv-on-demand/6476" lang="en" xmltv_id="">Free TV On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="freeform-on-demand/6669" lang="en" xmltv_id="">Freeform On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="french-movies-on-demand/10784" lang="en" xmltv_id="">French Movies On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="fuse-hd-on-demand/9748" lang="en" xmltv_id="">Fuse HD On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="fuse-on-demand/4788" lang="en" xmltv_id="">Fuse On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fx-networks-canada--west-hd/35616" lang="en" xmltv_id="">FX Networks Canada - West HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fx-networks-canada--west/35615" lang="en" xmltv_id="">FX Networks Canada - West</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fx-networks-canada-hd/10027" lang="en" xmltv_id="">FX Networks Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fx-networks-canada-on-demand-hd/10029" lang="en" xmltv_id="">FX Networks Canada On Demand HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fx-networks-canada-on-demand/10028" lang="en" xmltv_id="">FX Networks Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fx-networks-canada/10026" lang="en" xmltv_id="FX.ca@SD">FX Networks Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fxx-canada--west-hd/35618" lang="en" xmltv_id="">FXX Canada - West HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fxx-canada--west/35617" lang="en" xmltv_id="">FXX Canada - West</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fxx-canada-hd/13401" lang="en" xmltv_id="">FXX Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="fxx-canada/13400" lang="en" xmltv_id="FXX.ca@SD">FXX Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="gac-on-demand/4672" lang="en" xmltv_id="">GAC on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ginx-esports-tv-canada-hd/10894" lang="en" xmltv_id="">Super Channel Quest HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ginx-esports-tv-canada/4836" lang="en" xmltv_id="">Super Channel Quest</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cfen-tv-2-enderby-bc/13964" lang="en" xmltv_id="">Global BC (CFEN-TV-2) Enderby, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cffi-tv-2-malakwa-bc/13965" lang="en" xmltv_id="">Global BC (CFFI-TV-2) Malakwa, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cffl-tv-1-fraser-lake-bc/13966" lang="en" xmltv_id="">Global BC (CFFL-TV-1) Fraser Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cfho-tv-1-smithers-bc/13913" lang="en" xmltv_id="">Global BC (CFHO-TV-1) Smithers, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cfho-tv-2-telkwa-bc/13914" lang="en" xmltv_id="">Global BC (CFHO-TV-2) Telkwa, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cfho-tv-houston-bc/13982" lang="en" xmltv_id="">Global BC (CFHO-TV) Houston, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cfib-tv-little-fort-bc/13915" lang="en" xmltv_id="">Global BC (CFIB-TV) Little Fort, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cfty-tv-topley-bc/13917" lang="en" xmltv_id="">Global BC (CFTY-TV) Topley, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch2013-mcbride-bc/13918" lang="en" xmltv_id="">Global BC (CH2013) McBride, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch2030-endako-bc/13919" lang="en" xmltv_id="">Global BC (CH2030) Endako, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch2385-chetwynd-bc/13926" lang="en" xmltv_id="">Global BC (CH2385) Chetwynd, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch2518-logan-lake-bc/13927" lang="en" xmltv_id="">Global BC (CH2518) Logan Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch2737-parson-bc/13929" lang="en" xmltv_id="">Global BC (CH2737) Parson, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch2798-granisle-bc/13983" lang="en" xmltv_id="">Global BC (CH2798) Granisle, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch3033-north-pine-bc/13984" lang="en" xmltv_id="">Global BC (CH3033) North Pine, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch3035-fort-st-james-bc/13985" lang="en" xmltv_id="">Global BC (CH3035) Fort St James, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch4445-donald-station-bc/13968" lang="en" xmltv_id="">Global BC (CH4445) Donald Station, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch4552-pemberton-bc/13969" lang="en" xmltv_id="">Global BC (CH4552) Pemberton, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch4558-moberly-lake-bc/13970" lang="en" xmltv_id="">Global BC (CH4558) Moberly Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch4576-darcy-bc/13930" lang="en" xmltv_id="">Global BC (CH4576) D&apos;Arcy, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch4579-hagensborg-bc/13931" lang="en" xmltv_id="">Global BC (CH4579) Hagensborg, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch5645-crescent-valley-bc/13920" lang="en" xmltv_id="">Global BC (CH5645) Crescent Valley, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch5652-passmore-bc/13921" lang="en" xmltv_id="">Global BC (CH5652) Passmore, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch5668-new-denver-bc/13924" lang="en" xmltv_id="">Global BC (CH5668) New Denver, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ch5669-new-denver-bc/13925" lang="en" xmltv_id="">Global BC (CH5669) New Denver, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chac-tv-2-ashcroft-bc/13932" lang="en" xmltv_id="">Global BC (CHAC-TV-2) Ashcroft, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-dt-1-chilliwack-bc/14079" lang="en" xmltv_id="">Global BC (CHAN-DT-1) Chilliwack, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-dt-4-courtenay-bc/14080" lang="en" xmltv_id="">Global BC (CHAN-DT-4) Courtenay, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-dt-6-wilson-creek-bc/14081" lang="en" xmltv_id="">Global BC (CHAN-DT-6) Wilson Creek, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-tv-1-chilliwack-bc/13933" lang="en" xmltv_id="">Global BC (CHAN-TV-1) Chilliwack, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-tv-2-bowen-island-bc/13934" lang="en" xmltv_id="">Global BC (CHAN-TV-2) Bowen Island, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-tv-3-squamish-bc/13935" lang="en" xmltv_id="">Global BC (CHAN-TV-3) Squamish, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-tv-4-courtenay-bc/13936" lang="en" xmltv_id="">Global BC (CHAN-TV-4) Courtenay, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-tv-5-brackendale-bc/13937" lang="en" xmltv_id="">Global BC (CHAN-TV-5) Brackendale, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chan-tv-7-whistler-bc/13939" lang="en" xmltv_id="">Global BC (CHAN-TV-7) Whistler, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chbl-tv-ootsa-lake-bc/13940" lang="en" xmltv_id="">Global BC (CHBL-TV) Ootsa Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chcx-tv-campbell-road-bc/13941" lang="en" xmltv_id="">Global BC (CHCX-TV) Campbell Road, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chkc-tv-5-keremeosolalla-bc/13942" lang="en" xmltv_id="">Global BC (CHKC-TV-5) Keremeos/Olalla, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chkl-dt-1-penticton-bc/13944" lang="en" xmltv_id="">Global BC (CHKL-DT-1) Penticton, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chkl-dt-2-vernon-bc/13945" lang="en" xmltv_id="">Global BC (CHKL-DT-2) Vernon, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chkl-dt-kelowna-bc/13943" lang="en" xmltv_id="">Global BC (CHKL-DT) Kelowna, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chkl-tv-3-revelstoke-bc/13946" lang="en" xmltv_id="">Global BC (CHKL-TV-3) Revelstoke, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chkm-tv-1-pritchard-bc/13948" lang="en" xmltv_id="">Global BC (CHKM-TV-1) Pritchard, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chlp-tv-mcclure-bc/13949" lang="en" xmltv_id="">Global BC (CHLP-TV) McClure, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-chnj-tv-1-apex-mountain-bc/13950" lang="en" xmltv_id="">Global BC (CHNJ-TV-1) Apex Mountain, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ciac-tv-alexis-creek-bc/13951" lang="en" xmltv_id="">Global BC (CIAC-TV) Alexis Creek, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cial-tv-1-anahim-lake-bc/13952" lang="en" xmltv_id="">Global BC (CIAL-TV-1) Anahim Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cifg-tv-prince-george-bc/13953" lang="en" xmltv_id="">Global BC (CIFG-TV) Prince George, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cily-tv-2-lytton-bc/13954" lang="en" xmltv_id="">Global BC (CILY-TV-2) Lytton, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cipl-tv-peachland-bc/13955" lang="en" xmltv_id="">Global BC (CIPL-TV) Peachland, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cipv-tv-pavilion-lake-bc/13956" lang="en" xmltv_id="">Global BC (CIPV-TV) Pavilion Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cisr-tv-1-grand-forks-bc/13958" lang="en" xmltv_id="">Global BC (CISR-TV-1) Grand Forks, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cisr-tv-santa-rosa-bc/13957" lang="en" xmltv_id="">Global BC (CISR-TV) Santa Rosa, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-citm-tv-1-williams-lake-bc/13960" lang="en" xmltv_id="">Global BC (CITM-TV-1) Williams Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-citm-tv-2-quesnel-bc/13961" lang="en" xmltv_id="">Global BC (CITM-TV-2) Quesnel, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-citm-tv-100-mile-house-bc/13959" lang="en" xmltv_id="">Global BC (CITM-TV) 100 Mile House, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cjcc-tv-cherryville-bc/13971" lang="en" xmltv_id="">Global BC (CJCC-TV) Cherryville, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cjna-tv-2-spences-bridge-bc/13972" lang="en" xmltv_id="">Global BC (CJNA-TV-2) Spences Bridge, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ckhs-tv-burns-lake-bc/13973" lang="en" xmltv_id="">Global BC (CKHS-TV) Burns Lake, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ckkm-tv-oliverosoyoos-bc/13974" lang="en" xmltv_id="">Global BC (CKKM-TV) Oliver/Osoyoos, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-ckrr-tv-2-rimrock-bc/13975" lang="en" xmltv_id="">Global BC (CKRR-TV-2) Rimrock, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cktn-tv-1-castlegar-bc/13977" lang="en" xmltv_id="">Global BC (CKTN-TV-1) Castlegar, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cktn-tv-2-taghum-bc/13978" lang="en" xmltv_id="">Global BC (CKTN-TV-2) Taghum, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cktn-tv-3-nelson-bc/13979" lang="en" xmltv_id="">Global BC (CKTN-TV-3) Nelson, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cktn-tv-4-creston-bc/13980" lang="en" xmltv_id="">Global BC (CKTN-TV-4) Creston, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-cktn-tv-trail-bc/13976" lang="en" xmltv_id="">Global BC (CKTN-TV) Trail, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-dv/3934" lang="en" xmltv_id="">Global BC DV</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-bc-hd/4194" lang="en" xmltv_id="">Global BC HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="global-bc/31" lang="en" xmltv_id="GlobalNewsBC1.ca@SD">Global BC</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="global-cfre-regina-sk-hd/6429" lang="en" xmltv_id="">Global (CFRE) Regina, SK HD</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="global-cfre-regina-sk/536" lang="en" xmltv_id="">Global (CFRE) Regina, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="global-cfre-tv-2-fort-quappelle-sk/13809" lang="en" xmltv_id="">Global (CFRE-TV-2) Fort Qu&apos;Appelle, SK</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="global-cfsk-saskatoon-sk-dv/7590" lang="en" xmltv_id="">Global (CFSK) Saskatoon, SK DV</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="global-cfsk-saskatoon-sk-hd/6430" lang="en" xmltv_id="">Global (CFSK) Saskatoon, SK HD</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="global-cfsk-saskatoon-sk/442" lang="en" xmltv_id="">Global (CFSK) Saskatoon, SK</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-dt-1-penticton-bc/13833" lang="en" xmltv_id="">Global (CHBC-DT-1) Penticton, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-dt-2-vernon-bc/13834" lang="en" xmltv_id="">Global (CHBC-DT-2) Vernon, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-okanagan-valley-bc-hd/6601" lang="en" xmltv_id="">Global (CHBC) Okanagan Valley, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-okanagan-valley-bc/170" lang="en" xmltv_id="">Global (CHBC) Okanagan Valley, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-tv-3-oliver-bc/13835" lang="en" xmltv_id="">Global (CHBC-TV-3) Oliver, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-tv-4-salmon-arm-bc/13836" lang="en" xmltv_id="">Global (CHBC-TV-4) Salmon Arm, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-tv-5-enderby-bc/13837" lang="en" xmltv_id="">Global (CHBC-TV-5) Enderby, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-tv-7-penticton-bc/13838" lang="en" xmltv_id="">Global (CHBC-TV-7) Penticton, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-tv-8-canoe-bc/13839" lang="en" xmltv_id="">Global (CHBC-TV-8) Canoe, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chbc-tv-9-apex-mountain-bc/13840" lang="en" xmltv_id="">Global (CHBC-TV-9) Apex Mountain, BC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-chex-peterborough-on-hd/9697" lang="en" xmltv_id="">Global (CHEX) Peterborough, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-chex-peterborough-on/37" lang="en" xmltv_id="">Global (CHEX) Peterborough, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-chex-tv-2-durham-on-hd/9696" lang="en" xmltv_id="">Global (CHEX-TV-2) Durham, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-chex-tv-2-durham-on/1882" lang="en" xmltv_id="">Global (CHEX-TV-2) Durham, ON</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chkm-kamloops-bc-hd/11598" lang="en" xmltv_id="">Global (CHKM) Kamloops, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-chkm-kamloops-bc/11597" lang="en" xmltv_id="">Global (CHKM) Kamloops, BC</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-chnb-dt-1-fredericton-nb/14034" lang="en" xmltv_id="">Global (CHNB-DT-1) Fredericton, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-chnb-saint-john-nb-hd/31762" lang="en" xmltv_id="">Global (CHNB) Saint John, NB HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-chnb-saint-john-nb/3424" lang="en" xmltv_id="">Global (CHNB) Saint John, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-chnb-tv-13-miramichi-nb/14016" lang="en" xmltv_id="">Global (CHNB-TV-13) Miramichi, NB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cict-calgary-ab-dv/7596" lang="en" xmltv_id="">Global (CICT) Calgary, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cict-calgary-ab-hd/6431" lang="en" xmltv_id="">Global (CICT) Calgary, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cict-calgary-ab/349" lang="en" xmltv_id="">Global (CICT) Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cict-tv-1-drumheller-ab/13831" lang="en" xmltv_id="">Global (CICT-TV-1) Drumheller, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cict-tv-2-baff-ab/13832" lang="en" xmltv_id="">Global (CICT-TV-2) Baff, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-cifg-prince-george-bc-hd/11599" lang="en" xmltv_id="">Global (CIFG) Prince George, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-cifg-prince-george-bc/11600" lang="en" xmltv_id="">Global (CIFG) Prince George, BC</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="global-cihf-dartmouth/115" lang="en" xmltv_id="CIHFDT.ca@SD">Global (CIHF) Dartmouth</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-3-moncton-nb/14038" lang="en" xmltv_id="">Global (CIHF-DT-3) Moncton, NB</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-4-truro-ns/14021" lang="en" xmltv_id="">Global (CIHF-DT-4) Truro, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-5-wolfville-ns/14023" lang="en" xmltv_id="">Global (CIHF-DT-5) Wolfville, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-6-bridgewater-ns/14025" lang="en" xmltv_id="">Global (CIHF-DT-6) Bridgewater, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-7-sydney-ns/14027" lang="en" xmltv_id="">Global (CIHF-DT-7) Sydney, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-8-new-glasgow-ns/14029" lang="en" xmltv_id="">Global (CIHF-DT-8) New Glasgow, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-9-shelburne-ns/14031" lang="en" xmltv_id="">Global (CIHF-DT-9) Shelburne, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-10-yarmouth-ns/14009" lang="en" xmltv_id="">Global (CIHF-DT-10) Yarmouth, NS</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-11-woodstock-nb/14012" lang="en" xmltv_id="">Global (CIHF-DT-11) Woodstock, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-12-st-stephen-nb/14014" lang="en" xmltv_id="">Global (CIHF-DT-12) St Stephen, NB</channel>
+  <!-- TEST MATCH: Canadian province PE -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-14-charlottetown-pe-hd/31763" lang="en" xmltv_id="">Global (CIHF-DT-14) Charlottetown, PE HD</channel>
+  <!-- TEST MATCH: Canadian province PE -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-14-charlottetown-pe/14036" lang="en" xmltv_id="">Global (CIHF-DT-14) Charlottetown, PE</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-15-antigonish-ns/14017" lang="en" xmltv_id="">Global (CIHF-DT-15) Antigonish, NS</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-dt-16-mulgrave-ns/14019" lang="en" xmltv_id="">Global (CIHF-DT-16) Mulgrave, NS</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-cihf-maritimes-nb-only-hd/10695" lang="en" xmltv_id="">Global (CIHF) Maritimes (N.B. only) HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="global-cihf-maritimes-nb-only/3871" lang="en" xmltv_id="">Global (CIHF) Maritimes (N.B. only)</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="global-cihf-tv-15-antigonish-ns/13829" lang="en" xmltv_id="">Global (CIHF-TV-15) Antigonish, NS</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="global-ciii-ontario-hd/4021" lang="en" xmltv_id="CIIIDT.ca@SD">Global (CIII) Ontario HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-lethbridge-ab-hd/6435" lang="en" xmltv_id="">Global (CISA) Lethbridge, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-lethbridge-ab/262" lang="en" xmltv_id="">Global (CISA) Lethbridge, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-tv-1-burmis-ab/13815" lang="en" xmltv_id="">Global (CISA-TV-1) Burmis, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-tv-2-brooks-ab/13816" lang="en" xmltv_id="">Global (CISA-TV-2) Brooks, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-tv-3-coleman-ab/13817" lang="en" xmltv_id="">Global (CISA-TV-3) Coleman, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-tv-4-waterton-park-ab/13818" lang="en" xmltv_id="">Global (CISA-TV-4) Waterton Park, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-cisa-tv-5-pincher-creek-ab/13819" lang="en" xmltv_id="">Global (CISA-TV-5) Pincher Creek, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-citv-dt-1-red-deer-ab/13814" lang="en" xmltv_id="">Global (CITV-DT-1) Red Deer, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-citv-edmonton-ab-hd/6436" lang="en" xmltv_id="">Global (CITV) Edmonton, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="global-citv-edmonton-ab/33" lang="en" xmltv_id="">Global (CITV) Edmonton, AB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="global-ckmi-dt-2-sherbrooke-qc/13813" lang="en" xmltv_id="">Global (CKMI-DT-2) Sherbrooke, QC</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="global-cknd-dt-2-minnedosa-mb/14068" lang="en" xmltv_id="">Global (CKND-DT-2) Minnedosa, MB</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="global-cknd-winnipeg-mb-dv/3957" lang="en" xmltv_id="">Global (CKND) Winnipeg, MB DV</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="global-cknd-winnipeg-mb-hd/6438" lang="en" xmltv_id="">Global (CKND) Winnipeg, MB HD</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="global-cknd-winnipeg-mb/151" lang="en" xmltv_id="">Global (CKND) Winnipeg, MB</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-ckws-dt-1-brighton-on/13403" lang="en" xmltv_id="">Global (CKWS-DT-1) Brighton, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-ckws-kingston-on-hd/9694" lang="en" xmltv_id="">Global (CKWS) Kingston, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-ckws-kingston-on/24" lang="en" xmltv_id="">Global (CKWS) Kingston, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-ckws-tv-2-prescott-on/13404" lang="en" xmltv_id="">Global (CKWS-TV-2) Prescott, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-ckws-tv-3-smiths-falls-on/13405" lang="en" xmltv_id="">Global (CKWS-TV-3) Smiths Falls, ON</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-news-bc1-hd/10981" lang="en" xmltv_id="">Global News: BC1 HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="global-news-bc1/10980" lang="en" xmltv_id="">Global News: BC1</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="global-on-demand/8021" lang="en" xmltv_id="">Global On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="golf-channel-canada-hd/9901" lang="en" xmltv_id="">Golf Channel Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="golf-channel-canada/9900" lang="en" xmltv_id="">Golf Channel Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="golf-channel-on-demand/4645" lang="en" xmltv_id="">Golf Channel on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="gospel-music-on-demand-hd/9750" lang="en" xmltv_id="">Gospel Music On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="gospel-music-on-demand/6634" lang="en" xmltv_id="">Gospel Music On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="government-access-on-demand/7626" lang="en" xmltv_id="">Government Access On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="halla-bol/13664" lang="en" xmltv_id="HallaBolKidsTV.ca@SD">Halla Bol!</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hbo-canada-2--west/292" lang="en" xmltv_id="">HBO Canada 2 - West</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hbo-canada-east-on-demand-hd/9313" lang="en" xmltv_id="">HBO Canada East On Demand HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hbo-canada-east-on-demand/8252" lang="en" xmltv_id="">HBO Canada East On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hbo-canada-west-on-demand-hd/9314" lang="en" xmltv_id="">HBO Canada West On Demand HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hbo-canada-west-on-demand/8442" lang="en" xmltv_id="">HBO Canada West On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hbo-caribbean-feed-on-demand/8444" lang="en" xmltv_id="">HBO Caribbean Feed On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hbo-on-demand-hd/8610" lang="en" xmltv_id="">HBO On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hbo-on-demand/3479" lang="en" xmltv_id="">HBO On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hd-on-demand/7729" lang="en" xmltv_id="">HD On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hdnet-movies-on-dmenad/9340" lang="en" xmltv_id="">HDNet Movies On Dmenad</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="here-on-demand/3987" lang="en" xmltv_id="">Here! On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hgtv-canada-dv/3962" lang="en" xmltv_id="">Home Network DV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hgtv-canada-hd/8793" lang="en" xmltv_id="">Home Network HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hgtv-canada-on-demand/4335" lang="en" xmltv_id="">HGTV Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hgtv-canada/167" lang="en" xmltv_id="HGTV.ca@SD">Home Network</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="hi-wowt3-omaha-nb/18827" lang="en" xmltv_id="">365BLK (WOWT3) Omaha, NB</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="historia/345" lang="en" xmltv_id="Historia.ca@SD">Historia</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-2-canada-hd/8457" lang="en" xmltv_id="">History 2 Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-2-canada-on-demand/10886" lang="en" xmltv_id="">History 2 Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-2-canada/461" lang="en" xmltv_id="">History 2 Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-canada-east/164" lang="en" xmltv_id="History.ca@SD">History Canada East</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-canada-hd-east/6822" lang="en" xmltv_id="">History Canada HD East</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-canada-hd-west/3963" lang="en" xmltv_id="">History Canada HD West</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-canada-on-demand-hd/10842" lang="en" xmltv_id="">History Canada On Demand HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-canada-on-demand/10841" lang="en" xmltv_id="">History Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="history-canada-west/3782" lang="en" xmltv_id="">History Canada West</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="history-channel-us-hd-on-demand/4785" lang="en" xmltv_id="">History Channel US HD On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="history-channel-us-on-demand/9744" lang="en" xmltv_id="">History Channel US On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="hollywood-suite-00s/8887" lang="en" xmltv_id="HollywoodSuite00sMovies.ca@SD">Hollywood Suite 00s</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="hollywood-suite-70s/10310" lang="en" xmltv_id="HollywoodSuite70sMovies.ca@SD">Hollywood Suite 70s</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="hollywood-suite-80s/13639" lang="en" xmltv_id="HollywoodSuite80sMovies.ca@SD">Hollywood Suite 80s</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="hollywood-suite-90s/10880" lang="en" xmltv_id="HollywoodSuite90sMovies.ca@SD">Hollywood Suite 90s</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hollywood-suite-on-demand/11320" lang="en" xmltv_id="">Hollywood Suite On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="home--leisure-on-demand/6477" lang="en" xmltv_id="">Home &amp; Leisure On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="how-to-on-demand-hd/9085" lang="en" xmltv_id="">How To On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="how-to-on-demand/9084" lang="en" xmltv_id="">How To On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="howard-stern-on-demand/3989" lang="en" xmltv_id="">Howard Stern On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="hpitv-canada/2860" lang="en" xmltv_id="">HPItv Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="hustler-tv-usa-on-demand/10171" lang="en" xmltv_id="">Hustler TV USA On Demand</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ici-cbaft-moncton-nb-hd/6816" lang="en" xmltv_id="">ICI (CBAFT) Moncton, NB HD</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="ici-cbaft-moncton-nb/118" lang="en" xmltv_id="">ICI (CBAFT) Moncton, NB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbfst-src-nord-qc-hd/9671" lang="en" xmltv_id="">ICI (CBFST) SRC -Nord, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbft-montreal-qc-dv/5935" lang="en" xmltv_id="">ICI (CBFT) Montreal, QC DV</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbft-montreal-qc-hd/2837" lang="en" xmltv_id="">ICI (CBFT) Montreal, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbft-montreal-qc/196" lang="en" xmltv_id="">ICI (CBFT) Montreal, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbgat-gaspe-qc-hd/9670" lang="en" xmltv_id="">ICI (CBGAT) Gaspé, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbgat-gaspe-qc/2167" lang="en" xmltv_id="">ICI (CBGAT) Gaspé, QC</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ici-cbhft-halifax-ns-hd/6817" lang="en" xmltv_id="">ICI (CBHFT) Halifax, NS HD</channel>
+  <!-- TEST MATCH: Canadian province NS -->
+  <channel site="tvpassport.com" site_id="ici-cbhft-halifax-ns/3882" lang="en" xmltv_id="">ICI (CBHFT) Halifax, NS</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ici-cbkft-regina-sk-hd/6819" lang="en" xmltv_id="">ICI (CBKFT) Regina, SK HD</channel>
+  <!-- TEST MATCH: Canadian province SK -->
+  <channel site="tvpassport.com" site_id="ici-cbkft-regina-sk/287" lang="en" xmltv_id="">ICI (CBKFT) Regina, SK</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ici-cboft-ottawa-on-dv/14158" lang="en" xmltv_id="">ICI (CBOFT) Ottawa, ON DV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ici-cboft-ottawa-on-hd/6768" lang="en" xmltv_id="">ICI (CBOFT) Ottawa, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ici-cboft-ottawa-on/463" lang="en" xmltv_id="">ICI (CBOFT) Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ici-cbrft-calgary-ab-dv/14160" lang="en" xmltv_id="">ICI (CBRFT) Calgary, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ici-cbrft-calgary-ab-hd/9610" lang="en" xmltv_id="">ICI (CBRFT) Calgary, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ici-cbrft-calgary-ab/3980" lang="en" xmltv_id="">ICI (CBRFT) Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbst-sept-iles-qc-hd/9673" lang="en" xmltv_id="">ICI (CBST) Sept-Iles, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbst-sept-iles-qc/3299" lang="en" xmltv_id="">ICI (CBST) Sept-Iles, QC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ici-cbuft-vancouver-bc-hd/6769" lang="en" xmltv_id="">ICI (CBUFT) Vancouver, BC HD</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="ici-cbuft-vancouver-bc/188" lang="en" xmltv_id="">ICI (CBUFT) Vancouver, BC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbvt-quebec-qc--digital/5948" lang="en" xmltv_id="">ICI (CBVT) Quebec, QC - Digital</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbvt-quebec-qc-hd/6820" lang="en" xmltv_id="">ICI (CBVT) Quebec, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cbvt-quebec-qc/562" lang="en" xmltv_id="">ICI (CBVT) Quebec, QC</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ici-cbwft-winnipeg-mb-hd/6770" lang="en" xmltv_id="">ICI (CBWFT) Winnipeg, MB HD</channel>
+  <!-- TEST MATCH: Canadian province MB -->
+  <channel site="tvpassport.com" site_id="ici-cbwft-winnipeg-mb/144" lang="en" xmltv_id="">ICI (CBWFT) Winnipeg, MB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ici-cbxft-edmonton-ab-dv/14159" lang="en" xmltv_id="">ICI (CBXFT) Edmonton, AB DV</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ici-cbxft-edmonton-ab-hd/9609" lang="en" xmltv_id="">ICI (CBXFT) Edmonton, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="ici-cbxft-edmonton-ab/174" lang="en" xmltv_id="">ICI (CBXFT) Edmonton, AB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjbr-rimouski-qc-hd/9668" lang="en" xmltv_id="">ICI (CJBR) Rimouski, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjbr-rimouski-qc/2170" lang="en" xmltv_id="">ICI (CJBR) Rimouski, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjdg-dt-val-dor-qc/14060" lang="en" xmltv_id="">ICI (CJDG-DT) Val D&apos;Or, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjdg-tv-2-lebel-sur-quevillon-qc/14062" lang="en" xmltv_id="">ICI (CJDG-TV-2) Lebel-Sur-Quevillon, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjdg-tv-3-joutel-qc/14064" lang="en" xmltv_id="">ICI (CJDG-TV-3) Joutel, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjdg-tv-4-matagami-qc-hd/14067" lang="en" xmltv_id="">ICI (CJDG-TV-4) Matagami, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cjdg-tv-4-matagami-qc/14066" lang="en" xmltv_id="">ICI (CJDG-TV-4) Matagami, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrn-rouyn-qc-hd/9669" lang="en" xmltv_id="">ICI (CKRN) Rouyn, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrn-rouyn-qc/1036" lang="en" xmltv_id="">ICI (CKRN) Rouyn, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrn-tv-2-ville-marie-qc/14056" lang="en" xmltv_id="">ICI (CKRN-TV-2) Ville-Marie, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrn-tv-3-bearnfabre-qc/14058" lang="en" xmltv_id="">ICI (CKRN-TV-3) Bearn/Fabre, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-dt-1-baie-st-paul-qc/14050" lang="en" xmltv_id="">ICI (CKRT-DT-1) Baie St-Paul, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-dt-2-degelis-qc/14051" lang="en" xmltv_id="">ICI (CKRT-DT-2) Dégelis, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-dt-3-riviere-du-loup-qc/14052" lang="en" xmltv_id="">ICI (CKRT-DT-3) Rivière-du-Loup, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-dt-4-cabano-qc/14053" lang="en" xmltv_id="">ICI (CKRT-DT-4) Cabano, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-dt-5-st-urbain-qc/14054" lang="en" xmltv_id="">ICI (CKRT-DT-5) St Urbain, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-dt-6-trois-pistoles-qc/14055" lang="en" xmltv_id="">ICI (CKRT-DT-6) Trois-Pistoles, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-riviere-du-loup-qc-hd/10928" lang="en" xmltv_id="">ICI (CKRT) Riviere-du-Loup, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-ckrt-riviere-du-loup-qc/499" lang="en" xmltv_id="">ICI (CKRT) Riviere-du-Loup, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cksh-sherbrooke-qc--digital/5936" lang="en" xmltv_id="">ICI (CKSH) Sherbrooke, QC - digital</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cksh-sherbrooke-qc-hd/9672" lang="en" xmltv_id="">ICI (CKSH) Sherbrooke, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cksh-sherbrooke-qc/2169" lang="en" xmltv_id="">ICI (CKSH) Sherbrooke, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktm-trois-rivieres-qc--digital/5946" lang="en" xmltv_id="">ICI (CKTM) Trois-Rivières, QC - Digital</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktm-trois-rivieres-qc-hd/9674" lang="en" xmltv_id="">ICI (CKTM) Trois-Rivières, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktm-trois-rivieres-qc/550" lang="en" xmltv_id="">ICI (CKTM) Trois-Rivières, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktv-jonquiere-qc-hd/10968" lang="en" xmltv_id="">ICI (CKTV) Jonquière, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktv-jonquiere-qc/606" lang="en" xmltv_id="">ICI (CKTV) Jonquière, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktv-saguenay-qc-hd/9667" lang="en" xmltv_id="">ICI (CKTV) Saguenay, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-cktv-saguenay-qc/564" lang="en" xmltv_id="">ICI (CKTV) Saguenay, QC</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="ici-radio-canada-sur-demand/9059" lang="en" xmltv_id="">Ici Radio Canada sur Demand</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-television-cfhd-dt-montreal-qc-hd/13786" lang="en" xmltv_id="">ICI Television (CFHD-DT) Montréal, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-television-cfhd-dt-montreal-qc/11385" lang="en" xmltv_id="">ICI Television (CFHD-DT) Montréal, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="ici-television-cfhd-dt-montreal-qc/26780" lang="en" xmltv_id="">ICI Television (CFHD-DT) Montréal, QC</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="independent-film-channel-us-on-demand/7784" lang="en" xmltv_id="">Independent Film Channel US On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="inspiration-network-on-demand/4711" lang="en" xmltv_id="">Inspiration Network on demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="investigation-discovery-canada-hd/8458" lang="en" xmltv_id="InvestigationDiscovery.ca@SD">Oxygen True Crime Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="investigation-discovery-canada/1120" lang="en" xmltv_id="InvestigationDiscovery.ca@SD">Oxygen True Crime Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="journey-tv-on-demand-hd/9143" lang="en" xmltv_id="">Journey TV On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="journey-tv-on-demand/9142" lang="en" xmltv_id="">Journey TV On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="juicy-on-demand/10267" lang="en" xmltv_id="">Juicy On Demand</channel>
+  <!-- TEST MATCH: Canadian province NU -->
+  <channel site="tvpassport.com" site_id="k02nu-cedar-city-etc-ut/25804" lang="en" xmltv_id="">(K02NU) Cedar City, Etc., UT</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kcp-on-hd/33793" lang="en" xmltv_id="">KCP-ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kcp-on/33124" lang="en" xmltv_id="">KCP-ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kids--teens-on-demand/34644" lang="en" xmltv_id="">Kids &amp; Teens On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kids-movies-1-on-demand/6419" lang="en" xmltv_id="">Kids Movies 1 On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kids-movies-2-on-demand/14251" lang="en" xmltv_id="">Kids Movies 2 On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kids-preschool-on-demand/4668" lang="en" xmltv_id="">Kids Preschool on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kids-unlimited-on-demand-hd/6668" lang="en" xmltv_id="">Kids Unlimited On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kids-unlimited-on-demand/4647" lang="en" xmltv_id="">Kids Unlimited On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="kidsnow-on-demand/7925" lang="en" xmltv_id="">KidsNow On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="knowledge-on-demand/7668" lang="en" xmltv_id="">Knowledge On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="la-chaine-disney/5981" lang="en" xmltv_id="LaChaineDisney.ca@SD">La Chaine Disney</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="lcn/432" lang="en" xmltv_id="LCN.ca@SD">LCN</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="lifeskool-on-demand/4641" lang="en" xmltv_id="">LifeSkool On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="lifestyles-on-demand/4642" lang="en" xmltv_id="">Lifestyles on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="lifetime-network-on-demand/4784" lang="en" xmltv_id="">Lifetime Network on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="lifetime-tv--canada-hd/11044" lang="en" xmltv_id="Lifetime.ca@SD">Lifetime TV - Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="lifetime-tv--canada-on-demand/14325" lang="en" xmltv_id="">Lifetime TV - Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="lifetime-tv--canada/1148" lang="en" xmltv_id="Lifetime.ca@SD">Lifetime TV - Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="lo-mejor-on-demand/7860" lang="en" xmltv_id="">Lo Mejor On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="love-nature/3907" lang="en" xmltv_id="LoveNature.ca@SD">Love Nature</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="ls-times/6863" lang="en" xmltv_id="LSTimesTV.ca@SD">LS Times</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="magnolia-network-canada-hd/19839" lang="en" xmltv_id="">Magnolia Network Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="magnolia-network-canada/2034" lang="en" xmltv_id="">Magnolia Network Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="magnolia-network-on-demand/5615" lang="en" xmltv_id="">Magnolia Network On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="makeful-on-demand/6789" lang="en" xmltv_id="">Makeful On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="makeful/2466" lang="en" xmltv_id="Makeful.ca@SD">Makeful</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="mediaset-italia/8436" lang="en" xmltv_id="MediasetItalia.ca@SD">Mediaset Italia</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="metrosports-on-demand/7473" lang="en" xmltv_id="">MetroSports On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="mgm-on-demand-hd/9325" lang="en" xmltv_id="">MGM+ On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="mgm-on-demand/7930" lang="en" xmltv_id="">MGM+ On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="mlb-network-canada-hd/32975" lang="en" xmltv_id="">MLB Network Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="mlb-network-canada/32974" lang="en" xmltv_id="">MLB Network Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movie-central-on-demand/7597" lang="en" xmltv_id="">Movie Central On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movieplex-on-demand/16671" lang="en" xmltv_id="">Movieplex On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-a-to-z-on-demand/7744" lang="en" xmltv_id="">Movies A To Z On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-classics-hd/9557" lang="en" xmltv_id="">Movies On Demand Classics HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-classics/9135" lang="en" xmltv_id="">Movies On Demand Classics</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-en-espanol/7435" lang="en" xmltv_id="">Movies On Demand en Espanol</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-hd/7124" lang="en" xmltv_id="">Movies On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-hits-hd/10934" lang="en" xmltv_id="">Movies On Demand Hits HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-hits/10933" lang="en" xmltv_id="">Movies On Demand Hits</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-kids--teens-hd/9556" lang="en" xmltv_id="">Movies On Demand Kids &amp; Teens HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-kids--teens/9137" lang="en" xmltv_id="">Movies On Demand Kids &amp; Teens</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-thrillers-hd/9555" lang="en" xmltv_id="">Movies On Demand Thrillers HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-thrillers/9136" lang="en" xmltv_id="">Movies On Demand Thrillers</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand-top-10/19553" lang="en" xmltv_id="">Movies On Demand Top 10</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="movies-on-demand/6310" lang="en" xmltv_id="">Movies On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="movietime/464" lang="en" xmltv_id="MovieTime.ca@SD">MovieTime</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="msnbc-canada-hd/8430" lang="en" xmltv_id="">MSNBC Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="msnbc-canada/1850" lang="en" xmltv_id="">MSNBC Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="mtv-2-canada/478" lang="en" xmltv_id="MTV2.ca@SD">MTV 2 Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="mtv-2-on-demand/4787" lang="en" xmltv_id="">MTV 2 on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="mtv-canada-hd/11107" lang="en" xmltv_id="MTV.ca@SD">MTV Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="mtv-canada-on-demand/7747" lang="en" xmltv_id="">MTV Canada On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="mtv-canada/414" lang="en" xmltv_id="MTV.ca@SD">MTV Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="mtv-usa-on-demand/4786" lang="en" xmltv_id="">MTV USA on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="much-music-on-demand/7746" lang="en" xmltv_id="">Much Music On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="much-music/73" lang="en" xmltv_id="Much.ca@SD">Much Music</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="music-on-demand-hd/7647" lang="en" xmltv_id="">Music On Demand HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="national-geographic-canada-hd/4162" lang="en" xmltv_id="NationalGeographic.ca@SD">National Geographic Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="national-geographic-canada/475" lang="en" xmltv_id="NationalGeographic.ca@SD">National Geographic Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="national-geographic-hd-on-demand/8267" lang="en" xmltv_id="">National Geographic HD On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="national-geographic-on-demand/4337" lang="en" xmltv_id="">National Geographic On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="national-geographic-wild-canada-hd/11012" lang="en" xmltv_id="NationalGeographicWild.ca@SD">National Geographic Wild Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="national-geographic-wild-canada/11011" lang="en" xmltv_id="NationalGeographicWild.ca@SD">National Geographic Wild Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="national-geographic-wild-hd-on-demand/14485" lang="en" xmltv_id="">National Geographic Wild HD On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="national-geographic-wild-on-demand/14486" lang="en" xmltv_id="">National Geographic Wild On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="nature--knowledge-on-demand/8116" lang="en" xmltv_id="">Nature &amp; Knowledge On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="nba-tv-canada-tv-hd/3615" lang="en" xmltv_id="NBATVCanada.ca@SD">NBA TV Canada TV HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="nba-tv-canada/1150" lang="en" xmltv_id="NBATVCanada.ca@SD">NBA TV Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="new-releases-on-demand/7742" lang="en" xmltv_id="">New Releases On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="nfl-network--canada/37557" lang="en" xmltv_id="">NFL Network - Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="nfl-network-on-demand/3990" lang="en" xmltv_id="">NFL Network On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ngn-on-demand/7667" lang="en" xmltv_id="">NGN On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ngtv-greek-on-demand/10519" lang="en" xmltv_id="">NGTV (Greek) On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="nick-jr-on-demand/7946" lang="en" xmltv_id="">Nick Jr. On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="nickelodeon-canada-hd/11319" lang="en" xmltv_id="Nickelodeon.ca@SD">Nickelodeon Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="nickelodeon-canada-on-demand/14291" lang="en" xmltv_id="">Nickelodeon Canada on Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="nickelodeon-canada/6835" lang="en" xmltv_id="Nickelodeon.ca@SD">Nickelodeon Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="nickelodeon-usa-on-demand/7945" lang="en" xmltv_id="">Nickelodeon USA On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="nickelodeon-usa-on-demand/8127" lang="en" xmltv_id="">Nickelodeon USA On Demand</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfap-quebec-qc-hd/5937" lang="en" xmltv_id="">Noovo (CFAP) Quebec, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfap-quebec-qc/2179" lang="en" xmltv_id="">Noovo (CFAP) Québec, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfgs-gatineau-qc-hd/31506" lang="en" xmltv_id="">Noovo (CFGS) Gatineau, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfgs-gatineau-qc/5" lang="en" xmltv_id="">Noovo (CFGS) Gatineau, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfjp-montreal-qc/301" lang="en" xmltv_id="">Noovo (CFJP) Montreal, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfjp-montrealqc-hd/5940" lang="en" xmltv_id="">Noovo (CFJP) Montreal,QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfkm-trois-rivieres-qc-hd/5938" lang="en" xmltv_id="">Noovo (CFKM) Trois-Rivieres, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfkm-trois-rivieres-qc/2180" lang="en" xmltv_id="">Noovo (CFKM) Trois-Rivières, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfks-sherbrooke-qc-hd/5939" lang="en" xmltv_id="">Noovo (CFKS) Sherbrooke, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfks-sherbrooke-qc/2181" lang="en" xmltv_id="">Noovo (CFKS) Sherbrooke, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfrs-saguenaylac-st-jean-qc-hd/31495" lang="en" xmltv_id="">Noovo (CFRS) Saguenay/Lac St-Jean, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfrs-saguenaylac-st-jean-qc/2183" lang="en" xmltv_id="">Noovo (CFRS) Saguenay/Lac St-Jean, QC</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-1-edmundston-nb/13995" lang="en" xmltv_id="">Noovo (CFTF-DT-1) Edmundston, NB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-2-trois-pistoles-qc/13998" lang="en" xmltv_id="">Noovo (CFTF-DT-2) Trois-Pistoles, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-3-cabano-qc/13999" lang="en" xmltv_id="">Noovo (CFTF-DT-3) Cabano, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-4-forestville-qc/14000" lang="en" xmltv_id="">Noovo (CFTF-DT-4) Forestville, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-5-baie-comeau-qc/14001" lang="en" xmltv_id="">Noovo (CFTF-DT-5) Baie-Comeau, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-6-riviere-du-loup-qc/14002" lang="en" xmltv_id="">Noovo (CFTF-DT-6) Rivière-du-Loup, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-7-sept-iles-qc/14003" lang="en" xmltv_id="">Noovo (CFTF-DT-7) Sept-Iles, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-8-les-escoumins-qc/14004" lang="en" xmltv_id="">Noovo (CFTF-DT-8) Les Escoumins, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-9-gaspe-qc/14005" lang="en" xmltv_id="">Noovo (CFTF-DT-9) Gaspé, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-10-baie-st-paul-qc/13996" lang="en" xmltv_id="">Noovo (CFTF-DT-10) Baie St-Paul, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-dt-11-carleton-qc/13997" lang="en" xmltv_id="">Noovo (CFTF-DT-11) Carleton, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cftf-riviere-du-loup-qc/1272" lang="en" xmltv_id="">Noovo (CFTF) Riviere du Loup, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfvs-dt-1-rouyn-noranda-qc/14008" lang="en" xmltv_id="">Noovo (CFVS-DT-1) Rouyn-Noranda, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cfvs-val-dor-qc/2184" lang="en" xmltv_id="">Noovo (CFVS) Val-d&apos;Or, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="noovo-cjpc-dt-rimouski-qc/13994" lang="en" xmltv_id="">Noovo (CJPC-DT) Rimouski, QC</channel>
+  <!-- TEST MATCH: Canadian province NU -->
+  <channel site="tvpassport.com" site_id="nu-roc-house-channel/33051" lang="en" xmltv_id="">Nu-Roc House Channel</channel>
+  <!-- TEST MATCH: Canadian province NU -->
+  <channel site="tvpassport.com" site_id="nu-roc-tv-guide/33050" lang="en" xmltv_id="">Nu-Roc TV Guide</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="oc-16-on-demand/9582" lang="en" xmltv_id="">OC 16 On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="odyssey/412" lang="en" xmltv_id="Odyssey.ca@SD">Odyssey</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="omni-on-demand/3984" lang="en" xmltv_id="">OMNI On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="on-demand-en-espanol/10261" lang="en" xmltv_id="">On Demand en espanol</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="on-tonight-with-gary-morris-encore-presentations/37577" lang="en" xmltv_id="">On Tonight with Gary Morris-Encore Presentations</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="ontario-legislature/417" lang="en" xmltv_id="LegislativeAssemblyofOntario.ca@SD">Ontario Legislature</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="oprah-winfrey-network-canada/296" lang="en" xmltv_id="OWN.ca@SD">Oprah Winfrey Network Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="outdoor-life-network-canada-hd/9505" lang="en" xmltv_id="">Bravo Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="outdoor-life-network-canada/160" lang="en" xmltv_id="">Bravo Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="outrageous-on-demand/5640" lang="en" xmltv_id="">Outrageous On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="outtv/2729" lang="en" xmltv_id="OUTtv.ca@SD">OUTtv</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="oxygen-on-demand/4670" lang="en" xmltv_id="">Oxygen on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="paramount-with-showtime-on-demand-hd/7409" lang="en" xmltv_id="">Paramount+ with Showtime On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="paramount-with-showtime-on-demand/4658" lang="en" xmltv_id="">Paramount+ with Showtime On Demand</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="pbs-k16ab-d-guymon-ok/14914" lang="en" xmltv_id="">PBS (K16AB-D) Guymon, OK</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="pbs-k36ab-d-lawton-ok/14908" lang="en" xmltv_id="">PBS (K36AB-D) Lawton, OK</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="peachtree-tv-canada-hd/7342" lang="en" xmltv_id="">Peachtree TV (Canada) HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="peachtree-tv-canada/4179" lang="en" xmltv_id="">Peachtree TV (Canada)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="penthouse-tv-canada-hd/7313" lang="en" xmltv_id="">Penthouse TV Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="penthouse-tv-canada/5894" lang="en" xmltv_id="PenthouseTV.ca@SD">Penthouse TV Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="playboy-on-demand/3630" lang="en" xmltv_id="">Playboy On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="playboy-tv-en-espanol-on-demand/34776" lang="en" xmltv_id="">Playboy TV en espanol on demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="pop-on-demand/10371" lang="en" xmltv_id="">POP On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="premium-services-on-demand/7740" lang="en" xmltv_id="">Premium Services On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="prise-2/2848" lang="en" xmltv_id="Prise2.ca@SD">Prise 2</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="pt-check-ch-tv-vancouver-island-bc-hd/2021" lang="en" xmltv_id="">PT CHECK: CH TV Vancouver Island, BC HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="pt-check-city-calgary-ab/2278" lang="en" xmltv_id="">PT CHECK: CITY Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="pt-check-city-vancouver-bc/2028" lang="en" xmltv_id="">PT CHECK: CITY Vancouver, BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="pt-check-global-bc/2026" lang="en" xmltv_id="">PT CHECK: Global BC</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="pt-check-global-cict-calgary-ab/2024" lang="en" xmltv_id="">PT CHECK: Global (CICT) Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="pt-check-global-citv-edmonton-ab/2022" lang="en" xmltv_id="">PT CHECK: Global (CITV) Edmonton, AB</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="rdi-news/8" lang="en" xmltv_id="IciRDI.ca@SD">RDI (News)</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="rds-2/9705" lang="en" xmltv_id="RDS2.ca@SD">RDS 2</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="rds-info/3889" lang="en" xmltv_id="RDSInfo.ca@SD">RDS Info</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="rds-reseau-des-sports/47" lang="en" xmltv_id="RDS.ca@SD">RDS (Réseau des sports)</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="red-hot-tv/3627" lang="en" xmltv_id="RedHotTV.ca@SD">Red Hot TV</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="rev-tv--canada-hd/19233" lang="en" xmltv_id="">REV TV - Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="rev-tv--canada/19232" lang="en" xmltv_id="">REV TV - Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="rogers-keswick-on-hd/35976" lang="en" xmltv_id="">Rogers Keswick, ON HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="rogers-keswick-on/15151" lang="en" xmltv_id="">Rogers Keswick, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="rogers-on-demand/3622" lang="en" xmltv_id="">Rogers On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="rogers-orangeville-on/3993" lang="en" xmltv_id="">Rogers Orangeville, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="rogers-oshawawhitby-on/9847" lang="en" xmltv_id="">Rogers Oshawa/Whitby, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="rogers-television-on-demand/14289" lang="en" xmltv_id="">Rogers Television On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="rtvi-canada/32056" lang="en" xmltv_id="">RTVi Canada</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="saisons-canada-hd/20047" lang="en" xmltv_id="">Saisons Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="saisons-canada/20046" lang="en" xmltv_id="">Saisons Canada</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="shaw-cable-hd-sports-1--bc/17030" lang="en" xmltv_id="">Shaw Cable HD Sports 1 - BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="shaw-cable-sd-sports-1--bc/17022" lang="en" xmltv_id="">Shaw Cable SD Sports 1 - BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="shaw-cable-sports-1--bc/17007" lang="en" xmltv_id="">Shaw Cable Sports 1 - BC</channel>
+  <!-- TEST MATCH: Canadian province BC -->
+  <channel site="tvpassport.com" site_id="shaw-cable-sports-3--bc/16915" lang="en" xmltv_id="">Shaw Cable Sports 3 - BC</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="showcase-canada--dup/1029" lang="en" xmltv_id="">Showcase Canada - dup</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="showcase-canada-hd/4161" lang="en" xmltv_id="">Showcase Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="showcase-canada/62" lang="en" xmltv_id="Showcase.ca@SD">Showcase Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="showcase-on-demand/10816" lang="en" xmltv_id="">Showcase On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="shoxbet-hd-on-demand/4661" lang="en" xmltv_id="">SHOXBET HD on demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="silver-screen-classics/2115" lang="en" xmltv_id="SilverScreenClassics.ca@SD">Silver Screen Classics</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="siriusxm-radio--40s-on-4/32581" lang="en" xmltv_id="">SiriusXM Radio - &apos;40s on 4</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="siriusxm-radio--on-broadway/32589" lang="en" xmltv_id="">SiriusXM Radio - On Broadway</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="sleuth-on-demand/7926" lang="en" xmltv_id="">Sleuth On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="slice-on-demand-hd/10844" lang="en" xmltv_id="">Slice On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="slice-on-demand/10843" lang="en" xmltv_id="">Slice On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="slice/60" lang="en" xmltv_id="Slice.ca@SD">Slice</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="smithsonian-channel-canada-hd/11405" lang="en" xmltv_id="">Smithsonian Channel Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="smithsonian-channel-canada/3909" lang="en" xmltv_id="SmithsonianChannel.ca@SD">Smithsonian Channel Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="soapnet-on-demand/6662" lang="en" xmltv_id="">SoapNet On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="spectrum-on-demand/6741" lang="en" xmltv_id="">Spectrum On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="speed-on-demand/4671" lang="en" xmltv_id="">Speed on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="sports-on-demand-hd/6478" lang="en" xmltv_id="">Sports On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="sports-on-demand/9747" lang="en" xmltv_id="">Sports On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="sportskool-on-demand/4646" lang="en" xmltv_id="">Sportskool On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="sportsman-channel-canada-hd/32993" lang="en" xmltv_id="">Sportsman Channel Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="sportsman-channel-canada/32992" lang="en" xmltv_id="">Sportsman Channel Canada</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="sportsnet-360/336" lang="en" xmltv_id="Sportsnet360.ca@SD">Sportsnet 360</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="sportsnet-one/8249" lang="en" xmltv_id="SportsnetOne.ca@SD">Sportsnet One</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="sportsnet-ontario/254" lang="en" xmltv_id="Sportsnet.ca@Ontario">Sportsnet (Ontario)</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="sportsnet-world/4442" lang="en" xmltv_id="SportsnetWorld.ca@SD">Sportsnet World</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="starz-encore-on-demand-hd/8612" lang="en" xmltv_id="">Starz Encore on Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="starz-encore-on-demand/6199" lang="en" xmltv_id="">Starz Encore on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="starz-on-demand-hd/8206" lang="en" xmltv_id="">Starz On Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="starz-on-demand/3476" lang="en" xmltv_id="">Starz On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="stingray-iconcerts-on-demand/10785" lang="en" xmltv_id="">Stingray iConcerts On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="stingray-karaoke-on-demand-1/6481" lang="en" xmltv_id="">Stingray Karaoke On Demand 1</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="stingray-karaoke-on-demand-2/14304" lang="en" xmltv_id="">Stingray Karaoke On Demand 2</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="stingray-karaoke-on-demand-3/14305" lang="en" xmltv_id="">Stingray Karaoke On Demand 3</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="stingray-music-video-on-demand/9115" lang="en" xmltv_id="">Stingray Music Video On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="suddenlink-on-demand/6138" lang="en" xmltv_id="">Suddenlink On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="sundance-on-demand/4780" lang="en" xmltv_id="">Sundance on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="sundancetv-usa-hd-on-demand/8265" lang="en" xmltv_id="">SundanceTV USA HD On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="super-channel-on-demand-hd/10884" lang="en" xmltv_id="">Super Channel on Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="super-channel-on-demand/5598" lang="en" xmltv_id="">Super Channel on Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="super-ecran-2/362" lang="en" xmltv_id="SuperEcran2.ca@SD">Super Ecran 2</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="super-ecran-3/410" lang="en" xmltv_id="SuperEcran3.ca@SD">Super Ecran 3</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="super-ecran-4/411" lang="en" xmltv_id="SuperEcran4.ca@SD">Super Ecran 4</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="super-ecran/57" lang="en" xmltv_id="SuperEcran1.ca@SD">Super Ecran</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="syn-the-coolest-places-on-earth/32294" lang="en" xmltv_id="">SYN: The Coolest Places on Earth</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="talentvision/365" lang="en" xmltv_id="Talentvision.ca@SD">Talentvision</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tbs-on-demand/4674" lang="en" xmltv_id="">TBS on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="te-totally-entertaining-on-demand/10764" lang="en" xmltv_id="">T+E Totally Entertaining On Demand</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tele-quebec-civa-dt-1-rouyn-noranda-qc/14082" lang="en" xmltv_id="">Tele-Quebec (CIVA-DT-1) Rouyn-Noranda, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tele-quebec-civb-dt-1-grand-fonds-qc/14083" lang="en" xmltv_id="">Tele-Quebec (CIVB-DT-1) Grand-Fonds, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tele-quebec-civk-dt-1-gascons-qc/14078" lang="en" xmltv_id="">Tele-Quebec (CIVK-DT-1) Gascons, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tele-quebec-civk-dt-2-perce-qc/14076" lang="en" xmltv_id="">Tele-Quebec (CIVK-DT-2) Percé, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tele-quebec-civk-dt-3-gaspe-qc/14077" lang="en" xmltv_id="">Tele-Quebec (CIVK-DT-3) Gaspé, QC</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="telemagino/8019" lang="en" xmltv_id="Telemagino.ca@SD">Télémagino</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="teletoon-jr-on-demand/7701" lang="en" xmltv_id="">Teletoon Jr. On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="teletoon-on-demand/6637" lang="en" xmltv_id="">Teletoon On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="telexitos-on-demand/10481" lang="en" xmltv_id="">TeleXitos On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tfo-on-demand/10819" lang="en" xmltv_id="">TFO On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="the-cooking-channel-on-demand/7781" lang="en" xmltv_id="">The Cooking Channel On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="the-n-on-demand/7947" lang="en" xmltv_id="">The N On Demand</channel>
+  <!-- TEST MATCH: Canadian province NT -->
+  <channel site="tvpassport.com" site_id="three-angels-k47nt-d2-mineral-wells-tx/16594" lang="en" xmltv_id="">Three Angels (K47NT-D2) Mineral Wells, TX</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tiktok-radio-on-stingray/37202" lang="en" xmltv_id="">TikTok Radio on Stingray</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="tlc-canada-hd/6779" lang="en" xmltv_id="">TLC Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="tlc-canada/1204" lang="en" xmltv_id="">TLC Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tmc-on-demand-hd/8611" lang="en" xmltv_id="">TMC on Demand HD</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tmc-on-demand/4659" lang="en" xmltv_id="">TMC on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tnt-on-demand/4673" lang="en" xmltv_id="">TNT on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="too-much-on-demand/3988" lang="en" xmltv_id="">Too Much! On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="top-rentals-on-demand/7741" lang="en" xmltv_id="">Top Rentals On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="treehouse-on-demand/3633" lang="en" xmltv_id="">Treehouse On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="treehouse/163" lang="en" xmltv_id="TreehouseTV.ca@SD">Treehouse</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="trutv-on-demand/4666" lang="en" xmltv_id="">TruTV on Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tsn1/11" lang="en" xmltv_id="TSN1.ca@SD">TSN1</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tsn2/4294" lang="en" xmltv_id="TSN2.ca@SD">TSN2</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tsn3/13719" lang="en" xmltv_id="TSN3.ca@SD">TSN3</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tsn4/279" lang="en" xmltv_id="TSN4.ca@SD">TSN4</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tsn5/278" lang="en" xmltv_id="TSN5.ca@SD">TSN5</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tsn-on-demand/6784" lang="en" xmltv_id="">TSN On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="turner-classic-movies-canada-hd/7050" lang="en" xmltv_id="">Turner Classic Movies Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="turner-classic-movies-canada/2847" lang="en" xmltv_id="TCM.ca@SD">Turner Classic Movies Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tv-entertainment-on-demand/4669" lang="en" xmltv_id="">TV Entertainment on Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tv-one-on-demand/7489" lang="en" xmltv_id="">TV One On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tv-shows-on-demand/8020" lang="en" xmltv_id="">TV Shows On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tva-cftm-montreal/106" lang="en" xmltv_id="CFTMDT.ca@SD">TVA (CFTM) Montréal</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-1-ste-marguerite-marie-qc/13903" lang="en" xmltv_id="">TVA (CHAU-DT-1) Ste-Marguerite-Marie, QC</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-2-st-quentin-nb/13906" lang="en" xmltv_id="">TVA (CHAU-DT-2) St-Quentin, NB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-3-port-daniel-qc/13907" lang="en" xmltv_id="">TVA (CHAU-DT-3) Port-Daniel, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-4-chandler-qc/13908" lang="en" xmltv_id="">TVA (CHAU-DT-4) Chandler, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-6-gaspe-qc/13909" lang="en" xmltv_id="">TVA (CHAU-DT-6) Gaspé, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-7-riviere-au-renard-qc/13910" lang="en" xmltv_id="">TVA (CHAU-DT-7) Rivière-au-Renard, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-8-cloridorme-qc/13911" lang="en" xmltv_id="">TVA (CHAU-DT-8) Cloridorme, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-9-lanse-a-valleau-qc/13912" lang="en" xmltv_id="">TVA (CHAU-DT-9) L&apos;Anse-a-Valleau, QC</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-10-tracadie-nb/13904" lang="en" xmltv_id="">TVA (CHAU-DT-10) Tracadie, NB</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-11-kedgwick-nb/13905" lang="en" xmltv_id="">TVA (CHAU-DT-11) Kedgwick, NB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chau-dt-51-perce-qc/13902" lang="en" xmltv_id="">TVA (CHAU-DT-5(1)) Percé, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chot-gatineau-qc-hd/31494" lang="en" xmltv_id="">TVA (CHOT) Gatineau, QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-chot-gatineau-qc/4" lang="en" xmltv_id="">TVA (CHOT) Gatineau, QC</channel>
+  <!-- TEST MATCH: Canadian province NB -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-1-edmundston-nb/14069" lang="en" xmltv_id="">TVA (CIMT-DT-1) Edmundston, NB</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-2-trois-pistoles-qc/14070" lang="en" xmltv_id="">TVA (CIMT-DT-2) Trois-Pistoles, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-4-baie-st-paul-qc/14071" lang="en" xmltv_id="">TVA (CIMT-DT-4) Baie St-Paul, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-5-st-urbain-qc/14072" lang="en" xmltv_id="">TVA (CIMT-DT-5) St Urbain, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-6-riviere-du-loup-qc/14073" lang="en" xmltv_id="">TVA (CIMT-DT-6) Rivière-du-Loup, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-7-les-escoumins-qc/14074" lang="en" xmltv_id="">TVA (CIMT-DT-7) Les Escoumins, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cimt-dt-8-cabano-qc/14075" lang="en" xmltv_id="">TVA (CIMT-DT-8) Cabano, QC</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cjpm-saguenay-chicoutimi-qc-hd/31496" lang="en" xmltv_id="">TVA (CJPM) Saguenay (Chicoutimi), QC HD</channel>
+  <!-- TEST MATCH: Canadian province QC -->
+  <channel site="tvpassport.com" site_id="tva-cjpm-saguenay-qc/1035" lang="en" xmltv_id="">TVA (CJPM) Saguenay, QC</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tva-sports/9823" lang="en" xmltv_id="TVASports.ca@SD">TVA Sports</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvcogeco-on-demand/6786" lang="en" xmltv_id="">TVCOGECO On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cica-dt-toronto-on/13887" lang="en" xmltv_id="">TVO (CICA-DT) Toronto, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-9-thunder-bay-on/13886" lang="en" xmltv_id="">TVO (CICO-DT-9) Thunder Bay, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-18-london-on/13884" lang="en" xmltv_id="">TVO (CICO-DT-18) London, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-24-ottawa-on/13885" lang="en" xmltv_id="">TVO (CICO-DT-24) Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-28-kitchener-on/13883" lang="en" xmltv_id="">TVO (CICO-DT-28) Kitchener, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-32-windsor-on/13888" lang="en" xmltv_id="">TVO (CICO-DT-32) Windsor, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-53-belleville-on/13880" lang="en" xmltv_id="">TVO (CICO-DT-53) Belleville, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-59-chatham-on/13881" lang="en" xmltv_id="">TVO (CICO-DT-59) Chatham, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="tvo-cico-dt-92-cloyne-on/13882" lang="en" xmltv_id="">TVO (CICO-DT-92) Cloyne, ON</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="tvo-tv-ontario/18" lang="en" xmltv_id="CICADT.ca@SD">TVO (TV Ontario)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="univision-canada-hd/19654" lang="en" xmltv_id="">Univision Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="univision-canada/13625" lang="en" xmltv_id="">Univision Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="usa-network-on-demand/6663" lang="en" xmltv_id="">USA Network On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="video-on-demand/8101" lang="en" xmltv_id="">Video On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="vod-selection-xxx-on-demand/9113" lang="en" xmltv_id="">VOD: Selection XXX On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="vortex-on-demand/4532" lang="en" xmltv_id="">Vortex On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="vrak/48" lang="en" xmltv_id="Vrak.ca@SD">VRAK</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="vutopia-on-demand/8081" lang="en" xmltv_id="">Vutopia On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="w-womens-television-network-on-demand/9055" lang="en" xmltv_id="">W (Women&apos;s Television Network) On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="weather-network-dv/3959" lang="en" xmltv_id="TheWeatherNetwork.ca@SD">Weather Network DV</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="weather-network-hd/9440" lang="en" xmltv_id="TheWeatherNetwork.ca@SD">Weather Network HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="weather-network/419" lang="en" xmltv_id="TheWeatherNetwork.ca@SD">Weather Network</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="wfn-world-fishing-network-on-demand/6783" lang="en" xmltv_id="">WFN-World Fishing Network On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="wgn-canada-hd/9530" lang="en" xmltv_id="">WGN Canada HD</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="wgn-canada/4202" lang="en" xmltv_id="">WGN Canada</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="whats-on/16390" lang="en" xmltv_id="">What&apos;s On</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="wild-tv-on-demand/6782" lang="en" xmltv_id="">Wild TV On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="wild-tv/2976" lang="en" xmltv_id="WildTV.ca@SD">Wild TV</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="wildbraintv-on-demand/10818" lang="en" xmltv_id="">WildBrainTV On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="wlny-tv1055-riverhead-ny-on-demand/10526" lang="en" xmltv_id="">WLNY TV10/55, Riverhead, NY On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="world-picks-latino-on-demand/7706" lang="en" xmltv_id="">World Picks Latino On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="wwe-247-on-demand/3991" lang="en" xmltv_id="">WWE 24/7 On Demand</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="wwe-network-canada/14230" lang="en" xmltv_id="">WWE Network (Canada)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="wwe-network-hd-canada/14184" lang="en" xmltv_id="">WWE Network HD (Canada)</channel>
+  <!-- TEST MATCH: Canada -->
+  <channel site="tvpassport.com" site_id="wwe-network-on-demand-canada/14183" lang="en" xmltv_id="">WWE Network On Demand (Canada)</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="wzzm-dt2-13-on-target-weather-grand-rapids-mi/32574" lang="en" xmltv_id="">WZZM-DT2 13 On Target Weather Grand Rapids, MI</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="yes-tv-cits-burlington-on-hd/9691" lang="en" xmltv_id="">Yes TV (CITS) Burlington, ON HD</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="yes-tv-cits-burlington-on/293" lang="en" xmltv_id="CITSDT.ca@SD">Yes TV (CITS) Burlington, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="yes-tv-cits-dt-1-ottawa-on/13878" lang="en" xmltv_id="">Yes TV (CITS-DT-1) Ottawa, ON</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="yes-tv-cits-dt-2-london-on/13879" lang="en" xmltv_id="">Yes TV (CITS-DT-2) London, ON</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="yes-tv-ckcs-calgary-ab-hd/9692" lang="en" xmltv_id="">Yes TV (CKCS) Calgary, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="yes-tv-ckcs-calgary-ab/5425" lang="en" xmltv_id="">Yes TV (CKCS) Calgary, AB</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="yes-tv-ckes-edmonton-ab-hd/9693" lang="en" xmltv_id="">Yes TV (CKES) Edmonton, AB HD</channel>
+  <!-- TEST MATCH: Canadian province AB -->
+  <channel site="tvpassport.com" site_id="yes-tv-ckes-edmonton-ab/5424" lang="en" xmltv_id="">Yes TV (CKES) Edmonton, AB</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ynn-buffalo-on-demand/10055" lang="en" xmltv_id="">YNN Buffalo On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ynn-your-news-now-on-demand/10431" lang="en" xmltv_id="">YNN (Your News Now) On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="your-world-this-week-on-demand/10291" lang="en" xmltv_id="">Your World This Week On Demand</channel>
+  <!-- TEST MATCH: Canadian province ON -->
+  <channel site="tvpassport.com" site_id="ytv-on-demand/2463" lang="en" xmltv_id="">YTV On Demand</channel>
+  <!-- TEST MATCH: .ca XMLTV ID -->
+  <channel site="tvpassport.com" site_id="z/344" lang="en" xmltv_id="Z.ca@SD">Z</channel>
+</tv>
