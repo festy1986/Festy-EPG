@@ -72,6 +72,8 @@ no_public_match = 0
 logos_found = 0
 logos_missing = 0
 
+team_name_conversions = 0
+
 
 # --------------------------------------------------
 # Text cleanup
@@ -1081,17 +1083,6 @@ def team_matches(
     )
 
 
-    # The provider may use a nickname such as:
-    #
-    # Red Sox
-    #
-    # while the API uses:
-    #
-    # Boston Red Sox
-    #
-    # Require the meaningful provider words
-    # to appear in the full API team name.
-
     if wanted_words.issubset(
 
         actual_words
@@ -1099,20 +1090,6 @@ def team_matches(
     ):
 
         return True
-
-
-    # Also allow a meaningful shared team
-    # word when the provider name is short.
-
-    shared_words = (
-
-        wanted_words
-
-        &
-
-        actual_words
-
-    )
 
 
     meaningful_words = {
@@ -1126,13 +1103,20 @@ def team_matches(
     }
 
 
+    shared_words = (
+
+        wanted_words
+
+        &
+
+        actual_words
+
+    )
+
+
     return bool(
 
         meaningful_words
-
-        and
-
-        shared_words
 
         and
 
@@ -1141,6 +1125,490 @@ def team_matches(
             shared_words
 
         )
+
+    )
+
+
+# --------------------------------------------------
+# SportsDB team database
+# --------------------------------------------------
+
+SPORTSDB_LEAGUES = {
+
+    "MLB":
+
+    "MLB",
+
+    "NBA":
+
+    "NBA",
+
+    "NFL":
+
+    "NFL",
+
+    "NHL":
+
+    "NHL"
+
+}
+
+
+team_aliases = {}
+
+
+def load_sportsdb_teams():
+
+    print(
+
+        "Loading official team names from TheSportsDB..."
+
+    )
+
+
+    for league_folder, league_name in SPORTSDB_LEAGUES.items():
+
+        url = (
+
+            "https://www.thesportsdb.com/"
+
+            "api/v1/json/123/"
+
+            "search_all_teams.php"
+
+        )
+
+
+        try:
+
+            response = session.get(
+
+                url,
+
+                params={
+
+                    "l":
+
+                    league_name
+
+                },
+
+                timeout=60
+
+            )
+
+
+            response.raise_for_status()
+
+
+            data = response.json()
+
+
+            teams = data.get(
+
+                "teams",
+
+                []
+
+            ) or []
+
+
+            print(
+
+                f"{league_folder}: "
+
+                f"{len(teams)} official teams"
+
+            )
+
+
+            for team in teams:
+
+                official_name = clean_text(
+
+                    team.get(
+
+                        "strTeam",
+
+                        ""
+
+                    )
+
+                )
+
+
+                if not official_name:
+
+                    continue
+
+
+                aliases = [
+
+                    official_name,
+
+                    team.get(
+
+                        "strTeamShort",
+
+                        ""
+
+                    ),
+
+                    team.get(
+
+                        "strAlternate",
+
+                        ""
+
+                    ),
+
+                    team.get(
+
+                        "strTeamShort",
+
+                        ""
+
+                    )
+
+                ]
+
+
+                for alias in aliases:
+
+                    alias = clean_text(
+
+                        alias
+
+                    )
+
+
+                    if not alias:
+
+                        continue
+
+
+                    normalized_alias = (
+
+                        normalize_team_name(
+
+                            alias
+
+                        )
+
+                    )
+
+
+                    if normalized_alias:
+
+                        team_aliases[
+
+                            normalized_alias
+
+                        ] = {
+
+                            "name":
+
+                            official_name,
+
+                            "league":
+
+                            league_folder
+
+                        }
+
+
+        except Exception as e:
+
+            print(
+
+                f"Unable to load "
+
+                f"{league_folder} teams:"
+
+            )
+
+
+            print(
+
+                e
+
+            )
+
+
+load_sportsdb_teams()
+
+
+# --------------------------------------------------
+# Convert provider team name to official full name
+# --------------------------------------------------
+
+def canonicalize_team_name(
+
+    provider_team,
+
+    league_hint=None
+
+):
+
+    global team_name_conversions
+
+
+    provider_team = clean_text(
+
+        provider_team
+
+    )
+
+
+    if not provider_team:
+
+        return provider_team
+
+
+    normalized_provider = (
+
+        normalize_team_name(
+
+            provider_team
+
+        )
+
+    )
+
+
+    if not normalized_provider:
+
+        return provider_team
+
+
+    exact = team_aliases.get(
+
+        normalized_provider
+
+    )
+
+
+    if exact:
+
+        if exact["name"] != provider_team:
+
+            team_name_conversions += 1
+
+
+        return exact["name"]
+
+
+    provider_words = set(
+
+        normalized_provider.split()
+
+    )
+
+
+    best_match = None
+
+    best_score = 0
+
+
+    for normalized_alias, team_data in team_aliases.items():
+
+        if (
+
+            league_hint
+
+            and
+
+            team_data["league"] != league_hint
+
+        ):
+
+            continue
+
+
+        alias_words = set(
+
+            normalized_alias.split()
+
+        )
+
+
+        if not alias_words:
+
+            continue
+
+
+        shared = (
+
+            provider_words
+
+            &
+
+            alias_words
+
+        )
+
+
+        if not shared:
+
+            continue
+
+
+        meaningful_provider_words = {
+
+            word
+
+            for word in provider_words
+
+            if len(word) >= 4
+
+        }
+
+
+        meaningful_alias_words = {
+
+            word
+
+            for word in alias_words
+
+            if len(word) >= 4
+
+        }
+
+
+        if (
+
+            meaningful_provider_words
+
+            and
+
+            meaningful_provider_words.issubset(
+
+                alias_words
+
+            )
+
+        ):
+
+            score = (
+
+                len(
+
+                    meaningful_provider_words
+
+                )
+
+                * 10
+
+            )
+
+
+            if score > best_score:
+
+                best_score = score
+
+                best_match = team_data
+
+
+            continue
+
+
+        if (
+
+            meaningful_alias_words
+
+            and
+
+            meaningful_alias_words.issubset(
+
+                provider_words
+
+            )
+
+        ):
+
+            score = (
+
+                len(
+
+                    meaningful_alias_words
+
+                )
+
+                * 10
+
+            )
+
+
+            if score > best_score:
+
+                best_score = score
+
+                best_match = team_data
+
+
+    if best_match:
+
+        team_name_conversions += 1
+
+        return best_match["name"]
+
+
+    return provider_team
+
+
+# --------------------------------------------------
+# Canonicalize entire matchup
+# --------------------------------------------------
+
+def canonicalize_matchup(
+
+    matchup,
+
+    league_hint=None
+
+):
+
+    parts = matchup_parts(
+
+        matchup
+
+    )
+
+
+    if len(parts) != 2:
+
+        return normalize_matchup(
+
+            matchup
+
+        )
+
+
+    away = canonicalize_team_name(
+
+        parts[0],
+
+        league_hint
+
+    )
+
+
+    home = canonicalize_team_name(
+
+        parts[1],
+
+        league_hint
+
+    )
+
+
+    return (
+
+        f"{away}"
+
+        f" vs. "
+
+        f"{home}"
 
     )
 
@@ -1304,6 +1772,27 @@ def find_matchup_logo(
         return None
 
 
+    # These are already the official
+    # full names returned by TheSportsDB.
+
+    away = canonicalize_team_name(
+
+        away,
+
+        league_folder
+
+    )
+
+
+    home = canonicalize_team_name(
+
+        home,
+
+        league_folder
+
+    )
+
+
     away_folder = clean_logo_filename(
 
         away
@@ -1463,9 +1952,33 @@ def find_public_event(
     global public_api_matches
 
 
-    parts = matchup_parts(
+    # --------------------------------------------------
+    # FIRST:
+    #
+    # Convert provider shorthand into official names.
+    #
+    # Example:
+    #
+    # Red Sox vs Phillies
+    #
+    # becomes:
+    #
+    # Boston Red Sox vs. Philadelphia Phillies
+    #
+    # This is what is actually searched against
+    # TheSportsDB.
+    # --------------------------------------------------
+
+    canonical_matchup = canonicalize_matchup(
 
         provider_matchup
+
+    )
+
+
+    parts = matchup_parts(
+
+        canonical_matchup
 
     )
 
@@ -1542,11 +2055,78 @@ def find_public_event(
                 continue
 
 
+            event_league = clean_text(
+
+                event.get(
+
+                    "strLeague",
+
+                    ""
+
+                )
+
+            )
+
+
+            league_map = {
+
+                "Major League Baseball":
+
+                "MLB",
+
+                "National Basketball Association":
+
+                "NBA",
+
+                "National Football League":
+
+                "NFL",
+
+                "National Hockey League":
+
+                "NHL"
+
+            }
+
+
+            league_hint = league_map.get(
+
+                event_league
+
+            )
+
+
+            canonical_away = (
+
+                canonicalize_team_name(
+
+                    parts[0],
+
+                    league_hint
+
+                )
+
+            )
+
+
+            canonical_home = (
+
+                canonicalize_team_name(
+
+                    parts[1],
+
+                    league_hint
+
+                )
+
+            )
+
+
             direct_match = (
 
                 team_matches(
 
-                    parts[0],
+                    canonical_away,
 
                     away_team
 
@@ -1556,7 +2136,7 @@ def find_public_event(
 
                 team_matches(
 
-                    parts[1],
+                    canonical_home,
 
                     home_team
 
@@ -1569,7 +2149,7 @@ def find_public_event(
 
                 team_matches(
 
-                    parts[0],
+                    canonical_away,
 
                     home_team
 
@@ -1579,7 +2159,7 @@ def find_public_event(
 
                 team_matches(
 
-                    parts[1],
+                    canonical_home,
 
                     away_team
 
@@ -1630,9 +2210,6 @@ def find_public_event(
                 continue
 
 
-            # TheSportsDB event times are treated
-            # as UTC before conversion to Eastern.
-
             event_datetime = (
 
                 event_datetime
@@ -1671,17 +2248,7 @@ def find_public_event(
 
                 "league":
 
-                clean_text(
-
-                    event.get(
-
-                        "strLeague",
-
-                        ""
-
-                    )
-
-                ),
+                event_league,
 
                 "datetime":
 
@@ -1724,11 +2291,6 @@ def build_event_info(
 
     )
 
-
-    # This is used only as the event source.
-
-    # The original provider channel name
-    # remains untouched in the XMLTV channel.
 
     provider_event = remove_event_metadata(
 
@@ -1911,9 +2473,28 @@ def build_event_info(
         provider_fallbacks += 1
 
 
-    cleaned_provider_event = (
+    # --------------------------------------------------
+    # Even if TheSportsDB does not find the event,
+    # still canonicalize the provider matchup.
+    #
+    # Example:
+    #
+    # Red Sox vs Phillies
+    #
+    # becomes:
+    #
+    # Boston Red Sox vs. Philadelphia Phillies
+    #
+    # in the title and description.
+    # --------------------------------------------------
 
-        provider_event
+    canonical_provider_event = (
+
+        canonicalize_matchup(
+
+            provider_event
+
+        )
 
     )
 
@@ -1922,7 +2503,7 @@ def build_event_info(
 
         cleaned_title = (
 
-            f"{cleaned_provider_event}"
+            f"{canonical_provider_event}"
 
             f" "
 
@@ -1937,7 +2518,7 @@ def build_event_info(
 
         cleaned_description = (
 
-            f"{cleaned_provider_event}\n"
+            f"{canonical_provider_event}\n"
 
             f"{provider_start_eastern.strftime('%A')} "
 
@@ -1956,14 +2537,14 @@ def build_event_info(
 
         cleaned_title = (
 
-            cleaned_provider_event
+            canonical_provider_event
 
         )
 
 
         cleaned_description = (
 
-            cleaned_provider_event
+            canonical_provider_event
 
         )
 
@@ -2085,11 +2666,13 @@ for channel_id, requested_name in wanted.items():
 
     # IMPORTANT:
     #
-    # This is the original channel name.
+    # The original provider channel name
+    # remains unchanged.
     #
-    # It is not changed into a matchup name.
-    # It is not cleaned for the programme output.
-    # It remains the channel's display name.
+    # Only programme title,
+    # description,
+    # and programme icon
+    # are modified.
 
     provider_name = stream.get(
 
@@ -2270,7 +2853,7 @@ for channel_id, requested_name in wanted.items():
 
 
         # --------------------------------------------------
-        # Add matchup logo to the programme
+        # Add matchup logo to programme
         # --------------------------------------------------
 
         if logo_path:
@@ -2441,6 +3024,15 @@ print(
     f"No public schedule match: "
 
     f"{no_public_match}"
+
+)
+
+
+print(
+
+    f"Team name conversions: "
+
+    f"{team_name_conversions}"
 
 )
 
