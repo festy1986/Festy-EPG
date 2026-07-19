@@ -1,442 +1,715 @@
-#!/usr/bin/env python3
-
-import os
-import re
-import json
-import gzip
 from pathlib import Path
+from collections import defaultdict
 from datetime import datetime
+import re
+import yaml
 
 
-ROOT = Path.cwd()
+ROOT = Path(__file__).resolve().parent
 
-OUTPUT_TXT = ROOT / "repo_audit_report.txt"
-OUTPUT_JSON = ROOT / "repo_audit.json"
+WORKFLOWS_DIR = (
+    ROOT
+    / ".github"
+    / "workflows"
+)
 
-
-IGNORE_DIRS = {
-    ".git",
-    "node_modules",
-    "__pycache__",
-}
-
-
-TEXT_EXTENSIONS = {
-    ".yml",
-    ".yaml",
-    ".py",
-    ".js",
-    ".sh",
-    ".txt",
-    ".json",
-    ".xml",
-    ".md",
-}
+REPORT_FILE = (
+    ROOT
+    / "repo_audit_report.txt"
+)
 
 
-def scan_files():
-
-    files = []
-
-    for path in ROOT.rglob("*"):
-
-        if not path.is_file():
-            continue
-
-        if any(part in IGNORE_DIRS for part in path.parts):
-            continue
-
-        files.append(path)
-
-    return files
+COMMAND_FILE_PATTERNS = [
+    r"\bpython(?:3)?\s+([^\s;&|]+)",
+    r"\bnode\s+([^\s;&|]+)",
+    r"\bbash\s+([^\s;&|]+)",
+    r"\bsh\s+([^\s;&|]+)",
+    r"\bcat\s+([^\s;&|>]+)",
+    r"\bgzip\s+([^\s;&|]+)",
+    r"\bgunzip\s+([^\s;&|]+)",
+    r"\b(?:cp|mv|rm)\s+(?:-[^\s]+\s+)*([^\s;&|]+)",
+]
 
 
+def normalize_path(value):
 
-def read_text(path):
+    value = value.strip()
 
-    try:
-
-        if path.suffix == ".gz":
-
-            with gzip.open(path, "rt", errors="ignore") as f:
-                return f.read()
-
-        return path.read_text(
-            errors="ignore"
-        )
-
-    except Exception:
-
-        return ""
-
-
-
-def get_age(path):
-
-    try:
-
-        modified = datetime.fromtimestamp(
-            path.stat().st_mtime
-        )
-
-        days = (
-            datetime.now() - modified
-        ).days
-
-        return days
-
-    except Exception:
-
-        return None
-
-
-
-def find_workflows(files):
-
-    workflows = []
-
-    for f in files:
-
-        if ".github" not in str(f):
-            continue
-
-        if f.suffix not in {".yml",".yaml"}:
-            continue
-
-        text = read_text(f)
-
-        workflows.append({
-
-            "file": str(f.relative_to(ROOT)),
-            "name": extract_name(text),
-            "references": find_paths(text),
-            "secrets": find_secrets(text)
-
-        })
-
-    return workflows
-
-
-
-def extract_name(text):
-
-    match = re.search(
-        r"name:\s*(.+)",
-        text
+    value = value.strip(
+        "'\"`"
     )
 
-    if match:
-        return match.group(1).strip()
+    value = value.rstrip(
+        ".,;:)"
+    )
 
-    return "Unknown"
+    value = value.replace(
+        "${{ github.workspace }}/",
+        ""
+    )
 
+    value = value.replace(
+        "$GITHUB_WORKSPACE/",
+        ""
+    )
 
+    if value.startswith("./"):
 
-def find_paths(text):
+        value = value[2:]
 
-    found = set()
-
-    patterns = [
-
-        r"[\w./-]+\.(?:py|js|sh|xml|txt|json)",
-        r"scripts/[\w./-]+",
-        r"guides/[\w./-]+"
-
-    ]
-
-    for pattern in patterns:
-
-        for match in re.findall(pattern,text):
-
-            found.add(match)
-
-    return sorted(found)
+    return value
 
 
+def is_probable_path(value):
 
-def find_secrets(text):
+    if not value:
+
+        return False
+
+    if value.startswith("$"):
+
+        return False
+
+    if value.startswith(
+        (
+            "http://",
+            "https://",
+        )
+    ):
+
+        return False
+
+    if value in {
+
+        "true",
+        "false",
+        "null",
+        "echo",
+        "then",
+        "fi",
+        "done",
+
+    }:
+
+        return False
+
+    return (
+
+        "/" in value
+
+        or value.endswith(
+            (
+                ".py",
+                ".js",
+                ".ts",
+                ".sh",
+                ".xml",
+                ".gz",
+                ".json",
+                ".txt",
+                ".yml",
+                ".yaml",
+            )
+        )
+
+    )
+
+
+def extract_urls(text):
 
     return sorted(
         set(
             re.findall(
-                r"secrets\.([A-Z0-9_]+)",
-                text
+                r"https?://[^\s\"'<>]+",
+                text,
             )
         )
     )
 
 
+def extract_paths_from_command(command):
 
-def scan_references(files):
+    found = set()
 
-    references = {}
+    for pattern in COMMAND_FILE_PATTERNS:
 
-    all_text = {}
-
-    for f in files:
-
-        if f.suffix.lower() not in TEXT_EXTENSIONS:
-            continue
-
-        all_text[str(f)] = read_text(f)
-
-
-
-    for target in files:
-
-        name = str(
-            target.relative_to(ROOT)
+        matches = re.findall(
+            pattern,
+            command,
         )
 
-        used_by = []
+        for match in matches:
 
-        for source,text in all_text.items():
+            path = normalize_path(
+                match
+            )
 
-            if source == str(target):
-                continue
+            if is_probable_path(path):
 
-            if name in text:
+                found.add(path)
 
-                used_by.append(
-                    str(
-                        Path(source).relative_to(ROOT)
+    return found
+
+
+def extract_workflow_commands(node):
+
+    commands = []
+
+    if isinstance(node, dict):
+
+        for key, value in node.items():
+
+            if key == "run":
+
+                if isinstance(
+                    value,
+                    str,
+                ):
+
+                    commands.append(
+                        value
                     )
+
+            commands.extend(
+                extract_workflow_commands(
+                    value
                 )
+            )
 
+    elif isinstance(node, list):
 
-        references[name] = used_by
+        for item in node:
 
-
-    return references
-
-
-
-def find_duplicates(files):
-
-    results = []
-
-    xml_files = {}
-
-    for f in files:
-
-        if f.suffix == ".xml":
-
-            xml_files[str(f)] = f
-
-
-    for xml in xml_files:
-
-        gz = Path(
-            xml + ".gz"
-        )
-
-        if gz.exists():
-
-            results.append({
-
-                "xml": xml,
-                "compressed": str(
-                    gz.relative_to(ROOT)
+            commands.extend(
+                extract_workflow_commands(
+                    item
                 )
+            )
 
-            })
-
-
-    return results
+    return commands
 
 
+def extract_workflow_name(
+    data,
+    path,
+):
 
-def classify_files(files,references):
+    if isinstance(
+        data,
+        dict,
+    ):
 
-    output = []
-
-    for f in files:
-
-        rel = str(
-            f.relative_to(ROOT)
+        name = data.get(
+            "name"
         )
 
-        refs = references.get(
-            rel,
-            []
-        )
-
-        age = get_age(f)
-
-        if refs:
-
-            status = "USED"
-
-        elif (
-            "guides" in rel
-            or "output" in rel
+        if isinstance(
+            name,
+            str,
         ):
 
-            status = "POSSIBLY_GENERATED"
+            return name
 
-        else:
-
-            status = "ORPHAN_CANDIDATE"
+    return path.stem
 
 
-        output.append({
+def classify_path(path):
 
-            "file": rel,
-            "status": status,
-            "days_old": age,
-            "referenced_by": refs
+    if path.startswith(
+        "/tmp/"
+    ):
 
-        })
+        return "TEMPORARY"
 
+    if path.startswith(
+        ".github/workflows/"
+    ):
 
-    return output
+        return "WORKFLOW"
 
+    if path.startswith(
+        "guides/"
+    ):
 
+        return "GUIDE / OUTPUT"
 
-def write_report(data):
+    if path.startswith(
+        "logos/"
+    ):
 
-    with open(
-        OUTPUT_JSON,
-        "w",
-        encoding="utf-8"
-    ) as f:
+        return "LOGO / ASSET"
 
-        json.dump(
-            data,
-            f,
-            indent=2
+    if path.startswith(
+        "scripts/"
+    ):
+
+        return "SCRIPT"
+
+    if path.endswith(
+        (
+            ".py",
+            ".js",
+            ".ts",
+            ".sh",
         )
+    ):
 
+        return "SCRIPT"
 
-    with open(
-        OUTPUT_TXT,
-        "w",
-        encoding="utf-8"
-    ) as f:
-
-
-        f.write(
-            "REPOSITORY AUDIT REPORT\n"
+    if path.endswith(
+        (
+            ".xml",
+            ".gz",
         )
+    ):
 
-        f.write(
-            "=======================\n\n"
-        )
+        return "DATA / GUIDE"
 
-
-        f.write(
-            "WORKFLOWS\n"
-        )
-
-        for w in data["workflows"]:
-
-            f.write(
-                f"\n{w['name']}\n"
-            )
-
-            f.write(
-                f"File: {w['file']}\n"
-            )
-
-            if w["references"]:
-
-                f.write(
-                    "References:\n"
-                )
-
-                for r in w["references"]:
-                    f.write(
-                        f"  - {r}\n"
-                    )
+    return "OTHER"
 
 
-        f.write(
-            "\n\nDUPLICATE GUIDES\n"
-        )
+def build_file_index():
 
-        for d in data["duplicates"]:
+    index = {}
 
-            f.write(
-                f"\n{d['xml']}\n"
-            )
+    for path in ROOT.rglob("*"):
 
-            f.write(
-                f"  + {d['compressed']}\n"
-            )
+        if not path.is_file():
 
+            continue
 
-        f.write(
-            "\n\nCLEANUP CANDIDATES\n"
-        )
+        if ".git" in path.parts:
 
+            continue
 
-        for item in data["files"]:
+        relative = path.relative_to(
+            ROOT
+        ).as_posix()
 
-            if item["status"] == "ORPHAN_CANDIDATE":
+        index[relative] = {
 
-                f.write(
-                    f"\n{item['file']}"
-                )
+            "path": relative,
 
-                f.write(
-                    f" ({item['days_old']} days old)"
-                )
+            "size": path.stat().st_size,
 
+            "modified": datetime.fromtimestamp(
+                path.stat().st_mtime
+            ).isoformat(
+                timespec="seconds"
+            ),
+
+        }
+
+    return index
 
 
 def main():
 
+    file_index = build_file_index()
+
+    workflows = []
+
+    referenced_by = defaultdict(
+        set
+    )
+
+    workflow_paths = set()
+
+    for workflow_path in sorted(
+        WORKFLOWS_DIR.glob("*")
+    ):
+
+        if workflow_path.suffix not in {
+
+            ".yml",
+            ".yaml",
+
+        }:
+
+            continue
+
+        relative_workflow = (
+            workflow_path
+            .relative_to(ROOT)
+            .as_posix()
+        )
+
+        workflow_paths.add(
+            relative_workflow
+        )
+
+        try:
+
+            text = workflow_path.read_text(
+                encoding="utf-8"
+            )
+
+            data = yaml.safe_load(
+                text
+            )
+
+        except Exception as error:
+
+            workflows.append(
+
+                {
+
+                    "name": workflow_path.stem,
+
+                    "file": relative_workflow,
+
+                    "error": str(error),
+
+                    "commands": [],
+
+                    "paths": set(),
+
+                    "urls": set(),
+
+                }
+
+            )
+
+            continue
+
+        commands = (
+            extract_workflow_commands(
+                data
+            )
+        )
+
+        paths = set()
+
+        urls = set()
+
+        for command in commands:
+
+            paths.update(
+                extract_paths_from_command(
+                    command
+                )
+            )
+
+            urls.update(
+                extract_urls(
+                    command
+                )
+            )
+
+        paths.discard(
+            relative_workflow
+        )
+
+        for path in paths:
+
+            if path in file_index:
+
+                referenced_by[path].add(
+                    relative_workflow
+                )
+
+        workflows.append(
+
+            {
+
+                "name": extract_workflow_name(
+                    data,
+                    workflow_path,
+                ),
+
+                "file": relative_workflow,
+
+                "error": None,
+
+                "commands": commands,
+
+                "paths": paths,
+
+                "urls": urls,
+
+            }
+
+        )
+
+    report = []
+
+    report.append(
+        "REPOSITORY WORKFLOW DEPENDENCY AUDIT"
+    )
+
+    report.append(
+        "==================================="
+    )
+
+    report.append("")
+
+    report.append(
+        "Generated: "
+        + datetime.now().isoformat()
+    )
+
+    report.append("")
+
+    report.append(
+        "SUMMARY"
+    )
+
+    report.append(
+        "-------"
+    )
+
+    report.append(
+        f"total_files: {len(file_index)}"
+    )
+
+    report.append(
+        f"workflows: {len(workflows)}"
+    )
+
+    report.append(
+        "files_directly_referenced_by_workflows: "
+        f"{len(referenced_by)}"
+    )
+
+    report.append(
+        "files_not_directly_referenced: "
+        f"{len(file_index) - len(referenced_by)}"
+    )
+
+    report.append("")
+
+    report.append(
+        "WORKFLOW DEPENDENCY MAP"
+    )
+
+    report.append(
+        "======================="
+    )
+
+    for workflow in workflows:
+
+        report.append("")
+
+        report.append(
+            workflow["name"]
+        )
+
+        report.append(
+            "-" * len(
+                workflow["name"]
+            )
+        )
+
+        report.append(
+            "Workflow: "
+            + workflow["file"]
+        )
+
+        if workflow["error"]:
+
+            report.append(
+                "ERROR: "
+                + workflow["error"]
+            )
+
+            continue
+
+        if workflow["urls"]:
+
+            report.append("")
+
+            report.append(
+                "REMOTE SOURCES:"
+            )
+
+            for url in sorted(
+                workflow["urls"]
+            ):
+
+                report.append(
+                    "  - "
+                    + url
+                )
+
+        if workflow["paths"]:
+
+            report.append("")
+
+            report.append(
+                "FILES REFERENCED BY WORKFLOW:"
+            )
+
+            for path in sorted(
+                workflow["paths"]
+            ):
+
+                category = classify_path(
+                    path
+                )
+
+                exists = (
+                    path in file_index
+                )
+
+                if exists:
+
+                    status = (
+                        "EXISTS IN REPOSITORY"
+                    )
+
+                elif path.startswith(
+                    "/tmp/"
+                ):
+
+                    status = (
+                        "TEMPORARY / CREATED DURING RUN"
+                    )
+
+                else:
+
+                    status = (
+                        "NOT FOUND IN REPOSITORY"
+                    )
+
+                report.append(
+                    "  - "
+                    + path
+                )
+
+                report.append(
+                    "      Type: "
+                    + category
+                )
+
+                report.append(
+                    "      Status: "
+                    + status
+                )
+
+        report.append("")
+
+        report.append(
+            "COMMANDS EXECUTED:"
+        )
+
+        for command in workflow[
+            "commands"
+        ]:
+
+            for line in command.splitlines():
+
+                line = line.strip()
+
+                if line:
+
+                    report.append(
+                        "  $ "
+                        + line
+                    )
+
+    report.append("")
+
+    report.append(
+        "FILE USAGE SUMMARY"
+    )
+
+    report.append(
+        "=================="
+    )
+
+    for path in sorted(
+        file_index
+    ):
+
+        users = sorted(
+            referenced_by.get(
+                path,
+                set(),
+            )
+        )
+
+        report.append("")
+
+        report.append(
+            path
+        )
+
+        if users:
+
+            report.append(
+                "  STATUS: USED BY WORKFLOW"
+            )
+
+            report.append(
+                "  USED BY:"
+            )
+
+            for workflow in users:
+
+                report.append(
+                    "    - "
+                    + workflow
+                )
+
+        else:
+
+            report.append(
+                "  STATUS: NOT DIRECTLY FOUND "
+                "IN WORKFLOW COMMANDS"
+            )
+
+    report.append("")
+
+    report.append(
+        "POSSIBLE ORPHANS"
+    )
+
+    report.append(
+        "================"
+    )
+
+    for path in sorted(
+        file_index
+    ):
+
+        if path in workflow_paths:
+
+            continue
+
+        if path not in referenced_by:
+
+            report.append("")
+
+            report.append(
+                path
+            )
+
+            report.append(
+                "  REVIEW ONLY"
+            )
+
+            report.append(
+                "  No direct workflow command reference found."
+            )
+
+            report.append(
+                "  Nothing was deleted automatically."
+            )
+
+    REPORT_FILE.write_text(
+        "\n".join(
+            report
+        ),
+        encoding="utf-8",
+    )
+
     print(
-        "Scanning repository..."
-    )
-
-    files = scan_files()
-
-    print(
-        f"Found {len(files)} files"
-    )
-
-
-    workflows = find_workflows(files)
-
-    references = scan_references(files)
-
-    duplicates = find_duplicates(files)
-
-    classifications = classify_files(
-        files,
-        references
-    )
-
-
-    data = {
-
-        "generated":
-            datetime.now().isoformat(),
-
-        "workflows":
-            workflows,
-
-        "duplicates":
-            duplicates,
-
-        "files":
-            classifications
-
-    }
-
-
-    write_report(data)
-
-
-    print(
-        "\nAudit complete"
+        "Audit complete:"
     )
 
     print(
-        OUTPUT_TXT
+        REPORT_FILE
     )
-
 
 
 if __name__ == "__main__":
