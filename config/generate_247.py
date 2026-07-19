@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
 
-CHANNEL_FILE = "channels.txt"
+CHANNEL_FILE = "config/channels.txt"
 OUTPUT_FILE = "guides/24-7.xml"
 
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
