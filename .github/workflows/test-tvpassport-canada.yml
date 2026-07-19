@@ -1,0 +1,694 @@
+name: TEST TVPassport Canada Channels
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+
+  test-tvpassport-canada:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify TVPassport RAW guide exists
+        run: |
+
+          test -f guides/TVPassportRAW.xml
+
+          test -s guides/TVPassportRAW.xml
+
+          echo "Found:"
+          ls -lh guides/TVPassportRAW.xml
+
+      - name: TEST Extract all Canada channels from TVPassport RAW
+        run: |
+
+          mkdir -p config/TVPassportCanada
+
+          cat > /tmp/extract_tvpassport_canada_test.js <<'EOF'
+
+          const fs =
+            require(
+              'fs'
+            )
+
+          const inputPath =
+            'guides/TVPassportRAW.xml'
+
+          const outputPath =
+            'config/TVPassportCanada/TVPassportCanadaTEST.xml'
+
+          const xml =
+            fs.readFileSync(
+              inputPath,
+              'utf8'
+            )
+
+          function decodeXml(
+            value
+          ) {
+            return String(
+              value ||
+              ''
+            )
+              .replace(
+                /&amp;/g,
+                '&'
+              )
+              .replace(
+                /&quot;/g,
+                '"'
+              )
+              .replace(
+                /&apos;/g,
+                "'"
+              )
+              .replace(
+                /&lt;/g,
+                '<'
+              )
+              .replace(
+                /&gt;/g,
+                '>'
+              )
+          }
+
+          function cleanText(
+            value
+          ) {
+            return decodeXml(
+              String(
+                value ||
+                ''
+              )
+                .replace(
+                  /<[^>]+>/g,
+                  ' '
+                )
+            )
+              .replace(
+                /\s+/g,
+                ' '
+              )
+              .trim()
+          }
+
+          function getAttribute(
+            block,
+            attribute
+          ) {
+
+            const regex =
+              new RegExp(
+                '\\b' +
+                attribute +
+                '="([^"]*)"',
+                'i'
+              )
+
+            const match =
+              block.match(
+                regex
+              )
+
+            return match
+              ? decodeXml(
+                  match[1]
+                )
+              : ''
+          }
+
+          function getAllTagValues(
+            block,
+            tag
+          ) {
+
+            const regex =
+              new RegExp(
+                '<' +
+                tag +
+                '\\b[^>]*>' +
+                '([\\s\\S]*?)' +
+                '</' +
+                tag +
+                '>',
+                'gi'
+              )
+
+            return [
+              ...block.matchAll(
+                regex
+              )
+            ]
+              .map(
+                match =>
+                  cleanText(
+                    match[1]
+                  )
+              )
+              .filter(
+                value =>
+                  value
+              )
+          }
+
+          function normalize(
+            value
+          ) {
+
+            return String(
+              value ||
+              ''
+            )
+              .toLowerCase()
+              .replace(
+                /&/g,
+                ' and '
+              )
+              .replace(
+                /[^a-z0-9]+/g,
+                ' '
+              )
+              .replace(
+                /\s+/g,
+                ' '
+              )
+              .trim()
+          }
+
+          function isCanadianChannel(
+            channelBlock
+          ) {
+
+            const channelId =
+              normalize(
+                getAttribute(
+                  channelBlock,
+                  'id'
+                )
+              )
+
+            const displayNames =
+              getAllTagValues(
+                channelBlock,
+                'display-name'
+              )
+
+            const allNames =
+              displayNames
+                .map(
+                  normalize
+                )
+
+            const combined =
+              [
+                channelId,
+                ...allNames
+              ].join(
+                ' '
+              )
+
+            /*
+             * Explicit Canadian indicators.
+             */
+
+            if (
+              /\bcanada\b/.test(
+                combined
+              )
+            ) {
+              return true
+            }
+
+            if (
+              /\bcanadian\b/.test(
+                combined
+              )
+            ) {
+              return true
+            }
+
+            /*
+             * Canadian country / region identifiers.
+             *
+             * CA is only accepted as a separate token,
+             * not as part of another word.
+             */
+
+            if (
+              /\bca\b/.test(
+                combined
+              )
+            ) {
+              return true
+            }
+
+            if (
+              /\bcan\b/.test(
+                combined
+              )
+            ) {
+              return true
+            }
+
+            /*
+             * Clear Canadian network and service names.
+             */
+
+            const canadianNetworks = [
+
+              'cbc',
+
+              'cbc news',
+
+              'cbc television',
+
+              'cbc tv',
+
+              'cbc gem',
+
+              'cbc sports',
+
+              'ctv',
+
+              'ctv news',
+
+              'ctv2',
+
+              'ctv two',
+
+              'global',
+
+              'global tv',
+
+              'global news',
+
+              'citytv',
+
+              'city tv',
+
+              'cp24',
+
+              'tv ontario',
+
+              'tvo',
+
+              'tvo kids',
+
+              'knowledge network',
+
+              'tele quebec',
+
+              'tfo',
+
+              'noovo',
+
+              'ici tele',
+
+              'ici radio canada',
+
+              'radio canada',
+
+              'rdi',
+
+              'sportsnet',
+
+              'sportsnet ontario',
+
+              'sportsnet west',
+
+              'sportsnet pacific',
+
+              'sportsnet east',
+
+              'sportsnet one',
+
+              'tsn',
+
+              'tsn1',
+
+              'tsn2',
+
+              'tsn3',
+
+              'tsn4',
+
+              'tsn5',
+
+              'tsn 1',
+
+              'tsn 2',
+
+              'tsn 3',
+
+              'tsn 4',
+
+              'tsn 5',
+
+              'bell',
+
+              'bell fibe',
+
+              'shaw',
+
+              'rogers',
+
+              'rogers tv',
+
+              'cogeco',
+
+              'videotron',
+
+              'sasktel',
+
+              'manitoba telecom',
+
+              'mosaic',
+
+              'wild tv',
+
+              'weather network',
+
+              'the weather network',
+
+              'muchmusic',
+
+              'much music',
+
+              'yvtv',
+
+              'absolutely canadian',
+
+              'food network canada',
+
+              'history canada',
+
+              'history channel canada',
+
+              'discovery canada',
+
+              'slice',
+
+              'w network',
+
+              'lifetime canada',
+
+              'amc canada',
+
+              'showcase',
+
+              'super channel',
+
+              'hollywood suite',
+
+              'crave',
+
+              'crave 1',
+
+              'crave 2',
+
+              'crave 3',
+
+              'crave 4',
+
+              'treehouse',
+
+              'treehouse tv',
+
+              'family channel',
+
+              'family chrgd',
+
+              'family jr',
+
+              'teletoon',
+
+              'adult swim canada',
+
+              'youth culture',
+
+              'aptn',
+
+              'aptn lumi',
+
+              'aptn languages',
+
+              'aptn hd'
+
+            ]
+
+            for (
+              const network of
+              canadianNetworks
+            ) {
+
+              const normalizedNetwork =
+                normalize(
+                  network
+                )
+
+              if (
+                allNames.some(
+                  name =>
+                    name ===
+                    normalizedNetwork
+                    ||
+                    name.includes(
+                      normalizedNetwork
+                    )
+                )
+              ) {
+                return true
+              }
+            }
+
+            return false
+          }
+
+          const channelMatches =
+            xml.match(
+              /<channel\b[\s\S]*?<\/channel>/gi
+            )
+            ||
+            []
+
+          const matchedChannels =
+            []
+
+          const seenIds =
+            new Set()
+
+          let scanned =
+            0
+
+          for (
+            const channelBlock of
+            channelMatches
+          ) {
+
+            scanned++
+
+            const channelId =
+              getAttribute(
+                channelBlock,
+                'id'
+              )
+
+            if (
+              !channelId
+            ) {
+              continue
+            }
+
+            if (
+              seenIds.has(
+                channelId
+              )
+            ) {
+              continue
+            }
+
+            if (
+              !isCanadianChannel(
+                channelBlock
+              )
+            ) {
+              continue
+            }
+
+            seenIds.add(
+              channelId
+            )
+
+            matchedChannels.push(
+              {
+                id:
+                  channelId,
+
+                names:
+                  getAllTagValues(
+                    channelBlock,
+                    'display-name'
+                  ),
+
+                block:
+                  channelBlock
+              }
+            )
+          }
+
+          matchedChannels.sort(
+            (
+              a,
+              b
+            ) => {
+
+              const aName =
+                (
+                  a.names[0]
+                  ||
+                  a.id
+                ).toLowerCase()
+
+              const bName =
+                (
+                  b.names[0]
+                  ||
+                  b.id
+                ).toLowerCase()
+
+              return aName.localeCompare(
+                bName
+              )
+            }
+          )
+
+          const header =
+            `<?xml version="1.0" encoding="UTF-8"?>
+          <!--
+            TEST TVPassport Canada channel extraction
+
+            Source:
+            guides/TVPassportRAW.xml
+
+            This file contains all channel blocks identified
+            as Canadian / Canada / CA by the TEST extraction.
+          -->
+          <tv>
+          `
+
+          const body =
+            matchedChannels
+              .map(
+                channel =>
+                  channel.block.trim()
+              )
+              .join(
+                '\n\n'
+              )
+
+          const output =
+            header +
+            body +
+            '\n</tv>\n'
+
+          fs.writeFileSync(
+            outputPath,
+            output,
+            'utf8'
+          )
+
+          console.log(
+            ''
+          )
+
+          console.log(
+            'TEST TVPassport Canada extraction complete'
+          )
+
+          console.log(
+            'Raw channels scanned:',
+            scanned
+          )
+
+          console.log(
+            'Canadian channels found:',
+            matchedChannels.length
+          )
+
+          console.log(
+            ''
+          )
+
+          for (
+            const channel of
+            matchedChannels
+          ) {
+
+            console.log(
+              channel.id,
+              '|',
+              channel.names.join(
+                ' | '
+              )
+            )
+          }
+
+          console.log(
+            ''
+          )
+
+          console.log(
+            'Output:',
+            outputPath
+          )
+
+          EOF
+
+          node /tmp/extract_tvpassport_canada_test.js
+
+          test -s \
+            config/TVPassportCanada/TVPassportCanadaTEST.xml
+
+          echo
+          echo "Generated TEST file:"
+          ls -lh \
+            config/TVPassportCanada/TVPassportCanadaTEST.xml
+
+      - name: Commit TEST TVPassport Canada guide
+        run: |
+
+          git config --global user.name "github-actions"
+
+          git config --global user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add \
+            config/TVPassportCanada/TVPassportCanadaTEST.xml
+
+          if git diff --cached --quiet; then
+
+            echo "No changes to commit"
+
+          else
+
+            git commit \
+              -m "TEST TVPassport Canada channel list"
+
+            git pull \
+              --rebase \
+              origin main
+
+            git push \
+              origin HEAD:main
+
+          fi
