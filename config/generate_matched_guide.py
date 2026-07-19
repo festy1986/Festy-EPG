@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 
 
-CHANNEL_FILE = "matcheverychannel.txt"
+CHANNEL_FILE = "config/matcheverychannel.tx"
 
 OUTPUT_FILE = "guides/matched.xml"
 
