@@ -1,0 +1,2317 @@
+{
+  "generated": "2026-07-19T03:14:07.524642",
+  "summary": {
+    "total_files": 272,
+    "workflows": 17,
+    "referenced_files": 94,
+    "not_referenced": 154,
+    "xml_gzip_pairs": 3
+  },
+  "workflows": [
+    {
+      "file": ".github/workflows/combinedfast.yml",
+      "name": "Combined FAST",
+      "references": [
+        "//epg.guru/7daygracenote/USFast.xml",
+        "//iptv-epg.org/files/epg-us.xml",
+        "//iptv-epg.org/files/epg-us.xml.gz",
+        "/tmp/build_combinedfast.js",
+        "combinedfast/source/iptvorg.xml",
+        "combinedfast/source/iptvorg.xml.gz",
+        "combinedfast/source/jessman.xml",
+        "combinedfast/work/combinedfast.xml",
+        "guides/combinedfast.xml",
+        "guides/combinedfast.xml.gz",
+        "response.js",
+        "response.json"
+      ],
+      "secrets": [
+        "TMDB_API_TOKEN"
+      ]
+    },
+    {
+      "file": ".github/workflows/festy-tvguide.yml",
+      "name": "TVguide-Tivimate",
+      "references": [
+        "...xml",
+        "../guides/tvguidetivimateguide.xml",
+        "ch.xml",
+        "details.sh",
+        "epg/package-lock.js",
+        "epg/package-lock.json",
+        "epg/sites/tvguide.com/festy-tivimate.channels.xml",
+        "epg/sites/tvguide.com/tvguide.com.config.js",
+        "guides/.tvmaze-tivimate-cache.js",
+        "guides/.tvmaze-tivimate-cache.json",
+        "guides/OTALocalsguide.xml",
+        "guides/OTALocalsguide.xml.gz",
+        "guides/TVPassport.xml",
+        "guides/TVPassport.xml.gz",
+        "guides/tvguide.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.",
+        "guides/tvguidetivimateguide.pass",
+        "guides/tvguidetivimateguide.pass1-fast.descriptions.count",
+        "guides/tvguidetivimateguide.pass1-fast.issues.count",
+        "guides/tvguidetivimateguide.pass1-fast.programmes.count",
+        "guides/tvguidetivimateguide.pass2-backup.descriptions.count",
+        "guides/tvguidetivimateguide.pass2-backup.issues.count",
+        "guides/tvguidetivimateguide.pass2-backup.programmes.count",
+        "guides/tvguidetivimateguide.xml",
+        "guides/tvguidetivimateguide.xml.gz",
+        "response.js",
+        "response.json",
+        "scripts/commands/epg/grab.ts",
+        "sites/tvguide.com/festy-tivimate.channels.xml",
+        "src.xml",
+        "x.sh"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/generate_247.yml",
+      "name": "24/7 Guide",
+      "references": [
+        "generate_247.py",
+        "guides/24-7.xml"
+      ],
+      "secrets": [
+        "XTREAM_PASSWORD",
+        "XTREAM_URL",
+        "XTREAM_USERNAME"
+      ]
+    },
+    {
+      "file": ".github/workflows/iptvorg-inspect.yml",
+      "name": "IPTV Org Guide Inspection",
+      "references": [
+        "//iptv-epg.org/files/epg-us.xml",
+        "//iptv-epg.org/files/epg-us.xml.gz",
+        "/tmp/iptvorg/source.xml",
+        "/tmp/iptvorg/source.xml.gz",
+        "guides/iptvorg.xml"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/iptvorg-discover.yml",
+      "name": "IPTV Org",
+      "references": [
+        "//iptv-epg.org/files/epg-us.xml",
+        "//iptv-epg.org/files/epg-us.xml.gz",
+        "/tmp/process_iptvorg.js",
+        "guides/iptvorg.xml",
+        "guides/iptvorg.xml.gz",
+        "iptvorg/processed.xml",
+        "iptvorg/source.xml",
+        "iptvorg/source.xml.gz"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/CROSSCHECKFASTCHANNELS.yml",
+      "name": "PRIME Cross Check",
+      "references": [
+        "PRIMECROSSCHECK.txt",
+        "SOURCEFASTCHANNELS2.txt",
+        "fastchannels.txt"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/iptvorg.yml",
+      "name": "IPTV Org",
+      "references": [
+        "//iptv-epg.org/files/epg-us.xml",
+        "//iptv-epg.org/files/epg-us.xml.gz",
+        "/tmp/process_iptvorg.js",
+        "guides/iptvorg.xml",
+        "guides/iptvorg.xml.gz",
+        "iptvorg/processed.xml",
+        "iptvorg/source.xml",
+        "iptvorg/source.xml.gz"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/tvpassport-tivimate-workflow.yml",
+      "name": "TVPassport-TiviMate",
+      "references": [
+        "../guides/TVPassport.xml",
+        "epg/package-lock.js",
+        "epg/package-lock.json",
+        "epg/sites/tvpassport.com/festy-tvpassport.channels.xml",
+        "epg/sites/tvpassport.com/tvpassport.com.config.js",
+        "guides/.tvmaze-tvpassport-cache.js",
+        "guides/.tvmaze-tvpassport-cache.json",
+        "guides/OTALocalsguide.xml",
+        "guides/OTALocalsguide.xml.gz",
+        "guides/TVPassport.",
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.pass",
+        "guides/TVPassport.pass1-fast.descriptions.count",
+        "guides/TVPassport.pass1-fast.issues.count",
+        "guides/TVPassport.pass1-fast.programmes.count",
+        "guides/TVPassport.xml",
+        "guides/TVPassport.xml.gz",
+        "guides/tvguidetivimateguide.xml",
+        "guides/tvguidetivimateguide.xml.gz",
+        "response.js",
+        "response.json",
+        "scripts/commands/epg/grab.ts",
+        "sites/tvpassport.com/festy-tvpassport.channels.xml",
+        "x.sh"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/repository-audit.yml",
+      "name": "Repository Audit",
+      "references": [
+        "repo_audit.js",
+        "repo_audit.json",
+        "repo_audit_report.txt",
+        "repository_audit.py"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/matched-guide.yml",
+      "name": "Matched Channel Guide",
+      "references": [
+        "generate_matched_guide.py",
+        "guides/matched.xml"
+      ],
+      "secrets": [
+        "XTREAM_PASSWORD",
+        "XTREAM_URL",
+        "XTREAM_USERNAME"
+      ]
+    },
+    {
+      "file": ".github/workflows/festy-tvguide-ota.yml",
+      "name": "Festy TVGuide OTA",
+      "references": [
+        "...xml",
+        "../guides/OTALocalsguide.xml",
+        "details.sh",
+        "epg/package-lock.js",
+        "epg/package-lock.json",
+        "epg/sites/tvguide.com/festy-ota.channels.xml",
+        "epg/sites/tvguide.com/tvguide.com.config.js",
+        "guides/.tvmaze-ota-cache.js",
+        "guides/.tvmaze-ota-cache.json",
+        "guides/OTALocalsguide.",
+        "guides/OTALocalsguide.pass",
+        "guides/OTALocalsguide.pass1-fast.descriptions.count",
+        "guides/OTALocalsguide.pass1-fast.programmes.count",
+        "guides/OTALocalsguide.pass1-fast.schedule_issues.count",
+        "guides/OTALocalsguide.pass2-backup.descriptions.count",
+        "guides/OTALocalsguide.pass2-backup.programmes.count",
+        "guides/OTALocalsguide.pass2-backup.schedule_issues.count",
+        "guides/OTALocalsguide.raw.xml",
+        "guides/OTALocalsguide.xml",
+        "guides/OTALocalsguide.xml.gz",
+        "guides/TVPassport.xml",
+        "guides/TVPassport.xml.gz",
+        "guides/tvguidetivimateguide.xml",
+        "guides/tvguidetivimateguide.xml.gz",
+        "response.js",
+        "response.json",
+        "scripts/commands/epg/grab.ts",
+        "sites/tvguide.com/festy-ota.channels.xml",
+        "x.sh"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/generate_sports.yml",
+      "name": "Sports Guide",
+      "references": [
+        "generate_sports.py",
+        "guides/sports.xml",
+        "test_epg.py",
+        "test_xtream.py"
+      ],
+      "secrets": [
+        "XTREAM_PASSWORD",
+        "XTREAM_URL",
+        "XTREAM_USERNAME"
+      ]
+    },
+    {
+      "file": ".github/workflows/get-matched-channels.yml",
+      "name": "Get Matched Channels",
+      "references": [
+        "matcheverychannel.txt",
+        "response.js",
+        "response.json"
+      ],
+      "secrets": [
+        "XTREAM_PASSWORD",
+        "XTREAM_URL",
+        "XTREAM_USERNAME"
+      ]
+    },
+    {
+      "file": ".github/workflows/SOURCEFASTCHANNELS.yml",
+      "name": "SOURCEFASTCHANNELS",
+      "references": [
+        "//epg.guru/7dayiptv/USFast.xml",
+        "SOURCEFASTCHANNELS.txt",
+        "channels/USFast.xml",
+        "sourcefastchannels/USFast.xml"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/FAST.yml",
+      "name": "FAST",
+      "references": [
+        "//epg.guru/7daygracenote/USFast.xml",
+        "/tmp/process_fast.js",
+        "fast/processed.xml",
+        "fast/source.xml",
+        "guides/FAST.xml",
+        "guides/FAST.xml.gz"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/CLEANSOURCEFASTCHANNELS.yml",
+      "name": "CLEANSOURCEFASTCHANNELS",
+      "references": [
+        "SOURCEFASTCHANNELS.txt",
+        "SOURCEFASTCHANNELS2.txt"
+      ],
+      "secrets": []
+    },
+    {
+      "file": ".github/workflows/match-every-channel.yml",
+      "name": "Match Every Channel",
+      "references": [
+        "matcheverychannel.txt",
+        "response.js",
+        "response.json"
+      ],
+      "secrets": [
+        "XTREAM_PASSWORD",
+        "XTREAM_URL",
+        "XTREAM_USERNAME"
+      ]
+    }
+  ],
+  "xml_gzip_pairs": [
+    {
+      "xml": "guides/OTALocalsguide.xml",
+      "gzip": "guides/OTALocalsguide.xml.gz"
+    },
+    {
+      "xml": "guides/TVPassport.xml",
+      "gzip": "guides/TVPassport.xml.gz"
+    },
+    {
+      "xml": "guides/tvguidetivimateguide.xml",
+      "gzip": "guides/tvguidetivimateguide.xml.gz"
+    }
+  ],
+  "files": [
+    {
+      "file": "FASTCROSSCHECKED.txt",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "repository_audit.py",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/repository-audit.yml"
+      ]
+    },
+    {
+      "file": "matcheverychannel.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/get-matched-channels.yml",
+        ".github/workflows/match-every-channel.yml",
+        "generate_matched_guide.py"
+      ]
+    },
+    {
+      "file": "fastchannels.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/CROSSCHECKFASTCHANNELS.yml"
+      ]
+    },
+    {
+      "file": "generate_247.py",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/generate_247.yml"
+      ]
+    },
+    {
+      "file": "channels.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/CROSSCHECKFASTCHANNELS.yml",
+        "generate_247.py",
+        "generate_sports.py",
+        "test_epg.py",
+        "test_xtream.py"
+      ]
+    },
+    {
+      "file": "test_xtream.py",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/generate_sports.yml"
+      ]
+    },
+    {
+      "file": "sports_channels.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "generate_sports.py",
+        "test_epg.py",
+        "test_xtream.py"
+      ]
+    },
+    {
+      "file": "metadata_cache.json",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "generate_matched_guide.py",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/matched-guide.yml"
+      ]
+    },
+    {
+      "file": "repo_audit.py",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "test_epg.py",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/generate_sports.yml"
+      ]
+    },
+    {
+      "file": "SOURCEFASTCHANNELS.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/CLEANSOURCEFASTCHANNELS.yml",
+        ".github/workflows/SOURCEFASTCHANNELS.yml"
+      ]
+    },
+    {
+      "file": "SOURCEFASTCHANNELS2.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/CLEANSOURCEFASTCHANNELS.yml",
+        ".github/workflows/CROSSCHECKFASTCHANNELS.yml"
+      ]
+    },
+    {
+      "file": "generate_sports.py",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/generate_sports.yml"
+      ]
+    },
+    {
+      "file": "fast/FAST.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/FAST.yml"
+      ]
+    },
+    {
+      "file": "guides/24-7.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/generate_247.yml",
+        "generate_247.py"
+      ]
+    },
+    {
+      "file": "guides/OTALocalsguide.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml",
+        ".github/workflows/festy-tvguide.yml",
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/.tvmaze-fast-cache.json",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "guides/24-7-channel-list.txt",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "guides/FAST.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/FAST.yml"
+      ]
+    },
+    {
+      "file": "guides/.tvmaze-ota-cache.json",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml"
+      ]
+    },
+    {
+      "file": "guides/TVPassportRAW.xml",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "guides/TVPassport.channels.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/combinedfast2.xml.gz",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "guides/24-7part2.xml",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "guides/OTALocalsguide.raw.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml"
+      ]
+    },
+    {
+      "file": "guides/.tvmaze-tivimate-cache.json",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide.yml"
+      ]
+    },
+    {
+      "file": "guides/TVPassport.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml",
+        ".github/workflows/festy-tvguide.yml",
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/matched.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/matched-guide.yml",
+        "generate_matched_guide.py"
+      ]
+    },
+    {
+      "file": "guides/tvguidetivimateguide.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml",
+        ".github/workflows/festy-tvguide.yml",
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/tvguide.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide.yml"
+      ]
+    },
+    {
+      "file": "guides/OTALocalsguide.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml",
+        ".github/workflows/festy-tvguide.yml",
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/sports.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/generate_sports.yml",
+        "generate_sports.py"
+      ]
+    },
+    {
+      "file": "guides/iptvorg.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/combinedfast.yml",
+        ".github/workflows/iptvorg-discover.yml",
+        ".github/workflows/iptvorg.yml"
+      ]
+    },
+    {
+      "file": "guides/TVPassport.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml",
+        ".github/workflows/festy-tvguide.yml",
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/iptvorg-channels.txt",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "guides/tvguidetivimate.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide.yml"
+      ]
+    },
+    {
+      "file": "guides/combinedfast.xml.gz",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/combinedfast.yml"
+      ]
+    },
+    {
+      "file": "guides/tvguidetivimateguide.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/festy-tvguide-ota.yml",
+        ".github/workflows/festy-tvguide.yml",
+        ".github/workflows/tvpassport-tivimate-workflow.yml"
+      ]
+    },
+    {
+      "file": "guides/CombinedFAST.xml.gz",
+      "status": "GENERATED_OR_OUTPUT",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Starz_Encore_Suspense_2022.webp",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/National_Geographic_Wild_2018.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Cinemax_Action_2025.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/showtime bet.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/SHOWTIME FAMILY ZONE.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Paramount+ with Showtime.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ ENCORE.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/foxportlandextra.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ Kids & Family.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MGM+ Marquee.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/nat geo.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/RetroPlex.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml"
+      ]
+    },
+    {
+      "file": "logos/foxbostonextra.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/adult swim.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Great American Family.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ ENCORE Black.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/FOX Sports 1 HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/A&E.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/amc plus.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/action max.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Nickelodeon.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/fetv.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/lifetime movie network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/.gitkeep",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/SHOWTIME NEXT.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Discovery Family HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/NHL Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/CMT.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/WE tv.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/hboextra.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/5StarMax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/tbs.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/MGM+ Hits.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MAGNOLIA Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/FYI HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/univeralmonster.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/NFL Network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Destination America.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HBO Comedy.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Travel.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Cinemax Hits.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/cbs boston.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HBO.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/showtime west.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Crave_3.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/own.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Antenna TV.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Court TV.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Comedy Central.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/American Heroes.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/cinemax west.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Disney.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/HBO_Hits_2025.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ScreenPix Voices.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HLN.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/CBS Sports Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ InBlack.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Food Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ESPN.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Discovery Life.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/cinemax thrillermax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/abc boston.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Cozi TV.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/IndiePlex.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/HGTV HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/New England Sports Network Plus HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/SHOWTIME EXTREME.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Vice_TV.webp",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/ESPN News HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/VH1.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/National Geographic Wild.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/BBC America HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MTV.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Reelz HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/mgmpresents.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/tlc.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/hallmarkextra.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Cinemax_Classics_2025.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/MeTV Plus.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Investigation Discovery.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MS NOW HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ Cinema.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/nbc boston.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/FXX HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Ion_Plus.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Oxygen.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Sony_Movies_2019.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/Science HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/TV Land.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HBO Signature.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/SHOWTIME SHOWCASE.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WPFO-DT3 Waterville, Maine. (Comet).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Paramount Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/nbcbostonextra.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/OuterMax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Outdoor.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/PBS.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/OTALocalsguide.raw.xml",
+        "guides/OTALocalsguide.xml",
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/National Geographic.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/SHOWTIME WOMEN.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/insp.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Game_Show_Central.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/STARZ ENCORE Action.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/History HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WMTW-DT Poland Spring, Maine (ABC).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MoviePlex.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/hbo family.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/LOGO.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/AMC HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Bravo.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/HBO Hits.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Antenna_TV_logo.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/STARZ ENCORE Family.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ Encore Suspense.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/awe.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguide.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/HBO_Drama_2025.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/miramax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/AXS TV.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Syfy HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Ovation HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/The Movie Channel.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WMTW-DT2 Poland Spring, Maine (MeTV).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HBO Zone.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/lifetime.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/STARZ Comedy.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/retro.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/Game Show Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/hbo west.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ESPN2.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/tnt.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Military History.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ifcextra.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/cinesony.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/E!.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Crave.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/ScreenPix.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/NBA TV HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Crime & Investigation Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Cooking.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/ionmysteryextra.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WPXT-DT3 Portland, Maine (ION Mystery).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/The Weather.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ION Plus.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/charge!.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/OTALocalsguide.raw.xml",
+        "guides/OTALocalsguide.xml"
+      ]
+    },
+    {
+      "file": "logos/IFC HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/starz west.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WMTW-DT3 Poland Spring, Maine (Laff).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/tcm.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/usa network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/SHOWTIME 2.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Hallmark Mystery HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MTV2 HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MoreMax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MGM+.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/discovery.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/starz encore west.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Fuse HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/freeform.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Lifetime Real Women East.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ASPiRE.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Heroes & Icons Network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/smithsonian channel extra.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HBO Movies.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Cinemax_Hits_2025.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/Hallmark.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/CNN HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/STARZ Edge.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Up Entertainment HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ActionMax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Fox News.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WCSH-DT Portland, Maine (NBC).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Cinemax Classics.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Home Network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Screambox.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/truTV.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Cartoon Network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/bet.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/STARZ.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/HBO 2.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/HBO_Movies_2025.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Shudder.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Pop Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/New England Cable News.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/New England Sports Network.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/UPtv_2018_logo.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/FX Movie HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/FX.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/FOX Sports 2.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MLB Network HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/moviemax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/NBC Sports Boston.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WGME-DT Portland, Maine (CBS).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Great_American_Family.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/ION.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/OTALocalsguide.raw.xml",
+        "guides/OTALocalsguide.xml"
+      ]
+    },
+    {
+      "file": "logos/Crave_4.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/Cinemax.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml",
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/HBO Drama.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Animal Planet.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/cw.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/ScreenPix Action.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/MGM+ Drive-In.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/UPTV.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/tvguidetivimate.xml",
+        "guides/tvguidetivimateguide.xml"
+      ]
+    },
+    {
+      "file": "logos/txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        ".github/workflows/CLEANSOURCEFASTCHANNELS.yml",
+        ".github/workflows/CROSSCHECKFASTCHANNELS.yml",
+        ".github/workflows/SOURCEFASTCHANNELS.yml",
+        ".github/workflows/get-matched-channels.yml",
+        ".github/workflows/match-every-channel.yml",
+        ".github/workflows/repository-audit.yml",
+        "generate_247.py",
+        "generate_matched_guide.py",
+        "generate_sports.py",
+        "repo_audit.py",
+        "repository_audit.py",
+        "test_epg.py",
+        "test_xtream.py",
+        "xtream-epg/generator.py"
+      ]
+    },
+    {
+      "file": "logos/Starz Encore Westerns.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Hallmark Family.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/moremax.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/WGME-DT2 Portland, Maine (FOX).png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/CNBC HD.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "logos/Crave_2.png",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "guides/TVPassport.channels.xml",
+        "guides/TVPassport.xml"
+      ]
+    },
+    {
+      "file": "logos/STARZ ENCORE Classic.png",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "xtream-epg/.gitkeep",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": "xtream-epg/channel-map.txt",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "xtream-epg/generator.py"
+      ]
+    },
+    {
+      "file": "xtream-epg/xtream.xml",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "xtream-epg/generator.py"
+      ]
+    },
+    {
+      "file": "xtream-epg/channels.json",
+      "status": "REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": [
+        "xtream-epg/generator.py"
+      ]
+    },
+    {
+      "file": "xtream-epg/generator.py",
+      "status": "NOT_REFERENCED",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/combinedfast.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/festy-tvguide.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/generate_247.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/iptvorg-inspect.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/iptvorg-discover.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/CROSSCHECKFASTCHANNELS.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/iptvorg.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/tvpassport-tivimate-workflow.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/repository-audit.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/matched-guide.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/festy-tvguide-ota.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/generate_sports.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/get-matched-channels.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/SOURCEFASTCHANNELS.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/FAST.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/CLEANSOURCEFASTCHANNELS.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    },
+    {
+      "file": ".github/workflows/match-every-channel.yml",
+      "status": "WORKFLOW",
+      "days_since_modified": 0,
+      "referenced_by": []
+    }
+  ]
+}

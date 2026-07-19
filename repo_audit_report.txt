@@ -1,0 +1,1058 @@
+REPOSITORY AUDIT REPORT
+=======================
+
+Generated: 2026-07-19T03:14:07.524642
+
+SUMMARY
+-------
+total_files: 272
+workflows: 17
+referenced_files: 94
+not_referenced: 154
+xml_gzip_pairs: 3
+
+
+WORKFLOWS
+=========
+
+Combined FAST
+File: .github/workflows/combinedfast.yml
+Secrets:
+  - TMDB_API_TOKEN
+References:
+  - //epg.guru/7daygracenote/USFast.xml
+  - //iptv-epg.org/files/epg-us.xml
+  - //iptv-epg.org/files/epg-us.xml.gz
+  - /tmp/build_combinedfast.js
+  - combinedfast/source/iptvorg.xml
+  - combinedfast/source/iptvorg.xml.gz
+  - combinedfast/source/jessman.xml
+  - combinedfast/work/combinedfast.xml
+  - guides/combinedfast.xml
+  - guides/combinedfast.xml.gz
+  - response.js
+  - response.json
+
+TVguide-Tivimate
+File: .github/workflows/festy-tvguide.yml
+Secrets:
+References:
+  - ...xml
+  - ../guides/tvguidetivimateguide.xml
+  - ch.xml
+  - details.sh
+  - epg/package-lock.js
+  - epg/package-lock.json
+  - epg/sites/tvguide.com/festy-tivimate.channels.xml
+  - epg/sites/tvguide.com/tvguide.com.config.js
+  - guides/.tvmaze-tivimate-cache.js
+  - guides/.tvmaze-tivimate-cache.json
+  - guides/OTALocalsguide.xml
+  - guides/OTALocalsguide.xml.gz
+  - guides/TVPassport.xml
+  - guides/TVPassport.xml.gz
+  - guides/tvguide.xml
+  - guides/tvguidetivimate.xml
+  - guides/tvguidetivimateguide.
+  - guides/tvguidetivimateguide.pass
+  - guides/tvguidetivimateguide.pass1-fast.descriptions.count
+  - guides/tvguidetivimateguide.pass1-fast.issues.count
+  - guides/tvguidetivimateguide.pass1-fast.programmes.count
+  - guides/tvguidetivimateguide.pass2-backup.descriptions.count
+  - guides/tvguidetivimateguide.pass2-backup.issues.count
+  - guides/tvguidetivimateguide.pass2-backup.programmes.count
+  - guides/tvguidetivimateguide.xml
+  - guides/tvguidetivimateguide.xml.gz
+  - response.js
+  - response.json
+  - scripts/commands/epg/grab.ts
+  - sites/tvguide.com/festy-tivimate.channels.xml
+  - src.xml
+  - x.sh
+
+24/7 Guide
+File: .github/workflows/generate_247.yml
+Secrets:
+  - XTREAM_PASSWORD
+  - XTREAM_URL
+  - XTREAM_USERNAME
+References:
+  - generate_247.py
+  - guides/24-7.xml
+
+IPTV Org Guide Inspection
+File: .github/workflows/iptvorg-inspect.yml
+Secrets:
+References:
+  - //iptv-epg.org/files/epg-us.xml
+  - //iptv-epg.org/files/epg-us.xml.gz
+  - /tmp/iptvorg/source.xml
+  - /tmp/iptvorg/source.xml.gz
+  - guides/iptvorg.xml
+
+IPTV Org
+File: .github/workflows/iptvorg-discover.yml
+Secrets:
+References:
+  - //iptv-epg.org/files/epg-us.xml
+  - //iptv-epg.org/files/epg-us.xml.gz
+  - /tmp/process_iptvorg.js
+  - guides/iptvorg.xml
+  - guides/iptvorg.xml.gz
+  - iptvorg/processed.xml
+  - iptvorg/source.xml
+  - iptvorg/source.xml.gz
+
+PRIME Cross Check
+File: .github/workflows/CROSSCHECKFASTCHANNELS.yml
+Secrets:
+References:
+  - PRIMECROSSCHECK.txt
+  - SOURCEFASTCHANNELS2.txt
+  - fastchannels.txt
+
+IPTV Org
+File: .github/workflows/iptvorg.yml
+Secrets:
+References:
+  - //iptv-epg.org/files/epg-us.xml
+  - //iptv-epg.org/files/epg-us.xml.gz
+  - /tmp/process_iptvorg.js
+  - guides/iptvorg.xml
+  - guides/iptvorg.xml.gz
+  - iptvorg/processed.xml
+  - iptvorg/source.xml
+  - iptvorg/source.xml.gz
+
+TVPassport-TiviMate
+File: .github/workflows/tvpassport-tivimate-workflow.yml
+Secrets:
+References:
+  - ../guides/TVPassport.xml
+  - epg/package-lock.js
+  - epg/package-lock.json
+  - epg/sites/tvpassport.com/festy-tvpassport.channels.xml
+  - epg/sites/tvpassport.com/tvpassport.com.config.js
+  - guides/.tvmaze-tvpassport-cache.js
+  - guides/.tvmaze-tvpassport-cache.json
+  - guides/OTALocalsguide.xml
+  - guides/OTALocalsguide.xml.gz
+  - guides/TVPassport.
+  - guides/TVPassport.channels.xml
+  - guides/TVPassport.pass
+  - guides/TVPassport.pass1-fast.descriptions.count
+  - guides/TVPassport.pass1-fast.issues.count
+  - guides/TVPassport.pass1-fast.programmes.count
+  - guides/TVPassport.xml
+  - guides/TVPassport.xml.gz
+  - guides/tvguidetivimateguide.xml
+  - guides/tvguidetivimateguide.xml.gz
+  - response.js
+  - response.json
+  - scripts/commands/epg/grab.ts
+  - sites/tvpassport.com/festy-tvpassport.channels.xml
+  - x.sh
+
+Repository Audit
+File: .github/workflows/repository-audit.yml
+Secrets:
+References:
+  - repo_audit.js
+  - repo_audit.json
+  - repo_audit_report.txt
+  - repository_audit.py
+
+Matched Channel Guide
+File: .github/workflows/matched-guide.yml
+Secrets:
+  - XTREAM_PASSWORD
+  - XTREAM_URL
+  - XTREAM_USERNAME
+References:
+  - generate_matched_guide.py
+  - guides/matched.xml
+
+Festy TVGuide OTA
+File: .github/workflows/festy-tvguide-ota.yml
+Secrets:
+References:
+  - ...xml
+  - ../guides/OTALocalsguide.xml
+  - details.sh
+  - epg/package-lock.js
+  - epg/package-lock.json
+  - epg/sites/tvguide.com/festy-ota.channels.xml
+  - epg/sites/tvguide.com/tvguide.com.config.js
+  - guides/.tvmaze-ota-cache.js
+  - guides/.tvmaze-ota-cache.json
+  - guides/OTALocalsguide.
+  - guides/OTALocalsguide.pass
+  - guides/OTALocalsguide.pass1-fast.descriptions.count
+  - guides/OTALocalsguide.pass1-fast.programmes.count
+  - guides/OTALocalsguide.pass1-fast.schedule_issues.count
+  - guides/OTALocalsguide.pass2-backup.descriptions.count
+  - guides/OTALocalsguide.pass2-backup.programmes.count
+  - guides/OTALocalsguide.pass2-backup.schedule_issues.count
+  - guides/OTALocalsguide.raw.xml
+  - guides/OTALocalsguide.xml
+  - guides/OTALocalsguide.xml.gz
+  - guides/TVPassport.xml
+  - guides/TVPassport.xml.gz
+  - guides/tvguidetivimateguide.xml
+  - guides/tvguidetivimateguide.xml.gz
+  - response.js
+  - response.json
+  - scripts/commands/epg/grab.ts
+  - sites/tvguide.com/festy-ota.channels.xml
+  - x.sh
+
+Sports Guide
+File: .github/workflows/generate_sports.yml
+Secrets:
+  - XTREAM_PASSWORD
+  - XTREAM_URL
+  - XTREAM_USERNAME
+References:
+  - generate_sports.py
+  - guides/sports.xml
+  - test_epg.py
+  - test_xtream.py
+
+Get Matched Channels
+File: .github/workflows/get-matched-channels.yml
+Secrets:
+  - XTREAM_PASSWORD
+  - XTREAM_URL
+  - XTREAM_USERNAME
+References:
+  - matcheverychannel.txt
+  - response.js
+  - response.json
+
+SOURCEFASTCHANNELS
+File: .github/workflows/SOURCEFASTCHANNELS.yml
+Secrets:
+References:
+  - //epg.guru/7dayiptv/USFast.xml
+  - SOURCEFASTCHANNELS.txt
+  - channels/USFast.xml
+  - sourcefastchannels/USFast.xml
+
+FAST
+File: .github/workflows/FAST.yml
+Secrets:
+References:
+  - //epg.guru/7daygracenote/USFast.xml
+  - /tmp/process_fast.js
+  - fast/processed.xml
+  - fast/source.xml
+  - guides/FAST.xml
+  - guides/FAST.xml.gz
+
+CLEANSOURCEFASTCHANNELS
+File: .github/workflows/CLEANSOURCEFASTCHANNELS.yml
+Secrets:
+References:
+  - SOURCEFASTCHANNELS.txt
+  - SOURCEFASTCHANNELS2.txt
+
+Match Every Channel
+File: .github/workflows/match-every-channel.yml
+Secrets:
+  - XTREAM_PASSWORD
+  - XTREAM_URL
+  - XTREAM_USERNAME
+References:
+  - matcheverychannel.txt
+  - response.js
+  - response.json
+
+
+XML AND GZIP PAIRS
+===================
+
+guides/OTALocalsguide.xml
+  compressed: guides/OTALocalsguide.xml.gz
+  REVIEW WHETHER BOTH ARE NEEDED
+
+guides/TVPassport.xml
+  compressed: guides/TVPassport.xml.gz
+  REVIEW WHETHER BOTH ARE NEEDED
+
+guides/tvguidetivimateguide.xml
+  compressed: guides/tvguidetivimateguide.xml.gz
+  REVIEW WHETHER BOTH ARE NEEDED
+
+
+NOT REFERENCED FILES
+====================
+
+FASTCROSSCHECKED.txt
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+metadata_cache.json
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+repo_audit.py
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Starz_Encore_Suspense_2022.webp
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/National_Geographic_Wild_2018.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/showtime bet.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/SHOWTIME FAMILY ZONE.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Paramount+ with Showtime.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ ENCORE.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/foxportlandextra.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ Kids & Family.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MGM+ Marquee.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/nat geo.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/adult swim.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Great American Family.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ ENCORE Black.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/FOX Sports 1 HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/A&E.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/amc plus.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/action max.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/lifetime movie network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/.gitkeep
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/SHOWTIME NEXT.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Discovery Family HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/NHL Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WE tv.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/5StarMax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MGM+ Hits.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MAGNOLIA Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/FYI HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/univeralmonster.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/NFL Network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Destination America.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO Comedy.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Cinemax Hits.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/cbs boston.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/showtime west.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Antenna TV.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Court TV.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Comedy Central.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/American Heroes.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/cinemax west.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO_Hits_2025.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ScreenPix Voices.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/CBS Sports Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ InBlack.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Food Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Discovery Life.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/cinemax thrillermax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/abc boston.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Cozi TV.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HGTV HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/New England Sports Network Plus HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/SHOWTIME EXTREME.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ESPN News HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/National Geographic Wild.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/BBC America HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Reelz HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/mgmpresents.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/hallmarkextra.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MeTV Plus.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Investigation Discovery.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MS NOW HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ Cinema.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/nbc boston.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/FXX HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Ion_Plus.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Science HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/TV Land.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO Signature.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/SHOWTIME SHOWCASE.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WPFO-DT3 Waterville, Maine. (Comet).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Paramount Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/OuterMax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/National Geographic.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/SHOWTIME WOMEN.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ ENCORE Action.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/History HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WMTW-DT Poland Spring, Maine (ABC).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/hbo family.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/AMC HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO Hits.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ ENCORE Family.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ Encore Suspense.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO_Drama_2025.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/miramax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/AXS TV.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Syfy HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Ovation HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/The Movie Channel.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WMTW-DT2 Poland Spring, Maine (MeTV).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO Zone.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ Comedy.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Game Show Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/hbo west.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Military History.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ifcextra.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/NBA TV HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Crime & Investigation Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ionmysteryextra.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WPXT-DT3 Portland, Maine (ION Mystery).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/The Weather.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ION Plus.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/IFC HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/starz west.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WMTW-DT3 Poland Spring, Maine (Laff).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/usa network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/SHOWTIME 2.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Hallmark Mystery HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MTV2 HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MoreMax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MGM+.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/starz encore west.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Fuse HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Lifetime Real Women East.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Heroes & Icons Network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/smithsonian channel extra.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO Movies.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/CNN HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ Edge.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Up Entertainment HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ActionMax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Fox News.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WCSH-DT Portland, Maine (NBC).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Cinemax Classics.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Home Network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Screambox.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Cartoon Network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO 2.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO_Movies_2025.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Shudder.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Pop Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/New England Cable News.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/New England Sports Network.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/UPtv_2018_logo.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/FX Movie HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/FOX Sports 2.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MLB Network HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/moviemax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/NBC Sports Boston.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WGME-DT Portland, Maine (CBS).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Great_American_Family.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/HBO Drama.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Animal Planet.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/ScreenPix Action.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/MGM+ Drive-In.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Starz Encore Westerns.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/Hallmark Family.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/moremax.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/WGME-DT2 Portland, Maine (FOX).png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/CNBC HD.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+logos/STARZ ENCORE Classic.png
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+xtream-epg/.gitkeep
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
+
+xtream-epg/generator.py
+  Age: 0 days
+  Status: REVIEW ONLY
+  Nothing was deleted automatically
