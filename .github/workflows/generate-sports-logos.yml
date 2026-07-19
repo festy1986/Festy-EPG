@@ -15,50 +15,81 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install requests pillow
 
+
       - name: Build sports logo library
         run: |
+
           python - <<'PY'
+
           import os
           import re
           import time
           import requests
 
           from io import BytesIO
-          from PIL import Image, ImageOps, ImageDraw
+
+          from PIL import (
+              Image,
+              ImageDraw
+          )
 
 
-          API_URL = "https://www.thesportsdb.com/api/v1/json/123"
+          API_URL = (
+              "https://www.thesportsdb.com/"
+              "api/v1/json/123"
+          )
 
-          OUTPUT_ROOT = "sports-logos"
+
+          OUTPUT_ROOT = (
+              "sports-logos"
+          )
 
 
           LEAGUES = {
-              "MLB": "MLB",
-              "NBA": "NBA",
-              "NFL": "NFL",
-              "NHL": "NHL",
+
+              "MLB":
+              "MLB",
+
+              "NBA":
+              "NBA",
+
+              "NFL":
+              "NFL",
+
+              "NHL":
+              "NHL"
+
           }
 
 
           session = requests.Session()
 
+
           session.headers.update(
+
               {
+
                   "User-Agent":
                   "Festy Sports Logo Builder"
+
               }
+
           )
 
 
-          def clean_filename(text):
+          def clean_filename(
+              text
+          ):
 
               text = str(
                   text
@@ -85,7 +116,78 @@ jobs:
               )
 
 
-          def download_image(url):
+          def api_get(
+              endpoint,
+              params=None
+          ):
+
+              url = (
+                  f"{API_URL}/"
+                  f"{endpoint}"
+              )
+
+
+              for attempt in range(
+                  1,
+                  4
+              ):
+
+                  try:
+
+                      response = session.get(
+                          url,
+                          params=params,
+                          timeout=60
+                      )
+
+
+                      if response.status_code == 429:
+
+                          print(
+                              "API rate limit reached."
+                          )
+
+
+                          time.sleep(
+                              65
+                          )
+
+
+                          continue
+
+
+                      response.raise_for_status()
+
+
+                      return response.json()
+
+
+                  except Exception as e:
+
+                      print(
+                          f"API request failed "
+                          f"({attempt}/3):"
+                      )
+
+
+                      print(
+                          e
+                      )
+
+
+                      if attempt < 3:
+
+                          time.sleep(
+                              10
+                          )
+
+
+              return {}
+
+
+          def download_image(
+              url
+          ):
 
               if not url:
 
@@ -104,9 +206,11 @@ jobs:
 
 
                   return Image.open(
+
                       BytesIO(
                           response.content
                       )
+
                   ).convert(
                       "RGBA"
                   )
@@ -115,8 +219,12 @@ jobs:
               except Exception as e:
 
                   print(
-                      f"Unable to download image:"
-                      f" {url}"
+                      "Unable to download image:"
+                  )
+
+
+                  print(
+                      url
                   )
 
 
@@ -128,17 +236,22 @@ jobs:
                   return None
 
 
-          def resize_logo(image):
+          def resize_logo(
+              image
+          ):
 
               image = image.copy()
 
 
               image.thumbnail(
+
                   (
                       420,
                       420
                   ),
+
                   Image.Resampling.LANCZOS
+
               )
 
 
@@ -333,51 +446,59 @@ jobs:
 
 
           def get_teams(
-
               league_name
-
           ):
 
-              url = (
+              data = api_get(
 
-                  f"{API_URL}"
+                  "search_all_teams.php",
 
-                  f"/search_all_teams.php"
-
-              )
-
-
-              response = session.get(
-
-                  url,
-
-                  params={
+                  {
 
                       "l":
-
                       league_name
 
-                  },
-
-                  timeout=60
+                  }
 
               )
-
-
-              response.raise_for_status()
-
-
-              data = response.json()
 
 
               return (
 
                   data.get(
-
                       "teams",
-
                       []
+                  )
 
+                  or []
+
+              )
+
+
+          def get_team_schedule(
+              team_id,
+              endpoint
+          ):
+
+              data = api_get(
+
+                  endpoint,
+
+                  {
+
+                      "id":
+                      team_id
+
+                  }
+
+              )
+
+
+              return (
+
+                  data.get(
+                      "events",
+                      []
                   )
 
                   or []
@@ -393,27 +514,27 @@ jobs:
 
           failed_images = 0
 
+          schedule_events = 0
+
 
           for folder_name, league_name in LEAGUES.items():
 
+
               print()
 
+
               print(
-
                   "===================================="
-
               )
 
+
               print(
-
-                  f"Processing {folder_name}"
-
+                  f"PROCESSING {folder_name}"
               )
 
+
               print(
-
                   "===================================="
-
               )
 
 
@@ -427,9 +548,8 @@ jobs:
               if not teams:
 
                   print(
-
-                      f"No teams found for {league_name}"
-
+                      f"No teams found for "
+                      f"{league_name}"
                   )
 
 
@@ -441,12 +561,22 @@ jobs:
 
               for team in teams:
 
+
+                  team_id = (
+
+                      team.get(
+                          "idTeam"
+                      )
+
+                      or ""
+
+                  )
+
+
                   team_name = (
 
                       team.get(
-
                           "strTeam"
-
                       )
 
                       or ""
@@ -457,15 +587,11 @@ jobs:
                   team_badge = (
 
                       team.get(
-
                           "strTeamBadge"
-
                       )
 
                       or team.get(
-
                           "strTeamLogo"
-
                       )
 
                       or ""
@@ -473,32 +599,34 @@ jobs:
                   )
 
 
-                  if not team_name:
+                  if not team_id:
 
                       continue
 
 
-                  team_folder = clean_filename(
+                  if not team_name:
 
-                      team_name
-
-                  )
+                      continue
 
 
                   team_records.append(
 
                       {
 
-                          "name":
+                          "id":
+                          str(
+                              team_id
+                          ),
 
+                          "name":
                           team_name,
 
                           "folder":
-
-                          team_folder,
+                          clean_filename(
+                              team_name
+                          ),
 
                           "badge":
-
                           team_badge
 
                       }
@@ -509,7 +637,6 @@ jobs:
               print(
 
                   f"Teams found: "
-
                   f"{len(team_records)}"
 
               )
@@ -519,6 +646,7 @@ jobs:
 
 
               for team in team_records:
+
 
                   team_folder_path = os.path.join(
 
@@ -549,6 +677,9 @@ jobs:
                   )
 
 
+                  individual_logo = None
+
+
                   if os.path.exists(
 
                       individual_logo_path
@@ -568,66 +699,58 @@ jobs:
                           )
 
 
-                          loaded_teams.append(
-
-                              (
-
-                                  team,
-
-                                  individual_logo
-
-                              )
-
-                          )
-
-
                           print(
 
                               f"Existing logo: "
-
                               f"{team['name']}"
 
                           )
 
 
-                          continue
-
-
                       except Exception:
 
-                          pass
-
-
-                  print(
-
-                      f"Downloading logo: "
-
-                      f"{team['name']}"
-
-                  )
-
-
-                  individual_logo = download_image(
-
-                      team["badge"]
-
-                  )
+                          individual_logo = None
 
 
                   if individual_logo is None:
 
-                      failed_images += 1
 
-                      continue
+                      print(
+
+                          f"Downloading logo: "
+                          f"{team['name']}"
+
+                      )
 
 
-                  individual_logo.save(
+                      individual_logo = download_image(
 
-                      individual_logo_path,
+                          team["badge"]
 
-                      "PNG"
+                      )
 
-                  )
+
+                      if individual_logo is None:
+
+                          failed_images += 1
+
+                          continue
+
+
+                      individual_logo.save(
+
+                          individual_logo_path,
+
+                          "PNG"
+
+                      )
+
+
+                      time.sleep(
+
+                          2
+
+                      )
 
 
                   loaded_teams.append(
@@ -643,13 +766,6 @@ jobs:
                   )
 
 
-                  time.sleep(
-
-                      0.25
-
-                  )
-
-
               total_teams += len(
 
                   loaded_teams
@@ -657,83 +773,264 @@ jobs:
               )
 
 
-              for away_team, away_logo in loaded_teams:
+              team_lookup = {
 
-                  for home_team, home_logo in loaded_teams:
+                  team["id"]:
+                  (
 
-                      if away_team["folder"] == home_team["folder"]:
+                      team,
 
-                          continue
+                      logo
 
+                  )
 
-                      matchup_filename = (
+                  for team, logo
 
-                          f"{away_team['folder']}"
+                  in loaded_teams
 
-                          f"_vs_"
-
-                          f"{home_team['folder']}"
-
-                          f".png"
-
-                      )
+              }
 
 
-                      matchup_path = os.path.join(
+              print(
 
-                          OUTPUT_ROOT,
+                  "Reading past and upcoming "
+                  "team schedules..."
 
-                          folder_name,
-
-                          away_team["folder"],
-
-                          matchup_filename
-
-                      )
+              )
 
 
-                      if os.path.exists(
-
-                          matchup_path
-
-                      ):
-
-                          skipped_existing += 1
-
-                          continue
+              matchup_pairs = set()
 
 
-                      matchup_logo = create_matchup_logo(
-
-                          away_logo,
-
-                          home_logo
-
-                      )
+              for team, logo in loaded_teams:
 
 
-                      matchup_logo.save(
-
-                          matchup_path,
-
-                          "PNG"
-
-                      )
+                  team_id = team["id"]
 
 
-                      total_matchups += 1
+                  upcoming_events = get_team_schedule(
 
+                      team_id,
 
-                  print(
-
-                      f"Created matchups for "
-
-                      f"{away_team['name']}"
+                      "eventsnext.php"
 
                   )
 
 
+                  time.sleep(
+
+                      2
+
+                  )
+
+
+                  previous_events = get_team_schedule(
+
+                      team_id,
+
+                      "eventslast.php"
+
+                  )
+
+
+                  time.sleep(
+
+                      2
+
+                  )
+
+
+                  events = (
+
+                      upcoming_events
+
+                      +
+
+                      previous_events
+
+                  )
+
+
+                  schedule_events += len(
+
+                      events
+
+                  )
+
+
+                  for event in events:
+
+
+                      home_id = str(
+
+                          event.get(
+
+                              "idHomeTeam",
+
+                              ""
+
+                          )
+
+                      )
+
+
+                      away_id = str(
+
+                          event.get(
+
+                              "idAwayTeam",
+
+                              ""
+
+                          )
+
+                      )
+
+
+                      if not home_id:
+
+                          continue
+
+
+                      if not away_id:
+
+                          continue
+
+
+                      if home_id == away_id:
+
+                          continue
+
+
+                      if home_id not in team_lookup:
+
+                          continue
+
+
+                      if away_id not in team_lookup:
+
+                          continue
+
+
+                      matchup_pairs.add(
+
+                          (
+
+                              away_id,
+
+                              home_id
+
+                          )
+
+                      )
+
+
+              print(
+
+                  f"Schedule matchups found: "
+                  f"{len(matchup_pairs)}"
+
+              )
+
+
+              for away_id, home_id in sorted(
+
+                  matchup_pairs
+
+              ):
+
+
+                  away_team, away_logo = team_lookup[
+
+                      away_id
+
+                  ]
+
+
+                  home_team, home_logo = team_lookup[
+
+                      home_id
+
+                  ]
+
+
+                  matchup_filename = (
+
+                      f"{away_team['folder']}"
+
+                      f"_vs_"
+
+                      f"{home_team['folder']}"
+
+                      f".png"
+
+                  )
+
+
+                  matchup_path = os.path.join(
+
+                      OUTPUT_ROOT,
+
+                      folder_name,
+
+                      away_team["folder"],
+
+                      matchup_filename
+
+                  )
+
+
+                  if os.path.exists(
+
+                      matchup_path
+
+                  ):
+
+                      skipped_existing += 1
+
+                      continue
+
+
+                  matchup_logo = create_matchup_logo(
+
+                      away_logo,
+
+                      home_logo
+
+                  )
+
+
+                  matchup_logo.save(
+
+                      matchup_path,
+
+                      "PNG"
+
+                  )
+
+
+                  total_matchups += 1
+
+
+                  print(
+
+                      f"Created: "
+                      f"{folder_name}/"
+                      f"{away_team['folder']}/"
+                      f"{matchup_filename}"
+
+                  )
+
+
+              print(
+
+                  f"Finished {folder_name}"
+
+              )
+
+
           print()
+
 
           print(
 
@@ -741,11 +1038,13 @@ jobs:
 
           )
 
+
           print(
 
               "SPORTS LOGO BUILD COMPLETE"
 
           )
+
 
           print(
 
@@ -757,7 +1056,6 @@ jobs:
           print(
 
               f"Teams stored: "
-
               f"{total_teams}"
 
           )
@@ -765,8 +1063,15 @@ jobs:
 
           print(
 
-              f"New matchup logos created: "
+              f"Schedule events checked: "
+              f"{schedule_events}"
 
+          )
+
+
+          print(
+
+              f"New matchup logos created: "
               f"{total_matchups}"
 
           )
@@ -775,7 +1080,6 @@ jobs:
           print(
 
               f"Existing matchup logos skipped: "
-
               f"{skipped_existing}"
 
           )
@@ -784,25 +1088,34 @@ jobs:
           print(
 
               f"Failed images: "
-
               f"{failed_images}"
 
           )
 
           PY
 
+
       - name: Commit and push sports logos
         run: |
+
           git config --global user.name "github-actions"
+
           git config --global user.email "github-actions@github.com"
+
 
           git add sports-logos/
 
+
           if git diff --cached --quiet; then
+
             echo "No new sports logos to commit"
+
             exit 0
+
           fi
 
+
           git commit -m "Build sports logo library"
+
 
           git push
