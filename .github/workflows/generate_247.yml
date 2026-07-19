@@ -89,7 +89,7 @@ jobs:
 
         run: |
 
-          python generate_247.py
+          python config/generate_247.py
 
 
       - name: Commit and push guide
