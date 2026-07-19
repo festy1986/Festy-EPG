@@ -546,7 +546,7 @@ jobs:
 
           function cleanPackedDescription(value) {
             return cleanSpaces(value)
-              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
               .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.??\s*$/i, ' ($1)')
               .trim()
           }
@@ -616,7 +616,7 @@ jobs:
         run: |
           cd epg
 
-          rm -f ../guides/OTALocalsguide.xml
+          rm -f ../guides/OTALocalsguide.build.xml
           rm -f ../guides/OTALocalsguide.pass*.xml
           rm -f ../guides/OTALocalsguide.pass*.log
           rm -f ../guides/OTALocalsguide.pass*.count
@@ -760,7 +760,7 @@ jobs:
           echo "Best possible issues: $BEST_ISSUES"
           echo "============================================================"
 
-          cp "../guides/OTALocalsguide.${BEST_PASS}.xml" "../guides/OTALocalsguide.xml"
+          cp "../guides/OTALocalsguide.${BEST_PASS}.xml" "../guides/OTALocalsguide.build.xml"
 
           echo ""
           echo "Pass summary:"
@@ -780,7 +780,7 @@ jobs:
           node <<'EOF'
           const fs = require('fs')
 
-          const guidePath = 'guides/OTALocalsguide.xml'
+          const guidePath = 'guides/OTALocalsguide.build.xml'
           const cachePath = 'guides/.tvmaze-ota-cache.json'
 
           if (!fs.existsSync(guidePath)) {
@@ -1109,8 +1109,6 @@ jobs:
             return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
           }
 
-
-
           function shouldSuppressTvmazeDisplayDate(block, airdate) {
             if (!airdate) return false
 
@@ -1138,6 +1136,7 @@ jobs:
             // and similar listings, suppress dates when TVMaze only found the current airing date.
             return Math.abs(scheduleDate.getTime() - parsedAirDate.getTime()) / 86400000 <= 45
           }
+
           function cleanPackedTvmazeDescription(value) {
             return String(value || '')
               .replace(/\s+/g, ' ')
@@ -1385,9 +1384,9 @@ jobs:
 
       - name: Validate OTA output
         run: |
-          CH=$(grep -c '<channel ' guides/OTALocalsguide.xml || true)
-          PR=$(grep -c '<programme ' guides/OTALocalsguide.xml || true)
-          DESC=$(grep -c '<desc ' guides/OTALocalsguide.xml || true)
+          CH=$(grep -c '<channel ' guides/OTALocalsguide.build.xml || true)
+          PR=$(grep -c '<programme ' guides/OTALocalsguide.build.xml || true)
+          DESC=$(grep -c '<desc ' guides/OTALocalsguide.build.xml || true)
 
           echo "OTA channels: $CH"
           echo "OTA programmes: $PR"
@@ -1408,15 +1407,13 @@ jobs:
             exit 1
           fi
 
-
-
       - name: Inject RAW OTA logos into generated guide
         run: |
           node <<'EOF'
           const fs = require('fs')
 
           const rawPath = 'guides/OTALocalsguide.raw.xml'
-          const guidePath = 'guides/OTALocalsguide.xml'
+          const guidePath = 'guides/OTALocalsguide.build.xml'
 
           if (!fs.existsSync(rawPath)) {
             console.error(`Missing RAW OTA source: ${rawPath}`)
@@ -1567,7 +1564,11 @@ jobs:
 
       - name: Compress OTA guide
         run: |
-          gzip -c guides/OTALocalsguide.xml > guides/OTALocalsguide.xml.gz
+          gzip -c guides/OTALocalsguide.build.xml > guides/OTALocalsguide.xml.gz
+          rm -f guides/OTALocalsguide.build.xml
+          rm -f guides/OTALocalsguide.pass*.xml
+          rm -f guides/OTALocalsguide.pass*.log
+          rm -f guides/OTALocalsguide.pass*.count
 
       - name: Commit OTA guide safely
         run: |
@@ -1577,10 +1578,10 @@ jobs:
           git fetch origin main
 
           # Preserve compressed guides created by the other workflows.
-          # This workflow should only update its own XML/GZ output.
+          # This workflow should only update its own GZ output.
           git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
-          git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
+          git add guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
           git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -1605,7 +1606,7 @@ jobs:
 
             git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
-            git add guides/OTALocalsguide.xml guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
+            git add guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
             git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
