@@ -12,6 +12,7 @@ import time
 
 CHANNEL_FILE = "config/sports_channels.txt"
 OUTPUT_FILE = "guides/sports.xml"
+SPORTS_LOGO_ROOT = "sports-logos"
 
 
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
@@ -24,6 +25,7 @@ PASSWORD = os.environ["XTREAM_PASSWORD"]
 # --------------------------------------------------
 
 if XTREAM_URL.startswith("https://"):
+
     XTREAM_URL = XTREAM_URL.replace(
         "https://",
         "http://",
@@ -32,6 +34,7 @@ if XTREAM_URL.startswith("https://"):
 
 
 if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
+
     XTREAM_URL += ":80"
 
 
@@ -66,6 +69,9 @@ verified_public_times_used = 0
 provider_fallbacks = 0
 no_public_match = 0
 
+logos_found = 0
+logos_missing = 0
+
 
 # --------------------------------------------------
 # Text cleanup
@@ -74,6 +80,7 @@ no_public_match = 0
 def clean_text(text):
 
     if not text:
+
         return ""
 
 
@@ -129,6 +136,7 @@ def format_time(dt):
 def normalize_matchup(text):
 
     if not text:
+
         return ""
 
 
@@ -203,9 +211,13 @@ def clean_channel_name(name):
 
 
         suffix = (
+
             "AM"
+
             if hour < 12
+
             else "PM"
+
         )
 
 
@@ -213,68 +225,104 @@ def clean_channel_name(name):
 
 
         if display_hour == 0:
+
             display_hour = 12
 
 
         return (
+
             f"{display_hour}:"
+
             f"{minute:02d} "
+
             f"{suffix}"
+
         )
 
 
     name = re.sub(
+
         r"\b([01]?\d|2[0-3]):([0-5]\d)\b",
+
         convert_time,
+
         name
+
     )
 
 
     name = re.sub(
+
         r"\s+[xX]\s+",
+
         " vs. ",
+
         name
+
     )
 
 
     name = re.sub(
+
         r"\s+@\s+",
+
         " vs. ",
+
         name
+
     )
 
 
     name = re.sub(
+
         r"\s+vs\s*\.?\s+",
+
         " vs. ",
+
         name,
+
         flags=re.IGNORECASE
+
     )
 
 
     name = re.sub(
+
         r"\s*\|\s*",
+
         " | ",
+
         name
+
     )
 
 
     name = re.sub(
+
         r"\s*;\s*",
+
         " ; ",
+
         name
+
     )
 
 
     name = re.sub(
+
         r"\s+",
+
         " ",
+
         name
+
     )
 
 
     return name.strip(
+
         " -|:;"
+
     )
 
 
@@ -285,6 +333,7 @@ def clean_channel_name(name):
 def remove_event_metadata(text):
 
     if not text:
+
         return ""
 
 
@@ -294,37 +343,57 @@ def remove_event_metadata(text):
 
 
     text = re.split(
+
         r"\bStart\s*:",
+
         text,
+
         maxsplit=1,
+
         flags=re.IGNORECASE
+
     )[0]
 
 
     text = re.split(
+
         r"\bStop\s*:",
+
         text,
+
         maxsplit=1,
+
         flags=re.IGNORECASE
+
     )[0]
 
 
     text = re.sub(
+
         r"\s*\|\s*$",
+
         "",
+
         text
+
     )
 
 
     text = re.sub(
+
         r"\s*;\s*$",
+
         "",
+
         text
+
     )
 
 
     return normalize_matchup(
+
         text
+
     )
 
 
@@ -335,6 +404,7 @@ def remove_event_metadata(text):
 def extract_start_datetime(text):
 
     if not text:
+
         return None
 
 
@@ -365,13 +435,18 @@ def extract_start_datetime(text):
     for pattern in patterns:
 
         match = re.search(
+
             pattern,
+
             text,
+
             flags=re.IGNORECASE
+
         )
 
 
         if not match:
+
             continue
 
 
@@ -387,17 +462,19 @@ def extract_start_datetime(text):
 
         if len(time_part) == 5:
 
-            time_part += (
-                ":00"
-            )
+            time_part += ":00"
 
 
         try:
 
             return datetime.strptime(
+
                 f"{date_part} "
+
                 f"{time_part}",
+
                 "%Y-%m-%d %H:%M:%S"
+
             )
 
 
@@ -416,15 +493,22 @@ def extract_start_datetime(text):
 def get_server_timezone():
 
     url = (
+
         f"{XTREAM_URL}/player_api.php"
+
         f"?username={USERNAME}"
+
         f"&password={PASSWORD}"
+
     )
 
 
     response = session.get(
+
         url,
+
         timeout=60
+
     )
 
 
@@ -435,25 +519,34 @@ def get_server_timezone():
 
 
     server_info = data.get(
+
         "server_info",
+
         {}
+
     )
 
 
     timezone_name = server_info.get(
+
         "timezone"
+
     )
 
 
     if not timezone_name:
 
         print(
+
             "Provider did not return a timezone."
+
         )
 
 
         print(
+
             "Using UTC."
+
         )
 
 
@@ -461,8 +554,11 @@ def get_server_timezone():
 
 
     print(
+
         f"Provider timezone: "
+
         f"{timezone_name}"
+
     )
 
 
@@ -474,31 +570,42 @@ def get_server_timezone():
 # --------------------------------------------------
 
 def convert_to_eastern(
+
     naive_datetime,
+
     provider_timezone
+
 ):
 
     if not naive_datetime:
+
         return None
 
 
     try:
 
         source_zone = ZoneInfo(
+
             provider_timezone
+
         )
 
 
     except Exception:
 
         print(
+
             f"Invalid provider timezone: "
+
             f"{provider_timezone}"
+
         )
 
 
         print(
+
             "Falling back to UTC."
+
         )
 
 
@@ -506,20 +613,27 @@ def convert_to_eastern(
 
 
     eastern_zone = ZoneInfo(
+
         "America/New_York"
+
     )
 
 
     source_datetime = (
-        naive_datetime
-        .replace(
+
+        naive_datetime.replace(
+
             tzinfo=source_zone
+
         )
+
     )
 
 
     return source_datetime.astimezone(
+
         eastern_zone
+
     )
 
 
@@ -531,9 +645,13 @@ wanted = {}
 
 
 with open(
+
     CHANNEL_FILE,
+
     "r",
+
     encoding="utf-8"
+
 ) as f:
 
     for line in f:
@@ -542,16 +660,21 @@ with open(
 
 
         if not line:
+
             continue
 
 
         parts = [
+
             x.strip()
+
             for x in line.split("|")
+
         ]
 
 
         if len(parts) < 2:
+
             continue
 
 
@@ -559,7 +682,9 @@ with open(
 
 
         display_name = " ".join(
+
             parts[1:]
+
         )
 
 
@@ -567,8 +692,11 @@ with open(
 
 
 print(
+
     f"Requested channels: "
+
     f"{len(wanted)}"
+
 )
 
 
@@ -577,7 +705,9 @@ print(
 # --------------------------------------------------
 
 provider_timezone = (
+
     get_server_timezone()
+
 )
 
 
@@ -586,15 +716,22 @@ provider_timezone = (
 # --------------------------------------------------
 
 print(
+
     "Downloading provider channels..."
+
 )
 
 
 url = (
+
     f"{XTREAM_URL}/player_api.php"
+
     f"?username={USERNAME}"
+
     f"&password={PASSWORD}"
+
     f"&action=get_live_streams"
+
 )
 
 
@@ -602,21 +739,30 @@ streams = None
 
 
 for attempt in range(
+
     1,
+
     6
+
 ):
 
     try:
 
         print(
+
             f"Downloading provider channels "
+
             f"(attempt {attempt}/5)..."
+
         )
 
 
         response = session.get(
+
             url,
+
             timeout=(30, 600)
+
         )
 
 
@@ -632,37 +778,50 @@ for attempt in range(
     except Exception as e:
 
         print(
+
             "Download failed:"
+
         )
 
 
         print(
+
             e
+
         )
 
 
         if attempt < 5:
 
             time.sleep(
+
                 10
+
             )
 
 
 if streams is None:
 
     print(
+
         "Unable to download provider channels."
+
     )
 
 
     raise SystemExit(
+
         1
+
     )
 
 
 print(
+
     f"Provider channels: "
+
     f"{len(streams)}"
+
 )
 
 
@@ -672,9 +831,13 @@ provider = {}
 for stream in streams:
 
     stream_id = str(
+
         stream.get(
+
             "stream_id"
+
         )
+
     )
 
 
@@ -688,20 +851,30 @@ for stream in streams:
 def get_epg(stream_id):
 
     epg_url = (
+
         f"{XTREAM_URL}/player_api.php"
+
         f"?username={USERNAME}"
+
         f"&password={PASSWORD}"
+
         f"&action=get_short_epg"
+
         f"&stream_id={stream_id}"
+
         f"&limit=5"
+
     )
 
 
     try:
 
         response = session.get(
+
             epg_url,
+
             timeout=30
+
         )
 
 
@@ -714,8 +887,11 @@ def get_epg(stream_id):
 
 
         listings = data.get(
+
             "epg_listings",
+
             []
+
         )
 
 
@@ -739,15 +915,22 @@ def get_epg(stream_id):
 def matchup_parts(text):
 
     text = remove_event_metadata(
+
         text
+
     )
 
 
     parts = re.split(
+
         r"\s+vs\.\s+",
+
         text,
+
         maxsplit=1,
+
         flags=re.IGNORECASE
+
     )
 
 
@@ -772,33 +955,53 @@ def matchup_parts(text):
 def normalize_team_name(text):
 
     text = clean_text(
+
         text
+
     ).lower()
 
 
     text = re.sub(
+
         r"[^a-z0-9 ]",
+
         " ",
+
         text
+
     )
 
 
     stop_words = {
 
         "live",
+
         "hd",
+
         "sd",
+
         "fhd",
+
         "4k",
+
         "channel",
+
         "tv",
+
         "network",
+
         "sports",
+
         "sport",
+
         "event",
+
         "game",
+
         "match",
+
         "today",
+
         "tomorrow"
 
     }
@@ -816,7 +1019,9 @@ def normalize_team_name(text):
 
 
     return " ".join(
+
         words
+
     )
 
 
@@ -825,17 +1030,24 @@ def normalize_team_name(text):
 # --------------------------------------------------
 
 def team_matches(
+
     wanted_team,
+
     actual_team
+
 ):
 
     wanted_team = normalize_team_name(
+
         wanted_team
+
     )
 
 
     actual_team = normalize_team_name(
+
         actual_team
+
     )
 
 
@@ -845,32 +1057,308 @@ def team_matches(
 
 
     if (
+
         wanted_team in actual_team
+
         or actual_team in wanted_team
+
     ):
 
         return True
 
 
     wanted_words = set(
+
         wanted_team.split()
+
     )
 
 
     actual_words = set(
+
         actual_team.split()
+
     )
+
+
+    # The provider may use a nickname such as:
+    #
+    # Red Sox
+    #
+    # while the API uses:
+    #
+    # Boston Red Sox
+    #
+    # Require the meaningful provider words
+    # to appear in the full API team name.
+
+    if wanted_words.issubset(
+
+        actual_words
+
+    ):
+
+        return True
+
+
+    # Also allow a meaningful shared team
+    # word when the provider name is short.
+
+    shared_words = (
+
+        wanted_words
+
+        &
+
+        actual_words
+
+    )
+
+
+    meaningful_words = {
+
+        word
+
+        for word in wanted_words
+
+        if len(word) >= 4
+
+    }
 
 
     return bool(
-        wanted_words
-        and actual_words
-        and (
-            wanted_words
-            &
-            actual_words
+
+        meaningful_words
+
+        and
+
+        shared_words
+
+        and
+
+        meaningful_words.issubset(
+
+            shared_words
+
         )
+
     )
+
+
+# --------------------------------------------------
+# Create safe logo filename
+# --------------------------------------------------
+
+def clean_logo_filename(text):
+
+    text = clean_text(
+
+        text
+
+    )
+
+
+    text = re.sub(
+
+        r"[^A-Za-z0-9]+",
+
+        "_",
+
+        text
+
+    )
+
+
+    text = re.sub(
+
+        r"_+",
+
+        "_",
+
+        text
+
+    )
+
+
+    return text.strip(
+
+        "_"
+
+    )
+
+
+# --------------------------------------------------
+# Find matchup logo
+# --------------------------------------------------
+
+def find_matchup_logo(
+
+    public_event
+
+):
+
+    global logos_found
+
+    global logos_missing
+
+
+    if not public_event:
+
+        return None
+
+
+    league = clean_text(
+
+        public_event.get(
+
+            "league",
+
+            ""
+
+        )
+
+    )
+
+
+    away = clean_text(
+
+        public_event.get(
+
+            "away",
+
+            ""
+
+        )
+
+    )
+
+
+    home = clean_text(
+
+        public_event.get(
+
+            "home",
+
+            ""
+
+        )
+
+    )
+
+
+    if not league or not away or not home:
+
+        logos_missing += 1
+
+        return None
+
+
+    league_map = {
+
+        "Major League Baseball":
+
+        "MLB",
+
+        "National Basketball Association":
+
+        "NBA",
+
+        "National Football League":
+
+        "NFL",
+
+        "National Hockey League":
+
+        "NHL",
+
+        "MLB":
+
+        "MLB",
+
+        "NBA":
+
+        "NBA",
+
+        "NFL":
+
+        "NFL",
+
+        "NHL":
+
+        "NHL"
+
+    }
+
+
+    league_folder = league_map.get(
+
+        league
+
+    )
+
+
+    if not league_folder:
+
+        logos_missing += 1
+
+        return None
+
+
+    away_folder = clean_logo_filename(
+
+        away
+
+    )
+
+
+    home_folder = clean_logo_filename(
+
+        home
+
+    )
+
+
+    filename = (
+
+        f"{away_folder}"
+
+        f"_vs_"
+
+        f"{home_folder}"
+
+        f".png"
+
+    )
+
+
+    relative_path = os.path.join(
+
+        SPORTS_LOGO_ROOT,
+
+        league_folder,
+
+        away_folder,
+
+        filename
+
+    )
+
+
+    if not os.path.exists(
+
+        relative_path
+
+    ):
+
+        logos_missing += 1
+
+        return None
+
+
+    logos_found += 1
+
+
+    return relative_path
 
 
 # --------------------------------------------------
@@ -878,7 +1366,9 @@ def team_matches(
 # --------------------------------------------------
 
 def get_public_events(
+
     date_value
+
 ):
 
     global public_api_lookups
@@ -888,25 +1378,37 @@ def get_public_events(
 
 
     date_text = date_value.strftime(
+
         "%Y-%m-%d"
+
     )
 
 
     url = (
+
         "https://www.thesportsdb.com/"
+
         "api/v1/json/123/eventsday.php"
+
     )
 
 
     try:
 
         response = session.get(
+
             url,
+
             params={
+
                 "d":
+
                 date_text
+
             },
+
             timeout=30
+
         )
 
 
@@ -919,20 +1421,27 @@ def get_public_events(
 
 
         return data.get(
+
             "events",
+
             []
+
         ) or []
 
 
     except Exception as e:
 
         print(
+
             "Public schedule lookup failed:"
+
         )
 
 
         print(
+
             e
+
         )
 
 
@@ -944,15 +1453,20 @@ def get_public_events(
 # --------------------------------------------------
 
 def find_public_event(
+
     provider_matchup,
+
     preferred_date
+
 ):
 
     global public_api_matches
 
 
     parts = matchup_parts(
+
         provider_matchup
+
     )
 
 
@@ -965,19 +1479,22 @@ def find_public_event(
 
         preferred_date,
 
-        preferred_date
-        - timedelta(
+        preferred_date - timedelta(
+
             days=1
+
         ),
 
-        preferred_date
-        + timedelta(
+        preferred_date + timedelta(
+
             days=1
+
         ),
 
-        preferred_date
-        + timedelta(
+        preferred_date + timedelta(
+
             days=2
+
         )
 
     ]
@@ -986,25 +1503,37 @@ def find_public_event(
     for date_value in search_dates:
 
         events = get_public_events(
+
             date_value
+
         )
 
 
         for event in events:
 
             home_team = clean_text(
+
                 event.get(
+
                     "strHomeTeam",
+
                     ""
+
                 )
+
             )
 
 
             away_team = clean_text(
+
                 event.get(
+
                     "strAwayTeam",
+
                     ""
+
                 )
+
             )
 
 
@@ -1016,15 +1545,21 @@ def find_public_event(
             direct_match = (
 
                 team_matches(
+
                     parts[0],
-                    home_team
+
+                    away_team
+
                 )
 
                 and
 
                 team_matches(
+
                     parts[1],
-                    away_team
+
+                    home_team
+
                 )
 
             )
@@ -1033,15 +1568,21 @@ def find_public_event(
             reverse_match = (
 
                 team_matches(
+
                     parts[0],
-                    away_team
+
+                    home_team
+
                 )
 
                 and
 
                 team_matches(
+
                     parts[1],
-                    home_team
+
+                    away_team
+
                 )
 
             )
@@ -1052,17 +1593,17 @@ def find_public_event(
                 continue
 
 
-            event_date = (
-                event.get(
-                    "dateEvent"
-                )
+            event_date = event.get(
+
+                "dateEvent"
+
             )
 
 
-            event_time = (
-                event.get(
-                    "strTime"
-                )
+            event_time = event.get(
+
+                "strTime"
+
             )
 
 
@@ -1074,9 +1615,13 @@ def find_public_event(
             try:
 
                 event_datetime = datetime.strptime(
+
                     f"{event_date} "
+
                     f"{event_time}",
+
                     "%Y-%m-%d %H:%M:%S"
+
                 )
 
 
@@ -1085,14 +1630,29 @@ def find_public_event(
                 continue
 
 
+            # TheSportsDB event times are treated
+            # as UTC before conversion to Eastern.
+
             event_datetime = (
-                event_datetime.replace(
+
+                event_datetime
+
+                .replace(
+
                     tzinfo=timezone.utc
-                ).astimezone(
-                    ZoneInfo(
-                        "America/New_York"
-                    )
+
                 )
+
+                .astimezone(
+
+                    ZoneInfo(
+
+                        "America/New_York"
+
+                    )
+
+                )
+
             )
 
 
@@ -1102,12 +1662,29 @@ def find_public_event(
             return {
 
                 "away":
+
                 away_team,
 
                 "home":
+
                 home_team,
 
+                "league":
+
+                clean_text(
+
+                    event.get(
+
+                        "strLeague",
+
+                        ""
+
+                    )
+
+                ),
+
                 "datetime":
+
                 event_datetime
 
             }
@@ -1117,84 +1694,53 @@ def find_public_event(
 
 
 # --------------------------------------------------
-# Day label
-# --------------------------------------------------
-
-def get_day_label(
-    event_datetime
-):
-
-    eastern_now = datetime.now(
-        ZoneInfo(
-            "America/New_York"
-        )
-    )
-
-
-    event_date = (
-        event_datetime.date()
-    )
-
-
-    today = (
-        eastern_now.date()
-    )
-
-
-    tomorrow = (
-        today
-        + timedelta(
-            days=1
-        )
-    )
-
-
-    if event_date == today:
-
-        return "Today"
-
-
-    if event_date == tomorrow:
-
-        return "Tomorrow"
-
-
-    return event_datetime.strftime(
-        "%A"
-    )
-
-
-# --------------------------------------------------
 # Build event information
 # --------------------------------------------------
 
 def build_event_info(
+
     stream,
+
     epg
+
 ):
 
     global verified_public_times_used
+
     global provider_fallbacks
+
     global no_public_match
 
 
     provider_name = clean_text(
+
         stream.get(
+
             "name",
+
             ""
+
         )
+
     )
 
+
+    # This is used only as the event source.
+
+    # The original provider channel name
+    # remains untouched in the XMLTV channel.
 
     provider_event = remove_event_metadata(
+
         provider_name
+
     )
 
 
-    provider_start = (
-        extract_start_datetime(
-            provider_name
-        )
+    provider_start = extract_start_datetime(
+
+        provider_name
+
     )
 
 
@@ -1204,56 +1750,17 @@ def build_event_info(
     if provider_start:
 
         provider_start_eastern = (
+
             convert_to_eastern(
+
                 provider_start,
+
                 provider_timezone
+
             )
+
         )
 
-
-    # --------------------------------------------------
-    # Skip real provider EPG information
-    # --------------------------------------------------
-
-    if epg:
-
-        epg_title = clean_text(
-            epg.get(
-                "title",
-                ""
-            )
-        )
-
-
-        epg_description = clean_text(
-            epg.get(
-                "description",
-                ""
-            )
-        )
-
-
-        if epg_title or epg_description:
-
-            return (
-
-                epg_title
-                or provider_name,
-
-                epg_description
-                or epg_title
-                or provider_name,
-
-                provider_start_eastern,
-
-                True
-
-            )
-
-
-    # --------------------------------------------------
-    # Use channel name as event source
-    # --------------------------------------------------
 
     preferred_date = (
 
@@ -1262,17 +1769,28 @@ def build_event_info(
         if provider_start_eastern
 
         else datetime.now(
+
             ZoneInfo(
+
                 "America/New_York"
+
             )
+
         ).date()
 
     )
 
 
+    # --------------------------------------------------
+    # Find official public event
+    # --------------------------------------------------
+
     public_event = find_public_event(
+
         provider_event,
+
         preferred_date
+
     )
 
 
@@ -1282,30 +1800,42 @@ def build_event_info(
 
 
         away = public_event[
+
             "away"
+
         ]
 
 
         home = public_event[
+
             "home"
+
         ]
 
 
         event_datetime = public_event[
+
             "datetime"
+
         ]
 
 
         matchup = (
 
-            f"{away} vs. {home}"
+            f"{away}"
+
+            f" vs. "
+
+            f"{home}"
 
         )
 
 
         title_text = (
 
-            f"{matchup} "
+            f"{matchup}"
+
+            f" "
 
             f"({format_time(event_datetime)})"
 
@@ -1313,16 +1843,24 @@ def build_event_info(
 
 
         date_text = (
+
             event_datetime.strftime(
+
                 "%m/%d/%Y"
+
             )
+
         )
 
 
         day_text = (
+
             event_datetime.strftime(
+
                 "%A"
+
             )
+
         )
 
 
@@ -1339,6 +1877,13 @@ def build_event_info(
         )
 
 
+        logo_path = find_matchup_logo(
+
+            public_event
+
+        )
+
+
         return (
 
             title_text,
@@ -1346,6 +1891,8 @@ def build_event_info(
             description_text,
 
             event_datetime,
+
+            logo_path,
 
             False
 
@@ -1364,7 +1911,7 @@ def build_event_info(
         provider_fallbacks += 1
 
 
-    cleaned_title = (
+    cleaned_provider_event = (
 
         provider_event
 
@@ -1375,35 +1922,48 @@ def build_event_info(
 
         cleaned_title = (
 
-            f"{cleaned_title} "
+            f"{cleaned_provider_event}"
+
+            f" "
 
             f"({format_time(
+
                 provider_start_eastern
+
             )})"
 
         )
 
 
-    if provider_start_eastern:
-
         cleaned_description = (
 
-            f"{provider_event}\n"
+            f"{cleaned_provider_event}\n"
 
             f"{provider_start_eastern.strftime('%A')} "
 
             f"{provider_start_eastern.strftime('%m/%d/%Y')} - "
 
-            f"{format_time(provider_start_eastern)}"
+            f"{format_time(
+
+                provider_start_eastern
+
+            )}"
 
         )
 
 
     else:
 
+        cleaned_title = (
+
+            cleaned_provider_event
+
+        )
+
+
         cleaned_description = (
 
-            provider_event
+            cleaned_provider_event
 
         )
 
@@ -1416,6 +1976,8 @@ def build_event_info(
 
         provider_start_eastern,
 
+        None,
+
         False
 
     )
@@ -1426,11 +1988,17 @@ def build_event_info(
 # --------------------------------------------------
 
 tv = ET.Element(
+
     "tv",
+
     {
+
         "generator-info-name":
+
         "Festy Sports Guide"
+
     }
+
 )
 
 
@@ -1438,25 +2006,49 @@ tv = ET.Element(
 # Calculate guide period
 # --------------------------------------------------
 
-guide_start = datetime.now(
-    timezone.utc
-).astimezone(
-    ZoneInfo(
-        "America/New_York"
+guide_start = (
+
+    datetime.now(
+
+        timezone.utc
+
     )
-).replace(
-    hour=0,
-    minute=0,
-    second=0,
-    microsecond=0
+
+    .astimezone(
+
+        ZoneInfo(
+
+            "America/New_York"
+
+        )
+
+    )
+
+    .replace(
+
+        hour=0,
+
+        minute=0,
+
+        second=0,
+
+        microsecond=0
+
+    )
+
 )
 
 
 guide_end = (
+
     guide_start
+
     + timedelta(
+
         days=3
+
     )
+
 )
 
 
@@ -1465,7 +2057,9 @@ guide_end = (
 # --------------------------------------------------
 
 print(
+
     "Creating XMLTV channels..."
+
 )
 
 
@@ -1483,31 +2077,52 @@ for channel_id, requested_name in wanted.items():
 
 
     stream = provider[
+
         channel_id
+
     ]
 
 
-    provider_name = clean_channel_name(
-        stream.get(
-            "name",
-            requested_name
-        )
+    # IMPORTANT:
+    #
+    # This is the original channel name.
+    #
+    # It is not changed into a matchup name.
+    # It is not cleaned for the programme output.
+    # It remains the channel's display name.
+
+    provider_name = stream.get(
+
+        "name",
+
+        requested_name
+
     )
 
 
     channel = ET.SubElement(
+
         tv,
+
         "channel",
+
         {
+
             "id":
+
             channel_id
+
         }
+
     )
 
 
     display = ET.SubElement(
+
         channel,
+
         "display-name"
+
     )
 
 
@@ -1519,7 +2134,9 @@ for channel_id, requested_name in wanted.items():
 # --------------------------------------------------
 
 print(
+
     "Creating 6-hour programme blocks..."
+
 )
 
 
@@ -1531,32 +2148,44 @@ for channel_id, requested_name in wanted.items():
 
 
     stream = provider[
+
         channel_id
+
     ]
 
 
     print(
+
         f"Processing {channel_id}"
+
     )
 
 
     epg = get_epg(
+
         channel_id
+
     )
 
 
     (
+
         title_text,
 
         description_text,
 
         event_time,
 
+        logo_path,
+
         has_real_epg
 
     ) = build_event_info(
+
         stream,
+
         epg
+
     )
 
 
@@ -1570,7 +2199,9 @@ for channel_id, requested_name in wanted.items():
             current_start
 
             + timedelta(
+
                 hours=6
+
             )
 
         )
@@ -1582,35 +2213,44 @@ for channel_id, requested_name in wanted.items():
 
 
         programme = ET.SubElement(
+
             tv,
+
             "programme",
+
             {
 
                 "start":
 
                 current_start.strftime(
-                    "%Y%m%d%H%M%S %z"
-                ),
 
+                    "%Y%m%d%H%M%S %z"
+
+                ),
 
                 "stop":
 
                 current_stop.strftime(
-                    "%Y%m%d%H%M%S %z"
-                ),
 
+                    "%Y%m%d%H%M%S %z"
+
+                ),
 
                 "channel":
 
                 channel_id
 
             }
+
         )
 
 
         title = ET.SubElement(
+
             programme,
+
             "title"
+
         )
 
 
@@ -1618,16 +2258,45 @@ for channel_id, requested_name in wanted.items():
 
 
         desc = ET.SubElement(
+
             programme,
+
             "desc"
+
         )
 
 
         desc.text = description_text
 
 
+        # --------------------------------------------------
+        # Add matchup logo to the programme
+        # --------------------------------------------------
+
+        if logo_path:
+
+            icon = ET.SubElement(
+
+                programme,
+
+                "icon"
+
+            )
+
+
+            icon.set(
+
+                "src",
+
+                logo_path
+
+            )
+
+
         current_start = (
+
             current_stop
+
         )
 
 
@@ -1636,96 +2305,159 @@ for channel_id, requested_name in wanted.items():
 # --------------------------------------------------
 
 print(
+
     "Writing XMLTV file..."
+
 )
 
 
 tree = ET.ElementTree(
+
     tv
+
 )
 
 
 ET.indent(
+
     tree,
+
     space="  "
+
 )
 
 
 tree.write(
+
     OUTPUT_FILE,
+
     encoding="utf-8",
+
     xml_declaration=True
+
 )
 
 
 print(
+
     ""
+
 )
 
 
 print(
+
     "Created:"
+
 )
 
 
 print(
+
     OUTPUT_FILE
+
 )
 
 
 print(
+
     f"Matched channels: "
+
     f"{matched}"
+
 )
 
 
 print(
+
     "Guide blocks: "
+
     "6 hours each"
+
 )
 
 
 print(
+
     "Guide duration: "
+
     "3 days"
+
 )
 
 
 print(
+
     ""
+
 )
 
 
 print(
+
     "Public API statistics:"
+
 )
 
 
 print(
+
     f"Schedule API lookups: "
+
     f"{public_api_lookups}"
+
 )
 
 
 print(
+
     f"Verified public event matches: "
+
     f"{public_api_matches}"
+
 )
 
 
 print(
+
     f"Verified public times used: "
+
     f"{verified_public_times_used}"
+
 )
 
 
 print(
+
     f"Provider time fallbacks: "
+
     f"{provider_fallbacks}"
+
 )
 
 
 print(
+
     f"No public schedule match: "
+
     f"{no_public_match}"
+
+)
+
+
+print(
+
+    f"Matchup logos found: "
+
+    f"{logos_found}"
+
+)
+
+
+print(
+
+    f"Matchup logos missing: "
+
+    f"{logos_missing}"
+
 )
