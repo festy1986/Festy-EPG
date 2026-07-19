@@ -20,11 +20,6 @@ XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
 
-SPORTSDB_API_KEY = os.environ.get(
-    "SPORTSDB_API_KEY",
-    ""
-).strip()
-
 
 # --------------------------------------------------
 # Normalize Xtream URL
@@ -56,6 +51,7 @@ os.makedirs(
 
 session = requests.Session()
 
+
 session.headers.update(
     {
         "User-Agent": "Mozilla/5.0"
@@ -68,11 +64,15 @@ session.headers.update(
 # --------------------------------------------------
 
 public_api_lookups = 0
+
 public_api_matches = 0
+
 verified_public_times_used = 0
+
 no_public_match = 0
 
 logos_found = 0
+
 logos_missing = 0
 
 team_name_conversions = 0
@@ -756,19 +756,13 @@ def load_canonical_teams():
 
 
             if (
-
                 line.startswith("[")
-
                 and
-
                 line.endswith("]")
-
             ):
 
                 league = line[
-
                     1:-1
-
                 ].strip().upper()
 
 
@@ -858,13 +852,9 @@ def load_canonical_teams():
 
 
                 team_aliases[
-
                     current_league
-
                 ][
-
                     normalized_alias
-
                 ] = official_name
 
 
@@ -899,11 +889,8 @@ def matchup_parts(text):
     match = re.search(
 
         r"(.+?)\s+"
-
         r"(?:vs\.?|v\.?|x|@)"
-
         r"\s+"
-
         r"(.+)",
 
         text,
@@ -916,9 +903,7 @@ def matchup_parts(text):
     if not match:
 
         debug_stats[
-
             "provider_matchup_parts_failed"
-
         ] += 1
 
 
@@ -938,9 +923,7 @@ def matchup_parts(text):
     if not first or not second:
 
         debug_stats[
-
             "provider_matchup_parts_failed"
-
         ] += 1
 
 
@@ -957,7 +940,7 @@ def matchup_parts(text):
 
 
 # --------------------------------------------------
-# Determine league from provider channel name
+# Determine league
 # --------------------------------------------------
 
 def detect_league(text):
@@ -1013,9 +996,7 @@ def canonicalize_team_name(
     if not provider_team:
 
         debug_stats[
-
             "canonical_team_failures"
-
         ] += 1
 
 
@@ -1030,9 +1011,7 @@ def canonicalize_team_name(
     if not normalized_provider:
 
         debug_stats[
-
             "canonical_team_failures"
-
         ] += 1
 
 
@@ -1042,13 +1021,9 @@ def canonicalize_team_name(
     if league_hint in team_aliases:
 
         exact = team_aliases[
-
             league_hint
-
         ].get(
-
             normalized_provider
-
         )
 
 
@@ -1060,9 +1035,7 @@ def canonicalize_team_name(
 
 
             debug_stats[
-
                 "canonical_team_matches"
-
             ] += 1
 
 
@@ -1072,9 +1045,7 @@ def canonicalize_team_name(
     if league_hint in team_aliases:
 
         provider_words = set(
-
             normalized_provider.split()
-
         )
 
 
@@ -1084,15 +1055,11 @@ def canonicalize_team_name(
 
 
         for normalized_alias, official_name in team_aliases[
-
             league_hint
-
         ].items():
 
             alias_words = set(
-
                 normalized_alias.split()
-
             )
 
 
@@ -1101,20 +1068,10 @@ def canonicalize_team_name(
                 continue
 
 
-            if (
-
-                normalized_provider
-
-                in
-
-                normalized_alias
-
-            ):
+            if normalized_provider in normalized_alias:
 
                 score = len(
-
                     normalized_provider
-
                 )
 
 
@@ -1125,20 +1082,10 @@ def canonicalize_team_name(
                     best_match = official_name
 
 
-            elif (
-
-                normalized_alias
-
-                in
-
-                normalized_provider
-
-            ):
+            elif normalized_alias in normalized_provider:
 
                 score = len(
-
                     normalized_alias
-
                 )
 
 
@@ -1154,9 +1101,7 @@ def canonicalize_team_name(
                 shared_words = (
 
                     provider_words
-
                     &
-
                     alias_words
 
                 )
@@ -1165,9 +1110,7 @@ def canonicalize_team_name(
                 if shared_words:
 
                     score = len(
-
                         shared_words
-
                     )
 
 
@@ -1184,9 +1127,7 @@ def canonicalize_team_name(
 
 
             debug_stats[
-
                 "canonical_team_matches"
-
             ] += 1
 
 
@@ -1194,9 +1135,7 @@ def canonicalize_team_name(
 
 
     debug_stats[
-
         "canonical_team_failures"
-
     ] += 1
 
 
@@ -1248,152 +1187,47 @@ def canonicalize_matchup(
 
 
 # --------------------------------------------------
-# Create safe logo filename
-# --------------------------------------------------
-
-def clean_logo_filename(text):
-
-    text = clean_text(
-        text
-    )
-
-
-    text = re.sub(
-        r"[^A-Za-z0-9]+",
-        "_",
-        text
-    )
-
-
-    text = re.sub(
-        r"_+",
-        "_",
-        text
-    )
-
-
-    return text.strip(
-        "_"
-    )
-
-
-# --------------------------------------------------
-# SportsDB public schedule lookup
+# Normalize a matchup for SportsDB comparison
 #
-# This runs AFTER sports_teams.txt has already
-# converted the provider matchup to official names.
+# This deliberately removes:
+#
+# - vs.
+# - vs
+# - punctuation
+# - capitalization differences
+#
+# Therefore:
+#
+# Tampa Bay Rays vs. Boston Red Sox
+#
+# matches:
+#
+# Boston Red Sox vs Tampa Bay Rays
 # --------------------------------------------------
 
-def get_public_events(
-    date_value
-):
+def normalize_matchup_for_comparison(text):
 
-    global public_api_lookups
-
-
-    public_api_lookups += 1
-
-
-    date_text = date_value.strftime(
-        "%Y-%m-%d"
+    parts = matchup_parts(
+        text
     )
 
 
-    api_key = (
-
-        SPORTSDB_API_KEY
-
-        if SPORTSDB_API_KEY
-
-        else "123"
-
-    )
-
-
-    url = (
-
-        "https://www.thesportsdb.com/"
-
-        f"api/v1/json/{api_key}/eventsday.php"
-
-    )
-
-
-    try:
-
-        response = session.get(
-
-            url,
-
-            params={
-
-                "d": date_text
-
-            },
-
-            timeout=30
-
-        )
-
-
-        if response.status_code != 200:
-
-            debug_stats[
-
-                "public_events_empty"
-
-            ] += 1
-
-
-            return []
-
-
-        data = response.json()
-
-
-        events = data.get(
-
-            "events",
-
-            []
-
-        ) or []
-
-
-        if events:
-
-            debug_stats[
-
-                "public_events_downloaded"
-
-            ] += len(events)
-
-
-        else:
-
-            debug_stats[
-
-                "public_events_empty"
-
-            ] += 1
-
-
-        return events
-
-
-    except Exception as e:
-
-        print(
-            "[PUBLIC API ERROR]"
-        )
-
-
-        print(
-            e
-        )
-
+    if len(parts) != 2:
 
         return []
+
+
+    return [
+
+        normalize_team_name(
+            parts[0]
+        ),
+
+        normalize_team_name(
+            parts[1]
+        )
+
+    ]
 
 
 # --------------------------------------------------
@@ -1401,17 +1235,24 @@ def get_public_events(
 # --------------------------------------------------
 
 def team_matches(
+
     wanted_team,
+
     actual_team
+
 ):
 
     wanted_team = normalize_team_name(
+
         wanted_team
+
     )
 
 
     actual_team = normalize_team_name(
+
         actual_team
+
     )
 
 
@@ -1499,17 +1340,169 @@ def team_matches(
 
 
 # --------------------------------------------------
-# Find verified public event
+# SportsDB public schedule lookup
 #
 # IMPORTANT:
 #
-# provider_matchup is already canonicalized by
-# sports_teams.txt before this function is called.
+# This is performed AFTER:
+#
+# 1. The provider event is read.
+# 2. sports_teams.txt is loaded.
+# 3. The provider team names are converted
+#    into clean official team names.
+# 4. The clean title and description are created.
+#
+# The clean matchup is then used to find
+# the actual SportsDB event and its time.
+# --------------------------------------------------
+
+def get_public_events(
+    date_value
+):
+
+    global public_api_lookups
+
+
+    public_api_lookups += 1
+
+
+    date_text = date_value.strftime(
+        "%Y-%m-%d"
+    )
+
+
+    url = (
+
+        "https://www.thesportsdb.com/"
+
+        "api/v1/json/123/eventsday.php"
+
+    )
+
+
+    print()
+
+    print(
+        f"[SPORTSDB] Requesting events for "
+        f"{date_text}"
+    )
+
+
+    try:
+
+        response = session.get(
+
+            url,
+
+            params={
+
+                "d": date_text
+
+            },
+
+            timeout=30
+
+        )
+
+
+        print(
+
+            f"[SPORTSDB] HTTP status: "
+
+            f"{response.status_code}"
+
+        )
+
+
+        if response.status_code != 200:
+
+            debug_stats[
+                "public_events_empty"
+            ] += 1
+
+
+            return []
+
+
+        data = response.json()
+
+
+        events = data.get(
+
+            "events",
+
+            []
+
+        ) or []
+
+
+        if events:
+
+            debug_stats[
+                "public_events_downloaded"
+            ] += len(events)
+
+
+            print(
+
+                f"[SPORTSDB] Events returned: "
+
+                f"{len(events)}"
+
+            )
+
+
+        else:
+
+            debug_stats[
+                "public_events_empty"
+            ] += 1
+
+
+            print(
+
+                "[SPORTSDB] No events returned"
+
+            )
+
+
+        return events
+
+
+    except Exception as e:
+
+        print(
+            "[SPORTSDB ERROR]"
+        )
+
+
+        print(
+            e
+        )
+
+
+        return []
+
+
+# --------------------------------------------------
+# Find verified public event
+#
+# The input is the CLEAN matchup.
+#
+# Example:
+#
+# Tampa Bay Rays vs. Boston Red Sox
+#
+# SportsDB may return:
+#
+# Boston Red Sox vs Tampa Bay Rays
+#
+# Both orders are accepted.
 # --------------------------------------------------
 
 def find_public_event(
 
-    provider_matchup,
+    clean_matchup,
 
     preferred_date
 
@@ -1520,7 +1513,7 @@ def find_public_event(
 
     parts = matchup_parts(
 
-        provider_matchup
+        clean_matchup
 
     )
 
@@ -1530,25 +1523,36 @@ def find_public_event(
         return None
 
 
-    provider_first = parts[0]
+    clean_first = parts[0]
 
-    provider_second = parts[1]
+    clean_second = parts[1]
 
 
     print()
 
     print(
-        "[LOOKUP] Clean canonical matchup:"
+        "[SPORTSDB LOOKUP]"
     )
 
 
     print(
 
-        f"  {provider_first}"
+        f"Clean matchup being searched: "
+
+        f"{clean_first}"
 
         f" vs. "
 
-        f"{provider_second}"
+        f"{clean_second}"
+
+    )
+
+
+    print(
+
+        f"Preferred date: "
+
+        f"{preferred_date}"
 
     )
 
@@ -1580,6 +1584,7 @@ def find_public_event(
 
     for date_value in search_dates:
 
+
         events = get_public_events(
 
             date_value
@@ -1591,9 +1596,11 @@ def find_public_event(
 
             print(
 
-                f"[LOOKUP] {date_value}: "
+                f"[SPORTSDB] "
 
-                f"no public events returned"
+                f"{date_value}: "
+
+                f"no events"
 
             )
 
@@ -1601,16 +1608,8 @@ def find_public_event(
             continue
 
 
-        print(
-
-            f"[LOOKUP] {date_value}: "
-
-            f"{len(events)} public events"
-
-        )
-
-
         for event in events:
+
 
             home_team = clean_text(
 
@@ -1641,6 +1640,55 @@ def find_public_event(
             if not home_team or not away_team:
 
                 continue
+
+
+            # --------------------------------------------------
+            # Diagnostic output for possible team matches
+            # --------------------------------------------------
+
+            if (
+
+                "ray" in home_team.lower()
+
+                or
+
+                "ray" in away_team.lower()
+
+                or
+
+                "red sox" in home_team.lower()
+
+                or
+
+                "red sox" in away_team.lower()
+
+            ):
+
+                print()
+
+                print(
+
+                    "[SPORTSDB POSSIBLE TEAM EVENT]"
+
+                )
+
+
+                print(
+
+                    f"  Home: "
+
+                    f"{home_team}"
+
+                )
+
+
+                print(
+
+                    f"  Away: "
+
+                    f"{away_team}"
+
+                )
 
 
             event_league = clean_text(
@@ -1676,11 +1724,21 @@ def find_public_event(
             )
 
 
-            provider_first_canonical = (
+            # --------------------------------------------------
+            # IMPORTANT:
+            #
+            # The clean guide names are canonicalized again
+            # using sports_teams.txt.
+            #
+            # SportsDB names are also canonicalized using
+            # the same file.
+            # --------------------------------------------------
+
+            clean_first_canonical = (
 
                 canonicalize_team_name(
 
-                    provider_first,
+                    clean_first,
 
                     league_hint
 
@@ -1689,11 +1747,11 @@ def find_public_event(
             )
 
 
-            provider_second_canonical = (
+            clean_second_canonical = (
 
                 canonicalize_team_name(
 
-                    provider_second,
+                    clean_second,
 
                     league_hint
 
@@ -1728,11 +1786,18 @@ def find_public_event(
             )
 
 
+            # --------------------------------------------------
+            # Direct order:
+            #
+            # Clean first = SportsDB away
+            # Clean second = SportsDB home
+            # --------------------------------------------------
+
             direct_match = (
 
                 team_matches(
 
-                    provider_first_canonical,
+                    clean_first_canonical,
 
                     event_away_canonical
 
@@ -1742,7 +1807,7 @@ def find_public_event(
 
                 team_matches(
 
-                    provider_second_canonical,
+                    clean_second_canonical,
 
                     event_home_canonical
 
@@ -1751,11 +1816,18 @@ def find_public_event(
             )
 
 
+            # --------------------------------------------------
+            # Reverse order:
+            #
+            # Clean first = SportsDB home
+            # Clean second = SportsDB away
+            # --------------------------------------------------
+
             reverse_match = (
 
                 team_matches(
 
-                    provider_first_canonical,
+                    clean_first_canonical,
 
                     event_home_canonical
 
@@ -1765,7 +1837,7 @@ def find_public_event(
 
                 team_matches(
 
-                    provider_second_canonical,
+                    clean_second_canonical,
 
                     event_away_canonical
 
@@ -1837,6 +1909,8 @@ def find_public_event(
                 continue
 
 
+            # SportsDB event time is UTC.
+
             event_datetime = (
 
                 event_datetime
@@ -1874,20 +1948,16 @@ def find_public_event(
 
             print(
 
-                "[MATCH SUCCESS]"
+                "[SPORTSDB MATCH SUCCESS]"
 
             )
 
 
             print(
 
-                f"  Clean matchup: "
+                f"  Clean title: "
 
-                f"{provider_first_canonical}"
-
-                f" vs. "
-
-                f"{provider_second_canonical}"
+                f"{clean_matchup}"
 
             )
 
@@ -1898,7 +1968,7 @@ def find_public_event(
 
                 f"{away_team}"
 
-                f" vs. "
+                f" vs "
 
                 f"{home_team}"
 
@@ -1916,7 +1986,7 @@ def find_public_event(
 
             print(
 
-                f"  Time: "
+                f"  Verified Eastern time: "
 
                 f"{event_datetime}"
 
@@ -1940,18 +2010,16 @@ def find_public_event(
 
     print(
 
-        "[MATCH FAIL] No public event matched:"
+        "[SPORTSDB MATCH FAIL]"
 
     )
 
 
     print(
 
-        f"  {provider_first}"
+        f"No SportsDB event matched: "
 
-        f" vs. "
-
-        f"{provider_second}"
+        f"{clean_matchup}"
 
     )
 
@@ -1960,11 +2028,49 @@ def find_public_event(
 
 
 # --------------------------------------------------
+# Create safe logo filename
+# --------------------------------------------------
+
+def clean_logo_filename(text):
+
+    text = clean_text(
+        text
+    )
+
+
+    text = re.sub(
+        r"[^A-Za-z0-9]+",
+        "_",
+        text
+    )
+
+
+    text = re.sub(
+        r"_+",
+        "_",
+        text
+    )
+
+
+    return text.strip(
+        "_"
+    )
+
+
+# --------------------------------------------------
 # Find matchup logo
 #
-# This runs AFTER SportsDB has resolved the event.
-# The logo is then attached to the exact channel
-# whose programme is being built.
+# This is performed AFTER SportsDB has identified
+# the actual game.
+#
+# The existing logo structure is:
+#
+# sports-logos/
+#   MLB/
+#     Tampa_Bay_Rays/
+#       Tampa_Bay_Rays_vs_Boston_Red_Sox.png
+#
+# Both direct and reverse order are checked.
 # --------------------------------------------------
 
 def find_matchup_logo(
@@ -1981,6 +2087,7 @@ def find_matchup_logo(
     if not public_event:
 
         logos_missing += 1
+
 
         return None
 
@@ -2056,6 +2163,7 @@ def find_matchup_logo(
 
         logos_missing += 1
 
+
         return None
 
 
@@ -2117,6 +2225,51 @@ def find_matchup_logo(
     )
 
 
+    print()
+
+    print(
+
+        "[LOGO LOOKUP]"
+
+    )
+
+
+    print(
+
+        f"  League: "
+
+        f"{league_folder}"
+
+    )
+
+
+    print(
+
+        f"  Away: "
+
+        f"{away}"
+
+    )
+
+
+    print(
+
+        f"  Home: "
+
+        f"{home}"
+
+    )
+
+
+    print(
+
+        f"  Checking: "
+
+        f"{direct_path}"
+
+    )
+
+
     if os.path.exists(
 
         direct_path
@@ -2131,6 +2284,15 @@ def find_matchup_logo(
             "logo_direct_order_found"
 
         ] += 1
+
+
+        print(
+
+            "[LOGO MATCH] "
+
+            f"{direct_path}"
+
+        )
 
 
         return direct_path
@@ -2162,6 +2324,15 @@ def find_matchup_logo(
     )
 
 
+    print(
+
+        f"  Checking reverse: "
+
+        f"{reverse_path}"
+
+    )
+
+
     if os.path.exists(
 
         reverse_path
@@ -2178,6 +2349,15 @@ def find_matchup_logo(
         ] += 1
 
 
+        print(
+
+            "[LOGO MATCH] "
+
+            f"{reverse_path}"
+
+        )
+
+
         return reverse_path
 
 
@@ -2191,22 +2371,18 @@ def find_matchup_logo(
     ] += 1
 
 
+    print(
+
+        "[LOGO NOT FOUND]"
+
+    )
+
+
     return None
 
 
 # --------------------------------------------------
 # Build event information
-#
-# ORDER:
-#
-# 1. Extract provider matchup.
-# 2. Read sports_teams.txt aliases.
-# 3. Build clean official matchup.
-# 4. SportsDB uses that clean matchup.
-# 5. SportsDB supplies the real game time.
-# 6. Final title/description receive the time.
-# 7. Logo is searched AFTER SportsDB.
-# 8. Logo is returned for this exact channel.
 # --------------------------------------------------
 
 def build_event_info(
@@ -2277,9 +2453,9 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 1:
+    # STEP 1
     #
-    # Extract provider matchup.
+    # Extract the raw provider matchup.
     # --------------------------------------------------
 
     provider_event = extract_provider_matchup(
@@ -2304,7 +2480,7 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 2:
+    # STEP 2
     #
     # Determine league.
     # --------------------------------------------------
@@ -2331,10 +2507,12 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 3:
+    # STEP 3
     #
-    # Read sports_teams.txt and convert aliases
-    # BEFORE SportsDB is called.
+    # Convert provider team names using
+    # config/sports_teams.txt.
+    #
+    # THIS HAPPENS BEFORE SPORTSDB.
     # --------------------------------------------------
 
     canonical_matchup = canonicalize_matchup(
@@ -2361,9 +2539,12 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 4:
+    # STEP 4
     #
-    # Determine preferred date.
+    # Extract the provider date.
+    #
+    # This is used to determine which date to
+    # search on SportsDB.
     # --------------------------------------------------
 
     provider_start = extract_start_datetime(
@@ -2411,10 +2592,11 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 5:
+    # STEP 5
     #
-    # Build the clean title and description BEFORE
-    # SportsDB is called.
+    # Create the clean title and description.
+    #
+    # SportsDB has NOT been called yet.
     # --------------------------------------------------
 
     if canonical_matchup:
@@ -2449,13 +2631,39 @@ def build_event_info(
         )
 
 
+    print()
+
+    print(
+
+        "[CLEAN EVENT READY FOR SPORTSDB]"
+
+    )
+
+
+    print(
+
+        f"  Title: "
+
+        f"{title_text}"
+
+    )
+
+
+    print(
+
+        f"  Description: "
+
+        f"{description_text}"
+
+    )
+
+
     # --------------------------------------------------
-    # STEP 6:
+    # STEP 6
     #
-    # SportsDB LAST metadata lookup.
+    # NOW SportsDB uses the CLEAN matchup.
     #
-    # It receives the already-cleaned matchup.
-    # It does NOT receive the channel name.
+    # It does not use the provider channel name.
     # --------------------------------------------------
 
     public_event = None
@@ -2473,18 +2681,31 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 7:
+    # STEP 7
     #
-    # SportsDB found the actual event.
+    # SportsDB matched the actual game.
     #
-    # Use SportsDB only to obtain the real time.
-    # Keep sports_teams.txt as the source for the
-    # displayed official team names.
+    # Update the title/description with the verified
+    # actual event date and time.
     # --------------------------------------------------
 
     if public_event:
 
         verified_public_times_used += 1
+
+
+        away = public_event[
+
+            "away"
+
+        ]
+
+
+        home = public_event[
+
+            "home"
+
+        ]
 
 
         event_datetime = public_event[
@@ -2503,7 +2724,7 @@ def build_event_info(
         )
 
 
-        event_league_code = {
+        league_map = {
 
             "Major League Baseball": "MLB",
 
@@ -2513,23 +2734,19 @@ def build_event_info(
 
             "National Hockey League": "NHL"
 
-        }.get(
+        }
+
+
+        event_league_code = league_map.get(
 
             event_league
 
         )
 
 
-        # SportsDB names are canonicalized through
-        # sports_teams.txt before display.
-
         away = canonicalize_team_name(
 
-            public_event[
-
-                "away"
-
-            ],
+            away,
 
             event_league_code
 
@@ -2538,19 +2755,12 @@ def build_event_info(
 
         home = canonicalize_team_name(
 
-            public_event[
-
-                "home"
-
-            ],
+            home,
 
             event_league_code
 
         )
 
-
-        # Keep the clean matchup names from the
-        # sports_teams.txt process.
 
         matchup = (
 
@@ -2572,20 +2782,20 @@ def build_event_info(
 
             f"{event_datetime.strftime('%A')} "
 
-            f"{event_datetime.strftime('%m/%d/%Y')} "
+            f"{event_datetime.strftime('%m/%d/%Y')}\n"
 
-            f"{format_time(event_datetime)}"
+            f"{format_time(event_datetime)} "
+
+            f"ET"
 
         )
 
 
         # --------------------------------------------------
-        # STEP 8:
+        # STEP 8
         #
-        # ONLY AFTER SportsDB has resolved the game
-        # and time, match the two teams to the logo.
-        #
-        # This logo belongs to THIS stream/channel.
+        # AFTER SportsDB finds the actual game,
+        # find the matching matchup logo.
         # --------------------------------------------------
 
         logo_path = find_matchup_logo(
@@ -2616,8 +2826,7 @@ def build_event_info(
     # --------------------------------------------------
     # No SportsDB match.
     #
-    # Keep the clean canonical title/description.
-    # No provider start/stop metadata is inserted.
+    # Keep the clean canonical title and description.
     # --------------------------------------------------
 
     return (
@@ -2664,7 +2873,9 @@ guide_start = (
 
         timezone.utc
 
-    ).astimezone(
+    )
+
+    .astimezone(
 
         ZoneInfo(
 
@@ -2672,7 +2883,9 @@ guide_start = (
 
         )
 
-    ).replace(
+    )
+
+    .replace(
 
         hour=0,
 
@@ -2702,6 +2915,9 @@ guide_end = (
 
 # --------------------------------------------------
 # Create XMLTV channels
+#
+# Channel logos are added AFTER the event is
+# processed and SportsDB has identified the game.
 # --------------------------------------------------
 
 print()
@@ -2716,6 +2932,19 @@ print(
 matched = 0
 
 
+channel_logos = {}
+
+
+# --------------------------------------------------
+# First process each channel's event.
+#
+# This allows the SportsDB matchup and logo to be
+# determined before the channel XML is written.
+# --------------------------------------------------
+
+event_information = {}
+
+
 for channel_id, requested_name in wanted.items():
 
     if channel_id not in provider:
@@ -2724,6 +2953,64 @@ for channel_id, requested_name in wanted.items():
 
 
     matched += 1
+
+
+    stream = provider[
+
+        channel_id
+
+    ]
+
+
+    print()
+
+    print(
+
+        f"Processing event for channel "
+
+        f"{channel_id}"
+
+    )
+
+
+    event_information[channel_id] = build_event_info(
+
+        stream
+
+    )
+
+
+    (
+
+        title_text,
+
+        description_text,
+
+        event_time,
+
+        logo_path,
+
+        has_real_epg
+
+    ) = event_information[channel_id]
+
+
+    if logo_path:
+
+        channel_logos[channel_id] = logo_path
+
+
+# --------------------------------------------------
+# Now create XMLTV channels.
+#
+# The matchup logo is placed on the channel itself.
+# --------------------------------------------------
+
+for channel_id, requested_name in wanted.items():
+
+    if channel_id not in provider:
+
+        continue
 
 
     stream = provider[
@@ -2771,6 +3058,37 @@ for channel_id, requested_name in wanted.items():
     display.text = provider_name
 
 
+    # --------------------------------------------------
+    # Add the detected matchup logo to the channel.
+    # --------------------------------------------------
+
+    logo_path = channel_logos.get(
+
+        channel_id
+
+    )
+
+
+    if logo_path:
+
+        icon = ET.SubElement(
+
+            channel,
+
+            "icon"
+
+        )
+
+
+        icon.set(
+
+            "src",
+
+            logo_path
+
+        )
+
+
 # --------------------------------------------------
 # Create 6-hour programme blocks
 # --------------------------------------------------
@@ -2791,22 +3109,6 @@ for channel_id, requested_name in wanted.items():
         continue
 
 
-    stream = provider[
-
-        channel_id
-
-    ]
-
-
-    print()
-
-    print(
-
-        f"Processing {channel_id}"
-
-    )
-
-
     (
 
         title_text,
@@ -2819,11 +3121,7 @@ for channel_id, requested_name in wanted.items():
 
         has_real_epg
 
-    ) = build_event_info(
-
-        stream
-
-    )
+    ) = event_information[channel_id]
 
 
     current_start = guide_start
@@ -2905,29 +3203,6 @@ for channel_id, requested_name in wanted.items():
 
 
         desc.text = description_text
-
-
-        # The logo returned from the final logo lookup
-        # is attached to the programme on THIS channel.
-
-        if logo_path:
-
-            icon = ET.SubElement(
-
-                programme,
-
-                "icon"
-
-            )
-
-
-            icon.set(
-
-                "src",
-
-                logo_path
-
-            )
 
 
         current_start = current_stop
@@ -3101,8 +3376,6 @@ for key, value in debug_stats.items():
 
     print(
 
-        f"{key}: "
-
-        f"{value}"
+        f"{key}: {value}"
 
     )
