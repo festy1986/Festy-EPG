@@ -11,19 +11,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Delete all workflow runs
+      - name: Delete all other workflow runs
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
         run: |
           gh api \
             --paginate \
             "/repos/$REPO/actions/runs?per_page=100" \
             --jq '.workflow_runs[].id' |
           while read -r RUN_ID; do
+
+            if [ "$RUN_ID" = "$CURRENT_RUN_ID" ]; then
+              echo "Skipping current cleanup run $RUN_ID"
+              continue
+            fi
+
             echo "Deleting workflow run $RUN_ID"
 
             gh api \
               --method DELETE \
-              "/repos/$REPO/actions/runs/$RUN_ID"
+              "/repos/$REPO/actions/runs/$RUN_ID" \
+              --silent || true
+
           done
+
+          echo "Cleanup complete"
