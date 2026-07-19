@@ -1,18 +1,16 @@
 import os
+import re
+import html
+import time
 import requests
 import xml.etree.ElementTree as ET
 
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo
 
-import re
-import html
-import time
-
 
 CHANNEL_FILE = "config/sports_channels.txt"
 OUTPUT_FILE = "guides/sports.xml"
-
 
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
@@ -24,7 +22,6 @@ PASSWORD = os.environ["XTREAM_PASSWORD"]
 # --------------------------------------------------
 
 if XTREAM_URL.startswith("https://"):
-
     XTREAM_URL = XTREAM_URL.replace(
         "https://",
         "http://",
@@ -33,7 +30,6 @@ if XTREAM_URL.startswith("https://"):
 
 
 if ":80" not in XTREAM_URL and ":443" not in XTREAM_URL:
-
     XTREAM_URL += ":80"
 
 
@@ -61,20 +57,11 @@ session.headers.update(
 # --------------------------------------------------
 
 team_name_conversions = 0
-
-debug_stats = {
-
-    "provider_event_extracted": 0,
-
-    "provider_event_failed": 0,
-
-    "provider_matchup_parts_failed": 0,
-
-    "canonical_team_matches": 0,
-
-    "canonical_team_failures": 0,
-
-}
+canonical_team_matches = 0
+canonical_team_failures = 0
+provider_event_extracted = 0
+provider_event_failed = 0
+provider_matchup_parts_failed = 0
 
 
 # --------------------------------------------------
@@ -84,54 +71,37 @@ debug_stats = {
 def clean_text(text):
 
     if not text:
-
         return ""
 
 
     text = html.unescape(
-
         str(text)
-
     )
 
 
     text = re.sub(
-
         r"<[^>]+>",
-
         "",
-
         text
-
     )
 
 
     text = text.replace(
-
         "\n",
-
         " "
-
     )
 
 
     text = text.replace(
-
         "\r",
-
         " "
-
     )
 
 
     text = re.sub(
-
         r"\s+",
-
         " ",
-
         text
-
     )
 
 
@@ -140,191 +110,141 @@ def clean_text(text):
 
 # --------------------------------------------------
 # Normalize matchup separator
-#
-# Examples:
-#
-# Rays x Red Sox
-# Rays @ Red Sox
-# Rays v Red Sox
-# Rays vs Red Sox
-#
-# becomes:
-#
-# Rays vs. Red Sox
 # --------------------------------------------------
 
 def normalize_matchup(text):
 
     if not text:
-
         return ""
 
 
     text = clean_text(
-
         text
-
     )
 
 
     text = re.sub(
-
         r"\s+[xX]\s+",
-
         " vs. ",
-
         text
-
     )
 
 
     text = re.sub(
-
         r"\s+@\s+",
-
         " vs. ",
-
         text
-
     )
 
 
     text = re.sub(
-
         r"\s+v\.?\s+",
-
         " vs. ",
-
         text,
-
         flags=re.IGNORECASE
-
     )
 
 
     text = re.sub(
-
         r"\s+vs\s*\.?\s+",
-
         " vs. ",
-
         text,
-
         flags=re.IGNORECASE
-
     )
 
 
     text = re.sub(
-
         r"\s+",
-
         " ",
-
         text
-
     )
 
 
     return text.strip(
-
         " -|:;"
-
     )
 
 
 # --------------------------------------------------
-# Extract the matchup from the provider channel name
+# Extract matchup from provider channel name
 #
 # Example:
 #
-# MLB 04 | Rays x Red Sox
-# start:2026-07-19 18:35:00
-# stop:2026-07-20 01:48:20
+# MLB 04 | Rays x Red Sox start:2026-07-19 18:35:00
 #
 # becomes:
 #
 # Rays vs. Red Sox
-#
-# The provider timestamp is NOT used.
 # --------------------------------------------------
 
 def extract_provider_matchup(text):
 
+    global provider_event_extracted
+    global provider_event_failed
+
+
     if not text:
 
-        debug_stats[
-
-            "provider_event_failed"
-
-        ] += 1
-
+        provider_event_failed += 1
 
         return ""
 
 
     text = clean_text(
-
         text
-
     )
 
 
     if "|" not in text:
 
-        debug_stats[
-
-            "provider_event_failed"
-
-        ] += 1
-
+        provider_event_failed += 1
 
         return ""
 
 
-    text = text.split(
-
+    matchup_text = text.split(
         "|",
-
         1
-
     )[1]
 
 
-    matchup = normalize_matchup(
+    matchup_text = re.split(
+        r"\bstart\s*:",
+        matchup_text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
 
-        text
 
+    matchup_text = re.split(
+        r"\bstop\s*:",
+        matchup_text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
+
+
+    matchup_text = normalize_matchup(
+        matchup_text
     )
 
 
     parts = matchup_parts(
-
-        matchup
-
+        matchup_text
     )
 
 
     if len(parts) != 2:
 
-        debug_stats[
-
-            "provider_event_failed"
-
-        ] += 1
-
+        provider_event_failed += 1
 
         return ""
 
 
-    debug_stats[
-
-        "provider_event_extracted"
-
-    ] += 1
+    provider_event_extracted += 1
 
 
-    return matchup
+    return matchup_text
 
 
 # --------------------------------------------------
@@ -333,136 +253,95 @@ def extract_provider_matchup(text):
 
 def matchup_parts(text):
 
+    global provider_matchup_parts_failed
+
+
     if not text:
+
+        provider_matchup_parts_failed += 1
 
         return []
 
 
     text = clean_text(
-
         text
-
     )
 
 
     match = re.search(
-
         r"(.+?)\s+"
-
         r"(?:vs\.?|v\.?|x|@)"
-
         r"\s+"
-
         r"(.+)",
-
         text,
-
         flags=re.IGNORECASE
-
     )
 
 
     if not match:
 
-        debug_stats[
-
-            "provider_matchup_parts_failed"
-
-        ] += 1
-
+        provider_matchup_parts_failed += 1
 
         return []
 
 
     first = clean_text(
-
         match.group(1)
-
     )
 
 
     second = clean_text(
-
         match.group(2)
-
     )
 
 
     if not first or not second:
 
-        debug_stats[
-
-            "provider_matchup_parts_failed"
-
-        ] += 1
-
+        provider_matchup_parts_failed += 1
 
         return []
 
 
     return [
-
         first,
-
         second
-
     ]
 
 
 # --------------------------------------------------
-# Normalize team names for matching
+# Normalize team name for matching
 # --------------------------------------------------
 
 def normalize_team_name(text):
 
     text = clean_text(
-
         text
-
     ).lower()
 
 
     text = re.sub(
-
         r"[^a-z0-9 ]",
-
         " ",
-
         text
-
     )
 
 
     stop_words = {
 
         "live",
-
         "hd",
-
         "sd",
-
         "fhd",
-
         "4k",
-
         "channel",
-
         "tv",
-
         "network",
-
         "sports",
-
         "sport",
-
         "event",
-
         "game",
-
         "match",
-
         "today",
-
         "tomorrow"
 
     }
@@ -480,118 +359,7 @@ def normalize_team_name(text):
 
 
     return " ".join(
-
         words
-
-    )
-
-
-# --------------------------------------------------
-# Team matching
-# --------------------------------------------------
-
-def team_matches(
-
-    wanted_team,
-
-    actual_team
-
-):
-
-    wanted_team = normalize_team_name(
-
-        wanted_team
-
-    )
-
-
-    actual_team = normalize_team_name(
-
-        actual_team
-
-    )
-
-
-    if not wanted_team or not actual_team:
-
-        return False
-
-
-    if wanted_team == actual_team:
-
-        return True
-
-
-    if (
-
-        wanted_team in actual_team
-
-        or
-
-        actual_team in wanted_team
-
-    ):
-
-        return True
-
-
-    wanted_words = set(
-
-        wanted_team.split()
-
-    )
-
-
-    actual_words = set(
-
-        actual_team.split()
-
-    )
-
-
-    if wanted_words.issubset(
-
-        actual_words
-
-    ):
-
-        return True
-
-
-    meaningful_words = {
-
-        word
-
-        for word in wanted_words
-
-        if len(word) >= 4
-
-    }
-
-
-    shared_words = (
-
-        wanted_words
-
-        &
-
-        actual_words
-
-    )
-
-
-    return bool(
-
-        meaningful_words
-
-        and
-
-        meaningful_words.issubset(
-
-            shared_words
-
-        )
-
     )
 
 
@@ -602,11 +370,8 @@ def team_matches(
 SPORTSDB_LEAGUES = {
 
     "MLB": "MLB",
-
     "NBA": "NBA",
-
     "NFL": "NFL",
-
     "NHL": "NHL"
 
 }
@@ -621,23 +386,15 @@ team_aliases = {}
 
 def load_sportsdb_teams():
 
-    print()
-
     print(
-
         "Loading official team names from TheSportsDB..."
-
     )
 
 
     url = (
-
         "https://www.thesportsdb.com/"
-
         "api/v1/json/123/"
-
         "search_all_teams.php"
-
     )
 
 
@@ -667,40 +424,28 @@ def load_sportsdb_teams():
 
 
             teams = data.get(
-
                 "teams",
-
                 []
-
             ) or []
 
 
             print(
-
                 f"{league_folder}: "
-
                 f"{len(teams)} official teams"
-
             )
 
 
             for team in teams:
 
                 official_name = clean_text(
-
                     team.get(
-
                         "strTeam",
-
                         ""
-
                     )
-
                 )
 
 
                 if not official_name:
-
                     continue
 
 
@@ -709,19 +454,13 @@ def load_sportsdb_teams():
                     official_name,
 
                     team.get(
-
                         "strTeamShort",
-
                         ""
-
                     ),
 
                     team.get(
-
                         "strAlternate",
-
                         ""
-
                     )
 
                 ]
@@ -730,69 +469,49 @@ def load_sportsdb_teams():
                 for alias in aliases:
 
                     alias = clean_text(
-
                         alias
-
                     )
 
 
                     if not alias:
-
                         continue
 
 
-                    normalized_alias = (
-
-                        normalize_team_name(
-
-                            alias
-
-                        )
-
+                    normalized_alias = normalize_team_name(
+                        alias
                     )
 
 
-                    if normalized_alias:
+                    if not normalized_alias:
+                        continue
 
-                        team_aliases[
 
-                            normalized_alias
+                    team_aliases[
+                        normalized_alias
+                    ] = {
 
-                        ] = {
+                        "name": official_name,
 
-                            "name":
+                        "league": league_folder
 
-                            official_name,
-
-                            "league":
-
-                            league_folder
-
-                        }
+                    }
 
 
         except Exception as e:
 
-            print()
-
             print(
-
                 f"Unable to load "
-
                 f"{league_folder} teams:"
-
             )
 
 
             print(
-
                 e
-
             )
 
 
 # --------------------------------------------------
-# Convert provider team name to official name
+# Convert provider team name to official team name
 # --------------------------------------------------
 
 def canonicalize_team_name(
@@ -804,54 +523,40 @@ def canonicalize_team_name(
 ):
 
     global team_name_conversions
+    global canonical_team_matches
+    global canonical_team_failures
 
 
     provider_team = clean_text(
-
         provider_team
-
     )
 
 
     if not provider_team:
 
-        debug_stats[
-
-            "canonical_team_failures"
-
-        ] += 1
-
+        canonical_team_failures += 1
 
         return provider_team
 
 
-    normalized_provider = (
-
-        normalize_team_name(
-
-            provider_team
-
-        )
-
+    normalized_provider = normalize_team_name(
+        provider_team
     )
 
 
     if not normalized_provider:
 
-        debug_stats[
-
-            "canonical_team_failures"
-
-        ] += 1
-
+        canonical_team_failures += 1
 
         return provider_team
 
 
+    # --------------------------------------------------
+    # Exact alias match
+    # --------------------------------------------------
+
     exact = team_aliases.get(
-
         normalized_provider
-
     )
 
 
@@ -862,25 +567,22 @@ def canonicalize_team_name(
             team_name_conversions += 1
 
 
-        debug_stats[
-
-            "canonical_team_matches"
-
-        ] += 1
+        canonical_team_matches += 1
 
 
         return exact["name"]
 
 
+    # --------------------------------------------------
+    # Partial matching
+    # --------------------------------------------------
+
     provider_words = set(
-
         normalized_provider.split()
-
     )
 
 
     best_match = None
-
     best_score = 0
 
 
@@ -900,30 +602,22 @@ def canonicalize_team_name(
 
 
         alias_words = set(
-
             normalized_alias.split()
-
         )
 
 
         if not alias_words:
-
             continue
 
 
-        shared = (
-
+        shared_words = (
             provider_words
-
             &
-
             alias_words
-
         )
 
 
-        if not shared:
-
+        if not shared_words:
             continue
 
 
@@ -949,6 +643,8 @@ def canonicalize_team_name(
         }
 
 
+        # Provider words are contained in official name
+
         if (
 
             meaningful_provider_words
@@ -956,24 +652,14 @@ def canonicalize_team_name(
             and
 
             meaningful_provider_words.issubset(
-
                 alias_words
-
             )
 
         ):
 
-            score = (
-
-                len(
-
-                    meaningful_provider_words
-
-                )
-
-                * 10
-
-            )
+            score = len(
+                meaningful_provider_words
+            ) * 10
 
 
             if score > best_score:
@@ -986,6 +672,8 @@ def canonicalize_team_name(
             continue
 
 
+        # Official name words are contained in provider name
+
         if (
 
             meaningful_alias_words
@@ -993,24 +681,14 @@ def canonicalize_team_name(
             and
 
             meaningful_alias_words.issubset(
-
                 provider_words
-
             )
 
         ):
 
-            score = (
-
-                len(
-
-                    meaningful_alias_words
-
-                )
-
-                * 10
-
-            )
+            score = len(
+                meaningful_alias_words
+            ) * 10
 
 
             if score > best_score:
@@ -1024,36 +702,20 @@ def canonicalize_team_name(
 
         team_name_conversions += 1
 
-        debug_stats[
-
-            "canonical_team_matches"
-
-        ] += 1
+        canonical_team_matches += 1
 
 
         return best_match["name"]
 
 
-    debug_stats[
-
-        "canonical_team_failures"
-
-    ] += 1
+    canonical_team_failures += 1
 
 
     return provider_team
 
 
 # --------------------------------------------------
-# Canonicalize the entire matchup
-#
-# Example:
-#
-# Rays vs. Red Sox
-#
-# becomes:
-#
-# Tampa Bay Rays vs. Boston Red Sox
+# Canonicalize entire matchup
 # --------------------------------------------------
 
 def canonicalize_matchup(
@@ -1065,18 +727,14 @@ def canonicalize_matchup(
 ):
 
     parts = matchup_parts(
-
         matchup
-
     )
 
 
     if len(parts) != 2:
 
         return normalize_matchup(
-
             matchup
-
         )
 
 
@@ -1126,13 +784,13 @@ with open(
 
 ) as f:
 
+
     for line in f:
 
         line = line.strip()
 
 
         if not line:
-
             continue
 
 
@@ -1146,7 +804,6 @@ with open(
 
 
         if len(parts) < 2:
-
             continue
 
 
@@ -1154,36 +811,32 @@ with open(
 
 
         display_name = " ".join(
-
             parts[1:]
-
         )
 
 
         wanted[channel_id] = display_name
 
 
-print()
-
 print(
-
     f"Requested channels: "
-
     f"{len(wanted)}"
-
 )
+
+
+# --------------------------------------------------
+# Load official teams
+# --------------------------------------------------
+
+load_sportsdb_teams()
 
 
 # --------------------------------------------------
 # Download provider channels
 # --------------------------------------------------
 
-print()
-
 print(
-
     "Downloading provider channels..."
-
 )
 
 
@@ -1213,8 +866,6 @@ for attempt in range(
 
     try:
 
-        print()
-
         print(
 
             f"Downloading provider channels "
@@ -1228,13 +879,7 @@ for attempt in range(
 
             url,
 
-            timeout=(
-
-                30,
-
-                600
-
-            )
+            timeout=(30, 600)
 
         )
 
@@ -1250,57 +895,38 @@ for attempt in range(
 
     except Exception as e:
 
-        print()
-
         print(
-
             "Download failed:"
-
         )
 
 
         print(
-
             e
-
         )
 
 
         if attempt < 5:
 
             time.sleep(
-
                 10
-
             )
 
 
 if streams is None:
 
-    print()
-
     print(
-
         "Unable to download provider channels."
-
     )
 
 
     raise SystemExit(
-
         1
-
     )
 
 
-print()
-
 print(
-
     f"Provider channels: "
-
     f"{len(streams)}"
-
 )
 
 
@@ -1312,22 +938,13 @@ for stream in streams:
     stream_id = str(
 
         stream.get(
-
             "stream_id"
-
         )
 
     )
 
 
     provider[stream_id] = stream
-
-
-# --------------------------------------------------
-# Load official team names
-# --------------------------------------------------
-
-load_sportsdb_teams()
 
 
 # --------------------------------------------------
@@ -1341,7 +958,6 @@ tv = ET.Element(
     {
 
         "generator-info-name":
-
         "Festy Sports Guide"
 
     }
@@ -1351,26 +967,18 @@ tv = ET.Element(
 
 # --------------------------------------------------
 # Guide period
-#
-# 3 full days
 # --------------------------------------------------
 
 guide_start = (
 
     datetime.now(
-
         timezone.utc
-
     )
 
     .astimezone(
-
         ZoneInfo(
-
             "America/New_York"
-
         )
-
     )
 
     .replace(
@@ -1393,9 +1001,7 @@ guide_end = (
     guide_start
 
     + timedelta(
-
         days=3
-
     )
 
 )
@@ -1403,14 +1009,19 @@ guide_end = (
 
 # --------------------------------------------------
 # Create XMLTV channels
+#
+# IMPORTANT:
+#
+# The provider display-name is kept exactly as
+# provided by the provider.
+#
+# The cleaned matchup is written into the
+# programme title and description instead.
 # --------------------------------------------------
 
 print()
-
 print(
-
     "Creating XMLTV channels..."
-
 )
 
 
@@ -1428,9 +1039,7 @@ for channel_id, requested_name in wanted.items():
 
 
     stream = provider[
-
         channel_id
-
     ]
 
 
@@ -1452,7 +1061,6 @@ for channel_id, requested_name in wanted.items():
         {
 
             "id":
-
             channel_id
 
         }
@@ -1469,27 +1077,16 @@ for channel_id, requested_name in wanted.items():
     )
 
 
-    display.text = clean_text(
-
-        provider_name
-
-    )
+    display.text = provider_name
 
 
 # --------------------------------------------------
 # Create 6-hour programme blocks
-#
-# 3 days
-#
-# 12 blocks per channel
 # --------------------------------------------------
 
 print()
-
 print(
-
     "Creating 6-hour programme blocks..."
-
 )
 
 
@@ -1501,9 +1098,7 @@ for channel_id, requested_name in wanted.items():
 
 
     stream = provider[
-
         channel_id
-
     ]
 
 
@@ -1521,52 +1116,35 @@ for channel_id, requested_name in wanted.items():
 
 
     print()
-
     print(
-
         f"Processing {channel_id}"
-
     )
 
 
     print(
-
         "=================================================="
-
     )
 
 
     print(
-
         f"[CHANNEL {channel_id}]"
-
     )
 
 
-    print()
-
     print(
-
         "Raw provider name:"
-
     )
 
 
     print(
-
         f"  {provider_name}"
-
     )
 
 
     # --------------------------------------------------
     # STEP 1
     #
-    # Extract the teams from the provider channel name.
-    #
-    # No time lookup.
-    # No logo lookup.
-    # No provider-time fallback.
+    # Extract the two teams from the provider name.
     # --------------------------------------------------
 
     provider_matchup = extract_provider_matchup(
@@ -1576,81 +1154,75 @@ for channel_id, requested_name in wanted.items():
     )
 
 
-    print()
-
     print(
-
         "Extracted matchup:"
-
     )
 
 
     print(
-
         f"  {provider_matchup}"
-
     )
 
 
     # --------------------------------------------------
     # STEP 2
     #
-    # Convert the extracted team names into official names.
+    # Convert abbreviated names to official names.
+    #
+    # Example:
+    #
+    # Rays x Red Sox
+    #
+    # becomes:
+    #
+    # Tampa Bay Rays vs. Boston Red Sox
     # --------------------------------------------------
 
-    if provider_matchup:
+    cleaned_matchup = canonicalize_matchup(
 
-        cleaned_matchup = canonicalize_matchup(
-
-            provider_matchup
-
-        )
-
-
-    else:
-
-        cleaned_matchup = ""
-
-
-    print()
-
-    print(
-
-        "Cleaned matchup:"
+        provider_matchup
 
     )
 
 
     print(
+        "Cleaned matchup:"
+    )
 
+
+    print(
         f"  {cleaned_matchup}"
-
     )
 
 
     # --------------------------------------------------
     # STEP 3
     #
-    # Create title and description.
+    # Build the title.
+    # --------------------------------------------------
+
+    if cleaned_matchup:
+
+        title_text = cleaned_matchup
+
+
+    else:
+
+        title_text = "Sports Event"
+
+
+    # --------------------------------------------------
+    # STEP 4
+    #
+    # Build the description.
     #
     # Example:
     #
-    # Title:
-    # Tampa Bay Rays vs. Boston Red Sox
-    #
-    # Description:
     # Tampa Bay Rays vs. Boston Red Sox
     # Sunday 07/19/2026
     # --------------------------------------------------
 
     if cleaned_matchup:
-
-        title_text = (
-
-            cleaned_matchup
-
-        )
-
 
         description_text = (
 
@@ -1665,16 +1237,9 @@ for channel_id, requested_name in wanted.items():
 
     else:
 
-        title_text = (
-
-            "Sports Event"
-
-        )
-
-
         description_text = (
 
-            "Sports Event\n"
+            f"Sports Event\n"
 
             f"{guide_start.strftime('%A')} "
 
@@ -1683,40 +1248,8 @@ for channel_id, requested_name in wanted.items():
         )
 
 
-    print()
-
-    print(
-
-        "Final title:"
-
-    )
-
-
-    print(
-
-        f"  {title_text}"
-
-    )
-
-
-    print()
-
-    print(
-
-        "Final description:"
-
-    )
-
-
-    print(
-
-        f"  {description_text}"
-
-    )
-
-
     # --------------------------------------------------
-    # STEP 4
+    # STEP 5
     #
     # Create 6-hour blocks for 3 days.
     # --------------------------------------------------
@@ -1761,7 +1294,6 @@ for channel_id, requested_name in wanted.items():
 
                 ),
 
-
                 "stop":
 
                 current_stop.strftime(
@@ -1769,7 +1301,6 @@ for channel_id, requested_name in wanted.items():
                     "%Y%m%d%H%M%S %z"
 
                 ),
-
 
                 "channel":
 
@@ -1804,39 +1335,27 @@ for channel_id, requested_name in wanted.items():
         desc.text = description_text
 
 
-        current_start = (
-
-            current_stop
-
-        )
+        current_start = current_stop
 
 
 # --------------------------------------------------
-# Save XMLTV file
+# Write XMLTV file
 # --------------------------------------------------
 
 print()
-
 print(
-
     "Writing XMLTV file..."
-
 )
 
 
 tree = ET.ElementTree(
-
     tv
-
 )
 
 
 ET.indent(
-
     tree,
-
     space="  "
-
 )
 
 
@@ -1856,78 +1375,72 @@ tree.write(
 # --------------------------------------------------
 
 print()
-
 print(
-
     "Created:"
-
 )
 
 
 print(
-
     OUTPUT_FILE
-
 )
 
 
-print()
-
 print(
-
     f"Matched channels: "
-
     f"{matched}"
-
 )
 
 
-print()
-
 print(
-
     "Guide blocks: "
-
     "6 hours each"
-
 )
 
 
-print()
-
 print(
-
     "Guide duration: "
-
     "3 days"
-
 )
 
 
 print()
-
 print(
-
     "Team name conversions: "
-
     f"{team_name_conversions}"
+)
 
+
+print(
+    "Canonical team matches: "
+    f"{canonical_team_matches}"
+)
+
+
+print(
+    "Canonical team failures: "
+    f"{canonical_team_failures}"
+)
+
+
+print(
+    "Provider matchups extracted: "
+    f"{provider_event_extracted}"
+)
+
+
+print(
+    "Provider matchups failed: "
+    f"{provider_event_failed}"
+)
+
+
+print(
+    "Matchup parts failed: "
+    f"{provider_matchup_parts_failed}"
 )
 
 
 print()
-
 print(
-
-    "Detailed cleanup diagnostics:"
-
+    "Sports guide generation complete."
 )
-
-
-for key, value in debug_stats.items():
-
-    print(
-
-        f"{key}: {value}"
-
-    )
