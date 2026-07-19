@@ -781,7 +781,7 @@ jobs:
           const fs = require('fs')
 
           const guidePath = 'guides/OTALocalsguide.build.xml'
-          const cachePath = 'config/.tvmaze-ota-cache.json'
+          const cachePath = 'guides/.tvmaze-ota-cache.json'
 
           if (!fs.existsSync(guidePath)) {
             console.error(`Missing ${guidePath}`)
@@ -1581,7 +1581,7 @@ jobs:
           # This workflow should only update its own GZ output.
           git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
-          git add guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
+          git add guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
           git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
           if git diff --cached --quiet; then
@@ -1606,7 +1606,7 @@ jobs:
 
             git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
-            git add guides/OTALocalsguide.xml.gz guides/.tvmaze-ota-cache.json
+            git add guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
             git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
 
             if git diff --cached --quiet; then
