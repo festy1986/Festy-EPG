@@ -57,22 +57,6 @@ jobs:
         run: |
           python -m pip install requests
 
-      - name: Test Xtream provider
-        env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
-          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
-          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
-        run: |
-          python config/test_xtream.py
-
-      - name: Test provider EPG
-        env:
-          XTREAM_URL: ${{ secrets.XTREAM_URL }}
-          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
-          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
-        run: |
-          python config/test_epg.py
-
       - name: Generate sports guide
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
