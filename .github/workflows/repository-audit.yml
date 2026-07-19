@@ -14,18 +14,444 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
+      - name: Create audit script
+        run: |
+          cat > repository_audit.py <<'PY'
+          import json
+          import re
+          from pathlib import Path
+          from datetime import datetime
+
+          ROOT = Path.cwd()
+
+          IGNORE_DIRS = {
+              ".git",
+              "node_modules",
+              "__pycache__",
+              ".venv",
+              "venv"
+          }
+
+          TEXT_EXTENSIONS = {
+              ".yml",
+              ".yaml",
+              ".py",
+              ".js",
+              ".sh",
+              ".txt",
+              ".json",
+              ".xml",
+              ".md",
+              ".m3u",
+              ".m3u8"
+          }
+
+          def relative(path):
+              return str(
+                  path.relative_to(ROOT)
+              ).replace("\\", "/")
+
+          def read_text(path):
+              try:
+                  return path.read_text(
+                      encoding="utf-8",
+                      errors="ignore"
+                  )
+              except Exception:
+                  return ""
+
+          def get_age(path):
+              try:
+                  modified = datetime.fromtimestamp(
+                      path.stat().st_mtime
+                  )
+
+                  return (
+                      datetime.now() - modified
+                  ).days
+
+              except Exception:
+                  return None
+
+          def scan_files():
+              files = []
+
+              for path in ROOT.rglob("*"):
+                  if not path.is_file():
+                      continue
+
+                  if any(
+                      part in IGNORE_DIRS
+                      for part in path.parts
+                  ):
+                      continue
+
+                  files.append(path)
+
+              return files
+
+          def extract_workflow_name(text):
+              match = re.search(
+                  r"(?m)^name:\s*(.+)$",
+                  text
+              )
+
+              if match:
+                  return match.group(1).strip()
+
+              return "Unknown"
+
+          def extract_secrets(text):
+              return sorted(
+                  set(
+                      re.findall(
+                          r"secrets\.([A-Z0-9_]+)",
+                          text
+                      )
+                  )
+              )
+
+          def extract_references(text):
+              references = set()
+
+              patterns = [
+                  r"[\w./-]+\.py",
+                  r"[\w./-]+\.js",
+                  r"[\w./-]+\.sh",
+                  r"[\w./-]+\.xml",
+                  r"[\w./-]+\.xml\.gz",
+                  r"[\w./-]+\.txt",
+                  r"[\w./-]+\.json",
+                  r"[\w./-]+\.m3u",
+                  r"[\w./-]+\.m3u8",
+                  r"scripts/[\w./-]+",
+                  r"guides/[\w./-]+",
+                  r"channels/[\w./-]+",
+                  r"config/[\w./-]+"
+              ]
+
+              for pattern in patterns:
+                  for match in re.findall(
+                      pattern,
+                      text
+                  ):
+                      references.add(match)
+
+              return sorted(references)
+
+          files = scan_files()
+
+          text_database = {}
+
+          for path in files:
+              if path.suffix.lower() in TEXT_EXTENSIONS:
+                  text_database[
+                      relative(path)
+                  ] = read_text(path)
+
+          workflows = []
+
+          for path in files:
+              name = relative(path)
+
+              if not name.startswith(
+                  ".github/workflows/"
+              ):
+                  continue
+
+              if path.suffix.lower() not in {
+                  ".yml",
+                  ".yaml"
+              }:
+                  continue
+
+              text = read_text(path)
+
+              workflows.append({
+                  "file": name,
+                  "name": extract_workflow_name(text),
+                  "references": extract_references(text),
+                  "secrets": extract_secrets(text)
+              })
+
+          references = {}
+
+          for target in files:
+              target_name = relative(target)
+
+              references[target_name] = []
+
+              possible_names = {
+                  target_name,
+                  target.name,
+                  "./" + target_name
+              }
+
+              for source, text in text_database.items():
+                  if source == target_name:
+                      continue
+
+                  if any(
+                      item in text
+                      for item in possible_names
+                  ):
+                      references[target_name].append(
+                          source
+                      )
+
+              references[target_name] = sorted(
+                  set(
+                      references[target_name]
+                  )
+              )
+
+          xml_gzip_pairs = []
+
+          file_names = {
+              relative(path)
+              for path in files
+          }
+
+          for name in sorted(file_names):
+              if not name.endswith(".xml"):
+                  continue
+
+              compressed = name + ".gz"
+
+              if compressed in file_names:
+                  xml_gzip_pairs.append({
+                      "xml": name,
+                      "gzip": compressed
+                  })
+
+          file_report = []
+
+          for path in files:
+              name = relative(path)
+
+              used_by = references.get(
+                  name,
+                  []
+              )
+
+              if used_by:
+                  status = "REFERENCED"
+
+              elif name.startswith(
+                  ".github/workflows/"
+              ):
+                  status = "WORKFLOW"
+
+              elif (
+                  "guides/" in name
+                  or "output/" in name
+                  or "generated/" in name
+              ):
+                  status = "GENERATED_OR_OUTPUT"
+
+              else:
+                  status = "NOT_REFERENCED"
+
+              file_report.append({
+                  "file": name,
+                  "status": status,
+                  "days_since_modified": get_age(path),
+                  "referenced_by": used_by
+              })
+
+          report = {
+              "generated": datetime.now().isoformat(),
+              "summary": {
+                  "total_files": len(files),
+                  "workflows": len(workflows),
+                  "referenced_files": sum(
+                      1
+                      for item in file_report
+                      if item["status"] == "REFERENCED"
+                  ),
+                  "not_referenced": sum(
+                      1
+                      for item in file_report
+                      if item["status"] == "NOT_REFERENCED"
+                  ),
+                  "xml_gzip_pairs": len(
+                      xml_gzip_pairs
+                  )
+              },
+              "workflows": workflows,
+              "xml_gzip_pairs": xml_gzip_pairs,
+              "files": file_report
+          }
+
+          Path(
+              "repo_audit.json"
+          ).write_text(
+              json.dumps(
+                  report,
+                  indent=2
+              ),
+              encoding="utf-8"
+          )
+
+          with open(
+              "repo_audit_report.txt",
+              "w",
+              encoding="utf-8"
+          ) as output:
+
+              output.write(
+                  "REPOSITORY AUDIT REPORT\n"
+              )
+
+              output.write(
+                  "=======================\n\n"
+              )
+
+              output.write(
+                  "Generated: "
+                  + report["generated"]
+                  + "\n\n"
+              )
+
+              output.write(
+                  "SUMMARY\n"
+              )
+
+              output.write(
+                  "-------\n"
+              )
+
+              for key, value in report[
+                  "summary"
+              ].items():
+
+                  output.write(
+                      f"{key}: {value}\n"
+                  )
+
+              output.write(
+                  "\n\nWORKFLOWS\n"
+              )
+
+              output.write(
+                  "=========\n"
+              )
+
+              for workflow in workflows:
+
+                  output.write(
+                      "\n"
+                      + workflow["name"]
+                      + "\n"
+                  )
+
+                  output.write(
+                      "File: "
+                      + workflow["file"]
+                      + "\n"
+                  )
+
+                  output.write(
+                      "Secrets:\n"
+                  )
+
+                  for secret in workflow[
+                      "secrets"
+                  ]:
+
+                      output.write(
+                          "  - "
+                          + secret
+                          + "\n"
+                      )
+
+                  output.write(
+                      "References:\n"
+                  )
+
+                  for reference in workflow[
+                      "references"
+                  ]:
+
+                      output.write(
+                          "  - "
+                          + reference
+                          + "\n"
+                      )
+
+              output.write(
+                  "\n\nXML AND GZIP PAIRS\n"
+              )
+
+              output.write(
+                  "===================\n"
+              )
+
+              for pair in xml_gzip_pairs:
+
+                  output.write(
+                      "\n"
+                      + pair["xml"]
+                      + "\n"
+                  )
+
+                  output.write(
+                      "  compressed: "
+                      + pair["gzip"]
+                      + "\n"
+                  )
+
+                  output.write(
+                      "  REVIEW WHETHER BOTH ARE NEEDED\n"
+                  )
+
+              output.write(
+                  "\n\nNOT REFERENCED FILES\n"
+              )
+
+              output.write(
+                  "====================\n"
+              )
+
+              for item in file_report:
+
+                  if item["status"] != "NOT_REFERENCED":
+                      continue
+
+                  output.write(
+                      "\n"
+                      + item["file"]
+                      + "\n"
+                  )
+
+                  output.write(
+                      "  Age: "
+                      + str(
+                          item["days_since_modified"]
+                      )
+                      + " days\n"
+                  )
+
+                  output.write(
+                      "  Status: REVIEW ONLY\n"
+                  )
+
+                  output.write(
+                      "  Nothing was deleted automatically\n"
+                  )
 
       - name: Run repository audit
-        run: python scripts/repository_audit.py
+        run: |
+          python repository_audit.py
 
-      - name: Commit audit reports
+      - name: Commit audit report
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add repo_audit.json repo_audit_report.txt
+
+          git add repo_audit.json
+          git add repo_audit_report.txt
+
           git commit -m "Add repository audit report" || echo "No changes to commit"
+
           git push
