@@ -50,11 +50,9 @@ os.makedirs(
 
 session = requests.Session()
 
-
 session.headers.update(
     {
-        "User-Agent":
-        "Mozilla/5.0"
+        "User-Agent": "Mozilla/5.0"
     }
 )
 
@@ -76,6 +74,29 @@ team_name_conversions = 0
 
 
 # --------------------------------------------------
+# Detailed diagnostics
+# --------------------------------------------------
+
+debug_stats = {
+
+    "provider_event_extracted": 0,
+    "provider_event_failed": 0,
+    "provider_matchup_parts_failed": 0,
+    "canonical_team_matches": 0,
+    "canonical_team_failures": 0,
+    "public_events_downloaded": 0,
+    "public_events_empty": 0,
+    "public_events_team_match_failed": 0,
+    "public_events_date_time_failed": 0,
+    "public_events_success": 0,
+    "logo_direct_order_found": 0,
+    "logo_reverse_order_found": 0,
+    "logo_not_found": 0,
+
+}
+
+
+# --------------------------------------------------
 # Text cleanup
 # --------------------------------------------------
 
@@ -87,33 +108,49 @@ def clean_text(text):
 
 
     text = html.unescape(
+
         str(text)
+
     )
 
 
     text = re.sub(
+
         r"<[^>]+>",
+
         "",
+
         text
+
     )
 
 
     text = text.replace(
+
         "\n",
+
         " "
+
     )
 
 
     text = text.replace(
+
         "\r",
+
         " "
+
     )
 
 
     text = re.sub(
+
         r"\s+",
+
         " ",
+
         text
+
     )
 
 
@@ -127,7 +164,9 @@ def clean_text(text):
 def format_time(dt):
 
     return dt.strftime(
+
         "%-I:%M %p"
+
     )
 
 
@@ -143,185 +182,72 @@ def normalize_matchup(text):
 
 
     text = clean_text(
+
         text
+
     )
 
 
     text = re.sub(
+
         r"\s+[xX]\s+",
+
         " vs. ",
+
         text
+
     )
 
 
     text = re.sub(
+
         r"\s+@\s+",
+
         " vs. ",
+
         text
+
     )
 
 
     text = re.sub(
-        r"\s+v\s+",
+
+        r"\s+v\.?\s+",
+
         " vs. ",
+
         text,
+
         flags=re.IGNORECASE
+
     )
 
 
     text = re.sub(
+
         r"\s+vs\s*\.?\s+",
+
         " vs. ",
+
         text,
+
         flags=re.IGNORECASE
+
     )
 
 
     text = re.sub(
+
         r"\s+",
+
         " ",
+
         text
+
     )
 
 
     return text.strip(
-        " -|:;"
-    )
-
-
-# --------------------------------------------------
-# Clean provider channel names
-# --------------------------------------------------
-
-def clean_channel_name(name):
-
-    name = clean_text(
-        name
-    )
-
-
-    def convert_time(match):
-
-        hour = int(
-            match.group(1)
-        )
-
-
-        minute = int(
-            match.group(2)
-        )
-
-
-        suffix = (
-
-            "AM"
-
-            if hour < 12
-
-            else "PM"
-
-        )
-
-
-        display_hour = hour % 12
-
-
-        if display_hour == 0:
-
-            display_hour = 12
-
-
-        return (
-
-            f"{display_hour}:"
-
-            f"{minute:02d} "
-
-            f"{suffix}"
-
-        )
-
-
-    name = re.sub(
-
-        r"\b([01]?\d|2[0-3]):([0-5]\d)\b",
-
-        convert_time,
-
-        name
-
-    )
-
-
-    name = re.sub(
-
-        r"\s+[xX]\s+",
-
-        " vs. ",
-
-        name
-
-    )
-
-
-    name = re.sub(
-
-        r"\s+@\s+",
-
-        " vs. ",
-
-        name
-
-    )
-
-
-    name = re.sub(
-
-        r"\s+vs\s*\.?\s+",
-
-        " vs. ",
-
-        name,
-
-        flags=re.IGNORECASE
-
-    )
-
-
-    name = re.sub(
-
-        r"\s*\|\s*",
-
-        " | ",
-
-        name
-
-    )
-
-
-    name = re.sub(
-
-        r"\s*;\s*",
-
-        " ; ",
-
-        name
-
-    )
-
-
-    name = re.sub(
-
-        r"\s+",
-
-        " ",
-
-        name
-
-    )
-
-
-    return name.strip(
 
         " -|:;"
 
@@ -330,6 +256,18 @@ def clean_channel_name(name):
 
 # --------------------------------------------------
 # Remove provider event metadata
+#
+# Example:
+#
+# MLB 01 | White Sox x Blue Jays
+# start:2026-07-19 17:15:00
+# stop:2026-07-20 00:28:20
+#
+# becomes:
+#
+# MLB 01 | White Sox vs. Blue Jays
+#
+# The channel display-name is never changed.
 # --------------------------------------------------
 
 def remove_event_metadata(text):
@@ -340,13 +278,15 @@ def remove_event_metadata(text):
 
 
     text = clean_text(
+
         text
+
     )
 
 
     text = re.split(
 
-        r"\bStart\s*:",
+        r"\bstart\s*:",
 
         text,
 
@@ -359,7 +299,7 @@ def remove_event_metadata(text):
 
     text = re.split(
 
-        r"\bStop\s*:",
+        r"\bstop\s*:",
 
         text,
 
@@ -392,11 +332,103 @@ def remove_event_metadata(text):
     )
 
 
-    return normalize_matchup(
+    return text.strip()
+
+
+# --------------------------------------------------
+# Extract only the matchup from the provider name
+#
+# Example:
+#
+# MLB 01 | White Sox x Blue Jays
+#
+# becomes:
+#
+# White Sox vs. Blue Jays
+#
+# Everything before the pipe is discarded.
+# --------------------------------------------------
+
+def extract_provider_matchup(text):
+
+    if not text:
+
+        debug_stats[
+
+            "provider_event_failed"
+
+        ] += 1
+
+
+        return ""
+
+
+    text = clean_text(
 
         text
 
     )
+
+
+    text = remove_event_metadata(
+
+        text
+
+    )
+
+
+    if "|" in text:
+
+        text = text.split(
+
+            "|",
+
+            1
+
+        )[1]
+
+
+    text = clean_text(
+
+        text
+
+    )
+
+
+    matchup = normalize_matchup(
+
+        text
+
+    )
+
+
+    parts = matchup_parts(
+
+        matchup
+
+    )
+
+
+    if len(parts) != 2:
+
+        debug_stats[
+
+            "provider_event_failed"
+
+        ] += 1
+
+
+        return ""
+
+
+    debug_stats[
+
+        "provider_event_extracted"
+
+    ] += 1
+
+
+    return matchup
 
 
 # --------------------------------------------------
@@ -411,24 +443,36 @@ def extract_start_datetime(text):
 
 
     text = clean_text(
+
         text
+
     )
 
 
     patterns = [
 
-        r"Start\s*:\s*"
+        r"start\s*:\s*"
+
         r"(\d{4}-\d{2}-\d{2})"
+
         r"\s+"
+
         r"(\d{2}:\d{2}(?::\d{2})?)",
+
 
         r"start\s*=\s*"
-        r"(\d{4}-\d{2}-\d{2})"
-        r"\s+"
-        r"(\d{2}:\d{2}(?::\d{2})?)",
 
         r"(\d{4}-\d{2}-\d{2})"
+
         r"\s+"
+
+        r"(\d{2}:\d{2}(?::\d{2})?)",
+
+
+        r"(\d{4}-\d{2}-\d{2})"
+
+        r"\s+"
+
         r"(\d{2}:\d{2}:\d{2})"
 
     ]
@@ -453,12 +497,16 @@ def extract_start_datetime(text):
 
 
         date_part = match.group(
+
             1
+
         )
 
 
         time_part = match.group(
+
             2
+
         )
 
 
@@ -916,36 +964,78 @@ def get_epg(stream_id):
 
 def matchup_parts(text):
 
-    text = remove_event_metadata(
+    if not text:
+
+        return []
+
+
+    text = clean_text(
 
         text
 
     )
 
 
-    parts = re.split(
+    match = re.search(
 
-        r"\s+vs\.\s+",
+        r"(.+?)\s+"
+
+        r"(?:vs\.?|v\.?|x|@)"
+
+        r"\s+"
+
+        r"(.+)",
 
         text,
-
-        maxsplit=1,
 
         flags=re.IGNORECASE
 
     )
 
 
-    if len(parts) != 2:
+    if not match:
+
+        debug_stats[
+
+            "provider_matchup_parts_failed"
+
+        ] += 1
+
+
+        return []
+
+
+    first = clean_text(
+
+        match.group(1)
+
+    )
+
+
+    second = clean_text(
+
+        match.group(2)
+
+    )
+
+
+    if not first or not second:
+
+        debug_stats[
+
+            "provider_matchup_parts_failed"
+
+        ] += 1
+
 
         return []
 
 
     return [
 
-        parts[0].strip(),
+        first,
 
-        parts[1].strip()
+        second
 
     ]
 
@@ -1060,6 +1150,15 @@ def team_matches(
 
     if (
 
+        wanted_team == actual_team
+
+    ):
+
+        return True
+
+
+    if (
+
         wanted_team in actual_team
 
         or actual_team in wanted_team
@@ -1135,21 +1234,13 @@ def team_matches(
 
 SPORTSDB_LEAGUES = {
 
-    "MLB":
+    "MLB": "MLB",
 
-    "MLB",
+    "NBA": "NBA",
 
-    "NBA":
+    "NFL": "NFL",
 
-    "NBA",
-
-    "NFL":
-
-    "NFL",
-
-    "NHL":
-
-    "NHL"
+    "NHL": "NHL"
 
 }
 
@@ -1187,9 +1278,7 @@ def load_sportsdb_teams():
 
                 params={
 
-                    "l":
-
-                    league_name
+                    "l": league_name
 
                 },
 
@@ -1257,14 +1346,6 @@ def load_sportsdb_teams():
                     team.get(
 
                         "strAlternate",
-
-                        ""
-
-                    ),
-
-                    team.get(
-
-                        "strTeamShort",
 
                         ""
 
@@ -1362,6 +1443,13 @@ def canonicalize_team_name(
 
     if not provider_team:
 
+        debug_stats[
+
+            "canonical_team_failures"
+
+        ] += 1
+
+
         return provider_team
 
 
@@ -1378,6 +1466,13 @@ def canonicalize_team_name(
 
     if not normalized_provider:
 
+        debug_stats[
+
+            "canonical_team_failures"
+
+        ] += 1
+
+
         return provider_team
 
 
@@ -1393,6 +1488,13 @@ def canonicalize_team_name(
         if exact["name"] != provider_team:
 
             team_name_conversions += 1
+
+
+        debug_stats[
+
+            "canonical_team_matches"
+
+        ] += 1
 
 
         return exact["name"]
@@ -1550,7 +1652,21 @@ def canonicalize_team_name(
 
         team_name_conversions += 1
 
+        debug_stats[
+
+            "canonical_team_matches"
+
+        ] += 1
+
+
         return best_match["name"]
+
+
+    debug_stats[
+
+        "canonical_team_failures"
+
+    ] += 1
 
 
     return provider_team
@@ -1584,7 +1700,7 @@ def canonicalize_matchup(
         )
 
 
-    away = canonicalize_team_name(
+    first = canonicalize_team_name(
 
         parts[0],
 
@@ -1593,7 +1709,7 @@ def canonicalize_matchup(
     )
 
 
-    home = canonicalize_team_name(
+    second = canonicalize_team_name(
 
         parts[1],
 
@@ -1604,11 +1720,11 @@ def canonicalize_matchup(
 
     return (
 
-        f"{away}"
+        f"{first}"
 
         f" vs. "
 
-        f"{home}"
+        f"{second}"
 
     )
 
@@ -1657,6 +1773,22 @@ def clean_logo_filename(text):
 
 # --------------------------------------------------
 # Find matchup logo
+#
+# Checks BOTH possible orders.
+#
+# Example:
+#
+# Boston Red Sox vs Tampa Bay Rays
+#
+# First:
+#
+# sports-logos/MLB/Boston_Red_Sox/
+# Boston_Red_Sox_vs_Tampa_Bay_Rays.png
+#
+# Then:
+#
+# sports-logos/MLB/Tampa_Bay_Rays/
+# Tampa_Bay_Rays_vs_Boston_Red_Sox.png
 # --------------------------------------------------
 
 def find_matchup_logo(
@@ -1671,6 +1803,8 @@ def find_matchup_logo(
 
 
     if not public_event:
+
+        logos_missing += 1
 
         return None
 
@@ -1714,46 +1848,23 @@ def find_matchup_logo(
     )
 
 
-    if not league or not away or not home:
-
-        logos_missing += 1
-
-        return None
-
-
     league_map = {
 
-        "Major League Baseball":
+        "Major League Baseball": "MLB",
 
-        "MLB",
+        "National Basketball Association": "NBA",
 
-        "National Basketball Association":
+        "National Football League": "NFL",
 
-        "NBA",
+        "National Hockey League": "NHL",
 
-        "National Football League":
+        "MLB": "MLB",
 
-        "NFL",
+        "NBA": "NBA",
 
-        "National Hockey League":
+        "NFL": "NFL",
 
-        "NHL",
-
-        "MLB":
-
-        "MLB",
-
-        "NBA":
-
-        "NBA",
-
-        "NFL":
-
-        "NFL",
-
-        "NHL":
-
-        "NHL"
+        "NHL": "NHL"
 
     }
 
@@ -1767,13 +1878,19 @@ def find_matchup_logo(
 
     if not league_folder:
 
+        print(
+
+            f"[LOGO FAIL] Unknown league: "
+
+            f"{league}"
+
+        )
+
+
         logos_missing += 1
 
         return None
 
-
-    # These are already the official
-    # full names returned by TheSportsDB.
 
     away = canonicalize_team_name(
 
@@ -1807,7 +1924,7 @@ def find_matchup_logo(
     )
 
 
-    filename = (
+    direct_filename = (
 
         f"{away_folder}"
 
@@ -1820,7 +1937,7 @@ def find_matchup_logo(
     )
 
 
-    relative_path = os.path.join(
+    direct_path = os.path.join(
 
         SPORTS_LOGO_ROOT,
 
@@ -1828,26 +1945,123 @@ def find_matchup_logo(
 
         away_folder,
 
-        filename
+        direct_filename
 
     )
 
 
-    if not os.path.exists(
+    if os.path.exists(
 
-        relative_path
+        direct_path
 
     ):
 
-        logos_missing += 1
+        logos_found += 1
 
-        return None
+        debug_stats[
+
+            "logo_direct_order_found"
+
+        ] += 1
 
 
-    logos_found += 1
+        return direct_path
 
 
-    return relative_path
+    reverse_filename = (
+
+        f"{home_folder}"
+
+        f"_vs_"
+
+        f"{away_folder}"
+
+        f".png"
+
+    )
+
+
+    reverse_path = os.path.join(
+
+        SPORTS_LOGO_ROOT,
+
+        league_folder,
+
+        home_folder,
+
+        reverse_filename
+
+    )
+
+
+    if os.path.exists(
+
+        reverse_path
+
+    ):
+
+        logos_found += 1
+
+        debug_stats[
+
+            "logo_reverse_order_found"
+
+        ] += 1
+
+
+        return reverse_path
+
+
+    print()
+
+    print(
+
+        "[LOGO FAIL] Not found:"
+
+    )
+
+
+    print(
+
+        f"  {away} vs. {home}"
+
+    )
+
+
+    print(
+
+        "  Tried:"
+
+    )
+
+
+    print(
+
+        f"  {direct_path}"
+
+    )
+
+
+    print(
+
+        f"  {reverse_path}"
+
+    )
+
+
+    print()
+
+
+    logos_missing += 1
+
+    debug_stats[
+
+        "logo_not_found"
+
+    ] += 1
+
+
+    return None
 
 
 # --------------------------------------------------
@@ -1890,9 +2104,7 @@ def get_public_events(
 
             params={
 
-                "d":
-
-                date_text
+                "d": date_text
 
             },
 
@@ -1903,13 +2115,20 @@ def get_public_events(
 
         if response.status_code != 200:
 
+            debug_stats[
+
+                "public_events_empty"
+
+            ] += 1
+
+
             return []
 
 
         data = response.json()
 
 
-        return data.get(
+        events = data.get(
 
             "events",
 
@@ -1918,11 +2137,33 @@ def get_public_events(
         ) or []
 
 
+        if events:
+
+            debug_stats[
+
+                "public_events_downloaded"
+
+            ] += len(events)
+
+        else:
+
+            debug_stats[
+
+                "public_events_empty"
+
+            ] += 1
+
+
+        return events
+
+
     except Exception as e:
+
+        print()
 
         print(
 
-            "Public schedule lookup failed:"
+            "[PUBLIC API ERROR]"
 
         )
 
@@ -1939,6 +2180,24 @@ def get_public_events(
 
 # --------------------------------------------------
 # Find verified public event
+#
+# Matching process:
+#
+# 1. Extract provider matchup:
+#
+#    White Sox vs Blue Jays
+#
+# 2. Convert provider names:
+#
+#    Chicago White Sox
+#    Toronto Blue Jays
+#
+# 3. Compare against SportsDB:
+#
+#    Toronto Blue Jays
+#    Chicago White Sox
+#
+# 4. Accept either order.
 # --------------------------------------------------
 
 def find_public_event(
@@ -1952,40 +2211,53 @@ def find_public_event(
     global public_api_matches
 
 
-    # --------------------------------------------------
-    # FIRST:
-    #
-    # Convert provider shorthand into official names.
-    #
-    # Example:
-    #
-    # Red Sox vs Phillies
-    #
-    # becomes:
-    #
-    # Boston Red Sox vs. Philadelphia Phillies
-    #
-    # This is what is actually searched against
-    # TheSportsDB.
-    # --------------------------------------------------
-
-    canonical_matchup = canonicalize_matchup(
+    parts = matchup_parts(
 
         provider_matchup
 
     )
 
 
-    parts = matchup_parts(
+    if len(parts) != 2:
 
-        canonical_matchup
+        print()
+
+        print(
+
+            "[MATCH FAIL] Could not split provider matchup:"
+
+        )
+
+
+        print(
+
+            f"  {provider_matchup}"
+
+        )
+
+
+        return None
+
+
+    provider_first = parts[0]
+
+    provider_second = parts[1]
+
+
+    print()
+
+    print(
+
+        "[LOOKUP] Provider matchup:"
 
     )
 
 
-    if len(parts) != 2:
+    print(
 
-        return None
+        f"  {provider_first} vs. {provider_second}"
+
+    )
 
 
     search_dates = [
@@ -2015,6 +2287,7 @@ def find_public_event(
 
     for date_value in search_dates:
 
+
         events = get_public_events(
 
             date_value
@@ -2022,7 +2295,31 @@ def find_public_event(
         )
 
 
+        if not events:
+
+            print(
+
+                f"[LOOKUP] {date_value}: "
+
+                f"no public events returned"
+
+            )
+
+
+            continue
+
+
+        print(
+
+            f"[LOOKUP] {date_value}: "
+
+            f"{len(events)} public events"
+
+        )
+
+
         for event in events:
+
 
             home_team = clean_text(
 
@@ -2070,21 +2367,13 @@ def find_public_event(
 
             league_map = {
 
-                "Major League Baseball":
+                "Major League Baseball": "MLB",
 
-                "MLB",
+                "National Basketball Association": "NBA",
 
-                "National Basketball Association":
+                "National Football League": "NFL",
 
-                "NBA",
-
-                "National Football League":
-
-                "NFL",
-
-                "National Hockey League":
-
-                "NHL"
+                "National Hockey League": "NHL"
 
             }
 
@@ -2096,11 +2385,11 @@ def find_public_event(
             )
 
 
-            canonical_away = (
+            provider_first_canonical = (
 
                 canonicalize_team_name(
 
-                    parts[0],
+                    provider_first,
 
                     league_hint
 
@@ -2109,11 +2398,37 @@ def find_public_event(
             )
 
 
-            canonical_home = (
+            provider_second_canonical = (
 
                 canonicalize_team_name(
 
-                    parts[1],
+                    provider_second,
+
+                    league_hint
+
+                )
+
+            )
+
+
+            event_home_canonical = (
+
+                canonicalize_team_name(
+
+                    home_team,
+
+                    league_hint
+
+                )
+
+            )
+
+
+            event_away_canonical = (
+
+                canonicalize_team_name(
+
+                    away_team,
 
                     league_hint
 
@@ -2126,9 +2441,9 @@ def find_public_event(
 
                 team_matches(
 
-                    canonical_away,
+                    provider_first_canonical,
 
-                    away_team
+                    event_away_canonical
 
                 )
 
@@ -2136,9 +2451,9 @@ def find_public_event(
 
                 team_matches(
 
-                    canonical_home,
+                    provider_second_canonical,
 
-                    home_team
+                    event_home_canonical
 
                 )
 
@@ -2149,9 +2464,9 @@ def find_public_event(
 
                 team_matches(
 
-                    canonical_away,
+                    provider_first_canonical,
 
-                    home_team
+                    event_home_canonical
 
                 )
 
@@ -2159,9 +2474,9 @@ def find_public_event(
 
                 team_matches(
 
-                    canonical_home,
+                    provider_second_canonical,
 
-                    away_team
+                    event_away_canonical
 
                 )
 
@@ -2169,6 +2484,13 @@ def find_public_event(
 
 
             if not direct_match and not reverse_match:
+
+                debug_stats[
+
+                    "public_events_team_match_failed"
+
+                ] += 1
+
 
                 continue
 
@@ -2189,6 +2511,13 @@ def find_public_event(
 
             if not event_date or not event_time:
 
+                debug_stats[
+
+                    "public_events_date_time_failed"
+
+                ] += 1
+
+
                 continue
 
 
@@ -2206,6 +2535,13 @@ def find_public_event(
 
 
             except ValueError:
+
+                debug_stats[
+
+                    "public_events_date_time_failed"
+
+                ] += 1
+
 
                 continue
 
@@ -2236,25 +2572,87 @@ def find_public_event(
             public_api_matches += 1
 
 
+            debug_stats[
+
+                "public_events_success"
+
+            ] += 1
+
+
+            print()
+
+            print(
+
+                "[MATCH SUCCESS]"
+
+            )
+
+
+            print(
+
+                f"  Provider: "
+
+                f"{provider_first} vs. "
+
+                f"{provider_second}"
+
+            )
+
+
+            print(
+
+                f"  SportsDB: "
+
+                f"{away_team} vs. {home_team}"
+
+            )
+
+
+            print(
+
+                f"  League: "
+
+                f"{event_league}"
+
+            )
+
+
+            print(
+
+                f"  Time: "
+
+                f"{event_datetime}"
+
+            )
+
+
             return {
 
-                "away":
+                "away": away_team,
 
-                away_team,
+                "home": home_team,
 
-                "home":
+                "league": event_league,
 
-                home_team,
-
-                "league":
-
-                event_league,
-
-                "datetime":
-
-                event_datetime
+                "datetime": event_datetime
 
             }
+
+
+    print()
+
+    print(
+
+        "[MATCH FAIL] No public event matched:"
+
+    )
+
+
+    print(
+
+        f"  {provider_first} vs. {provider_second}"
+
+    )
 
 
     return None
@@ -2292,7 +2690,50 @@ def build_event_info(
     )
 
 
-    provider_event = remove_event_metadata(
+    stream_id = str(
+
+        stream.get(
+
+            "stream_id",
+
+            ""
+
+        )
+
+    )
+
+
+    print()
+
+    print(
+
+        "=================================================="
+
+    )
+
+
+    print(
+
+        f"[CHANNEL {stream_id}]"
+
+    )
+
+
+    print(
+
+        f"Raw provider name:"
+
+    )
+
+
+    print(
+
+        f"  {provider_name}"
+
+    )
+
+
+    provider_event = extract_provider_matchup(
 
         provider_name
 
@@ -2302,6 +2743,34 @@ def build_event_info(
     provider_start = extract_start_datetime(
 
         provider_name
+
+    )
+
+
+    print(
+
+        "Extracted event:"
+
+    )
+
+
+    print(
+
+        f"  {provider_event}"
+
+    )
+
+
+    print(
+
+        "Provider start:"
+
+    )
+
+
+    print(
+
+        f"  {provider_start}"
 
     )
 
@@ -2324,6 +2793,20 @@ def build_event_info(
         )
 
 
+    print(
+
+        "Provider Eastern start:"
+
+    )
+
+
+    print(
+
+        f"  {provider_start_eastern}"
+
+    )
+
+
     preferred_date = (
 
         provider_start_eastern.date()
@@ -2343,9 +2826,30 @@ def build_event_info(
     )
 
 
-    # --------------------------------------------------
-    # Find official public event
-    # --------------------------------------------------
+    if not provider_event:
+
+        no_public_match += 1
+
+
+        if provider_start_eastern:
+
+            provider_fallbacks += 1
+
+
+        return (
+
+            "Sports Event",
+
+            "Sports event",
+
+            provider_start_eastern,
+
+            None,
+
+            False
+
+        )
+
 
     public_event = find_public_event(
 
@@ -2456,14 +2960,10 @@ def build_event_info(
 
             logo_path,
 
-            False
+            True
 
         )
 
-
-    # --------------------------------------------------
-    # Fallback when public schedule does not match
-    # --------------------------------------------------
 
     no_public_match += 1
 
@@ -2472,21 +2972,6 @@ def build_event_info(
 
         provider_fallbacks += 1
 
-
-    # --------------------------------------------------
-    # Even if TheSportsDB does not find the event,
-    # still canonicalize the provider matchup.
-    #
-    # Example:
-    #
-    # Red Sox vs Phillies
-    #
-    # becomes:
-    #
-    # Boston Red Sox vs. Philadelphia Phillies
-    #
-    # in the title and description.
-    # --------------------------------------------------
 
     canonical_provider_event = (
 
@@ -2637,6 +3122,8 @@ guide_end = (
 # Create XMLTV channels
 # --------------------------------------------------
 
+print()
+
 print(
 
     "Creating XMLTV channels..."
@@ -2666,13 +3153,10 @@ for channel_id, requested_name in wanted.items():
 
     # IMPORTANT:
     #
-    # The original provider channel name
-    # remains unchanged.
+    # This is the original provider channel name.
     #
-    # Only programme title,
-    # description,
-    # and programme icon
-    # are modified.
+    # It remains completely untouched.
+    #
 
     provider_name = stream.get(
 
@@ -2716,6 +3200,8 @@ for channel_id, requested_name in wanted.items():
 # Create 6-hour programme blocks
 # --------------------------------------------------
 
+print()
+
 print(
 
     "Creating 6-hour programme blocks..."
@@ -2736,6 +3222,8 @@ for channel_id, requested_name in wanted.items():
 
     ]
 
+
+    print()
 
     print(
 
@@ -2776,6 +3264,7 @@ for channel_id, requested_name in wanted.items():
 
 
     while current_start < guide_end:
+
 
         current_stop = (
 
@@ -2852,10 +3341,6 @@ for channel_id, requested_name in wanted.items():
         desc.text = description_text
 
 
-        # --------------------------------------------------
-        # Add matchup logo to programme
-        # --------------------------------------------------
-
         if logo_path:
 
             icon = ET.SubElement(
@@ -2886,6 +3371,8 @@ for channel_id, requested_name in wanted.items():
 # --------------------------------------------------
 # Save XMLTV file
 # --------------------------------------------------
+
+print()
 
 print(
 
@@ -2921,12 +3408,11 @@ tree.write(
 )
 
 
-print(
+# --------------------------------------------------
+# Final statistics
+# --------------------------------------------------
 
-    ""
-
-)
-
+print()
 
 print(
 
@@ -2969,12 +3455,7 @@ print(
 )
 
 
-print(
-
-    ""
-
-)
-
+print()
 
 print(
 
@@ -3053,3 +3534,21 @@ print(
     f"{logos_missing}"
 
 )
+
+
+print()
+
+print(
+
+    "Detailed matching diagnostics:"
+
+)
+
+
+for key, value in debug_stats.items():
+
+    print(
+
+        f"{key}: {value}"
+
+    )
