@@ -1,6 +1,6 @@
 from pathlib import Path
-from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
+import json
 import re
 
 
@@ -8,17 +8,38 @@ ROOT = Path(__file__).resolve().parent
 
 WORKFLOW_DIR = ROOT / ".github" / "workflows"
 
-CHECK_DIRS = [
+AUDIT_DIRECTORIES = [
     ROOT / "fast",
     ROOT / "guides",
     ROOT / "xtream-epg",
 ]
 
-REPORT = ROOT / "repo_audit_report.txt"
+REPORT_FILE = ROOT / "repo_audit_report.txt"
+JSON_FILE = ROOT / "repo_audit.json"
 
 
-def relative(path):
-    return str(path.relative_to(ROOT)).replace("\\", "/")
+TEXT_EXTENSIONS = {
+    ".yml",
+    ".yaml",
+    ".py",
+    ".js",
+    ".ts",
+    ".json",
+    ".txt",
+    ".sh",
+    ".xml",
+    ".md",
+    ".toml",
+    ".ini",
+    ".cfg",
+}
+
+
+def relative_path(path):
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return str(path)
 
 
 def read_text(path):
@@ -31,293 +52,578 @@ def read_text(path):
         return ""
 
 
-def get_checked_files():
+def all_repository_files():
     files = []
 
-    for directory in CHECK_DIRS:
-        if not directory.exists():
+    for path in ROOT.rglob("*"):
+
+        if not path.is_file():
             continue
 
-        for path in directory.rglob("*"):
-            if path.is_file():
-                files.append(path)
+        relative = relative_path(path)
+
+        if relative.startswith(".git/"):
+            continue
+
+        if relative.startswith("logos/"):
+            continue
+
+        files.append(path)
 
     return files
 
 
-def get_workflows():
+def audit_scope_files():
+    files = []
+
+    for directory in AUDIT_DIRECTORIES:
+
+        if not directory.exists():
+            continue
+
+        for path in directory.rglob("*"):
+
+            if path.is_file():
+                files.append(path)
+
+    return sorted(files)
+
+
+def workflow_files():
     if not WORKFLOW_DIR.exists():
         return []
 
     return sorted(
-        [
-            path
-            for path in WORKFLOW_DIR.rglob("*")
-            if path.is_file()
-            and path.suffix.lower() in {".yml", ".yaml"}
-        ]
+        path
+        for path in WORKFLOW_DIR.rglob("*")
+        if path.is_file()
+        and path.suffix.lower() in {".yml", ".yaml"}
     )
 
 
-def normalize(value):
-    return value.replace("\\", "/").strip()
+def normalize_reference(value):
+    value = value.strip()
+
+    value = value.strip(
+        "\"'`"
+    )
+
+    value = value.replace(
+        "${{ github.workspace }}/",
+        ""
+    )
+
+    value = value.replace(
+        "${GITHUB_WORKSPACE}/",
+        ""
+    )
+
+    value = value.replace(
+        "$GITHUB_WORKSPACE/",
+        ""
+    )
+
+    value = value.lstrip("./")
+
+    return value
 
 
-def find_references(workflow_text, files):
-    referenced = set()
+def find_explicit_file_references(text, repository_files):
+    references = set()
 
-    file_lookup = {
-        relative(path): path
-        for path in files
+    known_paths = {
+        relative_path(path): path
+        for path in repository_files
     }
 
-    basename_lookup = defaultdict(list)
+    for relative in known_paths:
 
-    for path in files:
-        basename_lookup[path.name].append(path)
-
-    for file_path, actual_path in file_lookup.items():
+        escaped = re.escape(relative)
 
         if re.search(
-            rf"(?<![A-Za-z0-9_.-])"
-            rf"{re.escape(file_path)}"
-            rf"(?![A-Za-z0-9_.-])",
-            workflow_text
+            rf"(?<![A-Za-z0-9_./-]){escaped}(?![A-Za-z0-9_./-])",
+            text
         ):
-            referenced.add(actual_path)
+            references.add(relative)
 
-    for path in files:
+    return references
 
-        if path.name not in workflow_text:
+
+def find_filename_references(text, repository_files):
+    references = set()
+
+    for path in repository_files:
+
+        filename = path.name
+
+        if len(filename) < 4:
             continue
 
-        matches = basename_lookup[path.name]
+        if filename not in text:
+            continue
 
-        if len(matches) == 1:
-            referenced.add(matches[0])
+        references.add(
+            relative_path(path)
+        )
 
-    return referenced
-
-
-def classify(path):
-    suffix = path.suffix.lower()
-
-    if suffix in {".xml", ".gz"}:
-        return "Guides / Generated Data"
-
-    if suffix in {".py", ".js", ".ts", ".sh"}:
-        return "Scripts"
-
-    if suffix in {".txt", ".json", ".csv"}:
-        return "Data / Configuration"
-
-    return "Other"
+    return references
 
 
-def main():
+def find_path_like_references(text, repository_files):
+    references = set()
 
-    checked_files = get_checked_files()
-    workflows = get_workflows()
+    known_paths = {
+        relative_path(path): path
+        for path in repository_files
+    }
 
-    referenced_files = set()
-    workflow_references = {}
+    candidates = re.findall(
+        r"""
+        (?:
+            [A-Za-z0-9_.-]+/
+        )+
+        [A-Za-z0-9_.-]+
+        (?:\.[A-Za-z0-9_.-]+)?
+        """,
+        text,
+        re.VERBOSE
+    )
+
+    for candidate in candidates:
+
+        candidate = normalize_reference(
+            candidate
+        )
+
+        if candidate in known_paths:
+            references.add(candidate)
+
+    return references
+
+
+def find_workflow_dependencies(workflow_path, repository_files):
+    text = read_text(workflow_path)
+
+    references = set()
+
+    references.update(
+        find_explicit_file_references(
+            text,
+            repository_files
+        )
+    )
+
+    references.update(
+        find_filename_references(
+            text,
+            repository_files
+        )
+    )
+
+    references.update(
+        find_path_like_references(
+            text,
+            repository_files
+        )
+    )
+
+    return sorted(references)
+
+
+def find_script_dependencies(
+    script_path,
+    repository_files,
+    already_scanned=None
+):
+    if already_scanned is None:
+        already_scanned = set()
+
+    relative_script = relative_path(
+        script_path
+    )
+
+    if relative_script in already_scanned:
+        return set()
+
+    already_scanned.add(
+        relative_script
+    )
+
+    text = read_text(
+        script_path
+    )
+
+    dependencies = set()
+
+    dependencies.update(
+        find_explicit_file_references(
+            text,
+            repository_files
+        )
+    )
+
+    dependencies.update(
+        find_filename_references(
+            text,
+            repository_files
+        )
+    )
+
+    dependencies.update(
+        find_path_like_references(
+            text,
+            repository_files
+        )
+    )
+
+    script_extensions = {
+        ".py",
+        ".js",
+        ".ts",
+        ".sh"
+    }
+
+    for dependency in list(dependencies):
+
+        dependency_path = ROOT / dependency
+
+        if (
+            dependency_path.exists()
+            and dependency_path.is_file()
+            and dependency_path.suffix.lower()
+            in script_extensions
+        ):
+            dependencies.update(
+                find_script_dependencies(
+                    dependency_path,
+                    repository_files,
+                    already_scanned
+                )
+            )
+
+    return dependencies
+
+
+def build_audit():
+
+    repository_files = all_repository_files()
+
+    workflows = workflow_files()
+
+    workflow_results = {}
+
+    all_referenced = set()
 
     for workflow in workflows:
 
-        workflow_text = read_text(workflow)
-
-        references = find_references(
-            workflow_text,
-            checked_files
+        workflow_relative = relative_path(
+            workflow
         )
 
-        workflow_references[workflow] = references
-        referenced_files.update(references)
+        direct_dependencies = find_workflow_dependencies(
+            workflow,
+            repository_files
+        )
 
-    unreferenced_files = set(checked_files) - referenced_files
+        all_dependencies = set(
+            direct_dependencies
+        )
 
-    used_by_category = defaultdict(list)
-    unused_by_category = defaultdict(list)
+        for dependency in list(
+            direct_dependencies
+        ):
 
-    for path in sorted(
-        referenced_files,
-        key=lambda item: relative(item).lower()
-    ):
-        used_by_category[
-            classify(path)
-        ].append(relative(path))
+            dependency_path = ROOT / dependency
 
-    for path in sorted(
-        unreferenced_files,
-        key=lambda item: relative(item).lower()
-    ):
-        unused_by_category[
-            classify(path)
-        ].append(relative(path))
+            if (
+                dependency_path.exists()
+                and dependency_path.is_file()
+                and dependency_path.suffix.lower()
+                in {".py", ".js", ".ts", ".sh"}
+            ):
+                all_dependencies.update(
+                    find_script_dependencies(
+                        dependency_path,
+                        repository_files
+                    )
+                )
+
+        workflow_results[
+            workflow_relative
+        ] = sorted(
+            all_dependencies
+        )
+
+        all_referenced.update(
+            all_dependencies
+        )
+
+    scoped_files = audit_scope_files()
+
+    scoped_relative = {
+        relative_path(path)
+        for path in scoped_files
+    }
+
+    referenced_scoped = sorted(
+        scoped_relative.intersection(
+            all_referenced
+        )
+    )
+
+    unreferenced_scoped = sorted(
+        scoped_relative.difference(
+            all_referenced
+        )
+    )
+
+    return {
+        "generated": datetime.now(
+            timezone.utc
+        ).isoformat(),
+
+        "audit_scope": [
+            ".github/workflows/",
+            "fast/",
+            "guides/",
+            "xtream-epg/"
+        ],
+
+        "workflows_analyzed": len(
+            workflows
+        ),
+
+        "files_checked": len(
+            scoped_files
+        ),
+
+        "files_referenced_by_workflows": len(
+            referenced_scoped
+        ),
+
+        "files_not_referenced_by_workflows": len(
+            unreferenced_scoped
+        ),
+
+        "referenced_files": referenced_scoped,
+
+        "unreferenced_files": unreferenced_scoped,
+
+        "workflow_dependencies": workflow_results
+    }
+
+
+def build_report(data):
 
     lines = []
 
     lines.append(
         "REPOSITORY WORKFLOW DEPENDENCY AUDIT"
     )
+
     lines.append(
         "===================================="
     )
+
     lines.append("")
 
     lines.append(
-        f"Generated: {datetime.utcnow().isoformat()} UTC"
+        f"Generated: {data['generated']}"
     )
+
     lines.append("")
 
     lines.append(
         "AUDIT SCOPE"
     )
+
     lines.append(
         "-----------"
     )
+
     lines.append(
         ".github/workflows/"
     )
+
     lines.append(
         "fast/"
     )
+
     lines.append(
         "guides/"
     )
+
     lines.append(
         "xtream-epg/"
     )
+
     lines.append("")
 
     lines.append(
         "SUMMARY"
     )
+
     lines.append(
         "-------"
     )
+
     lines.append(
-        f"Workflows analyzed: {len(workflows)}"
+        f"Workflows analyzed: {data['workflows_analyzed']}"
     )
+
     lines.append(
-        f"Files checked: {len(checked_files)}"
+        f"Files checked: {data['files_checked']}"
     )
+
     lines.append(
-        f"Files referenced by workflows: {len(referenced_files)}"
+        f"Files referenced by workflows: "
+        f"{data['files_referenced_by_workflows']}"
     )
+
     lines.append(
-        f"Files not referenced by workflows: {len(unreferenced_files)}"
+        f"Files not referenced by workflows: "
+        f"{data['files_not_referenced_by_workflows']}"
     )
+
     lines.append("")
 
     lines.append(
         "FILES REFERENCED BY WORKFLOWS"
     )
+
     lines.append(
         "============================="
     )
+
     lines.append("")
 
-    for category in sorted(used_by_category):
+    for path in data[
+        "referenced_files"
+    ]:
+        lines.append(
+            path
+        )
 
-        lines.append(category)
-        lines.append("-" * len(category))
-
-        for item in used_by_category[category]:
-            lines.append(item)
-
-        lines.append("")
+    lines.append("")
 
     lines.append(
         "FILES NOT REFERENCED BY ANY WORKFLOW"
     )
+
     lines.append(
         "===================================="
     )
+
     lines.append("")
 
-    if not unreferenced_files:
+    if data[
+        "unreferenced_files"
+    ]:
 
-        lines.append(
-            "No unreferenced files found."
-        )
+        for path in data[
+            "unreferenced_files"
+        ]:
+            lines.append(
+                f"{path}"
+            )
 
     else:
 
-        for category in sorted(unused_by_category):
-
-            items = unused_by_category[category]
-
-            lines.append(
-                f"{category}: {len(items)} files"
-            )
-
-            for item in items:
-                lines.append(
-                    f"  {item}"
-                )
-
-            lines.append("")
-
-    lines.append(
-        "WORKFLOW DEPENDENCY SUMMARY"
-    )
-    lines.append(
-        "==========================="
-    )
-    lines.append("")
-
-    for workflow in workflows:
-
-        references = workflow_references[workflow]
-
         lines.append(
-            relative(workflow)
+            "None"
         )
 
-        if not references:
+    lines.append("")
 
-            lines.append(
-                "  No files found in audit scope"
-            )
+    lines.append(
+        "WORKFLOW DEPENDENCY MAP"
+    )
+
+    lines.append(
+        "======================="
+    )
+
+    lines.append("")
+
+    for workflow, dependencies in data[
+        "workflow_dependencies"
+    ].items():
+
+        lines.append(
+            workflow
+        )
+
+        if dependencies:
+
+            for dependency in dependencies:
+
+                lines.append(
+                    f"  - {dependency}"
+                )
 
         else:
 
-            for path in sorted(
-                references,
-                key=lambda item: relative(item).lower()
-            ):
-                lines.append(
-                    f"  - {relative(path)}"
-                )
+            lines.append(
+                "  No repository files detected"
+            )
 
         lines.append("")
 
     lines.append(
         "IMPORTANT"
     )
+
     lines.append(
         "========="
     )
+
     lines.append("")
+
     lines.append(
         "This audit does not delete or modify any files."
     )
-    lines.append(
-        "Files outside the audit scope were ignored."
-    )
+
     lines.append(
         "The logos directory was ignored."
     )
 
-    report = "\n".join(lines) + "\n"
+    lines.append(
+        "Files are only flagged for review."
+    )
 
-    REPORT.write_text(
-        report,
+    lines.append(
+        "Script dependencies are recursively scanned."
+    )
+
+    return "\n".join(
+        lines
+    )
+
+
+def main():
+
+    data = build_audit()
+
+    REPORT_FILE.write_text(
+        build_report(data),
         encoding="utf-8"
     )
 
-    print(report)
+    JSON_FILE.write_text(
+        json.dumps(
+            data,
+            indent=2
+        ),
+        encoding="utf-8"
+    )
+
+    print(
+        f"Audit complete: {REPORT_FILE}"
+    )
+
+    print(
+        f"JSON written: {JSON_FILE}"
+    )
 
 
 if __name__ == "__main__":
