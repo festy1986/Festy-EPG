@@ -26,11 +26,6 @@ XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
 
-SPORTSDB_TOKEN = os.environ.get(
-    "SPORTSDB_TOKEN",
-    "123"
-)
-
 
 # --------------------------------------------------
 # Normalize Xtream URL
@@ -316,9 +311,7 @@ def extract_provider_matchup(text):
 # --------------------------------------------------
 # Extract provider start timestamp
 #
-# This is used only to determine the date that
-# SportsDB should search.
-#
+# Used only to determine the date ESPN should search.
 # It is NOT used as the final displayed game time.
 # --------------------------------------------------
 
@@ -999,10 +992,6 @@ def detect_league(text):
 
 # --------------------------------------------------
 # Convert provider team name to official name
-#
-# This is the source of the displayed team names.
-#
-# SportsDB does NOT perform this conversion.
 # --------------------------------------------------
 
 def canonicalize_team_name(
@@ -1214,24 +1203,60 @@ def canonicalize_matchup(
 
 
 # --------------------------------------------------
-# SportsDB event date/time parsing
+# ESPN league configuration
 # --------------------------------------------------
 
-def parse_sportsdb_datetime(
+ESPN_LEAGUES = {
+
+    "MLB": (
+
+        "baseball",
+
+        "mlb"
+
+    ),
+
+    "NBA": (
+
+        "basketball",
+
+        "nba"
+
+    ),
+
+    "NFL": (
+
+        "football",
+
+        "nfl"
+
+    ),
+
+    "NHL": (
+
+        "hockey",
+
+        "nhl"
+
+    )
+
+}
+
+
+# --------------------------------------------------
+# Parse ESPN event datetime
+# --------------------------------------------------
+
+def parse_espn_datetime(
     event
 ):
 
     event_date = event.get(
-        "dateEvent"
+        "date"
     )
 
 
-    event_time = event.get(
-        "strTime"
-    )
-
-
-    if not event_date or not event_time:
+    if not event_date:
 
         debug_stats[
             "public_events_date_time_failed"
@@ -1243,13 +1268,12 @@ def parse_sportsdb_datetime(
 
     try:
 
-        event_datetime = datetime.strptime(
+        event_datetime = datetime.fromisoformat(
 
-            f"{event_date} "
-
-            f"{event_time}",
-
-            "%Y-%m-%d %H:%M:%S"
+            event_date.replace(
+                "Z",
+                "+00:00"
+            )
 
         )
 
@@ -1264,30 +1288,22 @@ def parse_sportsdb_datetime(
         return None
 
 
-    return (
+    return event_datetime.astimezone(
 
-        event_datetime
-
-        .replace(
-            tzinfo=timezone.utc
-        )
-
-        .astimezone(
-            ZoneInfo(
-                "America/New_York"
-            )
+        ZoneInfo(
+            "America/New_York"
         )
 
     )
 
 
 # --------------------------------------------------
-# SportsDB public schedule lookup
+# ESPN scoreboard lookup
 #
-# SPORTSDB IS USED ONLY TO:
+# ESPN IS USED ONLY TO:
 #
 # - Find the matching game
-# - Return the game's verified time
+# - Return the game's verified start time
 #
 # It does NOT provide:
 #
@@ -1298,25 +1314,40 @@ def parse_sportsdb_datetime(
 # --------------------------------------------------
 
 def get_public_events(
-    date_value
+    date_value,
+    league_hint
 ):
 
     global public_api_lookups
+
+
+    if league_hint not in ESPN_LEAGUES:
+
+        return []
+
+
+    sport, league = ESPN_LEAGUES[
+        league_hint
+    ]
 
 
     public_api_lookups += 1
 
 
     date_text = date_value.strftime(
-        "%Y-%m-%d"
+        "%Y%m%d"
     )
 
 
     url = (
 
-        "https://www.thesportsdb.com/"
+        "https://site.api.espn.com/apis/site/v2/sports/"
 
-        f"api/v1/json/{SPORTSDB_TOKEN}/eventsday.php"
+        f"{sport}/"
+
+        f"{league}/"
+
+        "scoreboard"
 
     )
 
@@ -1329,7 +1360,7 @@ def get_public_events(
 
             params={
 
-                "d": date_text
+                "dates": date_text
 
             },
 
@@ -1343,6 +1374,15 @@ def get_public_events(
             debug_stats[
                 "public_events_empty"
             ] += 1
+
+
+            print(
+
+                f"[ESPN] HTTP "
+
+                f"{response.status_code}"
+
+            )
 
 
             return []
@@ -1380,7 +1420,7 @@ def get_public_events(
     except Exception as e:
 
         print(
-            "[SPORTSDB API ERROR]"
+            "[ESPN API ERROR]"
         )
 
 
@@ -1393,12 +1433,12 @@ def get_public_events(
 
 
 # --------------------------------------------------
-# Find SportsDB event
+# Find ESPN event
 #
 # The cleaned canonical matchup is used to find
 # the game.
 #
-# SportsDB's team names are ONLY used internally
+# ESPN's team names are ONLY used internally
 # to verify that the correct event was found.
 #
 # They are NEVER written into the title or description.
@@ -1408,7 +1448,9 @@ def find_public_event(
 
     canonical_matchup,
 
-    preferred_date
+    preferred_date,
+
+    league_hint
 
 ):
 
@@ -1433,7 +1475,7 @@ def find_public_event(
     print()
 
     print(
-        "[SPORTSDB LOOKUP]"
+        "[ESPN LOOKUP]"
     )
 
 
@@ -1469,7 +1511,11 @@ def find_public_event(
     for date_value in search_dates:
 
         events = get_public_events(
-            date_value
+
+            date_value,
+
+            league_hint
+
         )
 
 
@@ -1477,7 +1523,7 @@ def find_public_event(
 
             print(
 
-                f"[SPORTSDB] {date_value}: "
+                f"[ESPN] {date_value}: "
 
                 f"no events returned"
 
@@ -1489,7 +1535,7 @@ def find_public_event(
 
         print(
 
-            f"[SPORTSDB] {date_value}: "
+            f"[ESPN] {date_value}: "
 
             f"{len(events)} events"
 
@@ -1498,176 +1544,231 @@ def find_public_event(
 
         for event in events:
 
-            home_team = clean_text(
+            competitions = event.get(
 
-                event.get(
+                "competitions",
 
-                    "strHomeTeam",
-
-                    ""
-
-                )
+                []
 
             )
 
 
-            away_team = clean_text(
-
-                event.get(
-
-                    "strAwayTeam",
-
-                    ""
-
-                )
-
-            )
-
-
-            if not home_team or not away_team:
+            if not competitions:
 
                 continue
 
 
-            event_league = clean_text(
+            competition = competitions[0]
 
-                event.get(
 
-                    "strLeague",
+            competitors = competition.get(
 
-                    ""
+                "competitors",
+
+                []
+
+            )
+
+
+            if len(competitors) < 2:
+
+                continue
+
+
+            event_teams = []
+
+
+            for competitor in competitors:
+
+                team = competitor.get(
+
+                    "team",
+
+                    {}
 
                 )
 
-            )
+
+                display_name = clean_text(
+
+                    team.get(
+
+                        "displayName",
+
+                        ""
+
+                    )
+
+                )
 
 
-            league_map = {
+                short_name = clean_text(
 
-                "Major League Baseball": "MLB",
+                    team.get(
 
-                "National Basketball Association": "NBA",
+                        "shortDisplayName",
 
-                "National Football League": "NFL",
+                        ""
 
-                "National Hockey League": "NHL"
+                    )
 
-            }
-
-
-            league_hint = league_map.get(
-
-                event_league
-
-            )
+                )
 
 
-            # --------------------------------------------------
-            # SportsDB names are only normalized internally
-            # for matching.
-            #
-            # They are NOT used for display.
-            # --------------------------------------------------
+                location = clean_text(
 
-            wanted_first_canonical = (
+                    team.get(
 
-                canonicalize_team_name(
+                        "location",
+
+                        ""
+
+                    )
+
+                )
+
+
+                nickname = clean_text(
+
+                    team.get(
+
+                        "name",
+
+                        ""
+
+                    )
+
+                )
+
+
+                event_teams.append({
+
+                    "display_name":
+
+                    display_name,
+
+                    "short_name":
+
+                    short_name,
+
+                    "location":
+
+                    location,
+
+                    "nickname":
+
+                    nickname
+
+                })
+
+
+            if len(event_teams) < 2:
+
+                continue
+
+
+            event_team_names = []
+
+
+            for team in event_teams:
+
+                candidates = [
+
+                    team["display_name"],
+
+                    team["short_name"],
+
+                    team["location"],
+
+                    team["nickname"]
+
+                ]
+
+
+                event_team_names.append(
+
+                    [
+
+                        canonicalize_team_name(
+
+                            candidate,
+
+                            league_hint
+
+                        )
+
+                        for candidate in candidates
+
+                        if candidate
+
+                    ]
+
+                )
+
+
+            wanted_first_match = any(
+
+                team_matches(
 
                     wanted_first,
 
-                    league_hint
+                    candidate
 
                 )
+
+                for candidate in event_team_names[0]
+
+            ) or any(
+
+                team_matches(
+
+                    wanted_first,
+
+                    candidate
+
+                )
+
+                for candidate in event_team_names[1]
 
             )
 
 
-            wanted_second_canonical = (
+            wanted_second_match = any(
 
-                canonicalize_team_name(
+                team_matches(
 
                     wanted_second,
 
-                    league_hint
+                    candidate
 
                 )
 
-            )
+                for candidate in event_team_names[0]
 
-
-            event_home_canonical = (
-
-                canonicalize_team_name(
-
-                    home_team,
-
-                    league_hint
-
-                )
-
-            )
-
-
-            event_away_canonical = (
-
-                canonicalize_team_name(
-
-                    away_team,
-
-                    league_hint
-
-                )
-
-            )
-
-
-            direct_match = (
+            ) or any(
 
                 team_matches(
 
-                    wanted_first_canonical,
+                    wanted_second,
 
-                    event_away_canonical
+                    candidate
 
                 )
+
+                for candidate in event_team_names[1]
+
+            )
+
+
+            if not (
+
+                wanted_first_match
 
                 and
 
-                team_matches(
+                wanted_second_match
 
-                    wanted_second_canonical,
-
-                    event_home_canonical
-
-                )
-
-            )
-
-
-            reverse_match = (
-
-                team_matches(
-
-                    wanted_first_canonical,
-
-                    event_home_canonical
-
-                )
-
-                and
-
-                team_matches(
-
-                    wanted_second_canonical,
-
-                    event_away_canonical
-
-                )
-
-            )
-
-
-            if not direct_match and not reverse_match:
+            ):
 
                 debug_stats[
 
@@ -1679,7 +1780,7 @@ def find_public_event(
                 continue
 
 
-            event_datetime = parse_sportsdb_datetime(
+            event_datetime = parse_espn_datetime(
 
                 event
 
@@ -1704,7 +1805,7 @@ def find_public_event(
             print()
 
             print(
-                "[SPORTSDB MATCH SUCCESS]"
+                "[ESPN MATCH SUCCESS]"
             )
 
 
@@ -1715,10 +1816,17 @@ def find_public_event(
 
 
             print(
-                f"  SportsDB event: "
-                f"{away_team} vs "
-                f"{home_team}"
+                "  ESPN event teams:"
             )
+
+
+            for team in event_teams:
+
+                print(
+
+                    f"    {team['display_name']}"
+
+                )
 
 
             print(
@@ -1737,7 +1845,7 @@ def find_public_event(
     print()
 
     print(
-        "[SPORTSDB MATCH FAIL]"
+        "[ESPN MATCH FAIL]"
     )
 
 
@@ -1891,20 +1999,6 @@ def clean_logo_filename(text):
 
 # --------------------------------------------------
 # Create normalized logo key
-#
-# This makes logo matching order-independent.
-#
-# Example:
-#
-# Tampa Bay Rays vs. Boston Red Sox
-#
-# matches:
-#
-# Tampa_Bay_Rays_vs_Boston_Red_Sox.png
-#
-# and:
-#
-# Boston_Red_Sox_vs_Tampa_Bay_Rays.png
 # --------------------------------------------------
 
 def matchup_logo_key(
@@ -1937,10 +2031,10 @@ def matchup_logo_key(
 
 
 # --------------------------------------------------
-# Find matchup logo by searching the ENTIRE
+# Find matchup logo by searching entire
 # sports-logos directory.
 #
-# This does NOT depend on SportsDB.
+# Independent of ESPN.
 # --------------------------------------------------
 
 def find_matchup_logo(
@@ -2280,7 +2374,7 @@ def find_matchup_logo(
 # 1. Read provider matchup
 # 2. Clean team names using sports_teams.txt
 # 3. Build title/description from those names
-# 4. SportsDB searches for the game time only
+# 4. ESPN searches for the game time only
 # 5. Logo search runs independently
 # --------------------------------------------------
 
@@ -2347,7 +2441,6 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 1:
-    #
     # Extract provider matchup.
     # --------------------------------------------------
 
@@ -2370,7 +2463,6 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 2:
-    #
     # Detect league.
     # --------------------------------------------------
 
@@ -2393,7 +2485,6 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 3:
-    #
     # Clean team names using sports_teams.txt.
     #
     # This controls the displayed matchup.
@@ -2420,11 +2511,10 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 4:
-    #
     # Determine preferred date.
     #
     # Provider timestamp is used only to know which
-    # date to search.
+    # date ESPN should search.
     # --------------------------------------------------
 
     provider_start = extract_start_datetime(
@@ -2473,11 +2563,7 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 5:
-    #
-    # Build the clean title and description BEFORE
-    # SportsDB.
-    #
-    # These names come from sports_teams.txt.
+    # Build clean title and description BEFORE ESPN.
     # --------------------------------------------------
 
     if canonical_matchup:
@@ -2514,10 +2600,9 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 6:
+    # Find logo independently.
     #
-    # Find the logo independently.
-    #
-    # This happens regardless of whether SportsDB
+    # This happens regardless of whether ESPN
     # finds the game.
     # --------------------------------------------------
 
@@ -2537,32 +2622,32 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 7:
-    #
-    # SportsDB is used ONLY to find the verified
+    # ESPN is used ONLY to find the verified
     # game time.
     # --------------------------------------------------
 
     public_event = None
 
 
-    if canonical_matchup:
+    if canonical_matchup and league_hint:
 
         public_event = find_public_event(
 
             canonical_matchup,
 
-            preferred_date
+            preferred_date,
+
+            league_hint
 
         )
 
 
     # --------------------------------------------------
     # STEP 8:
+    # If ESPN found the game, add verified
+    # Eastern time to BOTH title and description.
     #
-    # If SportsDB found the game, add its verified
-    # Eastern time to BOTH the title and description.
-    #
-    # Team names remain the names from sports_teams.txt.
+    # Team names remain from sports_teams.txt.
     # --------------------------------------------------
 
     if public_event:
@@ -2651,11 +2736,11 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # SportsDB failed.
+    # ESPN failed.
     #
-    # Keep the clean title and description.
+    # Keep clean title and description.
     #
-    # The logo remains valid if it was found.
+    # Logo remains valid if found.
     # --------------------------------------------------
 
     no_public_match += 1
@@ -2895,9 +2980,9 @@ for channel_id, requested_name in wanted.items():
 
 
     # --------------------------------------------------
-    # Add the matchup logo to the CHANNEL.
+    # Add matchup logo to CHANNEL.
     #
-    # This is independent of SportsDB success/failure.
+    # Independent of ESPN success/failure.
     # --------------------------------------------------
 
     if logo_url:
@@ -3087,13 +3172,13 @@ print(
 print()
 
 print(
-    "SportsDB statistics:"
+    "ESPN statistics:"
 )
 
 
 print(
 
-    f"Schedule API lookups: "
+    f"Scoreboard API lookups: "
 
     f"{public_api_lookups}"
 
@@ -3102,7 +3187,7 @@ print(
 
 print(
 
-    f"Verified public event matches: "
+    f"Verified ESPN event matches: "
 
     f"{public_api_matches}"
 
@@ -3111,7 +3196,7 @@ print(
 
 print(
 
-    f"Verified public times used: "
+    f"Verified ESPN times used: "
 
     f"{verified_public_times_used}"
 
@@ -3120,7 +3205,7 @@ print(
 
 print(
 
-    f"No public schedule match: "
+    f"No ESPN schedule match: "
 
     f"{no_public_match}"
 
