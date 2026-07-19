@@ -1,7 +1,7 @@
 REPOSITORY WORKFLOW DEPENDENCY AUDIT
 ====================================
 
-Generated: 2026-07-19T03:26:55.899519 UTC
+Generated: 2026-07-19T03:29:32.630782+00:00
 
 AUDIT SCOPE
 -----------
@@ -14,74 +14,66 @@ SUMMARY
 -------
 Workflows analyzed: 17
 Files checked: 31
-Files referenced by workflows: 18
-Files not referenced by workflows: 13
+Files referenced by workflows: 19
+Files not referenced by workflows: 12
 
 FILES REFERENCED BY WORKFLOWS
 =============================
 
-Data / Configuration
---------------------
+fast/FAST.xml.gz
 guides/.tvmaze-ota-cache.json
 guides/.tvmaze-tivimate-cache.json
-
-Guides / Generated Data
------------------------
 guides/24-7.xml
-guides/combinedfast.xml.gz
 guides/FAST.xml.gz
-guides/iptvorg.xml.gz
-guides/matched.xml
 guides/OTALocalsguide.raw.xml
 guides/OTALocalsguide.xml
 guides/OTALocalsguide.xml.gz
+guides/TVPassport.channels.xml
+guides/TVPassport.xml
+guides/TVPassport.xml.gz
+guides/combinedfast.xml.gz
+guides/iptvorg.xml.gz
+guides/matched.xml
 guides/sports.xml
 guides/tvguide.xml
 guides/tvguidetivimate.xml
 guides/tvguidetivimateguide.xml
 guides/tvguidetivimateguide.xml.gz
-guides/TVPassport.channels.xml
-guides/TVPassport.xml
-guides/TVPassport.xml.gz
 
 FILES NOT REFERENCED BY ANY WORKFLOW
 ====================================
 
-Data / Configuration: 5 files
-  guides/.tvmaze-fast-cache.json
-  guides/24-7-channel-list.txt
-  guides/iptvorg-channels.txt
-  xtream-epg/channel-map.txt
-  xtream-epg/channels.json
+guides/.tvmaze-fast-cache.json
+guides/24-7-channel-list.txt
+guides/24-7part2.xml
+guides/CombinedFAST.xml.gz
+guides/TVPassportRAW.xml
+guides/combinedfast2.xml.gz
+guides/iptvorg-channels.txt
+xtream-epg/.gitkeep
+xtream-epg/channel-map.txt
+xtream-epg/channels.json
+xtream-epg/generator.py
+xtream-epg/xtream.xml
 
-Guides / Generated Data: 6 files
-  fast/FAST.xml.gz
-  guides/24-7part2.xml
-  guides/CombinedFAST.xml.gz
-  guides/combinedfast2.xml.gz
-  guides/TVPassportRAW.xml
-  xtream-epg/xtream.xml
-
-Other: 1 files
-  xtream-epg/.gitkeep
-
-Scripts: 1 files
-  xtream-epg/generator.py
-
-WORKFLOW DEPENDENCY SUMMARY
-===========================
+WORKFLOW DEPENDENCY MAP
+=======================
 
 .github/workflows/CLEANSOURCEFASTCHANNELS.yml
-  No files found in audit scope
+  - SOURCEFASTCHANNELS.txt
+  - SOURCEFASTCHANNELS2.txt
 
 .github/workflows/CROSSCHECKFASTCHANNELS.yml
-  No files found in audit scope
+  - SOURCEFASTCHANNELS2.txt
+  - channels.txt
+  - fastchannels.txt
 
 .github/workflows/FAST.yml
+  - fast/FAST.xml.gz
   - guides/FAST.xml.gz
 
 .github/workflows/SOURCEFASTCHANNELS.yml
-  No files found in audit scope
+  - SOURCEFASTCHANNELS.txt
 
 .github/workflows/combinedfast.yml
   - guides/combinedfast.xml.gz
@@ -92,61 +84,73 @@ WORKFLOW DEPENDENCY SUMMARY
   - guides/OTALocalsguide.raw.xml
   - guides/OTALocalsguide.xml
   - guides/OTALocalsguide.xml.gz
-  - guides/tvguidetivimateguide.xml
-  - guides/tvguidetivimateguide.xml.gz
   - guides/TVPassport.xml
   - guides/TVPassport.xml.gz
+  - guides/tvguidetivimateguide.xml
+  - guides/tvguidetivimateguide.xml.gz
 
 .github/workflows/festy-tvguide.yml
   - guides/.tvmaze-tivimate-cache.json
   - guides/OTALocalsguide.xml
   - guides/OTALocalsguide.xml.gz
+  - guides/TVPassport.xml
+  - guides/TVPassport.xml.gz
   - guides/tvguide.xml
   - guides/tvguidetivimate.xml
   - guides/tvguidetivimateguide.xml
   - guides/tvguidetivimateguide.xml.gz
-  - guides/TVPassport.xml
-  - guides/TVPassport.xml.gz
 
 .github/workflows/generate_247.yml
+  - channels.txt
+  - generate_247.py
   - guides/24-7.xml
 
 .github/workflows/generate_sports.yml
+  - channels.txt
+  - generate_sports.py
   - guides/sports.xml
+  - sports_channels.txt
+  - test_epg.py
+  - test_xtream.py
 
 .github/workflows/get-matched-channels.yml
-  No files found in audit scope
+  - matcheverychannel.txt
 
 .github/workflows/iptvorg-discover.yml
   - guides/iptvorg.xml.gz
 
 .github/workflows/iptvorg-inspect.yml
-  No files found in audit scope
+  No repository files detected
 
 .github/workflows/iptvorg.yml
   - guides/iptvorg.xml.gz
 
 .github/workflows/match-every-channel.yml
-  No files found in audit scope
+  - matcheverychannel.txt
 
 .github/workflows/matched-guide.yml
+  - generate_matched_guide.py
   - guides/matched.xml
+  - matcheverychannel.txt
 
 .github/workflows/repository-audit.yml
-  No files found in audit scope
+  - repo_audit.json
+  - repo_audit.py
+  - repo_audit_report.txt
 
 .github/workflows/tvpassport-tivimate-workflow.yml
   - guides/OTALocalsguide.xml
   - guides/OTALocalsguide.xml.gz
-  - guides/tvguidetivimateguide.xml
-  - guides/tvguidetivimateguide.xml.gz
   - guides/TVPassport.channels.xml
   - guides/TVPassport.xml
   - guides/TVPassport.xml.gz
+  - guides/tvguidetivimateguide.xml
+  - guides/tvguidetivimateguide.xml.gz
 
 IMPORTANT
 =========
 
 This audit does not delete or modify any files.
-Files outside the audit scope were ignored.
 The logos directory was ignored.
+Files are only flagged for review.
+Script dependencies are recursively scanned.
