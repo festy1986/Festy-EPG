@@ -180,8 +180,6 @@ def clean_channel_name(name):
     )
 
 
-    # Convert embedded 24-hour times
-    # such as 19:30 to 7:30 PM.
     def convert_time(match):
 
         hour = int(
@@ -222,7 +220,6 @@ def clean_channel_name(name):
     )
 
 
-    # Normalize X between teams
     name = re.sub(
         r"\s+[xX]\s+",
         " vs. ",
@@ -230,7 +227,6 @@ def clean_channel_name(name):
     )
 
 
-    # Normalize @ between teams
     name = re.sub(
         r"\s+@\s+",
         " vs. ",
@@ -238,7 +234,6 @@ def clean_channel_name(name):
     )
 
 
-    # Normalize existing vs variations
     name = re.sub(
         r"\s+vs\s*\.?\s+",
         " vs. ",
@@ -247,7 +242,6 @@ def clean_channel_name(name):
     )
 
 
-    # Clean repeated separators
     name = re.sub(
         r"\s*\|\s*",
         " | ",
@@ -289,9 +283,6 @@ def remove_event_metadata(text):
     )
 
 
-    # Everything beginning with Start:
-    # is event metadata and is removed
-    # from the displayed event title.
     text = re.split(
         r"\bStart\s*:",
         text,
@@ -300,8 +291,6 @@ def remove_event_metadata(text):
     )[0]
 
 
-    # Also handle timestamp metadata if
-    # the provider uses a different format.
     text = re.split(
         r"\bStop\s*:",
         text,
@@ -480,7 +469,6 @@ def convert_to_eastern(
 ):
 
     if not naive_datetime:
-
         return None
 
 
@@ -544,7 +532,6 @@ with open(
 
 
         if not line:
-
             continue
 
 
@@ -555,7 +542,6 @@ with open(
 
 
         if len(parts) < 2:
-
             continue
 
 
@@ -686,92 +672,6 @@ for stream in streams:
 
 
 # --------------------------------------------------
-# Create XMLTV root
-# --------------------------------------------------
-
-tv = ET.Element(
-    "tv",
-    {
-        "generator-info-name":
-        "Festy Sports Guide"
-    }
-)
-
-
-# --------------------------------------------------
-# Calculate guide period
-# --------------------------------------------------
-
-guide_start = datetime.now(
-    timezone.utc
-).astimezone(
-    ZoneInfo(
-        "America/New_York"
-    )
-).replace(
-    hour=0,
-    minute=0,
-    second=0,
-    microsecond=0
-)
-
-
-guide_end = (
-    guide_start
-    + timedelta(
-        days=1
-    )
-)
-
-
-# --------------------------------------------------
-# Channel creation
-# --------------------------------------------------
-
-matched = 0
-
-
-for channel_id, requested_name in wanted.items():
-
-    if channel_id not in provider:
-
-        continue
-
-
-    matched += 1
-
-
-    stream = provider[
-        channel_id
-    ]
-
-
-    provider_name = clean_channel_name(
-        stream.get(
-            "name",
-            requested_name
-        )
-    )
-
-
-    channel = ET.SubElement(
-        tv,
-        "channel",
-        {
-            "id":
-            channel_id
-        }
-    )
-
-
-    display = ET.SubElement(
-        channel,
-        "display-name"
-    )
-
-
-    display.text = provider_name
-    # --------------------------------------------------
 # EPG lookup
 # --------------------------------------------------
 
@@ -823,6 +723,425 @@ def get_epg(stream_id):
 
 
 # --------------------------------------------------
+# Extract matchup parts
+# --------------------------------------------------
+
+def matchup_parts(text):
+
+    text = remove_event_metadata(
+        text
+    )
+
+
+    parts = re.split(
+        r"\s+vs\.\s+",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )
+
+
+    if len(parts) != 2:
+
+        return []
+
+
+    return [
+
+        parts[0].strip(),
+
+        parts[1].strip()
+
+    ]
+
+
+# --------------------------------------------------
+# Normalize team names for matching
+# --------------------------------------------------
+
+def normalize_team_name(text):
+
+    text = clean_text(
+        text
+    ).lower()
+
+
+    text = re.sub(
+        r"[^a-z0-9 ]",
+        " ",
+        text
+    )
+
+
+    stop_words = {
+
+        "live",
+        "hd",
+        "sd",
+        "fhd",
+        "4k",
+        "channel",
+        "tv",
+        "network",
+        "sports",
+        "sport",
+        "event",
+        "game",
+        "match",
+        "today",
+        "tomorrow"
+
+    }
+
+
+    words = [
+
+        word
+
+        for word in text.split()
+
+        if word not in stop_words
+
+    ]
+
+
+    return " ".join(
+        words
+    )
+
+
+# --------------------------------------------------
+# Team name matching
+# --------------------------------------------------
+
+def team_matches(
+    wanted_team,
+    actual_team
+):
+
+    wanted_team = normalize_team_name(
+        wanted_team
+    )
+
+
+    actual_team = normalize_team_name(
+        actual_team
+    )
+
+
+    if not wanted_team or not actual_team:
+
+        return False
+
+
+    if (
+        wanted_team in actual_team
+        or actual_team in wanted_team
+    ):
+
+        return True
+
+
+    wanted_words = set(
+        wanted_team.split()
+    )
+
+
+    actual_words = set(
+        actual_team.split()
+    )
+
+
+    return bool(
+        wanted_words
+        and actual_words
+        and (
+            wanted_words
+            & actual_words
+        )
+    )
+
+
+# --------------------------------------------------
+# Public schedule lookup
+# --------------------------------------------------
+
+def get_public_events(
+    date_value
+):
+
+    date_text = date_value.strftime(
+        "%Y-%m-%d"
+    )
+
+
+    url = (
+        "https://www.thesportsdb.com/"
+        "api/v1/json/123/eventsday.php"
+    )
+
+
+    try:
+
+        response = session.get(
+            url,
+            params={
+                "d":
+                date_text
+            },
+            timeout=30
+        )
+
+
+        if response.status_code != 200:
+
+            return []
+
+
+        data = response.json()
+
+
+        return data.get(
+            "events",
+            []
+        ) or []
+
+
+    except Exception as e:
+
+        print(
+            "Public schedule lookup failed:"
+        )
+
+
+        print(
+            e
+        )
+
+
+        return []
+
+
+# --------------------------------------------------
+# Find verified public event
+# --------------------------------------------------
+
+def find_public_event(
+    provider_matchup,
+    preferred_date
+):
+
+    parts = matchup_parts(
+        provider_matchup
+    )
+
+
+    if len(parts) != 2:
+
+        return None
+
+
+    search_dates = [
+
+        preferred_date,
+
+        preferred_date
+        - timedelta(
+            days=1
+        ),
+
+        preferred_date
+        + timedelta(
+            days=1
+        ),
+
+        preferred_date
+        + timedelta(
+            days=2
+        )
+
+    ]
+
+
+    for date_value in search_dates:
+
+        events = get_public_events(
+            date_value
+        )
+
+
+        for event in events:
+
+            home_team = clean_text(
+                event.get(
+                    "strHomeTeam",
+                    ""
+                )
+            )
+
+
+            away_team = clean_text(
+                event.get(
+                    "strAwayTeam",
+                    ""
+                )
+            )
+
+
+            if not home_team or not away_team:
+
+                continue
+
+
+            direct_match = (
+
+                team_matches(
+                    parts[0],
+                    home_team
+                )
+
+                and
+
+                team_matches(
+                    parts[1],
+                    away_team
+                )
+
+            )
+
+
+            reverse_match = (
+
+                team_matches(
+                    parts[0],
+                    away_team
+                )
+
+                and
+
+                team_matches(
+                    parts[1],
+                    home_team
+                )
+
+            )
+
+
+            if not direct_match and not reverse_match:
+
+                continue
+
+
+            event_date = (
+                event.get(
+                    "dateEvent"
+                )
+            )
+
+
+            event_time = (
+                event.get(
+                    "strTime"
+                )
+            )
+
+
+            if not event_date or not event_time:
+
+                continue
+
+
+            try:
+
+                event_datetime = datetime.strptime(
+                    f"{event_date} "
+                    f"{event_time}",
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
+
+            except ValueError:
+
+                continue
+
+
+            event_datetime = (
+                event_datetime.replace(
+                    tzinfo=timezone.utc
+                ).astimezone(
+                    ZoneInfo(
+                        "America/New_York"
+                    )
+                )
+            )
+
+
+            return {
+
+                "away":
+                away_team,
+
+                "home":
+                home_team,
+
+                "datetime":
+                event_datetime
+
+            }
+
+
+    return None
+
+
+# --------------------------------------------------
+# Day label
+# --------------------------------------------------
+
+def get_day_label(
+    event_datetime
+):
+
+    eastern_now = datetime.now(
+        ZoneInfo(
+            "America/New_York"
+        )
+    )
+
+
+    event_date = (
+        event_datetime.date()
+    )
+
+
+    today = (
+        eastern_now.date()
+    )
+
+
+    tomorrow = (
+        today
+        + timedelta(
+            days=1
+        )
+    )
+
+
+    if event_date == today:
+
+        return "Today"
+
+
+    if event_date == tomorrow:
+
+        return "Tomorrow"
+
+
+    return event_datetime.strftime(
+        "%A"
+    )
+
+
+# --------------------------------------------------
 # Build event information
 # --------------------------------------------------
 
@@ -830,80 +1149,6 @@ def build_event_info(
     stream,
     epg
 ):
-
-    title_text = ""
-
-
-    description_text = ""
-
-
-    start_eastern = None
-
-
-    # ----------------------------------------------
-    # Use provider EPG when it has information
-    # ----------------------------------------------
-
-    if epg:
-
-        title_text = clean_text(
-            epg.get(
-                "title",
-                ""
-            )
-        )
-
-
-        description_text = clean_text(
-            epg.get(
-                "description",
-                ""
-            )
-        )
-
-
-        # If the EPG title itself contains a
-        # provider timestamp, extract it.
-        start_datetime = (
-            extract_start_datetime(
-                title_text
-            )
-        )
-
-
-        if start_datetime:
-
-            start_eastern = (
-                convert_to_eastern(
-                    start_datetime,
-                    provider_timezone
-                )
-            )
-
-
-    # ----------------------------------------------
-    # Otherwise use the provider channel name
-    # ----------------------------------------------
-
-    if not title_text:
-
-        provider_name = clean_text(
-            stream.get(
-                "name",
-                ""
-            )
-        )
-
-
-        title_text = provider_name
-
-
-        description_text = provider_name
-
-
-    # ----------------------------------------------
-    # Extract actual provider start time
-    # ----------------------------------------------
 
     provider_name = clean_text(
         stream.get(
@@ -913,91 +1158,260 @@ def build_event_info(
     )
 
 
-    if not start_eastern:
+    provider_event = remove_event_metadata(
+        provider_name
+    )
 
-        start_datetime = (
-            extract_start_datetime(
-                provider_name
+
+    provider_start = (
+        extract_start_datetime(
+            provider_name
+        )
+    )
+
+
+    provider_start_eastern = None
+
+
+    if provider_start:
+
+        provider_start_eastern = (
+            convert_to_eastern(
+                provider_start,
+                provider_timezone
             )
         )
 
 
-        if start_datetime:
+    # --------------------------------------------------
+    # Skip real provider EPG information
+    # --------------------------------------------------
 
-            start_eastern = (
-                convert_to_eastern(
-                    start_datetime,
-                    provider_timezone
-                )
+    if epg:
+
+        epg_title = clean_text(
+            epg.get(
+                "title",
+                ""
+            )
+        )
+
+
+        epg_description = clean_text(
+            epg.get(
+                "description",
+                ""
+            )
+        )
+
+
+        if epg_title or epg_description:
+
+            return (
+
+                epg_title
+                or provider_name,
+
+                epg_description
+                or epg_title
+                or provider_name,
+
+                provider_start_eastern,
+
+                True
+
             )
 
 
-    # ----------------------------------------------
-    # Clean event title
-    # ----------------------------------------------
+    # --------------------------------------------------
+    # Use channel name as event source
+    # --------------------------------------------------
+
+    preferred_date = (
+
+        provider_start_eastern.date()
+
+        if provider_start_eastern
+
+        else datetime.now(
+            ZoneInfo(
+                "America/New_York"
+            )
+        ).date()
+
+    )
+
+
+    public_event = find_public_event(
+        provider_event,
+        preferred_date
+    )
+
+
+    if public_event:
+
+        away = public_event[
+            "away"
+        ]
+
+
+        home = public_event[
+            "home"
+        ]
+
+
+        event_datetime = public_event[
+            "datetime"
+        ]
+
+
+        matchup = (
+
+            f"{away} vs. {home}"
+
+        )
+
+
+        title_text = (
+
+            f"{matchup} "
+
+            f"({format_time(event_datetime)})"
+
+        )
+
+
+        day_label = get_day_label(
+            event_datetime
+        )
+
+
+        date_text = (
+            event_datetime.strftime(
+                "%m/%d/%Y"
+            )
+        )
+
+
+        description_text = (
+
+            f"{matchup} — "
+
+            f"{day_label}, "
+
+            f"{date_text}"
+
+        )
+
+
+        return (
+
+            title_text,
+
+            description_text,
+
+            event_datetime,
+
+            False
+
+        )
+
+
+    # --------------------------------------------------
+    # Fallback when public schedule does not match
+    # --------------------------------------------------
 
     cleaned_title = (
-        remove_event_metadata(
-            title_text
-        )
+        provider_event
     )
 
 
-    # If the EPG title did not contain a
-    # usable event title, try the provider name.
-    if not cleaned_title:
+    if provider_start_eastern:
 
         cleaned_title = (
-            remove_event_metadata(
-                provider_name
-            )
-        )
 
-
-    # ----------------------------------------------
-    # Add actual Eastern start time
-    # ----------------------------------------------
-
-    if start_eastern:
-
-        eastern_time = format_time(
-            start_eastern
-        )
-
-
-        cleaned_title = (
             f"{cleaned_title} "
-            f"({eastern_time})"
+
+            f"({format_time(
+                provider_start_eastern
+            )})"
+
         )
 
-
-    # ----------------------------------------------
-    # Clean description
-    # ----------------------------------------------
 
     cleaned_description = (
-        remove_event_metadata(
-            description_text
-        )
+
+        f"{provider_event} — "
+
+        f"{get_day_label(
+            provider_start_eastern
+        )}, "
+
+        f"{provider_start_eastern.strftime(
+            '%m/%d/%Y'
+        )}"
+
+        if provider_start_eastern
+
+        else provider_event
+
     )
-
-
-    if not cleaned_description:
-
-        cleaned_description = (
-            cleaned_title
-        )
 
 
     return (
+
         cleaned_title,
+
         cleaned_description,
-        start_eastern
+
+        provider_start_eastern,
+
+        False
+
     )
 
 
 # --------------------------------------------------
-# Create all XMLTV channels
+# Create XMLTV root
+# --------------------------------------------------
+
+tv = ET.Element(
+    "tv",
+    {
+        "generator-info-name":
+        "Festy Sports Guide"
+    }
+)
+
+
+# --------------------------------------------------
+# Calculate guide period
+# --------------------------------------------------
+
+guide_start = datetime.now(
+    timezone.utc
+).astimezone(
+    ZoneInfo(
+        "America/New_York"
+    )
+).replace(
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0
+)
+
+
+guide_end = (
+    guide_start
+    + timedelta(
+        days=1
+    )
+)
+
+
+# --------------------------------------------------
+# Create XMLTV channels
 # --------------------------------------------------
 
 print(
@@ -1005,11 +1419,17 @@ print(
 )
 
 
+matched = 0
+
+
 for channel_id, requested_name in wanted.items():
 
     if channel_id not in provider:
 
         continue
+
+
+    matched += 1
 
 
     stream = provider[
@@ -1077,8 +1497,13 @@ for channel_id, requested_name in wanted.items():
 
     (
         title_text,
+
         description_text,
-        event_time
+
+        event_time,
+
+        has_real_epg
+
     ) = build_event_info(
         stream,
         epg
@@ -1090,38 +1515,45 @@ for channel_id, requested_name in wanted.items():
 
     while current_start < guide_end:
 
-
         current_stop = (
+
             current_start
+
             + timedelta(
                 hours=2
             )
+
         )
 
 
         if current_stop > guide_end:
 
-            current_stop = (
-                guide_end
-            )
+            current_stop = guide_end
 
 
         programme = ET.SubElement(
             tv,
             "programme",
             {
+
                 "start":
+
                 current_start.strftime(
                     "%Y%m%d%H%M%S %z"
                 ),
 
+
                 "stop":
+
                 current_stop.strftime(
                     "%Y%m%d%H%M%S %z"
                 ),
 
+
                 "channel":
+
                 channel_id
+
             }
         )
 
