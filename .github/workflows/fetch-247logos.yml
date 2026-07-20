@@ -1,0 +1,99 @@
+name: Fetch 24/7 channel logos
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - config/24-7-channel-list.txt
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-logos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch missing channel logos
+        env:
+          CHANNEL_LIST: https://raw.githubusercontent.com/festy1986/festy-epg/main/config/24-7-channel-list.txt
+        run: |
+          set -euo pipefail
+          api='https://logos.fandom.com/api.php'
+          agent='festy-epg-247logos/1.0'
+          mkdir -p 247logos
+          printf 'channel_id,channel_name,reason\n' > 247logos/review.csv
+          curl --fail --location --retry 2 --user-agent "$agent" "$CHANNEL_LIST" -o /tmp/channels.txt
+
+          clean_name() { sed -E 's/^[A-Za-z]{2,3}:[[:space:]]*//' <<< "$1"; }
+          slug() { clean_name "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g'; }
+          normalise() { tr '[:upper:]' '[:lower:]' <<< "$1" | sed -E 's/[^a-z0-9]//g'; }
+          csv_field() { sed 's/"/""/g' <<< "$1" | tr -d '\n'; }
+          review() { printf '"%s","%s","%s"\n' "$(csv_field "$1")" "$(csv_field "$2")" "$(csv_field "$3")" >> 247logos/review.csv; }
+
+          while IFS='|' read -r raw_id raw_name; do
+            channel_id=$(xargs <<< "$raw_id")
+            original_name=$(xargs <<< "$raw_name")
+            [[ "$channel_id" =~ ^[0-9]+$ ]] || continue
+            search_name=$(clean_name "$original_name")
+            file_slug=$(slug "$original_name")
+            prefix="${channel_id}-${file_slug}"
+            compgen -G "247logos/${prefix}.*" > /dev/null && continue
+
+            page=$(curl --silent --show-error --fail --get --user-agent "$agent" "$api" \
+              --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 \
+              --data-urlencode "titles=${search_name// /_}" --data-urlencode redirects=1 \
+              | jq -r '.query.pages[0] | select(.missing != true) | .title // empty' || true)
+            if [[ -z "$page" ]]; then
+              wanted=$(normalise "$search_name")
+              page=$(curl --silent --show-error --fail --get --user-agent "$agent" "$api" \
+                --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 \
+                --data-urlencode list=search --data-urlencode "srsearch=\"${search_name}\"" \
+                --data-urlencode srnamespace=0 --data-urlencode srlimit=10 \
+                | jq -r --arg wanted "$wanted" '[.query.search[] | select((.title | ascii_downcase | gsub("[^a-z0-9]"; "")) == $wanted)][0].title // empty' || true)
+            fi
+            if [[ -z "$page" ]]; then
+              review "$channel_id" "$original_name" 'no exact Logopedia page found'
+              continue
+            fi
+
+            image=$(curl --silent --show-error --fail --get --user-agent "$agent" "$api" \
+              --data-urlencode action=parse --data-urlencode format=json --data-urlencode formatversion=2 \
+              --data-urlencode "page=$page" --data-urlencode prop=images \
+              | jq -r '[.parse.images[] | select(test("logo"; "i") and (test("card|intertitle|screenshot|promo|background"; "i") | not))][0] // .parse.images[0] // empty' || true)
+            if [[ -z "$image" ]]; then
+              review "$channel_id" "$original_name" 'Logopedia page has no image'
+              continue
+            fi
+
+            asset=$(curl --silent --show-error --fail --get --user-agent "$agent" "$api" \
+              --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 \
+              --data-urlencode "titles=File:$image" --data-urlencode prop=imageinfo --data-urlencode 'iiprop=url|mime' \
+              | jq -r '.query.pages[0].imageinfo[0] | select(.) | [.url, .mime] | @tsv' || true)
+            if [[ -z "$asset" ]]; then
+              review "$channel_id" "$original_name" 'Logopedia image URL unavailable'
+              continue
+            fi
+            image_url=${asset%%$'\t'*}
+            mime=${asset#*$'\t'}
+            case "$mime" in
+              image/png) extension=.png ;; image/jpeg) extension=.jpg ;; image/webp) extension=.webp ;;
+              image/gif) extension=.gif ;; image/svg+xml) extension=.svg ;; *) extension=.png ;;
+            esac
+            curl --fail --location --retry 2 --user-agent "$agent" "$image_url" -o "247logos/${prefix}${extension}"
+            echo "Saved 247logos/${prefix}${extension}"
+            sleep 1
+          done < /tmp/channels.txt
+
+      - name: Commit generated logos
+        run: |
+          if git diff --quiet -- 247logos; then
+            echo "No new logos to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add 247logos
+          git commit -m "Add 24/7 channel logos"
+          git push
