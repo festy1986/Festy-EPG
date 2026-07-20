@@ -135,7 +135,7 @@ jobs:
                 const guest = parseGuest($item)
                 const director = parseDirector($item)
 
-                if (title === 'Movie' || title === 'CinÃƒÆ’Ã‚Â©ma') {
+                if (title === 'Movie' || title === 'CinÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ma') {
                   title = episodeTitle
                   episodeTitle = ''
                 }
@@ -358,7 +358,7 @@ jobs:
             return cleanSpaces(value)
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .replace(/\s*[-â€“â€”]\s*(New|Live|Repeat)\s*$/i, '')
               .trim()
           }
 
@@ -545,7 +545,7 @@ jobs:
               .replace(/\s+/g, ' ')
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-–—]\s*(New|Live|Repeat)\s*$/i, '')
+              .replace(/\s*[-â€“â€”]\s*(New|Live|Repeat)\s*$/i, '')
               .trim()
           }
 
@@ -1091,7 +1091,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add guides/TVPassportCanada.xml.gz
+          git add -A -- guides/TVPassportCanada.xml guides/TVPassportCanada.xml.gz
 
           if git diff --cached --quiet; then
             echo "No Canada guide changes to commit"
@@ -1099,8 +1099,9 @@ jobs:
           fi
 
           git commit -m "Update Canada TVPassport guide"
-          git pull --rebase origin main
           git push origin HEAD:main
+
+
 
 
 
