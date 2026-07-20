@@ -136,9 +136,7 @@ jobs:
               return re.sub(
                   r"[^a-z0-9]",
                   "",
-                  normalize(
-                      value
-                  )
+                  normalize(value)
               )
 
 
@@ -157,9 +155,7 @@ jobs:
           def tokens(value):
 
               return set(
-                  normalize(
-                      value
-                  ).split()
+                  normalize(value).split()
               )
 
 
@@ -196,10 +192,7 @@ jobs:
                   )
 
                   if token not in ignored
-
-                  and len(
-                      token
-                  ) > 1
+                  and len(token) > 1
 
               }
 
@@ -207,7 +200,6 @@ jobs:
           def extract_master_channels():
 
               channels = []
-
 
               for line_number, raw_line in enumerate(
 
@@ -221,11 +213,9 @@ jobs:
 
                   line = raw_line.strip()
 
-
                   if not line:
 
                       continue
-
 
                   if line.startswith("#"):
 
@@ -255,15 +245,15 @@ jobs:
 
                   epg_channel_id = parts[2]
 
-                  display_name = parts[3]
+                  channel_name = parts[3]
 
 
-                  if not stream_id:
+                  if not stream_id.isdigit():
 
                       continue
 
 
-                  if not display_name:
+                  if not channel_name:
 
                       continue
 
@@ -281,8 +271,8 @@ jobs:
                           "epg_channel_id":
                               epg_channel_id,
 
-                          "display_name":
-                              display_name
+                          "channel_name":
+                              channel_name
 
                       }
 
@@ -311,15 +301,9 @@ jobs:
                   )
 
 
-                  return [
-
-                      element
-
-                      for element in root.findall(
-                          ".//channel"
-                      )
-
-                  ]
+                  return root.findall(
+                      ".//channel"
+                  )
 
 
               except ET.ParseError:
@@ -340,15 +324,9 @@ jobs:
                   )
 
 
-                  return [
-
-                      element
-
-                      for element in root.findall(
-                          ".//channel"
-                      )
-
-                  ]
+                  return root.findall(
+                      ".//channel"
+                  )
 
 
           def channel_values(element):
@@ -363,7 +341,7 @@ jobs:
               )
 
 
-              xmltv_id = (
+              passport_xmltv_id = (
 
                   element.attrib.get(
                       "xmltv_id",
@@ -376,7 +354,6 @@ jobs:
               channel_name = (
 
                   element.text or ""
-
               ).strip()
 
 
@@ -384,7 +361,7 @@ jobs:
 
                   site_id,
 
-                  xmltv_id,
+                  passport_xmltv_id,
 
                   channel_name
 
@@ -393,15 +370,11 @@ jobs:
 
           def score_match(
 
-              provider_epg_id,
-
               provider_name,
-
+              provider_epg_id,
               site_id,
-
-              xmltv_id,
-
-              raw_name
+              passport_xmltv_id,
+              passport_name
 
           ):
 
@@ -414,46 +387,14 @@ jobs:
 
 
               if is_on_demand(
-                  xmltv_id
+                  passport_name
               ):
 
                   return -100000
 
 
-              if is_on_demand(
-                  raw_name
-              ):
-
-                  return -100000
-
-
-              provider_epg_normalized = normalize(
-                  provider_epg_id
-              )
-
-
-              provider_name_normalized = normalize(
+              provider_name_normalized_lower = normalize(
                   provider_name
-              )
-
-
-              site_normalized = normalize(
-                  site_id
-              )
-
-
-              xmltv_normalized = normalize(
-                  xmltv_id
-              )
-
-
-              raw_normalized = normalize(
-                  raw_name
-              )
-
-
-              provider_epg_compact = compact(
-                  provider_epg_id
               )
 
 
@@ -462,18 +403,33 @@ jobs:
               )
 
 
+              provider_epg_id_normalized = normalize(
+                  provider_epg_id
+              )
+
+
+              provider_epg_id_compact = compact(
+                  provider_epg_id
+              )
+
+
+              site_normalized = normalize(
+                  site_id
+              )
+
+
               site_compact = compact(
                   site_id
               )
 
 
-              xmltv_compact = compact(
-                  xmltv_id
+              passport_name_normalized = normalize(
+                  passport_name
               )
 
 
-              raw_compact = compact(
-                  raw_name
+              passport_name_compact = compact(
+                  passport_name
               )
 
 
@@ -482,10 +438,8 @@ jobs:
 
               if (
 
-                  provider_epg_compact
-
-                  and provider_epg_compact
-                  == xmltv_compact
+                  provider_name_normalized_lower
+                  == passport_name_normalized
 
               ):
 
@@ -494,45 +448,39 @@ jobs:
 
               if (
 
-                  provider_epg_compact
-
-                  and provider_epg_compact
-                  in xmltv_compact
+                  provider_name_compact
+                  == passport_name_compact
 
               ):
 
-                  score += 150
-
-
-              if (
-
-                  provider_epg_compact
-
-                  and provider_epg_compact
-                  in site_compact
-
-              ):
-
-                  score += 150
-
-
-              if (
-
-                  provider_epg_compact
-
-                  and provider_epg_compact
-                  in raw_compact
-
-              ):
-
-                  score += 150
+                  score += 300
 
 
               if (
 
                   provider_name_compact
-                  and provider_name_compact
-                  in raw_compact
+                  in passport_name_compact
+
+              ):
+
+                  score += 150
+
+
+              if (
+
+                  passport_name_compact
+                  in provider_name_compact
+
+              ):
+
+                  score += 150
+
+
+              if (
+
+                  provider_epg_id_normalized
+                  and provider_epg_id_normalized
+                  in site_normalized
 
               ):
 
@@ -541,33 +489,22 @@ jobs:
 
               if (
 
-                  provider_name_compact
-                  and provider_name_compact
+                  provider_epg_id_compact
+                  and provider_epg_id_compact
                   in site_compact
 
               ):
 
-                  score += 150
+                  score += 250
 
 
-              if (
-
-                  provider_name_compact
-                  and provider_name_compact
-                  in xmltv_compact
-
-              ):
-
-                  score += 150
-
-
-              provider_epg_tokens = significant_tokens(
-                  provider_epg_id
+              provider_tokens = significant_tokens(
+                  provider_name
               )
 
 
-              provider_name_tokens = significant_tokens(
-                  provider_name
+              passport_tokens = significant_tokens(
+                  passport_name
               )
 
 
@@ -576,102 +513,36 @@ jobs:
               )
 
 
-              xmltv_tokens = significant_tokens(
-                  xmltv_id
+              name_overlap = (
+
+                  provider_tokens
+                  & passport_tokens
+
               )
 
 
-              raw_tokens = significant_tokens(
-                  raw_name
+              site_overlap = (
+
+                  provider_tokens
+                  & site_tokens
+
               )
 
 
-              if provider_epg_tokens:
+              score += (
 
-                  score += (
+                  len(name_overlap)
+                  * 60
 
-                      len(
-
-                          provider_epg_tokens
-                          & site_tokens
-
-                      )
-
-                      * 60
-
-                  )
+              )
 
 
-                  score += (
+              score += (
 
-                      len(
+                  len(site_overlap)
+                  * 35
 
-                          provider_epg_tokens
-                          & xmltv_tokens
-
-                      )
-
-                      * 60
-
-                  )
-
-
-                  score += (
-
-                      len(
-
-                          provider_epg_tokens
-                          & raw_tokens
-
-                      )
-
-                      * 60
-
-                  )
-
-
-              if provider_name_tokens:
-
-                  score += (
-
-                      len(
-
-                          provider_name_tokens
-                          & site_tokens
-
-                      )
-
-                      * 35
-
-                  )
-
-
-                  score += (
-
-                      len(
-
-                          provider_name_tokens
-                          & xmltv_tokens
-
-                      )
-
-                      * 35
-
-                  )
-
-
-                  score += (
-
-                      len(
-
-                          provider_name_tokens
-                          & raw_tokens
-
-                      )
-
-                      * 70
-
-                  )
+              )
 
 
               aliases = {
@@ -688,6 +559,7 @@ jobs:
 
                       ],
 
+
                   "history":
 
                       [
@@ -698,6 +570,7 @@ jobs:
 
                       ],
 
+
                   "discovery":
 
                       [
@@ -706,21 +579,6 @@ jobs:
 
                       ],
 
-                  "bbc canada":
-
-                      [
-
-                          "bbc canada"
-
-                      ],
-
-                  "bbc world news":
-
-                      [
-
-                          "bbc world news"
-
-                      ],
 
                   "global":
 
@@ -731,6 +589,7 @@ jobs:
                           "global news"
 
                       ],
+
 
                   "a and e":
 
@@ -747,34 +606,36 @@ jobs:
               }
 
 
-              provider_name_normalized_lower = normalize(
-                  provider_name
-                  )
-
-
               for alias, alternatives in aliases.items():
+
 
                   if (
 
-                      provider_name_normalized_lower
-                      == normalize(
+                      normalize(
+                          provider_name
+                      )
+
+                      ==
+
+                      normalize(
                           alias
                       )
 
                   ):
 
+
                       for alternative in alternatives:
 
-                          alternative_normalized =
-                              normalize(
-                                  alternative
-                              )
+
+                          alternative_normalized = normalize(
+                              alternative
+                          )
 
 
                           if (
 
                               alternative_normalized
-                              in raw_normalized
+                              in passport_name_normalized
 
                           ):
 
@@ -791,81 +652,31 @@ jobs:
                               score += 150
 
 
-                          if (
-
-                              alternative_normalized
-                              in xmltv_normalized
-
-                          ):
-
-                              score += 150
-
-
-              if (
-
-                  provider_name_normalized
-                  == raw_normalized
-
-              ):
-
-                  score += 300
-
-
-              if (
-
-                  provider_name_normalized
-                  == site_normalized
-
-              ):
-
-                  score += 200
-
-
-              if (
-
-                  provider_name_normalized
-                  == xmltv_normalized
-
-              ):
-
-                  score += 200
-
-
               return score
 
 
-          master_channels =
-              extract_master_channels()
+          master_channels = extract_master_channels()
 
-
-          raw_channels =
-              load_raw_channels()
+          raw_channels = load_raw_channels()
 
 
           print(
-
               "Master Canada channels:",
-
               len(
                   master_channels
               )
-
           )
 
 
           print(
-
               "Raw TVPassport channels:",
-
               len(
                   raw_channels
               )
-
           )
 
 
           matches = []
-
 
           unmatched = []
 
@@ -873,10 +684,7 @@ jobs:
           for master in master_channels:
 
 
-              channel_matches = []
-
-
-              best_score = 0
+              candidate_matches = []
 
 
               for raw_channel in raw_channels:
@@ -886,9 +694,9 @@ jobs:
 
                       site_id,
 
-                      xmltv_id,
+                      passport_xmltv_id,
 
-                      raw_name
+                      passport_name
 
                   ) = channel_values(
                       raw_channel
@@ -908,14 +716,7 @@ jobs:
 
 
                   if is_on_demand(
-                      xmltv_id
-                  ):
-
-                      continue
-
-
-                  if is_on_demand(
-                      raw_name
+                      passport_name
                   ):
 
                       continue
@@ -924,51 +725,48 @@ jobs:
                   score = score_match(
 
                       master[
-                          "epg_channel_id"
+                          "channel_name"
                       ],
 
                       master[
-                          "display_name"
+                          "epg_channel_id"
                       ],
 
                       site_id,
 
-                      xmltv_id,
+                      passport_xmltv_id,
 
-                      raw_name
+                      passport_name
 
                   )
 
 
-                  if score > best_score:
-
-                      best_score = score
-
-
                   if score >= 70:
 
-                      channel_matches.append(
+
+                      candidate_matches.append(
 
                           {
+
+                              "score":
+                                  score,
 
                               "site_id":
                                   site_id,
 
-                              "xmltv_id":
-                                  xmltv_id,
+                              "passport_xmltv_id":
+                                  passport_xmltv_id,
 
-                              "source_name":
-                                  raw_name,
-
-                              "match_score":
-                                  score
+                              "passport_name":
+                                  passport_name
 
                           }
 
                       )
 
 
-              if not channel_matches:
+              if not candidate_matches:
+
 
                   unmatched.append(
                       master
@@ -986,7 +784,7 @@ jobs:
                       "|",
 
                       master[
-                          "display_name"
+                          "channel_name"
                       ]
 
                   )
@@ -995,11 +793,11 @@ jobs:
                   continue
 
 
-              channel_matches.sort(
+              candidate_matches.sort(
 
                   key=lambda item:
                       item[
-                          "match_score"
+                          "score"
                       ],
 
                   reverse=True
@@ -1007,59 +805,105 @@ jobs:
               )
 
 
-              matches.append(
-
-                  {
-
-                      "stream_id":
-                          master[
-                              "stream_id"
-                          ],
-
-                      "category_id":
-                          master[
-                              "category_id"
-                          ],
-
-                      "epg_channel_id":
-                          master[
-                              "epg_channel_id"
-                          ],
-
-                      "display_name":
-                          master[
-                              "display_name"
-                          ],
-
-                      "passport_matches":
-                          channel_matches
-
-                  }
-
-              )
+              for candidate in candidate_matches:
 
 
-          seen_stream_ids = set()
+                  matches.append(
 
+                      {
+
+                          "stream_id":
+                              master[
+                                  "stream_id"
+                              ],
+
+                          "category_id":
+                              master[
+                                  "category_id"
+                              ],
+
+                          "epg_channel_id":
+                              master[
+                                  "epg_channel_id"
+                              ],
+
+                          "provider_name":
+                              master[
+                                  "channel_name"
+                              ],
+
+                          "site_id":
+                              candidate[
+                                  "site_id"
+                              ],
+
+                          "passport_xmltv_id":
+                              candidate[
+                                  "passport_xmltv_id"
+                              ],
+
+                          "passport_name":
+                              candidate[
+                                  "passport_name"
+                              ],
+
+                          "match_score":
+                              candidate[
+                                  "score"
+                              ]
+
+                      }
+
+                  )
+
+
+          seen_provider_ids = set()
+
+          seen_site_ids = set()
 
           final_matches = []
+
+          duplicate_matches = []
 
 
           for match in matches:
 
 
-              stream_id = match[
+              provider_id = match[
                   "stream_id"
               ]
 
 
-              if stream_id in seen_stream_ids:
+              site_id = match[
+                  "site_id"
+              ]
+
+
+              if provider_id in seen_provider_ids:
+
+                  duplicate_matches.append(
+                      match
+                  )
 
                   continue
 
 
-              seen_stream_ids.add(
-                  stream_id
+              if site_id in seen_site_ids:
+
+                  duplicate_matches.append(
+                      match
+                  )
+
+                  continue
+
+
+              seen_provider_ids.add(
+                  provider_id
+              )
+
+
+              seen_site_ids.add(
+                  site_id
               )
 
 
@@ -1069,8 +913,11 @@ jobs:
 
 
           with OUTPUT_FILE.open(
+
               "w",
+
               encoding="utf-8"
+
           ) as file:
 
 
@@ -1089,7 +936,7 @@ jobs:
               for match in final_matches:
 
 
-                  stream_id = html.escape(
+                  provider_id = html.escape(
 
                       match[
                           "stream_id"
@@ -1100,48 +947,43 @@ jobs:
                   )
 
 
-                  display_name = html.escape(
+                  provider_name = html.escape(
 
                       match[
-                          "display_name"
+                          "provider_name"
                       ]
 
                   )
 
 
-                  for passport in match[
-                      "passport_matches"
-                  ]:
+                  site_id = html.escape(
+
+                      match[
+                          "site_id"
+                      ],
+
+                      quote=True
+
+                  )
 
 
-                      site_id = html.escape(
+                  file.write(
 
-                          passport[
-                              "site_id"
-                          ],
+                      f'  <channel '
 
-                          quote=True
+                      f'site="tvpassport.com" '
 
-                      )
+                      f'site_id="{site_id}" '
 
+                      f'lang="en" '
 
-                      file.write(
+                      f'xmltv_id="{provider_id}">'
 
-                          f'  <channel '
+                      f'{provider_name}'
 
-                          f'site="tvpassport.com" '
+                      f'</channel>\n'
 
-                          f'site_id="{site_id}" '
-
-                          f'lang="en" '
-
-                          f'xmltv_id="{stream_id}">'
-
-                          f'{display_name}'
-
-                          f'</channel>\n'
-
-                      )
+                  )
 
 
               file.write(
@@ -1151,9 +993,8 @@ jobs:
 
           print()
 
-
           print(
-              "Canada TVPassport provider channels matched:",
+              "Canada TVPassport matches:",
               len(
                   final_matches
               )
@@ -1168,8 +1009,15 @@ jobs:
           )
 
 
-          print()
+          print(
+              "Duplicate/rejected matches:",
+              len(
+                  duplicate_matches
+              )
+          )
 
+
+          print()
 
           print(
               "Matched channels:"
@@ -1183,40 +1031,23 @@ jobs:
 
                   f'{match["stream_id"]} | '
 
-                  f'{match["display_name"]}'
+                  f'{match["provider_name"]} '
+
+                  f'-> '
+
+                  f'{match["passport_name"]} '
+
+                  f'[{match["site_id"]}] '
+
+                  f'(score {match["match_score"]})'
 
               )
-
-
-              for passport in match[
-                  "passport_matches"
-              ]:
-
-
-                  print(
-
-                      f'  -> '
-
-                      f'{passport["source_name"]} '
-
-                      f'[{passport["site_id"]}] '
-
-                      f'xmltv_id='
-
-                      f'{passport["xmltv_id"]} '
-
-                      f'(score '
-
-                      f'{passport["match_score"]})'
-
-                  )
 
 
           if unmatched:
 
 
               print()
-
 
               print(
                   "UNMATCHED MASTER CHANNELS:"
@@ -1230,7 +1061,7 @@ jobs:
 
                       f'{channel["stream_id"]} | '
 
-                      f'{channel["display_name"]}'
+                      f'{channel["provider_name"]}'
 
                   )
 
@@ -1281,16 +1112,7 @@ jobs:
 
                   "This report is updated automatically by the "
 
-                  "TVPassport-Canada-TiviMate workflow.\n"
-
-              )
-
-
-              file.write(
-
-                  "EPG data status is filled in after the guide "
-
-                  "is generated.\n\n"
+                  "TVPassport-Canada-TiviMate workflow.\n\n"
 
               )
 
@@ -1317,7 +1139,16 @@ jobs:
 
                   f"UNMATCHED CHANNELS: "
 
-                  f"{len(unmatched)}\n\n"
+                  f"{len(unmatched)}\n"
+
+              )
+
+
+              file.write(
+
+                  f"DUPLICATE/REJECTED MATCHES: "
+
+                  f"{len(duplicate_matches)}\n\n"
 
               )
 
@@ -1341,7 +1172,7 @@ jobs:
 
                   file.write(
 
-                      f'Festy Stream ID: '
+                      f'Provider Stream ID: '
 
                       f'{match["stream_id"]}\n'
 
@@ -1350,7 +1181,7 @@ jobs:
 
                   file.write(
 
-                      f'Festy Category ID: '
+                      f'Provider Category ID: '
 
                       f'{match["category_id"]}\n'
 
@@ -1359,7 +1190,7 @@ jobs:
 
                   file.write(
 
-                      f'Festy EPG Channel ID: '
+                      f'Provider EPG Channel ID: '
 
                       f'{match["epg_channel_id"]}\n'
 
@@ -1368,73 +1199,53 @@ jobs:
 
                   file.write(
 
-                      f'Festy Channel Name: '
+                      f'Provider Channel Name: '
 
-                      f'{match["display_name"]}\n'
-
-                  )
-
-
-                  file.write(
-                      '\n'
-                  )
-
-
-                  for passport in match[
-                      "passport_matches"
-                  ]:
-
-
-                      file.write(
-
-                          f'TVPassport Name: '
-
-                          f'{passport["source_name"]}\n'
-
-                      )
-
-
-                      file.write(
-
-                          f'TVPassport Site ID: '
-
-                          f'{passport["site_id"]}\n'
-
-                      )
-
-
-                      file.write(
-
-                          f'TVPassport XMLTV ID: '
-
-                          f'{passport["xmltv_id"]}\n'
-
-                      )
-
-
-                      file.write(
-
-                          f'Match Score: '
-
-                          f'{passport["match_score"]}\n'
-
-                      )
-
-
-                      file.write(
-                          '\n'
-                      )
-
-
-                  file.write(
-
-                      'EPG DATA: CHECKING AFTER GUIDE GENERATION\n'
+                      f'{match["provider_name"]}\n'
 
                   )
 
 
                   file.write(
-                      '\n'
+
+                      f'TVPassport Name: '
+
+                      f'{match["passport_name"]}\n'
+
+                  )
+
+
+                  file.write(
+
+                      f'TVPassport Site ID: '
+
+                      f'{match["site_id"]}\n'
+
+                  )
+
+
+                  file.write(
+
+                      f'TVPassport XMLTV ID: '
+
+                      f'{match["passport_xmltv_id"]}\n'
+
+                  )
+
+
+                  file.write(
+
+                      f'Match Score: '
+
+                      f'{match["match_score"]}\n'
+
+                  )
+
+
+                  file.write(
+
+                      'EPG DATA: CHECKING AFTER GUIDE GENERATION\n\n'
+
                   )
 
 
@@ -1463,7 +1274,7 @@ jobs:
 
                       f'{channel["epg_channel_id"]} | '
 
-                      f'{channel["display_name"]}\n'
+                      f'{channel["channel_name"]}\n'
 
                   )
 
@@ -1486,11 +1297,13 @@ jobs:
           dayjs.extend(timezone)
           dayjs.extend(customParseFormat)
 
+
           module.exports = {
 
             site: 'tvpassport.com',
 
             days: 14,
+
 
             url({ channel, date }) {
 
@@ -1498,17 +1311,22 @@ jobs:
 
             },
 
+
             async request() {
 
               return {
 
                 timeout: Number(
-                  process.env.TVPASSPORT_SCHEDULE_TIMEOUT || 30000
+
+                  process.env.TVPASSPORT_SCHEDULE_TIMEOUT
+                  || 30000
+
                 ),
 
                 headers: {
 
-                  Cookie: await getCookie(),
+                  Cookie:
+                    await getCookie(),
 
                   'User-Agent':
                     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
@@ -1519,32 +1337,45 @@ jobs:
 
             },
 
+
             parser({ content, channel, date }) {
 
               const programs = []
 
               const currentTimezone =
-                parseCurrentTimezone(content)
+                parseCurrentTimezone(
+                  content
+                )
 
               const items =
-                parseItems(content)
+                parseItems(
+                  content
+                )
 
 
               console.log(
+
                 `[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${items.length}`
+
               )
 
 
               for (const item of items) {
 
+
                 const $item =
-                  cheerio.load(item)
+                  cheerio.load(
+                    item
+                  )
 
 
                 const start =
                   parseStart(
+
                     $item,
+
                     currentTimezone
+
                   )
 
 
@@ -1563,27 +1394,35 @@ jobs:
 
                 let title =
                   cleanTitle(
+
                     parseTitle(
                       $item
                     )
+
                   )
 
 
                 let episodeTitle =
                   cleanSpaces(
+
                     parseSubTitle(
                       $item
                     )
+
                   )
 
 
                 const description =
                   cleanPassportDescription(
+
                     cleanSpaces(
+
                       parseDescription(
                         $item
                       )
+
                     )
+
                   )
 
 
@@ -1630,12 +1469,16 @@ jobs:
 
 
                 if (
+
                   title === 'Movie'
                   || title === 'Cinéma'
+
                 ) {
+
 
                   title =
                     episodeTitle
+
 
                   episodeTitle =
                     ''
@@ -1694,8 +1537,11 @@ jobs:
 
                   category:
                     buildCategories(
+
                       programType,
+
                       categories
+
                     )
 
                 }
@@ -1744,32 +1590,42 @@ jobs:
 
             const res =
               await axios.get(
+
                 'https://www.tvpassport.com/tv-listings'
+
               )
 
 
             const setCookie =
-              res.headers['set-cookie']
+              res.headers[
+                'set-cookie'
+              ]
 
 
             if (
+
               !setCookie
               || setCookie.length === 0
-            ) {
+
+            )
 
               return ''
-
-            }
 
 
             const cookies =
               setCookie.map(
+
                 cookie =>
-                  cookie.split(';')[0]
+                  cookie.split(
+                    ';'
+                  )[0]
+
               )
 
 
-            return cookies.join('; ')
+            return cookies.join(
+              '; '
+            )
 
           }
 
@@ -1798,8 +1654,11 @@ jobs:
             try {
 
               return new URL(
+
                 showpicture,
+
                 'https://cdn.tvpassport.com/image/show/960x540/'
+
               ).href
 
             } catch {
@@ -1847,9 +1706,19 @@ jobs:
 
 
             return showtype
-              ? String(showtype)
-                  .split(', ')
-                  .filter(Boolean)
+
+              ? String(
+                  showtype
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
               : []
 
           }
@@ -1864,9 +1733,19 @@ jobs:
 
 
             return cast
-              ? String(cast)
-                  .split(', ')
-                  .filter(Boolean)
+
+              ? String(
+                  cast
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
               : []
 
           }
@@ -1881,9 +1760,19 @@ jobs:
 
 
             return director
-              ? String(director)
-                  .split(', ')
-                  .filter(Boolean)
+
+              ? String(
+                  director
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
               : []
 
           }
@@ -1898,9 +1787,19 @@ jobs:
 
 
             return guest
-              ? String(guest)
-                  .split(', ')
-                  .filter(Boolean)
+
+              ? String(
+                  guest
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
               : []
 
           }
@@ -1937,9 +1836,13 @@ jobs:
 
 
           function parseStart(
+
             $item,
+
             currentTimezone
+
           ) {
+
 
             const time =
               $item('*').data(
@@ -1948,9 +1851,13 @@ jobs:
 
 
             return dayjs.tz(
+
               time,
+
               'YYYY-MM-DD HH:mm:ss',
+
               currentTimezone
+
             )
 
           }
@@ -1965,8 +1872,11 @@ jobs:
 
 
             return parseInt(
+
               duration || 0,
+
               10
+
             )
 
           }
@@ -2006,6 +1916,7 @@ jobs:
             return $(
               '#timezone_selector'
             ).val()
+
               || 'America/New_York'
 
           }
@@ -2028,24 +1939,27 @@ jobs:
           }) {
 
 
-            const haystack =
-              [
+            const haystack = [
 
-                title,
+              title,
 
-                description,
+              description,
 
-                categories
+              categories
 
-              ]
+            ]
 
-                .flat()
+              .flat()
 
-                .filter(Boolean)
+              .filter(
+                Boolean
+              )
 
-                .join(' ')
+              .join(
+                ' '
+              )
 
-                .toLowerCase()
+              .toLowerCase()
 
 
             const hasEpisodeSignals =
@@ -2055,20 +1969,26 @@ jobs:
 
 
             if (
+
               /mini[\s-]?series|limited series|limited-series/
+
                 .test(
                   haystack
                 )
+
             )
 
               return 'miniseries'
 
 
             if (
+
               /series|episode|tv show|television|scripted|reality|documentary series/
+
                 .test(
                   haystack
                 )
+
             )
 
               return 'series'
@@ -2082,19 +2002,24 @@ jobs:
 
 
             if (
+
               /movie|film|feature film|cinema/
+
                 .test(
                   haystack
                 )
+
             )
 
               return 'movie'
 
 
             if (
+
               duration >= 75
               && year
               && !hasEpisodeSignals
+
             )
 
               return 'movie'
@@ -2106,12 +2031,16 @@ jobs:
 
 
           function buildCategories(
+
             programType,
+
             originalCategories
+
           ) {
 
 
             const categories =
+
               Array.isArray(
                 originalCategories
               )
@@ -2124,46 +2053,76 @@ jobs:
 
 
             if (
+
               programType === 'movie'
+
             )
 
               return unique(
+
                 [
+
                   'Movie',
+
                   ...categories
+
                 ]
+
               )
 
 
             if (
+
               programType === 'miniseries'
+
             )
 
               return unique(
+
                 [
+
                   'Miniseries',
+
                   'Series',
+
                   ...categories
+
                 ]
+
               )
 
 
             if (
+
               programType === 'series'
+
             )
 
               return unique(
+
                 [
+
                   'Series',
+
                   ...categories
+
                 ]
+
               )
 
 
             return unique(
+
               categories.length
+
                 ? categories
-                : ['Program']
+
+                : [
+
+                    'Program'
+
+                  ]
+
             )
 
           }
@@ -2188,23 +2147,24 @@ jobs:
           }) {
 
 
-            const parts =
-              []
+            const parts = []
 
-
-            let prefix =
-              ''
+            let prefix = ''
 
 
             if (
+
               programType === 'series'
               || programType === 'miniseries'
+
             ) {
 
 
               if (
+
                 episodeTitle
                 && episodeCode
+
               )
 
                 prefix =
@@ -2212,7 +2172,9 @@ jobs:
 
 
               else if (
+
                 episodeTitle
+
               )
 
                 prefix =
@@ -2220,7 +2182,9 @@ jobs:
 
 
               else if (
+
                 episodeCode
+
               )
 
                 prefix =
@@ -2249,27 +2213,38 @@ jobs:
 
             let finalDescription =
               cleanPackedDescription(
+
                 parts.join(
                   '. '
                 )
+
               )
 
 
             if (
+
               programType === 'movie'
+
             ) {
 
 
               if (
+
                 releaseYear
+
                 && !descriptionIncludesDisplayDate(
+
                   finalDescription,
+
                   releaseYear
+
                 )
+
               ) {
 
 
                 finalDescription =
+
                   finalDescription
 
                     ? `${finalDescription} (${releaseYear})`
@@ -2285,22 +2260,31 @@ jobs:
 
 
             if (
+
               programType === 'series'
               || programType === 'miniseries'
+
             ) {
 
 
               if (
+
                 airDate
                 && !suppressDisplayDate
+
                 && !descriptionIncludesDisplayDate(
+
                   finalDescription,
+
                   airDate
+
                 )
+
               ) {
 
 
                 finalDescription =
+
                   finalDescription
 
                     ? `${finalDescription} (${airDate})`
@@ -2316,21 +2300,31 @@ jobs:
 
 
             const dateOrYear =
+
               suppressDisplayDate
+
                 ? releaseYear
+
                 : airDate || releaseYear
 
 
             if (
+
               dateOrYear
+
               && !descriptionIncludesDisplayDate(
+
                 finalDescription,
+
                 dateOrYear
+
               )
+
             ) {
 
 
               finalDescription =
+
                 finalDescription
 
                   ? `${finalDescription} (${dateOrYear})`
@@ -2352,13 +2346,19 @@ jobs:
             )
 
               .replace(
+
                 /\s*\(([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})(?:,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})*\)/g,
+
                 ''
+
               )
 
               .replace(
+
                 /\s+/g,
+
                 ' '
+
               )
 
               .trim()
@@ -2373,13 +2373,19 @@ jobs:
             )
 
               .replace(
+
                 /\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i,
+
                 ' ($1)'
+
               )
 
               .replace(
+
                 /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
+
                 ' ($2)'
+
               )
 
               .trim()
@@ -2388,38 +2394,53 @@ jobs:
 
 
           function descriptionIncludesDisplayDate(
+
             description,
+
             dateOrYear
+
           ) {
 
 
             if (
+
               !description
               || !dateOrYear
+
             )
 
               return false
 
 
             const escaped =
+
               String(
                 dateOrYear
               ).replace(
+
                 /[.*+?^${}()|[\]\\]/g,
+
                 '\\$&'
+
               )
 
 
             return new RegExp(
+
               `\\(${escaped}\\)\\s*$`
+
             ).test(
+
               description
+
             )
 
               || description.includes(
+
                 String(
                   dateOrYear
                 )
+
               )
 
           }
@@ -2432,18 +2453,27 @@ jobs:
             )
 
               .replace(
+
                 /^\s*(New|Live|Repeat)\s*[:\-]\s*/i,
+
                 ''
+
               )
 
               .replace(
+
                 /\s*\((New|Live|Repeat)\)\s*$/i,
+
                 ''
+
               )
 
               .replace(
+
                 /\s*[-–—]\s*(New|Live|Repeat)\s*$/i,
+
                 ''
+
               )
 
               .trim()
@@ -2454,22 +2484,33 @@ jobs:
           function cleanSpaces(value) {
 
             return String(
+
               value || ''
+
             )
 
               .replace(
+
                 /\s+/g,
+
                 ' '
+
               )
 
               .replace(
+
                 /\s+([.,!?;:])/g,
+
                 '$1'
+
               )
 
               .replace(
+
                 /([.,!?;:])([A-Za-z0-9])/g,
+
                 '$1 $2'
+
               )
 
               .trim()
@@ -2482,9 +2523,11 @@ jobs:
             return [
 
               ...new Set(
+
                 values.filter(
                   Boolean
                 )
+
               )
 
             ]
@@ -2533,11 +2576,18 @@ jobs:
 
 
             npx tsx scripts/commands/epg/grab.ts \
+
               --channels=sites/tvpassport.com/festy-tvpassport-canada.channels.xml \
+
               --output="../guides/TVPassportCanada.${PASS_NAME}.xml" \
+
               --days=14 \
+
               --maxConnections="$MAX_CONNECTIONS" \
-              2>&1 | tee "../guides/TVPassportCanada.${PASS_NAME}.log"
+
+              2>&1 |
+
+              tee "../guides/TVPassportCanada.${PASS_NAME}.log"
 
 
             STATUS=${PIPESTATUS[0]}
@@ -2546,25 +2596,42 @@ jobs:
             set -e
 
 
-            if [ "$STATUS" -ne 0 ]; then
+            if [
+
+              "$STATUS"
+
+              -ne
+
+              0
+
+            ]; then
 
               echo "$PASS_NAME exited with status $STATUS"
 
             fi
 
 
-            if [ ! -f "../guides/TVPassportCanada.${PASS_NAME}.xml" ]; then
+            if [
+
+              ! -f
+
+              "../guides/TVPassportCanada.${PASS_NAME}.xml"
+
+            ]; then
 
               echo "$PASS_NAME did not create an XML file"
 
-              echo "0" \
-                > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+              echo "0" >
 
-              echo "0" \
-                > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+                "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
-              echo "999999" \
-                > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+              echo "0" >
+
+                "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+
+              echo "999999" >
+
+                "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
               return 0
 
@@ -2572,37 +2639,53 @@ jobs:
 
 
             PR=$(
+
               grep -c '<programme ' \
+
               "../guides/TVPassportCanada.${PASS_NAME}.xml" \
+
               || true
+
             )
 
 
             DESC=$(
+
               grep -c '<desc ' \
+
               "../guides/TVPassportCanada.${PASS_NAME}.xml" \
+
               || true
+
             )
 
 
             ISSUE_COUNT=$(
+
               grep -Eic \
+
               'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' \
+
               "../guides/TVPassportCanada.${PASS_NAME}.log" \
+
               || true
+
             )
 
 
-            echo "$PR" \
-              > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+            echo "$PR" >
+
+              "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
 
-            echo "$DESC" \
-              > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+            echo "$DESC" >
+
+              "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
 
-            echo "$ISSUE_COUNT" \
-              > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+            echo "$ISSUE_COUNT" >
+
+              "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
 
             echo "$PASS_NAME programmes: $PR"
@@ -2615,18 +2698,33 @@ jobs:
 
 
           run_pass \
+
             "pass1-fast" \
+
             8 \
+
             30000
 
 
           PASS1_ISSUES=$(
+
             cat \
+
               ../guides/TVPassportCanada.pass1-fast.issues.count
+
           )
 
 
-          if [ "$PASS1_ISSUES" -gt 0 ]; then
+          if [
+
+            "$PASS1_ISSUES"
+
+            -gt
+
+            0
+
+          ]; then
+
 
             echo ""
 
@@ -2634,11 +2732,15 @@ jobs:
 
 
             run_pass \
+
               "pass2-backup" \
+
               4 \
+
               45000
 
           else
+
 
             echo ""
 
@@ -2649,47 +2751,83 @@ jobs:
 
           BEST_PASS="pass1-fast"
 
+
           BEST_PR=$(
+
             cat \
+
               ../guides/TVPassportCanada.pass1-fast.programmes.count
+
           )
 
 
           BEST_DESC=$(
+
             cat \
+
               ../guides/TVPassportCanada.pass1-fast.descriptions.count
+
           )
 
 
           BEST_ISSUES=$(
+
             cat \
+
               ../guides/TVPassportCanada.pass1-fast.issues.count
+
           )
 
 
           for PASS in pass2-backup; do
 
-            if [ -f "../guides/TVPassportCanada.${PASS}.programmes.count" ]; then
+
+            if [
+
+              -f
+
+              "../guides/TVPassportCanada.${PASS}.programmes.count"
+
+            ]; then
+
 
               CANDIDATE_PR=$(
+
                 cat \
+
                   "../guides/TVPassportCanada.${PASS}.programmes.count"
+
               )
 
 
               CANDIDATE_DESC=$(
+
                 cat \
+
                   "../guides/TVPassportCanada.${PASS}.descriptions.count"
+
               )
 
 
               CANDIDATE_ISSUES=$(
+
                 cat \
+
                   "../guides/TVPassportCanada.${PASS}.issues.count"
+
               )
 
 
-              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
+              if [
+
+                "$CANDIDATE_PR"
+
+                -gt
+
+                "$BEST_PR"
+
+              ]; then
+
 
                 BEST_PASS="$PASS"
 
@@ -2700,7 +2838,26 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
+              elif [
+
+                "$CANDIDATE_PR"
+
+                -eq
+
+                "$BEST_PR"
+
+              ]
+
+              && [
+
+                "$CANDIDATE_DESC"
+
+                -gt
+
+                "$BEST_DESC"
+
+              ]; then
+
 
                 BEST_PASS="$PASS"
 
@@ -2711,7 +2868,36 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
+              elif [
+
+                "$CANDIDATE_PR"
+
+                -eq
+
+                "$BEST_PR"
+
+              ]
+
+              && [
+
+                "$CANDIDATE_DESC"
+
+                -eq
+
+                "$BEST_DESC"
+
+              ]
+
+              && [
+
+                "$CANDIDATE_ISSUES"
+
+                -lt
+
+                "$BEST_ISSUES"
+
+              ]; then
+
 
                 BEST_PASS="$PASS"
 
@@ -2740,7 +2926,9 @@ jobs:
 
 
           cp \
+
             "../guides/TVPassportCanada.${BEST_PASS}.xml" \
+
             "../guides/TVPassportCanada.xml"
 
 
@@ -2752,41 +2940,55 @@ jobs:
           python3 - <<'PY'
 
           import re
+
           from pathlib import Path
+
           import xml.etree.ElementTree as ET
 
 
           MATCH_FILE = Path(
+
               "config/TVPassportCanada-matching.txt"
+
           )
 
 
           GUIDE_FILE = Path(
+
               "guides/TVPassportCanada.xml"
+
           )
 
 
           if not MATCH_FILE.exists():
 
               raise SystemExit(
+
                   f"Missing {MATCH_FILE}"
+
               )
 
 
           if not GUIDE_FILE.exists():
 
               raise SystemExit(
+
                   f"Missing {GUIDE_FILE}"
+
               )
 
 
           guide_text = GUIDE_FILE.read_text(
+
               encoding="utf-8"
+
           )
 
 
           root = ET.fromstring(
+
               guide_text
+
           )
 
 
@@ -2794,12 +2996,18 @@ jobs:
 
 
           for programme in root.findall(
+
               ".//programme"
+
           ):
 
+
               channel_id = programme.attrib.get(
+
                   "channel",
+
                   ""
+
               ).strip()
 
 
@@ -2809,8 +3017,11 @@ jobs:
 
 
               programs_by_channel.setdefault(
+
                   channel_id,
+
                   0
+
               )
 
 
@@ -2818,15 +3029,15 @@ jobs:
 
 
           original_lines = MATCH_FILE.read_text(
+
               encoding="utf-8"
+
           ).splitlines()
 
 
           output = []
 
-
           current_channel = None
-
 
           matched_count = 0
 
@@ -2839,40 +3050,55 @@ jobs:
 
           for line in original_lines:
 
+
               stripped = line.strip()
 
 
               match = re.match(
-                  r"^Festy Stream ID:\s*(\d+)$",
+
+                  r"^Provider Stream ID:\s*(\d+)$",
+
                   stripped
+
               )
 
 
               if match:
 
-                  if current_channel is not None:
-
-                      output.append(
-                          ""
-                      )
-
 
                   current_channel = {
 
                       "stream_id":
+
                           match.group(1),
 
                       "category_id":
+
                           "",
 
                       "epg_channel_id":
+
                           "",
 
-                      "name":
+                      "provider_name":
+
                           "",
 
-                      "passport_matches":
-                          []
+                      "passport_name":
+
+                          "",
+
+                      "site_id":
+
+                          "",
+
+                      "passport_xmltv_id":
+
+                          "",
+
+                      "score":
+
+                          ""
 
                   }
 
@@ -2884,156 +3110,169 @@ jobs:
 
               if current_channel is None:
 
-                  if stripped == "UNMATCHED CHANNELS":
-
-                      output.append(
-                          "UNMATCHED CHANNELS"
-                      )
-
-                      output.append(
-                          "------------------"
-                      )
-
-                      output.append(
-                          ""
-                      )
-
-                      unmatched_count = 0
-
-                  elif output and output[-1] == "UNMATCHED CHANNELS":
-
-                      if stripped:
-
-                          output.append(
-                              line
-                          )
-
-                          unmatched_count += 1
-
                   continue
 
 
               match = re.match(
-                  r"^Festy Category ID:\s*(.*)$",
+
+                  r"^Provider Category ID:\s*(.*)$",
+
                   stripped
+
               )
 
 
               if match:
 
                   current_channel[
+
                       "category_id"
+
                   ] = match.group(1)
 
                   continue
 
 
               match = re.match(
-                  r"^Festy EPG Channel ID:\s*(.*)$",
+
+                  r"^Provider EPG Channel ID:\s*(.*)$",
+
                   stripped
+
               )
 
 
               if match:
 
                   current_channel[
+
                       "epg_channel_id"
+
                   ] = match.group(1)
 
                   continue
 
 
               match = re.match(
-                  r"^Festy Channel Name:\s*(.*)$",
+
+                  r"^Provider Channel Name:\s*(.*)$",
+
                   stripped
+
               )
 
 
               if match:
 
                   current_channel[
-                      "name"
+
+                      "provider_name"
+
                   ] = match.group(1)
 
                   continue
 
 
-              if stripped.startswith(
-                  "TVPassport Name:"
-              ):
+              match = re.match(
+
+                  r"^TVPassport Name:\s*(.*)$",
+
+                  stripped
+
+              )
+
+
+              if match:
 
                   current_channel[
-                      "passport_matches"
-                  ].append(
-                      {
-                          "name":
-                              stripped.split(
-                                  ":",
-                                  1
-                              )[1].strip(),
 
-                          "site_id":
-                              "",
+                      "passport_name"
 
-                          "xmltv_id":
-                              ""
-
-                      }
-                  )
+                  ] = match.group(1)
 
                   continue
 
 
-              if stripped.startswith(
-                  "TVPassport Site ID:"
+              match = re.match(
+
+                  r"^TVPassport Site ID:\s*(.*)$",
+
+                  stripped
+
+              )
+
+
+              if match:
+
+                  current_channel[
+
+                      "site_id"
+
+                  ] = match.group(1)
+
+                  continue
+
+
+              match = re.match(
+
+                  r"^TVPassport XMLTV ID:\s*(.*)$",
+
+                  stripped
+
+              )
+
+
+              if match:
+
+                  current_channel[
+
+                      "passport_xmltv_id"
+
+                  ] = match.group(1)
+
+                  continue
+
+
+              match = re.match(
+
+                  r"^Match Score:\s*(.*)$",
+
+                  stripped
+
+              )
+
+
+              if match:
+
+                  current_channel[
+
+                      "score"
+
+                  ] = match.group(1)
+
+                  continue
+
+
+              if stripped == (
+
+                  "EPG DATA: CHECKING AFTER GUIDE GENERATION"
+
               ):
 
-                  if current_channel[
-                      "passport_matches"
-                  ]:
-
-                      current_channel[
-                          "passport_matches"
-                      ][-1][
-                          "site_id"
-                      ] = stripped.split(
-                          ":",
-                          1
-                      )[1].strip()
-
-                  continue
-
-
-              if stripped.startswith(
-                  "TVPassport XMLTV ID:"
-              ):
-
-                  if current_channel[
-                      "passport_matches"
-                  ]:
-
-                      current_channel[
-                          "passport_matches"
-                      ][-1][
-                          "xmltv_id"
-                      ] = stripped.split(
-                          ":",
-                          1
-                      )[1].strip()
-
-                  continue
-
-
-              if stripped == "EPG DATA: CHECKING AFTER GUIDE GENERATION":
 
                   channel_id = current_channel[
+
                       "stream_id"
+
                   ]
 
 
                   program_count = programs_by_channel.get(
+
                       channel_id,
+
                       0
+
                   )
 
 
@@ -3051,75 +3290,144 @@ jobs:
 
 
                   output.append(
-                      f'Festy Stream ID: '
+
+                      f'Provider Stream ID: '
+
                       f'{current_channel["stream_id"]}'
+
                   )
 
 
                   output.append(
-                      f'Festy Category ID: '
+
+                      f'Provider Category ID: '
+
                       f'{current_channel["category_id"]}'
+
                   )
 
 
                   output.append(
-                      f'Festy EPG Channel ID: '
+
+                      f'Provider EPG Channel ID: '
+
                       f'{current_channel["epg_channel_id"]}'
+
                   )
 
 
                   output.append(
-                      f'Festy Channel Name: '
-                      f'{current_channel["name"]}'
+
+                      f'Provider Channel Name: '
+
+                      f'{current_channel["provider_name"]}'
+
                   )
 
 
                   output.append(
-                      ""
+
+                      f'TVPassport Name: '
+
+                      f'{current_channel["passport_name"]}'
+
                   )
 
 
-                  for passport in current_channel[
-                      "passport_matches"
-                  ]:
+                  output.append(
 
-                      output.append(
-                          f'TVPassport Name: '
-                          f'{passport["name"]}'
-                      )
+                      f'TVPassport Site ID: '
 
-                      output.append(
-                          f'TVPassport Site ID: '
-                          f'{passport["site_id"]}'
-                      )
+                      f'{current_channel["site_id"]}'
 
-                      output.append(
-                          f'TVPassport XMLTV ID: '
-                          f'{passport["xmltv_id"]}'
-                      )
-
-                      output.append(
-                          ""
-                      )
+                  )
 
 
                   output.append(
+
+                      f'TVPassport XMLTV ID: '
+
+                      f'{current_channel["passport_xmltv_id"]}'
+
+                  )
+
+
+                  output.append(
+
+                      f'Match Score: '
+
+                      f'{current_channel["score"]}'
+
+                  )
+
+
+                  output.append(
+
                       f'EPG DATA: {status}'
+
                   )
 
 
                   output.append(
+
                       f'PROGRAMS RETURNED: '
+
                       f'{program_count}'
+
                   )
 
 
-                  output.append(
-                      ""
-                  )
+                  output.append("")
 
 
                   current_channel = None
+
+
+          unmatched_start = False
+
+
+          for line in original_lines:
+
+
+              if line.strip() == "UNMATCHED CHANNELS":
+
+
+                  unmatched_start = True
+
+                  output.append(
+
+                      "UNMATCHED CHANNELS"
+
+                  )
+
+                  output.append(
+
+                      "------------------"
+
+                  )
+
+                  output.append("")
+
+                  continue
+
+
+              if unmatched_start:
+
+                  if line.strip():
+
+                      output.append(line)
+
+
+                      unmatched_count += 1
+
+
+          total_channels = (
+
+              matched_count
+
+              + unmatched_count
+
+          )
 
 
           summary = [
@@ -3130,22 +3438,17 @@ jobs:
 
               "",
 
-              f"MASTER CHANNELS: "
-              f"{matched_count + unmatched_count}",
+              f"MASTER CHANNELS: {total_channels}",
 
-              f"MATCHED CHANNELS: "
-              f"{matched_count}",
+              f"MATCHED CHANNELS: {matched_count}",
 
-              f"UNMATCHED CHANNELS: "
-              f"{unmatched_count}",
+              f"UNMATCHED CHANNELS: {unmatched_count}",
 
               "",
 
-              f"MATCHED CHANNELS WITH EPG DATA: "
-              f"{data_count}",
+              f"MATCHED CHANNELS WITH EPG DATA: {data_count}",
 
-              f"MATCHED CHANNELS WITH NO EPG DATA: "
-              f"{no_data_count}",
+              f"MATCHED CHANNELS WITH NO EPG DATA: {no_data_count}",
 
               "",
 
@@ -3166,60 +3469,77 @@ jobs:
           ]
 
 
-          final_text = "\n".join(
-              summary
-              + output
-          )
-
-
           MATCH_FILE.write_text(
-              final_text
+
+              "\n".join(
+
+                  summary
+
+                  + output
+
+              )
+
               + "\n",
+
               encoding="utf-8"
+
           )
 
 
           print(
+
               "============================================================"
+
           )
 
-
           print(
+
               "CANADA TVPASSPORT CHANNEL REPORT"
+
           )
 
-
           print(
+
               "============================================================"
+
           )
 
-
           print(
+
               "Matched channels:",
+
               matched_count
+
           )
 
-
           print(
+
               "Unmatched channels:",
+
               unmatched_count
+
           )
 
-
           print(
+
               "Matched channels with EPG data:",
+
               data_count
+
           )
 
-
           print(
+
               "Matched channels with NO EPG data:",
+
               no_data_count
+
           )
 
-
           print(
+
               "============================================================"
+
           )
 
           PY
@@ -3228,23 +3548,35 @@ jobs:
         run: |
 
           CH=$(
+
             grep -c '<channel ' \
+
             guides/TVPassportCanada.xml \
+
             || true
+
           )
 
 
           PR=$(
+
             grep -c '<programme ' \
+
             guides/TVPassportCanada.xml \
+
             || true
+
           )
 
 
           DESC=$(
+
             grep -c '<desc ' \
+
             guides/TVPassportCanada.xml \
+
             || true
+
           )
 
 
@@ -3255,7 +3587,15 @@ jobs:
           echo "Canada descriptions: $DESC"
 
 
-          if [ "$CH" -lt 1 ]; then
+          if [
+
+            "$CH"
+
+            -lt
+
+            1
+
+          ]; then
 
             echo "Invalid Canada output - no channels"
 
@@ -3264,7 +3604,15 @@ jobs:
           fi
 
 
-          if [ "$PR" -lt 1 ]; then
+          if [
+
+            "$PR"
+
+            -lt
+
+            1
+
+          ]; then
 
             echo "Invalid Canada output - no programmes"
 
@@ -3273,7 +3621,15 @@ jobs:
           fi
 
 
-          if [ "$DESC" -lt 1 ]; then
+          if [
+
+            "$DESC"
+
+            -lt
+
+            1
+
+          ]; then
 
             echo "Invalid Canada output - no descriptions"
 
@@ -3311,19 +3667,21 @@ jobs:
 
           const curatedPath =
             candidates.find(
+
               file =>
                 fs.existsSync(
                   file
                 )
+
             )
 
 
-          if (
-            !curatedPath
-          ) {
+          if (!curatedPath) {
 
             console.log(
+
               'No existing curated logo source found; keeping generated logos.'
+
             )
 
             process.exit(
@@ -3434,24 +3792,36 @@ jobs:
             return normalize(
               s
             ).replace(
+
               /[^a-z0-9]/g,
+
               ''
+
             )
 
           }
 
 
           function attr(
+
             attrs,
+
             name
+
           ) {
+
 
             const match =
               attrs.match(
+
                 new RegExp(
+
                   `${name}="([^"]*)"`,
+
                   'i'
+
                 )
+
               )
 
 
@@ -3470,78 +3840,96 @@ jobs:
             block
           ) {
 
+
             const display =
               block.match(
+
                 /<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i
+
               )
 
 
-            if (
-              display
-            )
+            if (display)
 
               return decodeXml(
+
                 display[1]
+
                   .replace(
                     /<[^>]+>/g,
                     ''
                   )
+
                   .trim()
+
               )
 
 
             return decodeXml(
+
               block
+
                 .replace(
                   /<[^>]+>/g,
                   ' '
                 )
+
                 .replace(
                   /\s+/g,
                   ' '
                 )
+
                 .trim()
+
             )
 
           }
 
 
           function iconFromBlock(
+
             block,
+
             attrs
+
           ) {
+
 
             const icon =
               block.match(
+
                 /<icon\b[^>]*src="([^"]+)"/i
+
               )
 
 
-            if (
-              icon
-            )
+            if (icon)
 
               return decodeXml(
+
                 icon[1]
               ).trim()
 
 
-            const logo =
-              attr(
-                attrs,
-                'logo'
-              )
+            return attr(
 
+              attrs,
 
-            return logo
+              'logo'
+
+            )
 
           }
 
 
           function score(
+
             target,
+
             candidate
+
           ) {
+
 
             const a =
               normalize(
@@ -3583,12 +3971,15 @@ jobs:
 
 
             if (
+
               ac.includes(
                 bc
               )
+
               || bc.includes(
                 ac
               )
+
             )
 
               return 80
@@ -3596,33 +3987,40 @@ jobs:
 
             const at =
               new Set(
+
                 a.split(
                   ' '
                 )
+
               )
 
 
             const bt =
               new Set(
+
                 b.split(
                   ' '
                 )
+
               )
 
 
-            let overlap =
-              0
+            let overlap = 0
 
 
             for (
               const token of at
             ) {
 
+
               if (
+
                 token.length > 1
+
                 && bt.has(
                   token
                 )
+
               )
 
                 overlap++
@@ -3637,27 +4035,37 @@ jobs:
 
           const curatedXml =
             fs.readFileSync(
+
               curatedPath,
+
               'utf8'
+
             )
 
 
           let guideXml =
             fs.readFileSync(
+
               guidePath,
+
               'utf8'
+
             )
 
 
-          const logos =
-            []
+          const logos = []
 
 
           for (
+
             const match of curatedXml.matchAll(
+
               /<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi
+
             )
+
           ) {
+
 
             const attrs =
               match[1]
@@ -3675,50 +4083,54 @@ jobs:
 
             const logo =
               iconFromBlock(
+
                 block,
+
                 attrs
+
               )
 
 
-            if (
-              !logo
-            )
+            if (!logo)
 
               continue
 
 
             logos.push(
+
               {
+
                 name,
+
                 logo
+
               }
+
             )
 
           }
 
 
-          let scanned =
-            0
+          let scanned = 0
 
+          let matched = 0
 
-          let matched =
-            0
+          let added = 0
 
-
-          let added =
-            0
-
-
-          let updated =
-            0
+          let updated = 0
 
 
           guideXml =
             guideXml.replace(
+
               /<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi,
+
               (
+
                 block,
+
                 attrs
+
               ) => {
 
 
@@ -3731,29 +4143,34 @@ jobs:
                   )
 
 
-                let best =
-                  null
+                let best = null
 
-
-                let bestScore =
-                  0
+                let bestScore = 0
 
 
                 for (
+
                   const candidate of logos
+
                 ) {
 
 
                   const candidateScore =
                     score(
+
                       name,
+
                       candidate.name
+
                     )
 
 
                   if (
+
                     candidateScore > bestScore
+
                   ) {
+
 
                     bestScore =
                       candidateScore
@@ -3767,8 +4184,11 @@ jobs:
 
 
                 if (
+
                   !best
+
                   || bestScore < 80
+
                 )
 
                   return block
@@ -3779,23 +4199,27 @@ jobs:
 
                 const existing =
                   block.match(
+
                     /<icon\b[^>]*src="([^"]+)"/i
+
                   )
 
 
-                if (
-                  existing
-                ) {
+                if (existing) {
 
 
                   const existingLogo =
                     decodeXml(
+
                       existing[1]
+
                     ).trim()
 
 
                   if (
+
                     existingLogo === best.logo
+
                   )
 
                     return block
@@ -3805,8 +4229,11 @@ jobs:
 
 
                   return block.replace(
+
                     /<icon\b[^>]*src="[^"]*"[^/]*\/>/i,
+
                     `<icon src="${escapeXml(best.logo)}"/>`
+
                   )
 
                 }
@@ -3816,42 +4243,59 @@ jobs:
 
 
                 return block.replace(
+
                   /(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i,
+
                   `$1<icon src="${escapeXml(best.logo)}"/>`
+
                 )
 
               }
+
             )
 
 
           fs.writeFileSync(
+
             guidePath,
+
             guideXml
+
           )
 
 
           console.log(
+
             `Existing logo source: ${curatedPath}`
+
           )
 
 
           console.log(
+
             `Canada channels scanned: ${scanned}`
+
           )
 
 
           console.log(
+
             `Equivalent curated logos matched: ${matched}`
+
           )
 
 
           console.log(
+
             `Canada logos added: ${added}`
+
           )
 
 
           console.log(
+
             `Canada logos updated: ${updated}`
+
           )
 
           EOFJS
@@ -3880,8 +4324,11 @@ jobs:
 
 
           git add \
+
             guides/TVPassportCanada.xml \
+
             guides/TVPassportCanada.xml.gz \
+
             config/TVPassportCanada-matching.txt
 
 
@@ -3899,6 +4346,7 @@ jobs:
 
 
           for attempt in 1 2 3 4 5; do
+
 
             echo "Push attempt $attempt"
 
@@ -3922,8 +4370,11 @@ jobs:
 
 
             git add \
+
               guides/TVPassportCanada.xml \
+
               guides/TVPassportCanada.xml.gz \
+
               config/TVPassportCanada-matching.txt
 
 
@@ -3934,7 +4385,8 @@ jobs:
             else
 
               git commit \
-                -m "Update Canada TVPassport guide"
+
+                -m "Update TVPassport Canada guide"
 
             fi
 
