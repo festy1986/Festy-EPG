@@ -1307,4 +1307,10 @@ jobs:
               echo "No new commit needed after rebase, retrying push..."
             else
               git commit -m "Update TVPassport Canada guide"
-          
+            fi
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
