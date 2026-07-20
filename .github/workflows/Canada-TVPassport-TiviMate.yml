@@ -3911,6 +3911,10 @@ jobs:
           BROKEN_DUPLICATE_CONFIG_BLOCK
 
       - name: Grab Canada TVPassport guide
+        # This is an accidental duplicate of the guide-generation step above.
+        # Leaving it disabled preserves the original workflow while avoiding a
+        # second full, network-heavy EPG download.
+        if: ${{ false }}
         run: |
 
           cd epg
