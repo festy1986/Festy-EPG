@@ -32,7 +32,7 @@ jobs:
 
           echo "Provider credentials found"
 
-      - name: TEST Get all provider groups and channels
+      - name: Get ALL provider groups and channels
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -44,7 +44,7 @@ jobs:
 
           BASE_URL="${XTREAM_URL%/}"
 
-          echo "Getting all provider live categories..."
+          echo "Getting ALL provider live categories..."
 
           curl \
             --fail \
@@ -57,11 +57,11 @@ jobs:
             --data-urlencode "password=$XTREAM_PASSWORD" \
             --data-urlencode "action=get_live_categories" \
             "$BASE_URL/player_api.php" \
-            -o test/canada_categories_test.json
+            -o test/all_categories.json
 
-          test -s test/canada_categories_test.json
+          test -s test/all_categories.json
 
-          echo "Getting all provider live channels..."
+          echo "Getting ALL provider live channels..."
 
           curl \
             --fail \
@@ -74,11 +74,11 @@ jobs:
             --data-urlencode "password=$XTREAM_PASSWORD" \
             --data-urlencode "action=get_live_streams" \
             "$BASE_URL/player_api.php" \
-            -o test/canada_live_streams_test.json
+            -o test/all_live_streams.json
 
-          test -s test/canada_live_streams_test.json
+          test -s test/all_live_streams.json
 
-          echo "Building Canada / CA channel list..."
+          echo "Building COMPLETE CA / CANADA channel list..."
 
           python3 - <<'PY'
 
@@ -86,7 +86,7 @@ jobs:
           import re
 
           with open(
-              "test/canada_categories_test.json",
+              "test/all_categories.json",
               "r",
               encoding="utf-8"
           ) as file:
@@ -94,7 +94,7 @@ jobs:
               categories = json.load(file)
 
           with open(
-              "test/canada_live_streams_test.json",
+              "test/all_live_streams.json",
               "r",
               encoding="utf-8"
           ) as file:
@@ -110,7 +110,7 @@ jobs:
                       "category_id",
                       ""
                   )
-              )
+              ).strip()
 
               category_name = str(
                   category.get(
@@ -135,13 +135,15 @@ jobs:
               is_canada_category = (
                   "canada" in words
                   or "ca" in words
-                  or normalized_name == "canada"
-                  or normalized_name == "ca"
                   or normalized_name.startswith("ca ")
                   or normalized_name.startswith("ca-")
                   or normalized_name.startswith("ca:")
                   or normalized_name.startswith("ca/")
                   or normalized_name.startswith("ca|")
+                  or normalized_name.endswith(" ca")
+                  or normalized_name.endswith(" canada")
+                  or " canada " in f" {normalized_name} "
+                  or " ca " in f" {normalized_name} "
               )
 
               if is_canada_category:
@@ -155,8 +157,14 @@ jobs:
           for category_id, category_name in canada_categories.items():
 
               grouped_channels[
-                  category_name
-              ] = []
+                  category_id
+              ] = {
+                  "category_name":
+                      category_name,
+
+                  "channels":
+                      []
+              }
 
           for stream in streams:
 
@@ -165,9 +173,10 @@ jobs:
                       "category_id",
                       ""
                   )
-              )
+              ).strip()
 
               if category_id not in canada_categories:
+
                   continue
 
               category_name = canada_categories[
@@ -196,12 +205,21 @@ jobs:
               ).strip()
 
               if not channel_name:
+
                   continue
 
               grouped_channels[
-                  category_name
+                  category_id
+              ][
+                  "channels"
               ].append(
                   {
+                      "category_id":
+                          category_id,
+
+                      "category_name":
+                          category_name,
+
                       "name":
                           channel_name,
 
@@ -220,29 +238,46 @@ jobs:
           ) as file:
 
               file.write(
-                  "# CANADA / CA CHANNEL LIST\n"
+                  "# COMPLETE CANADA / CA PROVIDER CHANNEL EXPORT\n"
               )
 
               file.write(
-                  "# FULL PROVIDER EXPORT - GROUPS, CHANNEL NAMES, AND IDs\n"
+                  "# EVERY PROVIDER GROUP MATCHING CA OR CANADA\n"
+              )
+
+              file.write(
+                  "# EVERY CHANNEL WITH GROUP ID, STREAM ID, AND EPG CHANNEL ID\n"
+              )
+
+              file.write(
+                  "# THIS FILE IS OVERWRITTEN ON EVERY RUN\n"
               )
 
               file.write(
                   "#\n"
               )
 
-              for category_name in sorted(
+              for category_id in sorted(
                   grouped_channels,
                   key=lambda value:
-                      value.lower()
+                      grouped_channels[
+                          value
+                      ][
+                          "category_name"
+                      ].lower()
               ):
 
-                  channels = grouped_channels[
-                      category_name
+                  category_name = grouped_channels[
+                      category_id
+                  ][
+                      "category_name"
                   ]
 
-                  if not channels:
-                      continue
+                  channels = grouped_channels[
+                      category_id
+                  ][
+                      "channels"
+                  ]
 
                   file.write(
                       "\n"
@@ -253,8 +288,24 @@ jobs:
                   )
 
                   file.write(
-                      "# GROUP: "
+                      "# GROUP NAME: "
                       + category_name
+                      + "\n"
+                  )
+
+                  file.write(
+                      "# GROUP ID: "
+                      + category_id
+                      + "\n"
+                  )
+
+                  file.write(
+                      "# CHANNELS: "
+                      + str(
+                          len(
+                              channels
+                          )
+                      )
                       + "\n"
                   )
 
@@ -262,106 +313,127 @@ jobs:
                       "# ==================================================\n"
                   )
 
-                  seen = set()
-
-                  for channel in sorted(
-                      channels,
-                      key=lambda item:
-                          item["name"].lower()
-                  ):
-
-                      channel_name = channel[
-                          "name"
-                      ]
-
-                      stream_id = channel[
-                          "stream_id"
-                      ]
-
-                      epg_channel_id = channel[
-                          "epg_channel_id"
-                      ]
-
-                      unique_key = (
-                          channel_name.lower(),
-                          stream_id,
-                          epg_channel_id
-                      )
-
-                      if unique_key in seen:
-                          continue
-
-                      seen.add(
-                          unique_key
-                      )
+                  for channel in channels:
 
                       file.write(
-                          channel_name
-                          + " | STREAM_ID="
-                          + stream_id
-                          + " | EPG_CHANNEL_ID="
-                          + epg_channel_id
+                          "CHANNEL NAME: "
+                          + channel[
+                              "name"
+                          ]
                           + "\n"
                       )
 
-          print()
-          print(
-              "Canada / CA groups found:",
-              len(
-                  grouped_channels
-              )
+                      file.write(
+                          "CATEGORY ID: "
+                          + channel[
+                              "category_id"
+                          ]
+                          + "\n"
+                      )
+
+                      file.write(
+                          "STREAM ID: "
+                          + channel[
+                              "stream_id"
+                          ]
+                          + "\n"
+                      )
+
+                      file.write(
+                          "EPG CHANNEL ID: "
+                          + channel[
+                              "epg_channel_id"
+                          ]
+                          + "\n"
+                      )
+
+                      file.write(
+                          "\n"
+                      )
+
+          total_groups = len(
+              grouped_channels
           )
 
           total_channels = sum(
               len(
-                  channels
+                  group[
+                      "channels"
+                  ]
               )
-              for channels in
+              for group in
               grouped_channels.values()
           )
 
+          print()
+
           print(
-              "Canada / CA channels found:",
+              "============================================================"
+          )
+
+          print(
+              "COMPLETE CANADA / CA CHANNEL EXPORT"
+          )
+
+          print(
+              "============================================================"
+          )
+
+          print(
+              "CA / Canada groups found:",
+              total_groups
+          )
+
+          print(
+              "Channels found in CA / Canada groups:",
               total_channels
           )
 
           print()
+
+          for category_id in sorted(
+              grouped_channels,
+              key=lambda value:
+                  grouped_channels[
+                      value
+                  ][
+                      "category_name"
+                  ].lower()
+          ):
+
+              category_name = grouped_channels[
+                  category_id
+              ][
+                  "category_name"
+              ]
+
+              channel_count = len(
+                  grouped_channels[
+                      category_id
+                  ][
+                      "channels"
+                  ]
+              )
+
+              print(
+                  category_name,
+                  "| CATEGORY ID:",
+                  category_id,
+                  "| CHANNELS:",
+                  channel_count
+              )
+
+          print()
+
           print(
               "Output:",
               "config/canada_channels.txt"
           )
 
-          print()
-          print(
-              "Matched groups:"
-          )
-
-          for category_name in sorted(
-              grouped_channels,
-              key=lambda value:
-                  value.lower()
-          ):
-
-              channel_count = len(
-                  grouped_channels[
-                      category_name
-                  ]
-              )
-
-              if channel_count:
-
-                  print(
-                      " -",
-                      category_name,
-                      "(",
-                      channel_count,
-                      "channels)"
-                  )
-
           PY
 
           echo
-          echo "TEST Canada channel list complete"
+          echo "Canada channel export complete"
 
           echo
           echo "Generated file:"
@@ -388,7 +460,7 @@ jobs:
           else
 
             git commit \
-              -m "TEST Canada channel list"
+              -m "Update complete Canada channel list"
 
             git pull \
               --rebase \
