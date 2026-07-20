@@ -747,8 +747,9 @@ jobs:
               }
 
 
-              provider_name_normalized_lower =
-                  provider_name_normalized
+              provider_name_normalized_lower = normalize(
+                  provider_name
+                  )
 
 
               for alias, alternatives in aliases.items():
