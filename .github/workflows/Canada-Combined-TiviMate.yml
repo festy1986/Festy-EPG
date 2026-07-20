@@ -1,4 +1,4 @@
-name: Canada Combined TiviMate
+name: Canada Combined TiviMate READY
 
 on:
   workflow_dispatch:
@@ -2558,4 +2558,90 @@ jobs:
 
           main().catch(
             error => {
-              console.er
+              console.error(
+                error
+              )
+
+              process.exit(
+                1
+              )
+            }
+          )
+          EOF
+
+          node /tmp/build_canada_combined.js
+
+      - name: Validate Canada Combined guide
+        run: |
+          CHANNELS=$(grep -c '<channel ' canadacombined/work/canada-combined.xml || true)
+          PROGRAMMES=$(grep -c '<programme ' canadacombined/work/canada-combined.xml || true)
+          CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' canadacombined/work/canada-combined.xml | grep -c '<icon src=' || true)
+          PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' canadacombined/work/canada-combined.xml | grep -c '<icon src=' || true)
+          DESCRIPTIONS=$(grep -c '<desc ' canadacombined/work/canada-combined.xml || true)
+
+          echo "Combined FAST channels: $CHANNELS"
+          echo "Combined FAST programmes: $PROGRAMMES"
+          echo "Channel logos: $CHANNEL_LOGOS"
+          echo "Programme icons: $PROGRAMME_ICONS"
+          echo "Description tags: $DESCRIPTIONS"
+
+          if [ "$CHANNELS" -lt 1 ]; then
+            echo "Combined FAST guide contains no channels"
+            exit 1
+          fi
+
+          if [ "$PROGRAMMES" -lt 1 ]; then
+            echo "Combined FAST guide contains no programmes"
+            exit 1
+          fi
+
+          test -s canadacombined/work/canada-combined.xml
+
+      - name: Compress Canada Combined guide
+        run: |
+          gzip -c \
+            canadacombined/work/canada-combined.xml \
+            > guides/CanadaCombined.xml.gz
+
+          test -s guides/CanadaCombined.xml.gz
+
+          echo "Combined FAST guide:"
+          ls -lh guides/CanadaCombined.xml.gz
+
+      - name: Commit and push Canada Combined guide
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add guides/CanadaCombined.xml.gz
+
+          if git diff --cached --quiet; then
+            echo "No Combined FAST guide changes to commit"
+            exit 0
+          fi
+
+          git commit \
+            -m "Update Canada Combined guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed. Synchronizing with remote before retry..."
+
+            git fetch origin main
+
+            git rebase origin/main
+
+            echo "Waiting before retry..."
+
+            sleep 10
+          done
+
+          echo "Push failed after all retries"
+
+          exit 1
