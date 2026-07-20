@@ -37,8 +37,9 @@ jobs:
           review() { printf '"%s","%s","%s"\n' "$(csv_field "$1")" "$(csv_field "$2")" "$(csv_field "$3")" >> 247logos/review.csv; }
 
           while IFS='|' read -r raw_id raw_name; do
-            channel_id=$(xargs <<< "$raw_id")
-            original_name=$(xargs <<< "$raw_name")
+            # sed trims whitespace without treating apostrophes as shell syntax.
+            channel_id=$(sed -E 's/^[[:space:]]+|[[:space:]]+$//g' <<< "$raw_id")
+            original_name=$(sed -E 's/^[[:space:]]+|[[:space:]]+$//g' <<< "$raw_name")
             [[ "$channel_id" =~ ^[0-9]+$ ]] || continue
             total=$((total + 1))
             search_name=$(clean_name "$original_name")
@@ -117,7 +118,4 @@ jobs:
             exit 0
           fi
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 247logos
-          git commit -m "Add 24/7 channel logos"
-          git push
+          git config user.emai
