@@ -2112,7 +2112,7 @@ jobs:
 
                 BEST_DESC="$CANDIDATE_DESC"
 
-                BEST_ISSUES="$CANDIDATE_ISSUES
+                BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
               elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
