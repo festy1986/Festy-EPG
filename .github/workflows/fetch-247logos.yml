@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install PNG renderer
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick librsvg2-bin
 
       - name: Fetch logos in batches of three
         env:
@@ -59,15 +59,12 @@ jobs:
             git push origin "HEAD:$GITHUB_REF_NAME"
           }
 
-          # Replace only the prior fallback SVGs listed in fallbacks.csv with PNGs.
-          while IFS=, read -r quoted_id quoted_title; do
-            id=${quoted_id//\"/}; title=${quoted_title%\"}; title=${title#\"}
-            for old_svg in 247logos/"$id"-*.svg; do
-              [[ -f "$old_svg" ]] || continue
-              render_fallback_png "$title" "${old_svg%.svg}.png"
+          # TiviMate and GitHub previews are more reliable with PNG than SVG.
+          while IFS= read -r -d '' old_svg; do
+            if rsvg-convert --width 1200 --height 675 "$old_svg" -o "${old_svg%.svg}.png"; then
               rm -f "$old_svg"
-            done
-          done < <(tail -n +2 247logos/fallbacks.csv)
+            fi
+          done < <(find 247logos -maxdepth 1 -type f -name '*.svg' -print0)
 
           process_channel() {
             local channel_id="$1" original_name="$2" title key prefix page wanted image asset image_url mime extension duplicate
