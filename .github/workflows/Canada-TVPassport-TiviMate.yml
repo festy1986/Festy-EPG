@@ -1061,7 +1061,7 @@ jobs:
 
                       f'{channel["stream_id"]} | '
 
-                      f'{channel["provider_name"]}'
+                      f'{channel["channel_name"]}'
 
                   )
 
@@ -1352,8 +1352,1506 @@ jobs:
                   content
                 )
 
-
               console.log(
+
+                `[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${items.length}`
+
+              )
+
+              for (const item of items) {
+
+                const $item =
+                  cheerio.load(
+                    item
+                  )
+
+                const start =
+                  parseStart(
+
+                    $item,
+
+                    currentTimezone
+
+                  )
+
+                const duration =
+                  parseDuration(
+                    $item
+                  )
+
+                const stop =
+                  start.add(
+                    duration,
+                    'm'
+                  )
+
+                let title =
+                  cleanTitle(
+
+                    parseTitle(
+                      $item
+                    )
+
+                  )
+
+                let episodeTitle =
+                  cleanSpaces(
+
+                    parseSubTitle(
+                      $item
+                    )
+
+                  )
+
+                const description =
+                  cleanPassportDescription(
+
+                    cleanSpaces(
+
+                      parseDescription(
+                        $item
+                      )
+
+                    )
+
+                  )
+
+                const image =
+                  parseImage(
+                    $item
+                  )
+
+                const rating =
+                  parseRating(
+                    $item
+                  )
+
+                const year =
+                  parseYear(
+                    $item
+                  )
+
+                const categories =
+                  parseCategory(
+                    $item
+                  )
+
+                const actors =
+                  parseActors(
+                    $item
+                  )
+
+                const guest =
+                  parseGuest(
+                    $item
+                  )
+
+                const director =
+                  parseDirector(
+                    $item
+                  )
+
+                if (
+
+                  title === 'Movie'
+                  || title === 'Cinéma'
+
+                ) {
+
+                  title =
+                    episodeTitle
+
+                  episodeTitle =
+                    ''
+
+                }
+
+                const programType =
+                  classifyProgramType({
+
+                    title,
+
+                    episodeTitle,
+
+                    description,
+
+                    year,
+
+                    categories,
+
+                    duration
+
+                  })
+
+                const finalDescription =
+                  buildPackedDescription({
+
+                    programType,
+
+                    episodeTitle,
+
+                    episodeCode: '',
+
+                    description,
+
+                    airDate: '',
+
+                    releaseYear: year,
+
+                    suppressDisplayDate: false
+
+                  })
+
+                const program = {
+
+                  title,
+
+                  description:
+                    finalDescription,
+
+                  start,
+
+                  stop,
+
+                  category:
+                    buildCategories(
+
+                      programType,
+
+                      categories
+
+                    )
+
+                }
+
+                if (image)
+                  program.image =
+                    image
+
+                if (rating)
+                  program.rating =
+                    rating
+
+                if (actors.length)
+                  program.actors =
+                    actors
+
+                if (guest.length)
+                  program.guest =
+                    guest
+
+                if (director.length)
+                  program.director =
+                    director
+
+                programs.push(
+                  program
+                )
+
+              }
+
+              return programs
+
+            }
+
+          }
+
+
+          async function getCookie() {
+
+            const res =
+              await axios.get(
+
+                'https://www.tvpassport.com/tv-listings'
+
+              )
+
+            const setCookie =
+              res.headers[
+                'set-cookie'
+              ]
+
+            if (
+
+              !setCookie
+              || setCookie.length === 0
+
+            )
+
+              return ''
+
+            const cookies =
+              setCookie.map(
+
+                cookie =>
+                  cookie.split(
+                    ';'
+                  )[0]
+
+              )
+
+            return cookies.join(
+              '; '
+            )
+
+          }
+
+
+          function parseDescription($item) {
+
+            return $item('*').data(
+              'description'
+            ) || ''
+
+          }
+
+
+          function parseImage($item) {
+
+            const showpicture =
+              $item('*').data(
+                'showpicture'
+              )
+
+            if (!showpicture)
+              return null
+
+            try {
+
+              return new URL(
+
+                showpicture,
+
+                'https://cdn.tvpassport.com/image/show/960x540/'
+
+              ).href
+
+            } catch {
+
+              return null
+
+            }
+
+          }
+
+
+          function parseTitle($item) {
+
+            return $item('*').data(
+              'showname'
+            )?.toString() || ''
+
+          }
+
+
+          function parseSubTitle($item) {
+
+            return $item('*').data(
+              'episodetitle'
+            )?.toString() || ''
+
+          }
+
+
+          function parseYear($item) {
+
+            return $item('*').data(
+              'year'
+            )?.toString() || ''
+
+          }
+
+
+          function parseCategory($item) {
+
+            const showtype =
+              $item('*').data(
+                'showtype'
+              )
+
+            return showtype
+
+              ? String(
+                  showtype
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
+              : []
+
+          }
+
+
+          function parseActors($item) {
+
+            const cast =
+              $item('*').data(
+                'cast'
+              )
+
+            return cast
+
+              ? String(
+                  cast
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
+              : []
+
+          }
+
+
+          function parseDirector($item) {
+
+            const director =
+              $item('*').data(
+                'director'
+              )
+
+            return director
+
+              ? String(
+                  director
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
+              : []
+
+          }
+
+
+          function parseGuest($item) {
+
+            const guest =
+              $item('*').data(
+                'guest'
+              )
+
+            return guest
+
+              ? String(
+                  guest
+                )
+
+                  .split(
+                    ', '
+                  )
+
+                  .filter(
+                    Boolean
+                  )
+
+              : []
+
+          }
+
+
+          function parseRating($item) {
+
+            const rating =
+              $item('*').data(
+                'rating'
+              )
+
+            return rating
+
+              ? {
+
+                  system:
+                    'MPA',
+
+                  value:
+                    String(
+                      rating
+                    ).replace(
+                      /^TV/,
+                      'TV-'
+                    )
+
+                }
+
+              : null
+
+          }
+
+
+          function parseStart(
+
+            $item,
+
+            currentTimezone
+
+          ) {
+
+            const time =
+              $item('*').data(
+                'st'
+              )
+
+            return dayjs.tz(
+
+              time,
+
+              'YYYY-MM-DD HH:mm:ss',
+
+              currentTimezone
+
+            )
+
+          }
+
+
+          function parseDuration($item) {
+
+            const duration =
+              $item('*').data(
+                'duration'
+              )
+
+            return parseInt(
+
+              duration || 0,
+
+              10
+
+            )
+
+          }
+
+
+          function parseItems(content) {
+
+            if (!content)
+              return []
+
+            const $ =
+              cheerio.load(
+                content
+              )
+
+            return $(
+              '.station-listings .list-group-item'
+            ).toArray()
+
+          }
+
+
+          function parseCurrentTimezone(content) {
+
+            if (!content)
+              return 'America/New_York'
+
+            const $ =
+              cheerio.load(
+                content
+              )
+
+            return $(
+              '#timezone_selector'
+            ).val()
+
+              || 'America/New_York'
+
+          }
+
+
+          function classifyProgramType({
+
+            title,
+
+            episodeTitle,
+
+            description,
+
+            year,
+
+            categories,
+
+            duration
+
+          }) {
+
+            const haystack = [
+
+              title,
+
+              description,
+
+              categories
+
+            ]
+
+              .flat()
+
+              .filter(
+                Boolean
+              )
+
+              .join(
+                ' '
+              )
+
+              .toLowerCase()
+
+            const hasEpisodeSignals =
+              Boolean(
+                episodeTitle
+              )
+
+            if (
+
+              /mini[\s-]?series|limited series|limited-series/
+
+                .test(
+                  haystack
+                )
+
+            )
+
+              return 'miniseries'
+
+            if (
+
+              /series|episode|tv show|television|scripted|reality|documentary series/
+
+                .test(
+                  haystack
+                )
+
+            )
+
+              return 'series'
+
+            if (
+              hasEpisodeSignals
+            )
+
+              return 'series'
+
+            if (
+
+              /movie|film|feature film|cinema/
+
+                .test(
+                  haystack
+                )
+
+            )
+
+              return 'movie'
+
+            if (
+
+              duration >= 75
+              && year
+              && !hasEpisodeSignals
+
+            )
+
+              return 'movie'
+
+            return 'program'
+
+          }
+
+
+          function buildCategories(
+
+            programType,
+
+            originalCategories
+
+          ) {
+
+            const categories =
+
+              Array.isArray(
+                originalCategories
+              )
+
+                ? originalCategories.filter(
+                    Boolean
+                  )
+
+                : []
+
+            if (
+
+              programType === 'movie'
+
+            )
+
+              return unique(
+
+                [
+
+                  'Movie',
+
+                  ...categories
+
+                ]
+
+              )
+
+            if (
+
+              programType === 'miniseries'
+
+            )
+
+              return unique(
+
+                [
+
+                  'Miniseries',
+
+                  'Series',
+
+                  ...categories
+
+                ]
+
+              )
+
+            if (
+
+              programType === 'series'
+
+            )
+
+              return unique(
+
+                [
+
+                  'Series',
+
+                  ...categories
+
+                ]
+
+              )
+
+            return unique(
+
+              categories.length
+
+                ? categories
+
+                : [
+
+                    'Program'
+
+                  ]
+
+            )
+
+          }
+
+
+          function buildPackedDescription({
+
+            programType,
+
+            episodeTitle,
+
+            episodeCode,
+
+            description,
+
+            airDate,
+
+            releaseYear,
+
+            suppressDisplayDate
+
+          }) {
+
+            const parts = []
+
+            let prefix = ''
+
+            if (
+
+              programType === 'series'
+              || programType === 'miniseries'
+
+            ) {
+
+              if (
+
+                episodeTitle
+                && episodeCode
+
+              )
+
+                prefix =
+                  `${episodeTitle} - ${episodeCode}`
+
+              else if (
+
+                episodeTitle
+
+              )
+
+                prefix =
+                  episodeTitle
+
+              else if (
+
+                episodeCode
+
+              )
+
+                prefix =
+                  episodeCode
+
+            }
+
+            if (
+              prefix
+            )
+
+              parts.push(
+                prefix
+              )
+
+            if (
+              description
+            )
+
+              parts.push(
+                description
+              )
+
+            let finalDescription =
+              cleanPackedDescription(
+
+                parts.join(
+                  '. '
+                )
+
+              )
+
+            if (
+
+              programType === 'movie'
+
+            ) {
+
+              if (
+
+                releaseYear
+
+                && !descriptionIncludesDisplayDate(
+
+                  finalDescription,
+
+                  releaseYear
+
+                )
+
+              ) {
+
+                finalDescription =
+
+                  finalDescription
+
+                    ? `${finalDescription} (${releaseYear})`
+
+                    : `(${releaseYear})`
+
+              }
+
+              return finalDescription
+
+            }
+
+            if (
+
+              programType === 'series'
+              || programType === 'miniseries'
+
+            ) {
+
+              if (
+
+                airDate
+                && !suppressDisplayDate
+
+                && !descriptionIncludesDisplayDate(
+
+                  finalDescription,
+
+                  airDate
+
+                )
+
+              ) {
+
+                finalDescription =
+
+                  finalDescription
+
+                    ? `${finalDescription} (${airDate})`
+
+                    : `(${airDate})`
+
+              }
+
+              return finalDescription
+
+            }
+
+            const dateOrYear =
+
+              suppressDisplayDate
+
+                ? releaseYear
+
+                : airDate || releaseYear
+
+            if (
+
+              dateOrYear
+
+              && !descriptionIncludesDisplayDate(
+
+                finalDescription,
+
+                dateOrYear
+
+              )
+
+            ) {
+
+              finalDescription =
+
+                finalDescription
+
+                  ? `${finalDescription} (${dateOrYear})`
+
+                  : `(${dateOrYear})`
+
+            }
+
+            return finalDescription
+
+          }
+
+
+          function cleanPassportDescription(value) {
+
+            return cleanSpaces(
+              value
+            )
+
+              .replace(
+
+                /\s*\(([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})(?:,\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3})*\)/g,
+
+                ''
+
+              )
+
+              .replace(
+
+                /\s+/g,
+
+                ' '
+
+              )
+
+              .trim()
+
+          }
+
+
+          function cleanPackedDescription(value) {
+
+            return cleanSpaces(
+              value
+            )
+
+              .replace(
+
+                /\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i,
+
+                ' ($1)'
+
+              )
+
+              .replace(
+
+                /\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g,
+
+                ' ($2)'
+
+              )
+
+              .trim()
+
+          }
+
+
+          function descriptionIncludesDisplayDate(
+
+            description,
+
+            dateOrYear
+
+          ) {
+
+            if (
+
+              !description
+              || !dateOrYear
+
+            )
+
+              return false
+
+            const escaped =
+
+              String(
+                dateOrYear
+              ).replace(
+
+                /[.*+?^${}()|[\]\\]/g,
+
+                '\\$&'
+
+              )
+
+            return new RegExp(
+
+              `\\(${escaped}\\)\\s*$`
+
+            ).test(
+
+              description
+
+            )
+
+              || description.includes(
+
+                String(
+                  dateOrYear
+                )
+
+              )
+
+          }
+
+
+          function cleanTitle(value) {
+
+            return cleanSpaces(
+              value
+            )
+
+              .replace(
+
+                /^\s*(New|Live|Repeat)\s*[:\-]\s*/i,
+
+                ''
+
+              )
+
+              .replace(
+
+                /\s*\((New|Live|Repeat)\)\s*$/i,
+
+                ''
+
+              )
+
+              .replace(
+
+                /\s*[-–—]\s*(New|Live|Repeat)\s*$/i,
+
+                ''
+
+              )
+
+              .trim()
+
+          }
+
+
+          function cleanSpaces(value) {
+
+            return String(
+
+              value || ''
+
+            )
+
+              .replace(
+
+                /\s+/g,
+
+                ' '
+
+              )
+
+              .replace(
+
+                /\s+([.,!?;:])/g,
+
+                '$1'
+
+              )
+
+              .replace(
+
+                /([.,!?;:])([A-Za-z0-9])/g,
+
+                '$1 $2'
+
+              )
+
+              .trim()
+
+          }
+
+
+          function unique(values) {
+
+            return [
+
+              ...new Set(
+
+                values.filter(
+                  Boolean
+                )
+
+              )
+
+            ]
+
+          }
+
+          EOFJS
+
+      - name: Grab Canada TVPassport guide
+        run: |
+
+          cd epg
+
+          rm -f ../guides/TVPassportCanada.xml
+          rm -f ../guides/TVPassportCanada.pass*.xml
+          rm -f ../guides/TVPassportCanada.pass*.log
+          rm -f ../guides/TVPassportCanada.pass*.count
+
+
+          run_pass() {
+
+            PASS_NAME="$1"
+
+            MAX_CONNECTIONS="$2"
+
+            SCHEDULE_TIMEOUT="$3"
+
+
+            echo ""
+
+            echo "============================================================"
+
+            echo "Starting $PASS_NAME"
+
+            echo "maxConnections=$MAX_CONNECTIONS"
+
+            echo "TVPASSPORT_SCHEDULE_TIMEOUT=$SCHEDULE_TIMEOUT"
+
+            echo "============================================================"
+
+
+            export TVPASSPORT_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
+
+
+            set +e
+
+
+            npx tsx scripts/commands/epg/grab.ts \
+
+              --channels=sites/tvpassport.com/festy-tvpassport-canada.channels.xml \
+
+              --output="../guides/TVPassportCanada.${PASS_NAME}.xml" \
+
+              --days=14 \
+
+              --maxConnections="$MAX_CONNECTIONS" \
+
+              2>&1 |
+
+              tee "../guides/TVPassportCanada.${PASS_NAME}.log"
+
+
+            STATUS=${PIPESTATUS[0]}
+
+
+            set -e
+
+
+            if [
+
+              "$STATUS"
+
+              -ne
+
+              0
+
+            ]; then
+
+              echo "$PASS_NAME exited with status $STATUS"
+
+            fi
+
+
+            if [
+
+              !
+
+              -f
+
+              "../guides/TVPassportCanada.${PASS_NAME}.xml"
+
+            ]; then
+
+              echo "$PASS_NAME did not create an XML file"
+
+              echo "0" >
+
+                "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+
+              echo "0" >
+
+                "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+
+              echo "999999" >
+
+                "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+
+              return 0
+
+            fi
+
+
+            PR=$(
+
+              grep -c '<programme ' \
+
+              "../guides/TVPassportCanada.${PASS_NAME}.xml" \
+
+              || true
+
+            )
+
+
+            DESC=$(
+
+              grep -c '<desc ' \
+
+              "../guides/TVPassportCanada.${PASS_NAME}.xml" \
+
+              || true
+
+            )
+
+
+            ISSUE_COUNT=$(
+
+              grep -Eic \
+
+              'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' \
+
+              "../guides/TVPassportCanada.${PASS_NAME}.log" \
+
+              || true
+
+            )
+
+
+            echo "$PR" >
+
+              "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+
+
+            echo "$DESC" >
+
+              "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+
+
+            echo "$ISSUE_COUNT" >
+
+              "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+
+
+            echo "$PASS_NAME programmes: $PR"
+
+            echo "$PASS_NAME descriptions: $DESC"
+
+            echo "$PASS_NAME possible issues: $ISSUE_COUNT"
+
+          }
+
+
+          run_pass \
+
+            "pass1-fast" \
+
+            8 \
+
+            30000
+
+
+          PASS1_ISSUES=$(
+
+            cat \
+
+              ../guides/TVPassportCanada.pass1-fast.issues.count
+
+          )
+
+
+          if [
+
+            "$PASS1_ISSUES"
+
+            -gt
+
+            0
+
+          ]; then
+
+
+            echo ""
+
+            echo "Fast pass had possible issues, running backup pass..."
+
+
+            run_pass \
+
+              "pass2-backup" \
+
+              4 \
+
+              45000
+
+          else
+
+
+            echo ""
+
+            echo "Fast pass had no obvious issues. Skipping backup pass."
+
+          fi
+
+
+          BEST_PASS="pass1-fast"
+
+
+          BEST_PR=$(
+
+            cat \
+
+              ../guides/TVPassportCanada.pass1-fast.programmes.count
+
+          )
+
+
+          BEST_DESC=$(
+
+            cat \
+
+              ../guides/TVPassportCanada.pass1-fast.descriptions.count
+
+          )
+
+
+          BEST_ISSUES=$(
+
+            cat \
+
+              ../guides/TVPassportCanada.pass1-fast.issues.count
+
+          )
+
+
+          for PASS in pass2-backup; do
+
+
+            if [
+
+              -f
+
+              "../guides/TVPassportCanada.${PASS}.programmes.count"
+
+            ]; then
+
+
+              CANDIDATE_PR=$(
+
+                cat \
+
+                  "../guides/TVPassportCanada.${PASS}.programmes.count"
+
+              )
+
+
+              CANDIDATE_DESC=$(
+
+                cat \
+
+                  "../guides/TVPassportCanada.${PASS}.descriptions.count"
+
+              )
+
+
+              CANDIDATE_ISSUES=$(
+
+                cat \
+
+                  "../guides/TVPassportCanada.${PASS}.issues.count"
+
+              )
+
+
+              if [
+
+                "$CANDIDATE_PR"
+
+                -gt
+
+                "$BEST_PR"
+
+              ]; then
+
+
+                BEST_PASS="$PASS"
+
+                BEST_PR="$CANDIDATE_PR"
+
+                BEST_DESC="$CANDIDATE_DESC"
+
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+
+
+              elif [
+
+                "$CANDIDATE_PR"
+
+                -eq
+
+                "$BEST_PR"
+
+              ]
+
+              && [
+
+                "$CANDIDATE_DESC"
+
+                -gt
+
+                "$BEST_DESC"
+
+              ]; then
+
+
+                BEST_PASS="$PASS"
+
+                BEST_PR="$CANDIDATE_PR"
+
+                BEST_DESC="$CANDIDATE_DESC"
+
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+
+              elif [
+
+                "$CANDIDATE_PR"
+
+                -eq
+
+                "$BEST_PR"
+
+              ]
+
+              && [
+
+                "$CANDIDATE_DESC"
+
+                -eq
+
+                "$BEST_DESC"
+
+              ]
+
+              && [
+
+                "$CANDIDATE_ISSUES"
+
+                -lt
+
+                "$BEST_ISSUES"
+
+              ]; then
+
+
+                BEST_PASS="$PASS"
+
+                BEST_PR="$CANDIDATE_PR"
+
+                BEST_DESC="$CANDIDATE_DESC"
+
+                BEST_ISSUES="$CANDIDATE_ISSUES"
+
+              fi
+
+            fi
+
+          done
+
+
+          echo ""
+
+          echo "Selected best pass: $BEST_PASS"
+
+          echo "Best programmes: $BEST_PR"
+
+          echo "Best descriptions: $BEST_DESC"
+
+          echo "Best possible issues: $BEST_ISSUES"
+
+
+          cp \
+
+            "../guides/TVPassportCanada.${BEST_PASS}.xml" \
+
+            "../guides/TVPassportCanada.xml"
+
+
+          cd ..
+                        console.log(
 
                 `[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${items.length}`
 
@@ -2866,9 +4364,7 @@ jobs:
                 BEST_DESC="$CANDIDATE_DESC"
 
                 BEST_ISSUES="$CANDIDATE_ISSUES"
-
-
-              elif [
+                              elif [
 
                 "$CANDIDATE_PR"
 
@@ -4304,19 +5800,25 @@ jobs:
         run: |
 
           gzip -c \
+
             guides/TVPassportCanada.xml \
+
             > guides/TVPassportCanada.xml.gz
 
       - name: Commit and push Canada TVPassport guide safely
         run: |
 
           git config \
+
             user.name \
+
             "github-actions"
 
 
           git config \
+
             user.email \
+
             "github-actions@github.com"
 
 
@@ -4342,6 +5844,7 @@ jobs:
 
 
           git commit \
+
             -m "Update Canada TVPassport guide"
 
 
