@@ -63,7 +63,7 @@ jobs:
           )
 
           RAW_FILE = Path(
-              "config/TVPassportCanada"
+              "config/TVPassportCanada/TVPassportCanadaRAW.xml"
           )
 
           OUTPUT_FILE = Path(
