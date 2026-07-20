@@ -135,7 +135,7 @@ jobs:
                 const guest = parseGuest($item)
                 const director = parseDirector($item)
 
-                if (title === 'Movie' || title === 'CinÃ©ma') {
+                if (title === 'Movie' || title === 'CinÃƒÂ©ma') {
                   title = episodeTitle
                   episodeTitle = ''
                 }
@@ -358,7 +358,7 @@ jobs:
             return cleanSpaces(value)
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-â€“â€”]\s*(New|Live|Repeat)\s*$/i, '')
+              .replace(/\s*[-Ã¢â‚¬â€œÃ¢â‚¬â€]\s*(New|Live|Repeat)\s*$/i, '')
               .trim()
           }
 
@@ -437,52 +437,16 @@ jobs:
 
           run_pass "pass1-fast" 8 30000
 
-          PASS1_ISSUES=$(cat ../guides/TVPassportCanada.pass1-fast.issues.count)
-
-          if [ "$PASS1_ISSUES" -gt 0 ]; then
-            echo ""
-            echo "Fast pass had possible issues, running backup pass..."
-            run_pass "pass2-backup" 4 45000
-          else
-            echo ""
-            echo "Fast pass had no obvious issues. Skipping backup pass."
-          fi
-
           BEST_PASS="pass1-fast"
           BEST_PR=$(cat ../guides/TVPassportCanada.pass1-fast.programmes.count)
           BEST_DESC=$(cat ../guides/TVPassportCanada.pass1-fast.descriptions.count)
           BEST_ISSUES=$(cat ../guides/TVPassportCanada.pass1-fast.issues.count)
 
-          for PASS in pass2-backup; do
-            if [ -f "../guides/TVPassportCanada.${PASS}.programmes.count" ]; then
-              CANDIDATE_PR=$(cat "../guides/TVPassportCanada.${PASS}.programmes.count")
-              CANDIDATE_DESC=$(cat "../guides/TVPassportCanada.${PASS}.descriptions.count")
-              CANDIDATE_ISSUES=$(cat "../guides/TVPassportCanada.${PASS}.issues.count")
-
-              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
-                BEST_PASS="$PASS"
-                BEST_PR="$CANDIDATE_PR"
-                BEST_DESC="$CANDIDATE_DESC"
-                BEST_ISSUES="$CANDIDATE_ISSUES"
-              fi
-            fi
-          done
-
           echo ""
-          echo "Selected best pass: $BEST_PASS"
-          echo "Best programmes: $BEST_PR"
-          echo "Best descriptions: $BEST_DESC"
-          echo "Best possible issues: $BEST_ISSUES"
+          echo "Using the single fast pass only."
+          echo "Programmes: $BEST_PR"
+          echo "Descriptions: $BEST_DESC"
+          echo "Possible issues: $BEST_ISSUES"
 
           cp "../guides/TVPassportCanada.${BEST_PASS}.xml" "../guides/TVPassportCanada.xml"
 
@@ -581,7 +545,7 @@ jobs:
               .replace(/\s+/g, ' ')
               .replace(/^\s*(New|Live|Repeat)\s*[:\-]\s*/i, '')
               .replace(/\s*\((New|Live|Repeat)\)\s*$/i, '')
-              .replace(/\s*[-â€“â€”]\s*(New|Live|Repeat)\s*$/i, '')
+              .replace(/\s*[-Ã¢â‚¬â€œÃ¢â‚¬â€]\s*(New|Live|Repeat)\s*$/i, '')
               .trim()
           }
 
@@ -1118,199 +1082,4 @@ jobs:
           fi
 
 
-      - name: Inject curated TVPassport logos into generated guide
-        run: |
-          node <<'EOFJS'
-          const fs = require('fs')
 
-          const curatedPath = 'config/TVPassportCanada/TVPassportCanadaRAW.xml'
-          const guidePath = 'guides/TVPassportCanada.xml'
-
-          if (!fs.existsSync(curatedPath)) {
-            console.error(`Missing curated channel list: ${curatedPath}`)
-            process.exit(1)
-          }
-
-          if (!fs.existsSync(guidePath)) {
-            console.error(`Missing generated guide: ${guidePath}`)
-            process.exit(1)
-          }
-
-          function decodeXml(s) {
-            return String(s || '')
-              .replace(/&amp;/g, '&')
-              .replace(/&quot;/g, '"')
-              .replace(/&apos;/g, "'")
-              .replace(/&lt;/g, '<')
-              .replace(/&gt;/g, '>')
-          }
-
-          function escapeXml(s) {
-            return String(s || '')
-              .replace(/&/g, '&amp;')
-              .replace(/"/g, '&quot;')
-              .replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;')
-          }
-
-          function attr(attrs, name) {
-            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
-            return m ? decodeXml(m[1]).trim() : ''
-          }
-
-          function normalize(s) {
-            return decodeXml(s)
-              .toLowerCase()
-              .replace(/&/g, 'and')
-              .replace(/\+/g, 'plus')
-              .replace(/\.us$/i, '')
-              .replace(/[^a-z0-9]+/g, ' ')
-              .trim()
-          }
-
-          function channelName(block) {
-            const display = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
-            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
-            return decodeXml(block.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim())
-          }
-
-          function iconFromCurated(block, attrs) {
-            const iconMatch = block.match(/<icon\b[^>]*src="([^"]+)"/i)
-            if (iconMatch) return decodeXml(iconMatch[1]).trim()
-
-            const logoAttr = attr(attrs, 'logo')
-            if (logoAttr) return logoAttr
-
-            return ''
-          }
-
-          const curatedXml = fs.readFileSync(curatedPath, 'utf8')
-          let guideXml = fs.readFileSync(guidePath, 'utf8')
-
-          const logoById = new Map()
-          const logoByName = new Map()
-
-          for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
-            const attrs = match[1]
-            const block = match[0]
-            const id = attr(attrs, 'xmltv_id') || attr(attrs, 'id')
-            const name = channelName(block)
-            const logo = iconFromCurated(block, attrs)
-
-            if (!logo) continue
-
-            if (id) logoById.set(id, logo)
-            if (id) logoById.set(decodeXml(id).replace(/&amp;/g, '&'), logo)
-            if (name) logoByName.set(normalize(name), logo)
-          }
-
-          let scanned = 0
-          let matched = 0
-          let alreadyCorrect = 0
-          let added = 0
-          let updated = 0
-          let missing = 0
-
-          guideXml = guideXml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi, (block, attrs) => {
-            scanned++
-
-            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
-            const name = channelName(block)
-
-            const logo =
-              logoById.get(id) ||
-              logoById.get(decodeXml(id).replace(/&amp;/g, '&')) ||
-              logoByName.get(normalize(name))
-
-            if (!logo) {
-              missing++
-              return block
-            }
-
-            matched++
-
-            const existingIcon = block.match(/<icon\b[^>]*src="([^"]+)"/i)
-            if (existingIcon) {
-              const existingLogo = decodeXml(existingIcon[1]).trim()
-              if (existingLogo === logo) {
-                alreadyCorrect++
-                return block
-              }
-
-              updated++
-              return block.replace(/<icon\b[^>]*src="[^"]*"[^/]*\/>/i, `<icon src="${escapeXml(logo)}"/>`)
-            }
-
-            added++
-            return block.replace(/(<display-name\b[^>]*>[\s\S]*?<\/display-name>)/i, `$1<icon src="${escapeXml(logo)}"/>`)
-          })
-
-          fs.writeFileSync(guidePath, guideXml)
-
-          console.log(`Generated TVPassport channels scanned: ${scanned}`)
-          console.log(`Curated TVPassport logos available by id: ${logoById.size}`)
-          console.log(`Curated TVPassport logos available by name: ${logoByName.size}`)
-          console.log(`TVPassport channels matched to curated logos: ${matched}`)
-          console.log(`TVPassport icons already correct: ${alreadyCorrect}`)
-          console.log(`TVPassport icons added: ${added}`)
-          console.log(`TVPassport icons updated: ${updated}`)
-          console.log(`TVPassport channels still missing curated logo match: ${missing}`)
-
-          if (scanned < 100) {
-            console.error(`Expected at least 100 TVPassport channels, scanned ${scanned}`)
-            process.exit(1)
-          }
-
-          if (matched < 100) {
-            console.error('Refusing to continue: expected at least 100 TVPassport channels to match curated logos')
-            process.exit(1)
-          }
-          EOFJS
-
-      - name: Compress TVPassport guide
-        run: |
-          gzip -c guides/TVPassportCanada.xml > guides/TVPassportCanada.xml.gz
-          rm -f guides/TVPassportCanada.xml
-
-      - name: Commit and push TVPassport guide safely
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git fetch origin main
-
-          git add guides/TVPassportCanada.xml.gz
-
-          if git diff --cached --quiet; then
-            echo "No TVPassport guide changes to commit"
-            exit 0
-          fi
-
-          git commit -m "Update TVPassport Canada guide"
-
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
-
-            echo "Push failed, retrying after fresh fetch/rebase..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            git add guides/TVPassportCanada.xml.gz
-
-            if git diff --cached --quiet; then
-              echo "No new commit needed after rebase, retrying push..."
-            else
-              git commit -m "Update TVPassport Canada guide"
-            fi
-
-            sleep 5
-          done
-
-          echo "Push failed after retries"
-          exit 1
