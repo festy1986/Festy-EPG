@@ -2540,17 +2540,11 @@ jobs:
 
               echo "$PASS_NAME did not create an XML file"
 
-              echo "0" >
+              echo "0" > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
-                "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
-              echo "0" >
-
-                "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
-
-              echo "999999" >
-
-                "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+              echo "999999" > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
               return 0
 
@@ -2561,9 +2555,7 @@ jobs:
 
               grep -c '<programme ' \
 
-              "../guides/TVPassportCanada.${PASS_NAME}.xml" \
-
-              || true
+              "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
 
@@ -2572,9 +2564,7 @@ jobs:
 
               grep -c '<desc ' \
 
-              "../guides/TVPassportCanada.${PASS_NAME}.xml" \
-
-              || true
+              "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
 
@@ -2585,26 +2575,18 @@ jobs:
 
               'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' \
 
-              "../guides/TVPassportCanada.${PASS_NAME}.log" \
-
-              || true
+              "../guides/TVPassportCanada.${PASS_NAME}.log" || true
 
             )
 
 
-            echo "$PR" >
-
-              "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+            echo "$PR" > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
 
-            echo "$DESC" >
-
-              "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+            echo "$DESC" > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
 
-            echo "$ISSUE_COUNT" >
-
-              "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+            echo "$ISSUE_COUNT" > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
 
             echo "$PASS_NAME programmes: $PR"
@@ -2765,9 +2747,7 @@ jobs:
 
                 "$BEST_PR"
 
-              ]
-
-              && [
+              ] && [
 
                 "$CANDIDATE_DESC"
 
@@ -2794,9 +2774,7 @@ jobs:
 
                 "$BEST_PR"
 
-              ]
-
-              && [
+              ] && [
 
                 "$CANDIDATE_DESC"
 
@@ -2804,9 +2782,7 @@ jobs:
 
                 "$BEST_DESC"
 
-              ]
-
-              && [
+              ] && [
 
                 "$CANDIDATE_ISSUES"
 
@@ -2851,6 +2827,8 @@ jobs:
 
 
           cd ..
+
+          : <<'BROKEN_DUPLICATE_CONFIG_BLOCK'
                         console.log(
 
                 `[PULL] ${channel.name} | ${date.format('YYYY-MM-DD')} | programs=${items.length}`
@@ -4032,7 +4010,7 @@ jobs:
 
           }
 
-          EOFJS
+          BROKEN_DUPLICATE_CONFIG_BLOCK
 
       - name: Grab Canada TVPassport guide
         run: |
@@ -4119,17 +4097,11 @@ jobs:
 
               echo "$PASS_NAME did not create an XML file"
 
-              echo "0" >
+              echo "0" > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
-                "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
-              echo "0" >
-
-                "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
-
-              echo "999999" >
-
-                "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+              echo "999999" > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
               return 0
 
@@ -4140,9 +4112,7 @@ jobs:
 
               grep -c '<programme ' \
 
-              "../guides/TVPassportCanada.${PASS_NAME}.xml" \
-
-              || true
+              "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
 
@@ -4151,9 +4121,7 @@ jobs:
 
               grep -c '<desc ' \
 
-              "../guides/TVPassportCanada.${PASS_NAME}.xml" \
-
-              || true
+              "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
 
@@ -4164,26 +4132,18 @@ jobs:
 
               'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' \
 
-              "../guides/TVPassportCanada.${PASS_NAME}.log" \
-
-              || true
+              "../guides/TVPassportCanada.${PASS_NAME}.log" || true
 
             )
 
 
-            echo "$PR" >
-
-              "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+            echo "$PR" > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
 
-            echo "$DESC" >
-
-              "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+            echo "$DESC" > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
 
-            echo "$ISSUE_COUNT" >
-
-              "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+            echo "$ISSUE_COUNT" > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
 
             echo "$PASS_NAME programmes: $PR"
@@ -4344,9 +4304,7 @@ jobs:
 
                 "$BEST_PR"
 
-              ]
-
-              && [
+              ] && [
 
                 "$CANDIDATE_DESC"
 
@@ -4364,7 +4322,9 @@ jobs:
                 BEST_DESC="$CANDIDATE_DESC"
 
                 BEST_ISSUES="$CANDIDATE_ISSUES"
-                              elif [
+
+
+              elif [
 
                 "$CANDIDATE_PR"
 
@@ -4372,9 +4332,7 @@ jobs:
 
                 "$BEST_PR"
 
-              ]
-
-              && [
+              ] && [
 
                 "$CANDIDATE_DESC"
 
@@ -4382,9 +4340,7 @@ jobs:
 
                 "$BEST_DESC"
 
-              ]
-
-              && [
+              ] && [
 
                 "$CANDIDATE_ISSUES"
 
@@ -5047,9 +5003,7 @@ jobs:
 
             grep -c '<channel ' \
 
-            guides/TVPassportCanada.xml \
-
-            || true
+            guides/TVPassportCanada.xml || true
 
           )
 
@@ -5058,9 +5012,7 @@ jobs:
 
             grep -c '<programme ' \
 
-            guides/TVPassportCanada.xml \
-
-            || true
+            guides/TVPassportCanada.xml || true
 
           )
 
@@ -5069,9 +5021,7 @@ jobs:
 
             grep -c '<desc ' \
 
-            guides/TVPassportCanada.xml \
-
-            || true
+            guides/TVPassportCanada.xml || true
 
           )
 
