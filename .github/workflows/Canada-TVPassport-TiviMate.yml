@@ -1835,20 +1835,18 @@ jobs:
             fi
 
 
-            if [
-              ! -f "../guides/TVPassportCanada.${PASS_NAME}.xml"
-            ]; then
+            if [ ! -f "../guides/TVPassportCanada.${PASS_NAME}.xml" ]; then
 
               echo "$PASS_NAME did not create an XML file"
 
-              echo "0" >
-                "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+              echo "0" \
+                > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
-              echo "0" >
-                "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+              echo "0" \
+                > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
-              echo "999999" >
-                "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+              echo "999999" \
+                > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
               return 0
 
@@ -1877,16 +1875,16 @@ jobs:
             )
 
 
-            echo "$PR" >
-              "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
+            echo "$PR" \
+              > "../guides/TVPassportCanada.${PASS_NAME}.programmes.count"
 
 
-            echo "$DESC" >
-              "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
+            echo "$DESC" \
+              > "../guides/TVPassportCanada.${PASS_NAME}.descriptions.count"
 
 
-            echo "$ISSUE_COUNT" >
-              "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
+            echo "$ISSUE_COUNT" \
+              > "../guides/TVPassportCanada.${PASS_NAME}.issues.count"
 
 
             echo "$PASS_NAME programmes: $PR"
@@ -1905,14 +1903,12 @@ jobs:
 
 
           PASS1_ISSUES=$(
-            cat
-            ../guides/TVPassportCanada.pass1-fast.issues.count
+            cat \
+              ../guides/TVPassportCanada.pass1-fast.issues.count
           )
 
 
-          if [
-            "$PASS1_ISSUES" -gt 0
-          ]; then
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
 
             echo ""
 
@@ -1936,50 +1932,46 @@ jobs:
           BEST_PASS="pass1-fast"
 
           BEST_PR=$(
-            cat
-            ../guides/TVPassportCanada.pass1-fast.programmes.count
+            cat \
+              ../guides/TVPassportCanada.pass1-fast.programmes.count
           )
 
 
           BEST_DESC=$(
-            cat
-            ../guides/TVPassportCanada.pass1-fast.descriptions.count
+            cat \
+              ../guides/TVPassportCanada.pass1-fast.descriptions.count
           )
 
 
           BEST_ISSUES=$(
-            cat
-            ../guides/TVPassportCanada.pass1-fast.issues.count
+            cat \
+              ../guides/TVPassportCanada.pass1-fast.issues.count
           )
 
 
           for PASS in pass2-backup; do
 
-            if [
-              -f "../guides/TVPassportCanada.${PASS}.programmes.count"
-            ]; then
+            if [ -f "../guides/TVPassportCanada.${PASS}.programmes.count" ]; then
 
               CANDIDATE_PR=$(
-                cat
-                "../guides/TVPassportCanada.${PASS}.programmes.count"
+                cat \
+                  "../guides/TVPassportCanada.${PASS}.programmes.count"
               )
 
 
               CANDIDATE_DESC=$(
-                cat
-                "../guides/TVPassportCanada.${PASS}.descriptions.count"
+                cat \
+                  "../guides/TVPassportCanada.${PASS}.descriptions.count"
               )
 
 
               CANDIDATE_ISSUES=$(
-                cat
-                "../guides/TVPassportCanada.${PASS}.issues.count"
+                cat \
+                  "../guides/TVPassportCanada.${PASS}.issues.count"
               )
 
 
-              if [
-                "$CANDIDATE_PR" -gt "$BEST_PR"
-              ]; then
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
 
                 BEST_PASS="$PASS"
 
@@ -1990,11 +1982,7 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [
-                "$CANDIDATE_PR" -eq "$BEST_PR"
-                ] && [
-                "$CANDIDATE_DESC" -gt "$BEST_DESC"
-              ]; then
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
 
                 BEST_PASS="$PASS"
 
@@ -2005,13 +1993,7 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [
-                "$CANDIDATE_PR" -eq "$BEST_PR"
-                ] && [
-                "$CANDIDATE_DESC" -eq "$BEST_DESC"
-                ] && [
-                "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES"
-              ]; then
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
 
                 BEST_PASS="$PASS"
 
@@ -2077,9 +2059,7 @@ jobs:
           echo "Canada descriptions: $DESC"
 
 
-          if [
-            "$CH" -lt 1
-          ]; then
+          if [ "$CH" -lt 1 ]; then
 
             echo "Invalid Canada output - no channels"
 
@@ -2088,9 +2068,7 @@ jobs:
           fi
 
 
-          if [
-            "$PR" -lt 1
-          ]; then
+          if [ "$PR" -lt 1 ]; then
 
             echo "Invalid Canada output - no programmes"
 
@@ -2099,9 +2077,7 @@ jobs:
           fi
 
 
-          if [
-            "$DESC" -lt 1
-          ]; then
+          if [ "$DESC" -lt 1 ]; then
 
             echo "Invalid Canada output - no descriptions"
 
