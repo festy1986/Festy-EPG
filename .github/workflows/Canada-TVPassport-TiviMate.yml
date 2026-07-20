@@ -70,6 +70,10 @@ jobs:
               "epg/sites/tvpassport.com/festy-tvpassport-canada.channels.xml"
           )
 
+          MATCH_FILE = Path(
+              "config/TVPassportCanada-matching.txt"
+          )
+
 
           if not MASTER_FILE.exists():
               raise SystemExit(
@@ -285,8 +289,7 @@ jobs:
                   element.attrib.get(
                       "site_id",
                       ""
-                  )
-                  .strip()
+                  ).strip()
               )
 
               channel_name = (
@@ -435,6 +438,7 @@ jobs:
                           "a&e",
                           "a and e"
                       ]
+
               }
 
 
@@ -604,7 +608,10 @@ jobs:
                           site_id,
 
                       "source_name":
-                          raw_name
+                          raw_name,
+
+                      "match_score":
+                          best_score
                   }
               )
 
@@ -614,6 +621,8 @@ jobs:
           seen_site_ids = set()
 
           final_matches = []
+
+          duplicate_matches = []
 
 
           for match in matches:
@@ -629,10 +638,18 @@ jobs:
 
               if output_id in seen_output_ids:
 
+                  duplicate_matches.append(
+                      match
+                  )
+
                   continue
 
 
               if site_id in seen_site_ids:
+
+                  duplicate_matches.append(
+                      match
+                  )
 
                   continue
 
@@ -725,7 +742,8 @@ jobs:
                   f'{match["display_name"]} '
                   f'-> '
                   f'{match["source_name"]} '
-                  f'[{match["site_id"]}]'
+                  f'[{match["site_id"]}] '
+                  f'(score {match["match_score"]})'
               )
 
 
@@ -751,6 +769,109 @@ jobs:
               raise SystemExit(
                   "No Canada channels matched"
               )
+
+
+          MATCH_FILE.parent.mkdir(
+              parents=True,
+              exist_ok=True
+          )
+
+
+          with MATCH_FILE.open(
+              "w",
+              encoding="utf-8"
+          ) as file:
+
+              file.write(
+                  "TVPassport Canada Channel Matching Report\n"
+              )
+
+              file.write(
+                  "==========================================\n\n"
+              )
+
+              file.write(
+                  "This report is updated automatically by the "
+                  "TVPassport-Canada-TiviMate workflow.\n"
+              )
+
+              file.write(
+                  "EPG data status is filled in after the guide is generated.\n\n"
+              )
+
+              file.write(
+                  f"MASTER CHANNELS: {len(master_channels)}\n"
+              )
+
+              file.write(
+                  f"MATCHED CHANNELS: {len(final_matches)}\n"
+              )
+
+              file.write(
+                  f"UNMATCHED CHANNELS: {len(unmatched)}\n"
+              )
+
+              file.write(
+                  f"DUPLICATE/REJECTED MATCHES: "
+                  f"{len(duplicate_matches)}\n\n"
+              )
+
+              file.write(
+                  "MATCHED CHANNELS\n"
+              )
+
+              file.write(
+                  "----------------\n\n"
+              )
+
+
+              for match in final_matches:
+
+                  file.write(
+                      f'Festy Channel: '
+                      f'{match["output_id"]} | '
+                      f'{match["display_name"]}\n'
+                  )
+
+                  file.write(
+                      f'TVPassport Name: '
+                      f'{match["source_name"]}\n'
+                  )
+
+                  file.write(
+                      f'TVPassport Site ID: '
+                      f'{match["site_id"]}\n'
+                  )
+
+                  file.write(
+                      f'Match Score: '
+                      f'{match["match_score"]}\n'
+                  )
+
+                  file.write(
+                      'EPG DATA: CHECKING AFTER GUIDE GENERATION\n'
+                  )
+
+                  file.write(
+                      '\n'
+                  )
+
+
+              file.write(
+                  "UNMATCHED CHANNELS\n"
+              )
+
+              file.write(
+                  "------------------\n\n"
+              )
+
+
+              for channel in unmatched:
+
+                  file.write(
+                      f'{channel["output_id"]} | '
+                      f'{channel["display_name"]}\n'
+                  )
 
 
           PY
@@ -1786,6 +1907,7 @@ jobs:
           rm -f ../guides/TVPassportCanada.pass*.log
           rm -f ../guides/TVPassportCanada.pass*.count
 
+
           run_pass() {
 
             PASS_NAME="$1"
@@ -1990,7 +2112,7 @@ jobs:
 
                 BEST_DESC="$CANDIDATE_DESC"
 
-                BEST_ISSUES="$CANDIDATE_ISSUES"
+                BEST_ISSUES="$CANDIDATE_ISSUES
 
 
               elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
@@ -2027,6 +2149,387 @@ jobs:
 
 
           cd ..
+
+      - name: Create Canada TVPassport channel data report
+        run: |
+
+          python3 - <<'PY'
+
+          import re
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+
+          MATCH_FILE = Path(
+              "config/TVPassportCanada-matching.txt"
+          )
+
+          GUIDE_FILE = Path(
+              "guides/TVPassportCanada.xml"
+          )
+
+
+          if not MATCH_FILE.exists():
+
+              raise SystemExit(
+                  f"Missing {MATCH_FILE}"
+              )
+
+
+          if not GUIDE_FILE.exists():
+
+              raise SystemExit(
+                  f"Missing {GUIDE_FILE}"
+              )
+
+
+          guide_text =
+              GUIDE_FILE.read_text(
+                  encoding="utf-8"
+              )
+
+
+          root =
+              ET.fromstring(
+                  guide_text
+              )
+
+
+          programs_by_channel = {}
+
+
+          for programme in root.findall(
+              ".//programme"
+          ):
+
+              channel_id =
+                  programme.attrib.get(
+                      "channel",
+                      ""
+                  ).strip()
+
+
+              if not channel_id:
+
+                  continue
+
+
+              programs_by_channel.setdefault(
+                  channel_id,
+                  0
+              )
+
+
+              programs_by_channel[channel_id] += 1
+
+
+          original_lines =
+              MATCH_FILE.read_text(
+                  encoding="utf-8"
+              ).splitlines()
+
+
+          output = []
+
+
+          current_channel = None
+
+
+          matched_count = 0
+
+          unmatched_count = 0
+
+          data_count = 0
+
+          no_data_count = 0
+
+
+          for line in original_lines:
+
+              stripped =
+                  line.strip()
+
+
+              match =
+                  re.match(
+                      r"^Festy Channel:\s*(\d+)\s*\|\s*(.*)$",
+                      stripped
+                  )
+
+
+              if match:
+
+                  current_channel = {
+
+                      "output_id":
+                          match.group(1),
+
+                      "name":
+                          match.group(2),
+
+                      "site_id":
+                          "",
+
+                      "source_name":
+                          "",
+
+                      "score":
+                          ""
+
+                  }
+
+                  matched_count += 1
+
+                  continue
+
+
+              if current_channel is not None:
+
+                  match =
+                      re.match(
+                          r"^TVPassport Name:\s*(.*)$",
+                          stripped
+                      )
+
+                  if match:
+
+                      current_channel[
+                          "source_name"
+                      ] = match.group(1)
+
+                      continue
+
+
+                  match =
+                      re.match(
+                          r"^TVPassport Site ID:\s*(.*)$",
+                          stripped
+                      )
+
+                  if match:
+
+                      current_channel[
+                          "site_id"
+                      ] = match.group(1)
+
+                      continue
+
+
+                  match =
+                      re.match(
+                          r"^Match Score:\s*(.*)$",
+                          stripped
+                      )
+
+                  if match:
+
+                      current_channel[
+                          "score"
+                      ] = match.group(1)
+
+                      continue
+
+
+                  if stripped == "EPG DATA: CHECKING AFTER GUIDE GENERATION":
+
+                      channel_id =
+                          current_channel[
+                              "output_id"
+                          ]
+
+
+                      program_count =
+                          programs_by_channel.get(
+                              channel_id,
+                              0
+                          )
+
+
+                      if program_count > 0:
+
+                          status =
+                              "YES"
+
+                          data_count += 1
+
+                      else:
+
+                          status =
+                              "NO"
+
+                          no_data_count += 1
+
+
+                      output.append(
+                          f'Festy Channel: '
+                          f'{current_channel["output_id"]} | '
+                          f'{current_channel["name"]}'
+                      )
+
+                      output.append(
+                          f'TVPassport Name: '
+                          f'{current_channel["source_name"]}'
+                      )
+
+                      output.append(
+                          f'TVPassport Site ID: '
+                          f'{current_channel["site_id"]}'
+                      )
+
+                      output.append(
+                          f'Match Score: '
+                          f'{current_channel["score"]}'
+                      )
+
+                      output.append(
+                          f'EPG DATA: {status}'
+                      )
+
+                      output.append(
+                          f'PROGRAMS RETURNED: '
+                          f'{program_count}'
+                      )
+
+                      output.append(
+                          ''
+                      )
+
+
+                      current_channel =
+                          None
+
+
+          unmatched_start = False
+
+
+          for line in original_lines:
+
+              if line.strip() == "UNMATCHED CHANNELS":
+
+                  unmatched_start = True
+
+                  output.append(
+                      "UNMATCHED CHANNELS"
+                  )
+
+                  output.append(
+                      "------------------"
+                  )
+
+                  output.append(
+                      ""
+                  )
+
+                  unmatched_count = 0
+
+                  continue
+
+
+              if unmatched_start:
+
+                  if line.strip():
+
+                      output.append(
+                          line
+                      )
+
+                      unmatched_count += 1
+
+
+          total_channels =
+              matched_count + unmatched_count
+
+
+          summary = [
+
+              "TVPassport Canada Channel Matching Report",
+
+              "==========================================",
+
+              "",
+
+              f"MASTER CHANNELS: {total_channels}",
+
+              f"MATCHED CHANNELS: {matched_count}",
+
+              f"UNMATCHED CHANNELS: {unmatched_count}",
+
+              "",
+
+              f"MATCHED CHANNELS WITH EPG DATA: {data_count}",
+
+              f"MATCHED CHANNELS WITH NO EPG DATA: {no_data_count}",
+
+              "",
+
+              "The guide was checked after generation.",
+
+              "PROGRAMS RETURNED is the number of programme entries",
+
+              "found in the final TVPassportCanada.xml guide.",
+
+              "",
+
+              "CHANNEL DETAILS",
+
+              "---------------",
+
+              ""
+
+          ]
+
+
+          final_text =
+              "\n".join(
+                  summary
+                  + output
+              )
+
+
+          MATCH_FILE.write_text(
+              final_text
+              + "\n",
+              encoding="utf-8"
+          )
+
+
+          print(
+              "============================================================"
+          )
+
+          print(
+              "CANADA TVPASSPORT CHANNEL REPORT"
+          )
+
+          print(
+              "============================================================"
+          )
+
+          print(
+              "Matched channels:",
+              matched_count
+          )
+
+          print(
+              "Unmatched channels:",
+              unmatched_count
+          )
+
+          print(
+              "Matched channels with EPG data:",
+              data_count
+          )
+
+          print(
+              "Matched channels with NO EPG data:",
+              no_data_count
+          )
+
+          print(
+              "============================================================"
+          )
+
+          PY
 
       - name: Validate Canada guide
         run: |
@@ -2547,6 +3050,7 @@ jobs:
                   const candidate of logos
                 ) {
 
+
                   const candidateScore =
                     score(
                       name,
@@ -2589,6 +3093,7 @@ jobs:
                 if (
                   existing
                 ) {
+
 
                   const existingLogo =
                     decodeXml(
@@ -2683,12 +3188,13 @@ jobs:
 
           git add \
             guides/TVPassportCanada.xml \
-            guides/TVPassportCanada.xml.gz
+            guides/TVPassportCanada.xml.gz \
+            config/TVPassportCanada-matching.txt
 
 
           if git diff --cached --quiet; then
 
-            echo "No Canada TVPassport guide changes to commit"
+            echo "No Canada TVPassport guide or matching report changes to commit"
 
             exit 0
 
@@ -2724,7 +3230,8 @@ jobs:
 
             git add \
               guides/TVPassportCanada.xml \
-              guides/TVPassportCanada.xml.gz
+              guides/TVPassportCanada.xml.gz \
+              config/TVPassportCanada-matching.txt
 
 
             if git diff --cached --quiet; then
