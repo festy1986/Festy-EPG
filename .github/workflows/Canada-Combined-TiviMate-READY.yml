@@ -1415,10 +1415,67 @@ jobs:
             console.log(`${source}: read ${programmesRead} programme blocks total`)
           }
 
+          // Jessman Canada is over 600 MB, beyond Node's maximum single string
+          // size. Stream it safely while still reporting real progress.
+          function parseXmlFastStream(stream, callback, source) {
+            return new Promise((resolve, reject) => {
+              const rl = readline.createInterface({ input: stream, crlfDelay: Infinity })
+              let insideChannel = false
+              let channelBuffer = ''
+              let insideProgramme = false
+              let programmeBuffer = ''
+              let channelBlocks = 0
+              let programmeBlocks = 0
+
+              const finishChannel = () => {
+                insideChannel = false
+                channelBlocks++
+                callback('channel', channelBuffer)
+                channelBuffer = ''
+              }
+              const finishProgramme = () => {
+                insideProgramme = false
+                programmeBlocks++
+                callback('programme', programmeBuffer)
+                programmeBuffer = ''
+                if (programmeBlocks % 25000 === 0) console.log(`${source}: read ${programmeBlocks} programme blocks`)
+              }
+
+              rl.on('line', line => {
+                if (!insideChannel && !insideProgramme && line.includes('<channel ')) {
+                  insideChannel = true
+                  channelBuffer = line + '\n'
+                  if (line.includes('</channel>')) finishChannel()
+                  return
+                }
+                if (insideChannel) {
+                  channelBuffer += line + '\n'
+                  if (line.includes('</channel>')) finishChannel()
+                  return
+                }
+                if (!insideProgramme && line.includes('<programme ')) {
+                  insideProgramme = true
+                  programmeBuffer = line + '\n'
+                  if (line.includes('</programme>')) finishProgramme()
+                  return
+                }
+                if (insideProgramme) {
+                  programmeBuffer += line + '\n'
+                  if (line.includes('</programme>')) finishProgramme()
+                }
+              })
+              rl.once('close', () => {
+                console.log(`${source}: read ${channelBlocks} channels and ${programmeBlocks} programme blocks`)
+                resolve()
+              })
+              rl.once('error', reject)
+              stream.once('error', reject)
+            })
+          }
+
           async function loadJessman() {
-            const xml = fs.readFileSync(jessmanPath, 'utf8')
-            parseXmlText(
-              xml,
+            await parseXmlFastStream(
+              fs.createReadStream(jessmanPath),
               (
                 type,
                 block
@@ -1507,12 +1564,12 @@ jobs:
           }
 
           async function loadIptvOrg() {
-            const xml = zlib.gunzipSync(
-              fs.readFileSync(iptvOrgPath)
-            ).toString('utf8')
+            const input = fs.createReadStream(iptvOrgPath)
+            const gunzip = zlib.createGunzip()
+            input.pipe(gunzip)
 
-            parseXmlText(
-              xml,
+            await parseXmlFastStream(
+              gunzip,
               (
                 type,
                 block
