@@ -100,7 +100,7 @@ jobs:
 
           function channelMatchKey(value) {
             const ignored = new Set([
-              'ca', 'canada', 'hd', 'sd', 'channel', 'tv',
+              'ca', 'canada', 'en', 'fr', 'hd', 'sd', 'channel', 'tv',
               'television', 'east', 'west', 'network', 'the'
             ])
 
@@ -1117,6 +1117,14 @@ jobs:
               iptvOrgProgrammesScanned++
             }
 
+            const scanned = source === 'jessman'
+              ? jessmanProgrammesScanned
+              : iptvOrgProgrammesScanned
+
+            if (scanned % 5000 === 0) {
+              console.log(`${source}: ${scanned} selected programme blocks processed`)
+            }
+
             const start =
               getAttribute(
                 block,
@@ -1384,13 +1392,34 @@ jobs:
             )
           }
 
-          async function loadJessman() {
-            await parseXmlStream(
-              fs.createReadStream(
-                jessmanPath
-              ),
+          // Reads complete XML blocks directly. This keeps the Combined FAST
+          // matching and curation rules intact while avoiding a slow await for
+          // every line in the large Canada source files.
+          function parseXmlText(xml, callback, source) {
+            let channelsRead = 0
+            let programmesRead = 0
 
-              async (
+            for (const match of xml.matchAll(/<channel\b[^>]*>[\s\S]*?<\/channel>/gi)) {
+              channelsRead++
+              callback('channel', match[0])
+            }
+            console.log(`${source}: read ${channelsRead} channel blocks`)
+
+            for (const match of xml.matchAll(/<programme\b[^>]*>[\s\S]*?<\/programme>/gi)) {
+              programmesRead++
+              callback('programme', match[0])
+              if (programmesRead % 25000 === 0) {
+                console.log(`${source}: read ${programmesRead} programme blocks`)
+              }
+            }
+            console.log(`${source}: read ${programmesRead} programme blocks total`)
+          }
+
+          async function loadJessman() {
+            const xml = fs.readFileSync(jessmanPath, 'utf8')
+            parseXmlText(
+              xml,
+              (
                 type,
                 block
               ) => {
@@ -1472,27 +1501,19 @@ jobs:
                   if (!jessman.has(canonicalChannel)) jessman.set(canonicalChannel, new Map())
                   jessman.get(canonicalChannel).set(programme.key, programme)
                 }
-              }
+              },
+              'Jessman'
             )
           }
 
           async function loadIptvOrg() {
-            const input =
-              fs.createReadStream(
-                iptvOrgPath
-              )
+            const xml = zlib.gunzipSync(
+              fs.readFileSync(iptvOrgPath)
+            ).toString('utf8')
 
-            const gunzip =
-              zlib.createGunzip()
-
-            input.pipe(
-              gunzip
-            )
-
-            await parseXmlStream(
-              gunzip,
-
-              async (
+            parseXmlText(
+              xml,
+              (
                 type,
                 block
               ) => {
@@ -1559,7 +1580,8 @@ jobs:
                   if (!iptvOrg.has(canonicalChannel)) iptvOrg.set(canonicalChannel, new Map())
                   iptvOrg.get(canonicalChannel).set(programme.key, programme)
                 }
-              }
+              },
+              'IPTV-EPG.org'
             )
           }
 
@@ -1652,8 +1674,16 @@ jobs:
           const tvmazeCache =
             new Map()
 
+          const tvmazeEpisodeCache =
+            new Map()
+
           const tmdbCache =
             new Map()
+
+          const tmdbEpisodeCache =
+            new Map()
+
+          const METADATA_CONCURRENCY = 2
 
           function sleep(
             milliseconds
@@ -1742,6 +1772,15 @@ jobs:
             programme
           ) {
             if (
+              programme.episodeTitle &&
+              programme.description &&
+              programme.airDate &&
+              programme.icon
+            ) {
+              return
+            }
+
+            if (
               !programme.episodeNumber
             ) {
               return
@@ -1769,23 +1808,21 @@ jobs:
               return
             }
 
-            const episodeData =
-              await fetchJson(
-                'https://api.tvmaze.com/shows/' +
-                show.id +
-                '/episodebynumber?season=' +
-                Number(
-                  match[1]
-                ) +
-                '&number=' +
-                Number(
-                  match[2]
-                )
-              )
+            const episodeKey =
+              show.id + ':' + match[1] + ':' + match[2]
 
-            await sleep(
-              250
-            )
+            let episodeData =
+              tvmazeEpisodeCache.get(episodeKey)
+
+            if (episodeData === undefined) {
+              episodeData = await fetchJson(
+                'https://api.tvmaze.com/shows/' + show.id +
+                '/episodebynumber?season=' + Number(match[1]) +
+                '&number=' + Number(match[2])
+              )
+              tvmazeEpisodeCache.set(episodeKey, episodeData)
+              await sleep(250)
+            }
 
             if (
               !episodeData
@@ -1878,6 +1915,14 @@ jobs:
               return
             }
 
+            if (
+              programme.episodeTitle &&
+              programme.description &&
+              programme.airDate
+            ) {
+              return
+            }
+
             const match =
               programme.episodeNumber.match(
                 /^S(\d+)E(\d+)$/i
@@ -1941,31 +1986,24 @@ jobs:
               return
             }
 
-            const episodeData =
-              await fetchJson(
-                'https://api.themoviedb.org/3/tv/' +
-                show.id +
-                '/season/' +
-                Number(
-                  match[1]
-                ) +
-                '/episode/' +
-                Number(
-                  match[2]
-                ),
-                {
-                  Authorization:
-                    'Bearer ' +
-                    process.env.TMDB_API_TOKEN,
+            const episodeKey =
+              show.id + ':' + match[1] + ':' + match[2]
 
-                  accept:
-                    'application/json'
+            let episodeData =
+              tmdbEpisodeCache.get(episodeKey)
+
+            if (episodeData === undefined) {
+              episodeData = await fetchJson(
+                'https://api.themoviedb.org/3/tv/' + show.id +
+                '/season/' + Number(match[1]) + '/episode/' + Number(match[2]),
+                {
+                  Authorization: 'Bearer ' + process.env.TMDB_API_TOKEN,
+                  accept: 'application/json'
                 }
               )
-
-            await sleep(
-              250
-            )
+              tmdbEpisodeCache.set(episodeKey, episodeData)
+              await sleep(250)
+            }
 
             if (
               !episodeData
@@ -2021,6 +2059,34 @@ jobs:
             ) {
               tmdbMatches++
             }
+          }
+
+          async function enrichInBatches(
+            programmes,
+            enrich,
+            label
+          ) {
+            let nextIndex = 0
+            let completed = 0
+
+            async function worker() {
+              while (true) {
+                const index = nextIndex++
+                if (index >= programmes.length) return
+                await enrich(programmes[index])
+                completed++
+                if (completed % 500 === 0) {
+                  console.log(`${label}: ${completed}/${programmes.length} programmes checked`)
+                }
+              }
+            }
+
+            await Promise.all(
+              Array.from(
+                { length: METADATA_CONCURRENCY },
+                worker
+              )
+            )
           }
 
           async function buildFinalProgrammes() {
@@ -2094,23 +2160,14 @@ jobs:
               }
             }
 
-            for (
-              const programme of
-              finalProgrammes.values()
-            ) {
-              await enrichFromTvmaze(
-                programme
-              )
-            }
+            const programmesToEnrich =
+              Array.from(finalProgrammes.values())
 
-            for (
-              const programme of
-              finalProgrammes.values()
-            ) {
-              await enrichFromTmdb(
-                programme
-              )
-            }
+            console.log(`TVMaze: checking ${programmesToEnrich.length} programmes with ${METADATA_CONCURRENCY} workers`)
+            await enrichInBatches(programmesToEnrich, enrichFromTvmaze, 'TVMaze')
+
+            console.log(`TMDB: checking ${programmesToEnrich.length} programmes with ${METADATA_CONCURRENCY} workers`)
+            await enrichInBatches(programmesToEnrich, enrichFromTmdb, 'TMDB')
 
             return finalProgrammes
           }
@@ -2501,90 +2558,4 @@ jobs:
 
           main().catch(
             error => {
-              console.error(
-                error
-              )
-
-              process.exit(
-                1
-              )
-            }
-          )
-          EOF
-
-          node /tmp/build_canada_combined.js
-
-      - name: Validate Canada Combined guide
-        run: |
-          CHANNELS=$(grep -c '<channel ' canadacombined/work/canada-combined.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' canadacombined/work/canada-combined.xml || true)
-          CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' canadacombined/work/canada-combined.xml | grep -c '<icon src=' || true)
-          PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' canadacombined/work/canada-combined.xml | grep -c '<icon src=' || true)
-          DESCRIPTIONS=$(grep -c '<desc ' canadacombined/work/canada-combined.xml || true)
-
-          echo "Combined FAST channels: $CHANNELS"
-          echo "Combined FAST programmes: $PROGRAMMES"
-          echo "Channel logos: $CHANNEL_LOGOS"
-          echo "Programme icons: $PROGRAMME_ICONS"
-          echo "Description tags: $DESCRIPTIONS"
-
-          if [ "$CHANNELS" -lt 1 ]; then
-            echo "Combined FAST guide contains no channels"
-            exit 1
-          fi
-
-          if [ "$PROGRAMMES" -lt 1 ]; then
-            echo "Combined FAST guide contains no programmes"
-            exit 1
-          fi
-
-          test -s canadacombined/work/canada-combined.xml
-
-      - name: Compress Canada Combined guide
-        run: |
-          gzip -c \
-            canadacombined/work/canada-combined.xml \
-            > guides/CanadaCombined.xml.gz
-
-          test -s guides/CanadaCombined.xml.gz
-
-          echo "Combined FAST guide:"
-          ls -lh guides/CanadaCombined.xml.gz
-
-      - name: Commit and push Canada Combined guide
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git add guides/CanadaCombined.xml.gz
-
-          if git diff --cached --quiet; then
-            echo "No Combined FAST guide changes to commit"
-            exit 0
-          fi
-
-          git commit \
-            -m "Update Canada Combined guide"
-
-          for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
-
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
-              exit 0
-            fi
-
-            echo "Push failed. Synchronizing with remote before retry..."
-
-            git fetch origin main
-
-            git rebase origin/main
-
-            echo "Waiting before retry..."
-
-            sleep 10
-          done
-
-          echo "Push failed after all retries"
-
-          exit 1
+              console.er
