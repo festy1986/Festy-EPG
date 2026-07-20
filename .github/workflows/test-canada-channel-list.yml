@@ -24,12 +24,14 @@ jobs:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+
         run: |
 
           python3 - <<'PY'
 
           import os
           import re
+          import time
           import requests
           from pathlib import Path
 
@@ -51,28 +53,30 @@ jobs:
 
           def api_request(action):
 
+              url = (
+
+                  f"{XTREAM_URL}/player_api.php"
+
+                  f"?username={XTREAM_USERNAME}"
+
+                  f"&password={XTREAM_PASSWORD}"
+
+                  f"&action={action}"
+
+              )
+
+
               response = session.get(
 
-                  XTREAM_URL,
-
-                  params={
-
-                      "username":
-                          XTREAM_USERNAME,
-
-                      "password":
-                          XTREAM_PASSWORD,
-
-                      "action":
-                          action
-
-                  },
+                  url,
 
                   timeout=120
 
               )
 
+
               response.raise_for_status()
+
 
               return response.json()
 
@@ -99,18 +103,28 @@ jobs:
           for category in categories:
 
               category_id = str(
+
                   category.get(
+
                       "category_id",
+
                       ""
+
                   )
+
               ).strip()
 
 
               category_name = str(
+
                   category.get(
+
                       "category_name",
+
                       ""
+
                   )
+
               ).strip()
 
 
@@ -136,26 +150,21 @@ jobs:
 
 
               tokens = set(
+
                   normalized.split()
+
               )
 
 
-              is_canada = (
+              if (
 
                   "ca" in tokens
 
-                  or
+                  or "canada" in tokens
 
-                  "canada" in tokens
+                  or "canadian" in tokens
 
-                  or
-
-                  "canadian" in tokens
-
-              )
-
-
-              if is_canada:
+              ):
 
                   canada_categories.append(
 
@@ -175,32 +184,19 @@ jobs:
           print()
 
           print(
+
               "Canada categories found:",
+
               len(canada_categories)
+
           )
 
 
           if not canada_categories:
 
               raise SystemExit(
+
                   "No CA/Canada categories found"
-              )
-
-
-          print()
-
-          print(
-              "Canada categories:"
-          )
-
-
-          for category in canada_categories:
-
-              print(
-
-                  f'{category["category_id"]} | '
-
-                  f'{category["category_name"]}'
 
               )
 
@@ -208,18 +204,25 @@ jobs:
           print()
 
           print(
+
               "Loading all provider live streams..."
+
           )
 
 
           streams = api_request(
+
               "get_live_streams"
+
           )
 
 
           print(
+
               "Provider live streams:",
+
               len(streams)
+
           )
 
 
@@ -235,6 +238,7 @@ jobs:
           grouped_channels = {
 
               category["category_id"]:
+
                   []
 
               for category in canada_categories
@@ -359,11 +363,13 @@ jobs:
 
               )
 
+
               file.write(
 
-                  "# Generated automatically by the Canada Channel List workflow\n"
+                  "# Generated automatically\n"
 
               )
+
 
               file.write(
 
@@ -405,14 +411,7 @@ jobs:
 
                   file.write(
 
-                      f"# CHANNELS: {len(channels)}\n"
-
-                  )
-
-
-                  file.write(
-
-                      "\n"
+                      f"# CHANNELS: {len(channels)}\n\n"
 
                   )
 
@@ -423,7 +422,7 @@ jobs:
                   for channel in channels:
 
 
-                      channel_key = (
+                      key = (
 
                           channel["name"],
 
@@ -432,16 +431,12 @@ jobs:
                       )
 
 
-                      if channel_key in seen:
+                      if key in seen:
 
                           continue
 
 
-                      seen.add(
-
-                          channel_key
-
-                      )
+                      seen.add(key)
 
 
                       file.write(
@@ -453,11 +448,7 @@ jobs:
                       )
 
 
-                  file.write(
-
-                      "\n"
-
-                  )
+                  file.write("\n")
 
 
           print()
@@ -511,6 +502,7 @@ jobs:
           git config user.name "github-actions"
 
           git config user.email "github-actions@github.com"
+
 
           git add config/canada_channels.txt
 
