@@ -1081,7 +1081,26 @@ jobs:
             exit 1
           fi
 
+      - name: Compress Canada guide
+        run: |
+          gzip -c guides/TVPassportCanada.xml > guides/TVPassportCanada.xml.gz
+          rm -f guides/TVPassportCanada.xml
+          ls -lh guides/TVPassportCanada.xml.gz
 
+      - name: Commit updated Canada guide
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add guides/TVPassportCanada.xml.gz
+
+          if git diff --cached --quiet; then
+            echo "No Canada guide changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update Canada TVPassport guide"
+          git pull --rebase origin main
+          git push origin HEAD:main
 
 
 
