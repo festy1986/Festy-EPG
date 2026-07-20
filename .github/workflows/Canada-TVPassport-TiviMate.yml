@@ -5524,6 +5524,9 @@ jobs:
             guides/TVPassportCanada.xml \
             > guides/TVPassportCanada.xml.gz
 
+          rm -f \
+            guides/TVPassportCanada.xml
+
       - name: Commit and push Canada TVPassport guide safely
         run: |
 
@@ -5541,7 +5544,6 @@ jobs:
 
 
           git add \
-            guides/TVPassportCanada.xml \
             guides/TVPassportCanada.xml.gz \
             config/TVPassportCanada-matching.txt
 
@@ -5584,7 +5586,6 @@ jobs:
 
 
             git add \
-              guides/TVPassportCanada.xml \
               guides/TVPassportCanada.xml.gz \
               config/TVPassportCanada-matching.txt
 
