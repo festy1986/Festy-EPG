@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Fetch logos in batches of three
         env:
@@ -43,6 +45,15 @@ jobs:
             printf '"%s","%s"\n' "$(csv "$id")" "$(csv "$title")" >> 247logos/fallbacks.csv
           }
           request() { curl --silent --fail --location --user-agent "$agent" "$@"; }
+          checkpoint() {
+            git add -A 247logos
+            git diff --cached --quiet && return 0
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Checkpoint curated 24/7 channel logos"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          }
 
           process_channel() {
             local channel_id="$1" original_name="$2" title key prefix page wanted image asset image_url mime extension duplicate
@@ -87,13 +98,16 @@ jobs:
 
           total=$(grep -Ec '^[[:space:]]*[0-9]+[[:space:]]*\|' "$CURATED_LIST" || true)
           echo "Found $total channels. Processing $BATCH_SIZE at a time, then waiting $BATCH_WAIT_SECONDS seconds."
-          pids=(); batch=0
+          pids=(); batch=0; completed_batches=0
           while IFS='|' read -r id name; do
             [[ "$id" =~ [0-9] ]] || continue
             process_channel "$id" "$name" & pids+=("$!"); batch=$((batch + 1))
             if [[ "$batch" -eq "$BATCH_SIZE" ]]; then
               for pid in "${pids[@]}"; do wait "$pid" || true; done
-              pids=(); batch=0; sleep "$BATCH_WAIT_SECONDS"
+              pids=(); batch=0; completed_batches=$((completed_batches + 1))
+              # Save progress after every 50 batches (about 150 channels).
+              if (( completed_batches % 50 == 0 )); then checkpoint; fi
+              sleep "$BATCH_WAIT_SECONDS"
             fi
           done < "$CURATED_LIST"
           for pid in "${pids[@]}"; do wait "$pid" || true; done
@@ -115,4 +129,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Add curated 24/7 channel logos"
-          git push
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
