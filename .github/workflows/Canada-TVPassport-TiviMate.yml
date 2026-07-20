@@ -2493,15 +2493,10 @@ jobs:
 
 
             npx tsx scripts/commands/epg/grab.ts \
-
               --channels=sites/tvpassport.com/festy-tvpassport-canada.channels.xml \
-
               --output="../guides/TVPassportCanada.${PASS_NAME}.xml" \
-
               --days=14 \
-
               --maxConnections="$MAX_CONNECTIONS" \
-
               2>&1 |
 
               tee "../guides/TVPassportCanada.${PASS_NAME}.log"
@@ -2513,30 +2508,14 @@ jobs:
             set -e
 
 
-            if [
-
-              "$STATUS"
-
-              -ne
-
-              0
-
-            ]; then
+            if [ "$STATUS" -ne 0 ]; then
 
               echo "$PASS_NAME exited with status $STATUS"
 
             fi
 
 
-            if [
-
-              !
-
-              -f
-
-              "../guides/TVPassportCanada.${PASS_NAME}.xml"
-
-            ]; then
+            if [ ! -f "../guides/TVPassportCanada.${PASS_NAME}.xml" ]; then
 
               echo "$PASS_NAME did not create an XML file"
 
@@ -2554,7 +2533,6 @@ jobs:
             PR=$(
 
               grep -c '<programme ' \
-
               "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
@@ -2563,7 +2541,6 @@ jobs:
             DESC=$(
 
               grep -c '<desc ' \
-
               "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
@@ -2572,9 +2549,7 @@ jobs:
             ISSUE_COUNT=$(
 
               grep -Eic \
-
               'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' \
-
               "../guides/TVPassportCanada.${PASS_NAME}.log" || true
 
             )
@@ -2599,32 +2574,20 @@ jobs:
 
 
           run_pass \
-
             "pass1-fast" \
-
             8 \
-
             30000
 
 
           PASS1_ISSUES=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.issues.count
 
           )
 
 
-          if [
-
-            "$PASS1_ISSUES"
-
-            -gt
-
-            0
-
-          ]; then
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
 
 
             echo ""
@@ -2633,11 +2596,8 @@ jobs:
 
 
             run_pass \
-
               "pass2-backup" \
-
               4 \
-
               45000
 
           else
@@ -2656,7 +2616,6 @@ jobs:
           BEST_PR=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.programmes.count
 
           )
@@ -2665,7 +2624,6 @@ jobs:
           BEST_DESC=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.descriptions.count
 
           )
@@ -2674,7 +2632,6 @@ jobs:
           BEST_ISSUES=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.issues.count
 
           )
@@ -2683,19 +2640,12 @@ jobs:
           for PASS in pass2-backup; do
 
 
-            if [
-
-              -f
-
-              "../guides/TVPassportCanada.${PASS}.programmes.count"
-
-            ]; then
+            if [ -f "../guides/TVPassportCanada.${PASS}.programmes.count" ]; then
 
 
               CANDIDATE_PR=$(
 
                 cat \
-
                   "../guides/TVPassportCanada.${PASS}.programmes.count"
 
               )
@@ -2704,7 +2654,6 @@ jobs:
               CANDIDATE_DESC=$(
 
                 cat \
-
                   "../guides/TVPassportCanada.${PASS}.descriptions.count"
 
               )
@@ -2713,21 +2662,12 @@ jobs:
               CANDIDATE_ISSUES=$(
 
                 cat \
-
                   "../guides/TVPassportCanada.${PASS}.issues.count"
 
               )
 
 
-              if [
-
-                "$CANDIDATE_PR"
-
-                -gt
-
-                "$BEST_PR"
-
-              ]; then
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
 
 
                 BEST_PASS="$PASS"
@@ -2739,23 +2679,7 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [
-
-                "$CANDIDATE_PR"
-
-                -eq
-
-                "$BEST_PR"
-
-              ] && [
-
-                "$CANDIDATE_DESC"
-
-                -gt
-
-                "$BEST_DESC"
-
-              ]; then
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
 
 
                 BEST_PASS="$PASS"
@@ -2766,31 +2690,7 @@ jobs:
 
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
-              elif [
-
-                "$CANDIDATE_PR"
-
-                -eq
-
-                "$BEST_PR"
-
-              ] && [
-
-                "$CANDIDATE_DESC"
-
-                -eq
-
-                "$BEST_DESC"
-
-              ] && [
-
-                "$CANDIDATE_ISSUES"
-
-                -lt
-
-                "$BEST_ISSUES"
-
-              ]; then
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
 
 
                 BEST_PASS="$PASS"
@@ -2820,9 +2720,7 @@ jobs:
 
 
           cp \
-
             "../guides/TVPassportCanada.${BEST_PASS}.xml" \
-
             "../guides/TVPassportCanada.xml"
 
 
@@ -4052,15 +3950,10 @@ jobs:
 
 
             npx tsx scripts/commands/epg/grab.ts \
-
               --channels=sites/tvpassport.com/festy-tvpassport-canada.channels.xml \
-
               --output="../guides/TVPassportCanada.${PASS_NAME}.xml" \
-
               --days=14 \
-
               --maxConnections="$MAX_CONNECTIONS" \
-
               2>&1 |
 
               tee "../guides/TVPassportCanada.${PASS_NAME}.log"
@@ -4072,28 +3965,14 @@ jobs:
             set -e
 
 
-            if [
-
-              "$STATUS"
-
-              -ne
-
-              0
-
-            ]; then
+            if [ "$STATUS" -ne 0 ]; then
 
               echo "$PASS_NAME exited with status $STATUS"
 
             fi
 
 
-            if [
-
-              ! -f
-
-              "../guides/TVPassportCanada.${PASS_NAME}.xml"
-
-            ]; then
+            if [ ! -f "../guides/TVPassportCanada.${PASS_NAME}.xml" ]; then
 
               echo "$PASS_NAME did not create an XML file"
 
@@ -4111,7 +3990,6 @@ jobs:
             PR=$(
 
               grep -c '<programme ' \
-
               "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
@@ -4120,7 +3998,6 @@ jobs:
             DESC=$(
 
               grep -c '<desc ' \
-
               "../guides/TVPassportCanada.${PASS_NAME}.xml" || true
 
             )
@@ -4129,9 +4006,7 @@ jobs:
             ISSUE_COUNT=$(
 
               grep -Eic \
-
               'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' \
-
               "../guides/TVPassportCanada.${PASS_NAME}.log" || true
 
             )
@@ -4156,32 +4031,20 @@ jobs:
 
 
           run_pass \
-
             "pass1-fast" \
-
             8 \
-
             30000
 
 
           PASS1_ISSUES=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.issues.count
 
           )
 
 
-          if [
-
-            "$PASS1_ISSUES"
-
-            -gt
-
-            0
-
-          ]; then
+          if [ "$PASS1_ISSUES" -gt 0 ]; then
 
 
             echo ""
@@ -4190,11 +4053,8 @@ jobs:
 
 
             run_pass \
-
               "pass2-backup" \
-
               4 \
-
               45000
 
           else
@@ -4213,7 +4073,6 @@ jobs:
           BEST_PR=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.programmes.count
 
           )
@@ -4222,7 +4081,6 @@ jobs:
           BEST_DESC=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.descriptions.count
 
           )
@@ -4231,7 +4089,6 @@ jobs:
           BEST_ISSUES=$(
 
             cat \
-
               ../guides/TVPassportCanada.pass1-fast.issues.count
 
           )
@@ -4240,19 +4097,12 @@ jobs:
           for PASS in pass2-backup; do
 
 
-            if [
-
-              -f
-
-              "../guides/TVPassportCanada.${PASS}.programmes.count"
-
-            ]; then
+            if [ -f "../guides/TVPassportCanada.${PASS}.programmes.count" ]; then
 
 
               CANDIDATE_PR=$(
 
                 cat \
-
                   "../guides/TVPassportCanada.${PASS}.programmes.count"
 
               )
@@ -4261,7 +4111,6 @@ jobs:
               CANDIDATE_DESC=$(
 
                 cat \
-
                   "../guides/TVPassportCanada.${PASS}.descriptions.count"
 
               )
@@ -4270,21 +4119,12 @@ jobs:
               CANDIDATE_ISSUES=$(
 
                 cat \
-
                   "../guides/TVPassportCanada.${PASS}.issues.count"
 
               )
 
 
-              if [
-
-                "$CANDIDATE_PR"
-
-                -gt
-
-                "$BEST_PR"
-
-              ]; then
+              if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
 
 
                 BEST_PASS="$PASS"
@@ -4296,23 +4136,7 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [
-
-                "$CANDIDATE_PR"
-
-                -eq
-
-                "$BEST_PR"
-
-              ] && [
-
-                "$CANDIDATE_DESC"
-
-                -gt
-
-                "$BEST_DESC"
-
-              ]; then
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -gt "$BEST_DESC" ]; then
 
 
                 BEST_PASS="$PASS"
@@ -4324,31 +4148,7 @@ jobs:
                 BEST_ISSUES="$CANDIDATE_ISSUES"
 
 
-              elif [
-
-                "$CANDIDATE_PR"
-
-                -eq
-
-                "$BEST_PR"
-
-              ] && [
-
-                "$CANDIDATE_DESC"
-
-                -eq
-
-                "$BEST_DESC"
-
-              ] && [
-
-                "$CANDIDATE_ISSUES"
-
-                -lt
-
-                "$BEST_ISSUES"
-
-              ]; then
+              elif [ "$CANDIDATE_PR" -eq "$BEST_PR" ] && [ "$CANDIDATE_DESC" -eq "$BEST_DESC" ] && [ "$CANDIDATE_ISSUES" -lt "$BEST_ISSUES" ]; then
 
 
                 BEST_PASS="$PASS"
@@ -4378,9 +4178,7 @@ jobs:
 
 
           cp \
-
             "../guides/TVPassportCanada.${BEST_PASS}.xml" \
-
             "../guides/TVPassportCanada.xml"
 
 
@@ -5002,7 +4800,6 @@ jobs:
           CH=$(
 
             grep -c '<channel ' \
-
             guides/TVPassportCanada.xml || true
 
           )
@@ -5011,7 +4808,6 @@ jobs:
           PR=$(
 
             grep -c '<programme ' \
-
             guides/TVPassportCanada.xml || true
 
           )
@@ -5020,7 +4816,6 @@ jobs:
           DESC=$(
 
             grep -c '<desc ' \
-
             guides/TVPassportCanada.xml || true
 
           )
@@ -5033,15 +4828,7 @@ jobs:
           echo "Canada descriptions: $DESC"
 
 
-          if [
-
-            "$CH"
-
-            -lt
-
-            1
-
-          ]; then
+          if [ "$CH" -lt 1 ]; then
 
             echo "Invalid Canada output - no channels"
 
@@ -5050,15 +4837,7 @@ jobs:
           fi
 
 
-          if [
-
-            "$PR"
-
-            -lt
-
-            1
-
-          ]; then
+          if [ "$PR" -lt 1 ]; then
 
             echo "Invalid Canada output - no programmes"
 
@@ -5067,15 +4846,7 @@ jobs:
           fi
 
 
-          if [
-
-            "$DESC"
-
-            -lt
-
-            1
-
-          ]; then
+          if [ "$DESC" -lt 1 ]; then
 
             echo "Invalid Canada output - no descriptions"
 
@@ -5750,25 +5521,19 @@ jobs:
         run: |
 
           gzip -c \
-
             guides/TVPassportCanada.xml \
-
             > guides/TVPassportCanada.xml.gz
 
       - name: Commit and push Canada TVPassport guide safely
         run: |
 
           git config \
-
             user.name \
-
             "github-actions"
 
 
           git config \
-
             user.email \
-
             "github-actions@github.com"
 
 
@@ -5776,11 +5541,8 @@ jobs:
 
 
           git add \
-
             guides/TVPassportCanada.xml \
-
             guides/TVPassportCanada.xml.gz \
-
             config/TVPassportCanada-matching.txt
 
 
@@ -5794,7 +5556,6 @@ jobs:
 
 
           git commit \
-
             -m "Update Canada TVPassport guide"
 
 
@@ -5823,11 +5584,8 @@ jobs:
 
 
             git add \
-
               guides/TVPassportCanada.xml \
-
               guides/TVPassportCanada.xml.gz \
-
               config/TVPassportCanada-matching.txt
 
 
@@ -5838,7 +5596,6 @@ jobs:
             else
 
               git commit \
-
                 -m "Update TVPassport Canada guide"
 
             fi
