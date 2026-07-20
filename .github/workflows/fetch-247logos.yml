@@ -1,4 +1,4 @@
-name: Fetch 24/7 channel logos
+name: Fetch curated 24/7 channel logos
 
 on:
   workflow_dispatch:
@@ -15,168 +15,104 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fetch missing channel logos
+      - name: Fetch logos in batches of three
         env:
           CURATED_LIST: config/247-curated-list.txt
-          MAX_CHANNELS_PER_RUN: '10'
+          BATCH_SIZE: '3'
+          BATCH_WAIT_SECONDS: '3'
         run: |
-          set -euo pipefail
+          set -u -o pipefail
           api='https://logos.fandom.com/api.php'
           agent='festy-epg-247logos/1.0'
           mkdir -p 247logos
-          if [[ ! -s 247logos/review.csv ]]; then
-            printf 'channel_id,channel_name,reason\n' > 247logos/review.csv
-          fi
-          if [[ ! -f "$CURATED_LIST" ]]; then
-            echo "Curated list not found: $CURATED_LIST" >&2
-            exit 1
-          fi
-          total=0
-          looked_up=0
-          downloaded=0
-          already_present=0
-          copied_duplicates=0
-          fallbacks_created=0
-          not_found=0
+          [[ -f "$CURATED_LIST" ]] || { echo "Missing $CURATED_LIST" >&2; exit 1; }
+          [[ -s 247logos/review.csv ]] || printf 'channel_id,channel_name,reason\n' > 247logos/review.csv
+          [[ -s 247logos/fallbacks.csv ]] || printf 'channel_id,channel_name\n' > 247logos/fallbacks.csv
 
           clean_name() { sed -E 's/^[A-Za-z]{2,3}:[[:space:]]*//' <<< "$1"; }
           slug() { clean_name "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-|-$//g'; }
           normalise() { tr '[:upper:]' '[:lower:]' <<< "$1" | sed -E 's/[^a-z0-9]//g'; }
-          csv_field() { sed 's/"/""/g' <<< "$1" | tr -d '\n'; }
-          review() { printf '"%s","%s","%s"\n' "$(csv_field "$1")" "$(csv_field "$2")" "$(csv_field "$3")" >> 247logos/review.csv; }
-          svg_escape() { sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' <<< "$1"; }
-          make_fallback() {
-            local title escaped target
-            title="$1"
-            target="$2"
-            escaped=$(svg_escape "$title")
+          csv() { sed 's/"/""/g' <<< "$1" | tr -d '\n'; }
+          review() { printf '"%s","%s","%s"\n' "$(csv "$1")" "$(csv "$2")" "$(csv "$3")" >> 247logos/review.csv; }
+          fallback() {
+            local id="$1" title="$2" target="$3" text
+            text=$(sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' <<< "$title")
             cat > "$target" <<SVG
-          <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
-            <rect width="1200" height="675" fill="#111111"/>
-            <rect x="26" y="26" width="1148" height="623" rx="18" fill="#1c1c1c" stroke="#e50914" stroke-width="6"/>
-            <text x="600" y="337" fill="#ffffff" font-family="Impact, Arial Black, DejaVu Sans, sans-serif" font-size="72" font-weight="900" text-anchor="middle" textLength="1020" lengthAdjust="spacingAndGlyphs">$escaped</text>
-            <text x="600" y="420" fill="#aaaaaa" font-family="Arial, DejaVu Sans, sans-serif" font-size="26" letter-spacing="8" text-anchor="middle">24/7 CHANNEL</text>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"><rect width="1200" height="675" fill="#111"/><rect x="25" y="25" width="1150" height="625" rx="18" fill="#1c1c1c" stroke="#e50914" stroke-width="6"/><text x="600" y="337" fill="#fff" font-family="Impact,Arial Black,DejaVu Sans,sans-serif" font-size="72" font-weight="900" text-anchor="middle" textLength="1020" lengthAdjust="spacingAndGlyphs">$text</text><text x="600" y="420" fill="#aaa" font-family="Arial,sans-serif" font-size="26" letter-spacing="8" text-anchor="middle">24/7 CHANNEL</text></svg>
           SVG
+            printf '"%s","%s"\n' "$(csv "$id")" "$(csv "$title")" >> 247logos/fallbacks.csv
           }
-          source_count=$(grep -Ec '^[[:space:]]*[0-9]+[[:space:]]*\|' "$CURATED_LIST" || true)
-          echo "Found $source_count channels in the curated list. This run will look up at most $MAX_CHANNELS_PER_RUN new logos."
+          request() { curl --silent --fail --location --user-agent "$agent" "$@"; }
 
-          while IFS='|' read -r raw_id raw_name; do
-            # sed trims whitespace without treating apostrophes as shell syntax.
-            channel_id=$(sed -E 's/^[[:space:]]+|[[:space:]]+$//g' <<< "$raw_id")
-            original_name=$(sed -E 's/^[[:space:]]+|[[:space:]]+$//g' <<< "$raw_name")
-            [[ "$channel_id" =~ ^[0-9]+$ ]] || continue
-            total=$((total + 1))
-            search_name=$(clean_name "$original_name")
-            file_slug=$(slug "$original_name")
-            prefix="${channel_id}-${file_slug}"
-            if compgen -G "247logos/${prefix}.*" > /dev/null; then
-              already_present=$((already_present + 1))
-              continue
-            fi
-            # Reuse a logo already downloaded for the same title under a different ID.
-            duplicate_file=$(find 247logos -maxdepth 1 -type f -name "*-${file_slug}.*" ! -name review.csv -print -quit)
-            if [[ -n "$duplicate_file" ]]; then
-              extension=".${duplicate_file##*.}"
-              cp "$duplicate_file" "247logos/${prefix}${extension}"
-              copied_duplicates=$((copied_duplicates + 1))
-              continue
-            fi
-            if [[ "$looked_up" -ge "$MAX_CHANNELS_PER_RUN" ]]; then
-              echo "Stopped after $MAX_CHANNELS_PER_RUN new lookups to respect Logopedia's rate limit."
-              break
-            fi
-            looked_up=$((looked_up + 1))
+          process_channel() {
+            local channel_id="$1" original_name="$2" title key prefix page wanted image asset image_url mime extension duplicate
+            channel_id=$(sed -E 's/^[[:space:]]+|[[:space:]]+$//g' <<< "$channel_id")
+            original_name=$(sed -E 's/^[[:space:]]+|[[:space:]]+$//g' <<< "$original_name")
+            [[ "$channel_id" =~ ^[0-9]+$ ]] || return 0
+            title=$(clean_name "$original_name")
+            key=$(slug "$original_name")
+            prefix="${channel_id}-${key}"
+            compgen -G "247logos/${prefix}.*" > /dev/null && return 0
 
-            page=$(curl --silent --fail --get --user-agent "$agent" "$api" \
-              --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 \
-              --data-urlencode "titles=${search_name// /_}" --data-urlencode redirects=1 \
-              | jq -r '.query.pages[0] | select(.missing != true) | .title // empty' 2>/dev/null || true)
-            sleep 3
+            duplicate=$(find 247logos -maxdepth 1 -type f -name "*-${key}.*" ! -name review.csv ! -name fallbacks.csv -print -quit)
+            if [[ -n "$duplicate" ]]; then
+              cp "$duplicate" "247logos/${prefix}.${duplicate##*.}"
+              return 0
+            fi
+
+            page=$(request --get "$api" --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode "titles=${title// /_}" --data-urlencode redirects=1 | jq -r '.query.pages[0] | select(.missing != true) | .title // empty' 2>/dev/null || true)
             if [[ -z "$page" ]]; then
-              wanted=$(normalise "$search_name")
-              page=$(curl --silent --fail --get --user-agent "$agent" "$api" \
-                --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 \
-                --data-urlencode list=search --data-urlencode "srsearch=\"${search_name}\"" \
-                --data-urlencode srnamespace=0 --data-urlencode srlimit=10 \
-                | jq -r --arg wanted "$wanted" '[.query.search[] | select((.title | ascii_downcase | gsub("[^a-z0-9]"; "")) == $wanted)][0].title // empty' 2>/dev/null || true)
-              sleep 3
+              wanted=$(normalise "$title")
+              page=$(request --get "$api" --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode list=search --data-urlencode "srsearch=\"${title}\"" --data-urlencode srnamespace=0 --data-urlencode srlimit=10 | jq -r --arg wanted "$wanted" '[.query.search[] | select((.title | ascii_downcase | gsub("[^a-z0-9]"; "")) == $wanted)][0].title // empty' 2>/dev/null || true)
             fi
             if [[ -z "$page" ]]; then
-              review "$channel_id" "$original_name" 'no exact Logopedia page found'
-              not_found=$((not_found + 1))
-              make_fallback "$search_name" "247logos/${prefix}.svg"
-              fallbacks_created=$((fallbacks_created + 1))
-              continue
+              review "$channel_id" "$original_name" 'no exact Logopedia page found'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"; return 0
             fi
 
-            image=$(curl --silent --fail --get --user-agent "$agent" "$api" \
-              --data-urlencode action=parse --data-urlencode format=json --data-urlencode formatversion=2 \
-              --data-urlencode "page=$page" --data-urlencode prop=images \
-              | jq -r '[.parse.images[] | select(test("logo"; "i") and (test("card|intertitle|screenshot|promo|background"; "i") | not))][0] // .parse.images[0] // empty' 2>/dev/null || true)
-            sleep 3
+            image=$(request --get "$api" --data-urlencode action=parse --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode "page=$page" --data-urlencode prop=images | jq -r '[.parse.images[] | select(test("logo"; "i") and (test("card|intertitle|screenshot|promo|background"; "i") | not))][0] // .parse.images[0] // empty' 2>/dev/null || true)
             if [[ -z "$image" ]]; then
-              review "$channel_id" "$original_name" 'Logopedia page has no image'
-              not_found=$((not_found + 1))
-              make_fallback "$search_name" "247logos/${prefix}.svg"
-              fallbacks_created=$((fallbacks_created + 1))
-              continue
+              review "$channel_id" "$original_name" 'Logopedia page has no image'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"; return 0
             fi
 
-            asset=$(curl --silent --fail --get --user-agent "$agent" "$api" \
-              --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 \
-              --data-urlencode "titles=File:$image" --data-urlencode prop=imageinfo --data-urlencode 'iiprop=url|mime' \
-              | jq -r '.query.pages[0].imageinfo[0] | select(.) | [.url, .mime] | @tsv' 2>/dev/null || true)
-            sleep 3
+            asset=$(request --get "$api" --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode "titles=File:$image" --data-urlencode prop=imageinfo --data-urlencode 'iiprop=url|mime' | jq -r '.query.pages[0].imageinfo[0] | select(.) | [.url,.mime] | @tsv' 2>/dev/null || true)
             if [[ -z "$asset" ]]; then
-              review "$channel_id" "$original_name" 'Logopedia image URL unavailable'
-              not_found=$((not_found + 1))
-              make_fallback "$search_name" "247logos/${prefix}.svg"
-              fallbacks_created=$((fallbacks_created + 1))
-              continue
+              review "$channel_id" "$original_name" 'Logopedia image URL unavailable'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"; return 0
             fi
-            image_url=${asset%%$'\t'*}
-            mime=${asset#*$'\t'}
-            case "$mime" in
-              image/png) extension=.png ;; image/jpeg) extension=.jpg ;; image/webp) extension=.webp ;;
-              image/gif) extension=.gif ;; image/svg+xml) extension=.svg ;; *) extension=.png ;;
-            esac
-            if curl --silent --fail --location --retry 2 --retry-all-errors --retry-delay 15 --user-agent "$agent" "$image_url" -o "247logos/${prefix}${extension}"; then
-              echo "Saved 247logos/${prefix}${extension}"
-              downloaded=$((downloaded + 1))
-            else
-              rm -f "247logos/${prefix}${extension}"
-              review "$channel_id" "$original_name" 'Logopedia image download was rate-limited or unavailable'
-              make_fallback "$search_name" "247logos/${prefix}.svg"
-              fallbacks_created=$((fallbacks_created + 1))
-              not_found=$((not_found + 1))
+            image_url=${asset%%$'\t'*}; mime=${asset#*$'\t'}
+            case "$mime" in image/png) extension=.png;; image/jpeg) extension=.jpg;; image/webp) extension=.webp;; image/gif) extension=.gif;; image/svg+xml) extension=.svg;; *) extension=.png;; esac
+            if ! request -o "247logos/${prefix}${extension}" "$image_url"; then
+              rm -f "247logos/${prefix}${extension}"; review "$channel_id" "$original_name" 'Logopedia image download unavailable'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"
             fi
-            sleep 1
-          done < "$CURATED_LIST"
+          }
 
-          printf '\nLogo fetch complete: %s valid channels checked, %s downloaded, %s duplicate copies, %s fallbacks created, %s already present, %s source logos not found.\n' "$total" "$downloaded" "$copied_duplicates" "$fallbacks_created" "$already_present" "$not_found"
+          total=$(grep -Ec '^[[:space:]]*[0-9]+[[:space:]]*\|' "$CURATED_LIST" || true)
+          echo "Found $total channels. Processing $BATCH_SIZE at a time, then waiting $BATCH_WAIT_SECONDS seconds."
+          pids=(); batch=0
+          while IFS='|' read -r id name; do
+            [[ "$id" =~ [0-9] ]] || continue
+            process_channel "$id" "$name" & pids+=("$!"); batch=$((batch + 1))
+            if [[ "$batch" -eq "$BATCH_SIZE" ]]; then
+              for pid in "${pids[@]}"; do wait "$pid" || true; done
+              pids=(); batch=0; sleep "$BATCH_WAIT_SECONDS"
+            fi
+          done < "$CURATED_LIST"
+          for pid in "${pids[@]}"; do wait "$pid" || true; done
+
+          logos=$(find 247logos -maxdepth 1 -type f ! -name review.csv ! -name fallbacks.csv | wc -l)
+          fallbacks=$(( $(wc -l < 247logos/fallbacks.csv) - 1 ))
+          echo "Completed: $logos logo files, $fallbacks text fallbacks."
           {
-            echo '## 24/7 logo fetch complete'
-            echo
-            echo "- Valid channels: $total"
-            echo "- Logos downloaded: $downloaded"
-            echo "- Duplicate logo copies: $copied_duplicates"
-            echo "- Text fallback logos created: $fallbacks_created"
-            echo "- Logos already present: $already_present"
-            echo "- Source logos not found: $not_found"
-            echo
-            echo 'The full list of channels not found is in `247logos/review.csv`.'
+            echo '## Curated logo fetch complete'
+            echo "- Curated channels: $total"
+            echo "- Logo files: $logos"
+            echo "- Text fallbacks: $fallbacks"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit generated logos
         run: |
-          if git diff --quiet -- 247logos; then
-            echo "No new logos to commit."
-            exit 0
-          fi
+          git add -A 247logos
+          if git diff --cached --quiet; then echo "No new logos to commit."; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add 247logos
-          git commit -m "Add 24/7 channel logos"
+          git commit -m "Add curated 24/7 channel logos"
           git push
