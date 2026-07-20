@@ -120,6 +120,7 @@ jobs:
               ).strip()
 
               if not category_id or not category_name:
+
                   continue
 
               normalized_name = re.sub(
@@ -133,17 +134,29 @@ jobs:
               )
 
               is_canada_category = (
+
                   "canada" in words
+
                   or "ca" in words
+
                   or normalized_name.startswith("ca ")
+
                   or normalized_name.startswith("ca-")
+
                   or normalized_name.startswith("ca:")
+
                   or normalized_name.startswith("ca/")
+
                   or normalized_name.startswith("ca|")
+
                   or normalized_name.endswith(" ca")
+
                   or normalized_name.endswith(" canada")
+
                   or " canada " in f" {normalized_name} "
+
                   or " ca " in f" {normalized_name} "
+
               )
 
               if is_canada_category:
@@ -159,11 +172,13 @@ jobs:
               grouped_channels[
                   category_id
               ] = {
+
                   "category_name":
                       category_name,
 
                   "channels":
                       []
+
               }
 
           for stream in streams:
@@ -178,10 +193,6 @@ jobs:
               if category_id not in canada_categories:
 
                   continue
-
-              category_name = canada_categories[
-                  category_id
-              ]
 
               channel_name = str(
                   stream.get(
@@ -213,12 +224,16 @@ jobs:
               ][
                   "channels"
               ].append(
+
                   {
+
                       "category_id":
                           category_id,
 
                       "category_name":
-                          category_name,
+                          canada_categories[
+                              category_id
+                          ],
 
                       "name":
                           channel_name,
@@ -228,7 +243,9 @@ jobs:
 
                       "epg_channel_id":
                           epg_channel_id
+
                   }
+
               )
 
           with open(
@@ -242,11 +259,11 @@ jobs:
               )
 
               file.write(
-                  "# EVERY PROVIDER GROUP MATCHING CA OR CANADA\n"
+                  "# FORMAT: STREAM ID | CATEGORY ID | EPG CHANNEL ID | CHANNEL NAME\n"
               )
 
               file.write(
-                  "# EVERY CHANNEL WITH GROUP ID, STREAM ID, AND EPG CHANNEL ID\n"
+                  "# EVERY PROVIDER GROUP MATCHING CA OR CANADA\n"
               )
 
               file.write(
@@ -254,17 +271,21 @@ jobs:
               )
 
               file.write(
-                  "#\n"
+                  "\n"
               )
 
               for category_id in sorted(
+
                   grouped_channels,
+
                   key=lambda value:
+
                       grouped_channels[
                           value
                       ][
                           "category_name"
                       ].lower()
+
               ):
 
                   category_name = grouped_channels[
@@ -280,89 +301,63 @@ jobs:
                   ]
 
                   file.write(
-                      "\n"
-                  )
-
-                  file.write(
-                      "# ==================================================\n"
-                  )
-
-                  file.write(
-                      "# GROUP NAME: "
-                      + category_name
-                      + "\n"
-                  )
-
-                  file.write(
-                      "# GROUP ID: "
+                      category_id
+                      + " | "
                       + category_id
-                      + "\n"
-                  )
-
-                  file.write(
-                      "# CHANNELS: "
-                      + str(
-                          len(
-                              channels
-                          )
-                      )
-                      + "\n"
-                  )
-
-                  file.write(
-                      "# ==================================================\n"
+                      + " |  | ###### "
+                      + category_name
+                      + " ######\n"
                   )
 
                   for channel in channels:
 
                       file.write(
-                          "CHANNEL NAME: "
-                          + channel[
-                              "name"
-                          ]
-                          + "\n"
-                      )
 
-                      file.write(
-                          "CATEGORY ID: "
+                          channel[
+                              "stream_id"
+                          ]
+
+                          + " | "
+
                           + channel[
                               "category_id"
                           ]
-                          + "\n"
-                      )
 
-                      file.write(
-                          "STREAM ID: "
-                          + channel[
-                              "stream_id"
-                          ]
-                          + "\n"
-                      )
+                          + " | "
 
-                      file.write(
-                          "EPG CHANNEL ID: "
                           + channel[
                               "epg_channel_id"
                           ]
+
+                          + " | "
+
+                          + channel[
+                              "name"
+                          ]
+
                           + "\n"
+
                       )
 
-                      file.write(
-                          "\n"
-                      )
+                  file.write(
+                      "\n"
+                  )
 
           total_groups = len(
               grouped_channels
           )
 
           total_channels = sum(
+
               len(
                   group[
                       "channels"
                   ]
               )
+
               for group in
               grouped_channels.values()
+
           )
 
           print()
@@ -392,13 +387,17 @@ jobs:
           print()
 
           for category_id in sorted(
+
               grouped_channels,
+
               key=lambda value:
+
                   grouped_channels[
                       value
                   ][
                       "category_name"
                   ].lower()
+
           ):
 
               category_name = grouped_channels[
@@ -408,19 +407,27 @@ jobs:
               ]
 
               channel_count = len(
+
                   grouped_channels[
                       category_id
                   ][
                       "channels"
                   ]
+
               )
 
               print(
+
                   category_name,
+
                   "| CATEGORY ID:",
+
                   category_id,
+
                   "| CHANNELS:",
+
                   channel_count
+
               )
 
           print()
