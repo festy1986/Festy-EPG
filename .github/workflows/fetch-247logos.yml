@@ -17,6 +17,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install PNG renderer
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick
+
       - name: Fetch logos in batches of three
         env:
           CURATED_LIST: config/247-curated-list.txt
@@ -36,13 +39,14 @@ jobs:
           normalise() { tr '[:upper:]' '[:lower:]' <<< "$1" | sed -E 's/[^a-z0-9]//g'; }
           csv() { sed 's/"/""/g' <<< "$1" | tr -d '\n'; }
           review() { printf '"%s","%s","%s"\n' "$(csv "$1")" "$(csv "$2")" "$(csv "$3")" >> 247logos/review.csv; }
+          render_fallback_png() {
+            local title="$1" target="$2"
+            convert -size 1200x675 xc:'#1c1c1c' -stroke '#e50914' -strokewidth 6 -fill none -draw 'roundrectangle 25,25 1175,650 18,18' -stroke none -fill white -font DejaVu-Sans-Bold -gravity center -pointsize 72 -annotate 0 "$title" "$target"
+          }
           fallback() {
-            local id="$1" title="$2" target="$3" text
-            text=$(sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' <<< "$title")
-            cat > "$target" <<SVG
-          <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675"><rect width="1200" height="675" fill="#111"/><rect x="25" y="25" width="1150" height="625" rx="18" fill="#1c1c1c" stroke="#e50914" stroke-width="6"/><text x="600" y="337" fill="#fff" font-family="Impact,Arial Black,DejaVu Sans,sans-serif" font-size="72" font-weight="900" text-anchor="middle" textLength="1020" lengthAdjust="spacingAndGlyphs">$text</text><text x="600" y="420" fill="#aaa" font-family="Arial,sans-serif" font-size="26" letter-spacing="8" text-anchor="middle">24/7 CHANNEL</text></svg>
-          SVG
-            printf '"%s","%s"\n' "$(csv "$id")" "$(csv "$title")" >> 247logos/fallbacks.csv
+            local id="$1" title="$2" target="$3"
+            render_fallback_png "$title" "$target"
+            grep -Fq "\"${id}\"," 247logos/fallbacks.csv || printf '"%s","%s"\n' "$(csv "$id")" "$(csv "$title")" >> 247logos/fallbacks.csv
           }
           request() { curl --silent --fail --location --user-agent "$agent" "$@"; }
           checkpoint() {
@@ -54,6 +58,16 @@ jobs:
             git pull --rebase origin "$GITHUB_REF_NAME"
             git push origin "HEAD:$GITHUB_REF_NAME"
           }
+
+          # Replace only the prior fallback SVGs listed in fallbacks.csv with PNGs.
+          while IFS=, read -r quoted_id quoted_title; do
+            id=${quoted_id//\"/}; title=${quoted_title%\"}; title=${title#\"}
+            for old_svg in 247logos/"$id"-*.svg; do
+              [[ -f "$old_svg" ]] || continue
+              render_fallback_png "$title" "${old_svg%.svg}.png"
+              rm -f "$old_svg"
+            done
+          done < <(tail -n +2 247logos/fallbacks.csv)
 
           process_channel() {
             local channel_id="$1" original_name="$2" title key prefix page wanted image asset image_url mime extension duplicate
@@ -77,22 +91,22 @@ jobs:
               page=$(request --get "$api" --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode list=search --data-urlencode "srsearch=\"${title}\"" --data-urlencode srnamespace=0 --data-urlencode srlimit=10 | jq -r --arg wanted "$wanted" '[.query.search[] | select((.title | ascii_downcase | gsub("[^a-z0-9]"; "")) == $wanted)][0].title // empty' 2>/dev/null || true)
             fi
             if [[ -z "$page" ]]; then
-              review "$channel_id" "$original_name" 'no exact Logopedia page found'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"; return 0
+              review "$channel_id" "$original_name" 'no exact Logopedia page found'; fallback "$channel_id" "$title" "247logos/${prefix}.png"; return 0
             fi
 
             image=$(request --get "$api" --data-urlencode action=parse --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode "page=$page" --data-urlencode prop=images | jq -r '[.parse.images[] | select(test("logo"; "i") and (test("card|intertitle|screenshot|promo|background"; "i") | not))][0] // .parse.images[0] // empty' 2>/dev/null || true)
             if [[ -z "$image" ]]; then
-              review "$channel_id" "$original_name" 'Logopedia page has no image'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"; return 0
+              review "$channel_id" "$original_name" 'Logopedia page has no image'; fallback "$channel_id" "$title" "247logos/${prefix}.png"; return 0
             fi
 
             asset=$(request --get "$api" --data-urlencode action=query --data-urlencode format=json --data-urlencode formatversion=2 --data-urlencode "titles=File:$image" --data-urlencode prop=imageinfo --data-urlencode 'iiprop=url|mime' | jq -r '.query.pages[0].imageinfo[0] | select(.) | [.url,.mime] | @tsv' 2>/dev/null || true)
             if [[ -z "$asset" ]]; then
-              review "$channel_id" "$original_name" 'Logopedia image URL unavailable'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"; return 0
+              review "$channel_id" "$original_name" 'Logopedia image URL unavailable'; fallback "$channel_id" "$title" "247logos/${prefix}.png"; return 0
             fi
             image_url=${asset%%$'\t'*}; mime=${asset#*$'\t'}
             case "$mime" in image/png) extension=.png;; image/jpeg) extension=.jpg;; image/webp) extension=.webp;; image/gif) extension=.gif;; image/svg+xml) extension=.svg;; *) extension=.png;; esac
             if ! request -o "247logos/${prefix}${extension}" "$image_url"; then
-              rm -f "247logos/${prefix}${extension}"; review "$channel_id" "$original_name" 'Logopedia image download unavailable'; fallback "$channel_id" "$title" "247logos/${prefix}.svg"
+              rm -f "247logos/${prefix}${extension}"; review "$channel_id" "$original_name" 'Logopedia image download unavailable'; fallback "$channel_id" "$title" "247logos/${prefix}.png"
             fi
           }
 
