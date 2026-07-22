@@ -6,10 +6,8 @@ on:
   schedule:
     - cron: "0 */6 * * *"
 
-
 permissions:
   contents: write
-
 
 jobs:
 
@@ -17,12 +15,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
-
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
 
       - name: Verify provider credentials
 
@@ -35,7 +31,6 @@ jobs:
 
           echo "Provider credentials loaded"
 
-
           if [ -z "$XTREAM_URL" ]; then
 
             echo "XTREAM_URL missing"
@@ -43,7 +38,6 @@ jobs:
             exit 1
 
           fi
-
 
           if [ -z "$XTREAM_USERNAME" ]; then
 
@@ -53,7 +47,6 @@ jobs:
 
           fi
 
-
           if [ -z "$XTREAM_PASSWORD" ]; then
 
             echo "XTREAM_PASSWORD missing"
@@ -62,20 +55,17 @@ jobs:
 
           fi
 
-
           echo "XTREAM_URL exists"
 
           echo "XTREAM_USERNAME exists"
 
           echo "XTREAM_PASSWORD exists"
 
-
       - name: Install Python requirements
 
         run: |
 
           python -m pip install requests
-
 
       - name: Generate 24/7 guide
 
@@ -91,6 +81,241 @@ jobs:
 
           python config/generate_247.py
 
+      - name: Add 24/7 channel logos
+
+        run: |
+
+          python3 - <<'PY'
+
+          import os
+          import re
+          import urllib.parse
+          import xml.etree.ElementTree as ET
+
+
+          GUIDE_FILE = "guides/24-7.xml"
+
+          LOGO_FOLDER = "logos/config/247logos"
+
+          RAW_ROOT = (
+              "https://raw.githubusercontent.com/"
+              "festy1986/festy-epg/main/"
+          )
+
+
+          if not os.path.isfile(GUIDE_FILE):
+
+              raise FileNotFoundError(
+                  f"Guide file not found: {GUIDE_FILE}"
+              )
+
+
+          if not os.path.isdir(LOGO_FOLDER):
+
+              raise FileNotFoundError(
+                  f"Logo folder not found: {LOGO_FOLDER}"
+              )
+
+
+          logo_by_channel_id = {}
+
+
+          for filename in sorted(
+              os.listdir(LOGO_FOLDER)
+          ):
+
+              full_path = os.path.join(
+                  LOGO_FOLDER,
+                  filename,
+              )
+
+
+              if not os.path.isfile(full_path):
+
+                  continue
+
+
+              stem, extension = os.path.splitext(
+                  filename
+              )
+
+
+              if extension.lower() not in {
+                  ".png",
+                  ".jpg",
+                  ".jpeg",
+                  ".webp",
+              }:
+
+                  continue
+
+
+              match = re.match(
+                  r"^(\d+)-",
+                  stem,
+              )
+
+
+              if not match:
+
+                  print(
+                      "Skipping logo without channel ID: "
+                      f"{filename}"
+                  )
+
+                  continue
+
+
+              channel_id = match.group(1)
+
+
+              if channel_id in logo_by_channel_id:
+
+                  print(
+                      "Duplicate logo ID found; "
+                      "keeping first file: "
+                      f"{channel_id} | "
+                      f"{logo_by_channel_id[channel_id]} | "
+                      f"{filename}"
+                  )
+
+                  continue
+
+
+              logo_by_channel_id[channel_id] = (
+                  filename
+              )
+
+
+          print(
+              f"Loaded {len(logo_by_channel_id)} "
+              "channel logos"
+          )
+
+
+          tree = ET.parse(GUIDE_FILE)
+
+          root = tree.getroot()
+
+
+          matched = 0
+
+          missing = 0
+
+
+          for channel in root.findall(
+              "channel"
+          ):
+
+              channel_id = str(
+                  channel.get(
+                      "id",
+                      "",
+                  )
+              ).strip()
+
+
+              if not channel_id:
+
+                  continue
+
+
+              filename = logo_by_channel_id.get(
+                  channel_id
+              )
+
+
+              if not filename:
+
+                  missing += 1
+
+                  display_names = [
+                      element.text
+                      for element
+                      in channel.findall(
+                          "display-name"
+                      )
+                      if element.text
+                  ]
+
+                  print(
+                      "No logo found: "
+                      f"{channel_id} | "
+                      f"{display_names}"
+                  )
+
+                  continue
+
+
+              existing_icon = channel.find(
+                  "icon"
+              )
+
+
+              relative_path = (
+                  f"{LOGO_FOLDER}/"
+                  f"{filename}"
+              )
+
+
+              encoded_path = urllib.parse.quote(
+                  relative_path,
+                  safe="/",
+              )
+
+
+              logo_url = (
+                  f"{RAW_ROOT}"
+                  f"{encoded_path}"
+              )
+
+
+              if existing_icon is None:
+
+                  existing_icon = ET.SubElement(
+                      channel,
+                      "icon",
+                  )
+
+
+              existing_icon.set(
+                  "src",
+                  logo_url,
+              )
+
+
+              matched += 1
+
+
+              print(
+                  "Logo matched: "
+                  f"{channel_id} -> "
+                  f"{filename}"
+              )
+
+
+          ET.indent(
+              tree,
+              space="  ",
+          )
+
+
+          tree.write(
+              GUIDE_FILE,
+              encoding="utf-8",
+              xml_declaration=True,
+          )
+
+
+          print(
+              f"Logos matched: {matched}"
+          )
+
+          print(
+              f"Channels without logos: {missing}"
+          )
+
+          PY
 
       - name: Commit and push guide
 
@@ -100,11 +325,10 @@ jobs:
 
           git config --global user.email "github-actions@github.com"
 
-
           git add guides/24-7.xml
-
 
           git commit -m "Update 24/7 guide" || echo "No changes"
 
+          git pull --rebase origin main
 
-          git push
+          git push origin main
