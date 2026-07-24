@@ -1,0 +1,22 @@
+{
+  "live": {
+    "provider_categories": 876,
+    "kept_categories": 224,
+    "excluded_categories": 652
+  },
+  "movies": {
+    "provider_categories": 430,
+    "kept_categories": 63,
+    "excluded_categories": 367
+  },
+  "series": {
+    "provider_categories": 355,
+    "kept_categories": 51,
+    "excluded_categories": 304
+  },
+  "allowlists": {
+    "live_entries": 6,
+    "movie_entries": 31,
+    "series_entries": 32
+  }
+}
