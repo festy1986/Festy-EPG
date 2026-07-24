@@ -1,0 +1,254 @@
+name: TEST Filtered Playlist
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-filtered-playlist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify Xtream credentials
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+        run: |
+          test -n "$XTREAM_URL"
+          test -n "$XTREAM_USERNAME"
+          test -n "$XTREAM_PASSWORD"
+
+          echo "Xtream credentials found"
+
+      - name: Download provider M3U
+        env:
+          XTREAM_URL: ${{ secrets.XTREAM_URL }}
+          XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
+          XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
+        run: |
+          mkdir -p playlists
+          mkdir -p test
+
+          BASE_URL="${XTREAM_URL%/}"
+
+          M3U_URL="${BASE_URL}/get.php?username=${XTREAM_USERNAME}&password=${XTREAM_PASSWORD}&type=m3u_plus&output=ts"
+
+          echo "Downloading provider playlist..."
+
+          curl \
+            --fail \
+            --location \
+            --retry 3 \
+            --retry-delay 5 \
+            --connect-timeout 30 \
+            --max-time 600 \
+            --output test/provider-full.m3u \
+            "$M3U_URL"
+
+          test -s test/provider-full.m3u
+
+          echo "Provider playlist downloaded"
+          echo "Playlist size:"
+          du -h test/provider-full.m3u
+
+      - name: Filter US UK and CA groups
+        run: |
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+
+          input_path = Path("test/provider-full.m3u")
+          output_path = Path("playlists/festy-filtered-test.m3u")
+          report_path = Path("test/filtered-playlist-report.txt")
+
+          allowed_prefixes = ("US", "UK", "CA")
+
+          text = input_path.read_text(
+              encoding="utf-8",
+              errors="replace",
+          )
+
+          lines = text.splitlines()
+
+          output_lines = ["#EXTM3U"]
+          kept_groups = {}
+          removed_groups = {}
+          kept_channels = 0
+          removed_channels = 0
+
+          def extract_group(extinf_line: str) -> str:
+              match = re.search(
+                  r'group-title\s*=\s*"([^"]*)"',
+                  extinf_line,
+                  flags=re.IGNORECASE,
+              )
+
+              if match:
+                  return match.group(1).strip()
+
+              match = re.search(
+                  r"group-title\s*=\s*'([^']*)'",
+                  extinf_line,
+                  flags=re.IGNORECASE,
+              )
+
+              if match:
+                  return match.group(1).strip()
+
+              return ""
+
+          def normalized_group(group_name: str) -> str:
+              value = group_name.strip().upper()
+
+              # Remove common flag emojis and punctuation before the
+              # actual country/group prefix.
+              value = re.sub(r"^[^A-Z0-9]+", "", value)
+
+              return value
+
+          index = 0
+
+          while index < len(lines):
+              line = lines[index].strip()
+
+              if not line.startswith("#EXTINF"):
+                  index += 1
+                  continue
+
+              extinf_line = lines[index]
+              stream_lines = []
+
+              index += 1
+
+              # Preserve any optional M3U directives between #EXTINF and
+              # the actual stream URL.
+              while index < len(lines):
+                  following_line = lines[index].strip()
+
+                  if following_line.startswith("#EXTINF"):
+                      break
+
+                  if following_line:
+                      stream_lines.append(lines[index])
+
+                  index += 1
+
+                  if following_line and not following_line.startswith("#"):
+                      break
+
+              group_name = extract_group(extinf_line)
+              group_key = normalized_group(group_name)
+
+              keep = any(
+                  group_key.startswith(prefix)
+                  for prefix in allowed_prefixes
+              )
+
+              display_group = group_name or "(NO GROUP)"
+
+              if keep:
+                  output_lines.append(extinf_line)
+                  output_lines.extend(stream_lines)
+
+                  kept_channels += 1
+                  kept_groups[display_group] = (
+                      kept_groups.get(display_group, 0) + 1
+                  )
+              else:
+                  removed_channels += 1
+                  removed_groups[display_group] = (
+                      removed_groups.get(display_group, 0) + 1
+                  )
+
+          output_path.parent.mkdir(parents=True, exist_ok=True)
+
+          output_path.write_text(
+              "\n".join(output_lines) + "\n",
+              encoding="utf-8",
+          )
+
+          report_lines = [
+              "FILTERED PLAYLIST TEST REPORT",
+              "=============================",
+              "",
+              f"Allowed prefixes: {', '.join(allowed_prefixes)}",
+              f"Channels kept: {kept_channels:,}",
+              f"Channels removed: {removed_channels:,}",
+              f"Groups kept: {len(kept_groups):,}",
+              f"Groups removed: {len(removed_groups):,}",
+              "",
+              "KEPT GROUPS",
+              "-----------",
+          ]
+
+          for group_name, count in sorted(
+              kept_groups.items(),
+              key=lambda item: item[0].upper(),
+          ):
+              report_lines.append(
+                  f"{group_name} | {count:,} channels"
+              )
+
+          report_lines.extend([
+              "",
+              "REMOVED GROUPS",
+              "--------------",
+          ])
+
+          for group_name, count in sorted(
+              removed_groups.items(),
+              key=lambda item: item[0].upper(),
+          ):
+              report_lines.append(
+                  f"{group_name} | {count:,} channels"
+              )
+
+          report_path.write_text(
+              "\n".join(report_lines) + "\n",
+              encoding="utf-8",
+          )
+
+          if kept_channels == 0:
+              raise SystemExit(
+                  "No channels matched US, UK, or CA group prefixes."
+              )
+
+          print(f"Kept {kept_channels:,} channels")
+          print(f"Removed {removed_channels:,} channels")
+          print(f"Created {output_path}")
+          print(f"Created {report_path}")
+          PY
+
+      - name: Display filter report
+        run: |
+          cat test/filtered-playlist-report.txt
+
+          echo
+          echo "Filtered playlist size:"
+          du -h playlists/festy-filtered-test.m3u
+
+      - name: Commit filtered playlist
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add playlists/festy-filtered-test.m3u
+          git add test/filtered-playlist-report.txt
+
+          if git diff --cached --quiet; then
+            echo "No playlist changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update filtered M3U test playlist"
+
+          git pull --rebase origin main
+          git push origin HEAD:main
