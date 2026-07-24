@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gzip
 import json
 import os
 import re
@@ -29,20 +30,26 @@ CONFIG_DIRECTORY = REPOSITORY_ROOT / "config/provider"
 OUTPUT_DIRECTORY = REPOSITORY_ROOT / "filtered-provider"
 CATEGORY_DIRECTORY = OUTPUT_DIRECTORY / "categories"
 REPORT_DIRECTORY = OUTPUT_DIRECTORY / "reports"
+STREAM_DIRECTORY = OUTPUT_DIRECTORY / "streams"
 
 LIVE_ALLOWLIST_FILE = CONFIG_DIRECTORY / "live_allowlist.txt"
 MOVIE_ALLOWLIST_FILE = CONFIG_DIRECTORY / "movie_allowlist.txt"
 SERIES_ALLOWLIST_FILE = CONFIG_DIRECTORY / "series_allowlist.txt"
 
-RAW_LIVE_FILE = CATEGORY_DIRECTORY / "live-categories.raw.json"
-RAW_VOD_FILE = CATEGORY_DIRECTORY / "vod-categories.raw.json"
-RAW_SERIES_FILE = CATEGORY_DIRECTORY / "series-categories.raw.json"
+RAW_LIVE_CATEGORY_FILE = CATEGORY_DIRECTORY / "live-categories.raw.json"
+RAW_VOD_CATEGORY_FILE = CATEGORY_DIRECTORY / "vod-categories.raw.json"
+RAW_SERIES_CATEGORY_FILE = CATEGORY_DIRECTORY / "series-categories.raw.json"
 
-FILTERED_LIVE_FILE = CATEGORY_DIRECTORY / "live-categories.json"
-FILTERED_VOD_FILE = CATEGORY_DIRECTORY / "vod-categories.json"
-FILTERED_SERIES_FILE = CATEGORY_DIRECTORY / "series-categories.json"
+FILTERED_LIVE_CATEGORY_FILE = CATEGORY_DIRECTORY / "live-categories.json"
+FILTERED_VOD_CATEGORY_FILE = CATEGORY_DIRECTORY / "vod-categories.json"
+FILTERED_SERIES_CATEGORY_FILE = CATEGORY_DIRECTORY / "series-categories.json"
 
-SUMMARY_FILE = CATEGORY_DIRECTORY / "category-summary.json"
+CATEGORY_SUMMARY_FILE = CATEGORY_DIRECTORY / "category-summary.json"
+STREAM_SUMMARY_FILE = OUTPUT_DIRECTORY / "stream-summary.json"
+
+FILTERED_LIVE_STREAM_FILE = STREAM_DIRECTORY / "live-streams.json.gz"
+FILTERED_VOD_STREAM_FILE = STREAM_DIRECTORY / "vod-streams.json.gz"
+FILTERED_SERIES_FILE = STREAM_DIRECTORY / "series.json.gz"
 
 KEPT_LIVE_REPORT = REPORT_DIRECTORY / "kept-live.txt"
 KEPT_MOVIE_REPORT = REPORT_DIRECTORY / "kept-movies.txt"
@@ -180,19 +187,19 @@ FOREIGN_SHORT_TOKENS = (
 )
 
 FOREIGN_SCRIPT_RANGES = (
-    ("\u0370", "\u03ff"),  # Greek
-    ("\u0400", "\u052f"),  # Cyrillic
-    ("\u0590", "\u05ff"),  # Hebrew
-    ("\u0600", "\u06ff"),  # Arabic
-    ("\u0750", "\u077f"),  # Arabic Supplement
-    ("\u08a0", "\u08ff"),  # Arabic Extended
-    ("\u0900", "\u097f"),  # Devanagari
-    ("\u0980", "\u09ff"),  # Bengali
-    ("\u0e00", "\u0e7f"),  # Thai
-    ("\u3040", "\u30ff"),  # Japanese
-    ("\u3400", "\u4dbf"),  # CJK Extension A
-    ("\u4e00", "\u9fff"),  # CJK Unified
-    ("\uac00", "\ud7af"),  # Korean Hangul
+    ("\u0370", "\u03ff"),
+    ("\u0400", "\u052f"),
+    ("\u0590", "\u05ff"),
+    ("\u0600", "\u06ff"),
+    ("\u0750", "\u077f"),
+    ("\u08a0", "\u08ff"),
+    ("\u0900", "\u097f"),
+    ("\u0980", "\u09ff"),
+    ("\u0e00", "\u0e7f"),
+    ("\u3040", "\u30ff"),
+    ("\u3400", "\u4dbf"),
+    ("\u4e00", "\u9fff"),
+    ("\uac00", "\ud7af"),
 )
 
 
@@ -264,9 +271,9 @@ def normalize_text(value: str) -> str:
     cleaned_characters: list[str] = []
 
     for character in value:
-        category = unicodedata.category(character)
+        character_category = unicodedata.category(character)
 
-        if category.startswith("M"):
+        if character_category.startswith("M"):
             continue
 
         if character.isascii():
@@ -312,9 +319,7 @@ def is_foreign_category(value: str) -> bool:
     tokens = normalized_tokens(value)
 
     for term in FOREIGN_TERMS:
-        normalized_term = normalize_text(term)
-
-        if normalized_term in normalized:
+        if normalize_text(term) in normalized:
             return True
 
     for token in FOREIGN_SHORT_TOKENS:
@@ -338,10 +343,7 @@ def load_allowlist(path: Path) -> list[str]:
     ).splitlines():
         line = raw_line.strip()
 
-        if not line:
-            continue
-
-        if line.startswith("#"):
+        if not line or line.startswith("#"):
             continue
 
         normalized = normalize_text(line)
@@ -413,12 +415,13 @@ def create_session() -> requests.Session:
     return session
 
 
-def request_xtream_action(
+def request_xtream_list(
     session: requests.Session,
     base_url: str,
     username: str,
     password: str,
     action: str,
+    timeout_seconds: int = 900,
 ) -> list[dict[str, Any]]:
     endpoint = f"{base_url}/player_api.php"
 
@@ -431,7 +434,7 @@ def request_xtream_action(
             "password": password,
             "action": action,
         },
-        timeout=(30, 300),
+        timeout=(30, timeout_seconds),
     )
 
     print(
@@ -461,32 +464,69 @@ def request_xtream_action(
     if not isinstance(result, list):
         raise RuntimeError(
             f"{action} returned {type(result).__name__} "
-            "instead of a category list."
+            "instead of a list."
         )
 
-    cleaned_result: list[dict[str, Any]] = []
-
-    for item in result:
-        if not isinstance(item, dict):
-            continue
-
-        if not category_id(item):
-            continue
-
-        if not category_name(item):
-            continue
-
-        cleaned_result.append(item)
+    cleaned_result = [
+        item
+        for item in result
+        if isinstance(item, dict)
+    ]
 
     print(
-        f"  Valid categories: {len(cleaned_result):,}"
+        f"  Valid items: {len(cleaned_result):,}"
     )
 
     return cleaned_result
 
 
 # ---------------------------------------------------------------------------
-# Output helpers
+# Filtering
+# ---------------------------------------------------------------------------
+
+def split_categories(
+    categories: list[dict[str, Any]],
+    predicate: Callable[[str], bool],
+) -> tuple[
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+]:
+    kept: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+
+    for category in categories:
+        if predicate(category_name(category)):
+            kept.append(category)
+        else:
+            excluded.append(category)
+
+    return kept, excluded
+
+
+def category_id_set(
+    categories: list[dict[str, Any]],
+) -> set[str]:
+    return {
+        category_id(category)
+        for category in categories
+        if category_id(category)
+    }
+
+
+def filter_streams_by_category(
+    items: list[dict[str, Any]],
+    allowed_category_ids: set[str],
+) -> list[dict[str, Any]]:
+    return [
+        item
+        for item in items
+        if str(item.get("category_id", "")).strip()
+        in allowed_category_ids
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Output
 # ---------------------------------------------------------------------------
 
 def write_json(path: Path, value: Any) -> None:
@@ -509,6 +549,34 @@ def write_json(path: Path, value: Any) -> None:
             output_file,
             ensure_ascii=False,
             indent=2,
+        )
+        output_file.write("\n")
+
+    temporary_path.replace(path)
+
+
+def write_json_gzip(path: Path, value: Any) -> None:
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    temporary_path = path.with_suffix(
+        path.suffix + ".tmp"
+    )
+
+    with gzip.open(
+        temporary_path,
+        "wt",
+        encoding="utf-8",
+        newline="\n",
+        compresslevel=9,
+    ) as output_file:
+        json.dump(
+            value,
+            output_file,
+            ensure_ascii=False,
+            separators=(",", ":"),
         )
         output_file.write("\n")
 
@@ -549,49 +617,18 @@ def write_category_report(
     )
 
 
-def split_categories(
-    categories: list[dict[str, Any]],
-    predicate: Callable[[str], bool],
-) -> tuple[
-    list[dict[str, Any]],
-    list[dict[str, Any]],
-]:
-    kept: list[dict[str, Any]] = []
-    excluded: list[dict[str, Any]] = []
+def file_size(path: Path) -> int:
+    if not path.exists():
+        return 0
 
-    for category in categories:
-        if predicate(category_name(category)):
-            kept.append(category)
-        else:
-            excluded.append(category)
-
-    return kept, excluded
-
-
-def print_results(
-    label: str,
-    raw_categories: list[dict[str, Any]],
-    kept_categories: list[dict[str, Any]],
-    excluded_categories: list[dict[str, Any]],
-) -> None:
-    print()
-    print(f"{label} results:")
-    print(
-        f"  Provider categories: {len(raw_categories):,}"
-    )
-    print(
-        f"  Kept categories:     {len(kept_categories):,}"
-    )
-    print(
-        f"  Excluded categories: {len(excluded_categories):,}"
-    )
+    return path.stat().st_size
 
 
 # ---------------------------------------------------------------------------
 # Main build
 # ---------------------------------------------------------------------------
 
-def build_filtered_categories() -> None:
+def build_filtered_provider() -> None:
     xtream_url = required_environment_variable(
         "XTREAM_URL"
     )
@@ -632,7 +669,7 @@ def build_filtered_categories() -> None:
 
     session = create_session()
 
-    live_categories = request_xtream_action(
+    live_categories = request_xtream_list(
         session,
         base_url,
         username,
@@ -640,7 +677,7 @@ def build_filtered_categories() -> None:
         "get_live_categories",
     )
 
-    vod_categories = request_xtream_action(
+    vod_categories = request_xtream_list(
         session,
         base_url,
         username,
@@ -648,7 +685,7 @@ def build_filtered_categories() -> None:
         "get_vod_categories",
     )
 
-    series_categories = request_xtream_action(
+    series_categories = request_xtream_list(
         session,
         base_url,
         username,
@@ -656,7 +693,7 @@ def build_filtered_categories() -> None:
         "get_series_categories",
     )
 
-    kept_live, excluded_live = split_categories(
+    kept_live_categories, excluded_live_categories = split_categories(
         live_categories,
         lambda name: matches_live_allowlist(
             name,
@@ -664,7 +701,7 @@ def build_filtered_categories() -> None:
         ),
     )
 
-    kept_vod, excluded_vod = split_categories(
+    kept_vod_categories, excluded_vod_categories = split_categories(
         vod_categories,
         lambda name: matches_content_allowlist(
             name,
@@ -672,7 +709,7 @@ def build_filtered_categories() -> None:
         ),
     )
 
-    kept_series, excluded_series = split_categories(
+    kept_series_categories, excluded_series_categories = split_categories(
         series_categories,
         lambda name: matches_content_allowlist(
             name,
@@ -680,73 +717,138 @@ def build_filtered_categories() -> None:
         ),
     )
 
+    live_category_ids = category_id_set(
+        kept_live_categories
+    )
+    vod_category_ids = category_id_set(
+        kept_vod_categories
+    )
+    series_category_ids = category_id_set(
+        kept_series_categories
+    )
+
+    print()
+    print("Downloading provider content lists...")
+
+    all_live_streams = request_xtream_list(
+        session,
+        base_url,
+        username,
+        password,
+        "get_live_streams",
+    )
+
+    all_vod_streams = request_xtream_list(
+        session,
+        base_url,
+        username,
+        password,
+        "get_vod_streams",
+    )
+
+    all_series = request_xtream_list(
+        session,
+        base_url,
+        username,
+        password,
+        "get_series",
+    )
+
+    filtered_live_streams = filter_streams_by_category(
+        all_live_streams,
+        live_category_ids,
+    )
+
+    filtered_vod_streams = filter_streams_by_category(
+        all_vod_streams,
+        vod_category_ids,
+    )
+
+    filtered_series = filter_streams_by_category(
+        all_series,
+        series_category_ids,
+    )
+
     write_json(
-        RAW_LIVE_FILE,
+        RAW_LIVE_CATEGORY_FILE,
         live_categories,
     )
     write_json(
-        RAW_VOD_FILE,
+        RAW_VOD_CATEGORY_FILE,
         vod_categories,
     )
     write_json(
-        RAW_SERIES_FILE,
+        RAW_SERIES_CATEGORY_FILE,
         series_categories,
     )
 
     write_json(
-        FILTERED_LIVE_FILE,
-        kept_live,
+        FILTERED_LIVE_CATEGORY_FILE,
+        kept_live_categories,
     )
     write_json(
-        FILTERED_VOD_FILE,
-        kept_vod,
+        FILTERED_VOD_CATEGORY_FILE,
+        kept_vod_categories,
     )
     write_json(
-        FILTERED_SERIES_FILE,
-        kept_series,
+        FILTERED_SERIES_CATEGORY_FILE,
+        kept_series_categories,
     )
 
     write_category_report(
         KEPT_LIVE_REPORT,
-        kept_live,
+        kept_live_categories,
     )
     write_category_report(
         KEPT_MOVIE_REPORT,
-        kept_vod,
+        kept_vod_categories,
     )
     write_category_report(
         KEPT_SERIES_REPORT,
-        kept_series,
+        kept_series_categories,
     )
 
     write_category_report(
         EXCLUDED_LIVE_REPORT,
-        excluded_live,
+        excluded_live_categories,
     )
     write_category_report(
         EXCLUDED_MOVIE_REPORT,
-        excluded_vod,
+        excluded_vod_categories,
     )
     write_category_report(
         EXCLUDED_SERIES_REPORT,
-        excluded_series,
+        excluded_series_categories,
     )
 
-    summary = {
+    write_json_gzip(
+        FILTERED_LIVE_STREAM_FILE,
+        filtered_live_streams,
+    )
+    write_json_gzip(
+        FILTERED_VOD_STREAM_FILE,
+        filtered_vod_streams,
+    )
+    write_json_gzip(
+        FILTERED_SERIES_FILE,
+        filtered_series,
+    )
+
+    category_summary = {
         "live": {
             "provider_categories": len(live_categories),
-            "kept_categories": len(kept_live),
-            "excluded_categories": len(excluded_live),
+            "kept_categories": len(kept_live_categories),
+            "excluded_categories": len(excluded_live_categories),
         },
         "movies": {
             "provider_categories": len(vod_categories),
-            "kept_categories": len(kept_vod),
-            "excluded_categories": len(excluded_vod),
+            "kept_categories": len(kept_vod_categories),
+            "excluded_categories": len(excluded_vod_categories),
         },
         "series": {
             "provider_categories": len(series_categories),
-            "kept_categories": len(kept_series),
-            "excluded_categories": len(excluded_series),
+            "kept_categories": len(kept_series_categories),
+            "excluded_categories": len(excluded_series_categories),
         },
         "allowlists": {
             "live_entries": len(live_allowlist),
@@ -755,43 +857,125 @@ def build_filtered_categories() -> None:
         },
     }
 
+    stream_summary = {
+        "live": {
+            "provider_items": len(all_live_streams),
+            "kept_items": len(filtered_live_streams),
+            "excluded_items": (
+                len(all_live_streams)
+                - len(filtered_live_streams)
+            ),
+            "output_file": str(
+                FILTERED_LIVE_STREAM_FILE.relative_to(
+                    REPOSITORY_ROOT
+                )
+            ),
+            "compressed_bytes": file_size(
+                FILTERED_LIVE_STREAM_FILE
+            ),
+        },
+        "movies": {
+            "provider_items": len(all_vod_streams),
+            "kept_items": len(filtered_vod_streams),
+            "excluded_items": (
+                len(all_vod_streams)
+                - len(filtered_vod_streams)
+            ),
+            "output_file": str(
+                FILTERED_VOD_STREAM_FILE.relative_to(
+                    REPOSITORY_ROOT
+                )
+            ),
+            "compressed_bytes": file_size(
+                FILTERED_VOD_STREAM_FILE
+            ),
+        },
+        "series": {
+            "provider_items": len(all_series),
+            "kept_items": len(filtered_series),
+            "excluded_items": (
+                len(all_series)
+                - len(filtered_series)
+            ),
+            "output_file": str(
+                FILTERED_SERIES_FILE.relative_to(
+                    REPOSITORY_ROOT
+                )
+            ),
+            "compressed_bytes": file_size(
+                FILTERED_SERIES_FILE
+            ),
+        },
+        "security": {
+            "provider_credentials_written_to_output": False,
+            "direct_stream_urls_written_to_output": False,
+        },
+    }
+
     write_json(
-        SUMMARY_FILE,
-        summary,
+        CATEGORY_SUMMARY_FILE,
+        category_summary,
+    )
+    write_json(
+        STREAM_SUMMARY_FILE,
+        stream_summary,
     )
 
-    print_results(
-        "Live",
-        live_categories,
-        kept_live,
-        excluded_live,
+    print()
+    print("Category results:")
+    print(
+        f"  Live:   {len(kept_live_categories):,} kept "
+        f"of {len(live_categories):,}"
     )
-    print_results(
-        "Movies",
-        vod_categories,
-        kept_vod,
-        excluded_vod,
+    print(
+        f"  Movies: {len(kept_vod_categories):,} kept "
+        f"of {len(vod_categories):,}"
     )
-    print_results(
-        "Series",
-        series_categories,
-        kept_series,
-        excluded_series,
+    print(
+        f"  Series: {len(kept_series_categories):,} kept "
+        f"of {len(series_categories):,}"
+    )
+
+    print()
+    print("Stream results:")
+    print(
+        f"  Live:   {len(filtered_live_streams):,} kept "
+        f"of {len(all_live_streams):,}"
+    )
+    print(
+        f"  Movies: {len(filtered_vod_streams):,} kept "
+        f"of {len(all_vod_streams):,}"
+    )
+    print(
+        f"  Series: {len(filtered_series):,} kept "
+        f"of {len(all_series):,}"
+    )
+
+    print()
+    print("Compressed output sizes:")
+    print(
+        f"  Live:   {file_size(FILTERED_LIVE_STREAM_FILE):,} bytes"
+    )
+    print(
+        f"  Movies: {file_size(FILTERED_VOD_STREAM_FILE):,} bytes"
+    )
+    print(
+        f"  Series: {file_size(FILTERED_SERIES_FILE):,} bytes"
     )
 
     print()
     print(
-        "Filtered category files and reports created successfully."
+        "Filtered provider stream data created successfully."
     )
     print(
-        f"Output directory: "
-        f"{OUTPUT_DIRECTORY.relative_to(REPOSITORY_ROOT)}"
+        "Provider credentials and direct stream URLs were not "
+        "written to the repository."
     )
 
 
 def main() -> int:
     try:
-        build_filtered_categories()
+        build_filtered_provider()
         return 0
 
     except requests.HTTPError as error:
@@ -816,7 +1000,7 @@ def main() -> int:
 
     except Exception as error:
         print(
-            f"Filtered category build failed: {error}",
+            f"Filtered provider build failed: {error}",
             file=sys.stderr,
         )
         return 1
