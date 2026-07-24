@@ -44,7 +44,7 @@ FILTERED_LIVE_CATEGORY_FILE = CATEGORY_DIRECTORY / "live-categories.json"
 FILTERED_VOD_CATEGORY_FILE = CATEGORY_DIRECTORY / "vod-categories.json"
 FILTERED_SERIES_CATEGORY_FILE = CATEGORY_DIRECTORY / "series-categories.json"
 
-CATEGORY_SUMMARY_FILE = CATEGORY_DIRECTORY / "category-summary.json"
+CATEGORY_SUMMARY_FILE = OUTPUT_DIRECTORY / "category-summary.json"
 STREAM_SUMMARY_FILE = OUTPUT_DIRECTORY / "stream-summary.json"
 
 FILTERED_LIVE_STREAM_FILE = STREAM_DIRECTORY / "live-streams.json.gz"
@@ -629,6 +629,16 @@ def file_size(path: Path) -> int:
 # ---------------------------------------------------------------------------
 
 def build_filtered_provider() -> None:
+    # Create every output directory before downloading anything.
+    # This also makes the expected repository layout explicit in GitHub Actions.
+    for directory in (
+        OUTPUT_DIRECTORY,
+        CATEGORY_DIRECTORY,
+        REPORT_DIRECTORY,
+        STREAM_DIRECTORY,
+    ):
+        directory.mkdir(parents=True, exist_ok=True)
+
     xtream_url = required_environment_variable(
         "XTREAM_URL"
     )
@@ -962,6 +972,37 @@ def build_filtered_provider() -> None:
     print(
         f"  Series: {file_size(FILTERED_SERIES_FILE):,} bytes"
     )
+
+    expected_output_files = (
+        FILTERED_LIVE_CATEGORY_FILE,
+        FILTERED_VOD_CATEGORY_FILE,
+        FILTERED_SERIES_CATEGORY_FILE,
+        FILTERED_LIVE_STREAM_FILE,
+        FILTERED_VOD_STREAM_FILE,
+        FILTERED_SERIES_FILE,
+        CATEGORY_SUMMARY_FILE,
+        STREAM_SUMMARY_FILE,
+    )
+
+    missing_output_files = [
+        str(path.relative_to(REPOSITORY_ROOT))
+        for path in expected_output_files
+        if not path.is_file()
+    ]
+
+    if missing_output_files:
+        raise RuntimeError(
+            "Build completed but required output files are missing: "
+            + ", ".join(missing_output_files)
+        )
+
+    print()
+    print("Verified output files:")
+    for path in expected_output_files:
+        print(
+            f"  {path.relative_to(REPOSITORY_ROOT)} "
+            f"({file_size(path):,} bytes)"
+        )
 
     print()
     print(
