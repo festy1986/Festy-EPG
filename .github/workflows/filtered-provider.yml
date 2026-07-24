@@ -14,13 +14,10 @@ concurrency:
 
 jobs:
   build-filtered-provider:
-
     name: Build Filtered Provider
-
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -42,25 +39,22 @@ jobs:
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-
           test -n "$XTREAM_URL"
           test -n "$XTREAM_USERNAME"
           test -n "$XTREAM_PASSWORD"
 
           echo "Xtream credentials verified."
 
-      - name: Build filtered categories
+      - name: Build filtered provider categories
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-
           python config/provider/build_filtered_provider.py
 
-      - name: Commit updated category files
+      - name: Commit updated provider files
         run: |
-
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
@@ -75,10 +69,8 @@ jobs:
 
       - name: Push changes
         run: |
-
           for attempt in 1 2 3
           do
-
             echo "Push attempt $attempt"
 
             git pull --rebase origin main
@@ -90,15 +82,14 @@ jobs:
             fi
 
             sleep 5
-
           done
 
           echo "Push failed."
           exit 1
 
-      - name: Upload category artifacts
+      - name: Upload filtered provider artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: filtered-provider-categories
+          name: filtered-provider
           path: |
-            filtered-provider/categories/
+            filtered-provider/
