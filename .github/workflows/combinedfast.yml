@@ -324,6 +324,23 @@ jobs:
               .trim()
           }
 
+          function cleanProgrammeTitle(
+            value
+          ) {
+            return cleanSpaces(
+              value
+            )
+              .replace(
+                /\s+\(\d{4}\)\s*$/,
+                ''
+              )
+              .replace(
+                /\s*[.\-–—:]?\s*S(?:eason)?\s*\d{1,3}\s*E(?:pisode)?\s*\d{1,3}\s*$/i,
+                ''
+              )
+              .trim()
+          }
+
           function removeEmbeddedCredits(
             value
           ) {
@@ -1070,15 +1087,11 @@ jobs:
               replaceTag(
                 output,
                 'title',
-                cleanSpaces(
+                cleanProgrammeTitle(
                   getTag(
                     block,
                     'title'
                   )
-                    .replace(
-                      /\s+\(\d{4}\)\s*$/,
-                      ''
-                    )
                 )
               )
 
@@ -1124,15 +1137,11 @@ jobs:
                 output,
 
               title:
-                cleanSpaces(
+                cleanProgrammeTitle(
                   getTag(
                     block,
                     'title'
                   )
-                    .replace(
-                      /\s+\(\d{4}\)\s*$/,
-                      ''
-                    )
                 ),
 
               episodeTitle,
