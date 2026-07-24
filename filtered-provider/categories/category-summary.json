@@ -1,0 +1,17 @@
+{
+  "live": {
+    "provider_categories": 876,
+    "kept_categories": 224,
+    "excluded_categories": 652
+  },
+  "vod": {
+    "provider_categories": 430,
+    "kept_categories": 84,
+    "excluded_categories": 346
+  },
+  "series": {
+    "provider_categories": 355,
+    "kept_categories": 70,
+    "excluded_categories": 285
+  }
+}
