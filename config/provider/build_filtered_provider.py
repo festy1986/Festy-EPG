@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
+import unicodedata
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import urlsplit, urlunsplit
 
 import requests
@@ -23,8 +25,14 @@ REPOSITORY_ROOT = Path(
     )
 ).resolve()
 
+CONFIG_DIRECTORY = REPOSITORY_ROOT / "config/provider"
 OUTPUT_DIRECTORY = REPOSITORY_ROOT / "filtered-provider"
 CATEGORY_DIRECTORY = OUTPUT_DIRECTORY / "categories"
+REPORT_DIRECTORY = OUTPUT_DIRECTORY / "reports"
+
+LIVE_ALLOWLIST_FILE = CONFIG_DIRECTORY / "live_allowlist.txt"
+MOVIE_ALLOWLIST_FILE = CONFIG_DIRECTORY / "movie_allowlist.txt"
+SERIES_ALLOWLIST_FILE = CONFIG_DIRECTORY / "series_allowlist.txt"
 
 RAW_LIVE_FILE = CATEGORY_DIRECTORY / "live-categories.raw.json"
 RAW_VOD_FILE = CATEGORY_DIRECTORY / "vod-categories.raw.json"
@@ -36,159 +44,160 @@ FILTERED_SERIES_FILE = CATEGORY_DIRECTORY / "series-categories.json"
 
 SUMMARY_FILE = CATEGORY_DIRECTORY / "category-summary.json"
 
+KEPT_LIVE_REPORT = REPORT_DIRECTORY / "kept-live.txt"
+KEPT_MOVIE_REPORT = REPORT_DIRECTORY / "kept-movies.txt"
+KEPT_SERIES_REPORT = REPORT_DIRECTORY / "kept-series.txt"
+
+EXCLUDED_LIVE_REPORT = REPORT_DIRECTORY / "excluded-live.txt"
+EXCLUDED_MOVIE_REPORT = REPORT_DIRECTORY / "excluded-movies.txt"
+EXCLUDED_SERIES_REPORT = REPORT_DIRECTORY / "excluded-series.txt"
+
 
 # ---------------------------------------------------------------------------
-# Filtering rules
+# Foreign-language and foreign-region detection
 # ---------------------------------------------------------------------------
 
-# Live categories are retained when their original provider name begins
-# with one of these prefixes.
-LIVE_KEEP_PREFIXES = (
-    "US|",
-    "CA|",
-    "UK|",
-    "AU|",
-    "NZ|",
-    "IE|",
-)
-
-
-# Movie categories are retained when:
-# 1. Their name begins with EN -
-# 2. Their name does not identify a foreign country or language.
-VOD_ENGLISH_PREFIXES = (
-    "EN -",
-)
-
-
-# Series categories are retained when:
-# 1. Their name begins with ENGLISH
-# 2. Their name does not identify a foreign country or language.
-SERIES_ENGLISH_PREFIXES = (
-    "ENGLISH",
-)
-
-
-# These prefixes identify categories that should be excluded from Movies
-# and Series unless they match the explicit English rules above.
-FOREIGN_PREFIXES = (
-    "AF -",
+FOREIGN_TERMS = (
     "AFRICA",
-    "AL -",
     "ALBANIA",
-    "AR -",
+    "ALBANIAN",
+    "ARAB",
+    "ARABIA",
     "ARABIC",
-    "BE -",
+    "ASIA",
+    "BANGLA",
     "BELGIUM",
-    "BG -",
-    "BN -",
-    "BR -",
+    "BOSNIA",
+    "BRAZIL",
     "BULGARIA",
-    "BULGARIYA",
+    "BULGARIAN",
     "CHINA",
-    "CN -",
-    "DANSK",
-    "DANSKE",
+    "CHINESE",
+    "CROATIA",
+    "CROATIAN",
+    "CZECH",
+    "DANISH",
     "DENMARK",
-    "DE -",
     "DUTCH",
-    "ES -",
-    "ESPAÑA",
-    "EX -",
-    "FI -",
+    "ESPANOL",
     "FINLAND",
-    "FR -",
+    "FINNISH",
     "FRANCE",
     "FRENCH",
-    "GERMANY",
     "GERMAN",
-    "GR -",
+    "GERMANY",
     "GREECE",
     "GREEK",
     "HEBREW",
     "HINDI",
-    "HU -",
     "HUNGARY",
-    "IL -",
-    "IN -",
+    "HUNGARIAN",
+    "ICELAND",
+    "ICELANDIC",
     "INDIA",
     "INDIAN",
-    "IR -",
-    "ITALY",
+    "INDONESIA",
+    "INDONESIAN",
+    "IRAN",
+    "IRANIAN",
+    "ISRAEL",
     "ITALIAN",
-    "IT -",
+    "ITALY",
     "JAPAN",
     "JAPANESE",
-    "JP -",
     "KOREA",
     "KOREAN",
-    "KU -",
     "KURDISH",
-    "LA -",
+    "LATIN",
     "LATINO",
-    "MALTA",
-    "MT -",
+    "MALAY",
+    "MALAYSIA",
+    "MENA",
+    "MEXICO",
     "NETHERLANDS",
-    "NL -",
     "NORDIC",
-    "NORGE",
-    "NORSK",
+    "NORWAY",
+    "NORWEGIAN",
     "PAKISTAN",
     "PERSIAN",
-    "PH -",
     "PHILIPPINES",
-    "PK -",
-    "PL -",
+    "POLAND",
     "POLISH",
     "POLSKA",
     "PORTUGAL",
     "PORTUGUESE",
-    "PT -",
-    "PT/BR",
-    "QC -",
-    "QUÉBEC",
-    "RO -",
+    "QUEBEC",
     "ROMANIA",
     "ROMANIAN",
-    "RU -",
+    "RUSSIA",
     "RUSSIAN",
-    "RUSSAIN",
-    "SO -",
+    "SERBIA",
+    "SERBIAN",
     "SOMALIA",
+    "SOMALI",
+    "SOUTH AFRICA",
     "SPANISH",
-    "SUOMEN",
-    "SUOMI",
-    "SVENSK",
-    "SVENSKA",
     "SWEDEN",
     "SWEDISH",
-    "TR -",
+    "THAI",
+    "THAILAND",
     "TURKEY",
     "TURKISH",
-    "TURKSIH",
-    "VIAPLAY ÍSLANDS",
-    "ÍSLANDS",
+    "UKRAINE",
+    "UKRAINIAN",
+    "VIETNAM",
+    "VIETNAMESE",
 )
 
+FOREIGN_SHORT_TOKENS = (
+    "AR",
+    "BG",
+    "BR",
+    "CN",
+    "CZ",
+    "DE",
+    "DK",
+    "ES",
+    "FI",
+    "FR",
+    "GR",
+    "HU",
+    "IL",
+    "IN",
+    "IR",
+    "IT",
+    "JP",
+    "KR",
+    "NL",
+    "NO",
+    "PK",
+    "PL",
+    "PT",
+    "RO",
+    "RU",
+    "SE",
+    "TR",
+)
 
-# Detect names beginning with characters commonly used by foreign-language
-# category names.
 FOREIGN_SCRIPT_RANGES = (
     ("\u0370", "\u03ff"),  # Greek
-    ("\u0400", "\u04ff"),  # Cyrillic
+    ("\u0400", "\u052f"),  # Cyrillic
     ("\u0590", "\u05ff"),  # Hebrew
     ("\u0600", "\u06ff"),  # Arabic
     ("\u0750", "\u077f"),  # Arabic Supplement
     ("\u08a0", "\u08ff"),  # Arabic Extended
+    ("\u0900", "\u097f"),  # Devanagari
+    ("\u0980", "\u09ff"),  # Bengali
+    ("\u0e00", "\u0e7f"),  # Thai
     ("\u3040", "\u30ff"),  # Japanese
     ("\u3400", "\u4dbf"),  # CJK Extension A
-    ("\u4e00", "\u9fff"),  # Chinese
+    ("\u4e00", "\u9fff"),  # CJK Unified
     ("\uac00", "\ud7af"),  # Korean Hangul
 )
 
 
 # ---------------------------------------------------------------------------
-# General helpers
+# Basic helpers
 # ---------------------------------------------------------------------------
 
 def required_environment_variable(name: str) -> str:
@@ -217,16 +226,12 @@ def normalize_provider_base_url(value: str) -> str:
 
     path = parsed.path.rstrip("/")
 
-    known_endpoints = (
+    for endpoint in (
         "/player_api.php",
         "/get.php",
         "/xmltv.php",
-    )
-
-    lowered_path = path.casefold()
-
-    for endpoint in known_endpoints:
-        if lowered_path.endswith(endpoint):
+    ):
+        if path.casefold().endswith(endpoint):
             path = path[: -len(endpoint)]
             break
 
@@ -238,38 +243,6 @@ def normalize_provider_base_url(value: str) -> str:
             "",
             "",
         )
-    )
-
-
-def normalize_for_comparison(value: str) -> str:
-    return value.strip().casefold()
-
-
-def starts_with_any(
-    value: str,
-    prefixes: tuple[str, ...],
-) -> bool:
-    normalized_value = normalize_for_comparison(value)
-
-    return any(
-        normalized_value.startswith(
-            normalize_for_comparison(prefix)
-        )
-        for prefix in prefixes
-    )
-
-
-def begins_with_foreign_script(value: str) -> bool:
-    stripped = value.lstrip()
-
-    if not stripped:
-        return False
-
-    first_character = stripped[0]
-
-    return any(
-        start <= first_character <= end
-        for start, end in FOREIGN_SCRIPT_RANGES
     )
 
 
@@ -285,57 +258,135 @@ def category_id(category: dict[str, Any]) -> str:
     ).strip()
 
 
-def is_foreign_category(name: str) -> bool:
-    if begins_with_foreign_script(name):
-        return True
+def normalize_text(value: str) -> str:
+    value = unicodedata.normalize("NFKD", value)
 
-    return starts_with_any(
-        name,
-        FOREIGN_PREFIXES,
+    cleaned_characters: list[str] = []
+
+    for character in value:
+        category = unicodedata.category(character)
+
+        if category.startswith("M"):
+            continue
+
+        if character.isascii():
+            cleaned_characters.append(character)
+            continue
+
+        if character.isalnum():
+            cleaned_characters.append(character)
+            continue
+
+        cleaned_characters.append(" ")
+
+    normalized = "".join(cleaned_characters).upper()
+    normalized = re.sub(r"[^A-Z0-9+|&/-]+", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized)
+
+    return normalized.strip()
+
+
+def normalized_tokens(value: str) -> set[str]:
+    return set(
+        re.findall(
+            r"[A-Z0-9]+",
+            normalize_text(value),
+        )
     )
 
 
+def contains_foreign_script(value: str) -> bool:
+    for character in value:
+        for start, end in FOREIGN_SCRIPT_RANGES:
+            if start <= character <= end:
+                return True
+
+    return False
+
+
+def is_foreign_category(value: str) -> bool:
+    if contains_foreign_script(value):
+        return True
+
+    normalized = normalize_text(value)
+    tokens = normalized_tokens(value)
+
+    for term in FOREIGN_TERMS:
+        normalized_term = normalize_text(term)
+
+        if normalized_term in normalized:
+            return True
+
+    for token in FOREIGN_SHORT_TOKENS:
+        if token in tokens:
+            return True
+
+    return False
+
+
+def load_allowlist(path: Path) -> list[str]:
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Missing allowlist file: "
+            f"{path.relative_to(REPOSITORY_ROOT)}"
+        )
+
+    values: list[str] = []
+
+    for raw_line in path.read_text(
+        encoding="utf-8"
+    ).splitlines():
+        line = raw_line.strip()
+
+        if not line:
+            continue
+
+        if line.startswith("#"):
+            continue
+
+        normalized = normalize_text(line)
+
+        if normalized:
+            values.append(normalized)
+
+    if not values:
+        raise RuntimeError(
+            f"Allowlist is empty: "
+            f"{path.relative_to(REPOSITORY_ROOT)}"
+        )
+
+    return values
+
+
 # ---------------------------------------------------------------------------
-# Category rules
+# Category matching
 # ---------------------------------------------------------------------------
 
-def keep_live_category(
-    category: dict[str, Any],
+def matches_live_allowlist(
+    name: str,
+    allowlist: list[str],
 ) -> bool:
-    name = category_name(category)
+    normalized_name = normalize_text(name)
 
-    return starts_with_any(
-        name,
-        LIVE_KEEP_PREFIXES,
+    return any(
+        normalized_name.startswith(prefix)
+        for prefix in allowlist
     )
 
 
-def keep_vod_category(
-    category: dict[str, Any],
+def matches_content_allowlist(
+    name: str,
+    allowlist: list[str],
 ) -> bool:
-    name = category_name(category)
+    if is_foreign_category(name):
+        return False
 
-    if starts_with_any(
-        name,
-        VOD_ENGLISH_PREFIXES,
-    ):
-        return True
+    normalized_name = normalize_text(name)
 
-    return not is_foreign_category(name)
-
-
-def keep_series_category(
-    category: dict[str, Any],
-) -> bool:
-    name = category_name(category)
-
-    if starts_with_any(
-        name,
-        SERIES_ENGLISH_PREFIXES,
-    ):
-        return True
-
-    return not is_foreign_category(name)
+    return any(
+        phrase in normalized_name
+        for phrase in allowlist
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -435,13 +486,10 @@ def request_xtream_action(
 
 
 # ---------------------------------------------------------------------------
-# File output
+# Output helpers
 # ---------------------------------------------------------------------------
 
-def write_json(
-    path: Path,
-    value: Any,
-) -> None:
+def write_json(path: Path, value: Any) -> None:
     path.parent.mkdir(
         parents=True,
         exist_ok=True,
@@ -462,16 +510,69 @@ def write_json(
             ensure_ascii=False,
             indent=2,
         )
-
         output_file.write("\n")
 
     temporary_path.replace(path)
 
 
-def print_category_results(
+def write_category_report(
+    path: Path,
+    categories: list[dict[str, Any]],
+) -> None:
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    sorted_categories = sorted(
+        categories,
+        key=lambda item: (
+            normalize_text(category_name(item)),
+            category_id(item),
+        ),
+    )
+
+    lines = [
+        f"{category_id(item)} | {category_name(item)}"
+        for item in sorted_categories
+    ]
+
+    text = "\n".join(lines)
+
+    if text:
+        text += "\n"
+
+    path.write_text(
+        text,
+        encoding="utf-8",
+        newline="\n",
+    )
+
+
+def split_categories(
+    categories: list[dict[str, Any]],
+    predicate: Callable[[str], bool],
+) -> tuple[
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+]:
+    kept: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+
+    for category in categories:
+        if predicate(category_name(category)):
+            kept.append(category)
+        else:
+            excluded.append(category)
+
+    return kept, excluded
+
+
+def print_results(
     label: str,
     raw_categories: list[dict[str, Any]],
-    filtered_categories: list[dict[str, Any]],
+    kept_categories: list[dict[str, Any]],
+    excluded_categories: list[dict[str, Any]],
 ) -> None:
     print()
     print(f"{label} results:")
@@ -479,20 +580,11 @@ def print_category_results(
         f"  Provider categories: {len(raw_categories):,}"
     )
     print(
-        f"  Kept categories:     {len(filtered_categories):,}"
+        f"  Kept categories:     {len(kept_categories):,}"
     )
     print(
-        f"  Excluded categories: "
-        f"{len(raw_categories) - len(filtered_categories):,}"
+        f"  Excluded categories: {len(excluded_categories):,}"
     )
-
-    print("  Kept names:")
-
-    for category in filtered_categories:
-        print(
-            f"    [{category_id(category)}] "
-            f"{category_name(category)}"
-        )
 
 
 # ---------------------------------------------------------------------------
@@ -510,6 +602,16 @@ def build_filtered_categories() -> None:
         "XTREAM_PASSWORD"
     )
 
+    live_allowlist = load_allowlist(
+        LIVE_ALLOWLIST_FILE
+    )
+    movie_allowlist = load_allowlist(
+        MOVIE_ALLOWLIST_FILE
+    )
+    series_allowlist = load_allowlist(
+        SERIES_ALLOWLIST_FILE
+    )
+
     base_url = normalize_provider_base_url(
         xtream_url
     )
@@ -517,62 +619,75 @@ def build_filtered_categories() -> None:
     print(
         f"Provider base URL: {base_url}"
     )
+    print(
+        f"Live allowlist entries: {len(live_allowlist):,}"
+    )
+    print(
+        f"Movie allowlist entries: {len(movie_allowlist):,}"
+    )
+    print(
+        f"Series allowlist entries: {len(series_allowlist):,}"
+    )
     print()
 
     session = create_session()
 
     live_categories = request_xtream_action(
-        session=session,
-        base_url=base_url,
-        username=username,
-        password=password,
-        action="get_live_categories",
+        session,
+        base_url,
+        username,
+        password,
+        "get_live_categories",
     )
 
     vod_categories = request_xtream_action(
-        session=session,
-        base_url=base_url,
-        username=username,
-        password=password,
-        action="get_vod_categories",
+        session,
+        base_url,
+        username,
+        password,
+        "get_vod_categories",
     )
 
     series_categories = request_xtream_action(
-        session=session,
-        base_url=base_url,
-        username=username,
-        password=password,
-        action="get_series_categories",
+        session,
+        base_url,
+        username,
+        password,
+        "get_series_categories",
     )
 
-    filtered_live_categories = [
-        category
-        for category in live_categories
-        if keep_live_category(category)
-    ]
+    kept_live, excluded_live = split_categories(
+        live_categories,
+        lambda name: matches_live_allowlist(
+            name,
+            live_allowlist,
+        ),
+    )
 
-    filtered_vod_categories = [
-        category
-        for category in vod_categories
-        if keep_vod_category(category)
-    ]
+    kept_vod, excluded_vod = split_categories(
+        vod_categories,
+        lambda name: matches_content_allowlist(
+            name,
+            movie_allowlist,
+        ),
+    )
 
-    filtered_series_categories = [
-        category
-        for category in series_categories
-        if keep_series_category(category)
-    ]
+    kept_series, excluded_series = split_categories(
+        series_categories,
+        lambda name: matches_content_allowlist(
+            name,
+            series_allowlist,
+        ),
+    )
 
     write_json(
         RAW_LIVE_FILE,
         live_categories,
     )
-
     write_json(
         RAW_VOD_FILE,
         vod_categories,
     )
-
     write_json(
         RAW_SERIES_FILE,
         series_categories,
@@ -580,55 +695,63 @@ def build_filtered_categories() -> None:
 
     write_json(
         FILTERED_LIVE_FILE,
-        filtered_live_categories,
+        kept_live,
     )
-
     write_json(
         FILTERED_VOD_FILE,
-        filtered_vod_categories,
+        kept_vod,
     )
-
     write_json(
         FILTERED_SERIES_FILE,
-        filtered_series_categories,
+        kept_series,
+    )
+
+    write_category_report(
+        KEPT_LIVE_REPORT,
+        kept_live,
+    )
+    write_category_report(
+        KEPT_MOVIE_REPORT,
+        kept_vod,
+    )
+    write_category_report(
+        KEPT_SERIES_REPORT,
+        kept_series,
+    )
+
+    write_category_report(
+        EXCLUDED_LIVE_REPORT,
+        excluded_live,
+    )
+    write_category_report(
+        EXCLUDED_MOVIE_REPORT,
+        excluded_vod,
+    )
+    write_category_report(
+        EXCLUDED_SERIES_REPORT,
+        excluded_series,
     )
 
     summary = {
         "live": {
-            "provider_categories": len(
-                live_categories
-            ),
-            "kept_categories": len(
-                filtered_live_categories
-            ),
-            "excluded_categories": (
-                len(live_categories)
-                - len(filtered_live_categories)
-            ),
+            "provider_categories": len(live_categories),
+            "kept_categories": len(kept_live),
+            "excluded_categories": len(excluded_live),
         },
-        "vod": {
-            "provider_categories": len(
-                vod_categories
-            ),
-            "kept_categories": len(
-                filtered_vod_categories
-            ),
-            "excluded_categories": (
-                len(vod_categories)
-                - len(filtered_vod_categories)
-            ),
+        "movies": {
+            "provider_categories": len(vod_categories),
+            "kept_categories": len(kept_vod),
+            "excluded_categories": len(excluded_vod),
         },
         "series": {
-            "provider_categories": len(
-                series_categories
-            ),
-            "kept_categories": len(
-                filtered_series_categories
-            ),
-            "excluded_categories": (
-                len(series_categories)
-                - len(filtered_series_categories)
-            ),
+            "provider_categories": len(series_categories),
+            "kept_categories": len(kept_series),
+            "excluded_categories": len(excluded_series),
+        },
+        "allowlists": {
+            "live_entries": len(live_allowlist),
+            "movie_entries": len(movie_allowlist),
+            "series_entries": len(series_allowlist),
         },
     }
 
@@ -637,31 +760,32 @@ def build_filtered_categories() -> None:
         summary,
     )
 
-    print_category_results(
+    print_results(
         "Live",
         live_categories,
-        filtered_live_categories,
+        kept_live,
+        excluded_live,
     )
-
-    print_category_results(
+    print_results(
         "Movies",
         vod_categories,
-        filtered_vod_categories,
+        kept_vod,
+        excluded_vod,
     )
-
-    print_category_results(
+    print_results(
         "Series",
         series_categories,
-        filtered_series_categories,
+        kept_series,
+        excluded_series,
     )
 
     print()
     print(
-        "Filtered category files created successfully."
+        "Filtered category files and reports created successfully."
     )
     print(
         f"Output directory: "
-        f"{CATEGORY_DIRECTORY.relative_to(REPOSITORY_ROOT)}"
+        f"{OUTPUT_DIRECTORY.relative_to(REPOSITORY_ROOT)}"
     )
 
 
