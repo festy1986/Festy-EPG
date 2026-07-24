@@ -32,7 +32,7 @@ jobs:
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-          python scripts/build_filtered_provider.py
+          python config/provider/build_filtered_provider.py
 
       - name: Commit filtered output
         run: |
