@@ -22,13 +22,15 @@ jobs:
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
+          set -euo pipefail
+
           test -n "$XTREAM_URL"
           test -n "$XTREAM_USERNAME"
           test -n "$XTREAM_PASSWORD"
 
           echo "Provider credentials found"
 
-      - name: Download category lists and full M3U
+      - name: Download category lists
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -36,14 +38,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          mkdir -p config/provider-inventory
           mkdir -p test/provider-inventory
+          mkdir -p config/provider-inventory
 
           BASE_URL="${XTREAM_URL%/}"
 
           API_URL="${BASE_URL}/player_api.php?username=${XTREAM_USERNAME}&password=${XTREAM_PASSWORD}"
-
-          M3U_URL="${BASE_URL}/get.php?username=${XTREAM_USERNAME}&password=${XTREAM_PASSWORD}&type=m3u_plus&output=ts"
 
           echo "Downloading all live TV groups..."
 
@@ -81,27 +81,16 @@ jobs:
             --output test/provider-inventory/series-categories.json \
             "${API_URL}&action=get_series_categories"
 
-          echo "Downloading complete provider M3U..."
-
-          curl \
-            --fail \
-            --location \
-            --retry 3 \
-            --retry-delay 5 \
-            --connect-timeout 30 \
-            --max-time 1800 \
-            --output test/provider-inventory/provider-full.m3u \
-            "$M3U_URL"
-
           test -s test/provider-inventory/live-categories.json
           test -s test/provider-inventory/vod-categories.json
           test -s test/provider-inventory/series-categories.json
-          test -s test/provider-inventory/provider-full.m3u
 
-          echo "All provider inventory files downloaded"
+          echo "All category lists downloaded successfully"
 
       - name: Create readable category lists
         run: |
+          set -euo pipefail
+
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -136,22 +125,24 @@ jobs:
           ]
 
           for heading, source_path, output_path in category_sources:
+              raw_text = source_path.read_text(
+                  encoding="utf-8",
+                  errors="replace",
+              )
+
               try:
-                  data = json.loads(
-                      source_path.read_text(
-                          encoding="utf-8",
-                          errors="replace",
-                      )
-                  )
+                  data = json.loads(raw_text)
               except json.JSONDecodeError as error:
+                  print(raw_text[:1000])
+
                   raise SystemExit(
                       f"Invalid JSON returned for {heading}: {error}"
                   )
 
               if not isinstance(data, list):
                   raise SystemExit(
-                      f"Expected a category list for {heading}, "
-                      f"but provider returned: {type(data).__name__}"
+                      f"Expected a list for {heading}, "
+                      f"but received {type(data).__name__}"
                   )
 
               categories = []
@@ -181,17 +172,12 @@ jobs:
                       "parent_id": parent_id,
                   })
 
-              def sort_key(item):
-                  name = item["name"].upper()
-
-                  try:
-                      numeric_id = int(item["id"])
-                  except (TypeError, ValueError):
-                      numeric_id = 999999999
-
-                  return name, numeric_id
-
-              categories.sort(key=sort_key)
+              categories.sort(
+                  key=lambda item: (
+                      item["name"].casefold(),
+                      item["id"],
+                  )
+              )
 
               output_lines = [
                   heading,
@@ -216,7 +202,7 @@ jobs:
               summary_lines.extend([
                   heading,
                   "-" * len(heading),
-                  f"Total: {len(categories):,}",
+                  f"Total categories: {len(categories):,}",
                   f"File: {output_path}",
                   "",
               ])
@@ -225,53 +211,7 @@ jobs:
                   f"{heading}: {len(categories):,} categories"
               )
 
-          m3u_path = source_dir / "provider-full.m3u"
-
-          m3u_size = m3u_path.stat().st_size
-
-          with m3u_path.open(
-              "r",
-              encoding="utf-8",
-              errors="replace",
-          ) as file:
-              first_lines = []
-
-              for _ in range(30):
-                  line = file.readline()
-
-                  if not line:
-                      break
-
-                  first_lines.append(line.rstrip("\n"))
-
-          sample_path = output_dir / "provider-m3u-sample.txt"
-
-          sample_lines = [
-              "PROVIDER M3U FORMAT SAMPLE",
-              "==========================",
-              "",
-              f"Full M3U size: {m3u_size:,} bytes",
-              "",
-              "First 30 lines:",
-              "---------------",
-              *first_lines,
-          ]
-
-          sample_path.write_text(
-              "\n".join(sample_lines) + "\n",
-              encoding="utf-8",
-          )
-
           summary_path = output_dir / "inventory-summary.txt"
-
-          summary_lines.extend([
-              "FULL M3U",
-              "--------",
-              f"Downloaded size: {m3u_size:,} bytes",
-              "The complete M3U is kept only as a workflow artifact.",
-              "A 30-line format sample is committed to the repository.",
-              "",
-          ])
 
           summary_path.write_text(
               "\n".join(summary_lines) + "\n",
@@ -279,34 +219,32 @@ jobs:
           )
 
           print(f"Created {summary_path}")
-          print(f"Created {sample_path}")
           PY
 
-      - name: Display inventory summary
+      - name: Display category inventory
         run: |
+          set -euo pipefail
+
           echo
           cat config/provider-inventory/inventory-summary.txt
 
           echo
-          echo "Generated category files:"
+          echo "Generated files:"
           ls -lh config/provider-inventory
 
           echo
-          echo "Complete provider M3U:"
-          ls -lh test/provider-inventory/provider-full.m3u
+          echo "Live groups preview:"
+          head -n 40 config/provider-inventory/live-groups.txt
 
-      - name: Upload complete provider inventory
-        uses: actions/upload-artifact@v4
-        with:
-          name: provider-inventory
-          path: |
-            test/provider-inventory/live-categories.json
-            test/provider-inventory/vod-categories.json
-            test/provider-inventory/series-categories.json
-            test/provider-inventory/provider-full.m3u
-          retention-days: 7
+          echo
+          echo "VOD categories preview:"
+          head -n 40 config/provider-inventory/vod-categories.txt
 
-      - name: Commit readable category lists
+          echo
+          echo "Series categories preview:"
+          head -n 40 config/provider-inventory/series-categories.txt
+
+      - name: Commit category inventory
         run: |
           set -euo pipefail
 
@@ -316,7 +254,7 @@ jobs:
           git add config/provider-inventory/
 
           if git diff --cached --quiet; then
-            echo "No inventory changes to commit"
+            echo "No category changes to commit"
             exit 0
           fi
 
@@ -328,7 +266,7 @@ jobs:
             git pull --rebase origin main
 
             if git push origin HEAD:main; then
-              echo "Inventory pushed successfully"
+              echo "Category inventory pushed successfully"
               exit 0
             fi
 
