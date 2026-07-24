@@ -2,38 +2,47 @@
 
 from __future__ import annotations
 
+import json
 import os
-import re
 import sys
-import tempfile
 from pathlib import Path
-from typing import Iterable
+from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
 import requests
 
 
 # ---------------------------------------------------------------------------
-# Paths
+# Repository paths
 # ---------------------------------------------------------------------------
 
-# GitHub Actions supplies GITHUB_WORKSPACE.
-# Locally, this script is expected to be inside the repository's config folder.
 REPOSITORY_ROOT = Path(
     os.environ.get(
         "GITHUB_WORKSPACE",
-        str(Path(__file__).resolve().parents[1]),
+        str(Path(__file__).resolve().parents[2]),
     )
 ).resolve()
 
 OUTPUT_DIRECTORY = REPOSITORY_ROOT / "filtered-provider"
-OUTPUT_FILE = OUTPUT_DIRECTORY / "filtered-provider.m3u"
+CATEGORY_DIRECTORY = OUTPUT_DIRECTORY / "categories"
+
+RAW_LIVE_FILE = CATEGORY_DIRECTORY / "live-categories.raw.json"
+RAW_VOD_FILE = CATEGORY_DIRECTORY / "vod-categories.raw.json"
+RAW_SERIES_FILE = CATEGORY_DIRECTORY / "series-categories.raw.json"
+
+FILTERED_LIVE_FILE = CATEGORY_DIRECTORY / "live-categories.json"
+FILTERED_VOD_FILE = CATEGORY_DIRECTORY / "vod-categories.json"
+FILTERED_SERIES_FILE = CATEGORY_DIRECTORY / "series-categories.json"
+
+SUMMARY_FILE = CATEGORY_DIRECTORY / "category-summary.json"
 
 
 # ---------------------------------------------------------------------------
 # Filtering rules
 # ---------------------------------------------------------------------------
 
+# Live categories are retained when their original provider name begins
+# with one of these prefixes.
 LIVE_KEEP_PREFIXES = (
     "US|",
     "CA|",
@@ -43,20 +52,32 @@ LIVE_KEEP_PREFIXES = (
     "IE|",
 )
 
+
+# Movie categories are retained when:
+# 1. Their name begins with EN -
+# 2. Their name does not identify a foreign country or language.
 VOD_ENGLISH_PREFIXES = (
     "EN -",
 )
 
+
+# Series categories are retained when:
+# 1. Their name begins with ENGLISH
+# 2. Their name does not identify a foreign country or language.
 SERIES_ENGLISH_PREFIXES = (
     "ENGLISH",
 )
 
 
+# These prefixes identify categories that should be excluded from Movies
+# and Series unless they match the explicit English rules above.
 FOREIGN_PREFIXES = (
     "AF -",
     "AFRICA",
     "AL -",
     "ALBANIA",
+    "AR -",
+    "ARABIC",
     "BE -",
     "BELGIUM",
     "BG -",
@@ -70,12 +91,17 @@ FOREIGN_PREFIXES = (
     "DANSKE",
     "DENMARK",
     "DE -",
+    "DUTCH",
     "ES -",
     "ESPAÑA",
     "EX -",
+    "FI -",
+    "FINLAND",
     "FR -",
     "FRANCE",
+    "FRENCH",
     "GERMANY",
+    "GERMAN",
     "GR -",
     "GREECE",
     "GREEK",
@@ -89,9 +115,13 @@ FOREIGN_PREFIXES = (
     "INDIAN",
     "IR -",
     "ITALY",
+    "ITALIAN",
     "IT -",
     "JAPAN",
+    "JAPANESE",
     "JP -",
+    "KOREA",
+    "KOREAN",
     "KU -",
     "KURDISH",
     "LA -",
@@ -109,8 +139,11 @@ FOREIGN_PREFIXES = (
     "PHILIPPINES",
     "PK -",
     "PL -",
+    "POLISH",
     "POLSKA",
     "PORTUGAL",
+    "PORTUGUESE",
+    "PT -",
     "PT/BR",
     "QC -",
     "QUÉBEC",
@@ -122,11 +155,15 @@ FOREIGN_PREFIXES = (
     "RUSSAIN",
     "SO -",
     "SOMALIA",
+    "SPANISH",
     "SUOMEN",
     "SUOMI",
     "SVENSK",
     "SVENSKA",
+    "SWEDEN",
+    "SWEDISH",
     "TR -",
+    "TURKEY",
     "TURKISH",
     "TURKSIH",
     "VIAPLAY ÍSLANDS",
@@ -134,6 +171,8 @@ FOREIGN_PREFIXES = (
 )
 
 
+# Detect names beginning with characters commonly used by foreign-language
+# category names.
 FOREIGN_SCRIPT_RANGES = (
     ("\u0370", "\u03ff"),  # Greek
     ("\u0400", "\u04ff"),  # Cyrillic
@@ -143,14 +182,8 @@ FOREIGN_SCRIPT_RANGES = (
     ("\u08a0", "\u08ff"),  # Arabic Extended
     ("\u3040", "\u30ff"),  # Japanese
     ("\u3400", "\u4dbf"),  # CJK Extension A
-    ("\u4e00", "\u9fff"),  # CJK Unified Ideographs
+    ("\u4e00", "\u9fff"),  # Chinese
     ("\uac00", "\ud7af"),  # Korean Hangul
-)
-
-
-GROUP_TITLE_PATTERN = re.compile(
-    r"""group-title\s*=\s*(?:"([^"]*)"|'([^']*)')""",
-    re.IGNORECASE,
 )
 
 
@@ -178,7 +211,9 @@ def normalize_provider_base_url(value: str) -> str:
     parsed = urlsplit(value)
 
     if not parsed.netloc:
-        raise ValueError(f"Invalid XTREAM_URL: {value}")
+        raise ValueError(
+            f"Invalid XTREAM_URL: {value}"
+        )
 
     path = parsed.path.rstrip("/")
 
@@ -206,14 +241,20 @@ def normalize_provider_base_url(value: str) -> str:
     )
 
 
+def normalize_for_comparison(value: str) -> str:
+    return value.strip().casefold()
+
+
 def starts_with_any(
     value: str,
-    prefixes: Iterable[str],
+    prefixes: tuple[str, ...],
 ) -> bool:
-    normalized_value = value.strip().casefold()
+    normalized_value = normalize_for_comparison(value)
 
     return any(
-        normalized_value.startswith(prefix.strip().casefold())
+        normalized_value.startswith(
+            normalize_for_comparison(prefix)
+        )
         for prefix in prefixes
     )
 
@@ -232,258 +273,80 @@ def begins_with_foreign_script(value: str) -> bool:
     )
 
 
-def is_foreign_category(category_name: str) -> bool:
-    if begins_with_foreign_script(category_name):
+def category_name(category: dict[str, Any]) -> str:
+    return str(
+        category.get("category_name", "")
+    ).strip()
+
+
+def category_id(category: dict[str, Any]) -> str:
+    return str(
+        category.get("category_id", "")
+    ).strip()
+
+
+def is_foreign_category(name: str) -> bool:
+    if begins_with_foreign_script(name):
         return True
 
     return starts_with_any(
-        category_name,
+        name,
         FOREIGN_PREFIXES,
     )
 
 
 # ---------------------------------------------------------------------------
-# Category filtering
+# Category rules
 # ---------------------------------------------------------------------------
 
-def keep_live_category(category_name: str) -> bool:
+def keep_live_category(
+    category: dict[str, Any],
+) -> bool:
+    name = category_name(category)
+
     return starts_with_any(
-        category_name,
+        name,
         LIVE_KEEP_PREFIXES,
     )
 
 
-def keep_vod_category(category_name: str) -> bool:
+def keep_vod_category(
+    category: dict[str, Any],
+) -> bool:
+    name = category_name(category)
+
     if starts_with_any(
-        category_name,
+        name,
         VOD_ENGLISH_PREFIXES,
     ):
         return True
 
-    return not is_foreign_category(category_name)
+    return not is_foreign_category(name)
 
 
-def keep_series_category(category_name: str) -> bool:
+def keep_series_category(
+    category: dict[str, Any],
+) -> bool:
+    name = category_name(category)
+
     if starts_with_any(
-        category_name,
+        name,
         SERIES_ENGLISH_PREFIXES,
     ):
         return True
 
-    return not is_foreign_category(category_name)
+    return not is_foreign_category(name)
 
 
 # ---------------------------------------------------------------------------
-# M3U parsing
+# Xtream API
 # ---------------------------------------------------------------------------
 
-def extract_group_title(extinf_line: str) -> str:
-    match = GROUP_TITLE_PATTERN.search(extinf_line)
+def create_session() -> requests.Session:
+    session = requests.Session()
 
-    if not match:
-        return ""
-
-    return (
-        match.group(1)
-        or match.group(2)
-        or ""
-    ).strip()
-
-
-def find_stream_url(record_lines: list[str]) -> str:
-    for line in reversed(record_lines):
-        stripped = line.strip()
-
-        if not stripped:
-            continue
-
-        if stripped.startswith("#"):
-            continue
-
-        return stripped
-
-    return ""
-
-
-def classify_stream(stream_url: str) -> str:
-    normalized_url = stream_url.casefold()
-
-    if "/series/" in normalized_url:
-        return "series"
-
-    if "/movie/" in normalized_url:
-        return "vod"
-
-    return "live"
-
-
-def should_keep_record(
-    record_lines: list[str],
-) -> tuple[bool, str, str]:
-    if not record_lines:
-        return False, "unknown", ""
-
-    extinf_line = record_lines[0]
-    category_name = extract_group_title(extinf_line)
-    stream_url = find_stream_url(record_lines)
-    stream_type = classify_stream(stream_url)
-
-    if not category_name:
-        return False, stream_type, ""
-
-    if stream_type == "live":
-        return (
-            keep_live_category(category_name),
-            stream_type,
-            category_name,
-        )
-
-    if stream_type == "vod":
-        return (
-            keep_vod_category(category_name),
-            stream_type,
-            category_name,
-        )
-
-    if stream_type == "series":
-        return (
-            keep_series_category(category_name),
-            stream_type,
-            category_name,
-        )
-
-    return False, stream_type, category_name
-
-
-def process_record(
-    output_handle,
-    record_lines: list[str],
-    stats: dict[str, int],
-    seen_kept_categories: dict[str, set[str]],
-) -> None:
-    keep, stream_type, category_name = should_keep_record(
-        record_lines
-    )
-
-    if not category_name:
-        stats["ungrouped_skipped"] += 1
-        return
-
-    if keep:
-        for line in record_lines:
-            output_handle.write(line)
-            output_handle.write("\n")
-
-        stats[f"{stream_type}_kept"] += 1
-        seen_kept_categories[stream_type].add(
-            category_name
-        )
-    else:
-        stats[f"{stream_type}_skipped"] += 1
-
-
-# ---------------------------------------------------------------------------
-# Response inspection
-# ---------------------------------------------------------------------------
-
-def printable_preview(data: bytes, limit: int = 1000) -> str:
-    preview = data[:limit]
-
-    text = preview.decode(
-        "utf-8",
-        errors="replace",
-    )
-
-    text = text.replace("\r", "\\r")
-    text = text.replace("\n", "\\n\n")
-
-    return text
-
-
-def detect_response_type(
-    content_type: str,
-    content: bytes,
-) -> str:
-    stripped = content.lstrip()
-
-    if not stripped:
-        return "empty"
-
-    lowered_type = content_type.casefold()
-
-    if stripped.startswith(b"#EXTM3U"):
-        return "m3u"
-
-    if stripped.startswith(b"#EXTINF"):
-        return "m3u-without-header"
-
-    if stripped.startswith((b"{", b"[")):
-        return "json"
-
-    if stripped.startswith(
-        (
-            b"<!DOCTYPE html",
-            b"<!doctype html",
-            b"<html",
-            b"<HTML",
-        )
-    ):
-        return "html"
-
-    if "json" in lowered_type:
-        return "json"
-
-    if "html" in lowered_type:
-        return "html"
-
-    return "unknown"
-
-
-def decode_playlist(content: bytes) -> str:
-    encodings = (
-        "utf-8-sig",
-        "utf-8",
-        "latin-1",
-    )
-
-    for encoding in encodings:
-        try:
-            return content.decode(encoding)
-        except UnicodeDecodeError:
-            continue
-
-    return content.decode(
-        "utf-8",
-        errors="replace",
-    )
-
-
-# ---------------------------------------------------------------------------
-# Provider download and output
-# ---------------------------------------------------------------------------
-
-def download_provider_playlist(
-    base_url: str,
-    username: str,
-    password: str,
-) -> bytes:
-    playlist_url = f"{base_url}/get.php"
-
-    parameters = {
-        "username": username,
-        "password": password,
-        "type": "m3u_plus",
-        "output": "m3u8",
-    }
-
-    print("Downloading current provider playlist...")
-    print(f"Provider base URL: {base_url}")
-
-    response = requests.get(
-        playlist_url,
-        params=parameters,
-        timeout=(30, 300),
-        headers={
+    session.headers.update(
+        {
             "User-Agent": (
                 "Mozilla/5.0 "
                 "(Windows NT 10.0; Win64; x64) "
@@ -491,81 +354,152 @@ def download_provider_playlist(
                 "(KHTML, like Gecko) "
                 "Chrome/150.0.0.0 Safari/537.36"
             ),
-            "Accept": (
-                "application/x-mpegURL,"
-                "application/vnd.apple.mpegurl,"
-                "text/plain,*/*"
-            ),
-            "Accept-Encoding": "gzip, deflate",
+            "Accept": "application/json,text/plain,*/*",
             "Connection": "close",
-        },
+        }
     )
 
-    print(f"HTTP status: {response.status_code}")
+    return session
+
+
+def request_xtream_action(
+    session: requests.Session,
+    base_url: str,
+    username: str,
+    password: str,
+    action: str,
+) -> list[dict[str, Any]]:
+    endpoint = f"{base_url}/player_api.php"
+
+    print(f"Downloading {action}...")
+
+    response = session.get(
+        endpoint,
+        params={
+            "username": username,
+            "password": password,
+            "action": action,
+        },
+        timeout=(30, 300),
+    )
+
     print(
-        "Content-Type: "
-        f"{response.headers.get('content-type', 'missing')}"
+        f"  HTTP status: {response.status_code}"
     )
     print(
-        "Content-Length header: "
-        f"{response.headers.get('content-length', 'missing')}"
-    )
-    print(
-        "Content-Encoding: "
-        f"{response.headers.get('content-encoding', 'missing')}"
-    )
-    print(
-        "Content-Disposition: "
-        f"{response.headers.get('content-disposition', 'missing')}"
+        f"  Downloaded bytes: {len(response.content):,}"
     )
 
     response.raise_for_status()
 
-    content = response.content
-    content_type = response.headers.get(
-        "content-type",
-        "",
+    if not response.content:
+        raise RuntimeError(
+            f"{action} returned an empty response."
+        )
+
+    try:
+        result = response.json()
+    except ValueError as error:
+        preview = response.text[:500]
+
+        raise RuntimeError(
+            f"{action} did not return valid JSON. "
+            f"Response preview: {preview!r}"
+        ) from error
+
+    if not isinstance(result, list):
+        raise RuntimeError(
+            f"{action} returned {type(result).__name__} "
+            "instead of a category list."
+        )
+
+    cleaned_result: list[dict[str, Any]] = []
+
+    for item in result:
+        if not isinstance(item, dict):
+            continue
+
+        if not category_id(item):
+            continue
+
+        if not category_name(item):
+            continue
+
+        cleaned_result.append(item)
+
+    print(
+        f"  Valid categories: {len(cleaned_result):,}"
     )
 
-    print(f"Downloaded bytes: {len(content):,}")
+    return cleaned_result
 
-    response_type = detect_response_type(
-        content_type,
-        content,
+
+# ---------------------------------------------------------------------------
+# File output
+# ---------------------------------------------------------------------------
+
+def write_json(
+    path: Path,
+    value: Any,
+) -> None:
+    path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
     )
 
-    print(f"Detected response type: {response_type}")
+    temporary_path = path.with_suffix(
+        path.suffix + ".tmp"
+    )
 
-    if response_type != "m3u":
-        print()
-        print("Response preview:")
-        print(printable_preview(content))
-        print()
-
-    if response_type == "empty":
-        raise RuntimeError(
-            "The provider returned an empty HTTP response."
+    with temporary_path.open(
+        "w",
+        encoding="utf-8",
+        newline="\n",
+    ) as output_file:
+        json.dump(
+            value,
+            output_file,
+            ensure_ascii=False,
+            indent=2,
         )
 
-    if response_type == "json":
-        raise RuntimeError(
-            "The provider returned JSON instead of an M3U playlist."
+        output_file.write("\n")
+
+    temporary_path.replace(path)
+
+
+def print_category_results(
+    label: str,
+    raw_categories: list[dict[str, Any]],
+    filtered_categories: list[dict[str, Any]],
+) -> None:
+    print()
+    print(f"{label} results:")
+    print(
+        f"  Provider categories: {len(raw_categories):,}"
+    )
+    print(
+        f"  Kept categories:     {len(filtered_categories):,}"
+    )
+    print(
+        f"  Excluded categories: "
+        f"{len(raw_categories) - len(filtered_categories):,}"
+    )
+
+    print("  Kept names:")
+
+    for category in filtered_categories:
+        print(
+            f"    [{category_id(category)}] "
+            f"{category_name(category)}"
         )
 
-    if response_type == "html":
-        raise RuntimeError(
-            "The provider returned an HTML page instead of an M3U playlist."
-        )
 
-    if response_type == "unknown":
-        raise RuntimeError(
-            "The provider returned data that was not recognized as M3U."
-        )
+# ---------------------------------------------------------------------------
+# Main build
+# ---------------------------------------------------------------------------
 
-    return content
-
-
-def build_filtered_playlist() -> None:
+def build_filtered_categories() -> None:
     xtream_url = required_environment_variable(
         "XTREAM_URL"
     )
@@ -580,207 +514,160 @@ def build_filtered_playlist() -> None:
         xtream_url
     )
 
-    OUTPUT_DIRECTORY.mkdir(
-        parents=True,
-        exist_ok=True,
-    )
-
-    content = download_provider_playlist(
-        base_url,
-        username,
-        password,
-    )
-
-    playlist_text = decode_playlist(content)
-    playlist_lines = playlist_text.splitlines()
-
-    total_lines_received = len(playlist_lines)
-
-    extinf_lines_received = sum(
-        1
-        for line in playlist_lines
-        if line.lstrip().startswith("#EXTINF")
-    )
-
     print(
-        f"Total response lines: "
-        f"{total_lines_received:,}"
+        f"Provider base URL: {base_url}"
     )
-    print(
-        f"EXTINF entries received: "
-        f"{extinf_lines_received:,}"
+    print()
+
+    session = create_session()
+
+    live_categories = request_xtream_action(
+        session=session,
+        base_url=base_url,
+        username=username,
+        password=password,
+        action="get_live_categories",
     )
 
-    if extinf_lines_received == 0:
-        print()
-        print("First response lines:")
+    vod_categories = request_xtream_action(
+        session=session,
+        base_url=base_url,
+        username=username,
+        password=password,
+        action="get_vod_categories",
+    )
 
-        for line in playlist_lines[:20]:
-            safe_line = line
+    series_categories = request_xtream_action(
+        session=session,
+        base_url=base_url,
+        username=username,
+        password=password,
+        action="get_series_categories",
+    )
 
-            if username:
-                safe_line = safe_line.replace(
-                    username,
-                    "***USERNAME***",
-                )
+    filtered_live_categories = [
+        category
+        for category in live_categories
+        if keep_live_category(category)
+    ]
 
-            if password:
-                safe_line = safe_line.replace(
-                    password,
-                    "***PASSWORD***",
-                )
+    filtered_vod_categories = [
+        category
+        for category in vod_categories
+        if keep_vod_category(category)
+    ]
 
-            print(repr(safe_line))
+    filtered_series_categories = [
+        category
+        for category in series_categories
+        if keep_series_category(category)
+    ]
 
-        raise RuntimeError(
-            "Provider response contained no #EXTINF entries."
-        )
+    write_json(
+        RAW_LIVE_FILE,
+        live_categories,
+    )
 
-    stats = {
-        "live_kept": 0,
-        "live_skipped": 0,
-        "vod_kept": 0,
-        "vod_skipped": 0,
-        "series_kept": 0,
-        "series_skipped": 0,
-        "ungrouped_skipped": 0,
+    write_json(
+        RAW_VOD_FILE,
+        vod_categories,
+    )
+
+    write_json(
+        RAW_SERIES_FILE,
+        series_categories,
+    )
+
+    write_json(
+        FILTERED_LIVE_FILE,
+        filtered_live_categories,
+    )
+
+    write_json(
+        FILTERED_VOD_FILE,
+        filtered_vod_categories,
+    )
+
+    write_json(
+        FILTERED_SERIES_FILE,
+        filtered_series_categories,
+    )
+
+    summary = {
+        "live": {
+            "provider_categories": len(
+                live_categories
+            ),
+            "kept_categories": len(
+                filtered_live_categories
+            ),
+            "excluded_categories": (
+                len(live_categories)
+                - len(filtered_live_categories)
+            ),
+        },
+        "vod": {
+            "provider_categories": len(
+                vod_categories
+            ),
+            "kept_categories": len(
+                filtered_vod_categories
+            ),
+            "excluded_categories": (
+                len(vod_categories)
+                - len(filtered_vod_categories)
+            ),
+        },
+        "series": {
+            "provider_categories": len(
+                series_categories
+            ),
+            "kept_categories": len(
+                filtered_series_categories
+            ),
+            "excluded_categories": (
+                len(series_categories)
+                - len(filtered_series_categories)
+            ),
+        },
     }
 
-    seen_kept_categories: dict[str, set[str]] = {
-        "live": set(),
-        "vod": set(),
-        "series": set(),
-    }
+    write_json(
+        SUMMARY_FILE,
+        summary,
+    )
 
-    temporary_path: Path | None = None
+    print_category_results(
+        "Live",
+        live_categories,
+        filtered_live_categories,
+    )
 
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="w",
-            encoding="utf-8",
-            newline="\n",
-            delete=False,
-            dir=OUTPUT_DIRECTORY,
-            prefix="filtered-provider-",
-            suffix=".tmp",
-        ) as temporary_file:
-            temporary_path = Path(
-                temporary_file.name
-            )
+    print_category_results(
+        "Movies",
+        vod_categories,
+        filtered_vod_categories,
+    )
 
-            temporary_file.write("#EXTM3U\n")
-
-            current_record: list[str] = []
-
-            for line in playlist_lines:
-                stripped_line = line.lstrip()
-
-                if stripped_line.startswith("#EXTM3U"):
-                    continue
-
-                if stripped_line.startswith("#EXTINF"):
-                    if current_record:
-                        process_record(
-                            temporary_file,
-                            current_record,
-                            stats,
-                            seen_kept_categories,
-                        )
-
-                    current_record = [line]
-                    continue
-
-                if current_record:
-                    current_record.append(line)
-
-            if current_record:
-                process_record(
-                    temporary_file,
-                    current_record,
-                    stats,
-                    seen_kept_categories,
-                )
-
-        if (
-            stats["live_kept"] == 0
-            and stats["vod_kept"] == 0
-            and stats["series_kept"] == 0
-        ):
-            raise RuntimeError(
-                "The provider supplied M3U entries, but none matched "
-                "the configured filtering rules."
-            )
-
-        temporary_path.replace(
-            OUTPUT_FILE
-        )
-
-    except Exception:
-        if (
-            temporary_path is not None
-            and temporary_path.exists()
-        ):
-            temporary_path.unlink()
-
-        raise
+    print_category_results(
+        "Series",
+        series_categories,
+        filtered_series_categories,
+    )
 
     print()
     print(
-        "Filtered provider playlist created successfully."
+        "Filtered category files created successfully."
     )
     print(
-        "Output: "
-        f"{OUTPUT_FILE.relative_to(REPOSITORY_ROOT)}"
-    )
-    print()
-    print("Results:")
-    print(
-        f"  Live kept:       "
-        f"{stats['live_kept']:,}"
-    )
-    print(
-        f"  Live skipped:    "
-        f"{stats['live_skipped']:,}"
-    )
-    print(
-        f"  Movies kept:     "
-        f"{stats['vod_kept']:,}"
-    )
-    print(
-        f"  Movies skipped:  "
-        f"{stats['vod_skipped']:,}"
-    )
-    print(
-        f"  Series kept:     "
-        f"{stats['series_kept']:,}"
-    )
-    print(
-        f"  Series skipped:  "
-        f"{stats['series_skipped']:,}"
-    )
-    print(
-        f"  Ungrouped skip:  "
-        f"{stats['ungrouped_skipped']:,}"
-    )
-    print()
-    print("Kept category totals:")
-    print(
-        f"  Live groups:     "
-        f"{len(seen_kept_categories['live']):,}"
-    )
-    print(
-        f"  Movie groups:    "
-        f"{len(seen_kept_categories['vod']):,}"
-    )
-    print(
-        f"  Series groups:   "
-        f"{len(seen_kept_categories['series']):,}"
+        f"Output directory: "
+        f"{CATEGORY_DIRECTORY.relative_to(REPOSITORY_ROOT)}"
     )
 
 
 def main() -> int:
     try:
-        build_filtered_playlist()
+        build_filtered_categories()
         return 0
 
     except requests.HTTPError as error:
@@ -805,7 +692,7 @@ def main() -> int:
 
     except Exception as error:
         print(
-            f"Filtered provider build failed: {error}",
+            f"Filtered category build failed: {error}",
             file=sys.stderr,
         )
         return 1
