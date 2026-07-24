@@ -1,4 +1,4 @@
-name: TEST Filtered Playlist
+name: TEST Provider Category Inventory
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  build-filtered-playlist:
+  inventory-provider:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,7 +16,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Verify Xtream credentials
+      - name: Verify provider credentials
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -26,22 +26,26 @@ jobs:
           test -n "$XTREAM_USERNAME"
           test -n "$XTREAM_PASSWORD"
 
-          echo "Xtream credentials found"
+          echo "Provider credentials found"
 
-      - name: Download provider M3U
+      - name: Download category lists and full M3U
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
           XTREAM_PASSWORD: ${{ secrets.XTREAM_PASSWORD }}
         run: |
-          mkdir -p playlists
-          mkdir -p test
+          set -euo pipefail
+
+          mkdir -p config/provider-inventory
+          mkdir -p test/provider-inventory
 
           BASE_URL="${XTREAM_URL%/}"
 
+          API_URL="${BASE_URL}/player_api.php?username=${XTREAM_USERNAME}&password=${XTREAM_PASSWORD}"
+
           M3U_URL="${BASE_URL}/get.php?username=${XTREAM_USERNAME}&password=${XTREAM_PASSWORD}&type=m3u_plus&output=ts"
 
-          echo "Downloading provider playlist..."
+          echo "Downloading all live TV groups..."
 
           curl \
             --fail \
@@ -50,205 +54,286 @@ jobs:
             --retry-delay 5 \
             --connect-timeout 30 \
             --max-time 600 \
-            --output test/provider-full.m3u \
+            --output test/provider-inventory/live-categories.json \
+            "${API_URL}&action=get_live_categories"
+
+          echo "Downloading all movie/VOD categories..."
+
+          curl \
+            --fail \
+            --location \
+            --retry 3 \
+            --retry-delay 5 \
+            --connect-timeout 30 \
+            --max-time 600 \
+            --output test/provider-inventory/vod-categories.json \
+            "${API_URL}&action=get_vod_categories"
+
+          echo "Downloading all series categories..."
+
+          curl \
+            --fail \
+            --location \
+            --retry 3 \
+            --retry-delay 5 \
+            --connect-timeout 30 \
+            --max-time 600 \
+            --output test/provider-inventory/series-categories.json \
+            "${API_URL}&action=get_series_categories"
+
+          echo "Downloading complete provider M3U..."
+
+          curl \
+            --fail \
+            --location \
+            --retry 3 \
+            --retry-delay 5 \
+            --connect-timeout 30 \
+            --max-time 1800 \
+            --output test/provider-inventory/provider-full.m3u \
             "$M3U_URL"
 
-          test -s test/provider-full.m3u
+          test -s test/provider-inventory/live-categories.json
+          test -s test/provider-inventory/vod-categories.json
+          test -s test/provider-inventory/series-categories.json
+          test -s test/provider-inventory/provider-full.m3u
 
-          echo "Provider playlist downloaded"
-          echo "Playlist size:"
-          du -h test/provider-full.m3u
+          echo "All provider inventory files downloaded"
 
-      - name: Filter US UK and CA groups
+      - name: Create readable category lists
         run: |
           python3 - <<'PY'
-          import re
+          import json
           from pathlib import Path
 
-          input_path = Path("test/provider-full.m3u")
-          output_path = Path("playlists/festy-filtered-test.m3u")
-          report_path = Path("test/filtered-playlist-report.txt")
+          source_dir = Path("test/provider-inventory")
+          output_dir = Path("config/provider-inventory")
 
-          allowed_prefixes = ("US", "UK", "CA")
+          output_dir.mkdir(parents=True, exist_ok=True)
 
-          text = input_path.read_text(
-              encoding="utf-8",
-              errors="replace",
-          )
-
-          lines = text.splitlines()
-
-          output_lines = ["#EXTM3U"]
-          kept_groups = {}
-          removed_groups = {}
-          kept_channels = 0
-          removed_channels = 0
-
-          def extract_group(extinf_line: str) -> str:
-              match = re.search(
-                  r'group-title\s*=\s*"([^"]*)"',
-                  extinf_line,
-                  flags=re.IGNORECASE,
-              )
-
-              if match:
-                  return match.group(1).strip()
-
-              match = re.search(
-                  r"group-title\s*=\s*'([^']*)'",
-                  extinf_line,
-                  flags=re.IGNORECASE,
-              )
-
-              if match:
-                  return match.group(1).strip()
-
-              return ""
-
-          def normalized_group(group_name: str) -> str:
-              value = group_name.strip().upper()
-
-              # Remove common flag emojis and punctuation before the
-              # actual country/group prefix.
-              value = re.sub(r"^[^A-Z0-9]+", "", value)
-
-              return value
-
-          index = 0
-
-          while index < len(lines):
-              line = lines[index].strip()
-
-              if not line.startswith("#EXTINF"):
-                  index += 1
-                  continue
-
-              extinf_line = lines[index]
-              stream_lines = []
-
-              index += 1
-
-              # Preserve any optional M3U directives between #EXTINF and
-              # the actual stream URL.
-              while index < len(lines):
-                  following_line = lines[index].strip()
-
-                  if following_line.startswith("#EXTINF"):
-                      break
-
-                  if following_line:
-                      stream_lines.append(lines[index])
-
-                  index += 1
-
-                  if following_line and not following_line.startswith("#"):
-                      break
-
-              group_name = extract_group(extinf_line)
-              group_key = normalized_group(group_name)
-
-              keep = any(
-                  group_key.startswith(prefix)
-                  for prefix in allowed_prefixes
-              )
-
-              display_group = group_name or "(NO GROUP)"
-
-              if keep:
-                  output_lines.append(extinf_line)
-                  output_lines.extend(stream_lines)
-
-                  kept_channels += 1
-                  kept_groups[display_group] = (
-                      kept_groups.get(display_group, 0) + 1
-                  )
-              else:
-                  removed_channels += 1
-                  removed_groups[display_group] = (
-                      removed_groups.get(display_group, 0) + 1
-                  )
-
-          output_path.parent.mkdir(parents=True, exist_ok=True)
-
-          output_path.write_text(
-              "\n".join(output_lines) + "\n",
-              encoding="utf-8",
-          )
-
-          report_lines = [
-              "FILTERED PLAYLIST TEST REPORT",
-              "=============================",
-              "",
-              f"Allowed prefixes: {', '.join(allowed_prefixes)}",
-              f"Channels kept: {kept_channels:,}",
-              f"Channels removed: {removed_channels:,}",
-              f"Groups kept: {len(kept_groups):,}",
-              f"Groups removed: {len(removed_groups):,}",
-              "",
-              "KEPT GROUPS",
-              "-----------",
+          category_sources = [
+              (
+                  "LIVE TV GROUPS",
+                  source_dir / "live-categories.json",
+                  output_dir / "live-groups.txt",
+              ),
+              (
+                  "MOVIE / VOD CATEGORIES",
+                  source_dir / "vod-categories.json",
+                  output_dir / "vod-categories.txt",
+              ),
+              (
+                  "SERIES CATEGORIES",
+                  source_dir / "series-categories.json",
+                  output_dir / "series-categories.txt",
+              ),
           ]
 
-          for group_name, count in sorted(
-              kept_groups.items(),
-              key=lambda item: item[0].upper(),
-          ):
-              report_lines.append(
-                  f"{group_name} | {count:,} channels"
-              )
-
-          report_lines.extend([
+          summary_lines = [
+              "PROVIDER CATEGORY INVENTORY",
+              "===========================",
               "",
-              "REMOVED GROUPS",
-              "--------------",
-          ])
+          ]
 
-          for group_name, count in sorted(
-              removed_groups.items(),
-              key=lambda item: item[0].upper(),
-          ):
-              report_lines.append(
-                  f"{group_name} | {count:,} channels"
+          for heading, source_path, output_path in category_sources:
+              try:
+                  data = json.loads(
+                      source_path.read_text(
+                          encoding="utf-8",
+                          errors="replace",
+                      )
+                  )
+              except json.JSONDecodeError as error:
+                  raise SystemExit(
+                      f"Invalid JSON returned for {heading}: {error}"
+                  )
+
+              if not isinstance(data, list):
+                  raise SystemExit(
+                      f"Expected a category list for {heading}, "
+                      f"but provider returned: {type(data).__name__}"
+                  )
+
+              categories = []
+
+              for item in data:
+                  if not isinstance(item, dict):
+                      continue
+
+                  category_id = str(
+                      item.get("category_id", "")
+                  ).strip()
+
+                  category_name = str(
+                      item.get("category_name", "")
+                  ).strip()
+
+                  parent_id = str(
+                      item.get("parent_id", "")
+                  ).strip()
+
+                  if not category_name:
+                      continue
+
+                  categories.append({
+                      "id": category_id,
+                      "name": category_name,
+                      "parent_id": parent_id,
+                  })
+
+              def sort_key(item):
+                  name = item["name"].upper()
+
+                  try:
+                      numeric_id = int(item["id"])
+                  except (TypeError, ValueError):
+                      numeric_id = 999999999
+
+                  return name, numeric_id
+
+              categories.sort(key=sort_key)
+
+              output_lines = [
+                  heading,
+                  "=" * len(heading),
+                  "",
+                  f"Total categories: {len(categories):,}",
+                  "",
+                  "CATEGORY ID | CATEGORY NAME",
+                  "------------|--------------",
+              ]
+
+              for category in categories:
+                  output_lines.append(
+                      f'{category["id"]} | {category["name"]}'
+                  )
+
+              output_path.write_text(
+                  "\n".join(output_lines) + "\n",
+                  encoding="utf-8",
               )
 
-          report_path.write_text(
-              "\n".join(report_lines) + "\n",
+              summary_lines.extend([
+                  heading,
+                  "-" * len(heading),
+                  f"Total: {len(categories):,}",
+                  f"File: {output_path}",
+                  "",
+              ])
+
+              print(
+                  f"{heading}: {len(categories):,} categories"
+              )
+
+          m3u_path = source_dir / "provider-full.m3u"
+
+          m3u_size = m3u_path.stat().st_size
+
+          with m3u_path.open(
+              "r",
+              encoding="utf-8",
+              errors="replace",
+          ) as file:
+              first_lines = []
+
+              for _ in range(30):
+                  line = file.readline()
+
+                  if not line:
+                      break
+
+                  first_lines.append(line.rstrip("\n"))
+
+          sample_path = output_dir / "provider-m3u-sample.txt"
+
+          sample_lines = [
+              "PROVIDER M3U FORMAT SAMPLE",
+              "==========================",
+              "",
+              f"Full M3U size: {m3u_size:,} bytes",
+              "",
+              "First 30 lines:",
+              "---------------",
+              *first_lines,
+          ]
+
+          sample_path.write_text(
+              "\n".join(sample_lines) + "\n",
               encoding="utf-8",
           )
 
-          if kept_channels == 0:
-              raise SystemExit(
-                  "No channels matched US, UK, or CA group prefixes."
-              )
+          summary_path = output_dir / "inventory-summary.txt"
 
-          print(f"Kept {kept_channels:,} channels")
-          print(f"Removed {removed_channels:,} channels")
-          print(f"Created {output_path}")
-          print(f"Created {report_path}")
+          summary_lines.extend([
+              "FULL M3U",
+              "--------",
+              f"Downloaded size: {m3u_size:,} bytes",
+              "The complete M3U is kept only as a workflow artifact.",
+              "A 30-line format sample is committed to the repository.",
+              "",
+          ])
+
+          summary_path.write_text(
+              "\n".join(summary_lines) + "\n",
+              encoding="utf-8",
+          )
+
+          print(f"Created {summary_path}")
+          print(f"Created {sample_path}")
           PY
 
-      - name: Display filter report
+      - name: Display inventory summary
         run: |
-          cat test/filtered-playlist-report.txt
+          echo
+          cat config/provider-inventory/inventory-summary.txt
 
           echo
-          echo "Filtered playlist size:"
-          du -h playlists/festy-filtered-test.m3u
+          echo "Generated category files:"
+          ls -lh config/provider-inventory
 
-      - name: Commit filtered playlist
+          echo
+          echo "Complete provider M3U:"
+          ls -lh test/provider-inventory/provider-full.m3u
+
+      - name: Upload complete provider inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: provider-inventory
+          path: |
+            test/provider-inventory/live-categories.json
+            test/provider-inventory/vod-categories.json
+            test/provider-inventory/series-categories.json
+            test/provider-inventory/provider-full.m3u
+          retention-days: 7
+
+      - name: Commit readable category lists
         run: |
+          set -euo pipefail
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add playlists/festy-filtered-test.m3u
-          git add test/filtered-playlist-report.txt
+          git add config/provider-inventory/
 
           if git diff --cached --quiet; then
-            echo "No playlist changes to commit"
+            echo "No inventory changes to commit"
             exit 0
           fi
 
-          git commit -m "Update filtered M3U test playlist"
+          git commit -m "Update provider category inventory"
 
-          git pull --rebase origin main
-          git push origin HEAD:main
+          for attempt in 1 2 3; do
+            echo "Push attempt $attempt"
+
+            git pull --rebase origin main
+
+            if git push origin HEAD:main; then
+              echo "Inventory pushed successfully"
+              exit 0
+            fi
+
+            sleep 5
+          done
+
+          echo "Failed to push inventory after 3 attempts"
+          exit 1
