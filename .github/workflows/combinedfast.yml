@@ -933,6 +933,26 @@ jobs:
             )
           }
 
+
+          function removeEpisodeNumBySystem(
+            block,
+            system
+          ) {
+            const regex =
+              new RegExp(
+                '\\s*<episode-num\\b' +
+                '[^>]*\\bsystem="' +
+                system +
+                '"[^>]*>[\\s\\S]*?</episode-num>',
+                'gi'
+              )
+
+            return block.replace(
+              regex,
+              ''
+            )
+          }
+
           function cleanProgrammeBlock(
             block,
             source
@@ -1067,6 +1087,24 @@ jobs:
                 output,
                 'desc',
                 description
+              )
+
+            output =
+              removeTag(
+                output,
+                'sub-title'
+              )
+
+            output =
+              removeEpisodeNumBySystem(
+                output,
+                'onscreen'
+              )
+
+            output =
+              removeEpisodeNumBySystem(
+                output,
+                'common'
               )
 
             output =
