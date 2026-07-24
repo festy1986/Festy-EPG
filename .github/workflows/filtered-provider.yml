@@ -45,7 +45,7 @@ jobs:
 
           echo "Xtream credentials verified."
 
-      - name: Build filtered provider categories
+      - name: Build filtered provider
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -53,19 +53,21 @@ jobs:
         run: |
           python config/provider/build_filtered_provider.py
 
-      - name: Commit updated provider files
+      - name: Commit updated category and report files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add filtered-provider/
+          git add filtered-provider/categories/
+          git add filtered-provider/reports/
+          git add filtered-provider/stream-summary.json
 
           if git diff --cached --quiet; then
             echo "Nothing changed."
             exit 0
           fi
 
-          git commit -m "Update filtered provider categories"
+          git commit -m "Update filtered provider data"
 
       - name: Push changes
         run: |
@@ -87,9 +89,13 @@ jobs:
           echo "Push failed."
           exit 1
 
-      - name: Upload filtered provider artifacts
+      - name: Upload filtered stream data
         uses: actions/upload-artifact@v4
         with:
-          name: filtered-provider
+          name: filtered-provider-streams
           path: |
-            filtered-provider/
+            filtered-provider/streams/
+            filtered-provider/categories/
+            filtered-provider/reports/
+            filtered-provider/stream-summary.json
+          retention-days: 7
