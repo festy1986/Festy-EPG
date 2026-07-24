@@ -347,7 +347,7 @@ def build_playlist_url(
         f"?username={username}"
         f"&password={password}"
         f"&type=m3u_plus"
-        f"&output=ts"
+        f"&output=m3u8"
     )
 
 
