@@ -1622,6 +1622,8 @@ jobs:
 
       - name: Commit and push TiviMate guide safely
         run: |
+          set -e
+
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
@@ -1630,6 +1632,10 @@ jobs:
           # Preserve compressed guides created by the other workflows.
           # This workflow should only update its own XML/GZ output.
           git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
+
+          # The TVMaze enrichment step updates this tracked cache, but this
+          # workflow should commit only its guide outputs.
+          git restore config/.tvmaze-tivimate-cache.json 2>/dev/null || true
 
           git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
           git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
@@ -1649,20 +1655,29 @@ jobs:
               exit 0
             fi
 
-            echo "Push failed, retrying after fresh fetch/rebase..."
+            echo "Push failed, preparing clean rebase..."
 
             git fetch origin main
+
+            echo "Repository status before cleanup:"
+            git status --short
+
+            # Remove tracked changes not included in the committed guide update.
+            git restore --worktree .
+            git reset --hard HEAD
+
+            echo "Repository status before rebase:"
+            git status --short
+
             git rebase origin/main
 
+            # Keep the newest versions created by the other guide workflows.
             git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
             git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
 
-            if git diff --cached --quiet; then
-              echo "No new commit needed after rebase, retrying push..."
-            else
-              git commit -m "Update TiviMate guide"
+            if ! git diff --cached --quiet; then
+              git commit --amend --no-edit
             fi
 
             sleep 5
