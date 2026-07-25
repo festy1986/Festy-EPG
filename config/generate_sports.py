@@ -2643,14 +2643,18 @@ def detect_single_team(
         return None
 
 
-    # A matchup channel must be handled by the matchup-logo path,
-    # never mistaken for one single team.
+    raw_name = clean_text(
+        provider_name
+    )
+
+
+    # A real matchup must always stay on the matchup-logo path.
     if matchup_parts(
         normalize_matchup(
             re.sub(
                 r"\s*\([A-Za-z0-9]{2,5}\)\s*",
                 " ",
-                clean_text(provider_name)
+                raw_name
             )
         )
     ):
@@ -2658,13 +2662,31 @@ def detect_single_team(
         return None
 
 
-    candidate = clean_text(
-        provider_name
-    )
+    # Generic placeholders must never receive a team logo.
+    # This prevents short aliases such as "NO" from turning
+    # "NO EVENT STREAMING" into New Orleans Pelicans.
+    if re.search(
+        r"\b(?:"
+        r"NO\s+EVENT(?:\s+STREAMING)?|"
+        r"NO\s+INFORMATION|"
+        r"OFF\s*AIR|"
+        r"EVENT\s+NOT\s+STARTED|"
+        r"COMING\s+SOON|"
+        r"TO\s+BE\s+ANNOUNCED|"
+        r"TBA|"
+        r"NBA\s+PASS\s+PPV|"
+        r"LEAGUE\s+PASS\s+PPV"
+        r")\b",
+        raw_name,
+        flags=re.IGNORECASE
+    ):
+
+        return None
 
 
-    # Remove provider prefixes, league labels, channel numbers,
-    # and quality/feed markers without changing the display-name.
+    candidate = raw_name
+
+
     candidate = re.sub(
         r"^(?:US|CA|UK)\s*:\s*",
         "",
@@ -2672,12 +2694,14 @@ def detect_single_team(
         flags=re.IGNORECASE
     )
 
+
     candidate = re.sub(
-        r"^(?:MLB|NBA|NFL|NHL)\s*:\s*",
+        r"^(?:8K\s+EXCLUSIVE\s*[|:-]\s*)+",
         "",
         candidate,
         flags=re.IGNORECASE
     )
+
 
     candidate = re.sub(
         r"^(?:MLB|NBA|NFL|NHL)"
@@ -2688,8 +2712,9 @@ def detect_single_team(
         flags=re.IGNORECASE
     )
 
+
     candidate = re.sub(
-        r"\b(?:RAW|HD|FHD|UHD|SD|4K|8K)\b",
+        r"\b(?:RAW|HD|FHD|UHD|SD|4K|8K|FEED)\b",
         " ",
         candidate,
         flags=re.IGNORECASE
@@ -2701,6 +2726,12 @@ def detect_single_team(
         candidate
     )
 
+    candidate = re.sub(
+        r"\s*[-|:]\s*$",
+        "",
+        candidate
+    )
+
     candidate = clean_text(
         candidate
     )
@@ -2709,6 +2740,11 @@ def detect_single_team(
     candidate_normalized = normalize_team_name(
         candidate
     )
+
+
+    if not candidate_normalized:
+
+        return None
 
 
     leagues = (
@@ -2726,7 +2762,8 @@ def detect_single_team(
 
     for league in leagues:
 
-        # First try an exact cleaned-name match.
+        # Exact aliases only. Never accept an alias merely because it
+        # appears somewhere inside a longer generic channel name.
         official_name = team_aliases[
             league
         ].get(
@@ -2739,43 +2776,6 @@ def detect_single_team(
             return (
                 league,
                 official_name
-            )
-
-
-        # Then search every known alias inside the current live-stream
-        # name. This covers all provider groups and quality variants
-        # while still using the current stream ID and current name.
-        best_match = None
-        best_length = 0
-
-        for normalized_alias, official_name in team_aliases[
-            league
-        ].items():
-
-            if not normalized_alias:
-
-                continue
-
-            if re.search(
-                rf"(?:^|\s){re.escape(normalized_alias)}(?:$|\s)",
-                candidate_normalized
-            ):
-
-                alias_length = len(
-                    normalized_alias
-                )
-
-                if alias_length > best_length:
-
-                    best_length = alias_length
-                    best_match = official_name
-
-
-        if best_match:
-
-            return (
-                league,
-                best_match
             )
 
 
@@ -2862,7 +2862,42 @@ def find_single_team_logo(
             )
 
 
-            if file_team != wanted_team:
+            # Resolve the logo filename through the exact alias table.
+            # This allows "LA Clippers" to match a logo file named
+            # "Los_Angeles_Clippers.png" without fuzzy matching.
+            file_official = team_aliases[
+                league_hint
+            ].get(
+                file_team
+            )
+
+
+            if file_official:
+
+                file_team = normalize_team_name(
+                    file_official
+                )
+
+
+            official_alias = team_aliases[
+                league_hint
+            ].get(
+                wanted_team
+            )
+
+
+            if official_alias:
+
+                wanted_compare = normalize_team_name(
+                    official_alias
+                )
+
+            else:
+
+                wanted_compare = wanted_team
+
+
+            if file_team != wanted_compare:
 
                 continue
 
