@@ -1119,6 +1119,12 @@ jobs:
               )
 
             output =
+              removeEpisodeNumBySystem(
+                output,
+                'xmltv_ns'
+              )
+
+            output =
               removeTag(
                 output,
                 'actor'
