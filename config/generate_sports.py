@@ -15,6 +15,7 @@ CHANNEL_FILE = "config/sports_channels.txt"
 TEAM_FILE = "config/sports_teams.txt"
 OUTPUT_FILE = "guides/sports.xml"
 SPORTS_LOGO_ROOT = "sports-logos"
+SUPPORTED_MAJOR_LEAGUES = ("MLB", "NBA", "NFL", "NHL")
 
 GITHUB_RAW_ROOT = (
     "https://raw.githubusercontent.com/"
@@ -115,6 +116,14 @@ debug_stats = {
     "logo_reverse_order_found": 0,
 
     "logo_not_found": 0,
+
+    "dynamic_major_channels_added": 0,
+
+    "single_team_logo_found": 0,
+
+    "single_team_logo_missing": 0,
+
+    "provider_name_fallback_used": 0,
 
 }
 
@@ -219,6 +228,76 @@ def normalize_matchup(text):
 
     return text.strip(
         " -|:;"
+    )
+
+
+# --------------------------------------------------
+# Clean provider channel/event text for fallback use.
+#
+# This does not replace the existing matchup parser.
+# It is used only when a normal A-vs-B matchup cannot
+# be extracted, such as boxing, PPV, or named events.
+# --------------------------------------------------
+
+def extract_provider_event_text(text):
+
+    if not text:
+
+        return ""
+
+
+    text = clean_text(
+        text
+    )
+
+
+    if "|" in text:
+
+        text = text.split(
+            "|",
+            1
+        )[1]
+
+
+    text = re.split(
+        r"\bstart\s*[:=]",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
+
+
+    text = re.split(
+        r"\bstop\s*[:=]",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
+
+
+    text = re.sub(
+        r"^(?:MLB|NBA|NFL|NHL)\s*[-:]?\s*",
+        "",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    text = re.sub(
+        r"^(?:PPV\s+)?EVENT\s*\d*\s*[:|-]?\s*",
+        "",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    text = normalize_matchup(
+        text
+    )
+
+
+    return clean_text(
+        text
     )
 
 
@@ -672,6 +751,174 @@ for stream in streams:
 
 
     provider[stream_id] = stream
+
+
+# --------------------------------------------------
+# Download provider live categories.
+#
+# The original sports_channels.txt entries are kept.
+# This only adds current MLB/NBA/NFL/NHL streams found
+# by live category/group name or current channel name.
+# --------------------------------------------------
+
+category_names = {}
+
+
+categories_url = (
+
+    f"{XTREAM_URL}/player_api.php"
+
+    f"?username={USERNAME}"
+
+    f"&password={PASSWORD}"
+
+    f"&action=get_live_categories"
+
+)
+
+
+try:
+
+    categories_response = session.get(
+        categories_url,
+        timeout=(30, 120)
+    )
+
+
+    categories_response.raise_for_status()
+
+
+    categories = categories_response.json()
+
+
+    for category in categories:
+
+        category_id = str(
+            category.get(
+                "category_id",
+                ""
+            )
+        )
+
+
+        category_name = clean_text(
+            category.get(
+                "category_name",
+                ""
+            )
+        )
+
+
+        if category_id:
+
+            category_names[
+                category_id
+            ] = category_name
+
+
+    print(
+        f"Provider live categories: "
+        f"{len(category_names)}"
+    )
+
+
+except Exception as e:
+
+    print(
+        "Unable to download provider live categories."
+    )
+
+
+    print(
+        e
+    )
+
+
+# --------------------------------------------------
+# Dynamically add all current major-league streams.
+#
+# XMLTV IDs remain the current provider stream IDs,
+# preserving TiviMate matching.
+# --------------------------------------------------
+
+dynamic_major_channels_added = 0
+
+
+for stream in streams:
+
+    stream_id = str(
+        stream.get(
+            "stream_id",
+            ""
+        )
+    )
+
+
+    stream_name = clean_text(
+        stream.get(
+            "name",
+            ""
+        )
+    )
+
+
+    category_id = str(
+        stream.get(
+            "category_id",
+            ""
+        )
+    )
+
+
+    category_name = category_names.get(
+        category_id,
+        ""
+    )
+
+
+    detection_text = (
+
+        f"{category_name} "
+
+        f"{stream_name}"
+
+    )
+
+
+    if not re.search(
+        r"\b(?:MLB|NBA|NFL|NHL)\b",
+        detection_text,
+        flags=re.IGNORECASE
+    ):
+
+        continue
+
+
+    if stream_id not in wanted:
+
+        wanted[
+            stream_id
+        ] = stream_name
+
+
+        dynamic_major_channels_added += 1
+
+
+debug_stats[
+    "dynamic_major_channels_added"
+] = dynamic_major_channels_added
+
+
+print(
+    f"Dynamic major-league channels added: "
+    f"{dynamic_major_channels_added}"
+)
+
+
+print(
+    f"Total sports channels selected: "
+    f"{len(wanted)}"
+)
 
 
 # --------------------------------------------------
@@ -2367,6 +2614,225 @@ def find_matchup_logo(
 
 
 # --------------------------------------------------
+# Detect whether the current channel/event name is
+# simply one known MLB/NBA/NFL/NHL team.
+# --------------------------------------------------
+
+def detect_single_team(
+    provider_name,
+    league_hint=None
+):
+
+    candidate = extract_provider_event_text(
+        provider_name
+    )
+
+
+    if not candidate:
+
+        return None
+
+
+    candidate_normalized = normalize_team_name(
+        candidate
+    )
+
+
+    leagues = (
+
+        [league_hint]
+
+        if league_hint in team_aliases
+
+        else list(
+            SUPPORTED_MAJOR_LEAGUES
+        )
+
+    )
+
+
+    for league in leagues:
+
+        official_name = team_aliases[
+            league
+        ].get(
+            candidate_normalized
+        )
+
+
+        if official_name:
+
+            return (
+
+                league,
+
+                official_name
+
+            )
+
+
+    return None
+
+
+# --------------------------------------------------
+# Find an existing single-team logo.
+#
+# Existing matchup-logo logic is left unchanged.
+# This is used only when the entire channel/event name
+# is detected as one known major-league team.
+# --------------------------------------------------
+
+def find_single_team_logo(
+    official_team,
+    league_hint
+):
+
+    global logos_found
+
+    global logos_missing
+
+
+    wanted_team = normalize_team_name(
+        official_team
+    )
+
+
+    if not wanted_team:
+
+        return None
+
+
+    league_root = os.path.join(
+        SPORTS_LOGO_ROOT,
+        league_hint
+    )
+
+
+    if not os.path.isdir(
+        league_root
+    ):
+
+        debug_stats[
+            "single_team_logo_missing"
+        ] += 1
+
+
+        logos_missing += 1
+
+
+        return None
+
+
+    for root, directories, files in os.walk(
+        league_root
+    ):
+
+        for filename in files:
+
+            if not filename.lower().endswith(
+                ".png"
+            ):
+
+                continue
+
+
+            file_stem = os.path.splitext(
+                filename
+            )[0]
+
+
+            if "_vs_" in file_stem.lower():
+
+                continue
+
+
+            file_team = normalize_team_name(
+                file_stem.replace(
+                    "_",
+                    " "
+                )
+            )
+
+
+            if file_team != wanted_team:
+
+                continue
+
+
+            relative_path = os.path.relpath(
+                os.path.join(
+                    root,
+                    filename
+                ),
+                "."
+            )
+
+
+            relative_path = relative_path.replace(
+                os.sep,
+                "/"
+            )
+
+
+            encoded_path = "/".join(
+                quote(
+                    part,
+                    safe=""
+                )
+                for part in relative_path.split(
+                    "/"
+                )
+            )
+
+
+            logo_url = (
+                GITHUB_RAW_ROOT
+                + encoded_path
+            )
+
+
+            logos_found += 1
+
+
+            debug_stats[
+                "single_team_logo_found"
+            ] += 1
+
+
+            print()
+
+
+            print(
+                "[SINGLE TEAM LOGO FOUND]"
+            )
+
+
+            print(
+                f"  Team: {official_team}"
+            )
+
+
+            print(
+                f"  {relative_path}"
+            )
+
+
+            return logo_url
+
+
+    debug_stats[
+        "single_team_logo_missing"
+    ] += 1
+
+
+    logos_missing += 1
+
+
+    return None
+
+
+
+# --------------------------------------------------
 # Build event information
 #
 # Order:
@@ -2451,6 +2917,13 @@ def build_event_info(
     )
 
 
+    provider_fallback_event = extract_provider_event_text(
+
+        provider_name
+
+    )
+
+
     print(
         "Extracted matchup:"
     )
@@ -2480,6 +2953,15 @@ def build_event_info(
 
     print(
         f"  {league_hint}"
+    )
+
+
+    single_team = detect_single_team(
+
+        provider_name,
+
+        league_hint
+
     )
 
 
@@ -2584,12 +3066,30 @@ def build_event_info(
 
     else:
 
-        title_text = "Sports Event"
+        fallback_title = (
+
+            provider_fallback_event
+
+            or provider_name
+
+            or "Sports Event"
+
+        )
+
+
+        if fallback_title != "Sports Event":
+
+            debug_stats[
+                "provider_name_fallback_used"
+            ] += 1
+
+
+        title_text = fallback_title
 
 
         description_text = (
 
-            f"Sports event\n"
+            f"{fallback_title}\n"
 
             f"{preferred_date.strftime('%A')} "
 
@@ -2616,6 +3116,27 @@ def build_event_info(
             canonical_matchup,
 
             league_hint
+
+        )
+
+
+    elif single_team:
+
+        single_team_league = single_team[
+            0
+        ]
+
+
+        single_team_name = single_team[
+            1
+        ]
+
+
+        logo_url = find_single_team_logo(
+
+            single_team_name,
+
+            single_team_league
 
         )
 
@@ -2980,7 +3501,7 @@ for channel_id, requested_name in wanted.items():
 
 
     # --------------------------------------------------
-    # Add matchup logo to CHANNEL.
+    # Add matchup or single-team logo to CHANNEL.
     #
     # Independent of ESPN success/failure.
     # --------------------------------------------------
