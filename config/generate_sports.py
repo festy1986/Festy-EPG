@@ -313,7 +313,6 @@ def extract_provider_matchup(text):
             "provider_event_failed"
         ] += 1
 
-
         return ""
 
 
@@ -322,36 +321,53 @@ def extract_provider_matchup(text):
     )
 
 
-    if "|" not in text:
-
-        debug_stats[
-            "provider_event_failed"
-        ] += 1
-
-
-        return ""
-
-
-    text = text.split(
-        "|",
-        1
-    )[1]
-
+    # Remove provider scheduling metadata first.
+    text = re.split(
+        r"\bstart\s*[:=]",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
 
     text = re.split(
-        r"\bstart\s*:",
+        r"\bstop\s*[:=]",
         text,
         maxsplit=1,
         flags=re.IGNORECASE
     )[0]
 
 
-    text = re.split(
-        r"\bstop\s*:",
-        text,
-        maxsplit=1,
-        flags=re.IGNORECASE
-    )[0]
+    # Existing pipe-based names remain supported.
+    if "|" in text:
+
+        text = text.split(
+            "|",
+            1
+        )[1]
+
+    else:
+
+        # Also support current provider names such as:
+        # NBA 02: Knicks (NYK) x Timberwolves (MIN)
+        # MLB 04 - Blue Jays x Red Sox
+        text = re.sub(
+            r"^(?:US\s*:\s*)?"
+            r"(?:MLB|NBA|NFL|NHL)"
+            r"(?:\s+(?:CHANNEL\s*)?\d+)?"
+            r"\s*[-:|]\s*",
+            "",
+            text,
+            flags=re.IGNORECASE
+        )
+
+
+    # Remove provider abbreviations such as (NYK), (MIN), etc.
+    # The canonical team alias lookup supplies the full official names.
+    text = re.sub(
+        r"\s*\([A-Za-z0-9]{2,5}\)\s*",
+        " ",
+        text
+    )
 
 
     text = clean_text(
@@ -374,7 +390,6 @@ def extract_provider_matchup(text):
         debug_stats[
             "provider_event_failed"
         ] += 1
-
 
         return ""
 
@@ -2623,14 +2638,72 @@ def detect_single_team(
     league_hint=None
 ):
 
-    candidate = extract_provider_event_text(
+    if not provider_name:
+
+        return None
+
+
+    # A matchup channel must be handled by the matchup-logo path,
+    # never mistaken for one single team.
+    if matchup_parts(
+        normalize_matchup(
+            re.sub(
+                r"\s*\([A-Za-z0-9]{2,5}\)\s*",
+                " ",
+                clean_text(provider_name)
+            )
+        )
+    ):
+
+        return None
+
+
+    candidate = clean_text(
         provider_name
     )
 
 
-    if not candidate:
+    # Remove provider prefixes, league labels, channel numbers,
+    # and quality/feed markers without changing the display-name.
+    candidate = re.sub(
+        r"^(?:US|CA|UK)\s*:\s*",
+        "",
+        candidate,
+        flags=re.IGNORECASE
+    )
 
-        return None
+    candidate = re.sub(
+        r"^(?:MLB|NBA|NFL|NHL)\s*:\s*",
+        "",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+    candidate = re.sub(
+        r"^(?:MLB|NBA|NFL|NHL)"
+        r"(?:\s+(?:CHANNEL\s*)?\d+)?"
+        r"\s*[-:|]?\s*",
+        "",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+    candidate = re.sub(
+        r"\b(?:RAW|HD|FHD|UHD|SD|4K|8K)\b",
+        " ",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+    candidate = re.sub(
+        r"[ᴿᴬᵂᴴᴰ⁴ᴷ⁸ᴷ]+",
+        " ",
+        candidate
+    )
+
+    candidate = clean_text(
+        candidate
+    )
 
 
     candidate_normalized = normalize_team_name(
@@ -2653,6 +2726,7 @@ def detect_single_team(
 
     for league in leagues:
 
+        # First try an exact cleaned-name match.
         official_name = team_aliases[
             league
         ].get(
@@ -2663,11 +2737,45 @@ def detect_single_team(
         if official_name:
 
             return (
-
                 league,
-
                 official_name
+            )
 
+
+        # Then search every known alias inside the current live-stream
+        # name. This covers all provider groups and quality variants
+        # while still using the current stream ID and current name.
+        best_match = None
+        best_length = 0
+
+        for normalized_alias, official_name in team_aliases[
+            league
+        ].items():
+
+            if not normalized_alias:
+
+                continue
+
+            if re.search(
+                rf"(?:^|\s){re.escape(normalized_alias)}(?:$|\s)",
+                candidate_normalized
+            ):
+
+                alias_length = len(
+                    normalized_alias
+                )
+
+                if alias_length > best_length:
+
+                    best_length = alias_length
+                    best_match = official_name
+
+
+        if best_match:
+
+            return (
+                league,
+                best_match
             )
 
 
