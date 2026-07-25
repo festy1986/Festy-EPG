@@ -1087,11 +1087,9 @@ jobs:
               replaceTag(
                 output,
                 'title',
-                cleanProgrammeTitle(
-                  getTag(
-                    block,
-                    'title'
-                  )
+                getTag(
+                  block,
+                  'title'
                 )
               )
 
@@ -1137,11 +1135,9 @@ jobs:
                 output,
 
               title:
-                cleanProgrammeTitle(
-                  getTag(
-                    block,
-                    'title'
-                  )
+                getTag(
+                  block,
+                  'title'
                 ),
 
               episodeTitle,
@@ -2329,6 +2325,13 @@ jobs:
                   channel
                 ) +
                 '$2'
+              )
+
+            block =
+              replaceTag(
+                block,
+                'title',
+                programme.title
               )
 
             return block.trimEnd() +
