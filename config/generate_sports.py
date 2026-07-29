@@ -2263,18 +2263,68 @@ def clean_logo_filename(text):
 # Create normalized logo key
 # --------------------------------------------------
 
-def matchup_logo_key(
-    first_team,
-    second_team
+# --------------------------------------------------
+# Logo-name compatibility aliases.
+#
+# These affect logo matching only. Displayed team names,
+# ESPN matching, titles, and all other behavior remain
+# unchanged.
+# --------------------------------------------------
+
+def normalize_logo_team_name(
+    team_name,
+    league_hint=None
 ):
 
-    first = normalize_team_name(
-        first_team
+    normalized = normalize_team_name(
+        team_name
     )
 
 
-    second = normalize_team_name(
-        second_team
+    if league_hint == "NBA" and normalized in {
+        "new york knicks",
+        "ny knicks",
+        "knicks"
+    }:
+
+        return "new york knicks"
+
+
+    if league_hint == "NHL" and normalized in {
+        "arizona coyotes",
+        "phoenix coyotes",
+        "coyotes",
+        "utah hockey club",
+        "utah hc",
+        "utah mammoth",
+        "mammoth"
+    }:
+
+        return "utah mammoth"
+
+
+    return normalized
+
+
+# --------------------------------------------------
+# Create normalized logo key
+# --------------------------------------------------
+
+def matchup_logo_key(
+    first_team,
+    second_team,
+    league_hint=None
+):
+
+    first = normalize_logo_team_name(
+        first_team,
+        league_hint
+    )
+
+
+    second = normalize_logo_team_name(
+        second_team,
+        league_hint
     )
 
 
@@ -2356,7 +2406,9 @@ def find_matchup_logo(
 
         first_team,
 
-        second_team
+        second_team,
+
+        league_hint
 
     )
 
@@ -2497,7 +2549,9 @@ def find_matchup_logo(
 
                 logo_first_normalized,
 
-                logo_second_normalized
+                logo_second_normalized,
+
+                league_hint
 
             )
 
@@ -2564,13 +2618,21 @@ def find_matchup_logo(
 
             if (
 
-                logo_first_normalized
+                normalize_logo_team_name(
+
+                    logo_first_normalized,
+
+                    league_hint
+
+                )
 
                 ==
 
-                normalize_team_name(
+                normalize_logo_team_name(
 
-                    first_team
+                    first_team,
+
+                    league_hint
 
                 )
 
@@ -2800,8 +2862,9 @@ def find_single_team_logo(
     global logos_missing
 
 
-    wanted_team = normalize_team_name(
-        official_team
+    wanted_team = normalize_logo_team_name(
+        official_team,
+        league_hint
     )
 
 
@@ -2854,11 +2917,12 @@ def find_single_team_logo(
                 continue
 
 
-            file_team = normalize_team_name(
+            file_team = normalize_logo_team_name(
                 file_stem.replace(
                     "_",
                     " "
-                )
+                ),
+                league_hint
             )
 
 
@@ -2874,8 +2938,9 @@ def find_single_team_logo(
 
             if file_official:
 
-                file_team = normalize_team_name(
-                    file_official
+                file_team = normalize_logo_team_name(
+                    file_official,
+                    league_hint
                 )
 
 
@@ -2888,8 +2953,9 @@ def find_single_team_logo(
 
             if official_alias:
 
-                wanted_compare = normalize_team_name(
-                    official_alias
+                wanted_compare = normalize_logo_team_name(
+                    official_alias,
+                    league_hint
                 )
 
             else:
@@ -3354,7 +3420,9 @@ def build_event_info(
 
             f"{event_datetime.strftime('%A')} "
 
-            f"{event_datetime.strftime('%m/%d/%Y')}\n"
+            f"{event_datetime.strftime('%m/%d/%Y')}"
+
+            f" - "
 
             f"{event_time_text}"
 
