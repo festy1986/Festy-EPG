@@ -2776,6 +2776,13 @@ def detect_single_team(
 
 
     candidate = re.sub(
+        r"\s*\([A-Za-z0-9]{2,5}\)\s*",
+        " ",
+        candidate
+    )
+
+
+    candidate = re.sub(
         r"\b(?:RAW|HD|FHD|UHD|SD|4K|8K|FEED)\b",
         " ",
         candidate,
@@ -2823,6 +2830,22 @@ def detect_single_team(
 
 
     for league in leagues:
+
+        if league == "NHL" and candidate_normalized in {
+            "arizona coyotes",
+            "phoenix coyotes",
+            "coyotes",
+            "utah hockey club",
+            "utah hc",
+            "utah mammoth",
+            "mammoth"
+        }:
+
+            return (
+                "NHL",
+                "Utah Mammoth"
+            )
+
 
         # Exact aliases only. Never accept an alias merely because it
         # appears somewhere inside a longer generic channel name.
@@ -3277,11 +3300,19 @@ def build_event_info(
 
         fallback_title = (
 
-            provider_fallback_event
+            single_team[1]
 
-            or provider_name
+            if single_team
 
-            or "Sports Event"
+            else (
+
+                provider_fallback_event
+
+                or provider_name
+
+                or "Sports Event"
+
+            )
 
         )
 
@@ -3621,6 +3652,14 @@ for channel_id, requested_name in wanted.items():
 
         requested_name
 
+    )
+
+
+    provider_name = re.sub(
+        r"\b(?:ARIZONA\s+COYOTES|PHOENIX\s+COYOTES|UTAH\s+HOCKEY\s+CLUB|UTAH\s+HC)\b",
+        "UTAH MAMMOTH",
+        provider_name,
+        flags=re.IGNORECASE
     )
 
 
