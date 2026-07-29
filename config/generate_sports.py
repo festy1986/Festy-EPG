@@ -2691,6 +2691,31 @@ def find_matchup_logo(
 
 
 # --------------------------------------------------
+# Rename legacy provider team identities before any
+# display-name, title, description, or logo processing.
+# --------------------------------------------------
+
+def rename_legacy_team_identity(text):
+
+    if not text:
+
+        return text
+
+
+    return re.sub(
+        r"\b(?:"
+        r"ARIZONA\s+COYOTES|"
+        r"PHOENIX\s+COYOTES|"
+        r"UTAH\s+HOCKEY\s+CLUB|"
+        r"UTAH\s+HC"
+        r")\b",
+        "UTAH MAMMOTH",
+        str(text),
+        flags=re.IGNORECASE
+    )
+
+
+# --------------------------------------------------
 # Detect whether the current channel/event name is
 # simply one known MLB/NBA/NFL/NHL team.
 # --------------------------------------------------
@@ -2706,7 +2731,9 @@ def detect_single_team(
 
 
     raw_name = clean_text(
-        provider_name
+        rename_legacy_team_identity(
+            provider_name
+        )
     )
 
 
@@ -2831,15 +2858,7 @@ def detect_single_team(
 
     for league in leagues:
 
-        if league == "NHL" and candidate_normalized in {
-            "arizona coyotes",
-            "phoenix coyotes",
-            "coyotes",
-            "utah hockey club",
-            "utah hc",
-            "utah mammoth",
-            "mammoth"
-        }:
+        if league == "NHL" and candidate_normalized == "utah mammoth":
 
             return (
                 "NHL",
@@ -3089,11 +3108,15 @@ def build_event_info(
 
     provider_name = clean_text(
 
-        stream.get(
+        rename_legacy_team_identity(
 
-            "name",
+            stream.get(
 
-            ""
+                "name",
+
+                ""
+
+            )
 
         )
 
@@ -3646,20 +3669,16 @@ for channel_id, requested_name in wanted.items():
     ]
 
 
-    provider_name = stream.get(
+    provider_name = rename_legacy_team_identity(
 
-        "name",
+        stream.get(
 
-        requested_name
+            "name",
 
-    )
+            requested_name
 
+        )
 
-    provider_name = re.sub(
-        r"\b(?:ARIZONA\s+COYOTES|PHOENIX\s+COYOTES|UTAH\s+HOCKEY\s+CLUB|UTAH\s+HC)\b",
-        "UTAH MAMMOTH",
-        provider_name,
-        flags=re.IGNORECASE
     )
 
 
