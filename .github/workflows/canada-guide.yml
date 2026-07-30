@@ -31,7 +31,7 @@ jobs:
           echo "Downloading fresh IPTV-org Canada guide..."
           curl -L --fail --retry 5 --retry-delay 10 \
             --progress-bar \
-            https://iptv-org.github.io/epg/guides/ca.xml.gz \
+            https://iptv-epg.org/files/epg-ca.xml.gz \
             -o canada/source/ca.xml.gz
 
           test -s canada/source/ca.xml.gz
