@@ -64,6 +64,7 @@ jobs:
           const programmes = []
           const tvmazeShowCache = new Map()
           const tvmazeEpisodeCache = new Map()
+          const tvmazeEpisodeListCache = new Map()
           const tmdbTvCache = new Map()
           const tmdbMovieCache = new Map()
 
@@ -80,6 +81,8 @@ jobs:
           let tvmazeFieldsUsed = 0
           let tmdbMatches = 0
           let tmdbFieldsUsed = 0
+          let tvmazeCorrectedEpisodeNumbers = 0
+          let tvmazeDescriptionMatches = 0
 
           function decodeXml(value) {
             return String(value || '')
@@ -303,52 +306,142 @@ jobs:
             return true
           }
 
+          function similarityText(value) {
+            return cleanSpaces(String(value || '')
+              .toLowerCase()
+              .replace(/\([^)]*(?:19|20)\d{2}[^)]*\)/g, ' ')
+              .replace(/\bS\d+E\d+\b/gi, ' ')
+              .replace(/<[^>]+>/g, ' ')
+              .replace(/[^a-z0-9]+/g, ' '))
+          }
+
+          function tokenSimilarity(left, right) {
+            const a = similarityText(left).split(' ').filter(token => token.length > 2)
+            const b = similarityText(right).split(' ').filter(token => token.length > 2)
+            if (a.length < 4 || b.length < 4) return 0
+            const aSet = new Set(a)
+            const bSet = new Set(b)
+            let intersection = 0
+            for (const token of aSet) if (bSet.has(token)) intersection++
+            return (2 * intersection) / (aSet.size + bSet.size)
+          }
+
+          function cleanTvmazeSummary(value) {
+            return cleanSpaces(String(value || '').replace(/<[^>]+>/g, ' '))
+          }
+
           async function getTvmazeShow(title) {
             const key = normalizeTitle(title)
             if (tvmazeShowCache.has(key)) return tvmazeShowCache.get(key)
             const data = await fetchJson('https://api.tvmaze.com/search/shows?q=' + encodeURIComponent(title))
             await sleep(250)
-            const show = data && data.length ? data[0].show : null
+            const candidates = Array.isArray(data) ? data.map(item => item.show).filter(Boolean) : []
+            const exact = candidates.find(show => normalizeTitle(show.name) === key)
+            const show = exact || candidates.find(show => {
+              const candidate = normalizeTitle(show.name)
+              return candidate && (candidate.includes(key) || key.includes(candidate))
+            }) || null
             tvmazeShowCache.set(key, show)
             return show
           }
 
-          async function enrichFromTvmaze(programme) {
-            if (programme.movie || !programme.episodeNumber) return
-            const match = programme.episodeNumber.match(/^S(\d+)E(\d+)$/i)
-            if (!match) return
+          async function getTvmazeEpisodes(showId) {
+            if (tvmazeEpisodeListCache.has(showId)) return tvmazeEpisodeListCache.get(showId)
+            const episodes = await fetchJson('https://api.tvmaze.com/shows/' + showId + '/episodes?specials=1')
+            await sleep(250)
+            const result = Array.isArray(episodes) ? episodes : []
+            tvmazeEpisodeListCache.set(showId, result)
+            return result
+          }
 
-            const show = await getTvmazeShow(programme.title)
+          function tvmazeEpisodeNumber(episode) {
+            if (!episode || episode.season == null || episode.number == null) return ''
+            return 'S' + Number(episode.season) + 'E' + Number(episode.number)
+          }
+
+          function episodeTitleMatches(left, right) {
+            if (!left || !right) return false
+            return normalizeTitle(left) === normalizeTitle(right)
+          }
+
+          function findUniqueEpisodeByTitle(episodes, episodeTitle) {
+            const wanted = normalizeTitle(episodeTitle)
+            if (!wanted) return null
+            const exact = episodes.filter(episode => normalizeTitle(episode.name) === wanted)
+            return exact.length === 1 ? exact[0] : null
+          }
+
+          function findEpisodeByDescription(episodes, description) {
+            if (!description) return null
+            const ranked = episodes
+              .map(episode => ({ episode, score: tokenSimilarity(description, cleanTvmazeSummary(episode.summary)) }))
+              .filter(item => item.score > 0)
+              .sort((a, b) => b.score - a.score)
+            if (!ranked.length) return null
+            const best = ranked[0]
+            const second = ranked[1] || { score: 0 }
+            if (best.score < 0.90) return null
+            if (best.score - second.score < 0.10) return null
+            return best.episode
+          }
+
+          async function enrichFromTvmaze(programme, preparedShow = null, preparedEpisodes = null) {
+            if (programme.movie) return
+            if (!programme.episodeNumber && !programme.episodeTitle && !programme.baseDescription) return
+
+            const show = preparedShow || await getTvmazeShow(programme.title)
             if (!show) return
+            const episodes = preparedEpisodes || await getTvmazeEpisodes(show.id)
+            if (!episodes.length) return
 
-            const key = show.id + ':' + Number(match[1]) + ':' + Number(match[2])
-            let episode = tvmazeEpisodeCache.get(key)
-            if (episode === undefined) {
-              episode = await fetchJson(
-                'https://api.tvmaze.com/shows/' + show.id + '/episodebynumber?season=' +
-                Number(match[1]) + '&number=' + Number(match[2])
-              )
-              await sleep(250)
-              tvmazeEpisodeCache.set(key, episode || null)
+            let episode = null
+            let suppliedNumberEpisode = null
+            const numberMatch = programme.episodeNumber
+              ? programme.episodeNumber.match(/^S(\d+)E(\d+)$/i)
+              : null
+
+            if (numberMatch) {
+              suppliedNumberEpisode = episodes.find(candidate =>
+                Number(candidate.season) === Number(numberMatch[1]) &&
+                Number(candidate.number) === Number(numberMatch[2])
+              ) || null
+
+              if (suppliedNumberEpisode && programme.episodeTitle) {
+                if (episodeTitleMatches(programme.episodeTitle, suppliedNumberEpisode.name)) {
+                  episode = suppliedNumberEpisode
+                } else {
+                  const titleEpisode = findUniqueEpisodeByTitle(episodes, programme.episodeTitle)
+                  if (titleEpisode) {
+                    episode = titleEpisode
+                    const corrected = tvmazeEpisodeNumber(titleEpisode)
+                    if (corrected && corrected !== programme.episodeNumber) {
+                      programme.episodeNumber = corrected
+                      tvmazeCorrectedEpisodeNumbers++
+                    }
+                  }
+                }
+              } else if (suppliedNumberEpisode) {
+                episode = suppliedNumberEpisode
+              }
             }
+
+            if (!episode && programme.episodeTitle) {
+              episode = findUniqueEpisodeByTitle(episodes, programme.episodeTitle)
+            }
+
+            if (!episode && !programme.episodeTitle && !programme.episodeNumber) {
+              episode = findEpisodeByDescription(episodes, programme.baseDescription)
+              if (episode) tvmazeDescriptionMatches++
+            }
+
             if (!episode) return
 
             let used = false
             used = fillMissing(programme, 'episodeTitle', episode.name, 'tvmaze') || used
-            used = fillMissing(
-              programme,
-              'baseDescription',
-              episode.summary ? episode.summary.replace(/<[^>]+>/g, '') : '',
-              'tvmaze'
-            ) || used
+            used = fillMissing(programme, 'episodeNumber', tvmazeEpisodeNumber(episode), 'tvmaze') || used
+            used = fillMissing(programme, 'baseDescription', cleanTvmazeSummary(episode.summary), 'tvmaze') || used
             used = fillMissing(programme, 'airDate', parseOriginalAirDate(episode.airdate), 'tvmaze') || used
-            used = fillMissing(
-              programme,
-              'icon',
-              episode.image ? (episode.image.original || episode.image.medium) : '',
-              'tvmaze'
-            ) || used
-            if (used) tvmazeMatches++
+            if (used || episode) tvmazeMatches++
           }
 
           async function tmdbRequest(path) {
@@ -384,12 +477,6 @@ jobs:
             used = fillMissing(programme, 'episodeTitle', episode.name, 'tmdb') || used
             used = fillMissing(programme, 'baseDescription', episode.overview, 'tmdb') || used
             used = fillMissing(programme, 'airDate', parseOriginalAirDate(episode.air_date), 'tmdb') || used
-            used = fillMissing(
-              programme,
-              'icon',
-              episode.still_path ? 'https://image.tmdb.org/t/p/original' + episode.still_path : '',
-              'tmdb'
-            ) || used
             if (used) tmdbMatches++
           }
 
@@ -409,14 +496,6 @@ jobs:
 
             let used = false
             used = fillMissing(programme, 'baseDescription', movie.overview, 'tmdb') || used
-            used = fillMissing(
-              programme,
-              'icon',
-              movie.backdrop_path || movie.poster_path
-                ? 'https://image.tmdb.org/t/p/original' + (movie.backdrop_path || movie.poster_path)
-                : '',
-              'tmdb'
-            ) || used
             if (!programme.year && movie.release_date) {
               used = fillMissing(programme, 'year', movie.release_date.slice(0, 4), 'tmdb') || used
             }
@@ -553,11 +632,35 @@ jobs:
           }
 
           async function enrichGuide() {
+            const groups = new Map()
             for (const programme of programmes) {
-              await enrichFromTvmaze(programme)
-              await enrichTvFromTmdb(programme)
-              await enrichMovieFromTmdb(programme)
+              const key = normalizeTitle(programme.title)
+              if (!groups.has(key)) groups.set(key, [])
+              groups.get(key).push(programme)
             }
+
+            const queue = [...groups.values()]
+            let nextIndex = 0
+            const workerCount = Math.min(5, queue.length)
+
+            async function worker() {
+              while (true) {
+                const index = nextIndex++
+                if (index >= queue.length) return
+                const group = queue[index]
+                const first = group[0]
+                const show = first && !first.movie ? await getTvmazeShow(first.title) : null
+                const episodes = show ? await getTvmazeEpisodes(show.id) : []
+
+                for (const programme of group) {
+                  await enrichFromTvmaze(programme, show, episodes)
+                  await enrichTvFromTmdb(programme)
+                  await enrichMovieFromTmdb(programme)
+                }
+              }
+            }
+
+            await Promise.all(Array.from({ length: workerCount }, () => worker()))
           }
 
           async function writeGuide() {
@@ -597,6 +700,8 @@ jobs:
             console.log('Programmes with episode tags removed: ' + episodeTagsRemoved)
             console.log('TVMaze matched programmes: ' + tvmazeMatches)
             console.log('TVMaze fields filled: ' + tvmazeFieldsUsed)
+            console.log('TVMaze corrected episode numbers: ' + tvmazeCorrectedEpisodeNumbers)
+            console.log('TVMaze description-only matches: ' + tvmazeDescriptionMatches)
             console.log('TMDB matched programmes: ' + tmdbMatches)
             console.log('TMDB fields filled: ' + tmdbFieldsUsed)
             console.log('Output: ' + outputPath)
