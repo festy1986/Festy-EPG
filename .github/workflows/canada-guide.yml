@@ -83,11 +83,15 @@ jobs:
             appendedDescriptionTitles: 0,
             appendedDescriptionNumbers: 0,
             appendedDescriptionDates: 0,
+            moviesDetectedByCategory: 0,
+            moviesDetectedByChannel: 0,
+            moviesDetectedByYearFallback: 0,
             tmdbMoviesQueued: 0,
             tmdbMoviesCompleted: 0,
             tmdbMoviesSearched: 0,
             tmdbMoviesMatched: 0,
-            tmdbYearsAdded: 0
+            tmdbYearsAdded: 0,
+            tmdbFullReleaseDatesAdded: 0
           }
 
           const showSearchCache = new Map()
@@ -189,12 +193,52 @@ jobs:
               .filter(Boolean)
           }
 
-          function isMovie(block) {
-            // IPTV-EPG uses different movie labels by country/provider.
-            // Check every category, case-insensitively through normalize().
+          function movieCategoryMatch(block) {
+            // Canada normally identifies films with <category>Movie</category>.
+            // The UK normally identifies them with <category>Film</category>.
+            // Read every category because Movie/Film is often not the first one.
             return categories(block).some(value =>
-              /^(?:movie|movies|film|films|feature film|feature films|motion picture|motion pictures|cinema)(?:\b|$)/.test(value)
+              /^(?:movie|movies|film|films|feature film|feature films|motion picture|motion pictures|cinema)$/.test(value)
             )
+          }
+
+          function hasEpisodeEvidence(block) {
+            return Boolean(
+              tag(block, 'sub-title') ||
+              normalizeEpisodeCode(
+                systemTag(block, 'common') ||
+                systemTag(block, 'onscreen') ||
+                systemTag(block, 'xmltv_ns') ||
+                tag(block, 'episode-num')
+              )
+            )
+          }
+
+          function isMovieChannelName(value) {
+            const name = normalize(value)
+            return [
+              /\bsky cinema\b/, /\bfilm4\b/, /\bgreat movies\b/,
+              /\bmovies\b/, /\bmovie channel\b/, /\btcm\b/,
+              /\bturner classic movies\b/, /\bhollywood suite\b/,
+              /\bcrave movies\b/, /\bsuper ecran\b/, /\bcineplex\b/,
+              /\bmpix\b/, /\bmgm plus\b/, /\bhbo movies\b/
+            ].some(pattern => pattern.test(name))
+          }
+
+          function movieDetection(block, channelName) {
+            if (movieCategoryMatch(block)) return { movie: true, reason: 'category' }
+
+            // Never use a fallback when the source clearly supplies episode metadata.
+            if (hasEpisodeEvidence(block)) return { movie: false, reason: '' }
+
+            // Backup 1: movie-focused channel with no episode evidence.
+            if (isMovieChannelName(channelName)) return { movie: true, reason: 'channel' }
+
+            // Backup 2: a source release year with no episode evidence.
+            const dateValue = parseDateTag(block)
+            if (/^(?:18|19|20)\d{2}$/.test(dateValue)) return { movie: true, reason: 'year' }
+
+            return { movie: false, reason: '' }
           }
 
           function cleanSeriesTitle(value) {
@@ -632,43 +676,62 @@ jobs:
           function movieYear(programme) {
             const dateValue = parseDateTag(programme.block)
             if (/^(18|19|20)\d{2}$/.test(dateValue)) return dateValue
+            if (/^(18|19|20)\d{2}-\d{2}-\d{2}$/.test(dateValue)) return dateValue.slice(0, 4)
             const titleMatch = programme.title.match(/\(((?:18|19|20)\d{2})\)\s*$/)
             if (titleMatch) return titleMatch[1]
             const descMatch = programme.description.match(/\(((?:18|19|20)\d{2})\)\s*$/)
             return descMatch ? descMatch[1] : ''
           }
 
-          async function getMovieYear(title) {
-            const key = compactKey(title)
+          async function getMovieReleaseDate(title, yearHint) {
+            const key = compactKey(title) + '|' + (yearHint || '')
             if (movieCache.has(key)) return movieCache.get(key)
             if (!process.env.TMDB_API_KEY) return ''
+
             stats.tmdbMoviesSearched++
-            const data = await fetchJson(
-              'https://api.themoviedb.org/3/search/movie?api_key=' + encodeURIComponent(process.env.TMDB_API_KEY) + '&query=' + encodeURIComponent(title),
-              'movie ' + title,
-              tmdbLimiter
-            )
+            let url = 'https://api.themoviedb.org/3/search/movie?api_key=' +
+              encodeURIComponent(process.env.TMDB_API_KEY) +
+              '&query=' + encodeURIComponent(title)
+            if (yearHint) url += '&year=' + encodeURIComponent(yearHint)
+
+            const data = await fetchJson(url, 'movie ' + title + (yearHint ? ' (' + yearHint + ')' : ''), tmdbLimiter)
             const normalized = normalize(title)
             const matches = (data && Array.isArray(data.results) ? data.results : [])
               .filter(movie => normalize(movie.title) === normalized || normalize(movie.original_title) === normalized)
-            const movie = matches[0] || null
-            const year = movie && /^\d{4}/.test(movie.release_date || '') ? movie.release_date.slice(0, 4) : ''
+
+            let movie = null
+            if (yearHint) {
+              movie = matches.find(item => String(item.release_date || '').slice(0, 4) === yearHint) || null
+            }
+            if (!movie) movie = matches[0] || null
+
+            const releaseDate = movie && /^\d{4}-\d{2}-\d{2}$/.test(movie.release_date || '')
+              ? movie.release_date
+              : ''
             if (movie) stats.tmdbMoviesMatched++
-            movieCache.set(key, year)
-            return year
+            movieCache.set(key, releaseDate)
+            return releaseDate
           }
 
           async function enrichMovieGroup(group) {
-            const year = await getMovieYear(group[0].title)
-            if (!year) return
+            const yearHint = movieYear(group[0])
+            const releaseDate = await getMovieReleaseDate(group[0].title, yearHint)
+            if (!releaseDate) return
+
+            const visibleDate = displayDate(releaseDate)
             for (const programme of group) {
-              if (movieYear(programme)) continue
-              programme.movieYear = year
-              if (!/\((?:18|19|20)\d{2}\)\s*$/.test(programme.description)) {
-                programme.description = clean(programme.description).replace(/[.\s]+$/, '')
-                programme.description += (programme.description ? '. ' : '') + '(' + year + ')'
-              }
+              programme.movieReleaseDate = releaseDate
+              programme.movieYear = releaseDate.slice(0, 4)
+
+              let description = clean(programme.description)
+                .replace(/\s*\((?:18|19|20)\d{2}\)\s*$/, '')
+                .replace(/\s*\(\d{2}\/\d{2}\/\d{4}\)\s*$/, '')
+                .replace(/[.\s]+$/, '')
+              description += (description ? '. ' : '') + '(' + visibleDate + ')'
+              programme.description = description
+
               stats.tmdbYearsAdded++
+              stats.tmdbFullReleaseDatesAdded++
             }
           }
 
@@ -730,6 +793,13 @@ jobs:
               }
             }
 
+            const channelNames = new Map(channels.map(block => [
+              attr(block, 'id'),
+              [...block.matchAll(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/gi)]
+                .map(match => clean(decodeXml(match[1].replace(/<[^>]+>/g, ' '))))
+                .join(' ')
+            ]))
+
             stage = 'rebuilding programmes'
             const programmes = []
             for (const originalBlock of programmeBlocks) {
@@ -748,6 +818,11 @@ jobs:
               // Remove xmltv_ns so TiviMate cannot append S/E to the title.
               block = removeEpisodeSystem(block, 'xmltv_ns')
 
+              const detection = movieDetection(block, channelNames.get(channel) || '')
+              if (detection.reason === 'category') stats.moviesDetectedByCategory++
+              if (detection.reason === 'channel') stats.moviesDetectedByChannel++
+              if (detection.reason === 'year') stats.moviesDetectedByYearFallback++
+
               const programme = {
                 block,
                 channel,
@@ -756,8 +831,9 @@ jobs:
                 episodeCode: episodeCode(originalBlock),
                 airDate: parseDateTag(block),
                 description: tag(block, 'desc'),
-                movie: isMovie(block),
-                movieYear: ''
+                movie: detection.movie,
+                movieYear: '',
+                movieReleaseDate: ''
               }
               programmes.push(programme)
               rebuildDone++
@@ -769,8 +845,9 @@ jobs:
             const seriesGroups = new Map()
             const movieGroups = new Map()
             for (const programme of programmes) {
-              const key = compactKey(programme.title)
-              if (!key) continue
+              const titleKey = compactKey(programme.title)
+              if (!titleKey) continue
+              const key = programme.movie ? titleKey + '|' + movieYear(programme) : titleKey
               const target = programme.movie ? movieGroups : seriesGroups
               if (!target.has(key)) target.set(key, [])
               target.get(key).push(programme)
@@ -802,13 +879,15 @@ jobs:
               await runWorkers(secondPassQueue, TVMAZE_WORKERS, enrichSeriesGroup, 'tvmazeSecondPassCompleted', 'TVMAZE SECOND PASS')
             }
 
-            const movieQueue = [...movieGroups.values()].filter(group => group.some(programme => !movieYear(programme)))
+            // Every detected movie goes through TMDB because IPTV-EPG usually supplies only a year,
+            // while the guide requires the complete theatrical release date.
+            const movieQueue = [...movieGroups.values()]
             stats.tmdbMoviesQueued = movieQueue.length
             stage = 'TMDB movie enrichment'
             if (process.env.TMDB_API_KEY) {
               await runWorkers(movieQueue, TMDB_WORKERS, enrichMovieGroup, 'tmdbMoviesCompleted', 'TMDB')
             } else {
-              console.log('[TMDB] TMDB_API_KEY is missing; movie year enrichment skipped.')
+              console.log('[TMDB] TMDB_API_KEY is missing; movie release-date enrichment skipped.')
             }
 
             stage = 'writing final XML'
@@ -823,7 +902,9 @@ jobs:
               block = block.replace(/\s*<sub-title\b[^>]*>[\s\S]*?<\/sub-title>/gi, '')
 
               if (programme.episodeCode && episodeCode(block) !== programme.episodeCode) block = replaceEpisodeSystem(block, 'common', programme.episodeCode)
-              if (programme.airDate && /^\d{4}-\d{2}-\d{2}$/.test(programme.airDate) && !tag(block, 'date')) {
+              if (programme.movieReleaseDate && /^\d{4}-\d{2}-\d{2}$/.test(programme.movieReleaseDate)) {
+                block = replaceOrAddTag(block, 'date', programme.movieReleaseDate.replace(/-/g, ''))
+              } else if (programme.airDate && /^\d{4}-\d{2}-\d{2}$/.test(programme.airDate) && !tag(block, 'date')) {
                 block = addTag(block, '<date>' + programme.airDate.replace(/-/g, '') + '</date>')
               }
               if (programme.description) block = replaceOrAddTag(block, 'desc', programme.description, 'en')
