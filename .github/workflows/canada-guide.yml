@@ -48,7 +48,7 @@ jobs:
 
           const INPUT = 'canada/source/ca.xml.gz'
           const OUTPUT = 'canada/work/canada.xml'
-          const TVMAZE_WORKERS = 8
+          const TVMAZE_WORKERS = 16
           const TMDB_WORKERS = 3
 
           const stats = {
@@ -64,6 +64,9 @@ jobs:
             tvmazeShowsSearched: 0,
             tvmazeShowsMatched: 0,
             tvmazeEpisodeListsDownloaded: 0,
+            tvmaze429s: 0,
+            programmesEnriched: 0,
+            tvmazeNoEpisodeMatch: 0,
             tvmazeTransientFailuresQueued: 0,
             tvmazeSecondPassQueued: 0,
             tvmazeSecondPassCompleted: 0,
@@ -410,7 +413,8 @@ jobs:
                   const retryAfter = Number(response.headers.get('retry-after') || 0) * 1000
                   const wait = Math.max(retryAfter, Math.min(30000, 750 * (2 ** (attempt - 1))))
                   limiter.rateLimited(wait)
-                  console.log('[' + limiter.name + ' 429] ' + label + ' | wait=' + wait + 'ms')
+                  stats.tvmaze429s++
+                  console.log('[' + limiter.name + ' 429] ' + label + ' | wait=' + wait + 'ms | total429=' + stats.tvmaze429s)
                   await new Promise(resolve => setTimeout(resolve, wait))
                   continue
                 }
@@ -540,19 +544,32 @@ jobs:
             if (matched.method === 'title-only') stats.matchedTitleOnly++
             if (matched.method === 'code-only') stats.matchedCodeOnly++
 
-            if (!programme.episodeTitle && mazeTitle) {
+            // TVMaze is authoritative after a confident episode match.
+            // Replace IPTV episode metadata with the matched TVMaze episode.
+            if (mazeTitle) {
               programme.episodeTitle = mazeTitle
               stats.filledEpisodeTitles++
             }
-            if (!programme.episodeCode && mazeCode) {
+
+            if (mazeCode) {
               programme.episodeCode = mazeCode
               stats.filledEpisodeNumbers++
             }
-            if (!programme.airDate && mazeAirDate) {
+
+            if (mazeAirDate) {
               programme.airDate = mazeAirDate
               stats.filledAirDates++
             }
+
+            if (episode.summary) {
+              programme.description = clean(
+                String(episode.summary)
+                  .replace(/<[^>]+>/g, ' ')
+              )
+            }
+
             programme.description = appendMissingDescriptionPieces(programme)
+            stats.programmesEnriched++
           }
 
           async function enrichSeriesGroup(group) {
@@ -649,6 +666,7 @@ jobs:
                 stats[counter]++
                 if (stats[counter] % 100 === 0 || stats[counter] === items.length) {
                   console.log('[' + label + '] ' + stats[counter] + ' / ' + items.length)
+                  if (label === 'TVMAZE') heartbeat()
                 }
               }
             }
@@ -656,12 +674,22 @@ jobs:
           }
 
           function heartbeat() {
-            console.log(
-              '[HEARTBEAT] stage=' + stage +
-              ' | rebuild=' + rebuildDone + '/' + stats.programmesFound +
-              ' | TVMaze shows=' + stats.tvmazeShowsCompleted + '/' + stats.tvmazeShowsQueued +
-              ' | written=' + writeDone
-            )
+            console.log('')
+            console.log('========== TVMAZE STATUS ==========')
+            console.log('Stage: ' + stage)
+            console.log('Shows processed: ' + stats.tvmazeShowsCompleted + '/' + stats.tvmazeShowsQueued)
+            console.log('Shows matched: ' + stats.tvmazeShowsMatched)
+            console.log('Episode lists downloaded: ' + stats.tvmazeEpisodeListsDownloaded)
+            console.log('SxxExx matches: ' + stats.matchedCodeOnly)
+            console.log('Title matches: ' + stats.matchedTitleOnly)
+            console.log('Programmes enriched: ' + stats.programmesEnriched)
+            console.log('Episode titles added: ' + stats.filledEpisodeTitles)
+            console.log('Episode numbers added: ' + stats.filledEpisodeNumbers)
+            console.log('Air dates added: ' + stats.filledAirDates)
+            console.log('429 retries: ' + stats.tvmaze429s)
+            console.log('Second pass queue: ' + stats.tvmazeSecondPassQueued)
+            console.log('===================================')
+            console.log('')
           }
 
           async function main() {
@@ -771,7 +799,13 @@ jobs:
             const finalProgrammes = []
             for (const programme of programmes) {
               let block = programme.block
-              if (programme.episodeTitle && !tag(block, 'sub-title')) block = replaceOrAddTag(block, 'sub-title', programme.episodeTitle, 'en')
+
+              // Keep episode titles out of <sub-title>.
+              // TiviMate displays <title>:<sub-title> together, so the episode
+              // title belongs only in the description format:
+              // Episode Title - SxxExx. Description. (MM/DD/YYYY)
+              block = block.replace(/\s*<sub-title\b[^>]*>[\s\S]*?<\/sub-title>/gi, '')
+
               if (programme.episodeCode && episodeCode(block) !== programme.episodeCode) block = replaceEpisodeSystem(block, 'common', programme.episodeCode)
               if (programme.airDate && /^\d{4}-\d{2}-\d{2}$/.test(programme.airDate) && !tag(block, 'date')) {
                 block = addTag(block, '<date>' + programme.airDate.replace(/-/g, '') + '</date>')
