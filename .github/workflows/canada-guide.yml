@@ -66,6 +66,11 @@ jobs:
             tvmazeShowsSearched: 0,
             tvmazeShowsMatched: 0,
             tvmazeEpisodeListsDownloaded: 0,
+            tvmazeTransientFailuresQueued: 0,
+            tvmazeSecondPassQueued: 0,
+            tvmazeSecondPassCompleted: 0,
+            tvmazeSecondPassRecovered: 0,
+            tvmazeSecondPassFailed: 0,
 
             matchedTitleAndCode: 0,
             matchedTitleOnly: 0,
@@ -92,7 +97,9 @@ jobs:
           const showSearchCache = new Map()
           const episodeCache = new Map()
           const movieCache = new Map()
+          const tvmazeRetryGroups = new Map()
 
+          let tvmazePass = 1
           let stage = 'starting'
           let rebuildDone = 0
           let writeDone = 0
@@ -403,8 +410,17 @@ jobs:
             maxDelay: 10000
           })
 
+          class TransientFetchError extends Error {
+            constructor(message) {
+              super(message)
+              this.name = 'TransientFetchError'
+              this.transient = true
+            }
+          }
+
           async function fetchJson(url, label, limiter, retries = 7) {
             const retryQueue = []
+            let exhaustedTransientFailure = false
             for (let attempt = 1; attempt <= retries; attempt++) {
               await limiter.wait()
 
@@ -435,6 +451,7 @@ jobs:
                     ' | wait=' + item.wait + 'ms' +
                     ' | delay=' + limiter.delay + 'ms'
                   )
+                  exhaustedTransientFailure = true
                   await new Promise(resolve => setTimeout(resolve, item.wait))
                   continue
                 }
@@ -459,11 +476,15 @@ jobs:
                   ' | delay=' + limiter.delay + 'ms' +
                   ' | error=' + error.message
                 )
+                exhaustedTransientFailure = true
                 await new Promise(resolve => setTimeout(resolve, item.wait))
               }
             }
 
             console.log('[' + limiter.name + ' FAILED] ' + label)
+            if (limiter === tvmazeLimiter && exhaustedTransientFailure) {
+              throw new TransientFetchError(label + ' failed after transient TVMaze errors')
+            }
             return null
           }
 
@@ -722,38 +743,56 @@ jobs:
           }
 
           async function enrichSeriesGroup(group) {
-            const show = await getShow(group[0].title)
-            if (!show) {
-              stats.noConfidentMatch += group.filter(programme => !excludedFromSeriesEnrichment(programme)).length
-              return
-            }
-
-            const episodes = await getEpisodes(show.id)
-            if (!episodes.length) {
-              stats.noConfidentMatch += group.filter(programme => !excludedFromSeriesEnrichment(programme)).length
-              return
-            }
-
-            for (const programme of group) {
-              if (excludedFromSeriesEnrichment(programme)) continue
-
-              const needsAnything =
-                !programme.episodeTitle ||
-                !programme.episodeCode ||
-                !programme.airDate ||
-                !hasDescriptionTitle(programme.description, programme.episodeTitle) ||
-                !hasDescriptionCode(programme.description, programme.episodeCode) ||
-                !hasDescriptionDate(programme.description, programme.airDate)
-
-              if (!needsAnything) continue
-
-              const matched = matchProgramme(programme, episodes)
-              if (!matched) {
-                stats.noConfidentMatch++
-                continue
+            try {
+              const show = await getShow(group[0].title)
+              if (!show) {
+                stats.noConfidentMatch += group.filter(programme => !excludedFromSeriesEnrichment(programme)).length
+                return
               }
 
-              enrichProgramme(programme, matched)
+              const episodes = await getEpisodes(show.id)
+              if (!episodes.length) {
+                stats.noConfidentMatch += group.filter(programme => !excludedFromSeriesEnrichment(programme)).length
+                return
+              }
+
+              for (const programme of group) {
+                if (excludedFromSeriesEnrichment(programme)) continue
+
+                const needsAnything =
+                  !programme.episodeTitle ||
+                  !programme.episodeCode ||
+                  !programme.airDate ||
+                  !hasDescriptionTitle(programme.description, programme.episodeTitle) ||
+                  !hasDescriptionCode(programme.description, programme.episodeCode) ||
+                  !hasDescriptionDate(programme.description, programme.airDate)
+
+                if (!needsAnything) continue
+
+                const matched = matchProgramme(programme, episodes)
+                if (!matched) {
+                  stats.noConfidentMatch++
+                  continue
+                }
+
+                enrichProgramme(programme, matched)
+              }
+
+              if (tvmazePass === 2) stats.tvmazeSecondPassRecovered++
+            } catch (error) {
+              if (!error || !error.transient) throw error
+
+              const retryKey = compactKey(group[0].title)
+              if (tvmazePass === 1) {
+                if (!tvmazeRetryGroups.has(retryKey)) {
+                  tvmazeRetryGroups.set(retryKey, group)
+                  stats.tvmazeTransientFailuresQueued++
+                }
+                console.log('[TVMAZE QUEUED FOR SECOND PASS] ' + group[0].title)
+              } else {
+                stats.tvmazeSecondPassFailed++
+                console.log('[TVMAZE SECOND PASS FAILED] ' + group[0].title)
+              }
             }
           }
 
@@ -993,6 +1032,35 @@ jobs:
               'TVMAZE'
             )
 
+            // SECOND PASS: Retry only groups that exhausted retries because of
+            // temporary TVMaze 429, 5xx, or network failures. By this point the
+            // adaptive limiter has already settled closer to TVMaze's safe rate.
+            const secondPassQueue = [...tvmazeRetryGroups.values()]
+            stats.tvmazeSecondPassQueued = secondPassQueue.length
+
+            if (secondPassQueue.length) {
+              tvmazePass = 2
+              tvmazeRetryGroups.clear()
+              stage = 'TVMaze transient-failure second pass'
+              heartbeat()
+
+              const settleDelay = Math.max(1000, Math.min(15000, tvmazeLimiter.delay * 2))
+              console.log(
+                '[TVMAZE SECOND PASS] queued=' + secondPassQueue.length +
+                ' | settled delay=' + tvmazeLimiter.delay + 'ms' +
+                ' | waiting=' + settleDelay + 'ms'
+              )
+              await new Promise(resolve => setTimeout(resolve, settleDelay))
+
+              await runWorkers(
+                secondPassQueue,
+                TVMAZE_WORKERS,
+                enrichSeriesGroup,
+                'tvmazeSecondPassCompleted',
+                'TVMAZE SECOND PASS'
+              )
+            }
+
             // PHASE 4: Parallel adaptive TMDB year enrichment.
             const movieQueue = [...movieGroups.values()]
               .filter(group => group.some(programme => !movieYear(programme)))
@@ -1085,6 +1153,11 @@ jobs:
             console.log('  Shows searched: ' + stats.tvmazeShowsSearched)
             console.log('  Shows matched: ' + stats.tvmazeShowsMatched)
             console.log('  Episode lists: ' + stats.tvmazeEpisodeListsDownloaded)
+            console.log('  Transient failures queued: ' + stats.tvmazeTransientFailuresQueued)
+            console.log('  Second pass queued: ' + stats.tvmazeSecondPassQueued)
+            console.log('  Second pass completed: ' + stats.tvmazeSecondPassCompleted)
+            console.log('  Second pass recovered: ' + stats.tvmazeSecondPassRecovered)
+            console.log('  Second pass failed again: ' + stats.tvmazeSecondPassFailed)
             console.log('  SxxExx + Title: ' + stats.matchedTitleAndCode)
             console.log('  Title only: ' + stats.matchedTitleOnly)
             console.log('  SxxExx only: ' + stats.matchedCodeOnly)
