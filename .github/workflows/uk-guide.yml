@@ -39,7 +39,9 @@ jobs:
           echo "Download complete:"
           ls -lh uk/source/epg-gb.xml.gz
 
-      - name: Rebuild guide and fill missing TVMaze metadata
+      - name: Rebuild guide with adaptive TVMaze and TMDB enrichment
+        env:
+          TMDB_READ_TOKEN: ${{ secrets.TMDB_READ_TOKEN }}
         run: |
           cat > /tmp/build_uk_guide.js <<'EOF'
           const fs = require('fs')
@@ -47,7 +49,7 @@ jobs:
 
           const inputPath = 'uk/source/epg-gb.xml.gz'
           const outputPath = 'uk/work/uk.xml'
-          const WORKERS = 5
+          const WORKERS = 4
 
           const stats = {
             channelsFound: 0,
@@ -63,7 +65,18 @@ jobs:
             tvmazeEpisodeTitlesFilled: 0,
             tvmazeEpisodeNumbersFilled: 0,
             tvmazeDescriptionsFilled: 0,
-            tvmazeAirDatesFilled: 0
+            tvmazeAirDatesFilled: 0,
+            enrichmentCandidates: 0,
+            enrichmentGroupsSkippedComplete: 0,
+            enrichmentGroupsSkippedType: 0,
+            enrichmentGroupsSkippedCategory: 0,
+            tvmazeRateLimits: 0,
+            tvmazeHttpErrors: 0,
+            tvmazeNetworkErrors: 0,
+            movieCandidates: 0,
+            movieTitlesMatched: 0,
+            movieYearsFilled: 0,
+            movieLookupFailures: 0
           }
 
           let currentStage = 'starting'
@@ -218,26 +231,348 @@ jobs:
             return cleanSpaces(result)
           }
 
-          async function fetchJson(url) {
-            for (let attempt = 1; attempt <= 4; attempt++) {
-              try {
-                const response = await fetch(url, {
-                  headers: { 'User-Agent': 'festy-epg-uk-fill-missing-only/2.0' }
-                })
-                if (response.status === 404) return null
-                if (response.status === 429 || response.status >= 500) throw new Error('HTTP ' + response.status)
-                if (!response.ok) return null
-                return await response.json()
-              } catch (error) {
-                if (attempt === 4) return null
-                await new Promise(resolve => setTimeout(resolve, attempt * 1500))
+
+          function categories(block) {
+            return [...block.matchAll(/<category\b[^>]*>([\s\S]*?)<\/category>/gi)]
+              .map(match => normalize(decodeXml(match[1].replace(/<[^>]+>/g, ' '))))
+              .filter(Boolean)
+          }
+
+          function hasCategory(block, patterns) {
+            const values = categories(block)
+            return values.some(value => patterns.some(pattern => pattern.test(value)))
+          }
+
+          function isExcludedFromSeriesEnrichment(programme) {
+            const block = programme.originalBlock
+            const title = normalize(programme.title)
+            const subtitle = normalize(programme.episodeTitle)
+            const combined = cleanSpaces(title + ' ' + subtitle)
+
+            // Movies never go through TVMaze series enrichment.
+            // They are handled later by the dedicated movie-year enrichment pass.
+            if (programme.movie) return 'movie'
+
+            // These programmes keep the original IPTV-org metadata and only receive
+            // the normal display cleanup. They are never sent to TVMaze.
+            if (hasCategory(block, [
+              /\bsports?\b/, /\bnews\b/, /\bcurrent affairs\b/, /\bweather\b/,
+              /\bshopping\b/, /\binfomercial\b/, /\bpaid programming\b/,
+              /\breligion\b/, /\breligious\b/, /\bconcert\b/,
+              /\bawards?\b/
+            ])) return 'category'
+
+            if ([
+              /\blive\b/, /\bnews\b/, /\bweather\b/, /\bsports?\b/,
+              /\bshopping\b/, /\binfomercial\b/, /\bpaid programming\b/,
+              /\bto be announced\b/, /\btba\b/, /\bno information\b/,
+              /\bprogramme information\b/, /\bsign off\b/, /\bclosedown\b/
+            ].some(pattern => pattern.test(combined))) return 'category'
+
+            return ''
+          }
+
+          function needsEnrichment(programme) {
+            return !programme.episodeTitle ||
+              !programme.episodeCode ||
+              !programme.description ||
+              !programme.airDate
+          }
+
+          class AdaptiveApiClient {
+            constructor(name, options = {}) {
+              this.name = name
+              this.delayMs = options.startDelayMs || 500
+              this.minDelayMs = options.minDelayMs || 75
+              this.maxDelayMs = options.maxDelayMs || 15000
+              this.successesToSpeedUp = options.successesToSpeedUp || 20
+              this.speedUpFactor = options.speedUpFactor || 0.90
+              this.slowDownFactor = options.slowDownFactor || 1.80
+              this.nextRequestAt = 0
+              this.successStreak = 0
+              this.requests = 0
+              this.matches = 0
+              this.rateLimits = 0
+              this.retries = 0
+              this.temporaryFailures = 0
+              this.permanentFailures = 0
+              this.retryQueue = []
+            }
+
+            sleep(ms) {
+              return new Promise(resolve => setTimeout(resolve, ms))
+            }
+
+            async waitTurn() {
+              const now = Date.now()
+              const wait = Math.max(0, this.nextRequestAt - now)
+              this.nextRequestAt = Math.max(now, this.nextRequestAt) + this.delayMs
+              if (wait > 0) await this.sleep(wait)
+            }
+
+            speedUp() {
+              this.successStreak++
+              if (this.successStreak < this.successesToSpeedUp) return
+              const oldDelay = this.delayMs
+              this.delayMs = Math.max(this.minDelayMs, Math.round(this.delayMs * this.speedUpFactor))
+              this.successStreak = 0
+              if (this.delayMs !== oldDelay) {
+                console.log('[' + this.name + ' SPEED UP] delay=' + oldDelay + 'ms -> ' + this.delayMs + 'ms')
               }
             }
+
+            slowDown(retryAfterMs = 0) {
+              const oldDelay = this.delayMs
+              this.delayMs = Math.min(
+                this.maxDelayMs,
+                Math.max(Math.round(this.delayMs * this.slowDownFactor), retryAfterMs || 0)
+              )
+              this.successStreak = 0
+              console.log('[' + this.name + ' SLOW DOWN] delay=' + oldDelay + 'ms -> ' + this.delayMs + 'ms')
+            }
+
+            isTemporaryStatus(status) {
+              return status === 408 || status === 425 || status === 429 || status >= 500
+            }
+
+            retryAfterMs(response) {
+              const raw = response.headers.get('retry-after')
+              if (!raw) return 0
+              const seconds = Number(raw)
+              if (Number.isFinite(seconds)) return Math.max(0, seconds * 1000)
+              const date = Date.parse(raw)
+              return Number.isFinite(date) ? Math.max(0, date - Date.now()) : 0
+            }
+
+            async requestJson(task, isRetry = false) {
+              await this.waitTurn()
+              this.requests++
+
+              try {
+                const response = await fetch(task.url, task.options || {})
+
+                if (response.status === 404) {
+                  this.speedUp()
+                  return { ok: true, data: null, noMatch: true }
+                }
+
+                if (this.isTemporaryStatus(response.status)) {
+                  const retryAfter = this.retryAfterMs(response)
+                  if (response.status === 429) this.rateLimits++
+                  this.temporaryFailures++
+                  this.slowDown(retryAfter)
+                  if (retryAfter > 0) await this.sleep(retryAfter)
+                  return { ok: false, temporary: true, status: response.status }
+                }
+
+                if (!response.ok) {
+                  this.permanentFailures++
+                  console.log('[' + this.name + ' PERMANENT ERROR] HTTP ' + response.status + ' | ' + task.label)
+                  return { ok: false, permanent: true, status: response.status }
+                }
+
+                const data = await response.json()
+                this.speedUp()
+                return { ok: true, data }
+              } catch (error) {
+                this.temporaryFailures++
+                this.slowDown()
+                console.log('[' + this.name + ' NETWORK ERROR] ' + task.label + ' | ' + error.message)
+                return { ok: false, temporary: true, error: error.message }
+              }
+            }
+
+            async execute(task) {
+              const result = await this.requestJson(task, false)
+              if (result.temporary) this.retryQueue.push(task)
+              return result
+            }
+
+            async drainRetries(maxPasses = 4) {
+              let recovered = 0
+
+              for (let pass = 1; pass <= maxPasses && this.retryQueue.length; pass++) {
+                const pending = this.retryQueue.splice(0)
+                console.log('[' + this.name + ' RETRY ' + pass + '] queued=' + pending.length +
+                  ' | delay=' + this.delayMs + 'ms')
+
+                // Give the API a recovery pause before retrying the rate-limited batch.
+                await this.sleep(Math.min(this.maxDelayMs, Math.max(2000, this.delayMs * 3)))
+
+                for (let index = 0; index < pending.length; index++) {
+                  const task = pending[index]
+                  this.retries++
+                  const result = await this.requestJson(task, true)
+
+                  if (result.ok) {
+                    recovered++
+                    if (typeof task.onRecovered === 'function') await task.onRecovered(result.data)
+                  } else if (result.temporary) {
+                    this.retryQueue.push(task)
+                  }
+
+                  if ((index + 1) % 25 === 0 || index + 1 === pending.length) {
+                    console.log('[' + this.name + ' RETRY ' + pass + '] completed=' +
+                      (index + 1) + '/' + pending.length +
+                      ' | recovered=' + recovered +
+                      ' | remaining=' + this.retryQueue.length +
+                      ' | delay=' + this.delayMs + 'ms')
+                  }
+                }
+              }
+
+              return recovered
+            }
+
+            status() {
+              return 'delay=' + this.delayMs + 'ms' +
+                ' | requests=' + this.requests +
+                ' | 429s=' + this.rateLimits +
+                ' | retries=' + this.retries +
+                ' | retryQueue=' + this.retryQueue.length +
+                ' | tempFailures=' + this.temporaryFailures +
+                ' | permanentFailures=' + this.permanentFailures
+            }
+          }
+
+          const tvmazeClient = new AdaptiveApiClient('TVMAZE', {
+            startDelayMs: 550,
+            minDelayMs: 110,
+            maxDelayMs: 15000,
+            successesToSpeedUp: 20
+          })
+
+          const tmdbClient = new AdaptiveApiClient('TMDB', {
+            startDelayMs: 250,
+            minDelayMs: 60,
+            maxDelayMs: 15000,
+            successesToSpeedUp: 25
+          })
+
+          async function fetchJson(url, label = url) {
+            const task = {
+              url,
+              label,
+              options: {
+                headers: { 'User-Agent': 'festy-epg-fill-missing-only/4.0' }
+              }
+            }
+
+            // TVMaze lookups are retried here so recovered JSON flows back into the
+            // exact programme currently being enriched instead of being discarded.
+            for (let pass = 0; pass < 6; pass++) {
+              const result = await tvmazeClient.requestJson(task, pass > 0)
+
+              if (result.ok) return result.data
+              if (result.permanent) return null
+
+              tvmazeClient.retries++
+              const recoveryPause = Math.min(
+                tvmazeClient.maxDelayMs,
+                Math.max(2000, tvmazeClient.delayMs * (pass + 2))
+              )
+              console.log('[TVMAZE RETRY] pass=' + (pass + 1) + '/6' +
+                ' | title=' + label +
+                ' | waiting=' + recoveryPause + 'ms' +
+                ' | delay=' + tvmazeClient.delayMs + 'ms')
+              await tvmazeClient.sleep(recoveryPause)
+            }
+
+            console.log('[TVMAZE UNRECOVERED] keeping original IPTV-org metadata | ' + label)
             return null
           }
 
-          const showCache = new Map()
-          const episodesCache = new Map()
+          function extractExistingYear(programme) {
+            const dateTag = firstTag(programme.originalBlock, 'date')
+            const direct = normalize(dateTag).match(/\b(18|19|20)\d{2}\b/)
+            if (direct) return direct[0]
+
+            const desc = normalize(programme.description)
+            const inDescription = desc.match(/\((18|19|20)\d{2}\)\s*$/)
+            if (inDescription) return inDescription[0].replace(/[()]/g, '')
+
+            return ''
+          }
+
+          function needsMovieYear(programme) {
+            return programme.movie && !extractExistingYear(programme)
+          }
+
+          function addMovieYear(programme, year) {
+            if (!year || extractExistingYear(programme)) return false
+
+            if (/<date\b[^>]*>[\s\S]*?<\/date>/i.test(programme.originalBlock)) {
+              programme.originalBlock = replaceFirstTag(programme.originalBlock, 'date', year)
+            } else {
+              programme.originalBlock = programme.originalBlock.replace(
+                /<\/programme>\s*$/i,
+                '  <date>' + escapeXml(year) + '</date>\n</programme>'
+              )
+            }
+
+            programme.airDate = year
+            return true
+          }
+
+          function chooseTmdbMovie(results, title) {
+            const wanted = normalizedKey(title)
+            return (
+              results.find(item => normalizedKey(item.title) === wanted) ||
+              results.find(item => normalizedKey(item.original_title) === wanted) ||
+              results[0] ||
+              null
+            )
+          }
+
+          async function enrichMovieGroup(group) {
+            const title = group[0].title
+            const token = process.env.TMDB_READ_TOKEN || ''
+            if (!token) throw new Error('Missing required GitHub secret: TMDB_READ_TOKEN')
+
+            const task = {
+              url: 'https://api.themoviedb.org/3/search/movie?query=' +
+                encodeURIComponent(title) +
+                '&include_adult=false&language=en-US&page=1',
+              label: title,
+              options: {
+                headers: {
+                  Authorization: 'Bearer ' + token,
+                  Accept: 'application/json',
+                  'User-Agent': 'festy-epg-movie-enrichment/4.0'
+                }
+              },
+              onRecovered: async data => {
+                const results = Array.isArray(data && data.results) ? data.results : []
+                const match = chooseTmdbMovie(results, title)
+                const year = match && match.release_date
+                  ? String(match.release_date).match(/^(18|19|20)\d{2}/)?.[0] || ''
+                  : ''
+                if (year) {
+                  for (const programme of group) {
+                    if (addMovieYear(programme, year)) stats.movieYearsFilled++
+                  }
+                }
+              }
+            }
+
+            const result = await tmdbClient.execute(task)
+            if (!result.ok) return
+
+            const results = Array.isArray(result.data && result.data.results)
+              ? result.data.results
+              : []
+            const match = chooseTmdbMovie(results, title)
+            const year = match && match.release_date
+              ? String(match.release_date).match(/^(18|19|20)\d{2}/)?.[0] || ''
+              : ''
+
+            if (year) {
+              stats.movieTitlesMatched++
+              for (const programme of group) {
+                if (addMovieYear(programme, year)) stats.movieYearsFilled++
+              }
+            }
+          }
 
           async function getShow(title) {
             const key = normalizedKey(title)
@@ -248,7 +583,6 @@ jobs:
             const exact = shows.find(show => normalizedKey(show.name) === key) || null
             showCache.set(key, exact)
             if (exact) stats.tvmazeShowsMatched++
-            await new Promise(resolve => setTimeout(resolve, 250))
             return exact
           }
 
@@ -257,7 +591,6 @@ jobs:
             const result = await fetchJson('https://api.tvmaze.com/shows/' + showId + '/episodes?specials=1')
             const episodes = Array.isArray(result) ? result : []
             episodesCache.set(showId, episodes)
-            await new Promise(resolve => setTimeout(resolve, 250))
             return episodes
           }
 
@@ -295,6 +628,9 @@ jobs:
             if (!episodes.length) return
 
             for (const programme of group) {
+              if (isExcludedFromSeriesEnrichment(programme)) continue
+              if (!needsEnrichment(programme)) continue
+
               let episode = null
               if (programme.episodeCode) episode = episodeByCode(episodes, programme.episodeCode)
               if (!episode && programme.episodeTitle) episode = uniqueEpisodeByTitle(episodes, programme.episodeTitle)
@@ -326,14 +662,13 @@ jobs:
           }
 
           function heartbeat() {
-            console.log(
-              '[PROGRESS] stage=' + currentStage +
-              ' | channels=' + stats.channelsWritten + '/' + stats.channelsFound +
-              ' | programmes=' + stats.programmesWritten + '/' + stats.programmesFound +
-              ' | shows=' + groupsCompleted + '/' + totalGroups +
-              ' | TVMaze matches=' + stats.tvmazeProgrammesMatched +
-              ' | fields filled=' + stats.tvmazeFieldsFilled
-            )
+            console.log('[PROGRESS] stage=' + currentStage +
+              ' | groups=' + groupsCompleted + '/' + totalGroups +
+              ' | TVMaze: ' + tvmazeClient.status() +
+              ' | TMDB: ' + tmdbClient.status() +
+              ' | series matches=' + stats.tvmazeProgrammesMatched +
+              ' | series fields=' + stats.tvmazeFieldsFilled +
+              ' | movie years=' + stats.movieYearsFilled)
           }
 
           async function main() {
@@ -376,6 +711,9 @@ jobs:
               })
             }
 
+            currentStage = 'rebuilding from original IPTV-org metadata'
+            heartbeat()
+
             const groups = new Map()
             for (const programme of programmes) {
               const key = normalizedKey(programme.title)
@@ -383,11 +721,35 @@ jobs:
               groups.get(key).push(programme)
             }
 
-            const queue = [...groups.values()]
+            const queue = []
+            for (const group of groups.values()) {
+              const validCandidates = group.filter(programme => !isExcludedFromSeriesEnrichment(programme))
+
+              if (!validCandidates.length) {
+                const reasons = group.map(isExcludedFromSeriesEnrichment)
+                if (reasons.includes('movie')) {
+                  // Movie groups are handled by the dedicated movie pass below.
+                } else if (reasons.includes('type')) {
+                  stats.enrichmentGroupsSkippedType++
+                } else {
+                  stats.enrichmentGroupsSkippedCategory++
+                }
+                continue
+              }
+
+              if (!validCandidates.some(needsEnrichment)) {
+                stats.enrichmentGroupsSkippedComplete++
+                continue
+              }
+
+              queue.push(group)
+              stats.enrichmentCandidates++
+            }
+
             totalGroups = queue.length
             let nextIndex = 0
-            currentStage = 'TVMaze fill-missing enrichment'
-            const timer = setInterval(heartbeat, 30000)
+            currentStage = 'TVMaze enrichment pass after rebuild'
+            const timer = setInterval(heartbeat, 15000)
 
             async function worker(workerNumber) {
               while (true) {
@@ -397,15 +759,56 @@ jobs:
                 await enrichGroup(group)
                 groupsCompleted++
                 if (groupsCompleted % 100 === 0 || groupsCompleted === totalGroups) {
-                  console.log('[TVMAZE] worker=' + workerNumber + ' | completed shows=' + groupsCompleted + '/' + totalGroups + ' | current=' + group[0].title)
+                  console.log('[TVMAZE] worker=' + workerNumber +
+                    ' | completed=' + groupsCompleted + '/' + totalGroups +
+                    ' | current=' + group[0].title +
+                    ' | matches=' + stats.tvmazeProgrammesMatched +
+                    ' | fields=' + stats.tvmazeFieldsFilled +
+                    ' | 429s=' + stats.tvmazeRateLimits)
                 }
               }
             }
 
             await Promise.all(Array.from({ length: Math.min(WORKERS, queue.length) }, (_, index) => worker(index + 1)))
             clearInterval(timer)
+            currentStage = 'TVMaze retry verification complete'
+            heartbeat()
 
-            currentStage = 'writing rebuilt XMLTV guide'
+
+            currentStage = 'TMDB movie enrichment pass'
+            heartbeat()
+
+            const movieGroups = new Map()
+            for (const programme of programmes) {
+              if (!needsMovieYear(programme)) continue
+              const key = normalizedKey(programme.title)
+              if (!movieGroups.has(key)) movieGroups.set(key, [])
+              movieGroups.get(key).push(programme)
+            }
+
+            stats.movieCandidates = movieGroups.size
+            let movieDone = 0
+            const movieTimer = setInterval(heartbeat, 15000)
+
+            for (const group of movieGroups.values()) {
+              await enrichMovieGroup(group)
+              movieDone++
+
+              if (movieDone % 25 === 0 || movieDone === stats.movieCandidates) {
+                console.log('[TMDB] completed=' + movieDone + '/' + stats.movieCandidates +
+                  ' | current=' + group[0].title +
+                  ' | matched=' + stats.movieTitlesMatched +
+                  ' | years filled=' + stats.movieYearsFilled +
+                  ' | ' + tmdbClient.status())
+              }
+            }
+
+            currentStage = 'TMDB retry passes'
+            heartbeat()
+            await tmdbClient.drainRetries(4)
+            clearInterval(movieTimer)
+
+            currentStage = 'writing final enriched XMLTV guide'
             heartbeat()
             const rebuiltProgrammes = []
 
