@@ -23,66 +23,56 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Wait for other repository workflows
-        run: |
-          echo "Waiting before starting UK guide processing..."
-          sleep 60
-
       - name: Download fresh UK IPTV-org guide
         run: |
-          mkdir -p uk/source
-          mkdir -p uk/work
-          mkdir -p guides
+          set -e
+          mkdir -p uk/source uk/work guides
 
+          echo "Downloading fresh IPTV-org UK guide..."
           curl -L --fail --retry 5 --retry-delay 10 \
+            --progress-bar \
             https://iptv-epg.org/files/epg-gb.xml.gz \
             -o uk/source/epg-gb.xml.gz
 
           test -s uk/source/epg-gb.xml.gz
           gzip -t uk/source/epg-gb.xml.gz
-
-          echo "Fresh UK IPTV-org guide downloaded"
+          echo "Download complete:"
           ls -lh uk/source/epg-gb.xml.gz
 
-      - name: Process and rebuild UK guide
-        env:
-          TMDB_API_TOKEN: ${{ secrets.TMDB_API_TOKEN }}
+      - name: Rebuild guide and fill missing TVMaze metadata
         run: |
           cat > /tmp/build_uk_guide.js <<'EOF'
           const fs = require('fs')
-          const readline = require('readline')
           const zlib = require('zlib')
 
           const inputPath = 'uk/source/epg-gb.xml.gz'
           const outputPath = 'uk/work/uk.xml'
+          const WORKERS = 5
 
-          const now = new Date()
-          const pastCutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000)
-          const futureCutoff = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
+          const stats = {
+            channelsFound: 0,
+            channelsWritten: 0,
+            programmesFound: 0,
+            programmesWritten: 0,
+            titlesCleaned: 0,
+            descriptionsFormatted: 0,
+            tvmazeShowsChecked: 0,
+            tvmazeShowsMatched: 0,
+            tvmazeProgrammesMatched: 0,
+            tvmazeFieldsFilled: 0,
+            tvmazeEpisodeTitlesFilled: 0,
+            tvmazeEpisodeNumbersFilled: 0,
+            tvmazeDescriptionsFilled: 0,
+            tvmazeAirDatesFilled: 0
+          }
 
-          const channels = new Map()
-          const programmes = []
-          const tvmazeShowCache = new Map()
-          const tvmazeEpisodeCache = new Map()
-          const tvmazeEpisodeListCache = new Map()
-          const tmdbTvCache = new Map()
-          const tmdbMovieCache = new Map()
+          let currentStage = 'starting'
+          let groupsCompleted = 0
+          let totalGroups = 0
 
-          let channelsRead = 0
-          let programmesScanned = 0
-          let programmesKept = 0
-          let programmesSkipped = 0
-          let titlesChanged = 0
-          let descriptionsChanged = 0
-          let actorsRemoved = 0
-          let creditsRemoved = 0
-          let episodeTagsRemoved = 0
-          let tvmazeMatches = 0
-          let tvmazeFieldsUsed = 0
-          let tmdbMatches = 0
-          let tmdbFieldsUsed = 0
-          let tvmazeCorrectedEpisodeNumbers = 0
-          let tvmazeDescriptionMatches = 0
+          function cleanSpaces(value) {
+            return String(value || '').replace(/\s+/g, ' ').trim()
+          }
 
           function decodeXml(value) {
             return String(value || '')
@@ -102,608 +92,376 @@ jobs:
               .replace(/'/g, '&apos;')
           }
 
-          function cleanSpaces(value) {
-            return String(value || '').replace(/\s+/g, ' ').trim()
+          function normalize(value) {
+            return cleanSpaces(value)
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim()
           }
 
-          function getAttribute(block, attribute) {
-            const match = block.match(new RegExp('\\b' + attribute + '="([^"]*)"', 'i'))
+          function normalizedKey(value) {
+            return normalize(value).replace(/\s+/g, '')
+          }
+
+          function attr(block, name) {
+            const match = block.match(new RegExp('\\b' + name + '="([^"]*)"', 'i'))
             return match ? decodeXml(match[1]) : ''
           }
 
-          function getTag(block, tag) {
-            const match = block.match(new RegExp('<' + tag + '\\b[^>]*>([\\s\\S]*?)</' + tag + '>', 'i'))
-            if (!match) return ''
-            return cleanSpaces(decodeXml(match[1].replace(/<[^>]+>/g, '')))
+          function tag(block, name) {
+            const match = block.match(new RegExp('<' + name + '\\b[^>]*>([\\s\\S]*?)</' + name + '>', 'i'))
+            return match ? cleanSpaces(decodeXml(match[1].replace(/<[^>]+>/g, ' '))) : ''
           }
 
-          function getAllTags(block, tag) {
-            const regex = new RegExp('<' + tag + '\\b[^>]*>([\\s\\S]*?)</' + tag + '>', 'gi')
-            return [...block.matchAll(regex)].map(match =>
-              cleanSpaces(decodeXml(match[1].replace(/<[^>]+>/g, '')))
-            )
+          function tagBySystem(block, system) {
+            const match = block.match(new RegExp('<episode-num\\b[^>]*\\bsystem="' + system + '"[^>]*>([\\s\\S]*?)</episode-num>', 'i'))
+            return match ? cleanSpaces(decodeXml(match[1])) : ''
           }
 
-          function getTagBySystem(block, tag, system) {
-            const regex = new RegExp(
-              '<' + tag + '\\b[^>]*\\bsystem="' + system + '"[^>]*>([\\s\\S]*?)</' + tag + '>',
-              'i'
-            )
-            const match = block.match(regex)
-            return match ? cleanSpaces(decodeXml(match[1].replace(/<[^>]+>/g, ''))) : ''
+          function replaceFirstTag(block, name, value, language = 'en') {
+            const expression = new RegExp('<' + name + '\\b[^>]*>[\\s\\S]*?</' + name + '>', 'i')
+            const replacement = '<' + name + ' lang="' + language + '">' + escapeXml(value) + '</' + name + '>'
+            return expression.test(block)
+              ? block.replace(expression, replacement)
+              : block.replace(/<\/programme>\s*$/i, '  ' + replacement + '\n</programme>')
           }
 
-          function replaceTag(block, tag, value) {
-            const regex = new RegExp('<' + tag + '\\b[^>]*>[\\s\\S]*?</' + tag + '>', 'i')
-            const replacement = '<' + tag + ' lang="en">' + escapeXml(value) + '</' + tag + '>'
-            if (regex.test(block)) return block.replace(regex, replacement)
-            return block.replace(/<\/programme>\s*$/i, '  ' + replacement + '\n</programme>')
+          function addBeforeProgrammeEnd(block, xml) {
+            return block.replace(/<\/programme>\s*$/i, '  ' + xml + '\n</programme>')
           }
 
-          function removeTag(block, tag) {
-            return block.replace(new RegExp('\\s*<' + tag + '\\b[^>]*>[\\s\\S]*?</' + tag + '>', 'gi'), '')
-          }
-
-          function removeEpisodeNumBySystem(block, system) {
+          function removeEpisodeSystem(block, system) {
             return block.replace(
               new RegExp('\\s*<episode-num\\b[^>]*\\bsystem="' + system + '"[^>]*>[\\s\\S]*?</episode-num>', 'gi'),
               ''
             )
           }
 
-          function setProgrammeIcon(block, url) {
-            if (!url) return block
-            const iconRegex = /<icon\b[^>]*\bsrc="[^"]*"[^>]*\/?\s*>/i
-            const replacement = '<icon src="' + escapeXml(url) + '" />'
-            if (iconRegex.test(block)) return block.replace(iconRegex, replacement)
-            return block.replace(/<\/programme>\s*$/i, '  ' + replacement + '\n</programme>')
-          }
-
-          function cleanProgrammeTitle(value) {
+          function cleanSeriesTitle(value) {
             return cleanSpaces(value)
               .replace(/\s+\((?:19|20)\d{2}\)\s*$/, '')
               .replace(/\s*[.\-–—:]?\s*S(?:eason)?\s*\d{1,3}\s*E(?:pisode)?\s*\d{1,3}\s*$/i, '')
               .trim()
           }
 
-          function extractTitleYear(value) {
-            const match = cleanSpaces(value).match(/\(((?:19|20)\d{2})\)\s*$/)
-            return match ? match[1] : ''
-          }
-
-          function normalizeTitle(value) {
-            return cleanProgrammeTitle(value).toLowerCase().replace(/[^a-z0-9]+/g, '')
-          }
-
-          function removeEmbeddedCredits(value) {
-            let result = cleanSpaces(value)
-            const protectedValues = []
-
-            result = result.replace(/\(\d{2}\/\d{2}\/\d{4}\)/g, match => {
-              const token = '__DATE_' + protectedValues.length + '__'
-              protectedValues.push(match)
-              return token
-            })
-
-            result = result
-              .replace(/\([^()]*\)/g, '')
-              .replace(/\s+[A-Z][A-Za-z.'-]*(?:\s*,\s*[A-Z][A-Za-z.'-]*)*(?:\s+(?:and|&)\s+[A-Z][A-Za-z.'-]*)\s+(?:star|stars|starring)\.?\s*$/i, '')
-              .replace(/\s+(?:with|featuring|featuring performances by|with performances by)\s+[^.!?]*[.!?]?\s*$/i, '')
-              .replace(/\s+\*+\s*$/g, '')
-              .replace(/\s+\.\s*$/g, '')
-              .replace(/\s{2,}/g, ' ')
-              .trim()
-
-            result = result.replace(/__DATE_(\d+)__/g, (_, index) => protectedValues[Number(index)] || '')
-            return cleanSpaces(result)
-          }
-
-          function parseXmltvDate(value) {
-            const match = String(value || '').match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/)
-            if (!match) return null
-            return new Date(Date.UTC(
-              Number(match[1]), Number(match[2]) - 1, Number(match[3]),
-              Number(match[4]), Number(match[5]), Number(match[6])
-            ))
-          }
-
-          function parseOriginalAirDate(value) {
-            const match = String(value || '').match(/^(\d{4})-(\d{2})-(\d{2})/)
-            return match ? match[2] + '/' + match[3] + '/' + match[1] : ''
-          }
-
-          function parseCompactAirDate(value) {
-            const match = String(value || '').match(/^(\d{4})(\d{2})(\d{2})$/)
-            return match ? match[2] + '/' + match[3] + '/' + match[1] : ''
-          }
-
           function normalizeEpisode(value) {
             const text = cleanSpaces(value)
             let match = text.match(/^S\s*(\d{1,3})\s*E\s*(\d{1,3})$/i)
             if (match) return 'S' + Number(match[1]) + 'E' + Number(match[2])
-
             match = text.match(/^(\d{1,3})\.(\d{1,3})\.?$/)
             if (match) return 'S' + (Number(match[1]) + 1) + 'E' + (Number(match[2]) + 1)
-
             return ''
           }
 
-          function extractEpisodeNumber(block) {
+          function episodeNumber(block) {
             return normalizeEpisode(
-              getTagBySystem(block, 'episode-num', 'common') ||
-              getTagBySystem(block, 'episode-num', 'onscreen') ||
-              getTagBySystem(block, 'episode-num', 'xmltv_ns') ||
-              getTag(block, 'episode-num')
+              tagBySystem(block, 'common') ||
+              tagBySystem(block, 'onscreen') ||
+              tagBySystem(block, 'xmltv_ns')
             )
           }
 
-          function extractEpisodeTitle(block) {
-            return cleanSpaces(getTag(block, 'sub-title'))
+          function compactDate(block) {
+            const value = tag(block, 'date')
+            const match = value.match(/^(\d{4})(\d{2})(\d{2})$/)
+            return match ? match[2] + '/' + match[3] + '/' + match[1] : ''
           }
 
-          function extractAirDate(block) {
-            return parseOriginalAirDate(getTagBySystem(block, 'episode-num', 'original-air-date')) ||
-              parseCompactAirDate(getTag(block, 'date'))
+          function displayDate(iso) {
+            const match = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/)
+            return match ? match[2] + '/' + match[3] + '/' + match[1] : ''
           }
 
-          function isMovie(block, rawTitle, episodeNumber) {
-            if (episodeNumber) return false
-            const categories = getAllTags(block, 'category').map(value => value.toLowerCase())
-            return categories.some(value => /^(movie|film|movies|films)$/.test(value)) || Boolean(extractTitleYear(rawTitle))
+          function isMovie(block) {
+            const categories = [...block.matchAll(/<category\b[^>]*>([\s\S]*?)<\/category>/gi)]
+              .map(match => normalize(decodeXml(match[1])))
+            return categories.some(value => value === 'movie' || value === 'film')
           }
 
-          function appendSentence(base, addition) {
-            const left = cleanSpaces(base).replace(/[.\s]+$/, '')
-            const right = cleanSpaces(addition)
-            if (!left) return right
-            if (!right) return left
-            return left + '. ' + right
-          }
+          function stripExistingDisplayPrefix(description, episodeTitle, episodeCode) {
+            let result = cleanSpaces(description)
+            if (!result) return ''
 
-          function buildDescription(programme) {
-            let result = ''
+            const escapedTitle = episodeTitle ? episodeTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : ''
+            const escapedCode = episodeCode ? episodeCode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : ''
 
-            if (!programme.movie && (programme.episodeTitle || programme.episodeNumber)) {
-              if (programme.episodeTitle && programme.episodeNumber) {
-                result = programme.episodeTitle + ' - ' + programme.episodeNumber
-              } else {
-                result = programme.episodeTitle || programme.episodeNumber
-              }
+            if (escapedTitle && escapedCode) {
+              result = result.replace(new RegExp('^' + escapedTitle + '\\s*[-–—:]\\s*' + escapedCode + '\\.?\\s*', 'i'), '')
+              result = result.replace(new RegExp('^' + escapedCode + '\\s*[-–—:]\\s*' + escapedTitle + '\\.?\\s*', 'i'), '')
             }
+            if (escapedCode) result = result.replace(new RegExp('^' + escapedCode + '\\.?\\s*', 'i'), '')
+            if (escapedTitle) result = result.replace(new RegExp('^' + escapedTitle + '\\.?\\s*', 'i'), '')
+            return cleanSpaces(result)
+          }
 
-            result = appendSentence(result, programme.baseDescription)
+          function formatDescription({ episodeTitle, episodeCode, description, airDate, movie, year }) {
+            const body = stripExistingDisplayPrefix(description, episodeTitle, episodeCode)
+            const parts = []
 
-            if (programme.movie && programme.year) {
-              result = result.replace(new RegExp('\\s*\\(' + programme.year + '\\)\\s*$', 'i'), '')
-              result = cleanSpaces(result) + (result ? ' ' : '') + '(' + programme.year + ')'
-            } else if (!programme.movie && programme.airDate) {
+            if (!movie && episodeTitle && episodeCode) parts.push(episodeTitle + ' - ' + episodeCode)
+            else if (!movie && episodeTitle) parts.push(episodeTitle)
+            else if (!movie && episodeCode) parts.push(episodeCode)
+
+            if (body) parts.push(body.replace(/[.\s]+$/, ''))
+            let result = parts.join('. ')
+
+            if (movie && year) {
+              result = result.replace(/\s*\((?:19|20)\d{2}\)\s*$/, '')
+              result += (result ? ' ' : '') + '(' + year + ')'
+            } else if (!movie && airDate) {
               result = result.replace(/\s*\(\d{2}\/\d{2}\/\d{4}\)\s*$/, '')
-              result = cleanSpaces(result) + (result ? ' ' : '') + '(' + programme.airDate + ')'
+              result += (result ? ' ' : '') + '(' + airDate + ')'
             }
 
             return cleanSpaces(result)
           }
 
-          function sleep(milliseconds) {
-            return new Promise(resolve => setTimeout(resolve, milliseconds))
-          }
-
-          async function fetchJson(url, headers = {}) {
-            try {
-              const response = await fetch(url, { headers })
-              if (!response.ok) return null
-              return await response.json()
-            } catch {
-              return null
+          async function fetchJson(url) {
+            for (let attempt = 1; attempt <= 4; attempt++) {
+              try {
+                const response = await fetch(url, {
+                  headers: { 'User-Agent': 'festy-epg-uk-fill-missing-only/2.0' }
+                })
+                if (response.status === 404) return null
+                if (response.status === 429 || response.status >= 500) throw new Error('HTTP ' + response.status)
+                if (!response.ok) return null
+                return await response.json()
+              } catch (error) {
+                if (attempt === 4) return null
+                await new Promise(resolve => setTimeout(resolve, attempt * 1500))
+              }
             }
+            return null
           }
 
-          function fillMissing(programme, field, value, source) {
-            if (programme[field] || !value) return false
-            programme[field] = cleanSpaces(value)
-            if (source === 'tvmaze') tvmazeFieldsUsed++
-            if (source === 'tmdb') tmdbFieldsUsed++
-            return true
+          const showCache = new Map()
+          const episodesCache = new Map()
+
+          async function getShow(title) {
+            const key = normalizedKey(title)
+            if (showCache.has(key)) return showCache.get(key)
+            stats.tvmazeShowsChecked++
+            const results = await fetchJson('https://api.tvmaze.com/search/shows?q=' + encodeURIComponent(title))
+            const shows = Array.isArray(results) ? results.map(item => item.show).filter(Boolean) : []
+            const exact = shows.find(show => normalizedKey(show.name) === key) || null
+            showCache.set(key, exact)
+            if (exact) stats.tvmazeShowsMatched++
+            await new Promise(resolve => setTimeout(resolve, 250))
+            return exact
           }
 
-          function similarityText(value) {
-            return cleanSpaces(String(value || '')
-              .toLowerCase()
-              .replace(/\([^)]*(?:19|20)\d{2}[^)]*\)/g, ' ')
-              .replace(/\bS\d+E\d+\b/gi, ' ')
-              .replace(/<[^>]+>/g, ' ')
-              .replace(/[^a-z0-9]+/g, ' '))
+          async function getEpisodes(showId) {
+            if (episodesCache.has(showId)) return episodesCache.get(showId)
+            const result = await fetchJson('https://api.tvmaze.com/shows/' + showId + '/episodes?specials=1')
+            const episodes = Array.isArray(result) ? result : []
+            episodesCache.set(showId, episodes)
+            await new Promise(resolve => setTimeout(resolve, 250))
+            return episodes
           }
 
-          function tokenSimilarity(left, right) {
-            const a = similarityText(left).split(' ').filter(token => token.length > 2)
-            const b = similarityText(right).split(' ').filter(token => token.length > 2)
-            if (a.length < 4 || b.length < 4) return 0
-            const aSet = new Set(a)
-            const bSet = new Set(b)
-            let intersection = 0
-            for (const token of aSet) if (bSet.has(token)) intersection++
-            return (2 * intersection) / (aSet.size + bSet.size)
+          function uniqueEpisodeByTitle(episodes, title) {
+            const key = normalizedKey(title)
+            if (!key) return null
+            const matches = episodes.filter(episode => normalizedKey(episode.name) === key)
+            return matches.length === 1 ? matches[0] : null
           }
 
-          function cleanTvmazeSummary(value) {
-            return cleanSpaces(String(value || '').replace(/<[^>]+>/g, ' '))
+          function episodeByCode(episodes, code) {
+            const match = String(code || '').match(/^S(\d+)E(\d+)$/i)
+            if (!match) return null
+            return episodes.find(episode =>
+              Number(episode.season) === Number(match[1]) &&
+              Number(episode.number) === Number(match[2])
+            ) || null
           }
 
-          async function getTvmazeShow(title) {
-            const key = normalizeTitle(title)
-            if (tvmazeShowCache.has(key)) return tvmazeShowCache.get(key)
-            const data = await fetchJson('https://api.tvmaze.com/search/shows?q=' + encodeURIComponent(title))
-            await sleep(250)
-            const candidates = Array.isArray(data) ? data.map(item => item.show).filter(Boolean) : []
-            const exact = candidates.find(show => normalizeTitle(show.name) === key)
-            const show = exact || candidates.find(show => {
-              const candidate = normalizeTitle(show.name)
-              return candidate && (candidate.includes(key) || key.includes(candidate))
-            }) || null
-            tvmazeShowCache.set(key, show)
-            return show
-          }
-
-          async function getTvmazeEpisodes(showId) {
-            if (tvmazeEpisodeListCache.has(showId)) return tvmazeEpisodeListCache.get(showId)
-            const episodes = await fetchJson('https://api.tvmaze.com/shows/' + showId + '/episodes?specials=1')
-            await sleep(250)
-            const result = Array.isArray(episodes) ? episodes : []
-            tvmazeEpisodeListCache.set(showId, result)
-            return result
-          }
-
-          function tvmazeEpisodeNumber(episode) {
+          function episodeCode(episode) {
             if (!episode || episode.season == null || episode.number == null) return ''
             return 'S' + Number(episode.season) + 'E' + Number(episode.number)
           }
 
-          function episodeTitleMatches(left, right) {
-            if (!left || !right) return false
-            return normalizeTitle(left) === normalizeTitle(right)
+          function tvmazeSummary(episode) {
+            return cleanSpaces(String(episode && episode.summary || '').replace(/<[^>]+>/g, ' '))
           }
 
-          function findUniqueEpisodeByTitle(episodes, episodeTitle) {
-            const wanted = normalizeTitle(episodeTitle)
-            if (!wanted) return null
-            const exact = episodes.filter(episode => normalizeTitle(episode.name) === wanted)
-            return exact.length === 1 ? exact[0] : null
-          }
-
-          function findEpisodeByDescription(episodes, description) {
-            if (!description) return null
-            const ranked = episodes
-              .map(episode => ({ episode, score: tokenSimilarity(description, cleanTvmazeSummary(episode.summary)) }))
-              .filter(item => item.score > 0)
-              .sort((a, b) => b.score - a.score)
-            if (!ranked.length) return null
-            const best = ranked[0]
-            const second = ranked[1] || { score: 0 }
-            if (best.score < 0.90) return null
-            if (best.score - second.score < 0.10) return null
-            return best.episode
-          }
-
-          async function enrichFromTvmaze(programme, preparedShow = null, preparedEpisodes = null) {
-            if (programme.movie) return
-            if (!programme.episodeNumber && !programme.episodeTitle && !programme.baseDescription) return
-
-            const show = preparedShow || await getTvmazeShow(programme.title)
+          async function enrichGroup(group) {
+            const first = group[0]
+            if (!first || first.movie) return
+            const show = await getShow(first.title)
             if (!show) return
-            const episodes = preparedEpisodes || await getTvmazeEpisodes(show.id)
+            const episodes = await getEpisodes(show.id)
             if (!episodes.length) return
 
-            let episode = null
-            let suppliedNumberEpisode = null
-            const numberMatch = programme.episodeNumber
-              ? programme.episodeNumber.match(/^S(\d+)E(\d+)$/i)
-              : null
+            for (const programme of group) {
+              let episode = null
+              if (programme.episodeCode) episode = episodeByCode(episodes, programme.episodeCode)
+              if (!episode && programme.episodeTitle) episode = uniqueEpisodeByTitle(episodes, programme.episodeTitle)
+              if (!episode) continue
 
-            if (numberMatch) {
-              suppliedNumberEpisode = episodes.find(candidate =>
-                Number(candidate.season) === Number(numberMatch[1]) &&
-                Number(candidate.number) === Number(numberMatch[2])
-              ) || null
+              stats.tvmazeProgrammesMatched++
 
-              if (suppliedNumberEpisode && programme.episodeTitle) {
-                if (episodeTitleMatches(programme.episodeTitle, suppliedNumberEpisode.name)) {
-                  episode = suppliedNumberEpisode
-                } else {
-                  const titleEpisode = findUniqueEpisodeByTitle(episodes, programme.episodeTitle)
-                  if (titleEpisode) {
-                    episode = titleEpisode
-                    const corrected = tvmazeEpisodeNumber(titleEpisode)
-                    if (corrected && corrected !== programme.episodeNumber) {
-                      programme.episodeNumber = corrected
-                      tvmazeCorrectedEpisodeNumbers++
-                    }
-                  }
-                }
-              } else if (suppliedNumberEpisode) {
-                episode = suppliedNumberEpisode
+              if (!programme.episodeTitle && episode.name) {
+                programme.episodeTitle = cleanSpaces(episode.name)
+                stats.tvmazeEpisodeTitlesFilled++
+                stats.tvmazeFieldsFilled++
+              }
+              if (!programme.episodeCode && episodeCode(episode)) {
+                programme.episodeCode = episodeCode(episode)
+                stats.tvmazeEpisodeNumbersFilled++
+                stats.tvmazeFieldsFilled++
+              }
+              if (!programme.description && tvmazeSummary(episode)) {
+                programme.description = tvmazeSummary(episode)
+                stats.tvmazeDescriptionsFilled++
+                stats.tvmazeFieldsFilled++
+              }
+              if (!programme.airDate && displayDate(episode.airdate)) {
+                programme.airDate = displayDate(episode.airdate)
+                stats.tvmazeAirDatesFilled++
+                stats.tvmazeFieldsFilled++
               }
             }
-
-            if (!episode && programme.episodeTitle) {
-              episode = findUniqueEpisodeByTitle(episodes, programme.episodeTitle)
-            }
-
-            if (!episode && !programme.episodeTitle && !programme.episodeNumber) {
-              episode = findEpisodeByDescription(episodes, programme.baseDescription)
-              if (episode) tvmazeDescriptionMatches++
-            }
-
-            if (!episode) return
-
-            let used = false
-            used = fillMissing(programme, 'episodeTitle', episode.name, 'tvmaze') || used
-            used = fillMissing(programme, 'episodeNumber', tvmazeEpisodeNumber(episode), 'tvmaze') || used
-            used = fillMissing(programme, 'baseDescription', cleanTvmazeSummary(episode.summary), 'tvmaze') || used
-            used = fillMissing(programme, 'airDate', parseOriginalAirDate(episode.airdate), 'tvmaze') || used
-            if (used || episode) tvmazeMatches++
           }
 
-          async function tmdbRequest(path) {
-            if (!process.env.TMDB_API_TOKEN) return null
-            return fetchJson('https://api.themoviedb.org/3' + path, {
-              Authorization: 'Bearer ' + process.env.TMDB_API_TOKEN,
-              accept: 'application/json'
-            })
-          }
-
-          async function enrichTvFromTmdb(programme) {
-            if (programme.movie || !programme.episodeNumber || !process.env.TMDB_API_TOKEN) return
-            const match = programme.episodeNumber.match(/^S(\d+)E(\d+)$/i)
-            if (!match) return
-
-            const key = normalizeTitle(programme.title)
-            let show = tmdbTvCache.get(key)
-            if (show === undefined) {
-              const search = await tmdbRequest('/search/tv?query=' + encodeURIComponent(programme.title))
-              await sleep(250)
-              show = search && search.results && search.results.length ? search.results[0] : null
-              tmdbTvCache.set(key, show)
-            }
-            if (!show) return
-
-            const episode = await tmdbRequest(
-              '/tv/' + show.id + '/season/' + Number(match[1]) + '/episode/' + Number(match[2])
+          function heartbeat() {
+            console.log(
+              '[PROGRESS] stage=' + currentStage +
+              ' | channels=' + stats.channelsWritten + '/' + stats.channelsFound +
+              ' | programmes=' + stats.programmesWritten + '/' + stats.programmesFound +
+              ' | shows=' + groupsCompleted + '/' + totalGroups +
+              ' | TVMaze matches=' + stats.tvmazeProgrammesMatched +
+              ' | fields filled=' + stats.tvmazeFieldsFilled
             )
-            await sleep(250)
-            if (!episode) return
-
-            let used = false
-            used = fillMissing(programme, 'episodeTitle', episode.name, 'tmdb') || used
-            used = fillMissing(programme, 'baseDescription', episode.overview, 'tmdb') || used
-            used = fillMissing(programme, 'airDate', parseOriginalAirDate(episode.air_date), 'tmdb') || used
-            if (used) tmdbMatches++
           }
 
-          async function enrichMovieFromTmdb(programme) {
-            if (!programme.movie || !process.env.TMDB_API_TOKEN) return
-            const key = normalizeTitle(programme.title) + '|' + programme.year
-            let movie = tmdbMovieCache.get(key)
-            if (movie === undefined) {
-              let path = '/search/movie?query=' + encodeURIComponent(programme.title)
-              if (programme.year) path += '&year=' + encodeURIComponent(programme.year)
-              const search = await tmdbRequest(path)
-              await sleep(250)
-              movie = search && search.results && search.results.length ? search.results[0] : null
-              tmdbMovieCache.set(key, movie)
-            }
-            if (!movie) return
+          async function main() {
+            currentStage = 'decompressing fresh IPTV-org guide'
+            heartbeat()
+            const source = zlib.gunzipSync(fs.readFileSync(inputPath)).toString('utf8')
 
-            let used = false
-            used = fillMissing(programme, 'baseDescription', movie.overview, 'tmdb') || used
-            if (!programme.year && movie.release_date) {
-              used = fillMissing(programme, 'year', movie.release_date.slice(0, 4), 'tmdb') || used
-            }
-            if (used) tmdbMatches++
-          }
+            const declaration = (source.match(/^\s*<\?xml[\s\S]*?\?>/) || ['<?xml version="1.0" encoding="UTF-8"?>'])[0]
+            const rootOpen = (source.match(/<tv\b[^>]*>/i) || ['<tv>'])[0]
 
-          function cleanProgrammeBlock(block) {
-            const rawTitle = getTag(block, 'title')
-            const title = cleanProgrammeTitle(rawTitle)
-            const episodeNumber = extractEpisodeNumber(block)
-            const movie = isMovie(block, rawTitle, episodeNumber)
-            const originalDescription = cleanSpaces(getTag(block, 'desc'))
+            currentStage = 'reading channels and programmes'
+            const channelBlocks = [...source.matchAll(/<channel\b[\s\S]*?<\/channel>/gi)].map(match => match[0])
+            const programmeBlocks = [...source.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)].map(match => match[0])
+            stats.channelsFound = channelBlocks.length
+            stats.programmesFound = programmeBlocks.length
+            heartbeat()
 
-            const programme = {
-              block,
-              channel: getAttribute(block, 'channel'),
-              start: getAttribute(block, 'start'),
-              stop: getAttribute(block, 'stop'),
-              title,
-              episodeTitle: movie ? '' : extractEpisodeTitle(block),
-              episodeNumber: movie ? '' : episodeNumber,
-              airDate: movie ? '' : extractAirDate(block),
-              year: extractTitleYear(rawTitle) || (/^(?:19|20)\d{2}$/.test(getTag(block, 'date')) ? getTag(block, 'date') : ''),
-              movie,
-              baseDescription: removeEmbeddedCredits(originalDescription),
-              icon: getAttribute(block.match(/<icon\b[^>]*>/i)?.[0] || '', 'src')
+            const keptChannels = []
+            for (const block of channelBlocks) {
+              keptChannels.push(block)
+              stats.channelsWritten++
             }
 
-            if (title !== rawTitle) titlesChanged++
-            if (programme.baseDescription !== originalDescription) descriptionsChanged++
-            if (/<actor\b/i.test(block)) actorsRemoved++
-            if (/<credits\b/i.test(block)) creditsRemoved++
-            if (/<episode-num\b/i.test(block)) episodeTagsRemoved++
+            const programmes = []
+            for (const originalBlock of programmeBlocks) {
 
-            let output = block
-            output = replaceTag(output, 'title', title)
-            output = removeTag(output, 'sub-title')
-            output = removeEpisodeNumBySystem(output, 'onscreen')
-            output = removeEpisodeNumBySystem(output, 'common')
-            output = removeEpisodeNumBySystem(output, 'xmltv_ns')
-            output = removeTag(output, 'actor')
-            output = removeTag(output, 'credits')
-            programme.block = output
+              const rawTitle = tag(originalBlock, 'title')
+              const title = cleanSeriesTitle(rawTitle)
+              const movie = isMovie(originalBlock)
+              const yearMatch = rawTitle.match(/\(((?:19|20)\d{2})\)\s*$/)
+              programmes.push({
+                originalBlock,
+                title,
+                movie,
+                year: yearMatch ? yearMatch[1] : '',
+                episodeTitle: tag(originalBlock, 'sub-title'),
+                episodeCode: episodeNumber(originalBlock),
+                description: tag(originalBlock, 'desc'),
+                airDate: compactDate(originalBlock)
+              })
+            }
 
-            return programme
-          }
-
-          function buildProgramme(programme) {
-            let block = programme.block
-            block = replaceTag(block, 'title', programme.title)
-            block = replaceTag(block, 'desc', buildDescription(programme))
-            block = setProgrammeIcon(block, programme.icon)
-            return block.trimEnd() + '\n'
-          }
-
-          function parseXmlStream(stream, callback) {
-            return new Promise((resolve, reject) => {
-              const rl = readline.createInterface({ input: stream, crlfDelay: Infinity })
-              let type = ''
-              let buffer = ''
-
-              ;(async () => {
-                try {
-                  for await (const line of rl) {
-                    if (!type && line.includes('<channel ')) {
-                      type = 'channel'
-                      buffer = line + '\n'
-                      if (line.includes('</channel>')) {
-                        await callback(type, buffer)
-                        type = ''
-                        buffer = ''
-                      }
-                      continue
-                    }
-
-                    if (!type && line.includes('<programme ')) {
-                      type = 'programme'
-                      buffer = line + '\n'
-                      if (line.includes('</programme>')) {
-                        await callback(type, buffer)
-                        type = ''
-                        buffer = ''
-                      }
-                      continue
-                    }
-
-                    if (type) {
-                      buffer += line + '\n'
-                      if (
-                        (type === 'channel' && line.includes('</channel>')) ||
-                        (type === 'programme' && line.includes('</programme>'))
-                      ) {
-                        await callback(type, buffer)
-                        type = ''
-                        buffer = ''
-                      }
-                    }
-                  }
-                  resolve()
-                } catch (error) {
-                  reject(error)
-                }
-              })()
-            })
-          }
-
-          async function loadGuide() {
-            const input = fs.createReadStream(inputPath)
-            const gunzip = zlib.createGunzip()
-            input.pipe(gunzip)
-
-            await parseXmlStream(gunzip, async (type, block) => {
-              if (type === 'channel') {
-                const id = getAttribute(block, 'id')
-                if (id && !channels.has(id)) {
-                  channels.set(id, block.trimEnd() + '\n')
-                  channelsRead++
-                }
-                return
-              }
-
-              programmesScanned++
-              const start = getAttribute(block, 'start')
-              const startDate = parseXmltvDate(start)
-
-              if (!startDate || startDate < pastCutoff || startDate >= futureCutoff) {
-                programmesSkipped++
-                return
-              }
-
-              programmes.push(cleanProgrammeBlock(block))
-              programmesKept++
-            })
-          }
-
-          async function enrichGuide() {
             const groups = new Map()
             for (const programme of programmes) {
-              const key = normalizeTitle(programme.title)
+              const key = normalizedKey(programme.title)
               if (!groups.has(key)) groups.set(key, [])
               groups.get(key).push(programme)
             }
 
             const queue = [...groups.values()]
+            totalGroups = queue.length
             let nextIndex = 0
-            const workerCount = Math.min(5, queue.length)
+            currentStage = 'TVMaze fill-missing enrichment'
+            const timer = setInterval(heartbeat, 30000)
 
-            async function worker() {
+            async function worker(workerNumber) {
               while (true) {
                 const index = nextIndex++
                 if (index >= queue.length) return
                 const group = queue[index]
-                const first = group[0]
-                const show = first && !first.movie ? await getTvmazeShow(first.title) : null
-                const episodes = show ? await getTvmazeEpisodes(show.id) : []
-
-                for (const programme of group) {
-                  await enrichFromTvmaze(programme, show, episodes)
-                  await enrichTvFromTmdb(programme)
-                  await enrichMovieFromTmdb(programme)
+                await enrichGroup(group)
+                groupsCompleted++
+                if (groupsCompleted % 100 === 0 || groupsCompleted === totalGroups) {
+                  console.log('[TVMAZE] worker=' + workerNumber + ' | completed shows=' + groupsCompleted + '/' + totalGroups + ' | current=' + group[0].title)
                 }
               }
             }
 
-            await Promise.all(Array.from({ length: workerCount }, () => worker()))
-          }
+            await Promise.all(Array.from({ length: Math.min(WORKERS, queue.length) }, (_, index) => worker(index + 1)))
+            clearInterval(timer)
 
-          async function writeGuide() {
-            programmes.sort((a, b) => a.start.localeCompare(b.start) || a.channel.localeCompare(b.channel))
-            const output = fs.createWriteStream(outputPath, { encoding: 'utf8' })
+            currentStage = 'writing rebuilt XMLTV guide'
+            heartbeat()
+            const rebuiltProgrammes = []
 
-            await new Promise((resolve, reject) => {
-              output.once('error', reject)
-              output.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-              output.write('<tv generator-info-name="UK Guide">\n')
+            for (const programme of programmes) {
+              let block = programme.originalBlock
 
-              for (const block of channels.values()) output.write(block)
-              for (const programme of programmes) output.write(buildProgramme(programme))
+              if (programme.title && programme.title !== tag(block, 'title')) {
+                block = replaceFirstTag(block, 'title', programme.title)
+                stats.titlesCleaned++
+              }
 
-              output.write('</tv>\n')
-              output.end(resolve)
-            })
-          }
+              if (programme.episodeTitle && !tag(block, 'sub-title')) {
+                block = replaceFirstTag(block, 'sub-title', programme.episodeTitle)
+              }
 
-          async function main() {
-            await loadGuide()
-            await enrichGuide()
-            await writeGuide()
+              if (programme.episodeCode && !episodeNumber(block)) {
+                block = addBeforeProgrammeEnd(block, '<episode-num system="common">' + escapeXml(programme.episodeCode) + '</episode-num>')
+              }
 
+              if (programme.airDate && !tag(block, 'date')) {
+                const parts = programme.airDate.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)
+                if (parts) block = addBeforeProgrammeEnd(block, '<date>' + parts[3] + parts[1] + parts[2] + '</date>')
+              }
+
+              const formatted = formatDescription(programme)
+              if (formatted && formatted !== tag(block, 'desc')) {
+                block = replaceFirstTag(block, 'desc', formatted)
+                stats.descriptionsFormatted++
+              }
+
+              // Prevent TiviMate from appending S/E to the title. Keep/add common instead.
+              block = removeEpisodeSystem(block, 'xmltv_ns')
+
+              rebuiltProgrammes.push(block)
+              stats.programmesWritten++
+              if (stats.programmesWritten % 10000 === 0) heartbeat()
+            }
+
+            const output = [
+              declaration,
+              rootOpen,
+              ...keptChannels,
+              ...rebuiltProgrammes,
+              '</tv>',
+              ''
+            ].join('\n')
+
+            fs.writeFileSync(outputPath, output, 'utf8')
+
+            currentStage = 'complete'
+            heartbeat()
             console.log('')
             console.log('========================================')
-            console.log('CANADA GUIDE PROCESSING COMPLETE')
+            console.log('UK GUIDE COMPLETE')
             console.log('========================================')
-            console.log('Channels written: ' + channelsRead)
-            console.log('Programmes scanned: ' + programmesScanned)
-            console.log('Programmes kept: ' + programmesKept)
-            console.log('Programmes skipped: ' + programmesSkipped)
-            console.log('Titles cleaned: ' + titlesChanged)
-            console.log('Descriptions cleaned: ' + descriptionsChanged)
-            console.log('Actor tags removed: ' + actorsRemoved)
-            console.log('Credits tags removed: ' + creditsRemoved)
-            console.log('Programmes with episode tags removed: ' + episodeTagsRemoved)
-            console.log('TVMaze matched programmes: ' + tvmazeMatches)
-            console.log('TVMaze fields filled: ' + tvmazeFieldsUsed)
-            console.log('TVMaze corrected episode numbers: ' + tvmazeCorrectedEpisodeNumbers)
-            console.log('TVMaze description-only matches: ' + tvmazeDescriptionMatches)
-            console.log('TMDB matched programmes: ' + tmdbMatches)
-            console.log('TMDB fields filled: ' + tmdbFieldsUsed)
+            for (const [key, value] of Object.entries(stats)) console.log(key + ': ' + value)
             console.log('Output: ' + outputPath)
           }
 
@@ -715,52 +473,50 @@ jobs:
 
           node /tmp/build_uk_guide.js
 
-      - name: Validate UK guide
+      - name: Validate rebuilt guide against source
         run: |
-          CHANNELS=$(grep -c '<channel ' uk/work/uk.xml || true)
-          PROGRAMMES=$(grep -c '<programme ' uk/work/uk.xml || true)
-          CHANNEL_LOGOS=$(sed -n '/<channel /,/<\/channel>/p' uk/work/uk.xml | grep -c '<icon src=' || true)
-          PROGRAMME_ICONS=$(sed -n '/<programme /,/<\/programme>/p' uk/work/uk.xml | grep -c '<icon src=' || true)
-          DESCRIPTIONS=$(grep -c '<desc ' uk/work/uk.xml || true)
-          YEAR_TITLES=$(grep -E -c '<title[^>]*>.*\((19|20)[0-9]{2}\)</title>' uk/work/uk.xml || true)
+          set -e
+          gzip -dc uk/source/epg-gb.xml.gz > uk/work/original.xml
 
-          echo "UK channels: $CHANNELS"
-          echo "UK programmes: $PROGRAMMES"
-          echo "Channel logos: $CHANNEL_LOGOS"
-          echo "Programme icons: $PROGRAMME_ICONS"
-          echo "Description tags: $DESCRIPTIONS"
-          echo "Titles still ending in a year: $YEAR_TITLES"
+          ORIGINAL_CHANNELS=$(grep -c '<channel ' uk/work/original.xml || true)
+          ORIGINAL_PROGRAMMES=$(grep -c '<programme ' uk/work/original.xml || true)
+          OUTPUT_CHANNELS=$(grep -c '<channel ' uk/work/uk.xml || true)
+          OUTPUT_PROGRAMMES=$(grep -c '<programme ' uk/work/uk.xml || true)
 
-          if [ "$CHANNELS" -lt 1 ]; then
-            echo "UK guide contains no channels"
+          echo "Original channels: $ORIGINAL_CHANNELS"
+          echo "Output channels:   $OUTPUT_CHANNELS"
+          echo "Original programmes: $ORIGINAL_PROGRAMMES"
+          echo "Output programmes:   $OUTPUT_PROGRAMMES"
+
+          test "$OUTPUT_CHANNELS" -gt 0
+          test "$OUTPUT_PROGRAMMES" -gt 0
+
+          if [ "$OUTPUT_CHANNELS" -ne "$ORIGINAL_CHANNELS" ]; then
+            echo "ERROR: Output channel count does not match the original UK guide."
             exit 1
           fi
 
-          if [ "$PROGRAMMES" -lt 1 ]; then
-            echo "UK guide contains no programmes"
+          if [ "$OUTPUT_PROGRAMMES" -ne "$ORIGINAL_PROGRAMMES" ]; then
+            echo "ERROR: Output programme count does not match the original UK guide."
             exit 1
           fi
 
-          if [ "$YEAR_TITLES" -gt 0 ]; then
-            echo "UK guide still contains movie years in titles"
-            exit 1
-          fi
-
-          test -s uk/work/uk.xml
+          node -e "require('fs').readFileSync('uk/work/uk.xml','utf8'); console.log('Output XML file is readable')"
+          grep -q '<channel ' uk/work/uk.xml
+          grep -q '<programme ' uk/work/uk.xml
+          echo "UK channels and programme listings are present."
 
       - name: Compress UK guide
         run: |
           gzip -c uk/work/uk.xml > guides/uk.xml.gz
-          test -s guides/uk.xml.gz
-
-          echo "UK guide:"
+          gzip -t guides/uk.xml.gz
           ls -lh guides/uk.xml.gz
 
       - name: Commit and push UK guide
         run: |
+          set -e
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
           git add guides/uk.xml.gz
 
           if git diff --cached --quiet; then
@@ -772,16 +528,12 @@ jobs:
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
-
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
-
-            echo "Push failed. Synchronizing with remote before retry..."
             git fetch origin main
             git rebase origin/main
-            echo "Waiting before retry..."
             sleep 10
           done
 
