@@ -186,7 +186,11 @@ jobs:
           }
 
           function isMovie(block) {
-            return categories(block).some(value => value === 'movie' || value === 'film')
+            // IPTV-EPG uses different movie labels by country/provider.
+            // Check every category, case-insensitively through normalize().
+            return categories(block).some(value =>
+              /^(?:movie|movies|film|films|feature film|feature films|motion picture|motion pictures|cinema)(?:\b|$)/.test(value)
+            )
           }
 
           function cleanSeriesTitle(value) {
@@ -241,21 +245,33 @@ jobs:
           }
 
           function excludedFromSeriesEnrichment(programme) {
+            // Movies belong to TMDB, never TVMaze.
             if (programme.movie) return true
+
+            // Exclude programme types that are not episodic series and therefore
+            // should not consume TVMaze searches. Category checks are preferred.
             const values = categories(programme.block)
             if (values.some(value => [
-              /\bsports?\b/, /\bnews\b/, /\bcurrent affairs\b/, /\bweather\b/,
-              /\bshopping\b/, /\binfomercial\b/, /\bpaid programming\b/,
-              /\breligion\b/, /\breligious\b/, /\bconcert\b/, /\bawards?\b/
+              /sports?/, /news/, /current affairs/, /weather/,
+              /shopping/, /infomercial/, /paid programming/,
+              /religion/, /religious/, /radio/, /teleshopping/,
+              /horse racing/, /lottery/, /teletext/
             ].some(pattern => pattern.test(value)))) return true
 
+            // Use conservative title checks for guide filler and clearly live,
+            // non-series output. Do not reject a normal show merely because its
+            // title happens to contain a word such as "live".
+            const title = normalize(programme.title)
             const combined = normalize(programme.title + ' ' + programme.episodeTitle)
             return [
-              /\blive\b/, /\bnews\b/, /\bweather\b/, /\bsports?\b/,
-              /\bshopping\b/, /\binfomercial\b/, /\bpaid programming\b/,
-              /\bto be announced\b/, /\btba\b/, /\bno information\b/,
-              /\bprogramme information\b/, /\bsign off\b/, /\bclosedown\b/
-            ].some(pattern => pattern.test(combined))
+              /^(?:news|breaking news|latest news|world news|national news)(?:|$)/,
+              /^(?:weather|weather forecast)(?:|$)/,
+              /^(?:sports? news|live sports?|live football|live soccer|live rugby|live cricket|live tennis|live golf)(?:|$)/,
+              /^(?:shopping|teleshopping|infomercial|paid programming)(?:|$)/,
+              /^(?:radio|radio simulcast)(?:|$)/,
+              /^(?:to be announced|tba|no information|programme information|program information|sign off|closedown)(?:|$)/,
+              /^(?:channel off air|off air|this is .+|coming up|preview)(?:|$)/
+            ].some(pattern => pattern.test(title) || pattern.test(combined))
           }
 
           function episodeCodeFromMaze(episode) {
