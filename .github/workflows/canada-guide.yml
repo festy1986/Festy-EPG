@@ -75,8 +75,6 @@ jobs:
             matchedTitleAndCode: 0,
             matchedTitleOnly: 0,
             matchedCodeOnly: 0,
-            matchedDescription: 0,
-            matchedAirDateFallback: 0,
             correctedBadCode: 0,
             noConfidentMatch: 0,
 
@@ -296,17 +294,14 @@ jobs:
             ].some(pattern => pattern.test(combined))
           }
 
-          function wordSet(value) {
-            return new Set(
-              normalize(value)
-                .split(' ')
-                .filter(word => word.length > 2)
-            )
-          }
 
           function tokenSimilarity(leftValue, rightValue) {
-            const left = wordSet(leftValue)
-            const right = wordSet(rightValue)
+            const left = new Set(
+              normalize(leftValue).split(' ').filter(word => word.length > 2)
+            )
+            const right = new Set(
+              normalize(rightValue).split(' ').filter(word => word.length > 2)
+            )
             if (!left.size || !right.size) return 0
 
             let overlap = 0
@@ -318,37 +313,7 @@ jobs:
             return 2 * precision * recall / (precision + recall)
           }
 
-          function levenshteinRatio(leftValue, rightValue) {
-            const left = normalize(leftValue)
-            const right = normalize(rightValue)
-            if (!left || !right) return 0
 
-            const rows = left.length + 1
-            const cols = right.length + 1
-            const matrix = Array.from({ length: rows }, () => new Uint16Array(cols))
-
-            for (let i = 0; i < rows; i++) matrix[i][0] = i
-            for (let j = 0; j < cols; j++) matrix[0][j] = j
-
-            for (let i = 1; i < rows; i++) {
-              for (let j = 1; j < cols; j++) {
-                const cost = left[i - 1] === right[j - 1] ? 0 : 1
-                matrix[i][j] = Math.min(
-                  matrix[i - 1][j] + 1,
-                  matrix[i][j - 1] + 1,
-                  matrix[i - 1][j - 1] + cost
-                )
-              }
-            }
-
-            return 1 - matrix[left.length][right.length] / Math.max(left.length, right.length)
-          }
-
-          function descriptionScore(left, right) {
-            const token = tokenSimilarity(left, right)
-            const edit = levenshteinRatio(left, right)
-            return token * 0.78 + edit * 0.22
-          }
 
           function episodeCodeFromMaze(episode) {
             if (!episode || episode.season == null || episode.number == null) return ''
@@ -356,9 +321,6 @@ jobs:
               'E' + String(Number(episode.number)).padStart(2, '0')
           }
 
-          function episodeSummary(episode) {
-            return clean(String(episode && episode.summary || '').replace(/<[^>]+>/g, ' '))
-          }
 
           class RequestStartLimiter {
             constructor(name, options = {}) {
@@ -414,7 +376,7 @@ jobs:
           // TVMaze requests are started at a controlled rate, but episode
           // matching for already-downloaded shows is never serialized.
           const tvmazeLimiter = new RequestStartLimiter('TVMaze', {
-            initialDelay: 250,
+            initialDelay: 150,
             minDelay: 150,
             maxDelay: 2500
           })
@@ -572,45 +534,26 @@ jobs:
             return episodes.filter(episode => episodeCodeFromMaze(episode) === code)
           }
 
-          function findByAirDate(episodes, dateValue) {
-            if (!dateValue || !/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) return []
-            return episodes.filter(episode => episode.airdate === dateValue)
-          }
+
 
           function matchProgramme(programme, episodes) {
             const titleMatches = findByTitle(episodes, programme.episodeTitle)
             const codeMatches = findByCode(episodes, programme.episodeCode)
 
-            // Rule 1: episode title and SxxExx agree.
+            // Rule 1 and Rule 2: both episode title and SxxExx exist.
             if (programme.episodeTitle && programme.episodeCode) {
               const agreed = titleMatches.find(
                 episode => episodeCodeFromMaze(episode) === programme.episodeCode
               )
+
               if (agreed) {
                 return { episode: agreed, method: 'title-and-code', correctCode: false }
               }
 
-              // Rule 2: title and SxxExx disagree. Trust title.
+              // When title and code conflict, trust the title only when it
+              // identifies exactly one TVMaze episode.
               if (titleMatches.length === 1) {
                 return { episode: titleMatches[0], method: 'title-only', correctCode: true }
-              }
-
-              // Ambiguous repeated titles: use description to resolve title matches.
-              if (titleMatches.length > 1 && programme.description) {
-                const ranked = titleMatches
-                  .map(episode => ({
-                    episode,
-                    score: descriptionScore(programme.description, episodeSummary(episode))
-                  }))
-                  .sort((a, b) => b.score - a.score)
-
-                if (
-                  ranked[0] &&
-                  ranked[0].score >= 0.58 &&
-                  (!ranked[1] || ranked[0].score - ranked[1].score >= 0.1)
-                ) {
-                  return { episode: ranked[0].episode, method: 'title-only', correctCode: true }
-                }
               }
 
               return null
@@ -621,62 +564,18 @@ jobs:
               if (titleMatches.length === 1) {
                 return { episode: titleMatches[0], method: 'title-only', correctCode: false }
               }
-
-              if (titleMatches.length > 1 && programme.description) {
-                const ranked = titleMatches
-                  .map(episode => ({
-                    episode,
-                    score: descriptionScore(programme.description, episodeSummary(episode))
-                  }))
-                  .sort((a, b) => b.score - a.score)
-
-                if (
-                  ranked[0] &&
-                  ranked[0].score >= 0.58 &&
-                  (!ranked[1] || ranked[0].score - ranked[1].score >= 0.1)
-                ) {
-                  return { episode: ranked[0].episode, method: 'title-only', correctCode: false }
-                }
-              }
+              return null
             }
 
             // Rule 4: SxxExx only.
-            if (programme.episodeCode && codeMatches.length === 1) {
-              return { episode: codeMatches[0], method: 'code-only', correctCode: false }
-            }
-
-            // Rule 5: neither exists, or earlier matching was inconclusive.
-            if (programme.description) {
-              const ranked = episodes
-                .map(episode => ({
-                  episode,
-                  score: descriptionScore(programme.description, episodeSummary(episode))
-                }))
-                .filter(item => item.score >= 0.62)
-                .sort((a, b) => b.score - a.score)
-
-              if (
-                ranked[0] &&
-                (!ranked[1] || ranked[0].score - ranked[1].score >= 0.1)
-              ) {
-                return {
-                  episode: ranked[0].episode,
-                  method: 'description',
-                  correctCode: false
-                }
+            if (programme.episodeCode) {
+              if (codeMatches.length === 1) {
+                return { episode: codeMatches[0], method: 'code-only', correctCode: false }
               }
+              return null
             }
 
-            // Rule 6: original air date is the final fallback.
-            const dateMatches = findByAirDate(episodes, programme.airDate)
-            if (dateMatches.length === 1) {
-              return {
-                episode: dateMatches[0],
-                method: 'airdate',
-                correctCode: false
-              }
-            }
-
+            // Rule 5: neither episode title nor SxxExx exists.
             return null
           }
 
@@ -744,8 +643,6 @@ jobs:
             if (matched.method === 'title-and-code') stats.matchedTitleAndCode++
             if (matched.method === 'title-only') stats.matchedTitleOnly++
             if (matched.method === 'code-only') stats.matchedCodeOnly++
-            if (matched.method === 'description') stats.matchedDescription++
-            if (matched.method === 'airdate') stats.matchedAirDateFallback++
 
             // Existing IPTV-org title is authoritative.
             if (!programme.episodeTitle && mazeTitle) {
@@ -899,10 +796,14 @@ jobs:
               '[HEARTBEAT] stage=' + stage +
               ' | rebuild=' + rebuildDone + '/' + stats.programmesFound +
               ' | TVMaze shows=' + stats.tvmazeShowsCompleted + '/' + stats.tvmazeShowsQueued +
+              ' | searched=' + stats.tvmazeShowsSearched +
+              ' | matched-shows=' + stats.tvmazeShowsMatched +
               ' | title+code=' + stats.matchedTitleAndCode +
               ' | title=' + stats.matchedTitleOnly +
               ' | code=' + stats.matchedCodeOnly +
-              ' | description=' + stats.matchedDescription +
+              ' | titles-filled=' + stats.filledEpisodeTitles +
+              ' | numbers-filled=' + stats.filledEpisodeNumbers +
+              ' | dates-filled=' + stats.filledAirDates +
               ' | corrected=' + stats.correctedBadCode +
               ' | no-match=' + stats.noConfidentMatch +
               ' | TVMaze delay=' + tvmazeLimiter.delay + 'ms' +
@@ -1193,8 +1094,6 @@ jobs:
             console.log('  SxxExx + Title: ' + stats.matchedTitleAndCode)
             console.log('  Title only: ' + stats.matchedTitleOnly)
             console.log('  SxxExx only: ' + stats.matchedCodeOnly)
-            console.log('  Description: ' + stats.matchedDescription)
-            console.log('  Air-date fallback: ' + stats.matchedAirDateFallback)
             console.log('  Corrected bad SxxExx: ' + stats.correctedBadCode)
             console.log('  No confident match: ' + stats.noConfidentMatch)
             console.log('  Episode titles filled: ' + stats.filledEpisodeTitles)
