@@ -41,7 +41,7 @@ jobs:
 
       - name: Rebuild guide with adaptive TVMaze and TMDB enrichment
         env:
-          TMDB_READ_TOKEN: ${{ secrets.TMDB_READ_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: |
           cat > /tmp/build_uk_guide.js <<'EOF'
           const fs = require('fs')
@@ -82,6 +82,11 @@ jobs:
           let currentStage = 'starting'
           let groupsCompleted = 0
           let totalGroups = 0
+
+          // Local caches for this workflow only. Nothing is read from or written to TVGuide.
+          const showCache = new Map()
+          const episodesCache = new Map()
+          const tmdbMovieCache = new Map()
 
           function cleanSpaces(value) {
             return String(value || '').replace(/\s+/g, ' ').trim()
@@ -526,19 +531,31 @@ jobs:
 
           async function enrichMovieGroup(group) {
             const title = group[0].title
-            const token = process.env.TMDB_READ_TOKEN || ''
-            if (!token) throw new Error('Missing required GitHub secret: TMDB_READ_TOKEN')
+            const apiKey = process.env.TMDB_API_KEY || ''
+            if (!apiKey) throw new Error('Missing required GitHub secret: TMDB_API_KEY')
+
+            const cacheKey = normalizedKey(title)
+            if (tmdbMovieCache.has(cacheKey)) {
+              const cached = tmdbMovieCache.get(cacheKey)
+              if (cached && cached.year) {
+                stats.movieTitlesMatched++
+                for (const programme of group) {
+                  if (addMovieYear(programme, cached.year)) stats.movieYearsFilled++
+                }
+              }
+              return
+            }
 
             const task = {
-              url: 'https://api.themoviedb.org/3/search/movie?query=' +
-                encodeURIComponent(title) +
+              url: 'https://api.themoviedb.org/3/search/movie?api_key=' +
+                encodeURIComponent(apiKey) +
+                '&query=' + encodeURIComponent(title) +
                 '&include_adult=false&language=en-US&page=1',
               label: title,
               options: {
                 headers: {
-                  Authorization: 'Bearer ' + token,
                   Accept: 'application/json',
-                  'User-Agent': 'festy-epg-movie-enrichment/4.0'
+                  'User-Agent': 'festy-epg-movie-enrichment/4.1'
                 }
               },
               onRecovered: async data => {
@@ -547,7 +564,9 @@ jobs:
                 const year = match && match.release_date
                   ? String(match.release_date).match(/^(18|19|20)\d{2}/)?.[0] || ''
                   : ''
+                tmdbMovieCache.set(cacheKey, year ? { year } : null)
                 if (year) {
+                  stats.movieTitlesMatched++
                   for (const programme of group) {
                     if (addMovieYear(programme, year)) stats.movieYearsFilled++
                   }
@@ -566,6 +585,7 @@ jobs:
               ? String(match.release_date).match(/^(18|19|20)\d{2}/)?.[0] || ''
               : ''
 
+            tmdbMovieCache.set(cacheKey, year ? { year } : null)
             if (year) {
               stats.movieTitlesMatched++
               for (const programme of group) {
