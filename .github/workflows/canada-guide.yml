@@ -49,7 +49,7 @@ jobs:
           const INPUT = 'canada/source/ca.xml.gz'
           const OUTPUT = 'canada/work/canada.xml'
 
-          const TVMAZE_WORKERS = 4
+          const TVMAZE_WORKERS = 8
           const TMDB_WORKERS = 3
 
           const stats = {
@@ -360,51 +360,66 @@ jobs:
             return clean(String(episode && episode.summary || '').replace(/<[^>]+>/g, ' '))
           }
 
-          class AdaptiveLimiter {
+          class RequestStartLimiter {
             constructor(name, options = {}) {
               this.name = name
-              this.delay = options.initialDelay || 200
-              this.minDelay = options.minDelay || 80
-              this.maxDelay = options.maxDelay || 8000
-              this.successes = 0
-              this.failures = 0
+              this.delay = options.initialDelay || 250
+              this.minDelay = options.minDelay || 150
+              this.maxDelay = options.maxDelay || 2500
               this.nextAllowed = 0
+              this.cooldownUntil = 0
+              this.successesSince429 = 0
               this.lock = Promise.resolve()
             }
 
-            async wait() {
+            // This lock controls only when an HTTP request may START. It never
+            // holds a worker while JSON is downloading or while episodes are
+            // being matched locally, so all non-request work remains parallel.
+            async waitForRequestStart() {
               let release
               const previous = this.lock
               this.lock = new Promise(resolve => { release = resolve })
               await previous
 
               const now = Date.now()
-              const sleepFor = Math.max(0, this.nextAllowed - now)
+              const allowedAt = Math.max(this.nextAllowed, this.cooldownUntil)
+              const sleepFor = Math.max(0, allowedAt - now)
               if (sleepFor) await new Promise(resolve => setTimeout(resolve, sleepFor))
+
               this.nextAllowed = Date.now() + this.delay
               release()
             }
 
             success() {
-              this.successes++
-              if (this.successes % 8 === 0) {
+              this.successesSince429++
+
+              // Recover gradually after a real 429. Generic successes and
+              // failures do not otherwise alter the global request rate.
+              if (this.successesSince429 >= 40 && this.delay > this.minDelay) {
                 this.delay = Math.max(this.minDelay, Math.floor(this.delay * 0.9))
+                this.successesSince429 = 0
               }
             }
 
-            slowDown(multiplier = 1.7) {
-              this.failures++
-              this.delay = Math.min(this.maxDelay, Math.ceil(this.delay * multiplier))
+            rateLimited(retryAfterMs = 0) {
+              this.successesSince429 = 0
+              this.delay = Math.min(this.maxDelay, Math.max(this.delay + 100, Math.ceil(this.delay * 1.5)))
+              this.cooldownUntil = Math.max(
+                this.cooldownUntil,
+                Date.now() + Math.max(retryAfterMs, this.delay * 2)
+              )
             }
           }
 
-          const tvmazeLimiter = new AdaptiveLimiter('TVMaze', {
-            initialDelay: 180,
-            minDelay: 75,
-            maxDelay: 8000
+          // TVMaze requests are started at a controlled rate, but episode
+          // matching for already-downloaded shows is never serialized.
+          const tvmazeLimiter = new RequestStartLimiter('TVMaze', {
+            initialDelay: 250,
+            minDelay: 150,
+            maxDelay: 2500
           })
 
-          const tmdbLimiter = new AdaptiveLimiter('TMDB', {
+          const tmdbLimiter = new RequestStartLimiter('TMDB', {
             initialDelay: 220,
             minDelay: 100,
             maxDelay: 10000
@@ -419,14 +434,14 @@ jobs:
           }
 
           async function fetchJson(url, label, limiter, retries = 7) {
-            const retryQueue = []
             let exhaustedTransientFailure = false
+
             for (let attempt = 1; attempt <= retries; attempt++) {
-              await limiter.wait()
+              await limiter.waitForRequestStart()
 
               try {
                 const response = await fetch(url, {
-                  headers: { 'User-Agent': 'festy-canada-guide/6.0' }
+                  headers: { 'User-Agent': 'festy-canada-guide/6.1' }
                 })
 
                 if (response.status === 404) {
@@ -434,50 +449,62 @@ jobs:
                   return null
                 }
 
-                if (response.status === 429 || response.status >= 500) {
-                  limiter.slowDown(response.status === 429 ? 2.0 : 1.5)
+                if (response.status === 429) {
                   const retryAfter = Number(response.headers.get('retry-after') || 0) * 1000
-                  const backoff = Math.min(30000, 500 * (2 ** (attempt - 1)))
-                  retryQueue.push({
-                    attempt,
-                    status: response.status,
-                    wait: Math.max(retryAfter, backoff)
-                  })
-                  const item = retryQueue.shift()
-                  console.log(
-                    '[' + limiter.name + ' RETRY] ' + label +
-                    ' | attempt=' + item.attempt +
-                    ' | status=' + item.status +
-                    ' | wait=' + item.wait + 'ms' +
-                    ' | delay=' + limiter.delay + 'ms'
-                  )
+                  const localBackoff = Math.min(30000, 750 * (2 ** (attempt - 1)))
+                  const wait = Math.max(retryAfter, localBackoff)
+
+                  // A real TVMaze/TMDB 429 is the only event that slows the
+                  // shared limiter for every worker.
+                  limiter.rateLimited(wait)
                   exhaustedTransientFailure = true
-                  await new Promise(resolve => setTimeout(resolve, item.wait))
+
+                  console.log(
+                    '[' + limiter.name + ' 429] ' + label +
+                    ' | attempt=' + attempt +
+                    ' | wait=' + wait + 'ms' +
+                    ' | global delay=' + limiter.delay + 'ms'
+                  )
+
+                  await new Promise(resolve => setTimeout(resolve, wait))
+                  continue
+                }
+
+                if (response.status >= 500) {
+                  // Temporary server failures retry only this request. They do
+                  // not increase the global delay or stall unrelated workers.
+                  const wait = Math.min(30000, 500 * (2 ** (attempt - 1)))
+                  exhaustedTransientFailure = true
+                  console.log(
+                    '[' + limiter.name + ' SERVER RETRY] ' + label +
+                    ' | attempt=' + attempt +
+                    ' | status=' + response.status +
+                    ' | wait=' + wait + 'ms'
+                  )
+                  await new Promise(resolve => setTimeout(resolve, wait))
                   continue
                 }
 
                 if (!response.ok) {
-                  limiter.slowDown(1.25)
                   console.log('[' + limiter.name + ' HTTP ' + response.status + '] ' + label)
                   return null
                 }
 
+                const result = await response.json()
                 limiter.success()
-                return await response.json()
+                return result
               } catch (error) {
-                limiter.slowDown(1.5)
-                const backoff = Math.min(30000, 500 * (2 ** (attempt - 1)))
-                retryQueue.push({ attempt, status: 'network', wait: backoff })
-                const item = retryQueue.shift()
+                // Network failures retry only the failed request. They never
+                // throttle all TVMaze workers.
+                const wait = Math.min(30000, 500 * (2 ** (attempt - 1)))
+                exhaustedTransientFailure = true
                 console.log(
                   '[' + limiter.name + ' NETWORK RETRY] ' + label +
-                  ' | attempt=' + item.attempt +
-                  ' | wait=' + item.wait + 'ms' +
-                  ' | delay=' + limiter.delay + 'ms' +
+                  ' | attempt=' + attempt +
+                  ' | wait=' + wait + 'ms' +
                   ' | error=' + error.message
                 )
-                exhaustedTransientFailure = true
-                await new Promise(resolve => setTimeout(resolve, item.wait))
+                await new Promise(resolve => setTimeout(resolve, wait))
               }
             }
 
@@ -488,47 +515,50 @@ jobs:
             return null
           }
 
-          async function getShow(title) {
+          async function getShowWithEpisodes(title) {
             const cacheKey = compactKey(title)
             if (showSearchCache.has(cacheKey)) return showSearchCache.get(cacheKey)
 
-            stats.tvmazeShowsSearched++
-            const results = await fetchJson(
-              'https://api.tvmaze.com/search/shows?q=' + encodeURIComponent(title),
-              title,
-              tvmazeLimiter
-            )
+            // Store the in-flight promise immediately so any duplicate title
+            // encountered concurrently still produces only one TVMaze request.
+            const pending = (async () => {
+              stats.tvmazeShowsSearched++
 
-            const shows = Array.isArray(results)
-              ? results.map(item => item.show).filter(Boolean)
-              : []
+              // One request returns both the selected show and its complete
+              // episode list. Every airing in this series group reuses it.
+              const show = await fetchJson(
+                'https://api.tvmaze.com/singlesearch/shows?q=' +
+                  encodeURIComponent(title) + '&embed=episodes',
+                title,
+                tvmazeLimiter
+              )
 
-            const exact = shows.find(show => compactKey(show.name) === cacheKey)
-            const close = shows
-              .map(show => ({ show, score: tokenSimilarity(show.name, title) }))
-              .filter(item => item.score >= 0.8)
-              .sort((a, b) => b.score - a.score)[0]
+              if (!show) return null
 
-            const show = exact || (close && close.show) || null
-            showSearchCache.set(cacheKey, show)
+              const exact = compactKey(show.name) === cacheKey
+              const closeEnough = tokenSimilarity(show.name, title) >= 0.8
+              if (!exact && !closeEnough) return null
 
-            if (show) stats.tvmazeShowsMatched++
-            return show
-          }
+              stats.tvmazeShowsMatched++
 
-          async function getEpisodes(showId) {
-            if (episodeCache.has(showId)) return episodeCache.get(showId)
+              const episodes = Array.isArray(show._embedded && show._embedded.episodes)
+                ? show._embedded.episodes
+                : []
 
-            const result = await fetchJson(
-              'https://api.tvmaze.com/shows/' + showId + '/episodes?specials=1',
-              'show ' + showId,
-              tvmazeLimiter
-            )
+              if (episodes.length) stats.tvmazeEpisodeListsDownloaded++
+              return { show, episodes }
+            })()
 
-            const episodes = Array.isArray(result) ? result : []
-            episodeCache.set(showId, episodes)
-            if (episodes.length) stats.tvmazeEpisodeListsDownloaded++
-            return episodes
+            showSearchCache.set(cacheKey, pending)
+
+            try {
+              const result = await pending
+              showSearchCache.set(cacheKey, result)
+              return result
+            } catch (error) {
+              showSearchCache.delete(cacheKey)
+              throw error
+            }
           }
 
           function findByTitle(episodes, title) {
@@ -744,18 +774,20 @@ jobs:
 
           async function enrichSeriesGroup(group) {
             try {
-              const show = await getShow(group[0].title)
-              if (!show) {
+              const bundle = await getShowWithEpisodes(group[0].title)
+              if (!bundle) {
                 stats.noConfidentMatch += group.filter(programme => !excludedFromSeriesEnrichment(programme)).length
                 return
               }
 
-              const episodes = await getEpisodes(show.id)
+              const episodes = bundle.episodes
               if (!episodes.length) {
                 stats.noConfidentMatch += group.filter(programme => !excludedFromSeriesEnrichment(programme)).length
                 return
               }
 
+              // All matching below is local and reuses this one downloaded
+              // episode list for every airing of the series.
               for (const programme of group) {
                 if (excludedFromSeriesEnrichment(programme)) continue
 
@@ -1004,7 +1036,7 @@ jobs:
               target.get(groupKey).push(programme)
             }
 
-            // PHASE 3: Parallel, adaptive, programme-by-programme TVMaze enrichment.
+            // PHASE 3: One embedded TVMaze request per series; parallel local matching.
             const seriesQueue = [...seriesGroups.values()]
               .filter(group =>
                 group.some(programme => {
