@@ -31,7 +31,7 @@ jobs:
           echo "Downloading fresh IPTV-org UK guide..."
           curl -L --fail --retry 5 --retry-delay 10 \
             --progress-bar \
-            https://iptv-org.github.io/epg/guides/uk.xml.gz \
+            https://iptv-epg.org/files/epg-gb.xml \
             -o uk/source/uk.xml.gz
 
           test -s uk/source/uk.xml.gz
