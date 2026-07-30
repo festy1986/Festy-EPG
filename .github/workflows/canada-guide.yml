@@ -271,10 +271,10 @@ jobs:
             // should not consume TVMaze searches. Category checks are preferred.
             const values = categories(programme.block)
             if (values.some(value => [
-              /sports?/, /news/, /current affairs/, /weather/,
-              /shopping/, /infomercial/, /paid programming/,
-              /religion/, /religious/, /radio/, /teleshopping/,
-              /horse racing/, /lottery/, /teletext/
+              /\bsports?\b/, /\bnews\b/, /\bcurrent affairs\b/, /\bweather\b/,
+              /\bshopping\b/, /\binfomercial\b/, /\bpaid programming\b/,
+              /\breligion\b/, /\breligious\b/, /\bradio\b/, /\bteleshopping\b/,
+              /\bhorse racing\b/, /\blottery\b/, /\bteletext\b/
             ].some(pattern => pattern.test(value)))) return true
 
             // Use conservative title checks for guide filler and clearly live,
@@ -283,13 +283,13 @@ jobs:
             const title = normalize(programme.title)
             const combined = normalize(programme.title + ' ' + programme.episodeTitle)
             return [
-              /^(?:news|breaking news|latest news|world news|national news)(?:|$)/,
-              /^(?:weather|weather forecast)(?:|$)/,
-              /^(?:sports? news|live sports?|live football|live soccer|live rugby|live cricket|live tennis|live golf)(?:|$)/,
-              /^(?:shopping|teleshopping|infomercial|paid programming)(?:|$)/,
-              /^(?:radio|radio simulcast)(?:|$)/,
-              /^(?:to be announced|tba|no information|programme information|program information|sign off|closedown)(?:|$)/,
-              /^(?:channel off air|off air|this is .+|coming up|preview)(?:|$)/
+              /^(?:news|breaking news|latest news|world news|national news)(?:\b|$)/,
+              /^(?:weather|weather forecast)(?:\b|$)/,
+              /^(?:sports? news|live sports?|live football|live soccer|live rugby|live cricket|live tennis|live golf)(?:\b|$)/,
+              /^(?:shopping|teleshopping|infomercial|paid programming)(?:\b|$)/,
+              /^(?:radio|radio simulcast)(?:\b|$)/,
+              /^(?:to be announced|tba|no information|programme information|program information|sign off|closedown)(?:\b|$)/,
+              /^(?:channel off air|off air|this is .+|coming up|preview)(?:\b|$)/
             ].some(pattern => pattern.test(title) || pattern.test(combined))
           }
 
