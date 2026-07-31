@@ -1,0 +1,28 @@
+name: Check Workflow IDs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check stuck run and current workflow runs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "STUCK RUN #8"
+          gh api repos/festy1986/festy-epg/actions/runs/29711500691 \
+            --jq '{run_id: .id, run_number: .run_number, workflow_id: .workflow_id, workflow_path: .path, status: .status, conclusion: .conclusion}'
+
+          echo ""
+          echo "RECENT TEST CANADA CHANNEL LIST RUNS"
+          gh api repos/festy1986/festy-epg/actions/runs \
+            --paginate \
+            --jq '.workflow_runs[] | select(.name == "TEST Canada Channel List") | {run_id: .id, run_number: .run_number, workflow_id: .workflow_id, workflow_path: .path, status: .status, conclusion: .conclusion}' \
+            | head -40
