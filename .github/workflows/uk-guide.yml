@@ -20,8 +20,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        timeout-minutes: 5
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Download fresh UK IPTV-EPG guide
         run: |
