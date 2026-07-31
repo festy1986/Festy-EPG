@@ -88,12 +88,30 @@ jobs:
             tmdbMoviesSearched: 0,
             tmdbMoviesMatched: 0,
             tmdbYearsAdded: 0,
-            tmdbFullReleaseDatesAdded: 0
+            tmdbFullReleaseDatesAdded: 0,
+            tmdbTvShowsQueued: 0,
+            tmdbTvShowsCompleted: 0,
+            tmdbTvShowsSearched: 0,
+            tmdbTvShowsMatched: 0,
+            tmdbTvSeasonsDownloaded: 0,
+            tmdbTvProgrammesMatched: 0,
+            tmdbTvTitlesAdded: 0,
+            tmdbTvNumbersAdded: 0,
+            tmdbTvDatesAdded: 0,
+            tmdbTvDescriptionsAdded: 0,
+            originalTitlesRestored: 0,
+            originalNumbersRestored: 0,
+            originalDatesRestored: 0,
+            originalDescriptionsRestored: 0,
+            actorParentheticalsRemoved: 0,
+            programmesFinalValidated: 0
           }
 
           const showSearchCache = new Map()
           const episodeCache = new Map()
           const movieCache = new Map()
+          const tmdbTvShowCache = new Map()
+          const tmdbTvSeasonCache = new Map()
           const tvmazeRetryGroups = new Map()
           let tvmazePass = 1
           let stage = 'starting'
@@ -551,29 +569,92 @@ jobs:
             return date && description.includes('(' + displayDate(date) + ')')
           }
 
-          function appendMissingDescriptionPieces(programme) {
-            let description = clean(programme.description)
+          function isPlaceholderEpisodeTitle(value) {
+            const text = clean(value)
+            return !text || /^(?:episode|ep|part)\s*\d{1,4}(?:\s*(?:of|\/|-|–|—)\s*\d{1,4})?$/i.test(text)
+          }
+
+          function cleanActorParentheticals(value) {
+            let removed = 0
+            const result = clean(value).replace(
+              /\s*\((?:[A-Z][a-z]+(?:[-'][A-Z]?[a-z]+)?(?:\s+[A-Z][a-z]+(?:[-'][A-Z]?[a-z]+)?){1,3})(?:\s*,\s*(?:[A-Z][a-z]+(?:[-'][A-Z]?[a-z]+)?(?:\s+[A-Z][a-z]+(?:[-'][A-Z]?[a-z]+)?){1,3}))*\)/g,
+              () => { removed++; return '' }
+            )
+            stats.actorParentheticalsRemoved += removed
+            return clean(result)
+          }
+
+          function stripPackedEpisodeMetadata(description, programme) {
+            let body = clean(description)
+            body = body
+              .replace(/^\s*(?:S\s*\d{1,3}\s*E\s*\d{1,3}|Season\s*\d{1,3}\s*Episode\s*\d{1,3})\s*[-–—:.,]?\s*/i, '')
+              .replace(/^\s*(?:Episode|Ep|Part)\s*\d{1,4}\s*[-–—:.,]?\s*/i, '')
+              .replace(/\s*\((?:18|19|20)\d{2}\)\s*$/i, '')
+              .replace(/\s*\(\d{2}\/\d{2}\/\d{4}\)\s*$/i, '')
+              .trim()
+
+            if (programme.episodeTitle) {
+              const escaped = programme.episodeTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+              body = body.replace(new RegExp('^\\s*' + escaped + '\\s*(?:[-–—:]\\s*S\\d{1,3}E\\d{1,3})?[.\\-–—:]*\\s*', 'i'), '')
+            }
+            if (programme.episodeCode) {
+              const escapedCode = programme.episodeCode.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+              body = body.replace(new RegExp('^\\s*' + escapedCode + '[.\\-–—:]*\\s*', 'i'), '')
+            }
+            return clean(body)
+          }
+
+          function restoreOriginalMetadata(programme) {
+            if ((!programme.episodeTitle || isPlaceholderEpisodeTitle(programme.episodeTitle)) && programme.originalEpisodeTitle) {
+              if (!isPlaceholderEpisodeTitle(programme.originalEpisodeTitle) || !programme.episodeTitle) {
+                programme.episodeTitle = programme.originalEpisodeTitle
+                stats.originalTitlesRestored++
+              }
+            }
+            if (!programme.episodeCode && programme.originalEpisodeCode) {
+              programme.episodeCode = programme.originalEpisodeCode
+              stats.originalNumbersRestored++
+            }
+            if (!programme.airDate && programme.originalAirDate) {
+              programme.airDate = programme.originalAirDate
+              stats.originalDatesRestored++
+            }
+            if (!programme.description && programme.originalDescription) {
+              programme.description = programme.originalDescription
+              stats.originalDescriptionsRestored++
+            }
+          }
+
+          function needsFinalTvEnrichment(programme) {
+            if (excludedFromSeriesEnrichment(programme)) return false
+            return !programme.episodeTitle || isPlaceholderEpisodeTitle(programme.episodeTitle) ||
+              !programme.episodeCode || !programme.airDate || !programme.description
+          }
+
+          function formatFinalSeriesDescription(programme) {
+            restoreOriginalMetadata(programme)
+            let body = programme.description || programme.originalDescription || ''
+            body = cleanActorParentheticals(body)
+            body = stripPackedEpisodeMetadata(body, programme)
+
             const prefix = []
-
-            if (programme.episodeTitle && !hasDescriptionTitle(description, programme.episodeTitle)) {
-              prefix.push(programme.episodeTitle)
-              stats.appendedDescriptionTitles++
-            }
-
-            if (programme.episodeCode && !hasDescriptionCode(description, programme.episodeCode)) {
-              if (prefix.length) prefix[prefix.length - 1] += ' - ' + programme.episodeCode
+            if (programme.episodeTitle) prefix.push(programme.episodeTitle)
+            if (programme.episodeCode) {
+              if (prefix.length) prefix[0] += ' - ' + programme.episodeCode
               else prefix.push(programme.episodeCode)
-              stats.appendedDescriptionNumbers++
             }
 
-            if (prefix.length) description = prefix.join('. ') + (description ? '. ' + description : '')
-
-            if (programme.airDate && /^\d{4}-\d{2}-\d{2}$/.test(programme.airDate) && !hasDescriptionDate(description, programme.airDate)) {
-              description = clean(description).replace(/[.\s]+$/, '')
-              description += (description ? '. ' : '') + '(' + displayDate(programme.airDate) + ')'
-              stats.appendedDescriptionDates++
+            let output = prefix.join('. ')
+            if (body) output += (output ? '. ' : '') + body.replace(/[.\s]+$/, '')
+            if (programme.airDate && /^\d{4}-\d{2}-\d{2}$/.test(programme.airDate)) {
+              output += (output ? '. ' : '') + '(' + displayDate(programme.airDate) + ')'
             }
-            return clean(description)
+            return clean(output)
+          }
+
+          function appendMissingDescriptionPieces(programme) {
+            programme.description = formatFinalSeriesDescription(programme)
+            return programme.description
           }
 
           function enrichProgramme(programme, matched) {
@@ -586,31 +667,25 @@ jobs:
             if (matched.method === 'title-only') stats.matchedTitleOnly++
             if (matched.method === 'code-only') stats.matchedCodeOnly++
 
-            // TVMaze is authoritative after a confident episode match.
-            // Replace IPTV episode metadata with the matched TVMaze episode.
-            if (mazeTitle) {
+            // IPTV remains authoritative. TVMaze fills gaps and replaces only
+            // generic placeholders such as "Episode 1" when it has a real title.
+            if (mazeTitle && (!programme.episodeTitle || isPlaceholderEpisodeTitle(programme.episodeTitle))) {
               programme.episodeTitle = mazeTitle
               stats.filledEpisodeTitles++
             }
-
-            if (mazeCode) {
+            if (mazeCode && !programme.episodeCode) {
               programme.episodeCode = mazeCode
               stats.filledEpisodeNumbers++
             }
-
-            if (mazeAirDate) {
+            if (mazeAirDate && !programme.airDate) {
               programme.airDate = mazeAirDate
               stats.filledAirDates++
             }
-
-            if (episode.summary) {
-              programme.description = clean(
-                String(episode.summary)
-                  .replace(/<[^>]+>/g, ' ')
-              )
+            if (episode.summary && !programme.description) {
+              programme.description = clean(String(episode.summary).replace(/<[^>]+>/g, ' '))
             }
 
-            programme.description = appendMissingDescriptionPieces(programme)
+            programme.description = formatFinalSeriesDescription(programme)
             stats.programmesEnriched++
           }
 
@@ -651,6 +726,95 @@ jobs:
               } else {
                 stats.tvmazeSecondPassFailed++
                 console.log('[TVMAZE SECOND PASS FAILED] ' + group[0].title)
+              }
+            }
+          }
+
+          function tmdbTvShowScore(title, show) {
+            const wanted = compactKey(title)
+            if (!wanted || !show) return 0
+            const names = [show.name, show.original_name].filter(Boolean).map(compactKey)
+            if (names.includes(wanted)) return 100
+            if (names.some(name => name.includes(wanted) || wanted.includes(name))) return 85
+            return 0
+          }
+
+          async function getTmdbTvShow(title) {
+            const key = compactKey(title)
+            if (!key || !process.env.TMDB_API_KEY) return null
+            if (tmdbTvShowCache.has(key)) return tmdbTvShowCache.get(key)
+
+            stats.tmdbTvShowsSearched++
+            const url = 'https://api.themoviedb.org/3/search/tv?api_key=' +
+              encodeURIComponent(process.env.TMDB_API_KEY) + '&query=' + encodeURIComponent(title)
+            const data = await fetchJson(url, 'tv ' + title, tmdbLimiter)
+            let best = null
+            let bestScore = 0
+            for (const show of data && Array.isArray(data.results) ? data.results : []) {
+              const score = tmdbTvShowScore(title, show)
+              if (score > bestScore) { best = show; bestScore = score }
+            }
+            if (!best || bestScore < 80) best = null
+            if (best) stats.tmdbTvShowsMatched++
+            tmdbTvShowCache.set(key, best)
+            return best
+          }
+
+          async function getTmdbTvSeason(showId, seasonNumber) {
+            const key = showId + '|' + seasonNumber
+            if (tmdbTvSeasonCache.has(key)) return tmdbTvSeasonCache.get(key)
+            const url = 'https://api.themoviedb.org/3/tv/' + showId + '/season/' + seasonNumber +
+              '?api_key=' + encodeURIComponent(process.env.TMDB_API_KEY)
+            const data = await fetchJson(url, 'tv season ' + showId + ' S' + seasonNumber, tmdbLimiter)
+            const episodes = data && Array.isArray(data.episodes) ? data.episodes : []
+            tmdbTvSeasonCache.set(key, episodes)
+            stats.tmdbTvSeasonsDownloaded++
+            return episodes
+          }
+
+          function parseCodeParts(code) {
+            const match = normalizeEpisodeCode(code).match(/^S(\d{2,3})E(\d{2,3})$/)
+            return match ? { season: Number(match[1]), episode: Number(match[2]) } : null
+          }
+
+          async function enrichTmdbTvGroup(group) {
+            const candidates = group.filter(programme => needsFinalTvEnrichment(programme))
+            if (!candidates.length) return
+            const show = await getTmdbTvShow(group[0].title)
+            if (!show) return
+
+            const seasonsNeeded = [...new Set(candidates.map(programme => parseCodeParts(programme.episodeCode)?.season).filter(Number.isFinite))]
+            const seasonMaps = new Map()
+            for (const seasonNumber of seasonsNeeded) {
+              const episodes = await getTmdbTvSeason(show.id, seasonNumber)
+              seasonMaps.set(seasonNumber, episodes)
+            }
+
+            for (const programme of candidates) {
+              restoreOriginalMetadata(programme)
+              const parts = parseCodeParts(programme.episodeCode)
+              if (!parts) continue
+              const episodes = seasonMaps.get(parts.season) || []
+              const episode = episodes.find(item => Number(item.episode_number) === parts.episode)
+              if (!episode) continue
+
+              stats.tmdbTvProgrammesMatched++
+              const tmdbTitle = clean(episode.name)
+              if (tmdbTitle && (!programme.episodeTitle || isPlaceholderEpisodeTitle(programme.episodeTitle))) {
+                programme.episodeTitle = tmdbTitle
+                stats.tmdbTvTitlesAdded++
+              }
+              if (!programme.episodeCode) {
+                programme.episodeCode = 'S' + String(parts.season).padStart(2, '0') + 'E' + String(parts.episode).padStart(2, '0')
+                stats.tmdbTvNumbersAdded++
+              }
+              if (!programme.airDate && /^\d{4}-\d{2}-\d{2}$/.test(episode.air_date || '')) {
+                programme.airDate = episode.air_date
+                stats.tmdbTvDatesAdded++
+              }
+              if (!programme.description && episode.overview) {
+                programme.description = clean(episode.overview)
+                stats.tmdbTvDescriptionsAdded++
               }
             }
           }
@@ -795,10 +959,14 @@ jobs:
                 block,
                 channel,
                 title,
-                episodeTitle: tag(block, 'sub-title'),
+                originalEpisodeTitle: tag(originalBlock, 'sub-title'),
+                originalEpisodeCode: episodeCode(originalBlock),
+                originalAirDate: parseDateTag(originalBlock),
+                originalDescription: tag(originalBlock, 'desc'),
+                episodeTitle: tag(originalBlock, 'sub-title'),
                 episodeCode: episodeCode(originalBlock),
-                airDate: parseDateTag(block),
-                description: tag(block, 'desc'),
+                airDate: parseDateTag(originalBlock),
+                description: tag(originalBlock, 'desc'),
                 movie: detection.movie,
                 movieYear: '',
                 movieReleaseDate: ''
@@ -847,6 +1015,19 @@ jobs:
               await runWorkers(secondPassQueue, TVMAZE_WORKERS, enrichSeriesGroup, 'tvmazeSecondPassCompleted', 'TVMAZE SECOND PASS')
             }
 
+            // Mandatory second-source sweep. Every non-movie programme is validated;
+            // incomplete programmes are grouped by series and checked against TMDB TV.
+            const tmdbTvQueue = [...seriesGroups.values()].filter(group =>
+              group.some(programme => needsFinalTvEnrichment(programme))
+            )
+            stats.tmdbTvShowsQueued = tmdbTvQueue.length
+            stage = 'TMDB TV fallback enrichment'
+            if (process.env.TMDB_API_KEY) {
+              await runWorkers(tmdbTvQueue, TMDB_WORKERS, enrichTmdbTvGroup, 'tmdbTvShowsCompleted', 'TMDB TV')
+            } else {
+              console.log('[TMDB TV] TMDB_API_KEY is missing; TV fallback enrichment skipped.')
+            }
+
             // Every detected movie goes through TMDB because IPTV-EPG usually supplies only a year,
             // while the guide requires the complete theatrical release date.
             const movieQueue = [...movieGroups.values()]
@@ -856,6 +1037,14 @@ jobs:
               await runWorkers(movieQueue, TMDB_WORKERS, enrichMovieGroup, 'tmdbMoviesCompleted', 'TMDB')
             } else {
               console.log('[TMDB] TMDB_API_KEY is missing; movie release-date enrichment skipped.')
+            }
+
+            stage = 'final metadata validation'
+            for (const programme of programmes) {
+              restoreOriginalMetadata(programme)
+              if (!programme.movie) programme.description = formatFinalSeriesDescription(programme)
+              else programme.description = cleanActorParentheticals(programme.description)
+              stats.programmesFinalValidated++
             }
 
             stage = 'writing final XML'
