@@ -1,0 +1,48 @@
+name: Delete Stuck Workflow Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  delete-stuck-run:
+    name: Delete Run #8
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show run information
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Checking run..."
+          gh api \
+            repos/${{ github.repository }}/actions/runs/29711500691 \
+            --jq '{run_id: .id, run_number: .run_number, workflow_id: .workflow_id, status: .status, conclusion: .conclusion, workflow: .path}'
+
+      - name: Delete stuck run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Attempting to delete run 29711500691..."
+
+          gh api \
+            --method DELETE \
+            repos/${{ github.repository }}/actions/runs/29711500691
+
+          echo "Delete request completed."
+
+      - name: Verify deletion
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Checking if run still exists..."
+
+          if gh api repos/${{ github.repository }}/actions/runs/29711500691 >/dev/null 2>&1; then
+            echo "❌ Run still exists."
+            exit 1
+          else
+            echo "✅ Run has been deleted."
+          fi
