@@ -1601,7 +1601,7 @@ def get_public_events(
     )
 
 
-    url = (
+    primary_url = (
 
         "https://site.api.espn.com/apis/site/v2/sports/"
 
@@ -1614,11 +1614,128 @@ def get_public_events(
     )
 
 
+    fallback_url = (
+
+        "https://cdn.espn.com/core/"
+
+        f"{league}/"
+
+        "scoreboard"
+
+    )
+
+
+    request_headers = {
+
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/150.0.0.0 Safari/537.36"
+        ),
+
+        "Accept": "application/json, text/plain, */*",
+
+        "Accept-Language": "en-US,en;q=0.9",
+
+        "Referer": "https://www.espn.com/",
+
+        "Origin": "https://www.espn.com",
+
+    }
+
+
+    def extract_events(data):
+
+        if not isinstance(
+            data,
+            (dict, list)
+        ):
+
+            return []
+
+
+        if isinstance(
+            data,
+            dict
+        ):
+
+            events = data.get(
+                "events"
+            )
+
+
+            if isinstance(
+                events,
+                list
+            ):
+
+                usable_events = [
+
+                    event
+
+                    for event in events
+
+                    if isinstance(
+                        event,
+                        dict
+                    )
+
+                    and (
+
+                        event.get(
+                            "competitions"
+                        )
+
+                        or
+
+                        event.get(
+                            "date"
+                        )
+
+                    )
+
+                ]
+
+
+                if usable_events:
+
+                    return usable_events
+
+
+            for value in data.values():
+
+                found = extract_events(
+                    value
+                )
+
+
+                if found:
+
+                    return found
+
+
+        else:
+
+            for value in data:
+
+                found = extract_events(
+                    value
+                )
+
+
+                if found:
+
+                    return found
+
+
+        return []
+
+
     try:
 
         response = session.get(
 
-            url,
+            primary_url,
 
             params={
 
@@ -1626,30 +1743,72 @@ def get_public_events(
 
             },
 
-            headers={
-
-                "User-Agent": (
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/150.0.0.0 Safari/537.36"
-                ),
-
-                "Accept": "application/json, text/plain, */*",
-
-                "Accept-Language": "en-US,en;q=0.9",
-
-                "Referer": "https://www.espn.com/",
-
-                "Origin": "https://www.espn.com",
-
-            },
+            headers=request_headers,
 
             timeout=30
 
         )
 
 
-        if response.status_code != 200:
+        if response.status_code == 200:
+
+            data = response.json()
+
+
+            events = extract_events(
+                data
+            )
+
+
+            if events:
+
+                debug_stats[
+                    "public_events_downloaded"
+                ] += len(events)
+
+
+                return events
+
+
+            print(
+                "[ESPN PRIMARY] "
+                "No events returned"
+            )
+
+
+        else:
+
+            print(
+
+                f"[ESPN PRIMARY] HTTP "
+
+                f"{response.status_code}"
+
+            )
+
+
+        fallback_response = session.get(
+
+            fallback_url,
+
+            params={
+
+                "xhr": "1",
+
+                "limit": "100",
+
+                "dates": date_text
+
+            },
+
+            headers=request_headers,
+
+            timeout=30
+
+        )
+
+
+        if fallback_response.status_code != 200:
 
             debug_stats[
                 "public_events_empty"
@@ -1658,9 +1817,9 @@ def get_public_events(
 
             print(
 
-                f"[ESPN] HTTP "
+                f"[ESPN FALLBACK] HTTP "
 
-                f"{response.status_code}"
+                f"{fallback_response.status_code}"
 
             )
 
@@ -1668,16 +1827,12 @@ def get_public_events(
             return []
 
 
-        data = response.json()
+        fallback_data = fallback_response.json()
 
 
-        events = data.get(
-
-            "events",
-
-            []
-
-        ) or []
+        events = extract_events(
+            fallback_data
+        )
 
 
         if events:
@@ -1687,11 +1842,26 @@ def get_public_events(
             ] += len(events)
 
 
+            print(
+
+                f"[ESPN FALLBACK] "
+
+                f"{len(events)} events returned"
+
+            )
+
+
         else:
 
             debug_stats[
                 "public_events_empty"
             ] += 1
+
+
+            print(
+                "[ESPN FALLBACK] "
+                "No events returned"
+            )
 
 
         return events
