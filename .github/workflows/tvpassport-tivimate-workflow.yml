@@ -370,6 +370,10 @@ jobs:
         run: |
           cd epg
 
+          if [ -s ../guides/TVPassport.xml ]; then
+            cp ../guides/TVPassport.xml ../guides/TVPassport.previous.xml
+          fi
+
           rm -f ../guides/TVPassport.xml
           rm -f ../guides/TVPassport.pass*.xml
           rm -f ../guides/TVPassport.pass*.log
@@ -483,6 +487,115 @@ jobs:
           cp "../guides/TVPassport.${BEST_PASS}.xml" "../guides/TVPassport.xml"
 
           cd ..
+
+      - name: Merge previous 24 hours of TVPassport listings
+        run: |
+          node <<'EOFJS'
+          const fs = require('fs')
+
+          const currentPath = 'guides/TVPassport.xml'
+          const previousPath = 'guides/TVPassport.previous.xml'
+
+          if (!fs.existsSync(currentPath)) {
+            console.error(`Missing ${currentPath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(previousPath)) {
+            console.log('No previous TVPassport guide found; skipping previous-24-hour merge')
+            process.exit(0)
+          }
+
+          const currentXml = fs.readFileSync(currentPath, 'utf8')
+          const previousXml = fs.readFileSync(previousPath, 'utf8')
+
+          const cutoff = Date.now() - 24 * 60 * 60 * 1000
+
+          function parseXmltvTimestamp(value) {
+            const match = String(value || '').match(
+              /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\s*([+-])(\d{2})(\d{2})$/
+            )
+
+            if (!match) return NaN
+
+            const [, year, month, day, hour, minute, second, sign, offsetHour, offsetMinute] = match
+            const utc = Date.UTC(
+              Number(year),
+              Number(month) - 1,
+              Number(day),
+              Number(hour),
+              Number(minute),
+              Number(second)
+            )
+
+            const offset =
+              (Number(offsetHour) * 60 + Number(offsetMinute)) *
+              60 *
+              1000 *
+              (sign === '+' ? 1 : -1)
+
+            return utc - offset
+          }
+
+          function programmeKey(block) {
+            const attrs = block.match(/^<programme\b([^>]*)>/i)?.[1] || ''
+            const channel = attrs.match(/\bchannel="([^"]+)"/i)?.[1] || ''
+            const start = attrs.match(/\bstart="([^"]+)"/i)?.[1] || ''
+            const stop = attrs.match(/\bstop="([^"]+)"/i)?.[1] || ''
+            return `${channel}|${start}|${stop}`
+          }
+
+          const currentKeys = new Set(
+            [...currentXml.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)]
+              .map(match => programmeKey(match[0]))
+              .filter(Boolean)
+          )
+
+          const retained = []
+          let scanned = 0
+          let expired = 0
+          let duplicate = 0
+
+          for (const match of previousXml.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)) {
+            scanned++
+
+            const block = match[0]
+            const attrs = block.match(/^<programme\b([^>]*)>/i)?.[1] || ''
+            const stopText = attrs.match(/\bstop="([^"]+)"/i)?.[1] || ''
+            const stopTime = parseXmltvTimestamp(stopText)
+
+            if (!Number.isFinite(stopTime) || stopTime < cutoff) {
+              expired++
+              continue
+            }
+
+            const key = programmeKey(block)
+
+            if (!key || currentKeys.has(key)) {
+              duplicate++
+              continue
+            }
+
+            currentKeys.add(key)
+            retained.push(block)
+          }
+
+          if (retained.length) {
+            const mergedXml = currentXml.replace(
+              /\s*<\/tv>\s*$/i,
+              `\n${retained.join('\n')}\n</tv>\n`
+            )
+
+            fs.writeFileSync(currentPath, mergedXml)
+          }
+
+          fs.rmSync(previousPath, { force: true })
+
+          console.log(`Previous programmes scanned: ${scanned}`)
+          console.log(`Previous programmes retained: ${retained.length}`)
+          console.log(`Previous programmes expired: ${expired}`)
+          console.log(`Previous programmes already present: ${duplicate}`)
+          EOFJS
 
       - name: Fill missing TVPassport metadata from TVMaze
         run: |
