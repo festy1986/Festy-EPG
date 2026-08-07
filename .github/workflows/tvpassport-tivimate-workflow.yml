@@ -389,11 +389,16 @@ jobs:
 
             export TVPASSPORT_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
 
+            EASTERN_YESTERDAY=$(TZ=America/New_York date -d 'yesterday' +%Y-%m-%d)
+
+            echo "Starting guide from: $EASTERN_YESTERDAY"
+            export CURR_DATE="${EASTERN_YESTERDAY}T12:00:00Z"
+
             set +e
             npx tsx scripts/commands/epg/grab.ts \
               --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
               --output="../guides/TVPassport.${PASS_NAME}.xml" \
-              --days=14 \
+              --days=15 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/TVPassport.${PASS_NAME}.log"
 
