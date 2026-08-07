@@ -1343,46 +1343,38 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git fetch origin main
-
-          # Preserve compressed guides created by the other workflows.
-          # This workflow should only update its own XML/GZ output.
-          git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-          git add guides/TVPassport.xml guides/TVPassport.xml.gz
-          git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-          if git diff --cached --quiet; then
-            echo "No TVPassport guide changes to commit"
-            exit 0
-          fi
-
-          git commit -m "Update TVPassport guide"
+          # Keep an untouched copy of this run's generated TVPassport outputs.
+          cp guides/TVPassport.xml /tmp/TVPassport.xml
+          cp guides/TVPassport.xml.gz /tmp/TVPassport.xml.gz
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
+
+            git fetch origin main
+
+            # Start from the newest remote main so generated binary files are
+            # never rebased or merged against another workflow's commit.
+            git reset --hard origin/main
+
+            # Restore only this workflow's freshly generated outputs.
+            cp /tmp/TVPassport.xml guides/TVPassport.xml
+            cp /tmp/TVPassport.xml.gz guides/TVPassport.xml.gz
+
+            git add guides/TVPassport.xml guides/TVPassport.xml.gz
+
+            if git diff --cached --quiet; then
+              echo "No TVPassport guide changes to commit"
+              exit 0
+            fi
+
+            git commit -m "Update TVPassport guide"
 
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed, retrying after fresh fetch/rebase..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-            git add guides/TVPassport.xml guides/TVPassport.xml.gz
-            git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-            if git diff --cached --quiet; then
-              echo "No new commit needed after rebase, retrying push..."
-            else
-              git commit -m "Update TVPassport guide"
-            fi
-
+            echo "Push failed because main changed again; retrying from newest remote main..."
             sleep 5
           done
 
