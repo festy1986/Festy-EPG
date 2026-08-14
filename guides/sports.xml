@@ -2242,7 +2242,7 @@
     <display-name>ENDED | NATIONAL BANK OPEN: WOMEN'S FINAL | Thu 13 Aug 19:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 10</display-name>
   </channel>
   <channel id="1488473">
-    <display-name>LIVE | PHILADELPHIA @ MINNESOTA | Thu 13 Aug 21:00 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 11</display-name>
+    <display-name>ENDED | PHILADELPHIA @ MINNESOTA | Thu 13 Aug 21:00 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 11</display-name>
   </channel>
   <channel id="1488472">
     <display-name>LIVE | NATIONAL BANK OPEN: MEN'S FINAL | Thu 13 Aug 21:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 12</display-name>
@@ -3356,7 +3356,7 @@
   </channel>
   <channel id="606180">
     <display-name>NFL  | 01 - 8/13 7pm Lions at Bengals</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/redzone.png" />
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Detroit_Lions/Detroit_Lions_vs_Cincinnati_Bengals.png" />
   </channel>
   <channel id="606179">
     <display-name>NFL  | 02 - 8/13 7pm Packers at Steelers</display-name>
