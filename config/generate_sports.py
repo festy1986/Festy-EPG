@@ -246,46 +246,6 @@ def normalize_matchup(text):
 
 
 # --------------------------------------------------
-# NFL RedZone fixed-logo channel.
-#
-# Provider NFL slot/channel 1 is reserved for RedZone.
-# Its logo must always be the fixed repository logo.
-# --------------------------------------------------
-
-def is_nfl_redzone_channel(text):
-
-    if not text:
-
-        return False
-
-
-    text = clean_text(
-        text
-    )
-
-
-    if re.search(
-        r"\bRED\s*ZONE\b|\bREDZONE\b",
-        text,
-        flags=re.IGNORECASE
-    ):
-
-        return True
-
-
-    return bool(
-        re.search(
-            r"\bNFL\b"
-            r"\s*(?:[|:\-]\s*)?"
-            r"(?:CHANNEL\s*)?"
-            r"0*1\b",
-            text,
-            flags=re.IGNORECASE
-        )
-    )
-
-
-# --------------------------------------------------
 # Clean provider channel/event text for fallback use.
 #
 # This does not replace the existing matchup parser.
@@ -3987,17 +3947,13 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # NFL channel/slot 1 is always RedZone.
+    # NFL RedZone fixed-logo override.
     #
-    # This override intentionally runs after every other
-    # logo path so no matchup/team logo can replace it.
+    # Channel ID 1031379 is the provider's RedZone channel
+    # and always receives the fixed RedZone logo.
     # --------------------------------------------------
 
-    if is_nfl_redzone_channel(
-
-        provider_name
-
-    ):
+    if stream_id == "1031379":
 
         logo_url = REDZONE_LOGO_URL
 
