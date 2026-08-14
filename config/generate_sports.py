@@ -23,6 +23,12 @@ GITHUB_RAW_ROOT = (
 )
 
 
+REDZONE_LOGO_URL = (
+    GITHUB_RAW_ROOT
+    + "logos/redzone.png"
+)
+
+
 XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
@@ -236,6 +242,46 @@ def normalize_matchup(text):
 
     return text.strip(
         " -|:;"
+    )
+
+
+# --------------------------------------------------
+# NFL RedZone fixed-logo channel.
+#
+# Provider NFL slot/channel 1 is reserved for RedZone.
+# Its logo must always be the fixed repository logo.
+# --------------------------------------------------
+
+def is_nfl_redzone_channel(text):
+
+    if not text:
+
+        return False
+
+
+    text = clean_text(
+        text
+    )
+
+
+    if re.search(
+        r"\bRED\s*ZONE\b|\bREDZONE\b",
+        text,
+        flags=re.IGNORECASE
+    ):
+
+        return True
+
+
+    return bool(
+        re.search(
+            r"\bNFL\b"
+            r"\s*(?:[|:\-]\s*)?"
+            r"(?:CHANNEL\s*)?"
+            r"0*1\b",
+            text,
+            flags=re.IGNORECASE
+        )
     )
 
 
@@ -2743,10 +2789,16 @@ def matchup_logo_key(
 
 
 # --------------------------------------------------
-# Find matchup logo by searching entire
-# sports-logos directory.
+# Find matchup logo.
 #
-# Independent of ESPN.
+# Repository naming convention:
+#
+# sports-logos/<LEAGUE>/<AWAY_TEAM>/
+# <AWAY_TEAM>_vs_<HOME_TEAM>.png
+#
+# ESPN ordering is already applied before this function
+# is called. Away must remain first and home second.
+# Reverse-order matchup files are never accepted.
 # --------------------------------------------------
 
 def find_matchup_logo(
@@ -2802,9 +2854,16 @@ def find_matchup_logo(
     )
 
 
-    wanted_key = matchup_logo_key(
+    wanted_first = normalize_logo_team_name(
 
         first_team,
+
+        league_hint
+
+    )
+
+
+    wanted_second = normalize_logo_team_name(
 
         second_team,
 
@@ -2813,7 +2872,7 @@ def find_matchup_logo(
     )
 
 
-    if not wanted_key:
+    if not wanted_first or not wanted_second:
 
         logos_missing += 1
 
@@ -2836,20 +2895,29 @@ def find_matchup_logo(
 
 
     print(
-        f"  Searching entire: "
-        f"{SPORTS_LOGO_ROOT}/"
+        f"  League: "
+        f"{league_hint}"
     )
 
 
     print(
-        f"  Teams: "
+        f"  Ordered teams: "
         f"{first_team} vs. {second_team}"
+    )
+
+
+    league_root = os.path.join(
+
+        SPORTS_LOGO_ROOT,
+
+        league_hint
+
     )
 
 
     if not os.path.isdir(
 
-        SPORTS_LOGO_ROOT
+        league_root
 
     ):
 
@@ -2864,230 +2932,289 @@ def find_matchup_logo(
 
 
         print(
-            "  Logo directory does not exist."
+            "  League logo directory does not exist."
         )
 
 
         return None
 
 
-    for root, directories, files in os.walk(
+    # --------------------------------------------------
+    # Preferred exact repository path.
+    #
+    # Example:
+    # sports-logos/MLB/Seattle_Mariners/
+    # Seattle_Mariners_vs_New_York_Yankees.png
+    # --------------------------------------------------
 
-        SPORTS_LOGO_ROOT
+    first_filename = clean_logo_filename(
+
+        first_team
+
+    )
+
+
+    second_filename = clean_logo_filename(
+
+        second_team
+
+    )
+
+
+    exact_path = os.path.join(
+
+        league_root,
+
+        first_filename,
+
+        (
+            f"{first_filename}"
+            f"_vs_"
+            f"{second_filename}"
+            f".png"
+        )
+
+    )
+
+
+    candidate_path = None
+
+
+    if os.path.isfile(
+
+        exact_path
 
     ):
 
-        for filename in files:
-
-            if not filename.lower().endswith(
-
-                ".png"
-
-            ):
-
-                continue
+        candidate_path = exact_path
 
 
-            file_stem = os.path.splitext(
+    else:
 
-                filename
+        # --------------------------------------------------
+        # Strict ordered fallback.
+        #
+        # This allows an existing filename alias to match
+        # sports_teams.txt, but it still MUST be:
+        #
+        # away_team_vs_home_team
+        #
+        # A home_vs_away file is deliberately rejected.
+        # --------------------------------------------------
 
-            )[0]
+        for root, directories, files in os.walk(
 
+            league_root
 
-            if "_vs_" not in file_stem:
+        ):
 
-                continue
+            for filename in files:
 
+                if not filename.lower().endswith(
 
-            file_parts = file_stem.split(
+                    ".png"
 
-                "_vs_",
+                ):
 
-                1
-
-            )
-
-
-            if len(file_parts) != 2:
-
-                continue
-
-
-            logo_first = file_parts[0]
-
-            logo_second = file_parts[1]
-
-
-            logo_first_normalized = normalize_team_name(
-
-                logo_first.replace(
-
-                    "_",
-
-                    " "
-
-                )
-
-            )
+                    continue
 
 
-            logo_second_normalized = normalize_team_name(
+                file_stem = os.path.splitext(
 
-                logo_second.replace(
+                    filename
 
-                    "_",
+                )[0]
 
-                    " "
+
+                if "_vs_" not in file_stem:
+
+                    continue
+
+
+                file_parts = file_stem.split(
+
+                    "_vs_",
+
+                    1
 
                 )
 
-            )
+
+                if len(file_parts) != 2:
+
+                    continue
 
 
-            logo_key = matchup_logo_key(
+                logo_first = canonicalize_team_name(
 
-                logo_first_normalized,
+                    file_parts[0].replace(
 
-                logo_second_normalized,
+                        "_",
 
-                league_hint
+                        " "
 
-            )
+                    ),
+
+                    league_hint
+
+                )
 
 
-            if logo_key != wanted_key:
+                logo_second = canonicalize_team_name(
 
-                continue
+                    file_parts[1].replace(
+
+                        "_",
+
+                        " "
+
+                    ),
+
+                    league_hint
+
+                )
 
 
-            relative_path = os.path.relpath(
+                logo_first_ordered = normalize_logo_team_name(
 
-                os.path.join(
+                    logo_first,
+
+                    league_hint
+
+                )
+
+
+                logo_second_ordered = normalize_logo_team_name(
+
+                    logo_second,
+
+                    league_hint
+
+                )
+
+
+                if (
+
+                    logo_first_ordered != wanted_first
+
+                    or
+
+                    logo_second_ordered != wanted_second
+
+                ):
+
+                    continue
+
+
+                candidate_path = os.path.join(
 
                     root,
 
                     filename
 
-                ),
-
-                "."
-
-            )
-
-
-            relative_path = relative_path.replace(
-
-                os.sep,
-
-                "/"
-
-            )
-
-
-            encoded_path = "/".join(
-
-                quote(
-
-                    part,
-
-                    safe=""
-
                 )
 
-                for part in relative_path.split(
 
-                    "/"
-
-                )
-
-            )
+                break
 
 
-            logo_url = (
+            if candidate_path:
 
-                GITHUB_RAW_ROOT
-
-                + encoded_path
-
-            )
+                break
 
 
-            logos_found += 1
+    if not candidate_path:
+
+        logos_missing += 1
 
 
-            if (
+        debug_stats[
 
-                normalize_logo_team_name(
+            "logo_not_found"
 
-                    logo_first_normalized,
-
-                    league_hint
-
-                )
-
-                ==
-
-                normalize_logo_team_name(
-
-                    first_team,
-
-                    league_hint
-
-                )
-
-            ):
-
-                debug_stats[
-
-                    "logo_direct_order_found"
-
-                ] += 1
+        ] += 1
 
 
-            else:
-
-                debug_stats[
-
-                    "logo_reverse_order_found"
-
-                ] += 1
+        print(
+            "  No correctly ordered matching logo found."
+        )
 
 
-            print(
-                "  Logo found:"
-            )
+        return None
 
 
-            print(
-                f"  {relative_path}"
-            )
+    relative_path = os.path.relpath(
+
+        candidate_path,
+
+        "."
+
+    )
 
 
-            print(
-                f"  {logo_url}"
-            )
+    relative_path = relative_path.replace(
+
+        os.sep,
+
+        "/"
+
+    )
 
 
-            return logo_url
+    encoded_path = "/".join(
+
+        quote(
+
+            part,
+
+            safe=""
+
+        )
+
+        for part in relative_path.split(
+
+            "/"
+
+        )
+
+    )
 
 
-    logos_missing += 1
+    logo_url = (
+
+        GITHUB_RAW_ROOT
+
+        + encoded_path
+
+    )
+
+
+    logos_found += 1
 
 
     debug_stats[
 
-        "logo_not_found"
+        "logo_direct_order_found"
 
     ] += 1
 
 
     print(
-        "  No matching logo found."
+        "  Ordered logo found:"
     )
 
 
-    return None
+    print(
+        f"  {relative_path}"
+    )
+
+
+    print(
+        f"  {logo_url}"
+    )
+
+
+    return logo_url
 
 
 # --------------------------------------------------
@@ -3856,6 +3983,34 @@ def build_event_info(
 
             single_team_league
 
+        )
+
+
+    # --------------------------------------------------
+    # NFL channel/slot 1 is always RedZone.
+    #
+    # This override intentionally runs after every other
+    # logo path so no matchup/team logo can replace it.
+    # --------------------------------------------------
+
+    if is_nfl_redzone_channel(
+
+        provider_name
+
+    ):
+
+        logo_url = REDZONE_LOGO_URL
+
+
+        print()
+
+        print(
+            "[NFL REDZONE LOGO]"
+        )
+
+
+        print(
+            f"  {logo_url}"
         )
 
 
