@@ -4,10 +4,12 @@
     <display-name>####### DAZN PPV GB #######</display-name>
   </channel>
   <channel id="1900001">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 1</display-name>
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
   </channel>
   <channel id="1900000">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 2</display-name>
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
   </channel>
   <channel id="1899999">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 3</display-name>
@@ -553,7 +555,7 @@
     <display-name>LIVE EVENT 01 - 9:30am ONE Friday Fights 166 Khunpon v Panpadej</display-name>
   </channel>
   <channel id="605786">
-    <display-name>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</display-name>
+    <display-name>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev v Aliakbari</display-name>
   </channel>
   <channel id="605785">
     <display-name>LIVE EVENT 03 - 8pm Cage Fury FC 159</display-name>
@@ -1749,10 +1751,12 @@
     <display-name>####### DAZN PPV CA #######</display-name>
   </channel>
   <channel id="1912602">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 1</display-name>
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
   </channel>
   <channel id="1912601">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 2</display-name>
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
   </channel>
   <channel id="1912600">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 3</display-name>
@@ -2690,7 +2694,7 @@
     <display-name>LIVE EVENT 01 - 9:30am ONE Friday Fights 166 Khunpon v Panpadej</display-name>
   </channel>
   <channel id="605888">
-    <display-name>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</display-name>
+    <display-name>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev v Aliakbari</display-name>
   </channel>
   <channel id="605887">
     <display-name>LIVE EVENT 03 - 8pm Cage Fury FC 159</display-name>
@@ -4747,13 +4751,13 @@
     <display-name>ENDED | THU, 8/13 - FUTBOL AMERICAS | Thu 13 Aug 20:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 60</display-name>
   </channel>
   <channel id="1924669">
-    <display-name>LIVE | DENVER VS. NORTHERN COLORADO | Thu 13 Aug 21:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 61</display-name>
+    <display-name>ENDED | DENVER VS. NORTHERN COLORADO | Thu 13 Aug 21:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 61</display-name>
   </channel>
   <channel id="1924668">
-    <display-name>LIVE | CAL STATE BAKERSFIELD VS. SAN FRANCISCO | Thu 13 Aug 21:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 62</display-name>
+    <display-name>ENDED | CAL STATE BAKERSFIELD VS. SAN FRANCISCO | Thu 13 Aug 21:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 62</display-name>
   </channel>
   <channel id="1924667">
-    <display-name>LIVE | MICHIGAN VS. UTAH VALLEY | Thu 13 Aug 21:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 63</display-name>
+    <display-name>ENDED | MICHIGAN VS. UTAH VALLEY | Thu 13 Aug 21:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 63</display-name>
   </channel>
   <channel id="1924666">
     <display-name>LIVE | OREGON VS. PORTLAND STATE | Thu 13 Aug 22:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 64</display-name>
@@ -9413,6 +9417,14 @@
   <channel id="1632703">
     <display-name>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1881035">
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
+  </channel>
+  <channel id="1881034">
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
+  </channel>
   <channel id="1881001">
     <display-name>Next | Dolphins @ Commanders | NFL Game Pass | 2026-08-14 | 23:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 35</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Miami_Dolphins/Miami_Dolphins_vs_Washington_Commanders.png" />
@@ -9448,6 +9460,14 @@
   </channel>
   <channel id="1686819">
     <display-name>VIP: NBA TV</display-name>
+  </channel>
+  <channel id="1884206">
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
+  </channel>
+  <channel id="1884205">
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
   </channel>
   <channel id="1884154">
     <display-name>Next | Dolphins @ Commanders | NFL Game Pass | 2026-08-14 | 23:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 53</display-name>
@@ -9504,6 +9524,14 @@
   <channel id="1688731">
     <display-name>VIP: SPORT TV NBA ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1893380">
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
+  </channel>
+  <channel id="1893379">
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
+  </channel>
   <channel id="1893344">
     <display-name>Next | Dolphins @ Commanders | NFL Game Pass | 2026-08-14 | 23:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 37</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Miami_Dolphins/Miami_Dolphins_vs_Washington_Commanders.png" />
@@ -9524,6 +9552,14 @@
   </channel>
   <channel id="1977564">
     <display-name>End | NHL Tonight | NHL  2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2</display-name>
+  </channel>
+  <channel id="1899801">
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
+  </channel>
+  <channel id="1899800">
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
   </channel>
   <channel id="1899765">
     <display-name>Next | Dolphins @ Commanders | NFL Game Pass | 2026-08-14 | 23:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 37</display-name>
@@ -9840,6 +9876,14 @@
   <channel id="1500239">
     <display-name>- NO EVENT STREAMING - | 8K EXCLUSIVE | BR: NBA PASS PPV 620</display-name>
   </channel>
+  <channel id="1899701">
+    <display-name>End | Chargers @ Texans | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 1</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Los_Angeles_Chargers/Los_Angeles_Chargers_vs_Houston_Texans.png" />
+  </channel>
+  <channel id="1899700">
+    <display-name>End | Cardinals @ Raiders | NFL Game Pass | 2026-08-14 | 00:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 2</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Arizona_Cardinals/Arizona_Cardinals_vs_Las_Vegas_Raiders.png" />
+  </channel>
   <channel id="1899671">
     <display-name>Next | Dolphins @ Commanders | NFL Game Pass | 2026-08-14 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 31</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Miami_Dolphins/Miami_Dolphins_vs_Washington_Commanders.png" />
@@ -9990,124 +10034,124 @@ Thursday 08/13/2026</desc>
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1900001">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1900000">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899999">
     <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
@@ -20910,63 +20954,63 @@ Thursday 08/13/2026</desc>
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="605785">
@@ -44790,124 +44834,124 @@ Thursday 08/13/2026</desc>
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1912602">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 1</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 1
-Thursday 08/13/2026</desc>
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1912601">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 2
-Thursday 08/13/2026</desc>
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1912600">
     <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
@@ -63510,63 +63554,63 @@ Thursday 08/13/2026</desc>
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals</title>
-    <desc>LIVE EVENT 02 - 6pm Nos Energy Knoxville Nationals
+    <title>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari</title>
+    <desc>LIVE EVENT 02 - 8:30am ACA 206 Vakhaev vs. Aliakbari
 Thursday 08/13/2026</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="605887">
@@ -193709,6 +193753,126 @@ Thursday 08/13/2026</desc>
     <desc>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ
 Thursday 08/13/2026</desc>
   </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1881035">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1881034">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1881001">
     <title>Miami Dolphins vs. Washington Commanders - 7:00 PM</title>
     <desc>Miami Dolphins vs. Washington Commanders
@@ -194368,6 +194532,126 @@ Thursday 08/13/2026</desc>
     <title>VIP: NBA TV</title>
     <desc>VIP: NBA TV
 Thursday 08/13/2026</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1884206">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1884205">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1884154">
     <title>Miami Dolphins vs. Washington Commanders - 7:00 PM</title>
@@ -195389,6 +195673,126 @@ Thursday 08/13/2026</desc>
     <desc>VIP: SPORT TV NBA ᴿᴬᵂ
 Thursday 08/13/2026</desc>
   </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1893380">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1893379">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1893344">
     <title>Miami Dolphins vs. Washington Commanders - 7:00 PM</title>
     <desc>Miami Dolphins vs. Washington Commanders
@@ -195748,6 +196152,126 @@ Thursday 08/13/2026</desc>
     <title>NHL Tonight | NHL 2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2</title>
     <desc>NHL Tonight | NHL 2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2
 Thursday 08/13/2026</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1899801">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1899800">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899765">
     <title>Miami Dolphins vs. Washington Commanders - 7:00 PM</title>
@@ -201988,6 +202512,126 @@ Thursday 08/13/2026</desc>
     <title>8K EXCLUSIVE | BR: NBA PASS PPV 620</title>
     <desc>8K EXCLUSIVE | BR: NBA PASS PPV 620
 Thursday 08/13/2026</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1899701">
+    <title>Los Angeles Chargers vs. Houston Texans - 8:00 PM</title>
+    <desc>Los Angeles Chargers vs. Houston Texans
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813060000 -0400" stop="20260813120000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813120000 -0400" stop="20260813180000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260813180000 -0400" stop="20260814000000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814000000 -0400" stop="20260814060000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814060000 -0400" stop="20260814120000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814120000 -0400" stop="20260814180000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260814180000 -0400" stop="20260815000000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815000000 -0400" stop="20260815060000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815060000 -0400" stop="20260815120000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815120000 -0400" stop="20260815180000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
+  </programme>
+  <programme start="20260815180000 -0400" stop="20260816000000 -0400" channel="1899700">
+    <title>Arizona Cardinals vs. Las Vegas Raiders - 8:00 PM</title>
+    <desc>Arizona Cardinals vs. Las Vegas Raiders
+Thursday 08/13/2026 - 8:00 PM</desc>
   </programme>
   <programme start="20260813000000 -0400" stop="20260813060000 -0400" channel="1899671">
     <title>Miami Dolphins vs. Washington Commanders - 7:00 PM</title>
