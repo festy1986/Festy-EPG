@@ -3349,13 +3349,14 @@
   </channel>
   <channel id="1031379">
     <display-name>US: NFL REDZONE ᴴᴰ</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/redzone.png" />
   </channel>
   <channel id="1781953">
     <display-name>NFL   | 4k -</display-name>
   </channel>
   <channel id="606180">
     <display-name>NFL  | 01 - 8/13 7pm Lions at Bengals</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Detroit_Lions/Detroit_Lions_vs_Cincinnati_Bengals.png" />
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/logos/redzone.png" />
   </channel>
   <channel id="606179">
     <display-name>NFL  | 02 - 8/13 7pm Packers at Steelers</display-name>
