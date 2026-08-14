@@ -34,7 +34,7 @@ jobs:
           mkdir -p combinedfast/work
           mkdir -p guides
 
-          curl -L --fail --retry 5 --retry-delay 10 \
+          curl -L --fail --retry 5 --retry-all-errors --retry-delay 15 \
             https://epg.guru/7daygracenote/USFast.xml \
             -o combinedfast/source/jessman.xml
 
@@ -45,7 +45,7 @@ jobs:
 
       - name: Download fresh IPTV-org guide
         run: |
-          curl -L --fail --retry 5 --retry-delay 10 \
+          curl -L --fail --retry 5 --retry-all-errors --retry-delay 15 \
             https://iptv-epg.org/files/epg-us.xml.gz \
             -o combinedfast/source/iptvorg.xml.gz
 
