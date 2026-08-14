@@ -3623,6 +3623,17 @@ def build_event_info(
     )
 
 
+    # --------------------------------------------------
+    # NFL RedZone display cleanup.
+    # Channel 1031379 keeps its fixed logo, but the
+    # provider name should display simply as NFL RED ZONE.
+    # --------------------------------------------------
+
+    if stream_id == "1031379":
+
+        provider_name = "NFL RED ZONE"
+
+
     print()
 
     print(
