@@ -204,6 +204,14 @@ def normalize_matchup(text):
 
 
     text = re.sub(
+        r"\s+at\s+",
+        " vs. ",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    text = re.sub(
         r"\s+v\.?\s+",
         " vs. ",
         text,
@@ -361,6 +369,30 @@ def extract_provider_matchup(text):
         )
 
 
+    # Remove provider slot/date/time prefixes such as:
+    # 02 - 8/13 7pm Packers at Steelers
+    text = re.sub(
+        r"^\s*\d+\s*[-:]\s*",
+        "",
+        text
+    )
+
+
+    text = re.sub(
+        r"^\s*\d{1,2}/\d{1,2}(?:/\d{2,4})?\s*",
+        "",
+        text
+    )
+
+
+    text = re.sub(
+        r"^\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)\s*",
+        "",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
     # Remove provider abbreviations such as (NYK), (MIN), etc.
     # The canonical team alias lookup supplies the full official names.
     text = re.sub(
@@ -484,6 +516,121 @@ def extract_start_datetime(text):
 
 
     return None
+
+
+def extract_provider_date_hint(text):
+
+    if not text:
+
+        return None
+
+
+    text = clean_text(
+        text
+    )
+
+
+    match = re.search(
+        r"\b(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?\b",
+        text
+    )
+
+
+    if not match:
+
+        return None
+
+
+    month = int(
+        match.group(1)
+    )
+
+
+    day = int(
+        match.group(2)
+    )
+
+
+    year_text = match.group(
+        3
+    )
+
+
+    eastern_now = datetime.now(
+        ZoneInfo(
+            "America/New_York"
+        )
+    )
+
+
+    if year_text:
+
+        year = int(
+            year_text
+        )
+
+
+        if year < 100:
+
+            year += 2000
+
+
+        try:
+
+            return datetime(
+                year,
+                month,
+                day
+            ).date()
+
+
+        except ValueError:
+
+            return None
+
+
+    candidates = []
+
+
+    for year in (
+        eastern_now.year - 1,
+        eastern_now.year,
+        eastern_now.year + 1
+    ):
+
+        try:
+
+            candidate = datetime(
+                year,
+                month,
+                day
+            ).date()
+
+
+        except ValueError:
+
+            continue
+
+
+        candidates.append(
+            candidate
+        )
+
+
+    if not candidates:
+
+        return None
+
+
+    return min(
+        candidates,
+        key=lambda candidate: abs(
+            (
+                candidate
+                - eastern_now.date()
+            ).days
+        )
+    )
 
 
 # --------------------------------------------------
@@ -1562,17 +1709,14 @@ def parse_espn_datetime(
 # --------------------------------------------------
 # ESPN scoreboard lookup
 #
-# ESPN IS USED ONLY TO:
+# ESPN is used to:
 #
 # - Find the matching game
-# - Return the game's verified start time
+# - Return the game's verified date/time
+# - Verify away/home team order
 #
-# It does NOT provide:
-#
-# - Displayed team names
-# - Title cleanup
-# - Description cleanup
-# - Logo information
+# Displayed team names still pass through sports_teams.txt.
+# Logo files still come from the local sports-logos directory.
 # --------------------------------------------------
 
 def get_public_events(
@@ -2091,6 +2235,19 @@ def find_public_event(
                 )
 
 
+                home_away = clean_text(
+
+                    competitor.get(
+
+                        "homeAway",
+
+                        ""
+
+                    )
+
+                ).lower()
+
+
                 event_teams.append({
 
                     "display_name":
@@ -2107,7 +2264,11 @@ def find_public_event(
 
                     "nickname":
 
-                    nickname
+                    nickname,
+
+                    "home_away":
+
+                    home_away
 
                 })
 
@@ -2285,9 +2446,60 @@ def find_public_event(
             )
 
 
+            away_team = None
+
+            home_team = None
+
+
+            for team in event_teams:
+
+                team_name = (
+
+                    team["display_name"]
+
+                    or team["short_name"]
+
+                    or team["location"]
+
+                    or team["nickname"]
+
+                )
+
+
+                canonical_team = canonicalize_team_name(
+
+                    team_name,
+
+                    league_hint
+
+                )
+
+
+                if team["home_away"] == "away":
+
+                    away_team = canonical_team
+
+
+                elif team["home_away"] == "home":
+
+                    home_team = canonical_team
+
+
+            if away_team and home_team:
+
+                print(
+                    f"  Verified away/home: "
+                    f"{away_team} vs. {home_team}"
+                )
+
+
             return {
 
-                "datetime": event_datetime
+                "datetime": event_datetime,
+
+                "away_team": away_team,
+
+                "home_team": home_team
 
             }
 
@@ -2521,13 +2733,13 @@ def matchup_logo_key(
         return None
 
 
-    return frozenset({
+    return (
 
         first,
 
         second
 
-    })
+    )
 
 
 # --------------------------------------------------
@@ -3278,9 +3490,9 @@ def find_single_team_logo(
 #
 # 1. Read provider matchup
 # 2. Clean team names using sports_teams.txt
-# 3. Build title/description from those names
-# 4. ESPN searches for the game time only
-# 5. Logo search runs independently
+# 3. Use provider date only as an ESPN search hint
+# 4. ESPN verifies date/time and away/home order
+# 5. Build title/description and select the ordered logo
 # --------------------------------------------------
 
 def build_event_info(
@@ -3467,28 +3679,44 @@ def build_event_info(
         )
 
 
+    provider_date_hint = extract_provider_date_hint(
+
+        provider_name
+
+    )
+
+
     preferred_date = (
 
         provider_start_eastern.date()
 
         if provider_start_eastern
 
-        else datetime.now(
+        else (
 
-            ZoneInfo(
+            provider_date_hint
 
-                "America/New_York"
+            if provider_date_hint
 
-            )
+            else datetime.now(
 
-        ).date()
+                ZoneInfo(
+
+                    "America/New_York"
+
+                )
+
+            ).date()
+
+        )
 
     )
 
 
     # --------------------------------------------------
     # STEP 5:
-    # Build clean title and description BEFORE ESPN.
+    # Build clean fallback title/description.
+    # ESPN may replace matchup order/date/time below.
     # --------------------------------------------------
 
     if canonical_matchup:
@@ -3551,10 +3779,49 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 6:
-    # Find logo independently.
+    # ESPN verifies the matching game's date/time
+    # and away/home team order.
+    # --------------------------------------------------
+
+    public_event = None
+
+
+    if canonical_matchup and league_hint:
+
+        public_event = find_public_event(
+
+            canonical_matchup,
+
+            preferred_date,
+
+            league_hint
+
+        )
+
+
+    if (
+        public_event
+        and public_event.get("away_team")
+        and public_event.get("home_team")
+    ):
+
+        canonical_matchup = (
+
+            f"{public_event['away_team']}"
+
+            f" vs. "
+
+            f"{public_event['home_team']}"
+
+        )
+
+
+    # --------------------------------------------------
+    # STEP 7:
+    # Find the matchup logo AFTER ESPN ordering.
     #
-    # This happens regardless of whether ESPN
-    # finds the game.
+    # Ordered logo matching keeps the away team on
+    # the left and the home team on the right.
     # --------------------------------------------------
 
     logo_url = None
@@ -3593,33 +3860,11 @@ def build_event_info(
 
 
     # --------------------------------------------------
-    # STEP 7:
-    # ESPN is used ONLY to find the verified
-    # game time.
-    # --------------------------------------------------
-
-    public_event = None
-
-
-    if canonical_matchup and league_hint:
-
-        public_event = find_public_event(
-
-            canonical_matchup,
-
-            preferred_date,
-
-            league_hint
-
-        )
-
-
-    # --------------------------------------------------
     # STEP 8:
     # If ESPN found the game, add verified
-    # Eastern time to BOTH title and description.
+    # Eastern date/time to BOTH title and description.
     #
-    # Team names remain from sports_teams.txt.
+    # Team names remain canonicalized through sports_teams.txt.
     # --------------------------------------------------
 
     if public_event:
