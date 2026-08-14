@@ -19,70 +19,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        id: checkout
         uses: actions/checkout@v4
-        timeout-minutes: 5
-        continue-on-error: true
+        timeout-minutes: 15
         with:
           fetch-depth: 1
-
-      - name: Diagnose checkout failure
-        if: steps.checkout.outcome == 'failure'
-        run: |
-          echo "========================================"
-          echo "CHECKOUT FAILED - DIAGNOSTIC INFORMATION"
-          echo "========================================"
-          echo
-
-          echo "Runner:"
-          uname -a
-          echo
-
-          echo "Git:"
-          git --version
-          echo
-
-          echo "Disk:"
-          df -h
-          echo
-
-          echo "Memory:"
-          free -h || true
-          echo
-
-          echo "DNS resolution:"
-          getent hosts github.com || true
-          getent hosts api.github.com || true
-          echo
-
-          echo "GitHub HTTPS connectivity:"
-          curl -I -L --connect-timeout 10 --max-time 30 https://github.com || true
-          echo
-
-          echo "GitHub API connectivity:"
-          curl -I --connect-timeout 10 --max-time 30 https://api.github.com || true
-          echo
-
-          echo "Repository remote test:"
-          timeout 60 git ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD || true
-          echo
-
-          echo "Working directory:"
-          pwd
-          ls -lah || true
-          echo
-
-          echo "Git directory state:"
-          git status || true
-          git remote -v || true
-          git config --list --show-origin || true
-          echo
-
-          echo "========================================"
-          echo "END CHECKOUT DIAGNOSTICS"
-          echo "========================================"
-
-          exit 1
 
       - name: Download fresh Canadian IPTV-org guide
         run: |
