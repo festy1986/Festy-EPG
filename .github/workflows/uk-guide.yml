@@ -3,14 +3,14 @@ name: UK Guide
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 6 * * *'
-    - cron: '15 18 * * *'
+    - cron: '30 8 * * *'
+    - cron: '30 20 * * *'
 
 permissions:
   contents: write
 
 concurrency:
-  group: uk-guide
+  group: festy-epg-build-queue
   cancel-in-progress: false
 
 jobs:
