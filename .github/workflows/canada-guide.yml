@@ -3,14 +3,14 @@ name: Canada Guide
 on:
   workflow_dispatch:
   schedule:
-    - cron: '15 6 * * *'
-    - cron: '15 18 * * *'
+    - cron: '30 7 * * *'
+    - cron: '30 19 * * *'
 
 permissions:
   contents: write
 
 concurrency:
-  group: canada-guide
+  group: festy-epg-build-queue
   cancel-in-progress: false
 
 jobs:
