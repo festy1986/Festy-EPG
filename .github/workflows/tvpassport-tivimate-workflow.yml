@@ -3,13 +3,14 @@ name: TVPassport-TiviMate
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 */12 * * *"
+    - cron: "35 6 * * *"
+    - cron: "35 18 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: epg-guide-writes-tvpassport
+  group: festy-epg-build-queue
   cancel-in-progress: false
 
 jobs:
