@@ -90,6 +90,28 @@ jobs:
 
           git add guides/matched.xml
 
-          git commit -m "Update matched channel guide" || echo "No changes"
+          if git diff --cached --quiet; then
+            echo "No changes"
+            exit 0
+          fi
 
-          git push
+          git commit -m "Update matched channel guide"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Push attempt $attempt"
+
+            if git push origin HEAD:main; then
+              echo "Push succeeded"
+              exit 0
+            fi
+
+            echo "Push failed, fetching latest main and rebasing..."
+
+            git fetch origin main
+            git rebase origin/main
+
+            sleep 5
+          done
+
+          echo "Push failed after retries"
+          exit 1
