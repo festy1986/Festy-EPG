@@ -3,14 +3,14 @@ name: Combined FAST
 on:
   workflow_dispatch:
   schedule:
-    - cron: '45 5 * * *'
-    - cron: '45 17 * * *'
+    - cron: '20 4 * * *'
+    - cron: '20 16 * * *'
 
 permissions:
   contents: write
 
 concurrency:
-  group: combinedfast
+  group: festy-epg-build-queue
   cancel-in-progress: false
 
 jobs:
