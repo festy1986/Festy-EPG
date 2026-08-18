@@ -13,6 +13,7 @@ permissions:
 concurrency:
   group: festy-epg-build-queue
   cancel-in-progress: false
+  queue: max
 
 jobs:
 
