@@ -4,10 +4,15 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: "15 4 * * *"
+    - cron: "15 16 * * *"
 
 permissions:
   contents: write
+
+concurrency:
+  group: festy-epg-build-queue
+  cancel-in-progress: false
 
 jobs:
 
