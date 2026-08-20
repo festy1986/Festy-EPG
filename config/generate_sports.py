@@ -9,6 +9,7 @@ import re
 import html
 import time
 from urllib.parse import quote
+from difflib import SequenceMatcher
 
 
 CHANNEL_FILE = "config/sports_channels.txt"
@@ -106,6 +107,10 @@ debug_stats = {
     "canonical_team_matches": 0,
 
     "canonical_team_failures": 0,
+
+    "logo_typo_corrections": 0,
+
+    "logo_typo_correction_failures": 0,
 
     "public_events_downloaded": 0,
 
@@ -1571,6 +1576,231 @@ def canonicalize_team_name(
 
 
     return provider_team
+
+
+# --------------------------------------------------
+# Recover a provider team spelling error ONLY after
+# the normal matchup logo lookup has failed.
+#
+# The existing canonical matching path is intentionally
+# untouched. This is a narrow fallback for a provider typo:
+# - exactly one team must already be recognized
+# - the other team must have a very high fuzzy match
+# - ESPN must verify the proposed matchup
+# - only then is the corrected canonical name accepted
+# --------------------------------------------------
+
+def recover_logo_typo_matchup(
+
+    canonical_matchup,
+
+    league_hint,
+
+    preferred_date
+
+):
+
+    if league_hint not in team_aliases:
+
+        return None
+
+
+    parts = matchup_parts(
+
+        canonical_matchup
+
+    )
+
+
+    if len(parts) != 2:
+
+        return None
+
+
+    normalized_parts = [
+
+        normalize_team_name(
+
+            part
+
+        )
+
+        for part in parts
+
+    ]
+
+
+    recognized = []
+
+    unknown = []
+
+
+    for index, normalized_part in enumerate(
+
+        normalized_parts
+
+    ):
+
+        if normalized_part in team_aliases[league_hint]:
+
+            recognized.append(index)
+
+        else:
+
+            unknown.append(index)
+
+
+    # This recovery is deliberately limited to the case where
+    # one side is already known and the other side is misspelled.
+    if len(recognized) != 1 or len(unknown) != 1:
+
+        return None
+
+
+    unknown_index = unknown[0]
+
+    provider_team = parts[unknown_index]
+
+
+    best_score = 0.0
+
+    best_team = None
+
+
+    # Compare the bad provider spelling against every canonical
+    # alias for this league. The highest scoring canonical team
+    # becomes the candidate, but ESPN must still verify it.
+    for normalized_alias, official_name in team_aliases[
+
+        league_hint
+
+    ].items():
+
+        score = SequenceMatcher(
+
+            None,
+
+            normalized_parts[unknown_index],
+
+            normalized_alias
+
+        ).ratio()
+
+
+        if score > best_score:
+
+            best_score = score
+
+            best_team = official_name
+
+
+    # High-confidence typo only. We do not want this fallback
+    # changing legitimate unmatched provider names.
+    if not best_team or best_score < 0.90:
+
+        debug_stats[
+
+            "logo_typo_correction_failures"
+
+        ] += 1
+
+        return None
+
+
+    corrected_parts = list(parts)
+
+    corrected_parts[unknown_index] = best_team
+
+
+    candidate_matchup = (
+
+        f"{corrected_parts[0]}"
+
+        f" vs. "
+
+        f"{corrected_parts[1]}"
+
+    )
+
+
+    print()
+
+    print(
+
+        "[LOGO TYPO RECOVERY]"
+
+    )
+
+    print(
+
+        f"  Provider spelling: {provider_team}"
+
+    )
+
+    print(
+
+        f"  Candidate correction: {best_team}"
+
+    )
+
+    print(
+
+        f"  Similarity: {best_score:.0%}"
+
+    )
+
+    print(
+
+        f"  Proposed matchup: {candidate_matchup}"
+
+    )
+
+
+    # Final authority: ESPN must contain this matchup around the
+    # provider date before the correction is accepted.
+    verified_event = find_public_event(
+
+        candidate_matchup,
+
+        preferred_date,
+
+        league_hint
+
+    )
+
+
+    if not verified_event:
+
+        debug_stats[
+
+            "logo_typo_correction_failures"
+
+        ] += 1
+
+        print(
+
+            "  ESPN did not verify the proposed matchup."
+
+        )
+
+        return None
+
+
+    debug_stats[
+
+        "logo_typo_corrections"
+
+    ] += 1
+
+
+    print(
+
+        "  ESPN verified the proposed matchup."
+
+    )
+
+
+    return candidate_matchup, verified_event
 
 
 # --------------------------------------------------
@@ -3934,6 +4164,61 @@ def build_event_info(
             league_hint
 
         )
+
+
+        # --------------------------------------------------
+        # LOGO-FAILURE TYPO RECOVERY.
+        #
+        # Do nothing if the existing logo lookup succeeded.
+        # Only a missing matchup logo activates the new path.
+        # If a high-confidence spelling correction is found,
+        # ESPN must verify the corrected matchup before it is
+        # accepted. The corrected canonical matchup is then
+        # used for the guide title, description, and logo.
+        # --------------------------------------------------
+
+        if not logo_url:
+
+            recovered = recover_logo_typo_matchup(
+
+                canonical_matchup,
+
+                league_hint,
+
+                preferred_date
+
+            )
+
+
+            if recovered:
+
+                corrected_matchup, corrected_event = recovered
+
+                canonical_matchup = corrected_matchup
+
+                public_event = corrected_event
+
+
+                # The first lookup failed only because of the
+                # provider spelling error. Do not count that
+                # transient failure as a final missing logo.
+                global logos_missing
+
+                if logos_missing > 0:
+
+                    logos_missing -= 1
+
+                if debug_stats["logo_not_found"] > 0:
+
+                    debug_stats["logo_not_found"] -= 1
+
+                logo_url = find_matchup_logo(
+
+                    canonical_matchup,
+
+                    league_hint
+
+                )
 
 
     elif single_team:
