@@ -20,6 +20,15 @@ jobs:
 
     steps:
       - name: Checkout repository
+        id: checkout
+        continue-on-error: true
+        uses: actions/checkout@v4
+        timeout-minutes: 15
+        with:
+          fetch-depth: 1
+
+      - name: Retry checkout repository
+        if: steps.checkout.outcome == 'failure'
         uses: actions/checkout@v4
         timeout-minutes: 15
         with:
@@ -250,8 +259,8 @@ jobs:
               /\bsky cinema\b/, /\bfilm4\b/, /\bgreat movies\b/,
               /\bmovies\b/, /\bmovie channel\b/, /\btcm\b/,
               /\bturner classic movies\b/, /\bhollywood suite\b/,
-              /\bcrave movies\b/, /\bsuper ecran\b/, /\bcineplex\b/,
-              /\bmpix\b/, /\bmgm plus\b/, /\bhbo movies\b/
+              /\bcrave movies\b/, /\bsuper ecran\b/, /\bcanal vie\b/,
+              /\bcineplex\b/, /\bmpix\b/, /\bmgm plus\b/, /\bhbo movies\b/
             ].some(pattern => pattern.test(name))
           }
 
@@ -1229,7 +1238,6 @@ jobs:
             echo "No Canada guide changes to commit."
             exit 0
           fi
-
           git commit -m "Update Canada guide"
           git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}
