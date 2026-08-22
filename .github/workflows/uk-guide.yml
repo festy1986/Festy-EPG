@@ -20,6 +20,15 @@ jobs:
 
     steps:
       - name: Checkout repository
+        id: checkout_repository
+        uses: actions/checkout@v4
+        timeout-minutes: 15
+        continue-on-error: true
+        with:
+          fetch-depth: 1
+
+      - name: Retry checkout repository
+        if: steps.checkout_repository.outcome == 'failure'
         uses: actions/checkout@v4
         timeout-minutes: 15
         with:
@@ -37,7 +46,7 @@ jobs:
             -o uk/source/gb.xml
 
           test -s uk/source/gb.xml
-                    ls -lh uk/source/gb.xml
+          ls -lh uk/source/gb.xml
 
       - name: Rebuild and enrich UK guide
         env:
