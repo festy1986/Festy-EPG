@@ -1321,8 +1321,7 @@ def matchup_parts(text):
 
         r"(.+?)\s+"
         r"(?:vs\.?|v\.?|x|@)"
-        r"\s+"
-        r"(.+)",
+        r"\s+(.+)",
 
         text,
 
@@ -2657,11 +2656,17 @@ def find_public_event(
 
                     team["display_name"]
 
-                    or team["short_name"]
+                    or
 
-                    or team["location"]
+                    team["short_name"]
 
-                    or team["nickname"]
+                    or
+
+                    team["location"]
+
+                    or
+
+                    team["nickname"]
 
                 )
 
@@ -3097,10 +3102,15 @@ def find_matchup_logo(
         first_filename,
 
         (
+
             f"{first_filename}"
+
             f"_vs_"
+
             f"{second_filename}"
+
             f".png"
+
         )
 
     )
@@ -4124,12 +4134,16 @@ def build_event_info(
     elif single_team:
 
         single_team_league = single_team[
+
             0
+
         ]
 
 
         single_team_name = single_team[
+
             1
+
         ]
 
 
@@ -4604,6 +4618,37 @@ for channel_id, requested_name in wanted.items():
     )
 
 
+    # --------------------------------------------------
+    # UPCOMING / POST-GAME TITLES
+    #
+    # The actual game keeps the normal title.
+    #
+    # Before the game:
+    #     Upcoming: Team A vs. Team B - 7:00 PM
+    #
+    # During the game:
+    #     Team A vs. Team B - 7:00 PM
+    #
+    # After the game:
+    #     Post Game: Team A vs. Team B - 7:00 PM
+    #
+    # Descriptions remain unchanged.
+    # --------------------------------------------------
+
+    upcoming_title_text = (
+
+        f"Upcoming: {title_text}"
+
+    )
+
+
+    post_game_title_text = (
+
+        f"Post Game: {title_text}"
+
+    )
+
+
     if game_start:
 
         print()
@@ -4622,6 +4667,24 @@ for channel_id, requested_name in wanted.items():
         print(
             f"  Assumed game end: "
             f"{game_end}"
+        )
+
+
+        print(
+            f"  Upcoming title: "
+            f"{upcoming_title_text}"
+        )
+
+
+        print(
+            f"  Game title: "
+            f"{title_text}"
+        )
+
+
+        print(
+            f"  Post-game title: "
+            f"{post_game_title_text}"
         )
 
 
@@ -4670,10 +4733,12 @@ for channel_id, requested_name in wanted.items():
         ):
 
             # --------------------------------------------------
-            # PRE-GAME ADD-ON
+            # PRE-GAME / UPCOMING ADD-ON
             #
             # Existing block continues normally until the
             # actual ESPN game start.
+            #
+            # This block is labeled "Upcoming".
             # --------------------------------------------------
 
             if current_start < game_start:
@@ -4720,7 +4785,7 @@ for channel_id, requested_name in wanted.items():
                 )
 
 
-                title.text = title_text
+                title.text = upcoming_title_text
 
 
                 desc = ET.SubElement(
@@ -4739,6 +4804,8 @@ for channel_id, requested_name in wanted.items():
             # REAL GAME
             #
             # ESPN start time + exactly 3 hours.
+            #
+            # The actual game keeps the normal title.
             # --------------------------------------------------
 
             actual_game_end = game_end
@@ -4835,11 +4902,13 @@ for channel_id, requested_name in wanted.items():
             # 6-hour block ends, resume the original block
             # until its normal boundary.
             #
+            # This block is labeled "Post Game".
+            #
             # Example:
             #
-            # 6:00 PM - 7:15 PM
-            # 7:15 PM - 10:15 PM game
-            # 10:15 PM - 12:00 AM
+            # 6:00 PM - 7:15 PM  Upcoming
+            # 7:15 PM - 10:15 PM Game
+            # 10:15 PM - 12:00 AM Post Game
             #
             # Then:
             #
@@ -4891,7 +4960,7 @@ for channel_id, requested_name in wanted.items():
                 )
 
 
-                title.text = title_text
+                title.text = post_game_title_text
 
 
                 desc = ET.SubElement(
@@ -4917,8 +4986,8 @@ for channel_id, requested_name in wanted.items():
                 # game rather than creating overlapping XMLTV
                 # programmes.
                 #
-                # This situation should be uncommon because the
-                # normal sports blocks are six hours long.
+                # No Post Game block is created inside the old
+                # boundary because the game has already crossed it.
                 # --------------------------------------------------
 
                 current_start = actual_game_end
