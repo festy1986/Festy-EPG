@@ -13,10 +13,11 @@
     <display-name>End | Napier City Rovers vs. Miramar | National League - New Zealand | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</display-name>
   </channel>
   <channel id="1899998">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 4</display-name>
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="1899997">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 5</display-name>
+    <display-name>End | Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 5</display-name>
   </channel>
   <channel id="1899996">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 6</display-name>
@@ -550,10 +551,10 @@
     <display-name>LIVE EVENT 01 - 2pm FSC 37</display-name>
   </channel>
   <channel id="605786">
-    <display-name>LIVE EVENT 02 - 6/8pm Rolly v Teofimo</display-name>
+    <display-name>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</display-name>
   </channel>
   <channel id="605785">
-    <display-name>LIVE EVENT 03 - (HD) Rolly v Teofimo</display-name>
+    <display-name>LIVE EVENT 03 - 6pm TNA Lockdown</display-name>
   </channel>
   <channel id="605784">
     <display-name>LIVE EVENT 04 - 7:25pm Husets Late Models</display-name>
@@ -1761,7 +1762,8 @@
     <display-name>End | Napier City Rovers vs. Miramar | National League - New Zealand | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</display-name>
   </channel>
   <channel id="1912597">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 6</display-name>
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="1912596">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 7</display-name>
@@ -2238,7 +2240,7 @@
     <display-name>ENDED | UFC FIGHT NIGHT - HERNANDEZ VS. RODRIGUES | Sat 22 Aug 21:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 12</display-name>
   </channel>
   <channel id="1488471">
-    <display-name>LIVE | WOMEN'S NRL - TITANS V BRONCOS | Sat 22 Aug 23:10 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 13</display-name>
+    <display-name>ENDED | WOMEN'S NRL - TITANS V BRONCOS | Sat 22 Aug 23:10 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 13</display-name>
   </channel>
   <channel id="1488470">
     <display-name>LIVE | WOMEN'S NRL - ROOSTERS VS. WARRIORS | Sun 23 Aug 01:05 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 14</display-name>
@@ -2685,10 +2687,10 @@
     <display-name>LIVE EVENT 01 - 2pm FSC 37</display-name>
   </channel>
   <channel id="605888">
-    <display-name>LIVE EVENT 02 - 6/8pm Rolly v Teofimo</display-name>
+    <display-name>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</display-name>
   </channel>
   <channel id="605887">
-    <display-name>LIVE EVENT 03 - (HD) Rolly v Teofimo</display-name>
+    <display-name>LIVE EVENT 03 - 6pm TNA Lockdown</display-name>
   </channel>
   <channel id="605886">
     <display-name>LIVE EVENT 04 - 7:25pm Husets Late Models</display-name>
@@ -3039,7 +3041,7 @@
     <display-name>End | Napier City Rovers vs. Miramar | National League - New Zealand | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 1</display-name>
   </channel>
   <channel id="1899900">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 2</display-name>
+    <display-name>End | Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 2</display-name>
   </channel>
   <channel id="1899899">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 3</display-name>
@@ -4219,11 +4221,11 @@
   </channel>
   <channel id="633377">
     <display-name>NBA: LOS ANGELES CLIPPERS ᴴᴰ</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/LA_Clippers/LA_Clippers.png" />
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Los_Angeles_Clippers/Los_Angeles_Clippers.png" />
   </channel>
   <channel id="633376">
     <display-name>NBA: LOS ANGELES CLIPPERS SD</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/LA_Clippers/LA_Clippers.png" />
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Los_Angeles_Clippers/Los_Angeles_Clippers.png" />
   </channel>
   <channel id="633375">
     <display-name>NBA: LOS ANGELES LAKERS ᴴᴰ</display-name>
@@ -4414,7 +4416,7 @@
   </channel>
   <channel id="607666">
     <display-name>NBA: LOS ANGELES CLIPPERS</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/LA_Clippers/LA_Clippers.png" />
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NBA/Los_Angeles_Clippers/Los_Angeles_Clippers.png" />
   </channel>
   <channel id="607665">
     <display-name>NBA: LOS ANGELES LAKERS</display-name>
@@ -4698,7 +4700,7 @@
     <display-name>ENDED | SPOKANE VELOCITY FC VS. GREENVILLE TRIUMPH SC | Sat 22 Aug 21:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 50</display-name>
   </channel>
   <channel id="1924679">
-    <display-name>LIVE | AV ALTA FC VS. FC NAPLES | Sat 22 Aug 23:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 51</display-name>
+    <display-name>ENDED | AV ALTA FC VS. FC NAPLES | Sat 22 Aug 23:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 51</display-name>
   </channel>
   <channel id="1924678">
     <display-name>NEXT | EN ESPAÑOL-PSV VS. FC GRONINGEN | Sun 23 Aug 08:25 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 52</display-name>
@@ -9388,8 +9390,8 @@
   <channel id="1632703">
     <display-name>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ</display-name>
   </channel>
-  <channel id="1881029">
-    <display-name>Live | Cowboys @ Cardinals | NFL Game Pass | 8K EXCLUSIVE | BE: DAZN PPV 7</display-name>
+  <channel id="1881034">
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 2</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="284684">
@@ -9416,14 +9418,18 @@
   <channel id="1686819">
     <display-name>VIP: NBA TV</display-name>
   </channel>
+  <channel id="1884182">
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 25</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
+  </channel>
   <channel id="293277">
     <display-name>AF: NBA TV</display-name>
   </channel>
   <channel id="1548073">
     <display-name>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ</display-name>
   </channel>
-  <channel id="1881068">
-    <display-name>Live | Cowboys @ Cardinals | NFL Game Pass | 8K EXCLUSIVE | ES: DAZN PPV 68</display-name>
+  <channel id="1881095">
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 41</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="1695190">
@@ -9435,8 +9441,8 @@
   <channel id="1688731">
     <display-name>VIP: SPORT TV NBA ᴿᴬᵂ</display-name>
   </channel>
-  <channel id="1893373">
-    <display-name>Live | Cowboys @ Cardinals | NFL Game Pass | 8K EXCLUSIVE | PT: DAZN PPV 8</display-name>
+  <channel id="1893374">
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 7</display-name>
     <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="386374">
@@ -9447,6 +9453,10 @@
   </channel>
   <channel id="1977564">
     <display-name>End | NHL Tonight | NHL  2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2</display-name>
+  </channel>
+  <channel id="1899799">
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="1977357">
     <display-name>End | NHL Tonight | NHL  2026 | 2026-06-02 | 12:30 (GMT) | 8K EXCLUSIVE | NO: VIAPLAY PPV 9</display-name>
@@ -9750,6 +9760,10 @@
   </channel>
   <channel id="1500239">
     <display-name>- NO EVENT STREAMING - | 8K EXCLUSIVE | BR: NBA PASS PPV 620</display-name>
+  </channel>
+  <channel id="1899699">
+    <display-name>End | Cowboys @ Cardinals | NFL Game Pass | 2026-08-23 | 02:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 3</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/NFL/Dallas_Cowboys/Dallas_Cowboys_vs_Arizona_Cardinals.png" />
   </channel>
   <channel id="2096081">
     <display-name>VIP: MLB EI 1</display-name>
@@ -10309,243 +10323,243 @@ Sunday 08/23/2026</desc>
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1899998">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 4
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1899997">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 5
+    <title>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5</title>
+    <desc>Australia vs. Bangladesh - Second Test: Day 2 | ICC Test Championship | 2026-08-23 | 00:00 | 8K EXCLUSIVE | GB: DAZN PPV 5
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899996">
@@ -31789,243 +31803,243 @@ Sunday 08/23/2026</desc>
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="605786">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="605785">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="605784">
@@ -80149,124 +80163,124 @@ Sunday 08/23/2026</desc>
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1912597">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 6
-Sunday 08/23/2026</desc>
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1912596">
     <title>8K EXCLUSIVE | CA: DAZN PPV 7</title>
@@ -116989,243 +117003,243 @@ Sunday 08/23/2026</desc>
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="605888">
-    <title>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 02 - 6/8pm Rolly vs. Teofimo
+    <title>LIVE EVENT 02 - 5:50pm IRA Sprints Angell</title>
+    <desc>LIVE EVENT 02 - 5:50pm IRA Sprints Angell
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="605887">
-    <title>LIVE EVENT 03 - Rolly vs. Teofimo</title>
-    <desc>LIVE EVENT 03 - Rolly vs. Teofimo
+    <title>LIVE EVENT 03 - 6pm TNA Lockdown</title>
+    <desc>LIVE EVENT 03 - 6pm TNA Lockdown
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="605886">
@@ -131149,123 +131163,123 @@ Sunday 08/23/2026</desc>
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1899900">
-    <title>8K EXCLUSIVE | US: DAZN PPV 2</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 2
+    <title>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2</title>
+    <desc>Rolly vs. Teofimo: Full Event Replay | PBC | 2026-08-23 | 00:00 | 8K EXCLUSIVE | US: DAZN PPV 2
 Sunday 08/23/2026</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899899">
@@ -377393,122 +377407,122 @@ Sunday 08/23/2026</desc>
     <desc>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ
 Sunday 08/23/2026</desc>
   </programme>
-  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1881029">
+  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1881029">
+  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1881029">
+  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1881029">
+  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1881029">
+  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1881029">
+  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1881029">
+  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1881029">
+  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1881029">
+  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1881029">
+  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1881029">
+  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1881029">
+  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1881029">
+  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1881029">
+  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1881029">
+  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1881029">
+  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1881029">
+  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1881029">
+  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1881029">
+  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1881029">
+  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1881029">
+  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1881029">
+  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1881029">
+  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1881029">
+  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1881034">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
@@ -378473,6 +378487,126 @@ Sunday 08/23/2026</desc>
     <desc>VIP: NBA TV
 Sunday 08/23/2026</desc>
   </programme>
+  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1884182">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="293277">
     <title>AF: NBA TV</title>
     <desc>AF: NBA TV
@@ -378713,122 +378847,122 @@ Sunday 08/23/2026</desc>
     <desc>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ
 Sunday 08/23/2026</desc>
   </programme>
-  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1881068">
+  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1881068">
+  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1881068">
+  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1881068">
+  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1881068">
+  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1881068">
+  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1881068">
+  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1881068">
+  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1881068">
+  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1881068">
+  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1881068">
+  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1881068">
+  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1881068">
+  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1881068">
+  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1881068">
+  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1881068">
+  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1881068">
+  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1881068">
+  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1881068">
+  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1881068">
+  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1881068">
+  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1881068">
+  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1881068">
+  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1881068">
+  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1881095">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
@@ -379193,122 +379327,122 @@ Sunday 08/23/2026</desc>
     <desc>VIP: SPORT TV NBA ᴿᴬᵂ
 Sunday 08/23/2026</desc>
   </programme>
-  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1893373">
+  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1893373">
+  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1893373">
+  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1893373">
+  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1893373">
+  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1893373">
+  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1893373">
+  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1893373">
+  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1893373">
+  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1893373">
+  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1893373">
+  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1893373">
+  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1893373">
+  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1893373">
+  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1893373">
+  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1893373">
+  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1893373">
+  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1893373">
+  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1893373">
+  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1893373">
+  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1893373">
+  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1893373">
+  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1893373">
+  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
-  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1893373">
+  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1893374">
     <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
     <desc>Dallas Cowboys vs. Arizona Cardinals
 Saturday 08/22/2026 - 10:00 PM</desc>
@@ -379672,6 +379806,126 @@ Sunday 08/23/2026</desc>
     <title>NHL Tonight | NHL 2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2</title>
     <desc>NHL Tonight | NHL 2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2
 Sunday 08/23/2026</desc>
+  </programme>
+  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1899799">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1977357">
     <title>NHL Tonight | NHL 2026 | 2026-06-02 | 12:30 (GMT) | 8K EXCLUSIVE | NO: VIAPLAY PPV 9</title>
@@ -391792,6 +392046,126 @@ Sunday 08/23/2026</desc>
     <title>8K EXCLUSIVE | BR: NBA PASS PPV 620</title>
     <desc>8K EXCLUSIVE | BR: NBA PASS PPV 620
 Sunday 08/23/2026</desc>
+  </programme>
+  <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823030000 -0400" stop="20260823060000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823060000 -0400" stop="20260823090000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823090000 -0400" stop="20260823120000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823120000 -0400" stop="20260823150000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823150000 -0400" stop="20260823180000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823180000 -0400" stop="20260823210000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260823210000 -0400" stop="20260824000000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824000000 -0400" stop="20260824030000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824030000 -0400" stop="20260824060000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824060000 -0400" stop="20260824090000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824090000 -0400" stop="20260824120000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824120000 -0400" stop="20260824150000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824150000 -0400" stop="20260824180000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824180000 -0400" stop="20260824210000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260824210000 -0400" stop="20260825000000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825000000 -0400" stop="20260825030000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825030000 -0400" stop="20260825060000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825060000 -0400" stop="20260825090000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825090000 -0400" stop="20260825120000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825120000 -0400" stop="20260825150000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825150000 -0400" stop="20260825180000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825180000 -0400" stop="20260825210000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
+  </programme>
+  <programme start="20260825210000 -0400" stop="20260826000000 -0400" channel="1899699">
+    <title>Dallas Cowboys vs. Arizona Cardinals - 10:00 PM</title>
+    <desc>Dallas Cowboys vs. Arizona Cardinals
+Saturday 08/22/2026 - 10:00 PM</desc>
   </programme>
   <programme start="20260823000000 -0400" stop="20260823030000 -0400" channel="2096081">
     <title>VIP: MLB EI 1</title>
