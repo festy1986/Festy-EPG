@@ -3,15 +3,16 @@ name: Combined FAST
 on:
   workflow_dispatch:
   schedule:
-    - cron: '45 5 * * *'
-    - cron: '45 17 * * *'
+    - cron: '20 4 * * *'
+    - cron: '20 16 * * *'
 
 permissions:
   contents: write
 
 concurrency:
-  group: combinedfast
+  group: festy-epg-build-queue
   cancel-in-progress: false
+  queue: max
 
 jobs:
   build-combinedfast:
@@ -34,7 +35,7 @@ jobs:
           mkdir -p combinedfast/work
           mkdir -p guides
 
-          curl -L --fail --retry 5 --retry-delay 10 \
+          curl -L --fail --retry 5 --retry-all-errors --retry-delay 15 \
             https://epg.guru/7daygracenote/USFast.xml \
             -o combinedfast/source/jessman.xml
 
@@ -45,7 +46,7 @@ jobs:
 
       - name: Download fresh IPTV-org guide
         run: |
-          curl -L --fail --retry 5 --retry-delay 10 \
+          curl -L --fail --retry 5 --retry-all-errors --retry-delay 15 \
             https://iptv-epg.org/files/epg-us.xml.gz \
             -o combinedfast/source/iptvorg.xml.gz
 
@@ -320,6 +321,23 @@ jobs:
               .replace(
                 /\s+/g,
                 ' '
+              )
+              .trim()
+          }
+
+          function cleanProgrammeTitle(
+            value
+          ) {
+            return cleanSpaces(
+              value
+            )
+              .replace(
+                /\s+\(\d{4}\)\s*$/,
+                ''
+              )
+              .replace(
+                /\s*[.\-–—:]?\s*S(?:eason)?\s*\d{1,3}\s*E(?:pisode)?\s*\d{1,3}\s*$/i,
+                ''
               )
               .trim()
           }
@@ -933,6 +951,26 @@ jobs:
             )
           }
 
+
+          function removeEpisodeNumBySystem(
+            block,
+            system
+          ) {
+            const regex =
+              new RegExp(
+                '\\s*<episode-num\\b' +
+                '[^>]*\\bsystem="' +
+                system +
+                '"[^>]*>[\\s\\S]*?</episode-num>',
+                'gi'
+              )
+
+            return block.replace(
+              regex,
+              ''
+            )
+          }
+
           function cleanProgrammeBlock(
             block,
             source
@@ -1043,6 +1081,14 @@ jobs:
               }
             }
 
+            const cleanedTitle =
+              cleanProgrammeTitle(
+                getTag(
+                  block,
+                  'title'
+                )
+              )
+
             let output =
               block
 
@@ -1050,16 +1096,7 @@ jobs:
               replaceTag(
                 output,
                 'title',
-                cleanSpaces(
-                  getTag(
-                    block,
-                    'title'
-                  )
-                    .replace(
-                      /\s+\(\d{4}\)\s*$/,
-                      ''
-                    )
-                )
+                cleanedTitle
               )
 
             output =
@@ -1067,6 +1104,30 @@ jobs:
                 output,
                 'desc',
                 description
+              )
+
+            output =
+              removeTag(
+                output,
+                'sub-title'
+              )
+
+            output =
+              removeEpisodeNumBySystem(
+                output,
+                'onscreen'
+              )
+
+            output =
+              removeEpisodeNumBySystem(
+                output,
+                'common'
+              )
+
+            output =
+              removeEpisodeNumBySystem(
+                output,
+                'xmltv_ns'
               )
 
             output =
@@ -1086,16 +1147,7 @@ jobs:
                 output,
 
               title:
-                cleanSpaces(
-                  getTag(
-                    block,
-                    'title'
-                  )
-                    .replace(
-                      /\s+\(\d{4}\)\s*$/,
-                      ''
-                    )
-                ),
+                cleanedTitle,
 
               episodeTitle,
 
@@ -2282,6 +2334,13 @@ jobs:
                   channel
                 ) +
                 '$2'
+              )
+
+            block =
+              replaceTag(
+                block,
+                'title',
+                programme.title
               )
 
             return block.trimEnd() +

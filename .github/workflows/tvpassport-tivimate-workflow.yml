@@ -3,14 +3,16 @@ name: TVPassport-TiviMate
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 */12 * * *"
+    - cron: "35 6 * * *"
+    - cron: "35 18 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: epg-guide-writes-tvpassport
+  group: festy-epg-build-queue
   cancel-in-progress: false
+  queue: max
 
 jobs:
   build-tvpassport-tivimate:
@@ -253,7 +255,7 @@ jobs:
           function parseItems(content) {
             if (!content) return []
             const $ = cheerio.load(content)
-            return $('.station-listings .list-group-item').toArray()
+            return $('[data-st][data-duration][data-showname]').toArray()
           }
 
           function parseCurrentTimezone(content) {
@@ -370,6 +372,10 @@ jobs:
         run: |
           cd epg
 
+          if [ -s ../guides/TVPassport.xml ]; then
+            cp ../guides/TVPassport.xml ../guides/TVPassport.previous.xml
+          fi
+
           rm -f ../guides/TVPassport.xml
           rm -f ../guides/TVPassport.pass*.xml
           rm -f ../guides/TVPassport.pass*.log
@@ -389,11 +395,16 @@ jobs:
 
             export TVPASSPORT_SCHEDULE_TIMEOUT="$SCHEDULE_TIMEOUT"
 
+            EASTERN_YESTERDAY=$(TZ=America/New_York date -d 'yesterday' +%Y-%m-%d)
+
+            echo "Starting guide from: $EASTERN_YESTERDAY"
+            export CURR_DATE="${EASTERN_YESTERDAY}T12:00:00Z"
+
             set +e
             npx tsx scripts/commands/epg/grab.ts \
               --channels=sites/tvpassport.com/festy-tvpassport.channels.xml \
               --output="../guides/TVPassport.${PASS_NAME}.xml" \
-              --days=14 \
+              --days=15 \
               --maxConnections="$MAX_CONNECTIONS" \
               2>&1 | tee "../guides/TVPassport.${PASS_NAME}.log"
 
@@ -478,6 +489,115 @@ jobs:
           cp "../guides/TVPassport.${BEST_PASS}.xml" "../guides/TVPassport.xml"
 
           cd ..
+
+      - name: Merge previous 24 hours of TVPassport listings
+        run: |
+          node <<'EOFJS'
+          const fs = require('fs')
+
+          const currentPath = 'guides/TVPassport.xml'
+          const previousPath = 'guides/TVPassport.previous.xml'
+
+          if (!fs.existsSync(currentPath)) {
+            console.error(`Missing ${currentPath}`)
+            process.exit(1)
+          }
+
+          if (!fs.existsSync(previousPath)) {
+            console.log('No previous TVPassport guide found; skipping previous-24-hour merge')
+            process.exit(0)
+          }
+
+          const currentXml = fs.readFileSync(currentPath, 'utf8')
+          const previousXml = fs.readFileSync(previousPath, 'utf8')
+
+          const cutoff = Date.now() - 24 * 60 * 60 * 1000
+
+          function parseXmltvTimestamp(value) {
+            const match = String(value || '').match(
+              /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})\s*([+-])(\d{2})(\d{2})$/
+            )
+
+            if (!match) return NaN
+
+            const [, year, month, day, hour, minute, second, sign, offsetHour, offsetMinute] = match
+            const utc = Date.UTC(
+              Number(year),
+              Number(month) - 1,
+              Number(day),
+              Number(hour),
+              Number(minute),
+              Number(second)
+            )
+
+            const offset =
+              (Number(offsetHour) * 60 + Number(offsetMinute)) *
+              60 *
+              1000 *
+              (sign === '+' ? 1 : -1)
+
+            return utc - offset
+          }
+
+          function programmeKey(block) {
+            const attrs = block.match(/^<programme\b([^>]*)>/i)?.[1] || ''
+            const channel = attrs.match(/\bchannel="([^"]+)"/i)?.[1] || ''
+            const start = attrs.match(/\bstart="([^"]+)"/i)?.[1] || ''
+            const stop = attrs.match(/\bstop="([^"]+)"/i)?.[1] || ''
+            return `${channel}|${start}|${stop}`
+          }
+
+          const currentKeys = new Set(
+            [...currentXml.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)]
+              .map(match => programmeKey(match[0]))
+              .filter(Boolean)
+          )
+
+          const retained = []
+          let scanned = 0
+          let expired = 0
+          let duplicate = 0
+
+          for (const match of previousXml.matchAll(/<programme\b[\s\S]*?<\/programme>/gi)) {
+            scanned++
+
+            const block = match[0]
+            const attrs = block.match(/^<programme\b([^>]*)>/i)?.[1] || ''
+            const stopText = attrs.match(/\bstop="([^"]+)"/i)?.[1] || ''
+            const stopTime = parseXmltvTimestamp(stopText)
+
+            if (!Number.isFinite(stopTime) || stopTime < cutoff) {
+              expired++
+              continue
+            }
+
+            const key = programmeKey(block)
+
+            if (!key || currentKeys.has(key)) {
+              duplicate++
+              continue
+            }
+
+            currentKeys.add(key)
+            retained.push(block)
+          }
+
+          if (retained.length) {
+            const mergedXml = currentXml.replace(
+              /\s*<\/tv>\s*$/i,
+              `\n${retained.join('\n')}\n</tv>\n`
+            )
+
+            fs.writeFileSync(currentPath, mergedXml)
+          }
+
+          fs.rmSync(previousPath, { force: true })
+
+          console.log(`Previous programmes scanned: ${scanned}`)
+          console.log(`Previous programmes retained: ${retained.length}`)
+          console.log(`Previous programmes expired: ${expired}`)
+          console.log(`Previous programmes already present: ${duplicate}`)
+          EOFJS
 
       - name: Fill missing TVPassport metadata from TVMaze
         run: |
@@ -1225,46 +1345,38 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git fetch origin main
-
-          # Preserve compressed guides created by the other workflows.
-          # This workflow should only update its own XML/GZ output.
-          git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-          git add guides/TVPassport.xml guides/TVPassport.xml.gz
-          git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-          if git diff --cached --quiet; then
-            echo "No TVPassport guide changes to commit"
-            exit 0
-          fi
-
-          git commit -m "Update TVPassport guide"
+          # Keep an untouched copy of this run's generated TVPassport outputs.
+          cp guides/TVPassport.xml /tmp/TVPassport.xml
+          cp guides/TVPassport.xml.gz /tmp/TVPassport.xml.gz
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
+
+            git fetch origin main
+
+            # Start from the newest remote main so generated binary files are
+            # never rebased or merged against another workflow's commit.
+            git reset --hard origin/main
+
+            # Restore only this workflow's freshly generated outputs.
+            cp /tmp/TVPassport.xml guides/TVPassport.xml
+            cp /tmp/TVPassport.xml.gz guides/TVPassport.xml.gz
+
+            git add guides/TVPassport.xml guides/TVPassport.xml.gz
+
+            if git diff --cached --quiet; then
+              echo "No TVPassport guide changes to commit"
+              exit 0
+            fi
+
+            git commit -m "Update TVPassport guide"
 
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed, retrying after fresh fetch/rebase..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            git checkout origin/main -- guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-            git add guides/TVPassport.xml guides/TVPassport.xml.gz
-            git add guides/OTALocalsguide.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-            if git diff --cached --quiet; then
-              echo "No new commit needed after rebase, retrying push..."
-            else
-              git commit -m "Update TVPassport guide"
-            fi
-
+            echo "Push failed because main changed again; retrying from newest remote main..."
             sleep 5
           done
 

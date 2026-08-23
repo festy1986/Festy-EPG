@@ -88,7 +88,7 @@ def clean_channel_name(name):
     # Remove country prefix
 
     name = re.sub(
-        r"^(US|UK|CA|AU):\s*",
+        r"^(US|UK|CA|AU|EXYU):\s*",
         "",
         name,
         flags=re.IGNORECASE

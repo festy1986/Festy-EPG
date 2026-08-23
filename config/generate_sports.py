@@ -9,16 +9,24 @@ import re
 import html
 import time
 from urllib.parse import quote
+from difflib import SequenceMatcher
 
 
 CHANNEL_FILE = "config/sports_channels.txt"
 TEAM_FILE = "config/sports_teams.txt"
 OUTPUT_FILE = "guides/sports.xml"
 SPORTS_LOGO_ROOT = "sports-logos"
+SUPPORTED_MAJOR_LEAGUES = ("MLB", "NBA", "NFL", "NHL")
 
 GITHUB_RAW_ROOT = (
     "https://raw.githubusercontent.com/"
     "festy1986/festy-epg/main/"
+)
+
+
+REDZONE_LOGO_URL = (
+    GITHUB_RAW_ROOT
+    + "logos/redzone.png"
 )
 
 
@@ -100,6 +108,10 @@ debug_stats = {
 
     "canonical_team_failures": 0,
 
+    "logo_typo_corrections": 0,
+
+    "logo_typo_correction_failures": 0,
+
     "public_events_downloaded": 0,
 
     "public_events_empty": 0,
@@ -115,6 +127,14 @@ debug_stats = {
     "logo_reverse_order_found": 0,
 
     "logo_not_found": 0,
+
+    "dynamic_major_channels_added": 0,
+
+    "single_team_logo_found": 0,
+
+    "single_team_logo_missing": 0,
+
+    "provider_name_fallback_used": 0,
 
 }
 
@@ -195,6 +215,14 @@ def normalize_matchup(text):
 
 
     text = re.sub(
+        r"\s+at\s+",
+        " vs. ",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    text = re.sub(
         r"\s+v\.?\s+",
         " vs. ",
         text,
@@ -223,6 +251,76 @@ def normalize_matchup(text):
 
 
 # --------------------------------------------------
+# Clean provider channel/event text for fallback use.
+#
+# This does not replace the existing matchup parser.
+# It is used only when a normal A-vs-B matchup cannot
+# be extracted, such as boxing, PPV, or named events.
+# --------------------------------------------------
+
+def extract_provider_event_text(text):
+
+    if not text:
+
+        return ""
+
+
+    text = clean_text(
+        text
+    )
+
+
+    if "|" in text:
+
+        text = text.split(
+            "|",
+            1
+        )[1]
+
+
+    text = re.split(
+        r"\bstart\s*[:=]",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
+
+
+    text = re.split(
+        r"\bstop\s*[:=]",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
+
+
+    text = re.sub(
+        r"^(?:MLB|NBA|NFL|NHL)\s*[-:]?\s*",
+        "",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    text = re.sub(
+        r"^(?:PPV\s+)?EVENT\s*\d*\s*[:|-]?\s*",
+        "",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    text = normalize_matchup(
+        text
+    )
+
+
+    return clean_text(
+        text
+    )
+
+
+# --------------------------------------------------
 # Extract matchup from provider channel name
 # --------------------------------------------------
 
@@ -234,7 +332,6 @@ def extract_provider_matchup(text):
             "provider_event_failed"
         ] += 1
 
-
         return ""
 
 
@@ -243,36 +340,77 @@ def extract_provider_matchup(text):
     )
 
 
-    if "|" not in text:
-
-        debug_stats[
-            "provider_event_failed"
-        ] += 1
-
-
-        return ""
-
-
-    text = text.split(
-        "|",
-        1
-    )[1]
-
+    # Remove provider scheduling metadata first.
+    text = re.split(
+        r"\bstart\s*[:=]",
+        text,
+        maxsplit=1,
+        flags=re.IGNORECASE
+    )[0]
 
     text = re.split(
-        r"\bstart\s*:",
+        r"\bstop\s*[:=]",
         text,
         maxsplit=1,
         flags=re.IGNORECASE
     )[0]
 
 
-    text = re.split(
-        r"\bstop\s*:",
+    # Existing pipe-based names remain supported.
+    if "|" in text:
+
+        text = text.split(
+            "|",
+            1
+        )[1]
+
+    else:
+
+        # Also support current provider names such as:
+        # NBA 02: Knicks (NYK) x Timberwolves (MIN)
+        # MLB 04 - Blue Jays x Red Sox
+        text = re.sub(
+            r"^(?:US\s*:\s*)?"
+            r"(?:MLB|NBA|NFL|NHL)"
+            r"(?:\s+(?:CHANNEL\s*)?\d+)?"
+            r"\s*[-:|]\s*",
+            "",
+            text,
+            flags=re.IGNORECASE
+        )
+
+
+    # Remove provider slot/date/time prefixes such as:
+    # 02 - 8/13 7pm Packers at Steelers
+    text = re.sub(
+        r"^\s*\d+\s*[-:]\s*",
+        "",
+        text
+    )
+
+
+    text = re.sub(
+        r"^\s*\d{1,2}/\d{1,2}(?:/\d{2,4})?\s*",
+        "",
+        text
+    )
+
+
+    text = re.sub(
+        r"^\s*\d{1,2}(?::\d{2})?\s*(?:am|pm)\s*",
+        "",
         text,
-        maxsplit=1,
         flags=re.IGNORECASE
-    )[0]
+    )
+
+
+    # Remove provider abbreviations such as (NYK), (MIN), etc.
+    # The canonical team alias lookup supplies the full official names.
+    text = re.sub(
+        r"\s*\([A-Za-z0-9]{2,5}\)\s*",
+        " ",
+        text
+    )
 
 
     text = clean_text(
@@ -295,7 +433,6 @@ def extract_provider_matchup(text):
         debug_stats[
             "provider_event_failed"
         ] += 1
-
 
         return ""
 
@@ -390,6 +527,121 @@ def extract_start_datetime(text):
 
 
     return None
+
+
+def extract_provider_date_hint(text):
+
+    if not text:
+
+        return None
+
+
+    text = clean_text(
+        text
+    )
+
+
+    match = re.search(
+        r"\b(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?\b",
+        text
+    )
+
+
+    if not match:
+
+        return None
+
+
+    month = int(
+        match.group(1)
+    )
+
+
+    day = int(
+        match.group(2)
+    )
+
+
+    year_text = match.group(
+        3
+    )
+
+
+    eastern_now = datetime.now(
+        ZoneInfo(
+            "America/New_York"
+        )
+    )
+
+
+    if year_text:
+
+        year = int(
+            year_text
+        )
+
+
+        if year < 100:
+
+            year += 2000
+
+
+        try:
+
+            return datetime(
+                year,
+                month,
+                day
+            ).date()
+
+
+        except ValueError:
+
+            return None
+
+
+    candidates = []
+
+
+    for year in (
+        eastern_now.year - 1,
+        eastern_now.year,
+        eastern_now.year + 1
+    ):
+
+        try:
+
+            candidate = datetime(
+                year,
+                month,
+                day
+            ).date()
+
+
+        except ValueError:
+
+            continue
+
+
+        candidates.append(
+            candidate
+        )
+
+
+    if not candidates:
+
+        return None
+
+
+    return min(
+        candidates,
+        key=lambda candidate: abs(
+            (
+                candidate
+                - eastern_now.date()
+            ).days
+        )
+    )
 
 
 # --------------------------------------------------
@@ -675,6 +927,174 @@ for stream in streams:
 
 
 # --------------------------------------------------
+# Download provider live categories.
+#
+# The original sports_channels.txt entries are kept.
+# This only adds current MLB/NBA/NFL/NHL streams found
+# by live category/group name or current channel name.
+# --------------------------------------------------
+
+category_names = {}
+
+
+categories_url = (
+
+    f"{XTREAM_URL}/player_api.php"
+
+    f"?username={USERNAME}"
+
+    f"&password={PASSWORD}"
+
+    f"&action=get_live_categories"
+
+)
+
+
+try:
+
+    categories_response = session.get(
+        categories_url,
+        timeout=(30, 120)
+    )
+
+
+    categories_response.raise_for_status()
+
+
+    categories = categories_response.json()
+
+
+    for category in categories:
+
+        category_id = str(
+            category.get(
+                "category_id",
+                ""
+            )
+        )
+
+
+        category_name = clean_text(
+            category.get(
+                "category_name",
+                ""
+            )
+        )
+
+
+        if category_id:
+
+            category_names[
+                category_id
+            ] = category_name
+
+
+    print(
+        f"Provider live categories: "
+        f"{len(category_names)}"
+    )
+
+
+except Exception as e:
+
+    print(
+        "Unable to download provider live categories."
+    )
+
+
+    print(
+        e
+    )
+
+
+# --------------------------------------------------
+# Dynamically add all current major-league streams.
+#
+# XMLTV IDs remain the current provider stream IDs,
+# preserving TiviMate matching.
+# --------------------------------------------------
+
+dynamic_major_channels_added = 0
+
+
+for stream in streams:
+
+    stream_id = str(
+        stream.get(
+            "stream_id",
+            ""
+        )
+    )
+
+
+    stream_name = clean_text(
+        stream.get(
+            "name",
+            ""
+        )
+    )
+
+
+    category_id = str(
+        stream.get(
+            "category_id",
+            ""
+        )
+    )
+
+
+    category_name = category_names.get(
+        category_id,
+        ""
+    )
+
+
+    detection_text = (
+
+        f"{category_name} "
+
+        f"{stream_name}"
+
+    )
+
+
+    if not re.search(
+        r"\b(?:MLB|NBA|NFL|NHL)\b",
+        detection_text,
+        flags=re.IGNORECASE
+    ):
+
+        continue
+
+
+    if stream_id not in wanted:
+
+        wanted[
+            stream_id
+        ] = stream_name
+
+
+        dynamic_major_channels_added += 1
+
+
+debug_stats[
+    "dynamic_major_channels_added"
+] = dynamic_major_channels_added
+
+
+print(
+    f"Dynamic major-league channels added: "
+    f"{dynamic_major_channels_added}"
+)
+
+
+print(
+    f"Total sports channels selected: "
+    f"{len(wanted)}"
+)
+
+
+# --------------------------------------------------
 # Load canonical team names and aliases
 # --------------------------------------------------
 
@@ -900,12 +1320,8 @@ def matchup_parts(text):
     match = re.search(
 
         r"(.+?)\s+"
-
         r"(?:vs\.?|v\.?|x|@)"
-
-        r"\s+"
-
-        r"(.+)",
+        r"\s+(.+)",
 
         text,
 
@@ -1159,6 +1575,215 @@ def canonicalize_team_name(
 
 
 # --------------------------------------------------
+# Recover a provider team spelling error ONLY after
+# the normal matchup logo lookup has failed.
+# --------------------------------------------------
+
+def recover_logo_typo_matchup(
+
+    canonical_matchup,
+
+    league_hint,
+
+    preferred_date
+
+):
+
+    if league_hint not in team_aliases:
+
+        return None
+
+
+    parts = matchup_parts(
+
+        canonical_matchup
+
+    )
+
+
+    if len(parts) != 2:
+
+        return None
+
+
+    normalized_parts = [
+
+        normalize_team_name(
+
+            part
+
+        )
+
+        for part in parts
+
+    ]
+
+
+    recognized = []
+
+    unknown = []
+
+
+    for index, normalized_part in enumerate(
+
+        normalized_parts
+
+    ):
+
+        if normalized_part in team_aliases[league_hint]:
+
+            recognized.append(index)
+
+        else:
+
+            unknown.append(index)
+
+
+    if len(recognized) != 1 or len(unknown) != 1:
+
+        return None
+
+
+    unknown_index = unknown[0]
+
+    provider_team = parts[unknown_index]
+
+
+    best_score = 0.0
+
+    best_team = None
+
+
+    for normalized_alias, official_name in team_aliases[
+
+        league_hint
+
+    ].items():
+
+        score = SequenceMatcher(
+
+            None,
+
+            normalized_parts[unknown_index],
+
+            normalized_alias
+
+        ).ratio()
+
+
+        if score > best_score:
+
+            best_score = score
+
+            best_team = official_name
+
+
+    if not best_team or best_score < 0.90:
+
+        debug_stats[
+
+            "logo_typo_correction_failures"
+
+        ] += 1
+
+        return None
+
+
+    corrected_parts = list(parts)
+
+    corrected_parts[unknown_index] = best_team
+
+
+    candidate_matchup = (
+
+        f"{corrected_parts[0]}"
+
+        f" vs. "
+
+        f"{corrected_parts[1]}"
+
+    )
+
+
+    print()
+
+    print(
+
+        "[LOGO TYPO RECOVERY]"
+
+    )
+
+    print(
+
+        f"  Provider spelling: {provider_team}"
+
+    )
+
+    print(
+
+        f"  Candidate correction: {best_team}"
+
+    )
+
+    print(
+
+        f"  Similarity: {best_score:.0%}"
+
+    )
+
+    print(
+
+        f"  Proposed matchup: {candidate_matchup}"
+
+    )
+
+
+    verified_event = find_public_event(
+
+        candidate_matchup,
+
+        preferred_date,
+
+        league_hint
+
+    )
+
+
+    if not verified_event:
+
+        debug_stats[
+
+            "logo_typo_correction_failures"
+
+        ] += 1
+
+        print(
+
+            "  ESPN did not verify the proposed matchup."
+
+        )
+
+        return None
+
+
+    debug_stats[
+
+        "logo_typo_corrections"
+
+    ] += 1
+
+
+    print(
+
+        "  ESPN verified the proposed matchup."
+
+    )
+
+
+    return candidate_matchup, verified_event
+
+
+# --------------------------------------------------
 # Canonicalize entire matchup
 # --------------------------------------------------
 
@@ -1299,18 +1924,6 @@ def parse_espn_datetime(
 
 # --------------------------------------------------
 # ESPN scoreboard lookup
-#
-# ESPN IS USED ONLY TO:
-#
-# - Find the matching game
-# - Return the game's verified start time
-#
-# It does NOT provide:
-#
-# - Displayed team names
-# - Title cleanup
-# - Description cleanup
-# - Logo information
 # --------------------------------------------------
 
 def get_public_events(
@@ -1339,7 +1952,7 @@ def get_public_events(
     )
 
 
-    url = (
+    primary_url = (
 
         "https://site.api.espn.com/apis/site/v2/sports/"
 
@@ -1352,11 +1965,128 @@ def get_public_events(
     )
 
 
+    fallback_url = (
+
+        "https://cdn.espn.com/core/"
+
+        f"{league}/"
+
+        "scoreboard"
+
+    )
+
+
+    request_headers = {
+
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/150.0.0.0 Safari/537.36"
+        ),
+
+        "Accept": "application/json, text/plain, */*",
+
+        "Accept-Language": "en-US,en;q=0.9",
+
+        "Referer": "https://www.espn.com/",
+
+        "Origin": "https://www.espn.com",
+
+    }
+
+
+    def extract_events(data):
+
+        if not isinstance(
+            data,
+            (dict, list)
+        ):
+
+            return []
+
+
+        if isinstance(
+            data,
+            dict
+        ):
+
+            events = data.get(
+                "events"
+            )
+
+
+            if isinstance(
+                events,
+                list
+            ):
+
+                usable_events = [
+
+                    event
+
+                    for event in events
+
+                    if isinstance(
+                        event,
+                        dict
+                    )
+
+                    and (
+
+                        event.get(
+                            "competitions"
+                        )
+
+                        or
+
+                        event.get(
+                            "date"
+                        )
+
+                    )
+
+                ]
+
+
+                if usable_events:
+
+                    return usable_events
+
+
+            for value in data.values():
+
+                found = extract_events(
+                    value
+                )
+
+
+                if found:
+
+                    return found
+
+
+        else:
+
+            for value in data:
+
+                found = extract_events(
+                    value
+                )
+
+
+                if found:
+
+                    return found
+
+
+        return []
+
+
     try:
 
         response = session.get(
 
-            url,
+            primary_url,
 
             params={
 
@@ -1364,12 +2094,72 @@ def get_public_events(
 
             },
 
+            headers=request_headers,
+
             timeout=30
 
         )
 
 
-        if response.status_code != 200:
+        if response.status_code == 200:
+
+            data = response.json()
+
+
+            events = extract_events(
+                data
+            )
+
+
+            if events:
+
+                debug_stats[
+                    "public_events_downloaded"
+                ] += len(events)
+
+
+                return events
+
+
+            print(
+                "[ESPN PRIMARY] "
+                "No events returned"
+            )
+
+
+        else:
+
+            print(
+
+                f"[ESPN PRIMARY] HTTP "
+
+                f"{response.status_code}"
+
+            )
+
+
+        fallback_response = session.get(
+
+            fallback_url,
+
+            params={
+
+                "xhr": "1",
+
+                "limit": "100",
+
+                "dates": date_text
+
+            },
+
+            headers=request_headers,
+
+            timeout=30
+
+        )
+
+
+        if fallback_response.status_code != 200:
 
             debug_stats[
                 "public_events_empty"
@@ -1378,9 +2168,9 @@ def get_public_events(
 
             print(
 
-                f"[ESPN] HTTP "
+                f"[ESPN FALLBACK] HTTP "
 
-                f"{response.status_code}"
+                f"{fallback_response.status_code}"
 
             )
 
@@ -1388,16 +2178,12 @@ def get_public_events(
             return []
 
 
-        data = response.json()
+        fallback_data = fallback_response.json()
 
 
-        events = data.get(
-
-            "events",
-
-            []
-
-        ) or []
+        events = extract_events(
+            fallback_data
+        )
 
 
         if events:
@@ -1407,11 +2193,26 @@ def get_public_events(
             ] += len(events)
 
 
+            print(
+
+                f"[ESPN FALLBACK] "
+
+                f"{len(events)} events returned"
+
+            )
+
+
         else:
 
             debug_stats[
                 "public_events_empty"
             ] += 1
+
+
+            print(
+                "[ESPN FALLBACK] "
+                "No events returned"
+            )
 
 
         return events
@@ -1434,14 +2235,6 @@ def get_public_events(
 
 # --------------------------------------------------
 # Find ESPN event
-#
-# The cleaned canonical matchup is used to find
-# the game.
-#
-# ESPN's team names are ONLY used internally
-# to verify that the correct event was found.
-#
-# They are NEVER written into the title or description.
 # --------------------------------------------------
 
 def find_public_event(
@@ -1641,6 +2434,19 @@ def find_public_event(
                 )
 
 
+                home_away = clean_text(
+
+                    competitor.get(
+
+                        "homeAway",
+
+                        ""
+
+                    )
+
+                ).lower()
+
+
                 event_teams.append({
 
                     "display_name":
@@ -1657,7 +2463,11 @@ def find_public_event(
 
                     "nickname":
 
-                    nickname
+                    nickname,
+
+                    "home_away":
+
+                    home_away
 
                 })
 
@@ -1835,9 +2645,66 @@ def find_public_event(
             )
 
 
+            away_team = None
+
+            home_team = None
+
+
+            for team in event_teams:
+
+                team_name = (
+
+                    team["display_name"]
+
+                    or
+
+                    team["short_name"]
+
+                    or
+
+                    team["location"]
+
+                    or
+
+                    team["nickname"]
+
+                )
+
+
+                canonical_team = canonicalize_team_name(
+
+                    team_name,
+
+                    league_hint
+
+                )
+
+
+                if team["home_away"] == "away":
+
+                    away_team = canonical_team
+
+
+                elif team["home_away"] == "home":
+
+                    home_team = canonical_team
+
+
+            if away_team and home_team:
+
+                print(
+                    f"  Verified away/home: "
+                    f"{away_team} vs. {home_team}"
+                )
+
+
             return {
 
-                "datetime": event_datetime
+                "datetime": event_datetime,
+
+                "away_team": away_team,
+
+                "home_team": home_team
 
             }
 
@@ -1998,21 +2865,63 @@ def clean_logo_filename(text):
 
 
 # --------------------------------------------------
+# Logo-name compatibility aliases.
+# --------------------------------------------------
+
+def normalize_logo_team_name(
+    team_name,
+    league_hint=None
+):
+
+    normalized = normalize_team_name(
+        team_name
+    )
+
+
+    if league_hint == "NBA" and normalized in {
+        "new york knicks",
+        "ny knicks",
+        "knicks"
+    }:
+
+        return "new york knicks"
+
+
+    if league_hint == "NHL" and normalized in {
+        "arizona coyotes",
+        "phoenix coyotes",
+        "coyotes",
+        "utah hockey club",
+        "utah hc",
+        "utah mammoth",
+        "mammoth"
+    }:
+
+        return "utah mammoth"
+
+
+    return normalized
+
+
+# --------------------------------------------------
 # Create normalized logo key
 # --------------------------------------------------
 
 def matchup_logo_key(
     first_team,
-    second_team
+    second_team,
+    league_hint=None
 ):
 
-    first = normalize_team_name(
-        first_team
+    first = normalize_logo_team_name(
+        first_team,
+        league_hint
     )
 
 
-    second = normalize_team_name(
-        second_team
+    second = normalize_logo_team_name(
+        second_team,
+        league_hint
     )
 
 
@@ -2021,20 +2930,17 @@ def matchup_logo_key(
         return None
 
 
-    return frozenset({
+    return (
 
         first,
 
         second
 
-    })
+    )
 
 
 # --------------------------------------------------
-# Find matchup logo by searching entire
-# sports-logos directory.
-#
-# Independent of ESPN.
+# Find matchup logo.
 # --------------------------------------------------
 
 def find_matchup_logo(
@@ -2090,16 +2996,25 @@ def find_matchup_logo(
     )
 
 
-    wanted_key = matchup_logo_key(
+    wanted_first = normalize_logo_team_name(
 
         first_team,
 
-        second_team
+        league_hint
 
     )
 
 
-    if not wanted_key:
+    wanted_second = normalize_logo_team_name(
+
+        second_team,
+
+        league_hint
+
+    )
+
+
+    if not wanted_first or not wanted_second:
 
         logos_missing += 1
 
@@ -2122,20 +3037,29 @@ def find_matchup_logo(
 
 
     print(
-        f"  Searching entire: "
-        f"{SPORTS_LOGO_ROOT}/"
+        f"  League: "
+        f"{league_hint}"
     )
 
 
     print(
-        f"  Teams: "
+        f"  Ordered teams: "
         f"{first_team} vs. {second_team}"
+    )
+
+
+    league_root = os.path.join(
+
+        SPORTS_LOGO_ROOT,
+
+        league_hint
+
     )
 
 
     if not os.path.isdir(
 
-        SPORTS_LOGO_ROOT
+        league_root
 
     ):
 
@@ -2150,188 +3074,637 @@ def find_matchup_logo(
 
 
         print(
-            "  Logo directory does not exist."
+            "  League logo directory does not exist."
         )
 
 
         return None
 
 
+    first_filename = clean_logo_filename(
+
+        first_team
+
+    )
+
+
+    second_filename = clean_logo_filename(
+
+        second_team
+
+    )
+
+
+    exact_path = os.path.join(
+
+        league_root,
+
+        first_filename,
+
+        (
+
+            f"{first_filename}"
+
+            f"_vs_"
+
+            f"{second_filename}"
+
+            f".png"
+
+        )
+
+    )
+
+
+    candidate_path = None
+
+
+    if os.path.isfile(
+
+        exact_path
+
+    ):
+
+        candidate_path = exact_path
+
+
+    else:
+
+        for root, directories, files in os.walk(
+
+            league_root
+
+        ):
+
+            for filename in files:
+
+                if not filename.lower().endswith(
+
+                    ".png"
+
+                ):
+
+                    continue
+
+
+                file_stem = os.path.splitext(
+
+                    filename
+
+                )[0]
+
+
+                if "_vs_" not in file_stem:
+
+                    continue
+
+
+                file_parts = file_stem.split(
+
+                    "_vs_",
+
+                    1
+
+                )
+
+
+                if len(file_parts) != 2:
+
+                    continue
+
+
+                logo_first = canonicalize_team_name(
+
+                    file_parts[0].replace(
+
+                        "_",
+
+                        " "
+
+                    ),
+
+                    league_hint
+
+                )
+
+
+                logo_second = canonicalize_team_name(
+
+                    file_parts[1].replace(
+
+                        "_",
+
+                        " "
+
+                    ),
+
+                    league_hint
+
+                )
+
+
+                logo_first_ordered = normalize_logo_team_name(
+
+                    logo_first,
+
+                    league_hint
+
+                )
+
+
+                logo_second_ordered = normalize_logo_team_name(
+
+                    logo_second,
+
+                    league_hint
+
+                )
+
+
+                if (
+
+                    logo_first_ordered != wanted_first
+
+                    or
+
+                    logo_second_ordered != wanted_second
+
+                ):
+
+                    continue
+
+
+                candidate_path = os.path.join(
+
+                    root,
+
+                    filename
+
+                )
+
+
+                break
+
+
+            if candidate_path:
+
+                break
+
+
+    if not candidate_path:
+
+        logos_missing += 1
+
+
+        debug_stats[
+
+            "logo_not_found"
+
+        ] += 1
+
+
+        print(
+            "  No correctly ordered matching logo found."
+        )
+
+
+        return None
+
+
+    relative_path = os.path.relpath(
+
+        candidate_path,
+
+        "."
+
+    )
+
+
+    relative_path = relative_path.replace(
+
+        os.sep,
+
+        "/"
+
+    )
+
+
+    encoded_path = "/".join(
+
+        quote(
+
+            part,
+
+            safe=""
+
+        )
+
+        for part in relative_path.split(
+
+            "/"
+
+        )
+
+    )
+
+
+    logo_url = (
+
+        GITHUB_RAW_ROOT
+
+        + encoded_path
+
+    )
+
+
+    logos_found += 1
+
+
+    debug_stats[
+
+        "logo_direct_order_found"
+
+    ] += 1
+
+
+    print(
+        "  Ordered logo found:"
+    )
+
+
+    print(
+        f"  {relative_path}"
+    )
+
+
+    print(
+        f"  {logo_url}"
+    )
+
+
+    return logo_url
+
+
+# --------------------------------------------------
+# Rename legacy provider team identities before any
+# display-name, title, description, or logo processing.
+# --------------------------------------------------
+
+def rename_legacy_team_identity(text):
+
+    if not text:
+
+        return text
+
+
+    return re.sub(
+        r"\b(?:"
+        r"ARIZONA\s+COYOTES|"
+        r"PHOENIX\s+COYOTES|"
+        r"UTAH\s+HOCKEY\s+CLUB|"
+        r"UTAH\s+HC"
+        r")\b",
+        "UTAH MAMMOTH",
+        str(text),
+        flags=re.IGNORECASE
+    )
+
+
+# --------------------------------------------------
+# Detect whether the current channel/event name is
+# simply one known MLB/NBA/NFL/NHL team.
+# --------------------------------------------------
+
+def detect_single_team(
+    provider_name,
+    league_hint=None
+):
+
+    if not provider_name:
+
+        return None
+
+
+    raw_name = clean_text(
+        rename_legacy_team_identity(
+            provider_name
+        )
+    )
+
+
+    if matchup_parts(
+        normalize_matchup(
+            re.sub(
+                r"\s*\([A-Za-z0-9]{2,5}\)\s*",
+                " ",
+                raw_name
+            )
+        )
+    ):
+
+        return None
+
+
+    if re.search(
+        r"\b(?:"
+        r"NO\s+EVENT(?:\s+STREAMING)?|"
+        r"NO\s+INFORMATION|"
+        r"OFF\s*AIR|"
+        r"EVENT\s+NOT\s+STARTED|"
+        r"COMING\s+SOON|"
+        r"TO\s+BE\s+ANNOUNCED|"
+        r"TBA|"
+        r"NBA\s+PASS\s+PPV|"
+        r"LEAGUE\s+PASS\s+PPV"
+        r")\b",
+        raw_name,
+        flags=re.IGNORECASE
+    ):
+
+        return None
+
+
+    candidate = raw_name
+
+
+    candidate = re.sub(
+        r"^(?:US|CA|UK)\s*:\s*",
+        "",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+
+    candidate = re.sub(
+        r"^(?:8K\s+EXCLUSIVE\s*[|:-]\s*)+",
+        "",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+
+    candidate = re.sub(
+        r"^(?:MLB|NBA|NFL|NHL)"
+        r"(?:\s+(?:CHANNEL\s*)?\d+)?"
+        r"\s*[-:|]?\s*",
+        "",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+
+    candidate = re.sub(
+        r"\s*\([A-Za-z0-9]{2,5}\)\s*",
+        " ",
+        candidate
+    )
+
+
+    candidate = re.sub(
+        r"\b(?:RAW|HD|FHD|UHD|SD|4K|8K|FEED)\b",
+        " ",
+        candidate,
+        flags=re.IGNORECASE
+    )
+
+
+    candidate = re.sub(
+        r"[ᴿᴬᵂᴴᴰ⁴ᴷ⁸ᴷ]+",
+        " ",
+        candidate
+    )
+
+
+    candidate = re.sub(
+        r"\s*[-|:]\s*$",
+        "",
+        candidate
+    )
+
+
+    candidate = clean_text(
+        candidate
+    )
+
+
+    candidate_normalized = normalize_team_name(
+        candidate
+    )
+
+
+    if not candidate_normalized:
+
+        return None
+
+
+    leagues = (
+
+        [league_hint]
+
+        if league_hint in team_aliases
+
+        else list(
+            SUPPORTED_MAJOR_LEAGUES
+        )
+
+    )
+
+
+    for league in leagues:
+
+        if league == "NHL" and candidate_normalized == "utah mammoth":
+
+            return (
+                "NHL",
+                "Utah Mammoth"
+            )
+
+
+        official_name = team_aliases[
+            league
+        ].get(
+            candidate_normalized
+        )
+
+
+        if official_name:
+
+            return (
+                league,
+                official_name
+            )
+
+
+    return None
+
+
+# --------------------------------------------------
+# Find an existing single-team logo.
+# --------------------------------------------------
+
+def find_single_team_logo(
+    official_team,
+    league_hint
+):
+
+    global logos_found
+
+    global logos_missing
+
+
+    wanted_team = normalize_logo_team_name(
+        official_team,
+        league_hint
+    )
+
+
+    if not wanted_team:
+
+        return None
+
+
+    league_root = os.path.join(
+        SPORTS_LOGO_ROOT,
+        league_hint
+    )
+
+
+    if not os.path.isdir(
+        league_root
+    ):
+
+        debug_stats[
+            "single_team_logo_missing"
+        ] += 1
+
+
+        logos_missing += 1
+
+
+        return None
+
+
     for root, directories, files in os.walk(
-
-        SPORTS_LOGO_ROOT
-
+        league_root
     ):
 
         for filename in files:
 
             if not filename.lower().endswith(
-
                 ".png"
-
             ):
 
                 continue
 
 
             file_stem = os.path.splitext(
-
                 filename
-
             )[0]
 
 
-            if "_vs_" not in file_stem:
+            if "_vs_" in file_stem.lower():
 
                 continue
 
 
-            file_parts = file_stem.split(
-
-                "_vs_",
-
-                1
-
+            file_team = normalize_logo_team_name(
+                file_stem.replace(
+                    "_",
+                    " "
+                ),
+                league_hint
             )
 
 
-            if len(file_parts) != 2:
-
-                continue
-
-
-            logo_first = file_parts[0]
-
-            logo_second = file_parts[1]
+            file_official = team_aliases[
+                league_hint
+            ].get(
+                file_team
+            )
 
 
-            logo_first_normalized = normalize_team_name(
+            if file_official:
 
-                logo_first.replace(
-
-                    "_",
-
-                    " "
-
+                file_team = normalize_logo_team_name(
+                    file_official,
+                    league_hint
                 )
 
+
+            official_alias = team_aliases[
+                league_hint
+            ].get(
+                wanted_team
             )
 
 
-            logo_second_normalized = normalize_team_name(
+            if official_alias:
 
-                logo_second.replace(
-
-                    "_",
-
-                    " "
-
+                wanted_compare = normalize_logo_team_name(
+                    official_alias,
+                    league_hint
                 )
 
-            )
+            else:
+
+                wanted_compare = wanted_team
 
 
-            logo_key = matchup_logo_key(
-
-                logo_first_normalized,
-
-                logo_second_normalized
-
-            )
-
-
-            if logo_key != wanted_key:
+            if file_team != wanted_compare:
 
                 continue
 
 
             relative_path = os.path.relpath(
-
                 os.path.join(
-
                     root,
-
                     filename
-
                 ),
-
                 "."
-
             )
 
 
             relative_path = relative_path.replace(
-
                 os.sep,
-
                 "/"
-
             )
 
 
             encoded_path = "/".join(
-
                 quote(
-
                     part,
-
                     safe=""
-
                 )
-
                 for part in relative_path.split(
-
                     "/"
-
                 )
-
             )
 
 
             logo_url = (
-
                 GITHUB_RAW_ROOT
-
                 + encoded_path
-
             )
 
 
             logos_found += 1
 
 
-            if (
-
-                logo_first_normalized
-
-                ==
-
-                normalize_team_name(
-
-                    first_team
-
-                )
-
-            ):
-
-                debug_stats[
-
-                    "logo_direct_order_found"
-
-                ] += 1
+            debug_stats[
+                "single_team_logo_found"
+            ] += 1
 
 
-            else:
-
-                debug_stats[
-
-                    "logo_reverse_order_found"
-
-                ] += 1
+            print()
 
 
             print(
-                "  Logo found:"
+                "[SINGLE TEAM LOGO FOUND]"
+            )
+
+
+            print(
+                f"  Team: {official_team}"
             )
 
 
@@ -2340,27 +3713,15 @@ def find_matchup_logo(
             )
 
 
-            print(
-                f"  {logo_url}"
-            )
-
-
             return logo_url
 
 
-    logos_missing += 1
-
-
     debug_stats[
-
-        "logo_not_found"
-
+        "single_team_logo_missing"
     ] += 1
 
 
-    print(
-        "  No matching logo found."
-    )
+    logos_missing += 1
 
 
     return None
@@ -2373,9 +3734,13 @@ def find_matchup_logo(
 #
 # 1. Read provider matchup
 # 2. Clean team names using sports_teams.txt
-# 3. Build title/description from those names
-# 4. ESPN searches for the game time only
-# 5. Logo search runs independently
+# 3. Use provider date only as an ESPN search hint
+# 4. ESPN verifies date/time and away/home order
+# 5. Build title/description and select the ordered logo
+#
+# The verified ESPN datetime is returned to the caller so
+# the scheduler can use it without making another ESPN API
+# request.
 # --------------------------------------------------
 
 def build_event_info(
@@ -2391,11 +3756,15 @@ def build_event_info(
 
     provider_name = clean_text(
 
-        stream.get(
+        rename_legacy_team_identity(
 
-            "name",
+            stream.get(
 
-            ""
+                "name",
+
+                ""
+
+            )
 
         )
 
@@ -2413,6 +3782,15 @@ def build_event_info(
         )
 
     )
+
+
+    # --------------------------------------------------
+    # NFL RedZone display cleanup.
+    # --------------------------------------------------
+
+    if stream_id == "1031379":
+
+        provider_name = "NFL RED ZONE"
 
 
     print()
@@ -2451,6 +3829,13 @@ def build_event_info(
     )
 
 
+    provider_fallback_event = extract_provider_event_text(
+
+        provider_name
+
+    )
+
+
     print(
         "Extracted matchup:"
     )
@@ -2483,11 +3868,18 @@ def build_event_info(
     )
 
 
+    single_team = detect_single_team(
+
+        provider_name,
+
+        league_hint
+
+    )
+
+
     # --------------------------------------------------
     # STEP 3:
     # Clean team names using sports_teams.txt.
-    #
-    # This controls the displayed matchup.
     # --------------------------------------------------
 
     canonical_matchup = canonicalize_matchup(
@@ -2512,9 +3904,6 @@ def build_event_info(
     # --------------------------------------------------
     # STEP 4:
     # Determine preferred date.
-    #
-    # Provider timestamp is used only to know which
-    # date ESPN should search.
     # --------------------------------------------------
 
     provider_start = extract_start_datetime(
@@ -2542,28 +3931,43 @@ def build_event_info(
         )
 
 
+    provider_date_hint = extract_provider_date_hint(
+
+        provider_name
+
+    )
+
+
     preferred_date = (
 
         provider_start_eastern.date()
 
         if provider_start_eastern
 
-        else datetime.now(
+        else (
 
-            ZoneInfo(
+            provider_date_hint
 
-                "America/New_York"
+            if provider_date_hint
 
-            )
+            else datetime.now(
 
-        ).date()
+                ZoneInfo(
+
+                    "America/New_York"
+
+                )
+
+            ).date()
+
+        )
 
     )
 
 
     # --------------------------------------------------
     # STEP 5:
-    # Build clean title and description BEFORE ESPN.
+    # Build clean fallback title/description.
     # --------------------------------------------------
 
     if canonical_matchup:
@@ -2584,12 +3988,38 @@ def build_event_info(
 
     else:
 
-        title_text = "Sports Event"
+        fallback_title = (
+
+            single_team[1]
+
+            if single_team
+
+            else (
+
+                provider_fallback_event
+
+                or provider_name
+
+                or "Sports Event"
+
+            )
+
+        )
+
+
+        if fallback_title != "Sports Event":
+
+            debug_stats[
+                "provider_name_fallback_used"
+            ] += 1
+
+
+        title_text = fallback_title
 
 
         description_text = (
 
-            f"Sports event\n"
+            f"{fallback_title}\n"
 
             f"{preferred_date.strftime('%A')} "
 
@@ -2600,30 +4030,8 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 6:
-    # Find logo independently.
-    #
-    # This happens regardless of whether ESPN
-    # finds the game.
-    # --------------------------------------------------
-
-    logo_url = None
-
-
-    if canonical_matchup and league_hint:
-
-        logo_url = find_matchup_logo(
-
-            canonical_matchup,
-
-            league_hint
-
-        )
-
-
-    # --------------------------------------------------
-    # STEP 7:
-    # ESPN is used ONLY to find the verified
-    # game time.
+    # ESPN verifies the matching game's date/time
+    # and away/home team order.
     # --------------------------------------------------
 
     public_event = None
@@ -2642,13 +4050,141 @@ def build_event_info(
         )
 
 
+    if (
+        public_event
+        and public_event.get("away_team")
+        and public_event.get("home_team")
+    ):
+
+        canonical_matchup = (
+
+            f"{public_event['away_team']}"
+
+            f" vs. "
+
+            f"{public_event['home_team']}"
+
+        )
+
+
+    # --------------------------------------------------
+    # STEP 7:
+    # Find the matchup logo AFTER ESPN ordering.
+    # --------------------------------------------------
+
+    logo_url = None
+
+
+    if canonical_matchup and league_hint:
+
+        logo_url = find_matchup_logo(
+
+            canonical_matchup,
+
+            league_hint
+
+        )
+
+
+        # --------------------------------------------------
+        # LOGO-FAILURE TYPO RECOVERY.
+        # --------------------------------------------------
+
+        if not logo_url:
+
+            recovered = recover_logo_typo_matchup(
+
+                canonical_matchup,
+
+                league_hint,
+
+                preferred_date
+
+            )
+
+
+            if recovered:
+
+                corrected_matchup, corrected_event = recovered
+
+                canonical_matchup = corrected_matchup
+
+                public_event = corrected_event
+
+
+                global logos_missing
+
+                if logos_missing > 0:
+
+                    logos_missing -= 1
+
+                if debug_stats["logo_not_found"] > 0:
+
+                    debug_stats["logo_not_found"] -= 1
+
+                logo_url = find_matchup_logo(
+
+                    canonical_matchup,
+
+                    league_hint
+
+                )
+
+
+    elif single_team:
+
+        single_team_league = single_team[
+
+            0
+
+        ]
+
+
+        single_team_name = single_team[
+
+            1
+
+        ]
+
+
+        logo_url = find_single_team_logo(
+
+            single_team_name,
+
+            single_team_league
+
+        )
+
+
+    # --------------------------------------------------
+    # NFL RedZone fixed-logo override.
+    # --------------------------------------------------
+
+    if stream_id == "1031379":
+
+        logo_url = REDZONE_LOGO_URL
+
+
+        print()
+
+        print(
+            "[NFL REDZONE LOGO]"
+        )
+
+
+        print(
+            f"  {logo_url}"
+        )
+
+
     # --------------------------------------------------
     # STEP 8:
     # If ESPN found the game, add verified
-    # Eastern time to BOTH title and description.
-    #
-    # Team names remain from sports_teams.txt.
+    # Eastern date/time to BOTH title and description.
     # --------------------------------------------------
+
+    verified_game_datetime = None
+
 
     if public_event:
 
@@ -2660,6 +4196,9 @@ def build_event_info(
             "datetime"
 
         ]
+
+
+        verified_game_datetime = event_datetime
 
 
         event_time_text = (
@@ -2690,7 +4229,9 @@ def build_event_info(
 
             f"{event_datetime.strftime('%A')} "
 
-            f"{event_datetime.strftime('%m/%d/%Y')}\n"
+            f"{event_datetime.strftime('%m/%d/%Y')}"
+
+            f" - "
 
             f"{event_time_text}"
 
@@ -2722,6 +4263,12 @@ def build_event_info(
         )
 
 
+        print(
+            f"  Scheduling game start: "
+            f"{verified_game_datetime}"
+        )
+
+
         return (
 
             title_text,
@@ -2730,7 +4277,9 @@ def build_event_info(
 
             logo_url,
 
-            True
+            True,
+
+            verified_game_datetime
 
         )
 
@@ -2779,7 +4328,9 @@ def build_event_info(
 
         logo_url,
 
-        False
+        False,
+
+        None
 
     )
 
@@ -2883,11 +4434,15 @@ for channel_id, requested_name in wanted.items():
     ]
 
 
-    provider_name = stream.get(
+    provider_name = rename_legacy_team_identity(
 
-        "name",
+        stream.get(
 
-        requested_name
+            "name",
+
+            requested_name
+
+        )
 
     )
 
@@ -2929,13 +4484,35 @@ for channel_id, requested_name in wanted.items():
 
 
 # --------------------------------------------------
-# Create 6-hour programme blocks
+# Create 3-hour programme blocks.
+#
+# Normal blocks are anchored to:
+#
+# 12 AM - 3 AM
+# 3 AM  - 6 AM
+# 6 AM  - 9 AM
+# 9 AM  - 12 PM
+# 12 PM - 3 PM
+# 3 PM  - 6 PM
+# 6 PM  - 9 PM
+# 9 PM  - 12 AM
+#
+# If ESPN provides a verified game start inside one of
+# those blocks, the schedule is split around the game:
+#
+#   normal block start -> game start
+#   game start -> game start + 3 hours
+#   game end -> next normal 3-hour boundary
+#
+# The actual game remains exactly 3 hours.
+# Upcoming and Post Game titles are applied only to
+# the portions before and after the game.
 # --------------------------------------------------
 
 print()
 
 print(
-    "Creating 6-hour programme blocks..."
+    "Creating 3-hour programme blocks with ESPN game scheduling..."
 )
 
 
@@ -2970,7 +4547,9 @@ for channel_id, requested_name in wanted.items():
 
         logo_url,
 
-        has_real_epg
+        has_real_epg,
+
+        verified_game_datetime
 
     ) = build_event_info(
 
@@ -2980,7 +4559,7 @@ for channel_id, requested_name in wanted.items():
 
 
     # --------------------------------------------------
-    # Add matchup logo to CHANNEL.
+    # Add matchup or single-team logo to CHANNEL.
     #
     # Independent of ESPN success/failure.
     # --------------------------------------------------
@@ -3012,28 +4591,555 @@ for channel_id, requested_name in wanted.items():
         )
 
 
+    # --------------------------------------------------
+    # ESPN game scheduling information.
+    #
+    # Every verified game is assumed to last exactly
+    # three hours.
+    #
+    # No second ESPN lookup is performed here.
+    # The datetime returned by build_event_info() is
+    # the same verified ESPN datetime already used for
+    # the title and description.
+    # --------------------------------------------------
+
+    game_start = verified_game_datetime
+
+
+    game_end = (
+
+        game_start
+
+        + timedelta(
+
+            hours=3
+
+        )
+
+        if game_start
+
+        else None
+
+    )
+
+
+    # --------------------------------------------------
+    # UPCOMING / POST-GAME TITLES
+    #
+    # The actual game keeps the normal title.
+    #
+    # Before the game:
+    #     Upcoming: Team A vs. Team B - 7:00 PM
+    #
+    # During the game:
+    #     Team A vs. Team B - 7:00 PM
+    #
+    # After the game:
+    #     Post Game: Team A vs. Team B - 7:00 PM
+    #
+    # Descriptions remain unchanged.
+    # --------------------------------------------------
+
+    upcoming_title_text = (
+
+        f"Upcoming: {title_text}"
+
+    )
+
+
+    post_game_title_text = (
+
+        f"Post Game: {title_text}"
+
+    )
+
+
+    if game_start:
+
+        print()
+
+        print(
+            "[GAME BLOCK SCHEDULING]"
+        )
+
+
+        print(
+            f"  ESPN verified start: "
+            f"{game_start}"
+        )
+
+
+        print(
+            f"  Assumed game end: "
+            f"{game_end}"
+        )
+
+
+        print(
+            f"  Upcoming title: "
+            f"{upcoming_title_text}"
+        )
+
+
+        print(
+            f"  Game title: "
+            f"{title_text}"
+        )
+
+
+        print(
+            f"  Post-game title: "
+            f"{post_game_title_text}"
+        )
+
+
     current_start = guide_start
 
 
     while current_start < guide_end:
 
+        # --------------------------------------------------
+        # Every normal programme is exactly one 3-hour
+        # boundary-aligned block.
+        # --------------------------------------------------
 
-        current_stop = (
+        original_block_end = (
 
             current_start
 
             + timedelta(
 
-                hours=6
+                hours=3
 
             )
 
         )
 
 
-        if current_stop > guide_end:
+        if original_block_end > guide_end:
 
-            current_stop = guide_end
+            original_block_end = guide_end
+
+
+        # --------------------------------------------------
+        # If the verified game starts inside this normal
+        # 3-hour block, split the block around the game.
+        # --------------------------------------------------
+
+        if (
+
+            game_start
+
+            and
+
+            current_start <= game_start < original_block_end
+
+        ):
+
+            # --------------------------------------------------
+            # PRE-GAME / UPCOMING
+            #
+            # The first block may be shorter because the
+            # verified game starts inside the 3-hour block.
+            # --------------------------------------------------
+
+            if current_start < game_start:
+
+                programme = ET.SubElement(
+
+                    tv,
+
+                    "programme",
+
+                    {
+
+                        "start":
+
+                        current_start.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "stop":
+
+                        game_start.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "channel":
+
+                        channel_id
+
+                    }
+
+                )
+
+
+                title = ET.SubElement(
+
+                    programme,
+
+                    "title"
+
+                )
+
+
+                title.text = upcoming_title_text
+
+
+                desc = ET.SubElement(
+
+                    programme,
+
+                    "desc"
+
+                )
+
+
+                desc.text = description_text
+
+
+            # --------------------------------------------------
+            # REAL GAME
+            #
+            # ESPN start time + exactly 3 hours.
+            #
+            # The actual game keeps the normal title.
+            # --------------------------------------------------
+
+            actual_game_end = game_end
+
+
+            if actual_game_end > original_block_end:
+
+                print()
+
+                print(
+                    "[GAME CROSSES NORMAL 3-HOUR BOUNDARY]"
+                )
+
+
+                print(
+                    f"  Game starts: "
+                    f"{game_start}"
+                )
+
+
+                print(
+                    f"  Assumed game ends: "
+                    f"{actual_game_end}"
+                )
+
+
+                print(
+                    f"  Original block ends: "
+                    f"{original_block_end}"
+                )
+
+
+            programme = ET.SubElement(
+
+                tv,
+
+                "programme",
+
+                {
+
+                    "start":
+
+                    game_start.strftime(
+
+                        "%Y%m%d%H%M%S %z"
+
+                    ),
+
+                    "stop":
+
+                    actual_game_end.strftime(
+
+                        "%Y%m%d%H%M%S %z"
+
+                    ),
+
+                    "channel":
+
+                    channel_id
+
+                }
+
+            )
+
+
+            title = ET.SubElement(
+
+                programme,
+
+                "title"
+
+            )
+
+
+            title.text = title_text
+
+
+            desc = ET.SubElement(
+
+                programme,
+
+                "desc"
+
+            )
+
+
+            desc.text = description_text
+
+
+            # --------------------------------------------------
+            # POST-GAME
+            #
+            # If the game ends before the next normal 3-hour
+            # boundary, fill the remainder of that boundary
+            # with Post Game.
+            #
+            # Example:
+            #
+            # 6:00 PM - 7:15 PM  Upcoming
+            # 7:15 PM - 10:15 PM Game
+            # 10:15 PM - 12:00 AM Post Game
+            #
+            # Then:
+            #
+            # 12:00 AM - 3:00 AM Post Game
+            # 3:00 AM - 6:00 AM Post Game
+            #
+            # --------------------------------------------------
+
+            if actual_game_end < original_block_end:
+
+                programme = ET.SubElement(
+
+                    tv,
+
+                    "programme",
+
+                    {
+
+                        "start":
+
+                        actual_game_end.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "stop":
+
+                        original_block_end.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "channel":
+
+                        channel_id
+
+                    }
+
+                )
+
+
+                title = ET.SubElement(
+
+                    programme,
+
+                    "title"
+
+                )
+
+
+                title.text = post_game_title_text
+
+
+                desc = ET.SubElement(
+
+                    programme,
+
+                    "desc"
+
+                )
+
+
+                desc.text = description_text
+
+
+                current_start = original_block_end
+
+            else:
+
+                # --------------------------------------------------
+                # The game crosses one or more normal 3-hour
+                # boundaries.
+                #
+                # The game itself remains one continuous 3-hour
+                # programme. Once it ends, create a short
+                # Post Game segment up to the next normal
+                # 3-hour boundary, then resume normal 3-hour
+                # Post Game blocks.
+                # --------------------------------------------------
+
+                current_start = actual_game_end
+
+
+                if current_start < guide_end:
+
+                    elapsed_seconds = (
+
+                        (
+
+                            current_start
+
+                            - guide_start
+
+                        ).total_seconds()
+
+                    )
+
+
+                    block_seconds = 3 * 60 * 60
+
+
+                    completed_blocks = (
+
+                        int(
+
+                            elapsed_seconds
+
+                            // block_seconds
+
+                        )
+
+                    )
+
+
+                    next_boundary = (
+
+                        guide_start
+
+                        + timedelta(
+
+                            seconds=(
+
+                                (
+
+                                    completed_blocks
+
+                                    + 1
+
+                                )
+
+                                * block_seconds
+
+                            )
+
+                        )
+
+                    )
+
+
+                    if next_boundary > guide_end:
+
+                        next_boundary = guide_end
+
+
+                    if current_start < next_boundary:
+
+                        programme = ET.SubElement(
+
+                            tv,
+
+                            "programme",
+
+                            {
+
+                                "start":
+
+                                current_start.strftime(
+
+                                    "%Y%m%d%H%M%S %z"
+
+                                ),
+
+                                "stop":
+
+                                next_boundary.strftime(
+
+                                    "%Y%m%d%H%M%S %z"
+
+                                ),
+
+                                "channel":
+
+                                channel_id
+
+                            }
+
+                        )
+
+
+                        title = ET.SubElement(
+
+                            programme,
+
+                            "title"
+
+                        )
+
+
+                        title.text = post_game_title_text
+
+
+                        desc = ET.SubElement(
+
+                            programme,
+
+                            "desc"
+
+                        )
+
+
+                        desc.text = description_text
+
+
+                        current_start = next_boundary
+
+
+            # --------------------------------------------------
+            # Game has now been consumed. All subsequent
+            # normal 3-hour blocks are Post Game.
+            # --------------------------------------------------
+
+            game_start = None
+
+            game_end = None
+
+
+            continue
+
+
+        # --------------------------------------------------
+        # NORMAL 3-HOUR BLOCK
+        #
+        # Once a verified game has already occurred, these
+        # normal blocks become Post Game blocks.
+        #
+        # Otherwise they remain the normal game title.
+        # --------------------------------------------------
+
+        current_stop = original_block_end
 
 
         programme = ET.SubElement(
@@ -3160,7 +5266,12 @@ print(
 
 
 print(
-    "Guide blocks: 6 hours each"
+    "Guide blocks: 3 hours each, split around verified games"
+)
+
+
+print(
+    "Verified game duration assumption: 3 hours"
 )
 
 

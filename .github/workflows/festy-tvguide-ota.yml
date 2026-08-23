@@ -3,14 +3,16 @@ name: Festy TVGuide OTA
 on:
   workflow_dispatch:
   schedule:
-    - cron: "20 */12 * * *"
+    - cron: "35 4 * * *"
+    - cron: "35 16 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: epg-guide-writes-main
+  group: festy-epg-build-queue
   cancel-in-progress: false
+  queue: max
 
 jobs:
   build-festy-tvguide-ota:

@@ -1,0 +1,27 @@
+{
+  "live": {
+    "provider_items": 54027,
+    "kept_items": 17049,
+    "excluded_items": 36978,
+    "output_file": "filtered-provider/streams/live-streams.json.gz",
+    "compressed_bytes": 327980
+  },
+  "movies": {
+    "provider_items": 175973,
+    "kept_items": 27869,
+    "excluded_items": 148104,
+    "output_file": "filtered-provider/streams/vod-streams.json.gz",
+    "compressed_bytes": 1635146
+  },
+  "series": {
+    "provider_items": 45855,
+    "kept_items": 7576,
+    "excluded_items": 38279,
+    "output_file": "filtered-provider/streams/series.json.gz",
+    "compressed_bytes": 2270326
+  },
+  "security": {
+    "provider_credentials_written_to_output": false,
+    "direct_stream_urls_written_to_output": false
+  }
+}

@@ -3,14 +3,16 @@ name: TVguide-Tivimate
 on:
   workflow_dispatch:
   schedule:
-    - cron: "20 3,15 * * *"
+    - cron: "15 5 * * *"
+    - cron: "15 17 * * *"
 
 permissions:
   contents: write
 
 concurrency:
-  group: epg-guide-writes-main
+  group: festy-epg-build-queue
   cancel-in-progress: false
+  queue: max
 
 jobs:
   build-tvguide-tivimate:
@@ -1622,49 +1624,43 @@ jobs:
 
       - name: Commit and push TiviMate guide safely
         run: |
+          set -e
+
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git fetch origin main
-
-          # Preserve compressed guides created by the other workflows.
-          # This workflow should only update its own XML/GZ output.
-          git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
-
-          git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
-          git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
-
-          if git diff --cached --quiet; then
-            echo "No TiviMate guide changes to commit"
-            exit 0
-          fi
-
-          git commit -m "Update TiviMate guide"
+          # Keep untouched copies of this run's completed generated outputs.
+          cp guides/tvguidetivimateguide.xml /tmp/tvguidetivimateguide.xml
+          cp guides/tvguidetivimateguide.xml.gz /tmp/tvguidetivimateguide.xml.gz
 
           for attempt in 1 2 3 4 5; do
             echo "Push attempt $attempt"
+
+            git fetch origin main
+
+            # Start from the newest remote main so generated XML/GZ files are
+            # never rebased or merged against another workflow's commit.
+            git reset --hard origin/main
+
+            # Restore only this workflow's freshly generated outputs.
+            cp /tmp/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml
+            cp /tmp/tvguidetivimateguide.xml.gz guides/tvguidetivimateguide.xml.gz
+
+            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
+
+            if git diff --cached --quiet; then
+              echo "No TiviMate guide changes to commit"
+              exit 0
+            fi
+
+            git commit -m "Update TiviMate guide"
 
             if git push origin HEAD:main; then
               echo "Push succeeded"
               exit 0
             fi
 
-            echo "Push failed, retrying after fresh fetch/rebase..."
-
-            git fetch origin main
-            git rebase origin/main
-
-            git checkout origin/main -- guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
-
-            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
-            git add guides/TVPassport.xml.gz guides/OTALocalsguide.xml.gz 2>/dev/null || true
-
-            if git diff --cached --quiet; then
-              echo "No new commit needed after rebase, retrying push..."
-            else
-              git commit -m "Update TiviMate guide"
-            fi
-
+            echo "Push failed because main changed again; retrying from newest remote main..."
             sleep 5
           done
 
