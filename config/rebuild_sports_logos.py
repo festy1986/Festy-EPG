@@ -13,7 +13,17 @@ from PIL import Image
 # CONFIG
 # ============================================================
 
-ROOT = Path("temp/New folder")
+# TRUE SOURCE OF TRUTH.
+#
+# This directory is NEVER modified, renamed, deleted,
+# or replaced by this script.
+SOURCE_ROOT = Path("temp/New folder")
+
+# FINAL SPORTS LOGO LIBRARY.
+#
+# This is the directory that will be completely replaced
+# with the rebuilt library after successful verification.
+ROOT = Path("sports-logos")
 
 # Build into a completely separate directory first.
 BUILD_ROOT = Path("_sports_logos_rebuild")
@@ -107,15 +117,17 @@ def filesystem_name(team):
 #
 # IMPORTANT:
 #
-# The existing sports-logos library is now the SOURCE OF TRUTH.
+# temp/New folder is the TRUE SOURCE OF TRUTH.
 #
-# Every team is discovered from its existing team folder.
+# The only source image used for each team is:
 #
-# The ONLY source image used for a team is:
+#     temp/New folder/<LEAGUE>/<TEAM>/<TEAM>.png
 #
-#     TeamFolder/TeamFolder.png
+# Existing sports-logos files are NEVER used as sources.
 #
-# Existing A_vs_B files are NEVER used as source images.
+# Existing matchup files are NEVER used as sources.
+#
+# temp/New folder is NEVER modified.
 # ============================================================
 
 def discover_source_teams():
@@ -125,18 +137,20 @@ def discover_source_teams():
         for league in LEAGUES
     }
 
-    if not ROOT.is_dir():
+    if not SOURCE_ROOT.is_dir():
         raise RuntimeError(
-            f"Source library does not exist: {ROOT}"
+            f"Source library does not exist: "
+            f"{SOURCE_ROOT}"
         )
 
     for league in sorted(LEAGUES):
 
-        league_root = ROOT / league
+        league_root = SOURCE_ROOT / league
 
         if not league_root.is_dir():
             raise RuntimeError(
-                f"Missing league directory: {league_root}"
+                f"Missing source league directory: "
+                f"{league_root}"
             )
 
         team_folders = sorted(
@@ -147,7 +161,8 @@ def discover_source_teams():
 
         if not team_folders:
             raise RuntimeError(
-                f"No team folders found in {league_root}"
+                f"No team folders found in "
+                f"{league_root}"
             )
 
         for team_folder in team_folders:
@@ -197,8 +212,18 @@ def verify_source_library(teams_by_league):
 
     print()
     print("=" * 70)
-    print("VERIFYING EXISTING SPORTS LOGO LIBRARY")
+    print("VERIFYING TRUE SOURCE LOGO LIBRARY")
     print("=" * 70)
+
+    print()
+    print(
+        f"Source: {SOURCE_ROOT}"
+    )
+
+    print()
+    print(
+        "SOURCE IS READ-ONLY DURING THIS RUN."
+    )
 
     total_teams = 0
 
@@ -333,12 +358,11 @@ def load_source_logo(source_path):
 # ============================================================
 # COPY SOLO LOGO
 #
-# The existing solo logo is copied directly.
+# The logo is copied directly from the TRUE SOURCE:
 #
-# It is NOT rebuilt, resized, downloaded, or replaced.
+#     temp/New folder/<LEAGUE>/<TEAM>/<TEAM>.png
 #
-# This guarantees the current team logo remains the source
-# image used for all matchup generation.
+# It is NOT taken from sports-logos.
 # ============================================================
 
 def copy_solo_logo(
@@ -367,13 +391,15 @@ def copy_solo_logo(
 #
 # Boston_Red_Sox_vs_Tampa_Bay_Rays.png
 #
-# uses:
+# uses ONLY:
 #
-# Boston_Red_Sox/Boston_Red_Sox.png
+# temp/New folder/MLB/Boston_Red_Sox/
+#     Boston_Red_Sox.png
 #
 # and:
 #
-# Tampa_Bay_Rays/Tampa_Bay_Rays.png
+# temp/New folder/MLB/Tampa_Bay_Rays/
+#     Tampa_Bay_Rays.png
 #
 # Existing matchup files are NEVER used.
 # ============================================================
@@ -503,7 +529,7 @@ def build_matchup(
 #
 # Every other team in the SAME league is included.
 #
-# The team's existing solo logo is the source.
+# All files are generated from the TRUE SOURCE logos.
 # ============================================================
 
 def build_team_folder(
@@ -529,7 +555,7 @@ def build_team_folder(
     )
 
     # --------------------------------------------------------
-    # PRESERVE SOLO LOGO
+    # COPY TRUE SOURCE SOLO LOGO
     # --------------------------------------------------------
 
     solo_path = (
@@ -867,10 +893,21 @@ def verify_generated_library(
 
 
 # ============================================================
-# REPLACE OLD LIBRARY
+# REPLACE SPORTS-LOGOS
 #
-# The existing sports-logos directory is replaced ONLY after
-# the entire rebuild has completed and passed verification.
+# IMPORTANT:
+#
+# SOURCE_ROOT = temp/New folder
+#
+# ROOT = sports-logos
+#
+# ONLY sports-logos is replaced.
+#
+# temp/New folder is NEVER renamed, deleted,
+# or modified.
+#
+# The replacement happens ONLY after the complete
+# rebuilt library has passed verification.
 # ============================================================
 
 def install_new_library():
@@ -892,11 +929,27 @@ def install_new_library():
     print("INSTALLING REBUILT SPORTS LOGO LIBRARY")
     print("=" * 70)
 
+    print()
+    print(
+        f"TRUE SOURCE: {SOURCE_ROOT}"
+    )
+
+    print(
+        f"DESTINATION: {ROOT}"
+    )
+
+    # --------------------------------------------------------
+    # BACK UP EXISTING SPORTS-LOGOS.
+    #
+    # This does NOT touch temp/New folder.
+    # --------------------------------------------------------
+
     if ROOT.exists():
 
         print()
         print(
-            f"Removing old library: {ROOT}"
+            f"Moving existing library to temporary backup: "
+            f"{ROOT}"
         )
 
         ROOT.rename(
@@ -905,11 +958,19 @@ def install_new_library():
 
     try:
 
+        # ----------------------------------------------------
+        # INSTALL THE VERIFIED REBUILD AS sports-logos.
+        # ----------------------------------------------------
+
         BUILD_ROOT.rename(
             ROOT
         )
 
     except Exception:
+
+        # ----------------------------------------------------
+        # ROLLBACK IF INSTALLATION FAILS.
+        # ----------------------------------------------------
 
         if (
             backup_root.exists()
@@ -922,11 +983,26 @@ def install_new_library():
 
         raise
 
+    # --------------------------------------------------------
+    # DELETE ONLY THE OLD sports-logos BACKUP.
+    #
+    # temp/New folder remains completely untouched.
+    # --------------------------------------------------------
+
     if backup_root.exists():
 
         shutil.rmtree(
             backup_root
         )
+
+    print()
+    print(
+        "New sports-logos library installed successfully."
+    )
+
+    print(
+        f"Source library preserved at: {SOURCE_ROOT}"
+    )
 
 
 # ============================================================
@@ -1053,6 +1129,58 @@ def verify_installed_library(
 
 
 # ============================================================
+# VERIFY SOURCE STILL EXISTS
+#
+# This provides an additional safety check that the TRUE
+# SOURCE was not accidentally removed or replaced.
+# ============================================================
+
+def verify_source_still_exists(
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING TRUE SOURCE WAS PRESERVED")
+    print("=" * 70)
+
+    if not SOURCE_ROOT.is_dir():
+        raise RuntimeError(
+            f"TRUE SOURCE WAS REMOVED: "
+            f"{SOURCE_ROOT}"
+        )
+
+    for league in sorted(LEAGUES):
+
+        league_root = (
+            SOURCE_ROOT
+            /
+            league
+        )
+
+        if not league_root.is_dir():
+            raise RuntimeError(
+                f"TRUE SOURCE LEAGUE WAS REMOVED: "
+                f"{league_root}"
+            )
+
+        for team in teams_by_league[league].values():
+
+            source = team["source"]
+
+            if not source.is_file():
+                raise RuntimeError(
+                    f"TRUE SOURCE LOGO WAS REMOVED: "
+                    f"{source}"
+                )
+
+    print()
+    print(
+        f"TRUE SOURCE PRESERVED: {SOURCE_ROOT}"
+    )
+
+
+# ============================================================
 # MAIN
 # ============================================================
 
@@ -1063,16 +1191,50 @@ def main():
     print("=" * 70)
 
     print()
-    print("SOURCE:")
-    print("  sports-logos/<LEAGUE>/<TEAM>/<TEAM>.png")
+    print("TRUE SOURCE:")
+    print(
+        "  temp/New folder/<LEAGUE>/<TEAM>/<TEAM>.png"
+    )
+
+    print()
+    print("FINAL DESTINATION:")
+    print(
+        "  sports-logos/<LEAGUE>/<TEAM>/"
+    )
 
     print()
     print("IMPORTANT:")
-    print("  Existing solo team logos are preserved.")
-    print("  Existing matchup logos are NOT used as sources.")
-    print("  _temp_espn_logos is NOT used.")
-    print("  No logos are downloaded.")
-    print("  Every matchup is rebuilt from the two solo logos.")
+    print(
+        "  temp/New folder is the TRUE SOURCE OF TRUTH."
+    )
+
+    print(
+        "  temp/New folder is NEVER modified."
+    )
+
+    print(
+        "  Existing sports-logos logos are NOT used as sources."
+    )
+
+    print(
+        "  Existing matchup logos are NOT used as sources."
+    )
+
+    print(
+        "  Every solo logo comes directly from temp/New folder."
+    )
+
+    print(
+        "  Every matchup is rebuilt from two TRUE SOURCE logos."
+    )
+
+    print(
+        "  Both home/away matchup directions are generated."
+    )
+
+    print(
+        "  No logos are downloaded."
+    )
 
     print()
     print(
@@ -1080,7 +1242,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # NEVER build on top of the source library.
+    # NEVER BUILD ON TOP OF THE SOURCE.
     # --------------------------------------------------------
 
     if BUILD_ROOT.exists():
@@ -1096,7 +1258,7 @@ def main():
         )
 
     # --------------------------------------------------------
-    # DISCOVER TEAMS FROM EXISTING FOLDERS.
+    # DISCOVER TEAMS FROM TRUE SOURCE.
     # --------------------------------------------------------
 
     teams_by_league = discover_source_teams()
@@ -1143,7 +1305,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # BUILD EVERY LEAGUE.
+    # BUILD EVERY LEAGUE FROM TRUE SOURCE.
     # --------------------------------------------------------
 
     generated_total = 0
@@ -1166,7 +1328,9 @@ def main():
     )
 
     # --------------------------------------------------------
-    # INSTALL ONLY AFTER SUCCESSFUL VERIFICATION.
+    # INSTALL INTO sports-logos.
+    #
+    # temp/New folder is NOT touched.
     # --------------------------------------------------------
 
     install_new_library()
@@ -1176,6 +1340,14 @@ def main():
     # --------------------------------------------------------
 
     verify_installed_library(
+        teams_by_league
+    )
+
+    # --------------------------------------------------------
+    # VERIFY TRUE SOURCE STILL EXISTS.
+    # --------------------------------------------------------
+
+    verify_source_still_exists(
         teams_by_league
     )
 
@@ -1190,6 +1362,10 @@ def main():
 
     print()
     print(
+        f"TRUE SOURCE: {SOURCE_ROOT}"
+    )
+
+    print(
         f"Source teams: {total_teams}"
     )
 
@@ -1203,17 +1379,17 @@ def main():
 
     print()
     print(
-        "All matchup logos were rebuilt from the "
-        "existing solo team logos inside sports-logos."
+        "The sports-logos library was completely rebuilt "
+        "from the logos in temp/New folder."
     )
 
     print(
-        "Every team has a solo logo."
+        "Every team has a solo logo from the new source."
     )
 
     print(
-        "Every team has a matchup against every "
-        "other team in its league."
+        "Every team has a matchup against every other "
+        "team in its league."
     )
 
     print(
@@ -1221,11 +1397,18 @@ def main():
     )
 
     print(
-        "Existing matchup logos were never used as sources."
+        "Existing sports-logos matchup files were never "
+        "used as sources."
     )
 
     print(
-        "_temp_espn_logos was not used."
+        "Existing sports-logos solo logos were never "
+        "used as sources."
+    )
+
+    print(
+        "temp/New folder was preserved as the permanent "
+        "source library."
     )
 
     print(
