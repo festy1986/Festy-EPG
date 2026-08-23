@@ -7,14 +7,11 @@ import shutil
 import unicodedata
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from html.parser import HTMLParser
+from urllib.parse import urljoin
 
 import requests
 from PIL import Image
-
-try:
-    import cairosvg
-except ImportError:
-    cairosvg = None
 
 
 # ============================================================
@@ -44,25 +41,31 @@ REBUILD_TIMEOUT = 60
 # Total attempts = 1 initial pass + 2 retries = 3 passes.
 REBUILD_RETRY_PASSES = 2
 
-# Current LogoCDN season/year.
-#
-# LogoCDN's league pages identify the current logo separately
-# from historical logos. We therefore use the current season
-# rather than scanning every historical year.
-CURRENT_YEAR = 2026
+# SportsLogos.Net league identifiers.
+SPORTSLOGOS_LEAGUE_IDS = {
+    "MLB": 4,
+    "NHL": 5,
+    "NBA": 6,
+    "NFL": 7,
+}
 
-# Only use the immediately previous year as a fallback when
-# a current-year source genuinely does not exist.
-FALLBACK_YEAR = CURRENT_YEAR - 1
+SPORTSLOGOS_BASE = "https://www.sportslogos.net"
 
-SVG_RENDER_SIZE = 4096
+# SportsLogos.Net logo CDN.
+SPORTSLOGOS_CONTENT_BASE = "https://content.sportslogos.net"
 
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
         "Chrome/151.0 Safari/537.36"
-    )
+    ),
+    "Accept": (
+        "text/html,application/xhtml+xml,"
+        "application/xml;q=0.9,image/avif,image/webp,"
+        "image/apng,*/*;q=0.8"
+    ),
+    "Accept-Language": "en-US,en;q=0.9",
 }
 
 
@@ -99,10 +102,13 @@ ALIASES = {
 
 
 # ============================================================
-# LOGOCDN SLUG OVERRIDES
+# SPORTSLOGOS.NET NAME OVERRIDES
+#
+# These are only used to locate the corresponding team page
+# on SportsLogos.Net.
 # ============================================================
 
-LOGOCDN_SLUG_OVERRIDES = {
+SPORTSLOGOS_NAME_OVERRIDES = {
 
     # --------------------------------------------------------
     # NBA
@@ -110,44 +116,14 @@ LOGOCDN_SLUG_OVERRIDES = {
 
     ("NBA", "LA Clippers"):
         [
-            "los-angeles-clippers",
-            "la-clippers",
+            "Los Angeles Clippers",
+            "LA Clippers",
         ],
 
     ("NBA", "LA Lakers"):
         [
-            "los-angeles-lakers",
-            "la-lakers",
-        ],
-
-    ("NBA", "New Orleans Pelicans"):
-        [
-            "new-orleans-pelicans",
-        ],
-
-    ("NBA", "Oklahoma City Thunder"):
-        [
-            "oklahoma-city-thunder",
-        ],
-
-    ("NBA", "Golden State Warriors"):
-        [
-            "golden-state-warriors",
-        ],
-
-    ("NBA", "Portland Trail Blazers"):
-        [
-            "portland-trail-blazers",
-        ],
-
-    ("NBA", "Minnesota Timberwolves"):
-        [
-            "minnesota-timberwolves",
-        ],
-
-    ("NBA", "San Antonio Spurs"):
-        [
-            "san-antonio-spurs",
+            "Los Angeles Lakers",
+            "LA Lakers",
         ],
 
     # --------------------------------------------------------
@@ -156,75 +132,35 @@ LOGOCDN_SLUG_OVERRIDES = {
 
     ("MLB", "St Louis Cardinals"):
         [
-            "st-louis-cardinals",
+            "St. Louis Cardinals",
+            "St Louis Cardinals",
         ],
 
     ("MLB", "Athletics"):
         [
-            "athletics",
-            "oakland-athletics",
-        ],
-
-    ("MLB", "Los Angeles Angels"):
-        [
-            "los-angeles-angels",
-            "los-angeles-angels-of-anaheim",
-        ],
-
-    # --------------------------------------------------------
-    # NFL
-    # --------------------------------------------------------
-
-    ("NFL", "Los Angeles Rams"):
-        [
-            "los-angeles-rams",
-            "st-louis-rams",
-        ],
-
-    ("NFL", "Los Angeles Chargers"):
-        [
-            "los-angeles-chargers",
-            "san-diego-chargers",
-        ],
-
-    ("NFL", "Washington Commanders"):
-        [
-            "washington-commanders",
+            "Athletics",
+            "Oakland Athletics",
         ],
 
     # --------------------------------------------------------
     # NHL
     # --------------------------------------------------------
 
+    ("NHL", "St Louis Blues"):
+        [
+            "St. Louis Blues",
+            "St Louis Blues",
+        ],
+
     ("NHL", "Utah Mammoth"):
         [
-            "utah-mammoth",
+            "Utah Mammoth",
         ],
 
     ("NHL", "Utah Hockey Club"):
         [
-            "utah-mammoth",
-            "utah-hockey-club",
-        ],
-
-    ("NHL", "St Louis Blues"):
-        [
-            "st-louis-blues",
-        ],
-
-    ("NHL", "New Jersey Devils"):
-        [
-            "new-jersey-devils",
-        ],
-
-    ("NHL", "New York Islanders"):
-        [
-            "new-york-islanders",
-        ],
-
-    ("NHL", "New York Rangers"):
-        [
-            "new-york-rangers",
+            "Utah Mammoth",
+            "Utah Hockey Club",
         ],
 }
 
@@ -248,6 +184,128 @@ def get(url):
     response.raise_for_status()
 
     return response
+
+
+# ============================================================
+# HTML PARSER
+# ============================================================
+
+class SportsLogosHTMLParser(HTMLParser):
+
+    def __init__(self):
+
+        super().__init__(
+            convert_charrefs=True
+        )
+
+        self.links = []
+
+        self.images = []
+
+        self.current_anchor = None
+
+        self.current_anchor_text = []
+
+    def handle_starttag(
+        self,
+        tag,
+        attrs
+    ):
+
+        attributes = dict(
+            attrs
+        )
+
+        if tag.lower() == "a":
+
+            self.current_anchor = {
+                "href": attributes.get(
+                    "href"
+                ),
+                "text": "",
+            }
+
+            self.current_anchor_text = []
+
+        elif tag.lower() == "img":
+
+            self.images.append(
+                {
+                    "src": attributes.get(
+                        "src"
+                    ),
+                    "data_src": attributes.get(
+                        "data-src"
+                    ),
+                    "data_original": attributes.get(
+                        "data-original"
+                    ),
+                    "alt": attributes.get(
+                        "alt",
+                        ""
+                    ),
+                    "title": attributes.get(
+                        "title",
+                        ""
+                    ),
+                }
+            )
+
+    def handle_data(
+        self,
+        data
+    ):
+
+        if self.current_anchor is not None:
+
+            self.current_anchor_text.append(
+                data
+            )
+
+    def handle_endtag(
+        self,
+        tag
+    ):
+
+        if (
+            tag.lower() == "a"
+            and self.current_anchor is not None
+        ):
+
+            text = " ".join(
+                self.current_anchor_text
+            )
+
+            text = re.sub(
+                r"\s+",
+                " ",
+                text
+            ).strip()
+
+            self.current_anchor[
+                "text"
+            ] = text
+
+            self.links.append(
+                self.current_anchor
+            )
+
+            self.current_anchor = None
+
+            self.current_anchor_text = []
+
+
+def parse_html(
+    html_text
+):
+
+    parser = SportsLogosHTMLParser()
+
+    parser.feed(
+        html_text
+    )
+
+    return parser
 
 
 # ============================================================
@@ -307,76 +365,14 @@ def display_team_name(raw):
     )
 
 
-# ============================================================
-# GENERIC SLUG GENERATION
-# ============================================================
-
-def generic_slugs(team):
-
-    normalized = clean_name(
-        team
-    )
-
-    slug = normalized.replace(
-        " ",
-        "-"
-    )
-
-    values = [
-        slug
-    ]
-
-    values.append(
-        slug.replace(
-            "st-",
-            "saint-"
-        )
-    )
-
-    if normalized.startswith("la "):
-
-        values.append(
-            normalized.replace(
-                "la ",
-                "los-angeles-"
-            ).replace(
-                " ",
-                "-"
-            )
-        )
-
-    values.append(
-        slug.replace(
-            "-football",
-            ""
-        )
-    )
-
-    output = []
-
-    seen = set()
-
-    for value in values:
-
-        value = value.strip("-")
-
-        if value and value not in seen:
-
-            seen.add(value)
-
-            output.append(value)
-
-    return output
-
-
-def logo_slugs(
+def sportslogos_team_names(
     league,
     team
 ):
 
     values = []
 
-    override = LOGOCDN_SLUG_OVERRIDES.get(
+    override = SPORTSLOGOS_NAME_OVERRIDES.get(
         (
             league,
             team
@@ -388,8 +384,8 @@ def logo_slugs(
         override
     )
 
-    values.extend(
-        generic_slugs(team)
+    values.append(
+        team
     )
 
     output = []
@@ -398,16 +394,18 @@ def logo_slugs(
 
     for value in values:
 
-        value = value.strip()
+        key = clean_name(
+            value
+        )
 
-        if not value:
+        if not key:
             continue
 
-        if value in seen:
+        if key in seen:
             continue
 
         seen.add(
-            value
+            key
         )
 
         output.append(
@@ -418,245 +416,651 @@ def logo_slugs(
 
 
 # ============================================================
-# LOGOCDN URL DISCOVERY
-#
-# IMPORTANT:
-#
-# We intentionally DO NOT scan all historical years.
-#
-# LogoCDN identifies the current logo separately from the
-# historical logos on its league pages. The current source
-# is therefore preferred.
-#
-# Only the current year and one fallback year are checked.
+# GENERIC SPORTSLOGOS.NET SLUG GENERATION
 # ============================================================
 
-def logocdn_urls(
-    league,
+def sportslogos_slugs(
     team
 ):
 
-    slugs = logo_slugs(
-        league,
+    normalized = clean_name(
         team
     )
 
-    urls = []
+    values = [
+        normalized
+    ]
 
-    for year in (
-        CURRENT_YEAR,
-        FALLBACK_YEAR,
+    if normalized.startswith(
+        "la "
     ):
 
-        for slug in slugs:
-
-            urls.append(
-                (
-                    f"https://i.logocdn.com/"
-                    f"{league.lower()}/"
-                    f"{year}/"
-                    f"{slug}.svg"
-                )
+        values.append(
+            normalized.replace(
+                "la ",
+                "los angeles "
             )
+        )
 
-            urls.append(
-                (
-                    f"https://i.logocdn.com/"
-                    f"{league.lower()}/"
-                    f"{year}/"
-                    f"{slug}.png"
-                )
-            )
+    values.append(
+        normalized.replace(
+            "st ",
+            "st louis "
+        )
+    )
 
-    return urls
+    values.append(
+        normalized.replace(
+            "saint ",
+            "st louis "
+        )
+    )
+
+    output = []
+
+    seen = set()
+
+    for value in values:
+
+        slug = re.sub(
+            r"\s+",
+            "-",
+            value
+        )
+
+        slug = re.sub(
+            r"[^a-z0-9-]",
+            "",
+            slug
+        )
+
+        slug = re.sub(
+            r"-+",
+            "-",
+            slug
+        ).strip("-")
+
+        if not slug:
+            continue
+
+        if slug in seen:
+            continue
+
+        seen.add(
+            slug
+        )
+
+        output.append(
+            slug
+        )
+
+    return output
 
 
 # ============================================================
-# SVG RENDERING
+# SPORTSLOGOS.NET YEAR EXTRACTION
 # ============================================================
 
-def render_svg(
-    svg_bytes
+def extract_logo_year(
+    url
 ):
 
-    if cairosvg is None:
+    if not url:
+        return None
 
-        raise RuntimeError(
-            "CairoSVG is required to "
-            "convert SVG logos."
+    match = re.search(
+        r"/logos/view/[^/]+/[^/]+/(\d{4})/",
+        url
+    )
+
+    if not match:
+        return None
+
+    try:
+
+        return int(
+            match.group(1)
         )
 
-    png_bytes = cairosvg.svg2png(
-        bytestring=svg_bytes,
-        output_width=SVG_RENDER_SIZE,
-        output_height=SVG_RENDER_SIZE,
-    )
+    except ValueError:
 
-    image = Image.open(
-        io.BytesIO(
-            png_bytes
-        )
-    )
-
-    image.load()
-
-    return image.convert(
-        "RGBA"
-    )
+        return None
 
 
 # ============================================================
-# DOWNLOAD CURRENT LOGO FROM LOGOCDN
+# DISCOVER TEAM PAGE FROM SPORTSLOGOS.NET
 #
-# Search order:
+# We use the current league/year index to locate the official
+# SportsLogos.Net team-history page.
 #
-#   1. Current-year SVG
-#   2. Current-year PNG
-#   3. Previous-year SVG
-#   4. Previous-year PNG
-#
-# Once a valid source is found for a slug, it is used.
+# We do NOT guess a logo URL.
 # ============================================================
 
-def download_logocdn_logo(
+def sportslogos_year_page(
+    league,
+    year=2026
+):
+
+    league_id = SPORTSLOGOS_LEAGUE_IDS[
+        league
+    ]
+
+    return (
+        f"{SPORTSLOGOS_BASE}/teams/"
+        f"list_by_year/"
+        f"{league_id}{year}/"
+        f"{year}-{league}-Logos-By-Year/"
+    )
+
+
+def team_name_matches(
+    requested,
+    candidate
+):
+
+    requested_clean = clean_name(
+        requested
+    )
+
+    candidate_clean = clean_name(
+        candidate
+    )
+
+    if requested_clean == candidate_clean:
+
+        return True
+
+    requested_words = set(
+        requested_clean.split()
+    )
+
+    candidate_words = set(
+        candidate_clean.split()
+    )
+
+    if not requested_words:
+        return False
+
+    overlap = (
+        len(
+            requested_words
+            & candidate_words
+        )
+        / len(
+            requested_words
+        )
+    )
+
+    return overlap >= 0.80
+
+
+def discover_team_history_url_from_year_page(
     league,
     team
 ):
 
-    urls = logocdn_urls(
+    names = sportslogos_team_names(
         league,
         team
     )
 
-    last_error = None
+    name_keys = {
+        clean_name(name)
+        for name in names
+    }
 
-    for url in urls:
+    for year in range(
+        2026,
+        2018,
+        -1
+    ):
+
+        url = sportslogos_year_page(
+            league,
+            year
+        )
 
         try:
 
-            response = session.get(
-                url,
-                timeout=REQUEST_TIMEOUT,
-                allow_redirects=True,
+            response = get(
+                url
             )
 
-            if response.status_code != 200:
-
-                last_error = (
-                    f"HTTP {response.status_code}"
-                )
-
-                continue
-
-            if not response.content:
-
-                last_error = (
-                    "Empty response"
-                )
-
-                continue
-
-            content_type = (
-                response.headers.get(
-                    "Content-Type",
-                    ""
-                ).lower()
-            )
-
-            is_svg = (
-                ".svg" in url.lower()
-                or "svg" in content_type
-                or response.content.lstrip().startswith(
-                    b"<svg"
-                )
-                or response.content.lstrip().startswith(
-                    b"<?xml"
-                )
-            )
-
-            if is_svg:
-
-                image = render_svg(
-                    response.content
-                )
-
-                image.load()
-
-                if (
-                    image.width <= 0
-                    or image.height <= 0
-                ):
-
-                    last_error = (
-                        "Rendered SVG has invalid dimensions"
-                    )
-
-                    continue
-
-                print(
-                    f"  Source: {url}"
-                )
-
-                print(
-                    "  Source type: CURRENT/PREFERRED SVG"
-                )
-
-                print(
-                    f"  Rendered size: "
-                    f"{image.width}x{image.height}"
-                )
-
-                return image
-
-            image = Image.open(
-                io.BytesIO(
-                    response.content
-                )
-            )
-
-            image.load()
-
-            image = image.convert(
-                "RGBA"
-            )
-
-            if (
-                image.width <= 0
-                or image.height <= 0
-            ):
-
-                last_error = (
-                    "Downloaded image has invalid dimensions"
-                )
-
-                continue
-
-            print(
-                f"  Source: {url}"
-            )
-
-            print(
-                "  Source type: CURRENT/PREFERRED PNG"
-            )
-
-            print(
-                f"  Source size: "
-                f"{image.width}x{image.height}"
-            )
-
-            return image
-
-        except Exception as exc:
-
-            last_error = str(exc)
+        except Exception:
 
             continue
 
-    raise RuntimeError(
-        f"Could not download current logo for "
-        f"{league}: {team}. "
-        f"Last error: {last_error}"
+        parser = parse_html(
+            response.text
+        )
+
+        candidates = []
+
+        for link in parser.links:
+
+            href = link.get(
+                "href"
+            )
+
+            text = link.get(
+                "text",
+                ""
+            )
+
+            if not href:
+                continue
+
+            if "/logos/list_by_team/" not in href:
+                continue
+
+            candidates.append(
+                (
+                    text,
+                    urljoin(
+                        SPORTSLOGOS_BASE,
+                        href
+                    )
+                )
+            )
+
+        for text, href in candidates:
+
+            candidate_clean = clean_name(
+                text
+            )
+
+            if candidate_clean in name_keys:
+
+                return href
+
+        for text, href in candidates:
+
+            for requested_name in names:
+
+                if team_name_matches(
+                    requested_name,
+                    text
+                ):
+
+                    return href
+
+    return None
+
+
+# ============================================================
+# DISCOVER PRIMARY LOGO PAGE
+#
+# The team-history page contains separate sections for:
+#
+#   Primary Logos
+#   Alternate Logos
+#   Jersey Logos
+#   Wordmark Logos
+#   Primary Dark Logos
+#   etc.
+#
+# We ONLY accept an exact Primary-Logo URL.
+#
+# The newest year is selected.
+# ============================================================
+
+def discover_primary_logo_page(
+    league,
+    team
+):
+
+    print(
+        f"  Finding SportsLogos.Net team page "
+        f"for {team}..."
     )
+
+    team_page = (
+        discover_team_history_url_from_year_page(
+            league,
+            team
+        )
+    )
+
+    if not team_page:
+
+        raise RuntimeError(
+            f"Could not locate SportsLogos.Net "
+            f"team history page for {league}: {team}"
+        )
+
+    print(
+        f"  Team history: {team_page}"
+    )
+
+    response = get(
+        team_page
+    )
+
+    parser = parse_html(
+        response.text
+    )
+
+    primary_links = []
+
+    for link in parser.links:
+
+        href = link.get(
+            "href"
+        )
+
+        if not href:
+            continue
+
+        full_url = urljoin(
+            SPORTSLOGOS_BASE,
+            href
+        )
+
+        # EXACT Primary Logo only.
+        #
+        # This intentionally excludes:
+        #
+        # Primary-Dark-Logo
+        # Alternate-Logo
+        # Jersey-Logo
+        # Cap-Logo
+        # Wordmark-Logo
+        # etc.
+        if not re.search(
+            r"/Primary-Logo/?$",
+            full_url,
+            re.IGNORECASE
+        ):
+
+            continue
+
+        year = extract_logo_year(
+            full_url
+        )
+
+        if year is None:
+            continue
+
+        primary_links.append(
+            (
+                year,
+                full_url,
+                link.get(
+                    "text",
+                    ""
+                )
+            )
+        )
+
+    if not primary_links:
+
+        raise RuntimeError(
+            f"No Primary Logo entries found on "
+            f"SportsLogos.Net team page for "
+            f"{league}: {team}"
+        )
+
+    primary_links.sort(
+        key=lambda item: (
+            item[0],
+            item[1]
+        ),
+        reverse=True
+    )
+
+    selected_year, selected_url, selected_text = (
+        primary_links[0]
+    )
+
+    return (
+        team_page,
+        selected_year,
+        selected_url
+    )
+
+
+# ============================================================
+# EXTRACT FULL-RESOLUTION LOGO IMAGE
+#
+# SportsLogos.Net logo pages contain the actual image hosted
+# on content.sportslogos.net.
+#
+# We deliberately select the image from the logo page instead
+# of trying to construct a CDN filename ourselves.
+# ============================================================
+
+def extract_logo_image_url(
+    logo_page_url,
+    html_text,
+    team
+):
+
+    parser = parse_html(
+        html_text
+    )
+
+    candidates = []
+
+    for image in parser.images:
+
+        sources = [
+            image.get(
+                "src"
+            ),
+            image.get(
+                "data_src"
+            ),
+            image.get(
+                "data_original"
+            ),
+        ]
+
+        alt = (
+            image.get(
+                "alt",
+                ""
+            )
+            or ""
+        ).lower()
+
+        title = (
+            image.get(
+                "title",
+                ""
+            )
+            or ""
+        ).lower()
+
+        for source in sources:
+
+            if not source:
+                continue
+
+            full_url = urljoin(
+                logo_page_url,
+                source
+            )
+
+            lower_url = full_url.lower()
+
+            if (
+                "content.sportslogos.net"
+                not in lower_url
+            ):
+
+                continue
+
+            score = 0
+
+            if (
+                "logo"
+                in alt
+            ):
+
+                score += 5
+
+            if (
+                "primary"
+                in alt
+            ):
+
+                score += 5
+
+            if (
+                clean_name(team)
+                in clean_name(alt)
+            ):
+
+                score += 4
+
+            if (
+                "logo"
+                in title
+            ):
+
+                score += 2
+
+            if (
+                "primary"
+                in title
+            ):
+
+                score += 2
+
+            if (
+                "thumb"
+                in lower_url
+                or "thumbnail"
+                in lower_url
+            ):
+
+                score -= 5
+
+            candidates.append(
+                (
+                    score,
+                    full_url
+                )
+            )
+
+    if not candidates:
+
+        raise RuntimeError(
+            f"Could not find a SportsLogos.Net "
+            f"content image on {logo_page_url}"
+        )
+
+    candidates.sort(
+        key=lambda item: (
+            item[0],
+            len(item[1])
+        ),
+        reverse=True
+    )
+
+    return candidates[0][1]
+
+
+# ============================================================
+# DOWNLOAD SPORTSLOGOS.NET PRIMARY LOGO
+# ============================================================
+
+def download_sportslogos_logo(
+    league,
+    team
+):
+
+    (
+        team_page,
+        selected_year,
+        logo_page
+    ) = discover_primary_logo_page(
+        league,
+        team
+    )
+
+    print(
+        f"  Selected Primary Logo year: "
+        f"{selected_year}"
+    )
+
+    print(
+        f"  Primary Logo page: "
+        f"{logo_page}"
+    )
+
+    response = get(
+        logo_page
+    )
+
+    image_url = extract_logo_image_url(
+        logo_page,
+        response.text,
+        team
+    )
+
+    print(
+        f"  High-definition source: "
+        f"{image_url}"
+    )
+
+    image_response = session.get(
+        image_url,
+        timeout=REQUEST_TIMEOUT,
+        allow_redirects=True,
+    )
+
+    image_response.raise_for_status()
+
+    if not image_response.content:
+
+        raise RuntimeError(
+            "SportsLogos.Net returned an "
+            "empty image."
+        )
+
+    try:
+
+        image = Image.open(
+            io.BytesIO(
+                image_response.content
+            )
+        )
+
+        image.load()
+
+    except Exception as exc:
+
+        raise RuntimeError(
+            f"Could not decode SportsLogos.Net "
+            f"image: {exc}"
+        )
+
+    image = image.convert(
+        "RGBA"
+    )
+
+    if (
+        image.width <= 0
+        or image.height <= 0
+    ):
+
+        raise RuntimeError(
+            "SportsLogos.Net image has "
+            "invalid dimensions."
+        )
+
+    print(
+        "  Source type: "
+        "SPORTSLOGOS.NET CURRENT PRIMARY"
+    )
+
+    print(
+        f"  Source size: "
+        f"{image.width}x{image.height}"
+    )
+
+    return image
 
 
 # ============================================================
@@ -681,7 +1085,9 @@ def discover_files():
             yield league, path
 
 
-def teams_from_file(path):
+def teams_from_file(
+    path
+):
 
     filename = path.stem
 
@@ -749,7 +1155,7 @@ def reset_temp_directory():
 
 
 # ============================================================
-# DOWNLOAD ALL CURRENT LOGOS
+# DOWNLOAD ALL CURRENT PRIMARY LOGOS
 # ============================================================
 
 def download_all_logos(
@@ -758,24 +1164,23 @@ def download_all_logos(
 
     print()
     print("=" * 70)
-    print("DOWNLOADING CURRENT BIG-4 LOGOS")
+    print(
+        "DOWNLOADING SPORTSLOGOS.NET PRIMARY LOGOS"
+    )
     print("=" * 70)
 
     print()
     print(
-        "Using current LogoCDN sources only."
+        "Source: SportsLogos.Net"
     )
 
     print(
-        f"Current year: {CURRENT_YEAR}"
+        "Selection: newest available Primary Logo"
     )
 
     print(
-        f"Fallback year: {FALLBACK_YEAR}"
-    )
-
-    print(
-        "Historical logos are NOT scanned."
+        "Primary Dark / Alternate / Jersey / "
+        "Cap / Wordmark logos are excluded."
     )
 
     print(
@@ -817,6 +1222,7 @@ def download_all_logos(
             start=1
         ):
 
+            print()
             print(
                 f"[{league} "
                 f"{number}/{len(teams)}] "
@@ -825,7 +1231,7 @@ def download_all_logos(
 
             try:
 
-                image = download_logocdn_logo(
+                image = download_sportslogos_logo(
                     league,
                     team
                 )
@@ -888,7 +1294,7 @@ def download_all_logos(
     print("=" * 70)
 
     print(
-        f"Current logos downloaded: "
+        f"SportsLogos.Net primary logos downloaded: "
         f"{total_done}/{total_expected}"
     )
 
@@ -1629,6 +2035,20 @@ def main():
     print("SPORTS LOGO LIBRARY REBUILDER")
     print("=" * 70)
 
+    print()
+    print(
+        "Logo source: SportsLogos.Net"
+    )
+
+    print(
+        "Logo selection: newest available Primary Logo"
+    )
+
+    print(
+        "Primary Dark / Alternate / Jersey / "
+        "Cap / Wordmark logos are excluded."
+    )
+
     if not ROOT.is_dir():
 
         print()
@@ -1672,7 +2092,7 @@ def main():
         )
 
     # --------------------------------------------------------
-    # DOWNLOAD CURRENT LOGOS FIRST.
+    # DOWNLOAD PRIMARY LOGOS FIRST.
     #
     # sports-logos is untouched during this phase.
     # --------------------------------------------------------
@@ -1868,16 +2288,18 @@ def main():
     )
 
     print(
-        "Current LogoCDN team logos were selected."
+        "SportsLogos.Net was used as the "
+        "logo source."
     )
 
     print(
-        "SVG sources were rasterized at "
-        f"{SVG_RENDER_SIZE}px for maximum quality."
+        "The newest available Primary Logo "
+        "was selected for each team."
     )
 
     print(
-        "Historical logo years were not scanned."
+        "Primary Dark, Alternate, Jersey, "
+        "Cap, and Wordmark logos were excluded."
     )
 
     print(
