@@ -13,7 +13,7 @@ from PIL import Image
 # CONFIG
 # ============================================================
 
-ROOT = Path("sports-logos")
+ROOT = Path("temp/New folder")
 
 # Build into a completely separate directory first.
 BUILD_ROOT = Path("_sports_logos_rebuild")
