@@ -8,9 +8,9 @@ import unicodedata
 from pathlib import Path
 from difflib import SequenceMatcher
 from urllib.parse import quote, urljoin
+from html.parser import HTMLParser
 
 import requests
-from bs4 import BeautifulSoup
 from PIL import Image
 
 
@@ -111,6 +111,91 @@ def normalized_search_name(raw):
 
 
 # ============================================================
+# SIMPLE HTML PARSER
+# Replaces BeautifulSoup so no bs4 dependency is required.
+# ============================================================
+
+class CDNLogoHTMLParser(HTMLParser):
+
+    def __init__(self):
+        super().__init__(
+            convert_charrefs=True
+        )
+
+        self.links = []
+
+        self.images = []
+
+        self.current_link = None
+
+        self.current_link_text = []
+
+    def handle_starttag(
+        self,
+        tag,
+        attrs
+    ):
+
+        attributes = dict(attrs)
+
+        if tag.lower() == "a":
+
+            self.current_link = {
+                "href": attributes.get(
+                    "href"
+                ),
+                "text": []
+            }
+
+            self.current_link_text = []
+
+        elif tag.lower() == "img":
+
+            self.images.append(
+                attributes
+            )
+
+    def handle_data(self, data):
+
+        if self.current_link is not None:
+
+            self.current_link_text.append(
+                data
+            )
+
+    def handle_endtag(self, tag):
+
+        if tag.lower() == "a":
+
+            if self.current_link is not None:
+
+                self.current_link[
+                    "text"
+                ] = " ".join(
+                    self.current_link_text
+                ).strip()
+
+                self.links.append(
+                    self.current_link
+                )
+
+            self.current_link = None
+
+            self.current_link_text = []
+
+
+def parse_html(response_text):
+
+    parser = CDNLogoHTMLParser()
+
+    parser.feed(
+        response_text
+    )
+
+    return parser
+
+
+# ============================================================
 # HTTP
 # ============================================================
 
@@ -119,6 +204,7 @@ session.headers.update(HEADERS)
 
 
 def get(url):
+
     response = session.get(
         url,
         timeout=REQUEST_TIMEOUT
@@ -153,22 +239,29 @@ def search_cdnlogo(team_name):
     for url in urls:
 
         try:
+
             response = get(url)
 
         except Exception:
+
             continue
 
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
+        parser = parse_html(
+            response.text
         )
 
-        for link in soup.find_all("a", href=True):
+        for link in parser.links:
 
-            href = link.get("href")
+            href = link.get(
+                "href"
+            )
 
             if not href:
                 continue
+
+            href = html.unescape(
+                href
+            )
 
             href = urljoin(
                 CDNLOGO_BASE,
@@ -178,10 +271,10 @@ def search_cdnlogo(team_name):
             if "/logo/" not in href:
                 continue
 
-            text = link.get_text(
-                " ",
-                strip=True
-            )
+            text = link.get(
+                "text",
+                ""
+            ).strip()
 
             candidates.append(
                 (
@@ -229,14 +322,10 @@ def search_engine_fallback(team_name):
     for url in urls:
 
         try:
+
             response = get(url)
 
             if response.status_code == 200:
-
-                soup = BeautifulSoup(
-                    response.text,
-                    "html.parser"
-                )
 
                 results.append(
                     (
@@ -246,6 +335,7 @@ def search_engine_fallback(team_name):
                 )
 
         except Exception:
+
             pass
 
     return results
@@ -255,7 +345,10 @@ def search_engine_fallback(team_name):
 # MATCH RESULT
 # ============================================================
 
-def score_candidate(team_name, candidate_name):
+def score_candidate(
+    team_name,
+    candidate_name
+):
     """
     Score a CDNLogo result against our team name.
 
@@ -289,7 +382,11 @@ def score_candidate(team_name, candidate_name):
     ).ratio()
 
 
-def choose_candidate(team_name, candidates):
+def choose_candidate(
+    team_name,
+    candidates
+):
+
     scored = []
 
     for title, url in candidates:
@@ -328,27 +425,31 @@ def choose_candidate(team_name, candidates):
 # EXTRACT CDN IMAGE FROM LOGO PAGE
 # ============================================================
 
-def extract_png_from_page(page_url, team_name):
+def extract_png_from_page(
+    page_url,
+    team_name
+):
     """
     CDNLogo logo pages expose their CDN image URL in the page.
 
     Prefer PNG over SVG because the output library is PNG.
     """
 
-    response = get(page_url)
+    response = get(
+        page_url
+    )
 
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser"
+    parser = parse_html(
+        response.text
     )
 
     candidates = []
 
     # --------------------------------------------------------
-    # img tags
+    # IMG TAGS
     # --------------------------------------------------------
 
-    for img in soup.find_all("img"):
+    for img in parser.images:
 
         for attr in (
             "src",
@@ -357,7 +458,9 @@ def extract_png_from_page(page_url, team_name):
             "data-lazy-src",
         ):
 
-            value = img.get(attr)
+            value = img.get(
+                attr
+            )
 
             if not value:
                 continue
@@ -372,12 +475,15 @@ def extract_png_from_page(page_url, team_name):
             )
 
             if "static.cdnlogo.com" in value:
-                candidates.append(
-                    value
-                )
+
+                if value not in candidates:
+
+                    candidates.append(
+                        value
+                    )
 
     # --------------------------------------------------------
-    # raw HTML
+    # RAW HTML
     # --------------------------------------------------------
 
     patterns = [
@@ -398,12 +504,49 @@ def extract_png_from_page(page_url, team_name):
             )
 
             if match not in candidates:
+
                 candidates.append(
                     match
                 )
 
     # --------------------------------------------------------
-    # Prefer full-size PNG, not thumbnail.
+    # RELATIVE CDN IMAGE REFERENCES
+    # --------------------------------------------------------
+
+    relative_patterns = [
+        r'["\']([^"\']+\.png)["\']',
+        r'["\']([^"\']+\.svg)["\']',
+    ]
+
+    for pattern in relative_patterns:
+
+        for match in re.findall(
+            pattern,
+            response.text,
+            re.IGNORECASE
+        ):
+
+            if (
+                "cdnlogo" not in match.lower()
+                and not match.startswith("/")
+            ):
+                continue
+
+            absolute = urljoin(
+                page_url,
+                html.unescape(match)
+            )
+
+            if "static.cdnlogo.com" in absolute:
+
+                if absolute not in candidates:
+
+                    candidates.append(
+                        absolute
+                    )
+
+    # --------------------------------------------------------
+    # PREFER FULL-SIZE PNG
     # --------------------------------------------------------
 
     pngs = [
@@ -423,7 +566,10 @@ def extract_png_from_page(page_url, team_name):
     if pngs:
         return pngs[0]
 
-    # SVG fallback.
+    # --------------------------------------------------------
+    # SVG FALLBACK
+    # --------------------------------------------------------
+
     svgs = [
         x for x in candidates
         if ".svg" in x.lower()
@@ -434,8 +580,8 @@ def extract_png_from_page(page_url, team_name):
         return svgs[0]
 
     raise RuntimeError(
-        f"Could not find CDNLogo image on {page_url} "
-        f"for {team_name}"
+        f"Could not find CDNLogo image on "
+        f"{page_url} for {team_name}"
     )
 
 
@@ -447,18 +593,19 @@ SOURCE_CACHE = {}
 
 
 def find_team_source(team_name):
-    """
-    Find and cache the CDNLogo source for a team.
-    """
 
     cache_key = clean_name(
         team_name
     )
 
     if cache_key in SOURCE_CACHE:
-        return SOURCE_CACHE[cache_key]
+
+        return SOURCE_CACHE[
+            cache_key
+        ]
 
     print()
+
     print(
         f"Finding CDNLogo source: {team_name}"
     )
@@ -486,8 +633,9 @@ def find_team_source(team_name):
     if not best:
 
         raise RuntimeError(
-            f"Could not find a sufficiently close "
-            f"CDNLogo result for: {team_name}"
+            f"Could not find a sufficiently "
+            f"close CDNLogo result for: "
+            f"{team_name}"
         )
 
     score, title, page_url = best
@@ -513,7 +661,9 @@ def find_team_source(team_name):
         f"  Image: {image_url}"
     )
 
-    SOURCE_CACHE[cache_key] = (
+    SOURCE_CACHE[
+        cache_key
+    ] = (
         image_url,
         page_url
     )
@@ -536,12 +686,16 @@ IMAGE_CACHE = {}
 
 
 def download_logo(team_name):
+
     key = clean_name(
         team_name
     )
 
     if key in IMAGE_CACHE:
-        return IMAGE_CACHE[key].copy()
+
+        return IMAGE_CACHE[
+            key
+        ].copy()
 
     image_url, page_url = find_team_source(
         team_name
@@ -563,7 +717,9 @@ def download_logo(team_name):
         "RGBA"
     )
 
-    IMAGE_CACHE[key] = image
+    IMAGE_CACHE[
+        key
+    ] = image
 
     return image.copy()
 
@@ -585,6 +741,7 @@ def trim_transparency(image):
     bbox = alpha.getbbox()
 
     if bbox:
+
         image = image.crop(
             bbox
         )
@@ -603,6 +760,7 @@ def fit_logo(
     )
 
     if image.width <= 0 or image.height <= 0:
+
         raise RuntimeError(
             "Invalid logo image."
         )
@@ -639,6 +797,7 @@ def fit_logo(
 def existing_dimensions(path):
 
     with Image.open(path) as image:
+
         return image.size
 
 
@@ -783,6 +942,7 @@ def discover_files():
         league_dir = ROOT / league
 
         if not league_dir.is_dir():
+
             continue
 
         for path in sorted(
@@ -851,6 +1011,7 @@ def discover_all_teams():
 def verify_sources(teams):
 
     print()
+
     print("=" * 70)
     print("VERIFYING CDNLOGO SOURCES")
     print("=" * 70)
@@ -861,6 +1022,7 @@ def verify_sources(teams):
     ):
 
         print()
+
         print(
             f"[{number}/{len(teams)}] {team}"
         )
@@ -870,6 +1032,7 @@ def verify_sources(teams):
         )
 
     print()
+
     print(
         f"Verified {len(teams)} team sources."
     )
@@ -882,7 +1045,9 @@ def verify_sources(teams):
 def rebuild_library():
 
     total = 0
+
     replaced = 0
+
     failed = 0
 
     for league, path in discover_files():
@@ -898,6 +1063,7 @@ def rebuild_library():
             if len(teams) == 1:
 
                 print()
+
                 print(
                     f"[{league}] SOLO"
                 )
@@ -914,6 +1080,7 @@ def rebuild_library():
             else:
 
                 print()
+
                 print(
                     f"[{league}] MATCHUP"
                 )
@@ -943,6 +1110,7 @@ def rebuild_library():
             failed += 1
 
             print()
+
             print(
                 "ERROR:"
             )
@@ -969,6 +1137,7 @@ def rebuild_library():
 def main():
 
     print()
+
     print("=" * 70)
     print("CDNLOGO SPORTS LOGO LIBRARY REBUILDER")
     print("=" * 70)
@@ -976,6 +1145,7 @@ def main():
     if not ROOT.is_dir():
 
         print()
+
         print(
             f"ERROR: {ROOT} does not exist."
         )
@@ -987,6 +1157,7 @@ def main():
     if not teams:
 
         print()
+
         print(
             "ERROR: No PNG logos found."
         )
@@ -994,11 +1165,13 @@ def main():
         sys.exit(1)
 
     print()
+
     print(
         f"Discovered {len(teams)} unique teams."
     )
 
     print()
+
     print(
         "Leagues:"
     )
@@ -1010,6 +1183,7 @@ def main():
         directory = ROOT / league
 
         if directory.is_dir():
+
             print(
                 f"  {league}"
             )
@@ -1029,14 +1203,19 @@ def main():
     except Exception as exc:
 
         print()
+
         print("=" * 70)
         print("ABORTED")
         print("=" * 70)
+
         print()
+
         print(
             "No existing logo files were modified."
         )
+
         print()
+
         print(
             f"Reason: {exc}"
         )
@@ -1049,6 +1228,7 @@ def main():
     # --------------------------------------------------------
 
     print()
+
     print("=" * 70)
     print("REBUILDING EXISTING LOGO LIBRARY")
     print("=" * 70)
@@ -1056,28 +1236,38 @@ def main():
     total, replaced, failed = rebuild_library()
 
     print()
+
     print("=" * 70)
     print("FINISHED")
     print("=" * 70)
+
     print()
+
     print(
         f"Files found:    {total}"
     )
+
     print(
         f"Files replaced: {replaced}"
     )
+
     print(
         f"Files failed:   {failed}"
     )
+
     print()
+
     print(
         "No filenames or directory paths were changed."
     )
+
     print()
 
     if failed:
+
         sys.exit(1)
 
 
 if __name__ == "__main__":
+
     main()
