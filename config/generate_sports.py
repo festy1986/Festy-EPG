@@ -4484,30 +4484,35 @@ for channel_id, requested_name in wanted.items():
 
 
 # --------------------------------------------------
-# Create 6-hour programme blocks.
+# Create 3-hour programme blocks.
 #
-# Normal blocks remain anchored to:
+# Normal blocks are anchored to:
 #
-# 12 AM - 6 AM
-# 6 AM  - 12 PM
-# 12 PM - 6 PM
-# 6 PM  - 12 AM
+# 12 AM - 3 AM
+# 3 AM  - 6 AM
+# 6 AM  - 9 AM
+# 9 AM  - 12 PM
+# 12 PM - 3 PM
+# 3 PM  - 6 PM
+# 6 PM  - 9 PM
+# 9 PM  - 12 AM
 #
 # If ESPN provides a verified game start inside one of
-# those blocks, that block is split:
+# those blocks, the schedule is split around the game:
 #
-#   block start -> game start
+#   normal block start -> game start
 #   game start -> game start + 3 hours
-#   game end -> original block end
+#   game end -> next normal 3-hour boundary
 #
-# The next normal block still begins at its original
-# 6-hour boundary.
+# The actual game remains exactly 3 hours.
+# Upcoming and Post Game titles are applied only to
+# the portions before and after the game.
 # --------------------------------------------------
 
 print()
 
 print(
-    "Creating 6-hour programme blocks with ESPN game scheduling..."
+    "Creating 3-hour programme blocks with ESPN game scheduling..."
 )
 
 
@@ -4694,9 +4699,8 @@ for channel_id, requested_name in wanted.items():
     while current_start < guide_end:
 
         # --------------------------------------------------
-        # This is the ORIGINAL 6-hour block boundary.
-        #
-        # It is never moved by the game.
+        # Every normal programme is exactly one 3-hour
+        # boundary-aligned block.
         # --------------------------------------------------
 
         original_block_end = (
@@ -4705,7 +4709,7 @@ for channel_id, requested_name in wanted.items():
 
             + timedelta(
 
-                hours=6
+                hours=3
 
             )
 
@@ -4719,7 +4723,7 @@ for channel_id, requested_name in wanted.items():
 
         # --------------------------------------------------
         # If the verified game starts inside this normal
-        # 6-hour block, split the block around the game.
+        # 3-hour block, split the block around the game.
         # --------------------------------------------------
 
         if (
@@ -4733,12 +4737,10 @@ for channel_id, requested_name in wanted.items():
         ):
 
             # --------------------------------------------------
-            # PRE-GAME / UPCOMING ADD-ON
+            # PRE-GAME / UPCOMING
             #
-            # Existing block continues normally until the
-            # actual ESPN game start.
-            #
-            # This block is labeled "Upcoming".
+            # The first block may be shorter because the
+            # verified game starts inside the 3-hour block.
             # --------------------------------------------------
 
             if current_start < game_start:
@@ -4816,7 +4818,7 @@ for channel_id, requested_name in wanted.items():
                 print()
 
                 print(
-                    "[GAME CROSSES NORMAL BLOCK BOUNDARY]"
+                    "[GAME CROSSES NORMAL 3-HOUR BOUNDARY]"
                 )
 
 
@@ -4896,13 +4898,11 @@ for channel_id, requested_name in wanted.items():
 
 
             # --------------------------------------------------
-            # POST-GAME ADD-ON
+            # POST-GAME
             #
-            # If the 3-hour game ends before the original
-            # 6-hour block ends, resume the original block
-            # until its normal boundary.
-            #
-            # This block is labeled "Post Game".
+            # If the game ends before the next normal 3-hour
+            # boundary, fill the remainder of that boundary
+            # with Post Game.
             #
             # Example:
             #
@@ -4912,7 +4912,8 @@ for channel_id, requested_name in wanted.items():
             #
             # Then:
             #
-            # 12:00 AM - 6:00 AM
+            # 12:00 AM - 3:00 AM Post Game
+            # 3:00 AM - 6:00 AM Post Game
             #
             # --------------------------------------------------
 
@@ -4980,22 +4981,145 @@ for channel_id, requested_name in wanted.items():
             else:
 
                 # --------------------------------------------------
-                # A game that crosses a normal 6-hour boundary
-                # occupies the schedule until its assumed 3-hour
-                # end. The next available block begins after the
-                # game rather than creating overlapping XMLTV
-                # programmes.
+                # The game crosses one or more normal 3-hour
+                # boundaries.
                 #
-                # No Post Game block is created inside the old
-                # boundary because the game has already crossed it.
+                # The game itself remains one continuous 3-hour
+                # programme. Once it ends, create a short
+                # Post Game segment up to the next normal
+                # 3-hour boundary, then resume normal 3-hour
+                # Post Game blocks.
                 # --------------------------------------------------
 
                 current_start = actual_game_end
 
 
+                if current_start < guide_end:
+
+                    elapsed_seconds = (
+
+                        (
+
+                            current_start
+
+                            - guide_start
+
+                        ).total_seconds()
+
+                    )
+
+
+                    block_seconds = 3 * 60 * 60
+
+
+                    completed_blocks = (
+
+                        int(
+
+                            elapsed_seconds
+
+                            // block_seconds
+
+                        )
+
+                    )
+
+
+                    next_boundary = (
+
+                        guide_start
+
+                        + timedelta(
+
+                            seconds=(
+
+                                (
+
+                                    completed_blocks
+
+                                    + 1
+
+                                )
+
+                                * block_seconds
+
+                            )
+
+                        )
+
+                    )
+
+
+                    if next_boundary > guide_end:
+
+                        next_boundary = guide_end
+
+
+                    if current_start < next_boundary:
+
+                        programme = ET.SubElement(
+
+                            tv,
+
+                            "programme",
+
+                            {
+
+                                "start":
+
+                                current_start.strftime(
+
+                                    "%Y%m%d%H%M%S %z"
+
+                                ),
+
+                                "stop":
+
+                                next_boundary.strftime(
+
+                                    "%Y%m%d%H%M%S %z"
+
+                                ),
+
+                                "channel":
+
+                                channel_id
+
+                            }
+
+                        )
+
+
+                        title = ET.SubElement(
+
+                            programme,
+
+                            "title"
+
+                        )
+
+
+                        title.text = post_game_title_text
+
+
+                        desc = ET.SubElement(
+
+                            programme,
+
+                            "desc"
+
+                        )
+
+
+                        desc.text = description_text
+
+
+                        current_start = next_boundary
+
+
             # --------------------------------------------------
-            # Game has now been consumed. Do not schedule it
-            # again on a later block.
+            # Game has now been consumed. All subsequent
+            # normal 3-hour blocks are Post Game.
             # --------------------------------------------------
 
             game_start = None
@@ -5007,10 +5131,12 @@ for channel_id, requested_name in wanted.items():
 
 
         # --------------------------------------------------
-        # NORMAL 6-HOUR BLOCK
+        # NORMAL 3-HOUR BLOCK
         #
-        # No verified game starts inside this block.
-        # Nothing changes from the original scheduler.
+        # Once a verified game has already occurred, these
+        # normal blocks become Post Game blocks.
+        #
+        # Otherwise they remain the normal game title.
         # --------------------------------------------------
 
         current_stop = original_block_end
@@ -5140,7 +5266,7 @@ print(
 
 
 print(
-    "Guide blocks: 6 hours each, split around verified games"
+    "Guide blocks: 3 hours each, split around verified games"
 )
 
 
