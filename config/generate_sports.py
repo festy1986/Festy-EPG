@@ -1320,11 +1320,8 @@ def matchup_parts(text):
     match = re.search(
 
         r"(.+?)\s+"
-
         r"(?:vs\.?|v\.?|x|@)"
-
         r"\s+"
-
         r"(.+)",
 
         text,
@@ -1581,13 +1578,6 @@ def canonicalize_team_name(
 # --------------------------------------------------
 # Recover a provider team spelling error ONLY after
 # the normal matchup logo lookup has failed.
-#
-# The existing canonical matching path is intentionally
-# untouched. This is a narrow fallback for a provider typo:
-# - exactly one team must already be recognized
-# - the other team must have a very high fuzzy match
-# - ESPN must verify the proposed matchup
-# - only then is the corrected canonical name accepted
 # --------------------------------------------------
 
 def recover_logo_typo_matchup(
@@ -1650,8 +1640,6 @@ def recover_logo_typo_matchup(
             unknown.append(index)
 
 
-    # This recovery is deliberately limited to the case where
-    # one side is already known and the other side is misspelled.
     if len(recognized) != 1 or len(unknown) != 1:
 
         return None
@@ -1667,9 +1655,6 @@ def recover_logo_typo_matchup(
     best_team = None
 
 
-    # Compare the bad provider spelling against every canonical
-    # alias for this league. The highest scoring canonical team
-    # becomes the candidate, but ESPN must still verify it.
     for normalized_alias, official_name in team_aliases[
 
         league_hint
@@ -1694,8 +1679,6 @@ def recover_logo_typo_matchup(
             best_team = official_name
 
 
-    # High-confidence typo only. We do not want this fallback
-    # changing legitimate unmatched provider names.
     if not best_team or best_score < 0.90:
 
         debug_stats[
@@ -1756,8 +1739,6 @@ def recover_logo_typo_matchup(
     )
 
 
-    # Final authority: ESPN must contain this matchup around the
-    # provider date before the correction is accepted.
     verified_event = find_public_event(
 
         candidate_matchup,
@@ -1944,15 +1925,6 @@ def parse_espn_datetime(
 
 # --------------------------------------------------
 # ESPN scoreboard lookup
-#
-# ESPN is used to:
-#
-# - Find the matching game
-# - Return the game's verified date/time
-# - Verify away/home team order
-#
-# Displayed team names still pass through sports_teams.txt.
-# Logo files still come from the local sports-logos directory.
 # --------------------------------------------------
 
 def get_public_events(
@@ -2264,14 +2236,6 @@ def get_public_events(
 
 # --------------------------------------------------
 # Find ESPN event
-#
-# The cleaned canonical matchup is used to find
-# the game.
-#
-# ESPN's team names are ONLY used internally
-# to verify that the correct event was found.
-#
-# They are NEVER written into the title or description.
 # --------------------------------------------------
 
 def find_public_event(
@@ -2896,15 +2860,7 @@ def clean_logo_filename(text):
 
 
 # --------------------------------------------------
-# Create normalized logo key
-# --------------------------------------------------
-
-# --------------------------------------------------
 # Logo-name compatibility aliases.
-#
-# These affect logo matching only. Displayed team names,
-# ESPN matching, titles, and all other behavior remain
-# unchanged.
 # --------------------------------------------------
 
 def normalize_logo_team_name(
@@ -2980,15 +2936,6 @@ def matchup_logo_key(
 
 # --------------------------------------------------
 # Find matchup logo.
-#
-# Repository naming convention:
-#
-# sports-logos/<LEAGUE>/<AWAY_TEAM>/
-# <AWAY_TEAM>_vs_<HOME_TEAM>.png
-#
-# ESPN ordering is already applied before this function
-# is called. Away must remain first and home second.
-# Reverse-order matchup files are never accepted.
 # --------------------------------------------------
 
 def find_matchup_logo(
@@ -3129,14 +3076,6 @@ def find_matchup_logo(
         return None
 
 
-    # --------------------------------------------------
-    # Preferred exact repository path.
-    #
-    # Example:
-    # sports-logos/MLB/Seattle_Mariners/
-    # Seattle_Mariners_vs_New_York_Yankees.png
-    # --------------------------------------------------
-
     first_filename = clean_logo_filename(
 
         first_team
@@ -3180,17 +3119,6 @@ def find_matchup_logo(
 
 
     else:
-
-        # --------------------------------------------------
-        # Strict ordered fallback.
-        #
-        # This allows an existing filename alias to match
-        # sports_teams.txt, but it still MUST be:
-        #
-        # away_team_vs_home_team
-        #
-        # A home_vs_away file is deliberately rejected.
-        # --------------------------------------------------
 
         for root, directories, files in os.walk(
 
@@ -3454,7 +3382,6 @@ def detect_single_team(
     )
 
 
-    # A real matchup must always stay on the matchup-logo path.
     if matchup_parts(
         normalize_matchup(
             re.sub(
@@ -3468,9 +3395,6 @@ def detect_single_team(
         return None
 
 
-    # Generic placeholders must never receive a team logo.
-    # This prevents short aliases such as "NO" from turning
-    # "NO EVENT STREAMING" into New Orleans Pelicans.
     if re.search(
         r"\b(?:"
         r"NO\s+EVENT(?:\s+STREAMING)?|"
@@ -3533,17 +3457,20 @@ def detect_single_team(
         flags=re.IGNORECASE
     )
 
+
     candidate = re.sub(
         r"[ᴿᴬᵂᴴᴰ⁴ᴷ⁸ᴷ]+",
         " ",
         candidate
     )
 
+
     candidate = re.sub(
         r"\s*[-|:]\s*$",
         "",
         candidate
     )
+
 
     candidate = clean_text(
         candidate
@@ -3583,8 +3510,6 @@ def detect_single_team(
             )
 
 
-        # Exact aliases only. Never accept an alias merely because it
-        # appears somewhere inside a longer generic channel name.
         official_name = team_aliases[
             league
         ].get(
@@ -3605,10 +3530,6 @@ def detect_single_team(
 
 # --------------------------------------------------
 # Find an existing single-team logo.
-#
-# Existing matchup-logo logic is left unchanged.
-# This is used only when the entire channel/event name
-# is detected as one known major-league team.
 # --------------------------------------------------
 
 def find_single_team_logo(
@@ -3685,9 +3606,6 @@ def find_single_team_logo(
             )
 
 
-            # Resolve the logo filename through the exact alias table.
-            # This allows "LA Clippers" to match a logo file named
-            # "Los_Angeles_Clippers.png" without fuzzy matching.
             file_official = team_aliases[
                 league_hint
             ].get(
@@ -3799,7 +3717,6 @@ def find_single_team_logo(
     return None
 
 
-
 # --------------------------------------------------
 # Build event information
 #
@@ -3810,6 +3727,10 @@ def find_single_team_logo(
 # 3. Use provider date only as an ESPN search hint
 # 4. ESPN verifies date/time and away/home order
 # 5. Build title/description and select the ordered logo
+#
+# The verified ESPN datetime is returned to the caller so
+# the scheduler can use it without making another ESPN API
+# request.
 # --------------------------------------------------
 
 def build_event_info(
@@ -3855,8 +3776,6 @@ def build_event_info(
 
     # --------------------------------------------------
     # NFL RedZone display cleanup.
-    # Channel 1031379 keeps its fixed logo, but the
-    # provider name should display simply as NFL RED ZONE.
     # --------------------------------------------------
 
     if stream_id == "1031379":
@@ -3951,8 +3870,6 @@ def build_event_info(
     # --------------------------------------------------
     # STEP 3:
     # Clean team names using sports_teams.txt.
-    #
-    # This controls the displayed matchup.
     # --------------------------------------------------
 
     canonical_matchup = canonicalize_matchup(
@@ -3977,9 +3894,6 @@ def build_event_info(
     # --------------------------------------------------
     # STEP 4:
     # Determine preferred date.
-    #
-    # Provider timestamp is used only to know which
-    # date ESPN should search.
     # --------------------------------------------------
 
     provider_start = extract_start_datetime(
@@ -4044,7 +3958,6 @@ def build_event_info(
     # --------------------------------------------------
     # STEP 5:
     # Build clean fallback title/description.
-    # ESPN may replace matchup order/date/time below.
     # --------------------------------------------------
 
     if canonical_matchup:
@@ -4147,9 +4060,6 @@ def build_event_info(
     # --------------------------------------------------
     # STEP 7:
     # Find the matchup logo AFTER ESPN ordering.
-    #
-    # Ordered logo matching keeps the away team on
-    # the left and the home team on the right.
     # --------------------------------------------------
 
     logo_url = None
@@ -4168,13 +4078,6 @@ def build_event_info(
 
         # --------------------------------------------------
         # LOGO-FAILURE TYPO RECOVERY.
-        #
-        # Do nothing if the existing logo lookup succeeded.
-        # Only a missing matchup logo activates the new path.
-        # If a high-confidence spelling correction is found,
-        # ESPN must verify the corrected matchup before it is
-        # accepted. The corrected canonical matchup is then
-        # used for the guide title, description, and logo.
         # --------------------------------------------------
 
         if not logo_url:
@@ -4199,9 +4102,6 @@ def build_event_info(
                 public_event = corrected_event
 
 
-                # The first lookup failed only because of the
-                # provider spelling error. Do not count that
-                # transient failure as a final missing logo.
                 global logos_missing
 
                 if logos_missing > 0:
@@ -4244,9 +4144,6 @@ def build_event_info(
 
     # --------------------------------------------------
     # NFL RedZone fixed-logo override.
-    #
-    # Channel ID 1031379 is the provider's RedZone channel
-    # and always receives the fixed RedZone logo.
     # --------------------------------------------------
 
     if stream_id == "1031379":
@@ -4270,9 +4167,10 @@ def build_event_info(
     # STEP 8:
     # If ESPN found the game, add verified
     # Eastern date/time to BOTH title and description.
-    #
-    # Team names remain canonicalized through sports_teams.txt.
     # --------------------------------------------------
+
+    verified_game_datetime = None
+
 
     if public_event:
 
@@ -4284,6 +4182,9 @@ def build_event_info(
             "datetime"
 
         ]
+
+
+        verified_game_datetime = event_datetime
 
 
         event_time_text = (
@@ -4348,6 +4249,12 @@ def build_event_info(
         )
 
 
+        print(
+            f"  Scheduling game start: "
+            f"{verified_game_datetime}"
+        )
+
+
         return (
 
             title_text,
@@ -4356,7 +4263,9 @@ def build_event_info(
 
             logo_url,
 
-            True
+            True,
+
+            verified_game_datetime
 
         )
 
@@ -4405,7 +4314,9 @@ def build_event_info(
 
         logo_url,
 
-        False
+        False,
+
+        None
 
     )
 
@@ -4559,13 +4470,30 @@ for channel_id, requested_name in wanted.items():
 
 
 # --------------------------------------------------
-# Create 6-hour programme blocks
+# Create 6-hour programme blocks.
+#
+# Normal blocks remain anchored to:
+#
+# 12 AM - 6 AM
+# 6 AM  - 12 PM
+# 12 PM - 6 PM
+# 6 PM  - 12 AM
+#
+# If ESPN provides a verified game start inside one of
+# those blocks, that block is split:
+#
+#   block start -> game start
+#   game start -> game start + 3 hours
+#   game end -> original block end
+#
+# The next normal block still begins at its original
+# 6-hour boundary.
 # --------------------------------------------------
 
 print()
 
 print(
-    "Creating 6-hour programme blocks..."
+    "Creating 6-hour programme blocks with ESPN game scheduling..."
 )
 
 
@@ -4600,7 +4528,9 @@ for channel_id, requested_name in wanted.items():
 
         logo_url,
 
-        has_real_epg
+        has_real_epg,
+
+        verified_game_datetime
 
     ) = build_event_info(
 
@@ -4642,13 +4572,71 @@ for channel_id, requested_name in wanted.items():
         )
 
 
+    # --------------------------------------------------
+    # ESPN game scheduling information.
+    #
+    # Every verified game is assumed to last exactly
+    # three hours.
+    #
+    # No second ESPN lookup is performed here.
+    # The datetime returned by build_event_info() is
+    # the same verified ESPN datetime already used for
+    # the title and description.
+    # --------------------------------------------------
+
+    game_start = verified_game_datetime
+
+
+    game_end = (
+
+        game_start
+
+        + timedelta(
+
+            hours=3
+
+        )
+
+        if game_start
+
+        else None
+
+    )
+
+
+    if game_start:
+
+        print()
+
+        print(
+            "[GAME BLOCK SCHEDULING]"
+        )
+
+
+        print(
+            f"  ESPN verified start: "
+            f"{game_start}"
+        )
+
+
+        print(
+            f"  Assumed game end: "
+            f"{game_end}"
+        )
+
+
     current_start = guide_start
 
 
     while current_start < guide_end:
 
+        # --------------------------------------------------
+        # This is the ORIGINAL 6-hour block boundary.
+        #
+        # It is never moved by the game.
+        # --------------------------------------------------
 
-        current_stop = (
+        original_block_end = (
 
             current_start
 
@@ -4661,9 +4649,302 @@ for channel_id, requested_name in wanted.items():
         )
 
 
-        if current_stop > guide_end:
+        if original_block_end > guide_end:
 
-            current_stop = guide_end
+            original_block_end = guide_end
+
+
+        # --------------------------------------------------
+        # If the verified game starts inside this normal
+        # 6-hour block, split the block around the game.
+        # --------------------------------------------------
+
+        if (
+
+            game_start
+
+            and
+
+            current_start <= game_start < original_block_end
+
+        ):
+
+            # --------------------------------------------------
+            # PRE-GAME ADD-ON
+            #
+            # Existing block continues normally until the
+            # actual ESPN game start.
+            # --------------------------------------------------
+
+            if current_start < game_start:
+
+                programme = ET.SubElement(
+
+                    tv,
+
+                    "programme",
+
+                    {
+
+                        "start":
+
+                        current_start.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "stop":
+
+                        game_start.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "channel":
+
+                        channel_id
+
+                    }
+
+                )
+
+
+                title = ET.SubElement(
+
+                    programme,
+
+                    "title"
+
+                )
+
+
+                title.text = title_text
+
+
+                desc = ET.SubElement(
+
+                    programme,
+
+                    "desc"
+
+                )
+
+
+                desc.text = description_text
+
+
+            # --------------------------------------------------
+            # REAL GAME
+            #
+            # ESPN start time + exactly 3 hours.
+            # --------------------------------------------------
+
+            actual_game_end = game_end
+
+
+            if actual_game_end > original_block_end:
+
+                print()
+
+                print(
+                    "[GAME CROSSES NORMAL BLOCK BOUNDARY]"
+                )
+
+
+                print(
+                    f"  Game starts: "
+                    f"{game_start}"
+                )
+
+
+                print(
+                    f"  Assumed game ends: "
+                    f"{actual_game_end}"
+                )
+
+
+                print(
+                    f"  Original block ends: "
+                    f"{original_block_end}"
+                )
+
+
+            programme = ET.SubElement(
+
+                tv,
+
+                "programme",
+
+                {
+
+                    "start":
+
+                    game_start.strftime(
+
+                        "%Y%m%d%H%M%S %z"
+
+                    ),
+
+                    "stop":
+
+                    actual_game_end.strftime(
+
+                        "%Y%m%d%H%M%S %z"
+
+                    ),
+
+                    "channel":
+
+                    channel_id
+
+                }
+
+            )
+
+
+            title = ET.SubElement(
+
+                programme,
+
+                "title"
+
+            )
+
+
+            title.text = title_text
+
+
+            desc = ET.SubElement(
+
+                programme,
+
+                "desc"
+
+            )
+
+
+            desc.text = description_text
+
+
+            # --------------------------------------------------
+            # POST-GAME ADD-ON
+            #
+            # If the 3-hour game ends before the original
+            # 6-hour block ends, resume the original block
+            # until its normal boundary.
+            #
+            # Example:
+            #
+            # 6:00 PM - 7:15 PM
+            # 7:15 PM - 10:15 PM game
+            # 10:15 PM - 12:00 AM
+            #
+            # Then:
+            #
+            # 12:00 AM - 6:00 AM
+            #
+            # --------------------------------------------------
+
+            if actual_game_end < original_block_end:
+
+                programme = ET.SubElement(
+
+                    tv,
+
+                    "programme",
+
+                    {
+
+                        "start":
+
+                        actual_game_end.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "stop":
+
+                        original_block_end.strftime(
+
+                            "%Y%m%d%H%M%S %z"
+
+                        ),
+
+                        "channel":
+
+                        channel_id
+
+                    }
+
+                )
+
+
+                title = ET.SubElement(
+
+                    programme,
+
+                    "title"
+
+                )
+
+
+                title.text = title_text
+
+
+                desc = ET.SubElement(
+
+                    programme,
+
+                    "desc"
+
+                )
+
+
+                desc.text = description_text
+
+
+                current_start = original_block_end
+
+            else:
+
+                # --------------------------------------------------
+                # A game that crosses a normal 6-hour boundary
+                # occupies the schedule until its assumed 3-hour
+                # end. The next available block begins after the
+                # game rather than creating overlapping XMLTV
+                # programmes.
+                #
+                # This situation should be uncommon because the
+                # normal sports blocks are six hours long.
+                # --------------------------------------------------
+
+                current_start = actual_game_end
+
+
+            # --------------------------------------------------
+            # Game has now been consumed. Do not schedule it
+            # again on a later block.
+            # --------------------------------------------------
+
+            game_start = None
+
+            game_end = None
+
+
+            continue
+
+
+        # --------------------------------------------------
+        # NORMAL 6-HOUR BLOCK
+        #
+        # No verified game starts inside this block.
+        # Nothing changes from the original scheduler.
+        # --------------------------------------------------
+
+        current_stop = original_block_end
 
 
         programme = ET.SubElement(
@@ -4790,7 +5071,12 @@ print(
 
 
 print(
-    "Guide blocks: 6 hours each"
+    "Guide blocks: 6 hours each, split around verified games"
+)
+
+
+print(
+    "Verified game duration assumption: 3 hours"
 )
 
 
