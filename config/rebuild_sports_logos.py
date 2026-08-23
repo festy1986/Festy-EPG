@@ -32,23 +32,27 @@ LEAGUES = {
 }
 
 REQUEST_TIMEOUT = 30
-REQUEST_DELAY = 0.10
 
 # Number of files rebuilt simultaneously.
 REBUILD_WORKERS = 16
 
 # Maximum amount of time allowed for one rebuild job.
-# If a job exceeds this, it is considered failed and will
-# be retried during the next pass.
 REBUILD_TIMEOUT = 60
 
-# Number of additional passes for failed files.
-# Initial pass + 2 retry passes = up to 3 attempts total.
+# Initial pass + retry passes.
 REBUILD_RETRY_PASSES = 2
 
-# Maximum rasterized size used when converting SVG sources.
-# This prevents SVGs with small intrinsic dimensions from
-# producing low-resolution PNGs.
+# Current LogoCDN season/year.
+#
+# LogoCDN's league pages identify the current logo separately
+# from historical logos. We therefore use the current season
+# rather than scanning every historical year.
+CURRENT_YEAR = 2026
+
+# Only use the immediately previous year as a fallback when
+# a current-year source genuinely does not exist.
+FALLBACK_YEAR = CURRENT_YEAR - 1
+
 SVG_RENDER_SIZE = 4096
 
 HEADERS = {
@@ -413,6 +417,16 @@ def logo_slugs(
 
 # ============================================================
 # LOGOCDN URL DISCOVERY
+#
+# IMPORTANT:
+#
+# We intentionally DO NOT scan all historical years.
+#
+# LogoCDN identifies the current logo separately from the
+# historical logos on its league pages. The current source
+# is therefore preferred.
+#
+# Only the current year and one fallback year are checked.
 # ============================================================
 
 def logocdn_urls(
@@ -425,31 +439,14 @@ def logocdn_urls(
         team
     )
 
-    years = [
-        "2026",
-        "2025",
-        "2024",
-        "2023",
-        "2022",
-        "2021",
-        "2020",
-        "2019",
-        "2018",
-        "2017",
-        "2016",
-        "2015",
-        "2014",
-        "2013",
-        "2012",
-        "2011",
-        "2010",
-    ]
-
     urls = []
 
-    for slug in slugs:
+    for year in (
+        CURRENT_YEAR,
+        FALLBACK_YEAR,
+    ):
 
-        for year in years:
+        for slug in slugs:
 
             urls.append(
                 (
@@ -487,14 +484,6 @@ def render_svg(
             "convert SVG logos."
         )
 
-    # Render SVGs at a deliberately large resolution.
-    #
-    # The old behavior relied on the SVG's intrinsic
-    # dimensions, which could produce a small rasterized
-    # image even though the SVG itself was vector artwork.
-    #
-    # output_width/output_height force CairoSVG to create
-    # a high-resolution raster suitable for later resizing.
     png_bytes = cairosvg.svg2png(
         bytestring=svg_bytes,
         output_width=SVG_RENDER_SIZE,
@@ -515,17 +504,24 @@ def render_svg(
 
 
 # ============================================================
-# DOWNLOAD FROM LOGOCDN
+# DOWNLOAD CURRENT LOGO FROM LOGOCDN
 #
 # IMPORTANT:
 #
-# Do NOT simply take the first working source.
+# We no longer choose between historical logos based on
+# pixel count or file size.
 #
-# We examine every available candidate and choose the
-# highest-quality source.
+# The search order is:
 #
-# SVG is preferred because it is vector artwork.
-# PNG candidates are compared by actual pixel dimensions.
+#   1. Current-year SVG
+#   2. Current-year PNG
+#   3. Previous-year SVG
+#   4. Previous-year PNG
+#
+# Once a valid source is found for a slug, it is used.
+#
+# This prevents a historical/alternate logo from winning
+# merely because it happens to have more pixels.
 # ============================================================
 
 def download_logocdn_logo(
@@ -537,8 +533,6 @@ def download_logocdn_logo(
         league,
         team
     )
-
-    candidates = []
 
     last_error = None
 
@@ -588,15 +582,6 @@ def download_logocdn_logo(
 
             if is_svg:
 
-                if cairosvg is None:
-
-                    raise RuntimeError(
-                        "CairoSVG is required to "
-                        "convert SVG logos."
-                    )
-
-                # Keep the original SVG bytes so it can be
-                # rasterized at the maximum resolution.
                 image = render_svg(
                     response.content
                 )
@@ -614,57 +599,58 @@ def download_logocdn_logo(
 
                     continue
 
-                # SVG is vector source material, so it gets
-                # the highest source-quality priority.
-                #
-                # File size is used as a secondary signal when
-                # multiple SVG versions exist.
-                candidates.append(
-                    (
-                        3,
-                        image.width * image.height,
-                        len(response.content),
-                        url,
-                        image
-                    )
+                print(
+                    f"  Source: {url}"
                 )
 
-            else:
-
-                image = Image.open(
-                    io.BytesIO(
-                        response.content
-                    )
+                print(
+                    "  Source type: CURRENT/PREFERRED SVG"
                 )
 
-                image.load()
-
-                image = image.convert(
-                    "RGBA"
+                print(
+                    f"  Rendered size: "
+                    f"{image.width}x{image.height}"
                 )
 
-                if (
-                    image.width <= 0
-                    or image.height <= 0
-                ):
+                return image
 
-                    last_error = (
-                        "Downloaded image has invalid dimensions"
-                    )
-
-                    continue
-
-                # PNG quality is determined by actual pixel
-                # count, not by which year appeared first.
-                candidates.append(
-                    (
-                        1,
-                        image.width * image.height,
-                        len(response.content),
-                        url,
-                        image
-                    )
+            image = Image.open(
+                io.BytesIO(
+                    response.content
                 )
+            )
+
+            image.load()
+
+            image = image.convert(
+                "RGBA"
+            )
+
+            if (
+                image.width <= 0
+                or image.height <= 0
+            ):
+
+                last_error = (
+                    "Downloaded image has invalid dimensions"
+                )
+
+                continue
+
+            print(
+                f"  Source: {url}"
+            )
+
+            print(
+                "  Source type: CURRENT/PREFERRED PNG"
+            )
+
+            print(
+                f"  Source size: "
+                f"{image.width}x{image.height}"
+            )
+
+            return image
 
         except Exception as exc:
 
@@ -672,53 +658,11 @@ def download_logocdn_logo(
 
             continue
 
-        finally:
-
-            time.sleep(
-                REQUEST_DELAY
-            )
-
-    if not candidates:
-
-        raise RuntimeError(
-            f"Could not download logo for "
-            f"{league}: {team}. "
-            f"Last error: {last_error}"
-        )
-
-    # Highest priority first:
-    #
-    # 1. Vector SVG source
-    # 2. Largest rendered/source dimensions
-    # 3. Larger source file as tie breaker
-    candidates.sort(
-        key=lambda item: (
-            item[0],
-            item[1],
-            item[2],
-        ),
-        reverse=True
+    raise RuntimeError(
+        f"Could not download current logo for "
+        f"{league}: {team}. "
+        f"Last error: {last_error}"
     )
-
-    quality, pixels, source_size, url, image = (
-        candidates[0]
-    )
-
-    print(
-        f"  Best source: {url}"
-    )
-
-    print(
-        f"  Source quality: "
-        f"{'VECTOR SVG' if quality == 3 else 'PNG'}"
-    )
-
-    print(
-        f"  Source raster size: "
-        f"{image.width}x{image.height}"
-    )
-
-    return image
 
 
 # ============================================================
@@ -820,8 +764,25 @@ def download_all_logos(
 
     print()
     print("=" * 70)
-    print("DOWNLOADING HIGHEST-DEFINITION BIG-4 LOGOS")
+    print("DOWNLOADING CURRENT BIG-4 LOGOS")
     print("=" * 70)
+
+    print()
+    print(
+        "Using current LogoCDN sources only."
+    )
+
+    print(
+        f"Current year: {CURRENT_YEAR}"
+    )
+
+    print(
+        f"Fallback year: {FALLBACK_YEAR}"
+    )
+
+    print(
+        "Historical logos are NOT scanned."
+    )
 
     reset_temp_directory()
 
@@ -928,7 +889,7 @@ def download_all_logos(
     print("=" * 70)
 
     print(
-        f"Highest-definition logos downloaded: "
+        f"Current logos downloaded: "
         f"{total_done}/{total_expected}"
     )
 
@@ -1262,8 +1223,6 @@ def rebuild_matchup(
 
 # ============================================================
 # SINGLE REBUILD JOB
-#
-# The timer is checked before and after the actual rebuild.
 # ============================================================
 
 def rebuild_one(
@@ -1347,9 +1306,6 @@ def rebuild_one(
 
 # ============================================================
 # REBUILD PASS
-#
-# Runs many files simultaneously.
-# Failed files are returned so they can be retried.
 # ============================================================
 
 def rebuild_pass(
@@ -1469,11 +1425,6 @@ def rebuild_pass(
 
 # ============================================================
 # REBUILD EXISTING LIBRARY
-#
-# Initial pass + retry passes.
-#
-# A failure does NOT stop the run.
-# Failed files are collected and retried afterward.
 # ============================================================
 
 def rebuild_library(
@@ -1720,7 +1671,7 @@ def main():
         )
 
     # --------------------------------------------------------
-    # DOWNLOAD EVERYTHING FIRST.
+    # DOWNLOAD CURRENT LOGOS FIRST.
     #
     # sports-logos is untouched during this phase.
     # --------------------------------------------------------
@@ -1784,11 +1735,11 @@ def main():
 
         print()
         print(
-            f"Files found:       {total}"
+            f"Files found:        {total}"
         )
 
         print(
-            f"Files rebuilt:     {replaced}"
+            f"Files rebuilt:      {replaced}"
         )
 
         print(
@@ -1912,13 +1863,16 @@ def main():
     )
 
     print(
-        "Highest-definition available "
-        "LogoCDN sources were selected."
+        "Current LogoCDN team logos were selected."
     )
 
     print(
         "SVG sources were rasterized at "
         f"{SVG_RENDER_SIZE}px for maximum quality."
+    )
+
+    print(
+        "Historical logo years were not scanned."
     )
 
     print(
