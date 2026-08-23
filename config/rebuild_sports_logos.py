@@ -7,7 +7,7 @@ import html
 import unicodedata
 from pathlib import Path
 from difflib import SequenceMatcher
-from urllib.parse import quote, urljoin
+from urllib.parse import urljoin
 from html.parser import HTMLParser
 
 import requests
@@ -34,9 +34,14 @@ LEAGUES = {
 
 CDNLOGO_BASE = "https://cdnlogo.com"
 
+# CDNLogo's current sports index is paginated.
+CDNLOGO_SPORTS_INDEX = (
+    "https://cdnlogo.com/logos/sports?page={}"
+)
+
 REQUEST_TIMEOUT = 30
 
-REQUEST_DELAY = 0.25
+REQUEST_DELAY = 0.15
 
 HEADERS = {
     "User-Agent": (
@@ -53,24 +58,46 @@ HEADERS = {
 
 ALIASES = {
     "Los_Angeles_Angels": "Los Angeles Angels",
-    "Los_Angeles_Angels_Of_Anaheim": "Los Angeles Angels",
-    "Cleveland_Indians": "Cleveland Guardians",
-    "Washington_Redskins": "Washington Commanders",
-    "Washington_Football_Team": "Washington Commanders",
-    "New_Jersey_Nets": "Brooklyn Nets",
-    "Charlotte_Bobcats": "Charlotte Hornets",
-    "Phoenix_Coyotes": "Arizona Coyotes",
-    "Atlanta_Thrashers": "Winnipeg Jets",
+    "Los_Angeles_Angels_Of_Anaheim":
+        "Los Angeles Angels",
 
-    # Current / alternate naming variations
-    "Oakland_Athletics": "Athletics",
-    "Las_Vegas_Raiders": "Las Vegas Raiders",
-    "St_Louis_Rams": "Los Angeles Rams",
-    "San_Diego_Chargers": "Los Angeles Chargers",
+    "Cleveland_Indians":
+        "Cleveland Guardians",
+
+    "Washington_Redskins":
+        "Washington Commanders",
+
+    "Washington_Football_Team":
+        "Washington Commanders",
+
+    "New_Jersey_Nets":
+        "Brooklyn Nets",
+
+    "Charlotte_Bobcats":
+        "Charlotte Hornets",
+
+    "Phoenix_Coyotes":
+        "Arizona Coyotes",
+
+    "Atlanta_Thrashers":
+        "Winnipeg Jets",
+
+    "Oakland_Athletics":
+        "Athletics",
+
+    "Las_Vegas_Raiders":
+        "Las Vegas Raiders",
+
+    "St_Louis_Rams":
+        "Los Angeles Rams",
+
+    "San_Diego_Chargers":
+        "Los Angeles Chargers",
 }
 
 
 def clean_name(value):
+
     value = os.path.splitext(value)[0]
 
     value = value.replace("_", " ")
@@ -81,7 +108,8 @@ def clean_name(value):
     )
 
     value = "".join(
-        c for c in value
+        c
+        for c in value
         if not unicodedata.combining(c)
     )
 
@@ -110,15 +138,8 @@ def display_team_name(raw):
     return raw.replace("_", " ")
 
 
-def normalized_search_name(raw):
-
-    return clean_name(
-        display_team_name(raw)
-    )
-
-
 # ============================================================
-# SEARCH NAME VARIATIONS
+# NAME VARIATIONS
 # ============================================================
 
 def team_search_variations(team_name):
@@ -135,19 +156,16 @@ def team_search_variations(team_name):
         original
     )
 
-    # Common CDNLogo naming differences.
     replacements = {
+
         "los angeles angels":
             "los angeles angels of anaheim",
 
         "athletics":
             "oakland athletics",
 
-        "new york giants":
-            "new york giants",
-
-        "new york jets":
-            "new york jets",
+        "arizona coyotes":
+            "phoenix coyotes",
 
         "utah mammoth":
             "utah mammoth",
@@ -162,8 +180,6 @@ def team_search_variations(team_name):
             replacements[normalized]
         )
 
-    # Remove common sports suffixes where CDNLogo uses
-    # abbreviated or alternate naming.
     simplified = re.sub(
         r"\b(football|basketball|hockey|baseball)\b",
         "",
@@ -177,13 +193,16 @@ def team_search_variations(team_name):
         simplified
     ).strip()
 
-    if simplified and simplified.lower() != original.lower():
+    if (
+        simplified
+        and simplified.lower()
+        != original.lower()
+    ):
 
         variations.append(
             simplified
         )
 
-    # Unique values, preserving order.
     output = []
 
     seen = set()
@@ -202,7 +221,7 @@ def team_search_variations(team_name):
 
 
 # ============================================================
-# SIMPLE HTML PARSER
+# HTML PARSER
 # ============================================================
 
 class CDNLogoHTMLParser(HTMLParser):
@@ -308,340 +327,7 @@ def get(url):
 
 
 # ============================================================
-# CDNLOGO INDEX SEARCH
-#
-# CDNLogo's old /search?q= endpoint is not reliable anymore.
-#
-# We instead search CDNLogo's public logo index pages.
-# ============================================================
-
-def search_cdnlogo_index(team_name):
-
-    candidates = []
-
-    variations = team_search_variations(
-        team_name
-    )
-
-    # CDNLogo sports index.
-    index_urls = [
-        f"{CDNLOGO_BASE}/logos/sports",
-        f"{CDNLOGO_BASE}/logos/sports?page=1",
-    ]
-
-    # Also try CDNLogo's alphabetical/general index.
-    index_urls.extend([
-        f"{CDNLOGO_BASE}/logos",
-        f"{CDNLOGO_BASE}/logos?page=1",
-    ])
-
-    for index_url in index_urls:
-
-        try:
-
-            response = get(
-                index_url
-            )
-
-        except Exception:
-
-            continue
-
-        parser = parse_html(
-            response.text
-        )
-
-        for link in parser.links:
-
-            href = link.get(
-                "href"
-            )
-
-            if not href:
-                continue
-
-            href = html.unescape(
-                href
-            )
-
-            href = urljoin(
-                CDNLOGO_BASE,
-                href
-            )
-
-            if "/logo/" not in href:
-                continue
-
-            text = link.get(
-                "text",
-                ""
-            ).strip()
-
-            if not text:
-                continue
-
-            for variation in variations:
-
-                score = score_candidate(
-                    variation,
-                    text
-                )
-
-                if score >= 0.65:
-
-                    candidates.append(
-                        (
-                            text,
-                            href
-                        )
-                    )
-
-                    break
-
-        if candidates:
-
-            break
-
-        time.sleep(
-            REQUEST_DELAY
-        )
-
-    return unique_candidates(
-        candidates
-    )
-
-
-# ============================================================
-# CDNLOGO DIRECT SEARCH THROUGH SITE'S INDEX
-#
-# CDNLogo pages use predictable /logo/ URLs, but the numeric
-# suffix varies. We first discover the slug through CDNLogo's
-# indexed pages, then verify the actual page.
-# ============================================================
-
-def search_cdnlogo_slug(team_name):
-
-    candidates = []
-
-    variations = team_search_variations(
-        team_name
-    )
-
-    for variation in variations:
-
-        slug = clean_name(
-            variation
-        ).replace(
-            " ",
-            "-"
-        )
-
-        urls = [
-            f"{CDNLOGO_BASE}/logo/{slug}.html",
-            f"{CDNLOGO_BASE}/logo/{slug}",
-        ]
-
-        for url in urls:
-
-            try:
-
-                response = session.get(
-                    url,
-                    timeout=REQUEST_TIMEOUT,
-                    allow_redirects=True
-                )
-
-            except Exception:
-
-                continue
-
-            if response.status_code != 200:
-
-                continue
-
-            final_url = response.url
-
-            if "/logo/" not in final_url:
-
-                continue
-
-            candidates.append(
-                (
-                    variation,
-                    final_url
-                )
-            )
-
-            break
-
-        if candidates:
-
-            break
-
-        time.sleep(
-            REQUEST_DELAY
-        )
-
-    return unique_candidates(
-        candidates
-    )
-
-
-# ============================================================
-# CDNLOGO WEB SEARCH FALLBACK
-#
-# This is the important fallback for cases such as:
-#
-# Arizona Diamondbacks
-#
-# where CDNLogo has a valid page such as:
-#
-# /logo/arizona-diamondbacks_31851.html
-#
-# but there is no predictable URL without the numeric ID.
-# ============================================================
-
-def search_web_for_cdnlogo(team_name):
-
-    candidates = []
-
-    variations = team_search_variations(
-        team_name
-    )
-
-    for variation in variations:
-
-        query = quote(
-            f'site:cdnlogo.com/logo "{variation}"'
-        )
-
-        urls = [
-            f"https://www.google.com/search?q={query}",
-            f"https://www.bing.com/search?q={query}",
-        ]
-
-        for search_url in urls:
-
-            try:
-
-                response = session.get(
-                    search_url,
-                    timeout=REQUEST_TIMEOUT
-                )
-
-            except Exception:
-
-                continue
-
-            if response.status_code != 200:
-
-                continue
-
-            parser = parse_html(
-                response.text
-            )
-
-            for link in parser.links:
-
-                href = link.get(
-                    "href"
-                )
-
-                if not href:
-                    continue
-
-                href = html.unescape(
-                    href
-                )
-
-                # Google/Bing may wrap the destination.
-                if "cdnlogo.com/logo/" not in href:
-
-                    continue
-
-                match = re.search(
-                    r'https?://cdnlogo\.com/logo/[^&"\']+',
-                    href,
-                    re.IGNORECASE
-                )
-
-                if match:
-
-                    href = match.group(0)
-
-                href = href.replace(
-                    "&amp;",
-                    "&"
-                )
-
-                text = link.get(
-                    "text",
-                    ""
-                ).strip()
-
-                if not text:
-
-                    text = variation
-
-                candidates.append(
-                    (
-                        text,
-                        href
-                    )
-                )
-
-            if candidates:
-
-                return unique_candidates(
-                    candidates
-                )
-
-            time.sleep(
-                REQUEST_DELAY
-            )
-
-    return unique_candidates(
-        candidates
-    )
-
-
-# ============================================================
-# UNIQUE CANDIDATES
-# ============================================================
-
-def unique_candidates(candidates):
-
-    output = []
-
-    seen = set()
-
-    for title, url in candidates:
-
-        key = (
-            clean_name(title),
-            url.lower()
-        )
-
-        if key in seen:
-
-            continue
-
-        seen.add(
-            key
-        )
-
-        output.append(
-            (
-                title,
-                url
-            )
-        )
-
-    return output
-
-
-# ============================================================
-# MATCH RESULT
+# CANDIDATE SCORING
 # ============================================================
 
 def score_candidate(
@@ -667,11 +353,11 @@ def score_candidate(
 
     if wanted in candidate:
 
-        return 0.95
+        return 0.96
 
     if candidate in wanted:
 
-        return 0.90
+        return 0.94
 
     return SequenceMatcher(
         None,
@@ -687,66 +373,71 @@ def choose_candidate(
 
     scored = []
 
-    for title, url in candidates:
+    variations = team_search_variations(
+        team_name
+    )
 
-        # Score the visible title.
-        title_score = score_candidate(
-            team_name,
-            title
-        )
+    for title, url, image_url in candidates:
 
-        # Also score the URL slug. This is important because
-        # CDNLogo search-engine results can have titles with
-        # extra words such as "Logo PNG Vector SVG".
-        url_name = re.sub(
-            r"^https?://[^/]+/logo/",
-            "",
-            url,
-            flags=re.IGNORECASE
-        )
+        best_score = 0.0
 
-        url_name = re.sub(
-            r"_\d+\.html.*$",
-            "",
-            url_name,
-            flags=re.IGNORECASE
-        )
+        for variation in variations:
 
-        url_name = url_name.replace(
-            "-",
-            " "
-        )
+            title_score = score_candidate(
+                variation,
+                title
+            )
 
-        url_score = score_candidate(
-            team_name,
-            url_name
-        )
+            url_name = re.sub(
+                r"^https?://[^/]+/logo/",
+                "",
+                url,
+                flags=re.IGNORECASE
+            )
 
-        score = max(
-            title_score,
-            url_score
-        )
+            url_name = re.sub(
+                r"_\d+\.html.*$",
+                "",
+                url_name,
+                flags=re.IGNORECASE
+            )
+
+            url_name = url_name.replace(
+                "-",
+                " "
+            )
+
+            url_score = score_candidate(
+                variation,
+                url_name
+            )
+
+            best_score = max(
+                best_score,
+                title_score,
+                url_score
+            )
 
         scored.append(
             (
-                score,
+                best_score,
                 title,
-                url
+                url,
+                image_url
             )
         )
+
+    if not scored:
+
+        return None
 
     scored.sort(
         key=lambda x: x[0],
         reverse=True
     )
 
-    if not scored:
-
-        return None
-
     best = scored[0]
 
-    # Require a real match.
     if best[0] < 0.70:
 
         return None
@@ -755,186 +446,315 @@ def choose_candidate(
 
 
 # ============================================================
-# EXTRACT CDN IMAGE FROM LOGO PAGE
+# CDNLOGO SPORTS INDEX
+#
+# IMPORTANT:
+#
+# We no longer use Google/Bing.
+#
+# CDNLogo's sports index contains the actual logo entries and
+# the corresponding CDN static image URLs.
 # ============================================================
 
-def extract_image_from_page(
+CDNLOGO_INDEX_CACHE = None
+
+
+def extract_static_image_from_link(
     page_url,
-    team_name
+    link
 ):
 
-    response = get(
-        page_url
+    href = link.get(
+        "href"
     )
 
-    parser = parse_html(
-        response.text
+    if not href:
+
+        return None
+
+    href = html.unescape(
+        href
+    )
+
+    href = urljoin(
+        CDNLOGO_BASE,
+        href
+    )
+
+    text = link.get(
+        "text",
+        ""
+    ).strip()
+
+    # --------------------------------------------------------
+    # Find the actual static CDNLogo asset in the surrounding
+    # page HTML later. For now the page URL is sufficient.
+    # --------------------------------------------------------
+
+    return href
+
+
+def collect_cdnlogo_sports_index():
+
+    global CDNLOGO_INDEX_CACHE
+
+    if CDNLOGO_INDEX_CACHE is not None:
+
+        return CDNLOGO_INDEX_CACHE
+
+    print()
+
+    print(
+        "Downloading CDNLogo sports index..."
     )
 
     candidates = []
 
-    # --------------------------------------------------------
-    # IMG TAGS
-    # --------------------------------------------------------
+    # CDNLogo currently has hundreds of pages of sports logos.
+    # We scan until the site stops returning new entries.
+    #
+    # The exact number of pages can change, so we don't hard-code
+    # a page count based on the total logo count.
+    #
 
-    for img in parser.images:
+    empty_pages = 0
 
-        for attr in (
-            "src",
-            "data-src",
-            "data-original",
-            "data-lazy-src",
-        ):
+    seen_urls = set()
 
-            value = img.get(
-                attr
+    for page_number in range(1, 401):
+
+        url = CDNLOGO_SPORTS_INDEX.format(
+            page_number
+        )
+
+        try:
+
+            response = get(
+                url
             )
 
-            if not value:
+        except Exception as exc:
+
+            print(
+                f"  Page {page_number}: "
+                f"download failed: {exc}"
+            )
+
+            empty_pages += 1
+
+            if empty_pages >= 3:
+
+                break
+
+            continue
+
+        parser = parse_html(
+            response.text
+        )
+
+        page_count = 0
+
+        # ----------------------------------------------------
+        # CDNLogo page links
+        # ----------------------------------------------------
+
+        for link in parser.links:
+
+            href = link.get(
+                "href"
+            )
+
+            if not href:
+
                 continue
 
-            value = html.unescape(
-                value
+            href = html.unescape(
+                href
             )
 
-            value = urljoin(
-                page_url,
-                value
+            href = urljoin(
+                CDNLOGO_BASE,
+                href
             )
 
-            if (
-                "static.cdnlogo.com"
-                in value.lower()
-            ):
+            if "/logo/" not in href:
 
-                if value not in candidates:
+                continue
 
-                    candidates.append(
-                        value
-                    )
+            title = link.get(
+                "text",
+                ""
+            ).strip()
 
-    # --------------------------------------------------------
-    # RAW HTML
-    # --------------------------------------------------------
+            if not title:
 
-    patterns = [
-        r'https?://static\.cdnlogo\.com/[^"\']+\.(?:png|svg)',
-        r'//static\.cdnlogo\.com/[^"\']+\.(?:png|svg)',
-    ]
+                continue
 
-    for pattern in patterns:
+            # ------------------------------------------------
+            # Find the static.cdnlogo.com URL associated with
+            # this logo in the raw HTML.
+            # ------------------------------------------------
 
-        for match in re.findall(
-            pattern,
-            response.text,
-            re.IGNORECASE
-        ):
+            image_url = None
 
-            match = html.unescape(
-                match
+            slug_match = re.search(
+                r"/logo/([^/?#]+)",
+                href,
+                re.IGNORECASE
             )
 
-            if match.startswith("//"):
+            slug = None
 
-                match = "https:" + match
+            if slug_match:
 
-            if match not in candidates:
+                slug = slug_match.group(1)
 
-                candidates.append(
-                    match
+                slug = re.sub(
+                    r"_\d+\.html$",
+                    "",
+                    slug,
+                    flags=re.IGNORECASE
                 )
 
-    # --------------------------------------------------------
-    # RELATIVE IMAGE REFERENCES
-    # --------------------------------------------------------
+            if slug:
 
-    relative_patterns = [
-        r'["\']([^"\']+\.png)["\']',
-        r'["\']([^"\']+\.svg)["\']',
-    ]
+                image_pattern = re.compile(
+                    r'https?:?//static\.cdnlogo\.com/'
+                    r'[^"\']*'
+                    + re.escape(slug)
+                    + r'[^"\']*'
+                    r'\.(?:svg|png)',
+                    re.IGNORECASE
+                )
 
-    for pattern in relative_patterns:
+                match = image_pattern.search(
+                    response.text
+                )
 
-        for match in re.findall(
-            pattern,
-            response.text,
-            re.IGNORECASE
-        ):
+                if match:
 
-            decoded = html.unescape(
-                match
-            )
-
-            absolute = urljoin(
-                page_url,
-                decoded
-            )
-
-            if (
-                "static.cdnlogo.com"
-                in absolute.lower()
-            ):
-
-                if absolute not in candidates:
-
-                    candidates.append(
-                        absolute
+                    image_url = html.unescape(
+                        match.group(0)
                     )
 
-    # --------------------------------------------------------
-    # PREFER FULL-SIZE PNG
-    # --------------------------------------------------------
+                    if image_url.startswith(
+                        "//"
+                    ):
 
-    pngs = [
-        x for x in candidates
-        if ".png" in x.lower()
-        and "thumb" not in x.lower()
-    ]
+                        image_url = (
+                            "https:"
+                            + image_url
+                        )
 
-    if pngs:
+            # ------------------------------------------------
+            # More general fallback.
+            # ------------------------------------------------
 
-        return pngs[0]
+            if not image_url:
 
-    # --------------------------------------------------------
-    # THEN SVG
-    # --------------------------------------------------------
+                image_patterns = [
+                    r'https?://static\.cdnlogo\.com/'
+                    r'[^"\']+\.(?:svg|png)',
 
-    svgs = [
-        x for x in candidates
-        if ".svg" in x.lower()
-        and "thumb" not in x.lower()
-    ]
+                    r'//static\.cdnlogo\.com/'
+                    r'[^"\']+\.(?:svg|png)',
+                ]
 
-    if svgs:
+                for pattern in image_patterns:
 
-        return svgs[0]
+                    matches = re.findall(
+                        pattern,
+                        response.text,
+                        re.IGNORECASE
+                    )
 
-    # --------------------------------------------------------
-    # THUMBNAIL FALLBACK
-    # --------------------------------------------------------
+                    for match in matches:
 
-    pngs = [
-        x for x in candidates
-        if ".png" in x.lower()
-    ]
+                        match = html.unescape(
+                            match
+                        )
 
-    if pngs:
+                        if match.startswith(
+                            "//"
+                        ):
 
-        return pngs[0]
+                            match = (
+                                "https:"
+                                + match
+                            )
 
-    svgs = [
-        x for x in candidates
-        if ".svg" in x.lower()
-    ]
+                        if slug and clean_name(
+                            slug
+                        ) in clean_name(
+                            match
+                        ):
 
-    if svgs:
+                            image_url = match
 
-        return svgs[0]
+                            break
 
-    raise RuntimeError(
-        f"Could not find CDNLogo image on "
-        f"{page_url} for {team_name}"
+                    if image_url:
+
+                        break
+
+            if not image_url:
+
+                continue
+
+            key = (
+                clean_name(title),
+                href.lower()
+            )
+
+            if key in seen_urls:
+
+                continue
+
+            seen_urls.add(
+                key
+            )
+
+            candidates.append(
+                (
+                    title,
+                    href,
+                    image_url
+                )
+            )
+
+            page_count += 1
+
+        print(
+            f"  Page {page_number}: "
+            f"{page_count} usable logos"
+        )
+
+        if page_count == 0:
+
+            empty_pages += 1
+
+        else:
+
+            empty_pages = 0
+
+        if empty_pages >= 3:
+
+            break
+
+        time.sleep(
+            REQUEST_DELAY
+        )
+
+    CDNLOGO_INDEX_CACHE = candidates
+
+    print()
+
+    print(
+        f"Collected {len(candidates)} "
+        f"CDNLogo logo entries."
     )
+
+    return candidates
 
 
 # ============================================================
@@ -962,13 +782,8 @@ def find_team_source(team_name):
         f"Finding CDNLogo source: {team_name}"
     )
 
-    # --------------------------------------------------------
-    # METHOD 1:
-    # CDNLogo public index.
-    # --------------------------------------------------------
-
-    candidates = search_cdnlogo_index(
-        team_name
+    candidates = (
+        collect_cdnlogo_sports_index()
     )
 
     best = choose_candidate(
@@ -976,49 +791,14 @@ def find_team_source(team_name):
         candidates
     )
 
-    # --------------------------------------------------------
-    # METHOD 2:
-    # Predictable CDNLogo slug.
-    # --------------------------------------------------------
-
-    if not best:
-
-        candidates = search_cdnlogo_slug(
-            team_name
-        )
-
-        best = choose_candidate(
-            team_name,
-            candidates
-        )
-
-    # --------------------------------------------------------
-    # METHOD 3:
-    # Google/Bing site search.
-    #
-    # This handles CDNLogo URLs containing numeric IDs.
-    # --------------------------------------------------------
-
-    if not best:
-
-        candidates = search_web_for_cdnlogo(
-            team_name
-        )
-
-        best = choose_candidate(
-            team_name,
-            candidates
-        )
-
     if not best:
 
         raise RuntimeError(
-            "Could not find a sufficiently "
-            "close CDNLogo result for: "
-            f"{team_name}"
+            "Could not find CDNLogo sports-index "
+            f"result for: {team_name}"
         )
 
-    score, title, page_url = best
+    score, title, page_url, image_url = best
 
     print(
         f"  Match: {title}"
@@ -1032,11 +812,6 @@ def find_team_source(team_name):
         f"  Page: {page_url}"
     )
 
-    image_url = extract_image_from_page(
-        page_url,
-        team_name
-    )
-
     print(
         f"  Image: {image_url}"
     )
@@ -1046,10 +821,6 @@ def find_team_source(team_name):
     ] = (
         image_url,
         page_url
-    )
-
-    time.sleep(
-        REQUEST_DELAY
     )
 
     return (
@@ -1112,9 +883,7 @@ def download_logo(team_name):
             )
 
         png_bytes = cairosvg.svg2png(
-            bytestring=response.content,
-            output_width=None,
-            output_height=None
+            bytestring=response.content
         )
 
         image = Image.open(
@@ -1124,7 +893,7 @@ def download_logo(team_name):
         )
 
     # --------------------------------------------------------
-    # PNG / other raster image
+    # Raster
     # --------------------------------------------------------
 
     else:
@@ -1401,8 +1170,7 @@ def teams_from_file(path):
 
 
 # ============================================================
-# FIRST PASS:
-# DISCOVER EVERY TEAM BEFORE MODIFYING ANY FILE.
+# DISCOVER ALL TEAMS
 # ============================================================
 
 def discover_all_teams():
@@ -1428,11 +1196,10 @@ def discover_all_teams():
 
 
 # ============================================================
-# VERIFY ALL SOURCES FIRST
+# VERIFY SOURCES
 #
-# IMPORTANT:
-# We do NOT overwrite the library until every team has a
-# successfully discovered CDNLogo source.
+# We verify that every team can be matched and downloaded
+# before modifying any existing logo.
 # ============================================================
 
 def verify_sources(teams):
@@ -1442,6 +1209,8 @@ def verify_sources(teams):
     print("=" * 70)
     print("VERIFYING CDNLOGO SOURCES")
     print("=" * 70)
+
+    verified = 0
 
     for number, team in enumerate(
         teams,
@@ -1454,14 +1223,42 @@ def verify_sources(teams):
             f"[{number}/{len(teams)}] {team}"
         )
 
-        find_team_source(
+        image_url, page_url = find_team_source(
             team
+        )
+
+        # ----------------------------------------------------
+        # Actually download the source now.
+        # This means verification is not merely checking that
+        # a page exists — it confirms the image can be fetched
+        # and decoded.
+        # ----------------------------------------------------
+
+        image = download_logo(
+            team
+        )
+
+        if (
+            image.width <= 0
+            or image.height <= 0
+        ):
+
+            raise RuntimeError(
+                f"Downloaded invalid logo for: {team}"
+            )
+
+        verified += 1
+
+        print(
+            f"  Verified image: "
+            f"{image.width}x{image.height}"
         )
 
     print()
 
     print(
-        f"Verified {len(teams)} team sources."
+        f"Verified {verified}/{len(teams)} "
+        "team logos."
     )
 
 
@@ -1618,7 +1415,8 @@ def main():
     # --------------------------------------------------------
     # VERIFY EVERYTHING FIRST.
     #
-    # If even one team cannot be found, nothing gets changed.
+    # No existing files are touched until every team has a
+    # downloadable, decodable CDNLogo image.
     # --------------------------------------------------------
 
     try:
