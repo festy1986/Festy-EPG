@@ -31,15 +31,17 @@ LEAGUES = {
     "NHL",
 }
 
+# Maximum time allowed for one HTTP request.
 REQUEST_TIMEOUT = 30
 
 # Number of files rebuilt simultaneously.
-REBUILD_WORKERS = 16
+REBUILD_WORKERS = 8
 
 # Maximum amount of time allowed for one rebuild job.
 REBUILD_TIMEOUT = 60
 
-# Initial pass + retry passes.
+# Number of retry passes AFTER the initial pass.
+# Total attempts = 1 initial pass + 2 retries = 3 passes.
 REBUILD_RETRY_PASSES = 2
 
 # Current LogoCDN season/year.
@@ -506,12 +508,7 @@ def render_svg(
 # ============================================================
 # DOWNLOAD CURRENT LOGO FROM LOGOCDN
 #
-# IMPORTANT:
-#
-# We no longer choose between historical logos based on
-# pixel count or file size.
-#
-# The search order is:
+# Search order:
 #
 #   1. Current-year SVG
 #   2. Current-year PNG
@@ -519,9 +516,6 @@ def render_svg(
 #   4. Previous-year PNG
 #
 # Once a valid source is found for a slug, it is used.
-#
-# This prevents a historical/alternate logo from winning
-# merely because it happens to have more pixels.
 # ============================================================
 
 def download_logocdn_logo(
@@ -782,6 +776,11 @@ def download_all_logos(
 
     print(
         "Historical logos are NOT scanned."
+    )
+
+    print(
+        f"HTTP request timeout: "
+        f"{REQUEST_TIMEOUT} seconds"
     )
 
     reset_temp_directory()
@@ -1445,6 +1444,7 @@ def rebuild_library(
 
     pending = files
 
+    # Initial pass + retry passes.
     total_passes = (
         1
         + REBUILD_RETRY_PASSES
@@ -1546,7 +1546,8 @@ def rebuild_library(
     return (
         total,
         total_replaced,
-        final_failures
+        final_failures,
+        total_passes
     )
 
 
@@ -1718,7 +1719,7 @@ def main():
     print("REBUILDING EXISTING SPORTS LOGO LIBRARY")
     print("=" * 70)
 
-    total, replaced, failed = rebuild_library(
+    total, replaced, failed, total_passes = rebuild_library(
         downloaded
     )
 
@@ -1744,6 +1745,10 @@ def main():
 
         print(
             f"Files still failed: {len(failed)}"
+        )
+
+        print(
+            f"Total attempts:     {total_passes}"
         )
 
         print()
@@ -1873,6 +1878,25 @@ def main():
 
     print(
         "Historical logo years were not scanned."
+    )
+
+    print(
+        f"Rebuild workers: {REBUILD_WORKERS}"
+    )
+
+    print(
+        f"HTTP request timeout: "
+        f"{REQUEST_TIMEOUT} seconds."
+    )
+
+    print(
+        f"Per-file rebuild timeout: "
+        f"{REBUILD_TIMEOUT} seconds."
+    )
+
+    print(
+        f"Total rebuild attempts: "
+        f"{total_passes}"
     )
 
     print(
