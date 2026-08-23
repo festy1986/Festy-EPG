@@ -1240,4 +1240,4 @@ jobs:
           fi
           git commit -m "Update Canada guide"
           git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}" fuck you
+          git push origin "HEAD:${GITHUB_REF_NAME}"
