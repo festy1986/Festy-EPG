@@ -46,6 +46,11 @@ REBUILD_TIMEOUT = 60
 # Initial pass + 2 retry passes = up to 3 attempts total.
 REBUILD_RETRY_PASSES = 2
 
+# Maximum rasterized size used when converting SVG sources.
+# This prevents SVGs with small intrinsic dimensions from
+# producing low-resolution PNGs.
+SVG_RENDER_SIZE = 4096
+
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -468,7 +473,59 @@ def logocdn_urls(
 
 
 # ============================================================
+# SVG RENDERING
+# ============================================================
+
+def render_svg(
+    svg_bytes
+):
+
+    if cairosvg is None:
+
+        raise RuntimeError(
+            "CairoSVG is required to "
+            "convert SVG logos."
+        )
+
+    # Render SVGs at a deliberately large resolution.
+    #
+    # The old behavior relied on the SVG's intrinsic
+    # dimensions, which could produce a small rasterized
+    # image even though the SVG itself was vector artwork.
+    #
+    # output_width/output_height force CairoSVG to create
+    # a high-resolution raster suitable for later resizing.
+    png_bytes = cairosvg.svg2png(
+        bytestring=svg_bytes,
+        output_width=SVG_RENDER_SIZE,
+        output_height=SVG_RENDER_SIZE,
+    )
+
+    image = Image.open(
+        io.BytesIO(
+            png_bytes
+        )
+    )
+
+    image.load()
+
+    return image.convert(
+        "RGBA"
+    )
+
+
+# ============================================================
 # DOWNLOAD FROM LOGOCDN
+#
+# IMPORTANT:
+#
+# Do NOT simply take the first working source.
+#
+# We examine every available candidate and choose the
+# highest-quality source.
+#
+# SVG is preferred because it is vector artwork.
+# PNG candidates are compared by actual pixel dimensions.
 # ============================================================
 
 def download_logocdn_logo(
@@ -480,6 +537,8 @@ def download_logocdn_logo(
         league,
         team
     )
+
+    candidates = []
 
     last_error = None
 
@@ -536,13 +595,37 @@ def download_logocdn_logo(
                         "convert SVG logos."
                     )
 
-                png_bytes = cairosvg.svg2png(
-                    bytestring=response.content
+                # Keep the original SVG bytes so it can be
+                # rasterized at the maximum resolution.
+                image = render_svg(
+                    response.content
                 )
 
-                image = Image.open(
-                    io.BytesIO(
-                        png_bytes
+                image.load()
+
+                if (
+                    image.width <= 0
+                    or image.height <= 0
+                ):
+
+                    last_error = (
+                        "Rendered SVG has invalid dimensions"
+                    )
+
+                    continue
+
+                # SVG is vector source material, so it gets
+                # the highest source-quality priority.
+                #
+                # File size is used as a secondary signal when
+                # multiple SVG versions exist.
+                candidates.append(
+                    (
+                        3,
+                        image.width * image.height,
+                        len(response.content),
+                        url,
+                        image
                     )
                 )
 
@@ -554,28 +637,34 @@ def download_logocdn_logo(
                     )
                 )
 
-            image.load()
+                image.load()
 
-            image = image.convert(
-                "RGBA"
-            )
-
-            if (
-                image.width <= 0
-                or image.height <= 0
-            ):
-
-                last_error = (
-                    "Downloaded image has invalid dimensions"
+                image = image.convert(
+                    "RGBA"
                 )
 
-                continue
+                if (
+                    image.width <= 0
+                    or image.height <= 0
+                ):
 
-            print(
-                f"  Source: {url}"
-            )
+                    last_error = (
+                        "Downloaded image has invalid dimensions"
+                    )
 
-            return image
+                    continue
+
+                # PNG quality is determined by actual pixel
+                # count, not by which year appeared first.
+                candidates.append(
+                    (
+                        1,
+                        image.width * image.height,
+                        len(response.content),
+                        url,
+                        image
+                    )
+                )
 
         except Exception as exc:
 
@@ -589,11 +678,47 @@ def download_logocdn_logo(
                 REQUEST_DELAY
             )
 
-    raise RuntimeError(
-        f"Could not download logo for "
-        f"{league}: {team}. "
-        f"Last error: {last_error}"
+    if not candidates:
+
+        raise RuntimeError(
+            f"Could not download logo for "
+            f"{league}: {team}. "
+            f"Last error: {last_error}"
+        )
+
+    # Highest priority first:
+    #
+    # 1. Vector SVG source
+    # 2. Largest rendered/source dimensions
+    # 3. Larger source file as tie breaker
+    candidates.sort(
+        key=lambda item: (
+            item[0],
+            item[1],
+            item[2],
+        ),
+        reverse=True
     )
+
+    quality, pixels, source_size, url, image = (
+        candidates[0]
+    )
+
+    print(
+        f"  Best source: {url}"
+    )
+
+    print(
+        f"  Source quality: "
+        f"{'VECTOR SVG' if quality == 3 else 'PNG'}"
+    )
+
+    print(
+        f"  Source raster size: "
+        f"{image.width}x{image.height}"
+    )
+
+    return image
 
 
 # ============================================================
@@ -695,7 +820,7 @@ def download_all_logos(
 
     print()
     print("=" * 70)
-    print("DOWNLOADING CURRENT BIG-4 LOGOS")
+    print("DOWNLOADING HIGHEST-DEFINITION BIG-4 LOGOS")
     print("=" * 70)
 
     reset_temp_directory()
@@ -803,7 +928,7 @@ def download_all_logos(
     print("=" * 70)
 
     print(
-        f"Logos downloaded: "
+        f"Highest-definition logos downloaded: "
         f"{total_done}/{total_expected}"
     )
 
@@ -1391,15 +1516,12 @@ def rebuild_library(
 
         total_replaced += replaced
 
-        # Store/update failure reason.
         for league, path, error in failed:
 
             all_failures[
                 (league, path)
             ] = error
 
-        # Successful files are removed from
-        # the pending list automatically.
         failed_keys = {
             (league, path)
             for league, path, error in failed
@@ -1429,7 +1551,6 @@ def rebuild_library(
 
                 print("=" * 70)
 
-                # Small pause before retrying.
                 time.sleep(1)
 
             else:
@@ -1453,14 +1574,6 @@ def rebuild_library(
                 "All remaining files succeeded."
             )
             print("=" * 70)
-
-    # --------------------------------------------------------
-    # IMPORTANT:
-    #
-    # Some files may have failed initially and succeeded
-    # later. Remove successful files from the final failure
-    # dictionary by checking whether they are still pending.
-    # --------------------------------------------------------
 
     final_failures = []
 
@@ -1796,6 +1909,16 @@ def main():
 
     print(
         "All rebuilt logos remain PNG."
+    )
+
+    print(
+        "Highest-definition available "
+        "LogoCDN sources were selected."
+    )
+
+    print(
+        "SVG sources were rasterized at "
+        f"{SVG_RENDER_SIZE}px for maximum quality."
     )
 
     print(
