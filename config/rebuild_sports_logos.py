@@ -6,6 +6,7 @@ import time
 import shutil
 import unicodedata
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 from PIL import Image
@@ -32,6 +33,18 @@ LEAGUES = {
 
 REQUEST_TIMEOUT = 30
 REQUEST_DELAY = 0.10
+
+# Number of files rebuilt simultaneously.
+REBUILD_WORKERS = 16
+
+# Maximum amount of time allowed for one rebuild job.
+# If a job exceeds this, it is considered failed and will
+# be retried during the next pass.
+REBUILD_TIMEOUT = 60
+
+# Number of additional passes for failed files.
+# Initial pass + 2 retry passes = up to 3 attempts total.
+REBUILD_RETRY_PASSES = 2
 
 HEADERS = {
     "User-Agent": (
@@ -76,16 +89,6 @@ ALIASES = {
 
 # ============================================================
 # LOGOCDN SLUG OVERRIDES
-#
-# Logocdn does NOT always use the visible team name as its
-# image filename.
-#
-# The important example:
-#
-# LA Clippers -> los-angeles-clippers
-#
-# Add explicit mappings here rather than trying to guess
-# endlessly from display names.
 # ============================================================
 
 LOGOCDN_SLUG_OVERRIDES = {
@@ -95,38 +98,61 @@ LOGOCDN_SLUG_OVERRIDES = {
     # --------------------------------------------------------
 
     ("NBA", "LA Clippers"):
-        ["los-angeles-clippers", "la-clippers"],
+        [
+            "los-angeles-clippers",
+            "la-clippers",
+        ],
 
     ("NBA", "LA Lakers"):
-        ["los-angeles-lakers", "la-lakers"],
+        [
+            "los-angeles-lakers",
+            "la-lakers",
+        ],
 
     ("NBA", "New Orleans Pelicans"):
-        ["new-orleans-pelicans"],
+        [
+            "new-orleans-pelicans",
+        ],
 
     ("NBA", "Oklahoma City Thunder"):
-        ["oklahoma-city-thunder"],
+        [
+            "oklahoma-city-thunder",
+        ],
 
     ("NBA", "Golden State Warriors"):
-        ["golden-state-warriors"],
+        [
+            "golden-state-warriors",
+        ],
 
     ("NBA", "Portland Trail Blazers"):
-        ["portland-trail-blazers"],
+        [
+            "portland-trail-blazers",
+        ],
 
     ("NBA", "Minnesota Timberwolves"):
-        ["minnesota-timberwolves"],
+        [
+            "minnesota-timberwolves",
+        ],
 
     ("NBA", "San Antonio Spurs"):
-        ["san-antonio-spurs"],
+        [
+            "san-antonio-spurs",
+        ],
 
     # --------------------------------------------------------
     # MLB
     # --------------------------------------------------------
 
     ("MLB", "St Louis Cardinals"):
-        ["st-louis-cardinals", "st-louis-cardinals"],
+        [
+            "st-louis-cardinals",
+        ],
 
     ("MLB", "Athletics"):
-        ["athletics", "oakland-athletics"],
+        [
+            "athletics",
+            "oakland-athletics",
+        ],
 
     ("MLB", "Los Angeles Angels"):
         [
@@ -139,35 +165,56 @@ LOGOCDN_SLUG_OVERRIDES = {
     # --------------------------------------------------------
 
     ("NFL", "Los Angeles Rams"):
-        ["los-angeles-rams", "st-louis-rams"],
+        [
+            "los-angeles-rams",
+            "st-louis-rams",
+        ],
 
     ("NFL", "Los Angeles Chargers"):
-        ["los-angeles-chargers", "san-diego-chargers"],
+        [
+            "los-angeles-chargers",
+            "san-diego-chargers",
+        ],
 
     ("NFL", "Washington Commanders"):
-        ["washington-commanders"],
+        [
+            "washington-commanders",
+        ],
 
     # --------------------------------------------------------
     # NHL
     # --------------------------------------------------------
 
     ("NHL", "Utah Mammoth"):
-        ["utah-mammoth"],
+        [
+            "utah-mammoth",
+        ],
 
     ("NHL", "Utah Hockey Club"):
-        ["utah-mammoth", "utah-hockey-club"],
+        [
+            "utah-mammoth",
+            "utah-hockey-club",
+        ],
 
     ("NHL", "St Louis Blues"):
-        ["st-louis-blues"],
+        [
+            "st-louis-blues",
+        ],
 
     ("NHL", "New Jersey Devils"):
-        ["new-jersey-devils"],
+        [
+            "new-jersey-devils",
+        ],
 
     ("NHL", "New York Islanders"):
-        ["new-york-islanders"],
+        [
+            "new-york-islanders",
+        ],
 
     ("NHL", "New York Rangers"):
-        ["new-york-rangers"],
+        [
+            "new-york-rangers",
+        ],
 }
 
 
@@ -268,7 +315,6 @@ def generic_slugs(team):
         slug
     ]
 
-    # Common punctuation/name variations.
     values.append(
         slug.replace(
             "st-",
@@ -276,7 +322,6 @@ def generic_slugs(team):
         )
     )
 
-    # NBA abbreviated LA naming.
     if normalized.startswith("la "):
 
         values.append(
@@ -289,7 +334,6 @@ def generic_slugs(team):
             )
         )
 
-    # Remove common suffixes that occasionally appear.
     values.append(
         slug.replace(
             "-football",
@@ -321,7 +365,6 @@ def logo_slugs(
 
     values = []
 
-    # Explicit mappings first.
     override = LOGOCDN_SLUG_OVERRIDES.get(
         (
             league,
@@ -347,11 +390,9 @@ def logo_slugs(
         value = value.strip()
 
         if not value:
-
             continue
 
         if value in seen:
-
             continue
 
         seen.add(
@@ -367,10 +408,6 @@ def logo_slugs(
 
 # ============================================================
 # LOGOCDN URL DISCOVERY
-#
-# Current logos can exist under different years.
-#
-# Try current first, then older versions.
 # ============================================================
 
 def logocdn_urls(
@@ -383,7 +420,6 @@ def logocdn_urls(
         team
     )
 
-    # Current first.
     years = [
         "2026",
         "2025",
@@ -445,7 +481,7 @@ def download_logocdn_logo(
         team
     )
 
-    errors = []
+    last_error = None
 
     for url in urls:
 
@@ -459,13 +495,17 @@ def download_logocdn_logo(
 
             if response.status_code != 200:
 
-                errors.append(
-                    f"{response.status_code}: {url}"
+                last_error = (
+                    f"HTTP {response.status_code}"
                 )
 
                 continue
 
             if not response.content:
+
+                last_error = (
+                    "Empty response"
+                )
 
                 continue
 
@@ -475,10 +515,6 @@ def download_logocdn_logo(
                     ""
                 ).lower()
             )
-
-            # ------------------------------------------------
-            # SVG
-            # ------------------------------------------------
 
             is_svg = (
                 ".svg" in url.lower()
@@ -524,11 +560,14 @@ def download_logocdn_logo(
                 "RGBA"
             )
 
-            # Verify it is a real image.
             if (
                 image.width <= 0
                 or image.height <= 0
             ):
+
+                last_error = (
+                    "Downloaded image has invalid dimensions"
+                )
 
                 continue
 
@@ -540,9 +579,7 @@ def download_logocdn_logo(
 
         except Exception as exc:
 
-            errors.append(
-                f"{url}: {exc}"
-            )
+            last_error = str(exc)
 
             continue
 
@@ -554,7 +591,8 @@ def download_logocdn_logo(
 
     raise RuntimeError(
         f"Could not download logo for "
-        f"{league}: {team}"
+        f"{league}: {team}. "
+        f"Last error: {last_error}"
     )
 
 
@@ -571,7 +609,6 @@ def discover_files():
         league_dir = ROOT / league
 
         if not league_dir.is_dir():
-
             continue
 
         for path in sorted(
@@ -649,7 +686,7 @@ def reset_temp_directory():
 
 
 # ============================================================
-# DOWNLOAD ALL 124 CURRENT LOGOS
+# DOWNLOAD ALL CURRENT LOGOS
 # ============================================================
 
 def download_all_logos(
@@ -720,7 +757,6 @@ def download_all_logos(
                     optimize=True
                 )
 
-                # Verify file immediately.
                 with Image.open(
                     destination
                 ) as verify:
@@ -1100,108 +1136,353 @@ def rebuild_matchup(
 
 
 # ============================================================
+# SINGLE REBUILD JOB
+#
+# The timer is checked before and after the actual rebuild.
+# ============================================================
+
+def rebuild_one(
+    league,
+    path,
+    downloaded
+):
+
+    started = time.monotonic()
+
+    teams = teams_from_file(
+        path
+    )
+
+    if len(teams) == 1:
+
+        team = teams[0]
+
+        source = downloaded[
+            league
+        ][
+            clean_name(team)
+        ]
+
+        rebuild_solo(
+            path,
+            source
+        )
+
+        details = (
+            f"TEAM: {team}"
+        )
+
+    else:
+
+        home_team = teams[0]
+        away_team = teams[1]
+
+        home_source = downloaded[
+            league
+        ][
+            clean_name(home_team)
+        ]
+
+        away_source = downloaded[
+            league
+        ][
+            clean_name(away_team)
+        ]
+
+        rebuild_matchup(
+            path,
+            home_source,
+            away_source
+        )
+
+        details = (
+            f"HOME: {home_team} | "
+            f"AWAY: {away_team}"
+        )
+
+    elapsed = (
+        time.monotonic()
+        - started
+    )
+
+    if elapsed > REBUILD_TIMEOUT:
+
+        raise TimeoutError(
+            f"Rebuild exceeded "
+            f"{REBUILD_TIMEOUT} second timeout "
+            f"({elapsed:.1f}s)"
+        )
+
+    return (
+        league,
+        path,
+        details
+    )
+
+
+# ============================================================
+# REBUILD PASS
+#
+# Runs many files simultaneously.
+# Failed files are returned so they can be retried.
+# ============================================================
+
+def rebuild_pass(
+    files,
+    downloaded,
+    pass_number,
+    total_passes
+):
+
+    if not files:
+
+        return (
+            [],
+            0
+        )
+
+    total = len(
+        files
+    )
+
+    completed = 0
+    replaced = 0
+    failed = []
+
+    print()
+    print("=" * 70)
+    print(
+        f"REBUILD PASS "
+        f"{pass_number}/{total_passes}"
+    )
+    print("=" * 70)
+
+    print()
+    print(
+        f"Processing {total} files with "
+        f"{REBUILD_WORKERS} workers..."
+    )
+
+    print(
+        f"Per-file safety timeout: "
+        f"{REBUILD_TIMEOUT} seconds"
+    )
+
+    print()
+
+    with ThreadPoolExecutor(
+        max_workers=REBUILD_WORKERS
+    ) as executor:
+
+        futures = {
+            executor.submit(
+                rebuild_one,
+                league,
+                path,
+                downloaded
+            ): (
+                league,
+                path
+            )
+            for league, path in files
+        }
+
+        for future in as_completed(
+            futures
+        ):
+
+            league, path = futures[
+                future
+            ]
+
+            completed += 1
+
+            try:
+
+                result_league, result_path, details = (
+                    future.result()
+                )
+
+                replaced += 1
+
+                print(
+                    f"[{completed}/{total}] "
+                    f"[PASS {pass_number}] "
+                    f"[{result_league}] "
+                    f"{result_path}"
+                )
+
+                print(
+                    f"  {details}"
+                )
+
+            except Exception as exc:
+
+                failed.append(
+                    (
+                        league,
+                        path,
+                        str(exc)
+                    )
+                )
+
+                print(
+                    f"[{completed}/{total}] "
+                    f"[PASS {pass_number}] "
+                    f"FAILED: {path}"
+                )
+
+                print(
+                    f"  Reason: {exc}"
+                )
+
+    return (
+        failed,
+        replaced
+    )
+
+
+# ============================================================
 # REBUILD EXISTING LIBRARY
 #
-# IMPORTANT:
-# Existing filenames and directories are NEVER changed.
+# Initial pass + retry passes.
+#
+# A failure does NOT stop the run.
+# Failed files are collected and retried afterward.
 # ============================================================
 
 def rebuild_library(
     downloaded
 ):
 
-    total = 0
-    replaced = 0
-    failed = []
+    files = list(
+        discover_files()
+    )
 
-    for league, path in discover_files():
+    total = len(
+        files
+    )
 
-        total += 1
+    all_failures = {}
 
-        teams = teams_from_file(
-            path
+    total_replaced = 0
+
+    pending = files
+
+    total_passes = (
+        1
+        + REBUILD_RETRY_PASSES
+    )
+
+    for pass_number in range(
+        1,
+        total_passes + 1
+    ):
+
+        if not pending:
+            break
+
+        failed, replaced = rebuild_pass(
+            pending,
+            downloaded,
+            pass_number,
+            total_passes
         )
 
-        print()
-        print(
-            f"[{league}]"
-        )
+        total_replaced += replaced
 
-        print(
-            f"  {path}"
-        )
+        # Store/update failure reason.
+        for league, path, error in failed:
 
-        try:
+            all_failures[
+                (league, path)
+            ] = error
 
-            if len(teams) == 1:
+        # Successful files are removed from
+        # the pending list automatically.
+        failed_keys = {
+            (league, path)
+            for league, path, error in failed
+        }
 
-                team = teams[0]
+        pending = [
+            item
+            for item in pending
+            if item in failed_keys
+        ]
 
-                source = downloaded[
-                    league
-                ][
-                    clean_name(team)
-                ]
+        if pending:
+
+            if pass_number < total_passes:
+
+                print()
+                print("=" * 70)
+                print(
+                    f"{len(pending)} files failed "
+                    f"PASS {pass_number}."
+                )
 
                 print(
-                    f"  TEAM: {team}"
+                    "They will be retried "
+                    f"in PASS {pass_number + 1}."
                 )
 
-                rebuild_solo(
-                    path,
-                    source
-                )
+                print("=" * 70)
+
+                # Small pause before retrying.
+                time.sleep(1)
 
             else:
 
-                home_team = teams[0]
-                away_team = teams[1]
-
-                home_source = downloaded[
-                    league
-                ][
-                    clean_name(home_team)
-                ]
-
-                away_source = downloaded[
-                    league
-                ][
-                    clean_name(away_team)
-                ]
-
+                print()
+                print("=" * 70)
                 print(
-                    f"  HOME: {home_team}"
+                    "FILES STILL FAILED AFTER "
+                    f"{total_passes} PASSES"
                 )
+                print("=" * 70)
 
-                print(
-                    f"  AWAY: {away_team}"
-                )
+        else:
 
-                rebuild_matchup(
-                    path,
-                    home_source,
-                    away_source
-                )
-
-            replaced += 1
-
-        except Exception as exc:
-
-            failed.append(
-                (
-                    path,
-                    str(exc)
-                )
-            )
-
+            print()
+            print("=" * 70)
             print(
-                f"  ERROR: {exc}"
+                f"PASS {pass_number} COMPLETE"
             )
+            print(
+                "All remaining files succeeded."
+            )
+            print("=" * 70)
+
+    # --------------------------------------------------------
+    # IMPORTANT:
+    #
+    # Some files may have failed initially and succeeded
+    # later. Remove successful files from the final failure
+    # dictionary by checking whether they are still pending.
+    # --------------------------------------------------------
+
+    final_failures = []
+
+    for league, path in pending:
+
+        error = all_failures.get(
+            (league, path),
+            "Unknown failure"
+        )
+
+        final_failures.append(
+            (
+                league,
+                path,
+                error
+            )
+        )
 
     return (
         total,
-        replaced,
-        failed
+        total_replaced,
+        final_failures
     )
 
 
@@ -1228,6 +1509,13 @@ def verify_existing_library():
 
                 image.verify()
 
+                if image.format != "PNG":
+
+                    raise RuntimeError(
+                        f"File is not PNG: "
+                        f"{image.format}"
+                    )
+
             count += 1
 
         except Exception as exc:
@@ -1238,8 +1526,31 @@ def verify_existing_library():
             )
 
     print(
-        f"Verified {count} existing logo files."
+        f"Verified {count} existing "
+        f"PNG logo files."
     )
+
+
+# ============================================================
+# CLEAN TEMP DIRECTORY
+# ============================================================
+
+def cleanup_temp_directory():
+
+    if TEMP_ROOT.exists():
+
+        print()
+        print(
+            "Deleting temporary source logo library..."
+        )
+
+        shutil.rmtree(
+            TEMP_ROOT
+        )
+
+        print(
+            f"Removed: {TEMP_ROOT}"
+        )
 
 
 # ============================================================
@@ -1298,7 +1609,7 @@ def main():
     # --------------------------------------------------------
     # DOWNLOAD EVERYTHING FIRST.
     #
-    # sports-logos is untouched during this entire phase.
+    # sports-logos is untouched during this phase.
     # --------------------------------------------------------
 
     try:
@@ -1333,7 +1644,8 @@ def main():
         sys.exit(1)
 
     # --------------------------------------------------------
-    # EVERYTHING EXISTS.
+    # ALL SOURCE LOGOS EXIST.
+    #
     # NOW rebuild the actual library.
     # --------------------------------------------------------
 
@@ -1346,6 +1658,10 @@ def main():
         downloaded
     )
 
+    # --------------------------------------------------------
+    # FINAL FAILURE REPORT
+    # --------------------------------------------------------
+
     if failed:
 
         print()
@@ -1353,21 +1669,62 @@ def main():
         print("REBUILD FAILED")
         print("=" * 70)
 
-        for path, error in failed:
+        print()
+        print(
+            f"Files found:       {total}"
+        )
+
+        print(
+            f"Files rebuilt:     {replaced}"
+        )
+
+        print(
+            f"Files still failed: {len(failed)}"
+        )
+
+        print()
+        print(
+            "FINAL FAILURE SUMMARY"
+        )
+
+        print(
+            "-" * 70
+        )
+
+        for league, path, error in failed:
 
             print()
             print(
-                f"File: {path}"
+                f"LEAGUE: {league}"
             )
 
             print(
-                f"Error: {error}"
+                f"FILE:   {path}"
+            )
+
+            print(
+                f"ERROR:  {error}"
             )
 
         print()
         print(
-            "Some existing logo files could not "
-            "be rebuilt."
+            "-" * 70
+        )
+
+        print()
+        print(
+            "The failed files were skipped after "
+            f"{total_passes} total attempts."
+        )
+
+        print(
+            "The temporary source logos were "
+            "NOT deleted."
+        )
+
+        print(
+            f"Temporary source directory: "
+            f"{TEMP_ROOT}"
         )
 
         sys.exit(1)
@@ -1392,7 +1749,21 @@ def main():
             str(exc)
         )
 
+        print()
+        print(
+            "Temporary source logos were "
+            "NOT deleted."
+        )
+
         sys.exit(1)
+
+    # --------------------------------------------------------
+    # EVERYTHING PASSED.
+    #
+    # Delete the temporary source library.
+    # --------------------------------------------------------
+
+    cleanup_temp_directory()
 
     print()
     print("=" * 70)
@@ -1401,7 +1772,11 @@ def main():
 
     print()
     print(
-        f"Files found:    {total}"
+        f"Unique source logos: {total_teams}"
+    )
+
+    print(
+        f"Existing files found: {total}"
     )
 
     print(
@@ -1409,19 +1784,22 @@ def main():
     )
 
     print(
-        f"Files failed:   0"
+        "Files failed: 0"
     )
 
     print()
 
     print(
-        "Existing filenames and directory "
-        "paths were preserved."
+        "All existing filenames and "
+        "directory paths were preserved."
     )
 
     print(
-        f"Temporary source logos remain in: "
-        f"{TEMP_ROOT}"
+        "All rebuilt logos remain PNG."
+    )
+
+    print(
+        "Temporary source logos were deleted."
     )
 
 
