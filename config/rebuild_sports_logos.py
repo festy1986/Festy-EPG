@@ -2,8 +2,8 @@ import io
 import os
 import re
 import sys
-import time
-import html
+import shutil
+import tempfile
 import unicodedata
 from pathlib import Path
 from difflib import SequenceMatcher
@@ -25,6 +25,8 @@ except ImportError:
 
 ROOT = Path("sports-logos")
 
+TEMP_ROOT = Path("_temp_sports_logos")
+
 LEAGUES = {
     "MLB",
     "NBA",
@@ -32,12 +34,14 @@ LEAGUES = {
     "NHL",
 }
 
-CDNLOGO_BASE = "https://cdnlogo.com"
+LOGO_CDN_BASE = "https://logocdn.com"
 
-# CDNLogo's current sports index is paginated.
-CDNLOGO_SPORTS_INDEX = (
-    "https://cdnlogo.com/logos/sports?page={}"
-)
+LEAGUE_URLS = {
+    "MLB": f"{LOGO_CDN_BASE}/mlb/",
+    "NBA": f"{LOGO_CDN_BASE}/nba/",
+    "NFL": f"{LOGO_CDN_BASE}/nfl/",
+    "NHL": f"{LOGO_CDN_BASE}/nhl/",
+}
 
 REQUEST_TIMEOUT = 30
 
@@ -53,11 +57,13 @@ HEADERS = {
 
 
 # ============================================================
-# TEAM NAME NORMALIZATION
+# TEAM NAME ALIASES
 # ============================================================
 
 ALIASES = {
-    "Los_Angeles_Angels": "Los Angeles Angels",
+    "Los_Angeles_Angels":
+        "Los Angeles Angels",
+
     "Los_Angeles_Angels_Of_Anaheim":
         "Los Angeles Angels",
 
@@ -93,14 +99,27 @@ ALIASES = {
 
     "San_Diego_Chargers":
         "Los Angeles Chargers",
+
+    # Current NHL naming
+    "Utah_Hockey_Club":
+        "Utah Mammoth",
 }
 
 
+# ============================================================
+# NORMALIZATION
+# ============================================================
+
 def clean_name(value):
 
-    value = os.path.splitext(value)[0]
+    value = os.path.splitext(
+        str(value)
+    )[0]
 
-    value = value.replace("_", " ")
+    value = value.replace(
+        "_",
+        " "
+    )
 
     value = unicodedata.normalize(
         "NFKD",
@@ -130,177 +149,25 @@ def clean_name(value):
 
 def display_team_name(raw):
 
-    raw = os.path.splitext(raw)[0]
+    raw = os.path.splitext(
+        str(raw)
+    )[0]
 
     if raw in ALIASES:
+
         return ALIASES[raw]
 
-    return raw.replace("_", " ")
-
-
-# ============================================================
-# NAME VARIATIONS
-# ============================================================
-
-def team_search_variations(team_name):
-
-    original = display_team_name(
-        team_name
+    return raw.replace(
+        "_",
+        " "
     )
 
-    variations = [
-        original
-    ]
 
-    normalized = clean_name(
-        original
+def filename_team_name(raw):
+
+    return display_team_name(
+        raw
     )
-
-    replacements = {
-
-        "los angeles angels":
-            "los angeles angels of anaheim",
-
-        "athletics":
-            "oakland athletics",
-
-        "arizona coyotes":
-            "phoenix coyotes",
-
-        "utah mammoth":
-            "utah mammoth",
-
-        "washington commanders":
-            "washington commanders",
-    }
-
-    if normalized in replacements:
-
-        variations.append(
-            replacements[normalized]
-        )
-
-    simplified = re.sub(
-        r"\b(football|basketball|hockey|baseball)\b",
-        "",
-        original,
-        flags=re.IGNORECASE
-    )
-
-    simplified = re.sub(
-        r"\s+",
-        " ",
-        simplified
-    ).strip()
-
-    if (
-        simplified
-        and simplified.lower()
-        != original.lower()
-    ):
-
-        variations.append(
-            simplified
-        )
-
-    output = []
-
-    seen = set()
-
-    for value in variations:
-
-        key = clean_name(value)
-
-        if key and key not in seen:
-
-            seen.add(key)
-
-            output.append(value)
-
-    return output
-
-
-# ============================================================
-# HTML PARSER
-# ============================================================
-
-class CDNLogoHTMLParser(HTMLParser):
-
-    def __init__(self):
-
-        super().__init__(
-            convert_charrefs=True
-        )
-
-        self.links = []
-
-        self.images = []
-
-        self.current_link = None
-
-        self.current_link_text = []
-
-    def handle_starttag(
-        self,
-        tag,
-        attrs
-    ):
-
-        attributes = dict(attrs)
-
-        if tag.lower() == "a":
-
-            self.current_link = {
-                "href": attributes.get("href"),
-                "text": []
-            }
-
-            self.current_link_text = []
-
-        elif tag.lower() == "img":
-
-            self.images.append(
-                attributes
-            )
-
-    def handle_data(self, data):
-
-        if self.current_link is not None:
-
-            self.current_link_text.append(
-                data
-            )
-
-    def handle_endtag(self, tag):
-
-        if tag.lower() == "a":
-
-            if self.current_link is not None:
-
-                self.current_link[
-                    "text"
-                ] = " ".join(
-                    self.current_link_text
-                ).strip()
-
-                self.links.append(
-                    self.current_link
-                )
-
-            self.current_link = None
-
-            self.current_link_text = []
-
-
-def parse_html(response_text):
-
-    parser = CDNLogoHTMLParser()
-
-    parser.feed(
-        response_text
-    )
-
-    return parser
 
 
 # ============================================================
@@ -327,37 +194,125 @@ def get(url):
 
 
 # ============================================================
-# CANDIDATE SCORING
+# HTML PARSER
 # ============================================================
 
-def score_candidate(
-    team_name,
-    candidate_name
+class LogoCDNParser(HTMLParser):
+
+    def __init__(self):
+
+        super().__init__(
+            convert_charrefs=True
+        )
+
+        self.images = []
+
+        self.links = []
+
+        self.current_link = None
+
+        self.current_text = []
+
+    def handle_starttag(
+        self,
+        tag,
+        attrs
+    ):
+
+        attributes = dict(
+            attrs
+        )
+
+        tag = tag.lower()
+
+        if tag == "img":
+
+            self.images.append(
+                attributes
+            )
+
+        elif tag == "a":
+
+            self.current_link = {
+                "href":
+                    attributes.get(
+                        "href"
+                    ),
+
+                "text": []
+            }
+
+            self.current_text = []
+
+    def handle_data(
+        self,
+        data
+    ):
+
+        if self.current_link is not None:
+
+            self.current_text.append(
+                data
+            )
+
+    def handle_endtag(
+        self,
+        tag
+    ):
+
+        if tag.lower() != "a":
+
+            return
+
+        if self.current_link is not None:
+
+            self.current_link[
+                "text"
+            ] = " ".join(
+                self.current_text
+            ).strip()
+
+            self.links.append(
+                self.current_link
+            )
+
+        self.current_link = None
+
+        self.current_text = []
+
+
+# ============================================================
+# TEAM MATCHING
+# ============================================================
+
+def score_name(
+    wanted,
+    candidate
 ):
 
     wanted = clean_name(
-        team_name
+        wanted
     )
 
     candidate = clean_name(
-        candidate_name
+        candidate
     )
 
-    if not candidate:
+    if not wanted or not candidate:
 
         return 0.0
 
-    if candidate == wanted:
+    if wanted == candidate:
 
         return 1.0
 
     if wanted in candidate:
 
-        return 0.96
+        return 0.97
 
     if candidate in wanted:
 
-        return 0.94
+        return 0.95
 
     return SequenceMatcher(
         None,
@@ -366,480 +321,594 @@ def score_candidate(
     ).ratio()
 
 
-def choose_candidate(
-    team_name,
-    candidates
-):
+def team_variations(team):
 
-    scored = []
-
-    variations = team_search_variations(
-        team_name
+    original = display_team_name(
+        team
     )
 
-    for title, url, image_url in candidates:
+    variations = [
+        original
+    ]
 
-        best_score = 0.0
+    normalized = clean_name(
+        original
+    )
 
-        for variation in variations:
+    replacements = {
+        "los angeles angels":
+            [
+                "Los Angeles Angels",
+                "Los Angeles Angels of Anaheim",
+                "Anaheim Angels",
+            ],
 
-            title_score = score_candidate(
-                variation,
-                title
-            )
+        "athletics":
+            [
+                "Athletics",
+                "Oakland Athletics",
+            ],
 
-            url_name = re.sub(
-                r"^https?://[^/]+/logo/",
-                "",
-                url,
-                flags=re.IGNORECASE
-            )
+        "arizona coyotes":
+            [
+                "Arizona Coyotes",
+                "Phoenix Coyotes",
+            ],
 
-            url_name = re.sub(
-                r"_\d+\.html.*$",
-                "",
-                url_name,
-                flags=re.IGNORECASE
-            )
+        "utah mammoth":
+            [
+                "Utah Mammoth",
+                "Utah Hockey Club",
+            ],
 
-            url_name = url_name.replace(
-                "-",
-                " "
-            )
+        "brooklyn nets":
+            [
+                "Brooklyn Nets",
+                "New Jersey Nets",
+            ],
 
-            url_score = score_candidate(
-                variation,
-                url_name
-            )
+        "charlotte hornets":
+            [
+                "Charlotte Hornets",
+                "Charlotte Bobcats",
+            ],
 
-            best_score = max(
-                best_score,
-                title_score,
-                url_score
-            )
+        "winnipeg jets":
+            [
+                "Winnipeg Jets",
+                "Atlanta Thrashers",
+            ],
+    }
 
-        scored.append(
-            (
-                best_score,
-                title,
-                url,
-                image_url
-            )
+    if normalized in replacements:
+
+        variations.extend(
+            replacements[
+                normalized
+            ]
         )
 
-    if not scored:
+    output = []
 
-        return None
+    seen = set()
 
-    scored.sort(
-        key=lambda x: x[0],
-        reverse=True
-    )
+    for value in variations:
 
-    best = scored[0]
-
-    if best[0] < 0.70:
-
-        return None
-
-    return best
-
-
-# ============================================================
-# CDNLOGO SPORTS INDEX
-#
-# IMPORTANT:
-#
-# We no longer use Google/Bing.
-#
-# CDNLogo's sports index contains the actual logo entries and
-# the corresponding CDN static image URLs.
-# ============================================================
-
-CDNLOGO_INDEX_CACHE = None
-
-
-def extract_static_image_from_link(
-    page_url,
-    link
-):
-
-    href = link.get(
-        "href"
-    )
-
-    if not href:
-
-        return None
-
-    href = html.unescape(
-        href
-    )
-
-    href = urljoin(
-        CDNLOGO_BASE,
-        href
-    )
-
-    text = link.get(
-        "text",
-        ""
-    ).strip()
-
-    # --------------------------------------------------------
-    # Find the actual static CDNLogo asset in the surrounding
-    # page HTML later. For now the page URL is sufficient.
-    # --------------------------------------------------------
-
-    return href
-
-
-def collect_cdnlogo_sports_index():
-
-    global CDNLOGO_INDEX_CACHE
-
-    if CDNLOGO_INDEX_CACHE is not None:
-
-        return CDNLOGO_INDEX_CACHE
-
-    print()
-
-    print(
-        "Downloading CDNLogo sports index..."
-    )
-
-    candidates = []
-
-    # CDNLogo currently has hundreds of pages of sports logos.
-    # We scan until the site stops returning new entries.
-    #
-    # The exact number of pages can change, so we don't hard-code
-    # a page count based on the total logo count.
-    #
-
-    empty_pages = 0
-
-    seen_urls = set()
-
-    for page_number in range(1, 401):
-
-        url = CDNLOGO_SPORTS_INDEX.format(
-            page_number
+        key = clean_name(
+            value
         )
 
-        try:
-
-            response = get(
-                url
-            )
-
-        except Exception as exc:
-
-            print(
-                f"  Page {page_number}: "
-                f"download failed: {exc}"
-            )
-
-            empty_pages += 1
-
-            if empty_pages >= 3:
-
-                break
+        if key in seen:
 
             continue
 
-        parser = parse_html(
-            response.text
+        seen.add(
+            key
         )
 
-        page_count = 0
-
-        # ----------------------------------------------------
-        # CDNLogo page links
-        # ----------------------------------------------------
-
-        for link in parser.links:
-
-            href = link.get(
-                "href"
-            )
-
-            if not href:
-
-                continue
-
-            href = html.unescape(
-                href
-            )
-
-            href = urljoin(
-                CDNLOGO_BASE,
-                href
-            )
-
-            if "/logo/" not in href:
-
-                continue
-
-            title = link.get(
-                "text",
-                ""
-            ).strip()
-
-            if not title:
-
-                continue
-
-            # ------------------------------------------------
-            # Find the static.cdnlogo.com URL associated with
-            # this logo in the raw HTML.
-            # ------------------------------------------------
-
-            image_url = None
-
-            slug_match = re.search(
-                r"/logo/([^/?#]+)",
-                href,
-                re.IGNORECASE
-            )
-
-            slug = None
-
-            if slug_match:
-
-                slug = slug_match.group(1)
-
-                slug = re.sub(
-                    r"_\d+\.html$",
-                    "",
-                    slug,
-                    flags=re.IGNORECASE
-                )
-
-            if slug:
-
-                image_pattern = re.compile(
-                    r'https?:?//static\.cdnlogo\.com/'
-                    r'[^"\']*'
-                    + re.escape(slug)
-                    + r'[^"\']*'
-                    r'\.(?:svg|png)',
-                    re.IGNORECASE
-                )
-
-                match = image_pattern.search(
-                    response.text
-                )
-
-                if match:
-
-                    image_url = html.unescape(
-                        match.group(0)
-                    )
-
-                    if image_url.startswith(
-                        "//"
-                    ):
-
-                        image_url = (
-                            "https:"
-                            + image_url
-                        )
-
-            # ------------------------------------------------
-            # More general fallback.
-            # ------------------------------------------------
-
-            if not image_url:
-
-                image_patterns = [
-                    r'https?://static\.cdnlogo\.com/'
-                    r'[^"\']+\.(?:svg|png)',
-
-                    r'//static\.cdnlogo\.com/'
-                    r'[^"\']+\.(?:svg|png)',
-                ]
-
-                for pattern in image_patterns:
-
-                    matches = re.findall(
-                        pattern,
-                        response.text,
-                        re.IGNORECASE
-                    )
-
-                    for match in matches:
-
-                        match = html.unescape(
-                            match
-                        )
-
-                        if match.startswith(
-                            "//"
-                        ):
-
-                            match = (
-                                "https:"
-                                + match
-                            )
-
-                        if slug and clean_name(
-                            slug
-                        ) in clean_name(
-                            match
-                        ):
-
-                            image_url = match
-
-                            break
-
-                    if image_url:
-
-                        break
-
-            if not image_url:
-
-                continue
-
-            key = (
-                clean_name(title),
-                href.lower()
-            )
-
-            if key in seen_urls:
-
-                continue
-
-            seen_urls.add(
-                key
-            )
-
-            candidates.append(
-                (
-                    title,
-                    href,
-                    image_url
-                )
-            )
-
-            page_count += 1
-
-        print(
-            f"  Page {page_number}: "
-            f"{page_count} usable logos"
+        output.append(
+            value
         )
 
-        if page_count == 0:
+    return output
 
-            empty_pages += 1
 
-        else:
+# ============================================================
+# EXTRACT IMAGE URL
+# ============================================================
 
-            empty_pages = 0
+def extract_image_urls(
+    page_url,
+    html_text,
+    parser
+):
 
-        if empty_pages >= 3:
+    candidates = []
 
-            break
+    # --------------------------------------------------------
+    # IMG TAGS
+    # --------------------------------------------------------
 
-        time.sleep(
-            REQUEST_DELAY
+    for img in parser.images:
+
+        for attribute in (
+            "src",
+            "data-src",
+            "data-lazy-src",
+            "data-original",
+        ):
+
+            value = img.get(
+                attribute
+            )
+
+            if not value:
+
+                continue
+
+            value = value.strip()
+
+            value = urljoin(
+                page_url,
+                value
+            )
+
+            if value not in candidates:
+
+                candidates.append(
+                    value
+                )
+
+    # --------------------------------------------------------
+    # RAW HTML
+    # --------------------------------------------------------
+
+    patterns = [
+
+        r'https?://[^"\']+\.(?:svg|png|webp)',
+
+        r'//[^"\']+\.(?:svg|png|webp)',
+
+    ]
+
+    for pattern in patterns:
+
+        matches = re.findall(
+            pattern,
+            html_text,
+            re.IGNORECASE
         )
 
-    CDNLOGO_INDEX_CACHE = candidates
+        for value in matches:
+
+            value = value.strip()
+
+            if value.startswith(
+                "//"
+            ):
+
+                value = (
+                    "https:"
+                    + value
+                )
+
+            value = value.replace(
+                "\\/",
+                "/"
+            )
+
+            if value not in candidates:
+
+                candidates.append(
+                    value
+                )
+
+    # --------------------------------------------------------
+    # PREFER SVG
+    # --------------------------------------------------------
+
+    svg = [
+        x
+        for x in candidates
+        if ".svg" in x.lower()
+    ]
+
+    if svg:
+
+        return svg
+
+    png = [
+        x
+        for x in candidates
+        if ".png" in x.lower()
+    ]
+
+    if png:
+
+        return png
+
+    return candidates
+
+
+# ============================================================
+# GET CURRENT TEAM LOGOS FROM LOGO CDN
+# ============================================================
+
+SOURCE_CACHE = {}
+
+
+def collect_league_sources(
+    league
+):
+
+    if league in SOURCE_CACHE:
+
+        return SOURCE_CACHE[
+            league
+        ]
+
+    url = LEAGUE_URLS[
+        league
+    ]
 
     print()
 
     print(
-        f"Collected {len(candidates)} "
-        f"CDNLogo logo entries."
+        f"Downloading {league} logo index:"
     )
 
-    return candidates
+    print(
+        f"  {url}"
+    )
+
+    response = get(
+        url
+    )
+
+    parser = LogoCDNParser()
+
+    parser.feed(
+        response.text
+    )
+
+    entries = []
+
+    seen = set()
+
+    # --------------------------------------------------------
+    # Logo CDN pages contain links surrounding the current
+    # team logo. We identify those links and inspect the
+    # nearby image references.
+    # --------------------------------------------------------
+
+    for link in parser.links:
+
+        title = link.get(
+            "text",
+            ""
+        ).strip()
+
+        href = link.get(
+            "href"
+        )
+
+        if not title or not href:
+
+            continue
+
+        # Ignore navigation/history links.
+        if (
+            "histor" in title.lower()
+            or "see " in title.lower()
+            or "missing" in title.lower()
+        ):
+
+            continue
+
+        href = urljoin(
+            url,
+            href
+        )
+
+        # ----------------------------------------------------
+        # Team names on Logo CDN are headings/links. Only keep
+        # names that look like team entries.
+        # ----------------------------------------------------
+
+        if len(
+            title.split()
+        ) < 2:
+
+            continue
+
+        key = (
+            clean_name(title),
+            href
+        )
+
+        if key in seen:
+
+            continue
+
+        seen.add(
+            key
+        )
+
+        entries.append(
+            {
+                "name":
+                    title,
+
+                "page":
+                    href,
+            }
+        )
+
+    # --------------------------------------------------------
+    # If links aren't sufficient, parse image alt/title data.
+    # --------------------------------------------------------
+
+    for image in parser.images:
+
+        title = (
+            image.get("alt")
+            or image.get("title")
+            or ""
+        ).strip()
+
+        src = (
+            image.get("src")
+            or image.get("data-src")
+            or ""
+        ).strip()
+
+        if not title or not src:
+
+            continue
+
+        if len(
+            title.split()
+        ) < 2:
+
+            continue
+
+        key = (
+            clean_name(title),
+            src
+        )
+
+        if key in seen:
+
+            continue
+
+        seen.add(
+            key
+        )
+
+        entries.append(
+            {
+                "name":
+                    title,
+
+                "image":
+                    urljoin(
+                        url,
+                        src
+                    ),
+            }
+        )
+
+    # --------------------------------------------------------
+    # Download each candidate team page where necessary.
+    # --------------------------------------------------------
+
+    resolved = []
+
+    resolved_names = set()
+
+    for entry in entries:
+
+        name = entry[
+            "name"
+        ]
+
+        page = entry.get(
+            "page"
+        )
+
+        image = entry.get(
+            "image"
+        )
+
+        if image:
+
+            resolved.append(
+                {
+                    "name":
+                        name,
+
+                    "image":
+                        image,
+
+                    "page":
+                        page or url,
+                }
+            )
+
+            resolved_names.add(
+                clean_name(name)
+            )
+
+            continue
+
+        if not page:
+
+            continue
+
+        try:
+
+            page_response = get(
+                page
+            )
+
+            page_parser = LogoCDNParser()
+
+            page_parser.feed(
+                page_response.text
+            )
+
+            image_urls = (
+                extract_image_urls(
+                    page,
+                    page_response.text,
+                    page_parser
+                )
+            )
+
+            if not image_urls:
+
+                continue
+
+            resolved.append(
+                {
+                    "name":
+                        name,
+
+                    "image":
+                        image_urls[0],
+
+                    "page":
+                        page,
+                }
+            )
+
+            resolved_names.add(
+                clean_name(name)
+            )
+
+        except Exception:
+
+            continue
+
+    SOURCE_CACHE[
+        league
+    ] = resolved
+
+    print(
+        f"  Found {len(resolved)} logo entries."
+    )
+
+    return resolved
 
 
 # ============================================================
 # FIND TEAM SOURCE
 # ============================================================
 
-SOURCE_CACHE = {}
+def find_team_source(
+    league,
+    team
+):
 
-
-def find_team_source(team_name):
-
-    cache_key = clean_name(
-        team_name
+    variations = team_variations(
+        team
     )
 
-    if cache_key in SOURCE_CACHE:
+    entries = collect_league_sources(
+        league
+    )
 
-        return SOURCE_CACHE[
-            cache_key
+    scored = []
+
+    for entry in entries:
+
+        name = entry[
+            "name"
         ]
 
-    print()
+        image = entry[
+            "image"
+        ]
 
-    print(
-        f"Finding CDNLogo source: {team_name}"
-    )
+        best = 0.0
 
-    candidates = (
-        collect_cdnlogo_sports_index()
-    )
+        for variation in variations:
 
-    best = choose_candidate(
-        team_name,
-        candidates
-    )
+            best = max(
+                best,
+                score_name(
+                    variation,
+                    name
+                )
+            )
 
-    if not best:
-
-        raise RuntimeError(
-            "Could not find CDNLogo sports-index "
-            f"result for: {team_name}"
+        scored.append(
+            (
+                best,
+                name,
+                image,
+                entry.get(
+                    "page"
+                )
+            )
         )
 
-    score, title, page_url, image_url = best
+    if not scored:
+
+        raise RuntimeError(
+            f"No {league} logos were "
+            "available from Logo CDN."
+        )
+
+    scored.sort(
+        reverse=True,
+        key=lambda x: x[0]
+    )
+
+    best = scored[0]
+
+    if best[0] < 0.75:
+
+        raise RuntimeError(
+            f"Could not match "
+            f"{league} team '{team}'. "
+            f"Best result was '{best[1]}' "
+            f"with score {best[0]:.3f}."
+        )
 
     print(
-        f"  Match: {title}"
+        f"  Source match: {best[1]}"
     )
 
     print(
-        f"  Score: {score:.3f}"
+        f"  Score: {best[0]:.3f}"
     )
 
     print(
-        f"  Page: {page_url}"
-    )
-
-    print(
-        f"  Image: {image_url}"
-    )
-
-    SOURCE_CACHE[
-        cache_key
-    ] = (
-        image_url,
-        page_url
+        f"  Image: {best[2]}"
     )
 
     return (
-        image_url,
-        page_url
+        best[2],
+        best[3]
     )
 
 
 # ============================================================
-# DOWNLOAD IMAGE
+# DOWNLOAD AND DECODE LOGO
 # ============================================================
 
 IMAGE_CACHE = {}
 
 
-def download_logo(team_name):
+def download_logo(
+    league,
+    team
+):
 
-    key = clean_name(
-        team_name
+    key = (
+        league,
+        clean_name(team)
     )
 
     if key in IMAGE_CACHE:
@@ -848,8 +917,11 @@ def download_logo(team_name):
             key
         ].copy()
 
-    image_url, page_url = find_team_source(
-        team_name
+    image_url, page_url = (
+        find_team_source(
+            league,
+            team
+        )
     )
 
     response = get(
@@ -863,6 +935,8 @@ def download_logo(team_name):
         ).lower()
     )
 
+    raw = response.content
+
     # --------------------------------------------------------
     # SVG
     # --------------------------------------------------------
@@ -870,7 +944,7 @@ def download_logo(team_name):
     if (
         ".svg" in image_url.lower()
         or "svg" in content_type
-        or response.content.lstrip().startswith(
+        or raw.lstrip().startswith(
             b"<svg"
         )
     ):
@@ -878,12 +952,14 @@ def download_logo(team_name):
         if cairosvg is None:
 
             raise RuntimeError(
-                "CairoSVG is required to convert "
-                f"SVG logo: {team_name}"
+                "CairoSVG is required to "
+                f"process {team}."
             )
 
-        png_bytes = cairosvg.svg2png(
-            bytestring=response.content
+        png_bytes = (
+            cairosvg.svg2png(
+                bytestring=raw
+            )
         )
 
         image = Image.open(
@@ -892,15 +968,11 @@ def download_logo(team_name):
             )
         )
 
-    # --------------------------------------------------------
-    # Raster
-    # --------------------------------------------------------
-
     else:
 
         image = Image.open(
             io.BytesIO(
-                response.content
+                raw
             )
         )
 
@@ -918,10 +990,439 @@ def download_logo(team_name):
 
 
 # ============================================================
+# SAVE TEMP SOURCE LOGO
+# ============================================================
+
+def save_temp_logo(
+    league,
+    team,
+    image
+):
+
+    league_dir = (
+        TEMP_ROOT
+        / league
+    )
+
+    league_dir.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    path = (
+        league_dir
+        / f"{team}.png"
+    )
+
+    image.save(
+        path,
+        "PNG",
+        optimize=True
+    )
+
+    return path
+
+
+# ============================================================
+# DISCOVER EXISTING FILES
+# ============================================================
+
+def discover_files():
+
+    for league in sorted(
+        LEAGUES
+    ):
+
+        league_dir = (
+            ROOT
+            / league
+        )
+
+        if not league_dir.is_dir():
+
+            continue
+
+        for path in sorted(
+            league_dir.rglob("*.png")
+        ):
+
+            yield (
+                league,
+                path
+            )
+
+
+def teams_from_file(
+    path
+):
+
+    filename = path.stem
+
+    if "_vs_" in filename:
+
+        home, away = (
+            filename.split(
+                "_vs_",
+                1
+            )
+        )
+
+        return [
+            display_team_name(home),
+            display_team_name(away)
+        ]
+
+    return [
+        display_team_name(filename)
+    ]
+
+
+# ============================================================
+# DISCOVER ALL TEAMS IN EXISTING LIBRARY
+# ============================================================
+
+def discover_all_teams():
+
+    teams = {}
+
+    for league, path in discover_files():
+
+        for team in teams_from_file(
+            path
+        ):
+
+            key = (
+                clean_name(team)
+            )
+
+            teams[
+                (
+                    league,
+                    key
+                )
+            ] = team
+
+    return teams
+
+
+# ============================================================
+# COMPLETE CURRENT BIG-4 SOURCE LIBRARY
+#
+# This downloads ALL current teams, not merely the teams found
+# in existing files.
+# ============================================================
+
+def download_all_current_logos():
+
+    print()
+
+    print("=" * 70)
+    print("DOWNLOADING CURRENT BIG-4 LOGOS")
+    print("=" * 70)
+
+    if TEMP_ROOT.exists():
+
+        shutil.rmtree(
+            TEMP_ROOT
+        )
+
+    TEMP_ROOT.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    total_expected = {
+        "MLB": 30,
+        "NBA": 30,
+        "NFL": 32,
+        "NHL": 32,
+    }
+
+    downloaded = 0
+
+    failures = []
+
+    for league in (
+        "MLB",
+        "NBA",
+        "NFL",
+        "NHL",
+    ):
+
+        print()
+
+        print(
+            f"{league}: "
+            f"expected {total_expected[league]}"
+        )
+
+        sources = (
+            collect_league_sources(
+                league
+            )
+        )
+
+        # ----------------------------------------------------
+        # Build unique current-team matches.
+        # ----------------------------------------------------
+
+        selected = {}
+
+        for source in sources:
+
+            name = source[
+                "name"
+            ]
+
+            key = clean_name(
+                name
+            )
+
+            # Ignore obvious historical entries.
+            if key in selected:
+
+                continue
+
+            selected[
+                key
+            ] = source
+
+        # ----------------------------------------------------
+        # Download every current source entry.
+        # ----------------------------------------------------
+
+        league_count = 0
+
+        for number, source in enumerate(
+            selected.values(),
+            start=1
+        ):
+
+            team = source[
+                "name"
+            ]
+
+            print()
+
+            print(
+                f"[{league} "
+                f"{number}/{len(selected)}] "
+                f"{team}"
+            )
+
+            try:
+
+                image = download_logo(
+                    league,
+                    team
+                )
+
+                save_temp_logo(
+                    league,
+                    team,
+                    image
+                )
+
+                league_count += 1
+
+                downloaded += 1
+
+                print(
+                    f"  Saved: "
+                    f"{TEMP_ROOT / league / (team + '.png')}"
+                )
+
+            except Exception as exc:
+
+                failures.append(
+                    (
+                        league,
+                        team,
+                        str(exc)
+                    )
+                )
+
+                print(
+                    f"  FAILED: {exc}"
+                )
+
+    print()
+
+    print("=" * 70)
+    print("TEMPORARY SOURCE LIBRARY")
+    print("=" * 70)
+
+    print()
+
+    print(
+        f"Logos downloaded: {downloaded}"
+    )
+
+    if failures:
+
+        print()
+
+        print(
+            "Failures:"
+        )
+
+        for league, team, error in failures:
+
+            print(
+                f"  {league}: "
+                f"{team} -> {error}"
+            )
+
+        raise RuntimeError(
+            f"{len(failures)} source logo(s) "
+            "failed to download."
+        )
+
+    # --------------------------------------------------------
+    # Verify exact expected counts.
+    # --------------------------------------------------------
+
+    for league, expected in (
+        total_expected.items()
+    ):
+
+        actual = len(
+            list(
+                (
+                    TEMP_ROOT
+                    / league
+                ).glob("*.png")
+            )
+        )
+
+        if actual != expected:
+
+            raise RuntimeError(
+                f"{league}: expected "
+                f"{expected} logos but downloaded "
+                f"{actual}."
+            )
+
+    print()
+
+    print(
+        "All 124 current team logos "
+        "downloaded successfully."
+    )
+
+
+# ============================================================
+# FIND TEMP LOGO FOR TEAM
+# ============================================================
+
+def find_temp_logo(
+    league,
+    team
+):
+
+    directory = (
+        TEMP_ROOT
+        / league
+    )
+
+    if not directory.is_dir():
+
+        raise RuntimeError(
+            f"Temporary {league} "
+            "logo directory does not exist."
+        )
+
+    wanted = clean_name(
+        team
+    )
+
+    candidates = []
+
+    for path in directory.glob(
+        "*.png"
+    ):
+
+        candidate = clean_name(
+            path.stem
+        )
+
+        score = 0.0
+
+        for variation in team_variations(
+            team
+        ):
+
+            score = max(
+                score,
+                score_name(
+                    variation,
+                    candidate
+                )
+            )
+
+        candidates.append(
+            (
+                score,
+                path
+            )
+        )
+
+    candidates.sort(
+        reverse=True,
+        key=lambda x: x[0]
+    )
+
+    if not candidates:
+
+        raise RuntimeError(
+            f"No temporary logo found "
+            f"for {league}: {team}"
+        )
+
+    score, path = candidates[0]
+
+    if score < 0.75:
+
+        raise RuntimeError(
+            f"Could not match temporary "
+            f"{league} logo for {team}."
+        )
+
+    return path
+
+
+# ============================================================
+# LOAD TEMP LOGO
+# ============================================================
+
+def load_temp_logo(
+    league,
+    team
+):
+
+    path = find_temp_logo(
+        league,
+        team
+    )
+
+    with Image.open(
+        path
+    ) as image:
+
+        image.load()
+
+        return image.convert(
+            "RGBA"
+        ).copy()
+
+
+# ============================================================
 # IMAGE PROCESSING
 # ============================================================
 
-def trim_transparency(image):
+def trim_transparency(
+    image
+):
 
     image = image.convert(
         "RGBA"
@@ -986,31 +1487,35 @@ def fit_logo(
     )
 
 
-# ============================================================
-# EXISTING IMAGE DIMENSIONS
-# ============================================================
+def existing_dimensions(
+    path
+):
 
-def existing_dimensions(path):
-
-    with Image.open(path) as image:
+    with Image.open(
+        path
+    ) as image:
 
         return image.size
 
 
 # ============================================================
-# SOLO LOGO
+# REBUILD SOLO
 # ============================================================
 
 def rebuild_solo(
     path,
+    league,
     team
 ):
 
-    width, height = existing_dimensions(
-        path
+    width, height = (
+        existing_dimensions(
+            path
+        )
     )
 
-    source = download_logo(
+    source = load_temp_logo(
+        league,
         team
     )
 
@@ -1047,24 +1552,29 @@ def rebuild_solo(
 
 
 # ============================================================
-# MATCHUP LOGO
+# REBUILD MATCHUP
 # ============================================================
 
 def rebuild_matchup(
     path,
+    league,
     home_team,
     away_team
 ):
 
-    width, height = existing_dimensions(
-        path
+    width, height = (
+        existing_dimensions(
+            path
+        )
     )
 
-    home_source = download_logo(
+    home_source = load_temp_logo(
+        league,
         home_team
     )
 
-    away_source = download_logo(
+    away_source = load_temp_logo(
+        league,
         away_team
     )
 
@@ -1089,23 +1599,28 @@ def rebuild_matchup(
     )
 
     home_x = (
-        half_width - home.width
+        half_width
+        - home.width
     ) // 2
 
     home_y = (
-        height - home.height
+        height
+        - home.height
     ) // 2
 
     away_x = (
         half_width
         + (
-            (half_width - away.width)
-            // 2
+            (
+                half_width
+                - away.width
+            ) // 2
         )
     )
 
     away_y = (
-        height - away.height
+        height
+        - away.height
     ) // 2
 
     canvas.alpha_composite(
@@ -1126,231 +1641,250 @@ def rebuild_matchup(
 
 
 # ============================================================
-# DISCOVER EXISTING TEAMS
+# BUILD NEW LIBRARY IN STAGING DIRECTORY
 # ============================================================
 
-def discover_files():
-
-    for league in sorted(
-        LEAGUES
-    ):
-
-        league_dir = ROOT / league
-
-        if not league_dir.is_dir():
-
-            continue
-
-        for path in sorted(
-            league_dir.rglob("*.png")
-        ):
-
-            yield league, path
-
-
-def teams_from_file(path):
-
-    filename = path.stem
-
-    if "_vs_" in filename:
-
-        home, away = filename.split(
-            "_vs_",
-            1
-        )
-
-        return [
-            display_team_name(home),
-            display_team_name(away)
-        ]
-
-    return [
-        display_team_name(filename)
-    ]
-
-
-# ============================================================
-# DISCOVER ALL TEAMS
-# ============================================================
-
-def discover_all_teams():
-
-    teams = {}
-
-    for league, path in discover_files():
-
-        for team in teams_from_file(
-            path
-        ):
-
-            key = clean_name(
-                team
-            )
-
-            teams[key] = team
-
-    return sorted(
-        teams.values(),
-        key=lambda x: clean_name(x)
-    )
-
-
-# ============================================================
-# VERIFY SOURCES
-#
-# We verify that every team can be matched and downloaded
-# before modifying any existing logo.
-# ============================================================
-
-def verify_sources(teams):
+def build_staging_library():
 
     print()
 
     print("=" * 70)
-    print("VERIFYING CDNLOGO SOURCES")
+    print("BUILDING STAGED SPORTS-LOGOS LIBRARY")
     print("=" * 70)
 
-    verified = 0
+    staging = Path(
+        tempfile.mkdtemp(
+            prefix="sports-logos-build-"
+        )
+    )
 
-    for number, team in enumerate(
-        teams,
-        start=1
-    ):
+    try:
+
+        # ----------------------------------------------------
+        # Preserve the exact existing directory structure.
+        # ----------------------------------------------------
+
+        files = list(
+            discover_files()
+        )
+
+        total = len(
+            files
+        )
+
+        rebuilt = 0
+
+        failures = []
+
+        for number, (
+            league,
+            original_path
+        ) in enumerate(
+            files,
+            start=1
+        ):
+
+            relative = (
+                original_path.relative_to(
+                    ROOT
+                )
+            )
+
+            destination = (
+                staging
+                / relative
+            )
+
+            destination.parent.mkdir(
+                parents=True,
+                exist_ok=True
+            )
+
+            shutil.copy2(
+                original_path,
+                destination
+            )
+
+            teams = teams_from_file(
+                original_path
+            )
+
+            try:
+
+                if len(teams) == 1:
+
+                    print()
+
+                    print(
+                        f"[{number}/{total}] "
+                        f"{league} SOLO"
+                    )
+
+                    print(
+                        f"  {relative}"
+                    )
+
+                    rebuild_solo(
+                        destination,
+                        league,
+                        teams[0]
+                    )
+
+                else:
+
+                    print()
+
+                    print(
+                        f"[{number}/{total}] "
+                        f"{league} MATCHUP"
+                    )
+
+                    print(
+                        f"  {relative}"
+                    )
+
+                    print(
+                        f"  HOME: {teams[0]}"
+                    )
+
+                    print(
+                        f"  AWAY: {teams[1]}"
+                    )
+
+                    rebuild_matchup(
+                        destination,
+                        league,
+                        teams[0],
+                        teams[1]
+                    )
+
+                rebuilt += 1
+
+            except Exception as exc:
+
+                failures.append(
+                    (
+                        league,
+                        relative,
+                        str(exc)
+                    )
+                )
+
+        if failures:
+
+            print()
+
+            print(
+                "Staged rebuild failed."
+            )
+
+            for league, path, error in failures:
+
+                print(
+                    f"  {league}: "
+                    f"{path} -> {error}"
+                )
+
+            raise RuntimeError(
+                f"{len(failures)} library "
+                "file(s) failed to rebuild."
+            )
 
         print()
 
         print(
-            f"[{number}/{len(teams)}] {team}"
+            f"Successfully rebuilt "
+            f"{rebuilt}/{total} existing files."
         )
 
-        image_url, page_url = find_team_source(
-            team
+        return staging
+
+    except Exception:
+
+        shutil.rmtree(
+            staging,
+            ignore_errors=True
         )
 
-        # ----------------------------------------------------
-        # Actually download the source now.
-        # This means verification is not merely checking that
-        # a page exists — it confirms the image can be fetched
-        # and decoded.
-        # ----------------------------------------------------
+        raise
 
-        image = download_logo(
-            team
+
+# ============================================================
+# ATOMICALLY REPLACE EXISTING LIBRARY
+# ============================================================
+
+def replace_library(
+    staging
+):
+
+    print()
+
+    print("=" * 70)
+    print("REPLACING EXISTING SPORTS-LOGOS LIBRARY")
+    print("=" * 70)
+
+    backup = (
+        ROOT.parent
+        / (
+            ROOT.name
+            + ".backup"
+        )
+    )
+
+    if backup.exists():
+
+        shutil.rmtree(
+            backup
         )
 
-        if (
-            image.width <= 0
-            or image.height <= 0
-        ):
+    # --------------------------------------------------------
+    # Move current library out of the way.
+    # --------------------------------------------------------
 
-            raise RuntimeError(
-                f"Downloaded invalid logo for: {team}"
+    if ROOT.exists():
+
+        ROOT.rename(
+            backup
+        )
+
+    try:
+
+        staging.rename(
+            ROOT
+        )
+
+    except Exception:
+
+        if ROOT.exists():
+
+            shutil.rmtree(
+                ROOT
             )
 
-        verified += 1
+        if backup.exists():
 
-        print(
-            f"  Verified image: "
-            f"{image.width}x{image.height}"
+            backup.rename(
+                ROOT
+            )
+
+        raise
+
+    # --------------------------------------------------------
+    # New library is now active.
+    # Remove backup only after successful replacement.
+    # --------------------------------------------------------
+
+    if backup.exists():
+
+        shutil.rmtree(
+            backup
         )
 
     print()
 
     print(
-        f"Verified {verified}/{len(teams)} "
-        "team logos."
-    )
-
-
-# ============================================================
-# REBUILD EXISTING LIBRARY
-# ============================================================
-
-def rebuild_library():
-
-    total = 0
-
-    replaced = 0
-
-    failed = 0
-
-    for league, path in discover_files():
-
-        total += 1
-
-        teams = teams_from_file(
-            path
-        )
-
-        try:
-
-            if len(teams) == 1:
-
-                print()
-
-                print(
-                    f"[{league}] SOLO"
-                )
-
-                print(
-                    f"  {path}"
-                )
-
-                rebuild_solo(
-                    path,
-                    teams[0]
-                )
-
-            else:
-
-                print()
-
-                print(
-                    f"[{league}] MATCHUP"
-                )
-
-                print(
-                    f"  {path}"
-                )
-
-                print(
-                    f"  HOME: {teams[0]}"
-                )
-
-                print(
-                    f"  AWAY: {teams[1]}"
-                )
-
-                rebuild_matchup(
-                    path,
-                    teams[0],
-                    teams[1]
-                )
-
-            replaced += 1
-
-        except Exception as exc:
-
-            failed += 1
-
-            print()
-
-            print(
-                "ERROR:"
-            )
-
-            print(
-                f"  {path}"
-            )
-
-            print(
-                f"  {exc}"
-            )
-
-    return (
-        total,
-        replaced,
-        failed
+        "Existing sports-logos library "
+        "successfully replaced."
     )
 
 
@@ -1363,7 +1897,7 @@ def main():
     print()
 
     print("=" * 70)
-    print("CDNLOGO SPORTS LOGO LIBRARY REBUILDER")
+    print("SPORTS LOGO LIBRARY REBUILDER")
     print("=" * 70)
 
     if not ROOT.is_dir():
@@ -1376,14 +1910,14 @@ def main():
 
         sys.exit(1)
 
-    teams = discover_all_teams()
+    existing = discover_all_teams()
 
-    if not teams:
+    if not existing:
 
         print()
 
         print(
-            "ERROR: No PNG logos found."
+            "ERROR: No existing sports logos found."
         )
 
         sys.exit(1)
@@ -1391,52 +1925,54 @@ def main():
     print()
 
     print(
-        f"Discovered {len(teams)} unique teams."
+        f"Existing library contains "
+        f"{len(existing)} unique "
+        "league/team combinations."
     )
 
     print()
-
-    print(
-        "Leagues:"
-    )
 
     for league in sorted(
         LEAGUES
     ):
 
-        directory = ROOT / league
+        count = sum(
+            1
+            for (
+                existing_league,
+                _key
+            ) in existing
+            if existing_league == league
+        )
 
-        if directory.is_dir():
+        print(
+            f"  {league}: "
+            f"{count} unique teams used "
+            "by existing library"
+        )
 
-            print(
-                f"  {league}"
-            )
-
-    # --------------------------------------------------------
-    # VERIFY EVERYTHING FIRST.
-    #
-    # No existing files are touched until every team has a
-    # downloadable, decodable CDNLogo image.
-    # --------------------------------------------------------
+    # ========================================================
+    # STEP 1
+    # DOWNLOAD ALL 124 CURRENT LOGOS
+    # ========================================================
 
     try:
 
-        verify_sources(
-            teams
-        )
+        download_all_current_logos()
 
     except Exception as exc:
 
         print()
 
         print("=" * 70)
-        print("ABORTED")
+        print("ABORTED DURING DOWNLOAD")
         print("=" * 70)
 
         print()
 
         print(
-            "No existing logo files were modified."
+            "Existing sports-logos library "
+            "was NOT modified."
         )
 
         print()
@@ -1447,18 +1983,96 @@ def main():
 
         sys.exit(1)
 
-    # --------------------------------------------------------
-    # ALL SOURCES VERIFIED.
-    # NOW modify the existing library.
-    # --------------------------------------------------------
+    # ========================================================
+    # STEP 2
+    # BUILD ENTIRE LIBRARY IN STAGING
+    # ========================================================
 
-    print()
+    staging = None
 
-    print("=" * 70)
-    print("REBUILDING EXISTING LOGO LIBRARY")
-    print("=" * 70)
+    try:
 
-    total, replaced, failed = rebuild_library()
+        staging = (
+            build_staging_library()
+        )
+
+    except Exception as exc:
+
+        print()
+
+        print("=" * 70)
+        print("ABORTED DURING REBUILD")
+        print("=" * 70)
+
+        print()
+
+        print(
+            "Existing sports-logos library "
+            "was NOT modified."
+        )
+
+        print()
+
+        print(
+            f"Reason: {exc}"
+        )
+
+        sys.exit(1)
+
+    # ========================================================
+    # STEP 3
+    # REPLACE EXISTING LIBRARY
+    # ========================================================
+
+    try:
+
+        replace_library(
+            staging
+        )
+
+    except Exception as exc:
+
+        print()
+
+        print("=" * 70)
+        print("ABORTED DURING REPLACEMENT")
+        print("=" * 70)
+
+        print()
+
+        print(
+            "Existing sports-logos library "
+            "was restored/left untouched."
+        )
+
+        print()
+
+        print(
+            f"Reason: {exc}"
+        )
+
+        if staging and staging.exists():
+
+            shutil.rmtree(
+                staging,
+                ignore_errors=True
+            )
+
+        sys.exit(1)
+
+    # ========================================================
+    # CLEAN TEMP SOURCE LIBRARY
+    # ========================================================
+
+    if TEMP_ROOT.exists():
+
+        shutil.rmtree(
+            TEMP_ROOT
+        )
+
+    # ========================================================
+    # FINAL
+    # ========================================================
 
     print()
 
@@ -1469,28 +2083,31 @@ def main():
     print()
 
     print(
-        f"Files found:    {total}"
+        "Downloaded: 124 current MLB/NBA/NFL/NHL logos"
     )
 
     print(
-        f"Files replaced: {replaced}"
+        "Rebuilt:   existing sports-logos library"
     )
 
     print(
-        f"Files failed:   {failed}"
+        "Structure: preserved"
+    )
+
+    print(
+        "Filenames: preserved"
+    )
+
+    print(
+        "Temporary source library: removed"
     )
 
     print()
 
     print(
-        "No filenames or directory paths were changed."
+        "No logo library replacement occurred "
+        "until all source logos and rebuilds succeeded."
     )
-
-    print()
-
-    if failed:
-
-        sys.exit(1)
 
 
 if __name__ == "__main__":
