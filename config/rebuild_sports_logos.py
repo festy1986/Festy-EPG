@@ -5,6 +5,7 @@ import unicodedata
 
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from collections import deque
 
 from PIL import Image
 
@@ -13,20 +14,28 @@ from PIL import Image
 # CONFIG
 # ============================================================
 
-# TRUE SOURCE OF TRUTH.
+# ============================================================
+# SPORTS-LOGOS IS BOTH:
 #
-# This directory is NEVER modified, renamed, deleted,
-# or replaced by this script.
-SOURCE_ROOT = Path("temp/New folder")
+#   1. THE CURRENT SOURCE
+#   2. THE FINAL DESTINATION
+#
+# The existing sports-logos library is read first.
+# A completely separate temporary build is then created.
+# Only after the entire build passes verification is the
+# existing sports-logos directory replaced.
+#
+# NO temp/New folder is used.
+# NO external downloads are performed.
+# ============================================================
 
-# FINAL SPORTS LOGO LIBRARY.
-#
-# This is the directory that will be completely replaced
-# with the rebuilt library after successful verification.
 ROOT = Path("sports-logos")
 
-# Build into a completely separate directory first.
+# Temporary build directory.
 BUILD_ROOT = Path("_sports_logos_rebuild")
+
+# Temporary backup used during installation.
+BACKUP_ROOT = Path("_sports_logos_old")
 
 LEAGUES = {
     "MLB",
@@ -38,12 +47,41 @@ LEAGUES = {
 # Number of team folders processed simultaneously.
 BUILD_WORKERS = 8
 
-# Matchup canvas.
+
+# ============================================================
+# SOLO LOGO SETTINGS
+# ============================================================
+
+# Final solo logo canvas.
+SOLO_SIZE = (1024, 1024)
+
+# Percentage of the canvas the actual logo artwork is allowed
+# to occupy.
+#
+# Increasing this makes logos appear larger in TiviMate.
+SOLO_LOGO_SCALE = 0.90
+
+
+# ============================================================
+# MATCHUP SETTINGS
+# ============================================================
+
 MATCHUP_SIZE = (1024, 512)
 
-# Percentage of each half available to the logo.
 MATCHUP_LOGO_WIDTH_SCALE = 0.88
 MATCHUP_LOGO_HEIGHT_SCALE = 0.88
+
+
+# ============================================================
+# WHITE BACKGROUND REMOVAL
+# ============================================================
+
+# Pixels at or above this value are considered white enough
+# to potentially be background.
+WHITE_THRESHOLD = 245
+
+# Alpha values at or below this are treated as transparent.
+ALPHA_THRESHOLD = 8
 
 
 # ============================================================
@@ -51,6 +89,7 @@ MATCHUP_LOGO_HEIGHT_SCALE = 0.88
 # ============================================================
 
 def clean_name(value):
+
     value = os.path.splitext(value)[0]
 
     value = value.replace("_", " ")
@@ -82,6 +121,7 @@ def clean_name(value):
 
 
 def filesystem_name(team):
+
     team = os.path.splitext(team)[0]
 
     team = team.replace("_", " ")
@@ -115,20 +155,63 @@ def filesystem_name(team):
 # ============================================================
 # SOURCE DISCOVERY
 #
+# sports-logos is the source.
+#
 # IMPORTANT:
 #
-# temp/New folder is the TRUE SOURCE OF TRUTH.
+# We ONLY use the individual team logo from each team folder.
 #
-# The only source image used for each team is:
+# Example:
 #
-#     temp/New folder/<LEAGUE>/<TEAM>/<TEAM>.png
+# sports-logos/
+#   MLB/
+#     Boston_Red_Sox/
+#       Boston_Red_Sox.png
+#       Boston_Red_Sox_vs_Tampa_Bay_Rays.png
 #
-# Existing sports-logos files are NEVER used as sources.
+# The ONLY source is:
+#
+#   Boston_Red_Sox/Boston_Red_Sox.png
 #
 # Existing matchup files are NEVER used as sources.
-#
-# temp/New folder is NEVER modified.
 # ============================================================
+
+def find_solo_source(team_folder):
+
+    team_key = clean_name(
+        team_folder.name
+    )
+
+    candidates = []
+
+    for path in team_folder.iterdir():
+
+        if not path.is_file():
+            continue
+
+        if path.suffix.lower() != ".png":
+            continue
+
+        if clean_name(path.stem) == team_key:
+            candidates.append(path)
+
+    if len(candidates) == 0:
+
+        raise RuntimeError(
+            f"Missing solo team logo in "
+            f"{team_folder}"
+        )
+
+    if len(candidates) > 1:
+
+        raise RuntimeError(
+            f"Multiple solo team logos found in "
+            f"{team_folder}: "
+            f"{candidates}"
+        )
+
+    return candidates[0]
+
 
 def discover_source_teams():
 
@@ -137,19 +220,21 @@ def discover_source_teams():
         for league in LEAGUES
     }
 
-    if not SOURCE_ROOT.is_dir():
+    if not ROOT.is_dir():
+
         raise RuntimeError(
-            f"Source library does not exist: "
-            f"{SOURCE_ROOT}"
+            f"Sports logo source directory does not exist: "
+            f"{ROOT}"
         )
 
     for league in sorted(LEAGUES):
 
-        league_root = SOURCE_ROOT / league
+        league_root = ROOT / league
 
         if not league_root.is_dir():
+
             raise RuntimeError(
-                f"Missing source league directory: "
+                f"Missing league directory: "
                 f"{league_root}"
             )
 
@@ -160,6 +245,7 @@ def discover_source_teams():
         )
 
         if not team_folders:
+
             raise RuntimeError(
                 f"No team folders found in "
                 f"{league_root}"
@@ -169,27 +255,23 @@ def discover_source_teams():
 
             team_name = team_folder.name
 
-            source_logo = (
+            source_logo = find_solo_source(
                 team_folder
-                /
-                f"{team_folder.name}.png"
             )
 
-            if not source_logo.is_file():
-                raise RuntimeError(
-                    f"Missing solo team logo: "
-                    f"{source_logo}"
-                )
-
-            key = clean_name(team_name)
+            key = clean_name(
+                team_name
+            )
 
             if not key:
+
                 raise RuntimeError(
                     f"Invalid team folder name: "
                     f"{team_folder}"
                 )
 
             if key in teams_by_league[league]:
+
                 raise RuntimeError(
                     f"Duplicate team detected in "
                     f"{league}: {team_folder.name}"
@@ -208,21 +290,24 @@ def discover_source_teams():
 # VERIFY SOURCE LIBRARY
 # ============================================================
 
-def verify_source_library(teams_by_league):
+def verify_source_library(
+    teams_by_league
+):
 
     print()
     print("=" * 70)
-    print("VERIFYING TRUE SOURCE LOGO LIBRARY")
+    print("VERIFYING SPORTS-LOGOS SOURCE")
     print("=" * 70)
 
     print()
     print(
-        f"Source: {SOURCE_ROOT}"
+        f"Source: {ROOT}"
     )
 
     print()
     print(
-        "SOURCE IS READ-ONLY DURING THIS RUN."
+        "The existing sports-logos library will be "
+        "read-only until the new build is verified."
     )
 
     total_teams = 0
@@ -237,20 +322,25 @@ def verify_source_library(teams_by_league):
         )
 
         if not teams:
+
             raise RuntimeError(
                 f"{league} contains no teams."
             )
 
         for team in sorted(
             teams.values(),
-            key=lambda item: clean_name(item["name"])
+            key=lambda item: clean_name(
+                item["name"]
+            )
         ):
 
             source = team["source"]
 
             if not source.is_file():
+
                 raise RuntimeError(
-                    f"Missing source logo: {source}"
+                    f"Missing source logo: "
+                    f"{source}"
                 )
 
             try:
@@ -263,6 +353,7 @@ def verify_source_library(teams_by_league):
                         image.width <= 0
                         or image.height <= 0
                     ):
+
                         raise RuntimeError(
                             "Invalid image dimensions."
                         )
@@ -282,6 +373,7 @@ def verify_source_library(teams_by_league):
     )
 
     if total_teams == 0:
+
         raise RuntimeError(
             "No source teams were discovered."
         )
@@ -290,61 +382,12 @@ def verify_source_library(teams_by_league):
 
 
 # ============================================================
-# IMAGE PROCESSING
+# LOAD SOURCE IMAGE
 # ============================================================
 
-def trim_transparency(image):
-
-    image = image.convert("RGBA")
-
-    alpha = image.getchannel("A")
-
-    bbox = alpha.getbbox()
-
-    if bbox:
-        image = image.crop(bbox)
-
-    return image
-
-
-def fit_logo(
-    image,
-    max_width,
-    max_height
+def load_source_logo(
+    source_path
 ):
-
-    image = trim_transparency(image)
-
-    if (
-        image.width <= 0
-        or image.height <= 0
-    ):
-        raise RuntimeError(
-            "Invalid logo image."
-        )
-
-    scale = min(
-        max_width / image.width,
-        max_height / image.height
-    )
-
-    width = max(
-        1,
-        int(image.width * scale)
-    )
-
-    height = max(
-        1,
-        int(image.height * scale)
-    )
-
-    return image.resize(
-        (width, height),
-        Image.Resampling.LANCZOS
-    )
-
-
-def load_source_logo(source_path):
 
     with Image.open(source_path) as image:
 
@@ -356,74 +399,394 @@ def load_source_logo(source_path):
 
 
 # ============================================================
-# COPY SOLO LOGO
+# REMOVE WHITE BACKGROUND
 #
-# The logo is copied directly from the TRUE SOURCE:
+# IMPORTANT:
 #
-#     temp/New folder/<LEAGUE>/<TEAM>/<TEAM>.png
+# We do NOT simply delete every white pixel.
 #
-# It is NOT taken from sports-logos.
+# White pixels that are enclosed inside the logo are preserved.
+#
+# We only remove near-white pixels that are connected to the
+# outside edges of the image.
+#
+# This means white lettering, white outlines, white baseball
+# details, etc. can remain intact.
 # ============================================================
 
-def copy_solo_logo(
+def remove_edge_white_background(
+    image
+):
+
+    image = image.convert("RGBA")
+
+    width, height = image.size
+
+    if width <= 0 or height <= 0:
+
+        raise RuntimeError(
+            "Invalid image dimensions."
+        )
+
+    pixels = image.load()
+
+    visited = bytearray(
+        width * height
+    )
+
+    queue = deque()
+
+    def pixel_is_background(x, y):
+
+        r, g, b, a = pixels[x, y]
+
+        if a <= ALPHA_THRESHOLD:
+            return True
+
+        return (
+            r >= WHITE_THRESHOLD
+            and
+            g >= WHITE_THRESHOLD
+            and
+            b >= WHITE_THRESHOLD
+        )
+
+    def add_if_background(x, y):
+
+        index = (
+            y * width
+            +
+            x
+        )
+
+        if visited[index]:
+
+            return
+
+        if not pixel_is_background(x, y):
+
+            return
+
+        visited[index] = 1
+
+        queue.append(
+            (x, y)
+        )
+
+    # --------------------------------------------------------
+    # Seed the flood fill from every image edge.
+    # --------------------------------------------------------
+
+    for x in range(width):
+
+        add_if_background(
+            x,
+            0
+        )
+
+        if height > 1:
+
+            add_if_background(
+                x,
+                height - 1
+            )
+
+    for y in range(height):
+
+        add_if_background(
+            0,
+            y
+        )
+
+        if width > 1:
+
+            add_if_background(
+                width - 1,
+                y
+            )
+
+    # --------------------------------------------------------
+    # Flood-fill all connected white background.
+    # --------------------------------------------------------
+
+    while queue:
+
+        x, y = queue.popleft()
+
+        neighbors = (
+            (x - 1, y),
+            (x + 1, y),
+            (x, y - 1),
+            (x, y + 1),
+        )
+
+        for nx, ny in neighbors:
+
+            if (
+                nx < 0
+                or
+                nx >= width
+                or
+                ny < 0
+                or
+                ny >= height
+            ):
+                continue
+
+            add_if_background(
+                nx,
+                ny
+            )
+
+    # --------------------------------------------------------
+    # Convert detected background to transparent.
+    # --------------------------------------------------------
+
+    for y in range(height):
+
+        for x in range(width):
+
+            index = (
+                y * width
+                +
+                x
+            )
+
+            if visited[index]:
+
+                r, g, b, a = pixels[x, y]
+
+                pixels[x, y] = (
+                    r,
+                    g,
+                    b,
+                    0
+                )
+
+    return image
+
+
+# ============================================================
+# TRIM TRANSPARENT SPACE
+# ============================================================
+
+def trim_transparency(
+    image
+):
+
+    image = image.convert("RGBA")
+
+    alpha = image.getchannel("A")
+
+    bbox = alpha.getbbox()
+
+    if bbox:
+
+        image = image.crop(
+            bbox
+        )
+
+    return image
+
+
+# ============================================================
+# CLEAN SOURCE LOGO
+#
+# Pipeline:
+#
+#   source PNG
+#       ↓
+#   RGBA
+#       ↓
+#   remove edge-connected white background
+#       ↓
+#   trim transparent space
+#       ↓
+#   return clean artwork
+# ============================================================
+
+def clean_source_logo(
+    source_path
+):
+
+    image = load_source_logo(
+        source_path
+    )
+
+    image = remove_edge_white_background(
+        image
+    )
+
+    image = trim_transparency(
+        image
+    )
+
+    if (
+        image.width <= 0
+        or image.height <= 0
+    ):
+
+        raise RuntimeError(
+            f"Logo became empty after cleanup: "
+            f"{source_path}"
+        )
+
+    return image
+
+
+# ============================================================
+# FIT LOGO TO MAXIMUM AREA
+# ============================================================
+
+def fit_logo(
+    image,
+    max_width,
+    max_height
+):
+
+    image = trim_transparency(
+        image
+    )
+
+    if (
+        image.width <= 0
+        or image.height <= 0
+    ):
+
+        raise RuntimeError(
+            "Invalid logo image."
+        )
+
+    scale = min(
+        max_width / image.width,
+        max_height / image.height
+    )
+
+    width = max(
+        1,
+        int(
+            round(
+                image.width * scale
+            )
+        )
+    )
+
+    height = max(
+        1,
+        int(
+            round(
+                image.height * scale
+            )
+        )
+    )
+
+    return image.resize(
+        (width, height),
+        Image.Resampling.LANCZOS
+    )
+
+
+# ============================================================
+# BUILD FINAL SOLO LOGO
+#
+# Output:
+#
+#   1024 x 1024
+#   RGBA
+#   transparent
+#
+# Artwork fills approximately 90% of the canvas.
+# ============================================================
+
+def build_solo_logo(
     source_path,
     destination
 ):
+
+    image = clean_source_logo(
+        source_path
+    )
+
+    max_width = int(
+        SOLO_SIZE[0]
+        *
+        SOLO_LOGO_SCALE
+    )
+
+    max_height = int(
+        SOLO_SIZE[1]
+        *
+        SOLO_LOGO_SCALE
+    )
+
+    logo = fit_logo(
+        image,
+        max_width,
+        max_height
+    )
+
+    canvas = Image.new(
+        "RGBA",
+        SOLO_SIZE,
+        (0, 0, 0, 0)
+    )
+
+    x = (
+        SOLO_SIZE[0]
+        -
+        logo.width
+    ) // 2
+
+    y = (
+        SOLO_SIZE[1]
+        -
+        logo.height
+    ) // 2
+
+    canvas.alpha_composite(
+        logo,
+        (x, y)
+    )
 
     destination.parent.mkdir(
         parents=True,
         exist_ok=True
     )
 
-    shutil.copy2(
-        source_path,
-        destination
+    canvas.save(
+        destination,
+        "PNG",
+        optimize=True
     )
 
 
 # ============================================================
-# BUILD MATCHUP LOGO
+# BUILD MATCHUP
 #
-# HOME TEAM IS ALWAYS ON THE LEFT.
-# AWAY TEAM IS ALWAYS ON THE RIGHT.
+# HOME TEAM ALWAYS LEFT.
+# AWAY TEAM ALWAYS RIGHT.
 #
-# Example:
+# IMPORTANT:
 #
-# Boston_Red_Sox_vs_Tampa_Bay_Rays.png
+# Matchups are built from CLEANED SOLO LOGOS.
 #
-# uses ONLY:
-#
-# temp/New folder/MLB/Boston_Red_Sox/
-#     Boston_Red_Sox.png
-#
-# and:
-#
-# temp/New folder/MLB/Tampa_Bay_Rays/
-#     Tampa_Bay_Rays.png
-#
-# Existing matchup files are NEVER used.
+# They are NOT built from existing matchup files.
 # ============================================================
 
 def build_matchup(
-    home_source,
-    away_source,
+    home_clean_logo,
+    away_clean_logo,
     destination
 ):
 
-    home_image = load_source_logo(
-        home_source
-    )
-
-    away_image = load_source_logo(
-        away_source
-    )
-
     half_width = (
-        MATCHUP_SIZE[0] // 2
+        MATCHUP_SIZE[0]
+        //
+        2
     )
 
     home = fit_logo(
-        home_image,
+        home_clean_logo,
         int(
             half_width
             *
@@ -437,7 +800,7 @@ def build_matchup(
     )
 
     away = fit_logo(
-        away_image,
+        away_clean_logo,
         int(
             half_width
             *
@@ -517,19 +880,15 @@ def build_matchup(
 # ============================================================
 # BUILD ONE TEAM FOLDER
 #
-# Every team folder receives:
+# Every team receives:
 #
 #   Team.png
 #
 # PLUS:
 #
-#   Team_vs_Opponent1.png
-#   Team_vs_Opponent2.png
-#   ...
+#   Team_vs_Opponent.png
 #
-# Every other team in the SAME league is included.
-#
-# All files are generated from the TRUE SOURCE logos.
+# for every other team in that league.
 # ============================================================
 
 def build_team_folder(
@@ -555,7 +914,15 @@ def build_team_folder(
     )
 
     # --------------------------------------------------------
-    # COPY TRUE SOURCE SOLO LOGO
+    # CLEAN HOME SOLO LOGO ONCE.
+    # --------------------------------------------------------
+
+    home_clean_logo = clean_source_logo(
+        home_source
+    )
+
+    # --------------------------------------------------------
+    # CREATE FINAL SOLO LOGO.
     # --------------------------------------------------------
 
     solo_path = (
@@ -564,27 +931,36 @@ def build_team_folder(
         f"{filesystem_name(home_name)}.png"
     )
 
-    copy_solo_logo(
-        home_source,
+    build_solo_logo_from_clean_image(
+        home_clean_logo,
         solo_path
     )
 
     generated = 1
 
     # --------------------------------------------------------
-    # REBUILD EVERY MATCHUP
+    # BUILD EVERY MATCHUP.
     #
-    # Every other team in the league is included.
+    # Clean each opponent's source independently.
+    # Existing matchup files are never touched as sources.
     # --------------------------------------------------------
 
     for away_team in all_teams:
 
         away_name = away_team["name"]
 
-        if clean_name(away_name) == clean_name(home_name):
+        if (
+            clean_name(away_name)
+            ==
+            clean_name(home_name)
+        ):
             continue
 
         away_source = away_team["source"]
+
+        away_clean_logo = clean_source_logo(
+            away_source
+        )
 
         matchup_filename = (
             f"{filesystem_name(home_name)}"
@@ -600,16 +976,19 @@ def build_team_folder(
         )
 
         build_matchup(
-            home_source,
-            away_source,
+            home_clean_logo,
+            away_clean_logo,
             matchup_path
         )
 
         generated += 1
 
-    expected = len(all_teams)
+    expected = len(
+        all_teams
+    )
 
     if generated != expected:
+
         raise RuntimeError(
             f"{league} / {home_name}: "
             f"generated {generated} files, "
@@ -620,6 +999,72 @@ def build_team_folder(
         league,
         home_name,
         generated
+    )
+
+
+# ============================================================
+# BUILD SOLO FROM ALREADY CLEANED IMAGE
+# ============================================================
+
+def build_solo_logo_from_clean_image(
+    image,
+    destination
+):
+
+    image = trim_transparency(
+        image
+    )
+
+    max_width = int(
+        SOLO_SIZE[0]
+        *
+        SOLO_LOGO_SCALE
+    )
+
+    max_height = int(
+        SOLO_SIZE[1]
+        *
+        SOLO_LOGO_SCALE
+    )
+
+    logo = fit_logo(
+        image,
+        max_width,
+        max_height
+    )
+
+    canvas = Image.new(
+        "RGBA",
+        SOLO_SIZE,
+        (0, 0, 0, 0)
+    )
+
+    x = (
+        SOLO_SIZE[0]
+        -
+        logo.width
+    ) // 2
+
+    y = (
+        SOLO_SIZE[1]
+        -
+        logo.height
+    ) // 2
+
+    canvas.alpha_composite(
+        logo,
+        (x, y)
+    )
+
+    destination.parent.mkdir(
+        parents=True,
+        exist_ok=True
+    )
+
+    canvas.save(
+        destination,
+        "PNG",
+        optimize=True
     )
 
 
@@ -642,7 +1087,9 @@ def build_league(
 
     sorted_teams = sorted(
         teams.values(),
-        key=lambda item: clean_name(item["name"])
+        key=lambda item: clean_name(
+            item["name"]
+        )
     )
 
     destination_league = (
@@ -719,7 +1166,7 @@ def build_league(
             )
 
     # --------------------------------------------------------
-    # VERIFY LEAGUE COUNT
+    # VERIFY FILE COUNT.
     # --------------------------------------------------------
 
     actual_files = list(
@@ -727,6 +1174,7 @@ def build_league(
     )
 
     if len(actual_files) != expected_files:
+
         raise RuntimeError(
             f"{league}: generated "
             f"{len(actual_files)} PNG files, "
@@ -734,7 +1182,7 @@ def build_league(
         )
 
     # --------------------------------------------------------
-    # VERIFY EVERY TEAM FOLDER
+    # VERIFY EVERY TEAM FOLDER.
     # --------------------------------------------------------
 
     for team in sorted_teams:
@@ -748,6 +1196,7 @@ def build_league(
         )
 
         if not team_folder.is_dir():
+
             raise RuntimeError(
                 f"Missing team folder: "
                 f"{team_folder}"
@@ -758,6 +1207,7 @@ def build_league(
         )
 
         if len(files) != expected_per_team:
+
             raise RuntimeError(
                 f"{league} / {team_name}: "
                 f"folder contains {len(files)} "
@@ -772,16 +1222,20 @@ def build_league(
         )
 
         if not solo.is_file():
+
             raise RuntimeError(
                 f"Missing solo logo: {solo}"
             )
 
-        # Every other team must have a matchup file.
         for opponent in sorted_teams:
 
             opponent_name = opponent["name"]
 
-            if clean_name(opponent_name) == clean_name(team_name):
+            if (
+                clean_name(opponent_name)
+                ==
+                clean_name(team_name)
+            ):
                 continue
 
             matchup = (
@@ -796,6 +1250,7 @@ def build_league(
             )
 
             if not matchup.is_file():
+
                 raise RuntimeError(
                     f"Missing matchup: "
                     f"{matchup}"
@@ -822,7 +1277,7 @@ def verify_generated_library(
 
     print()
     print("=" * 70)
-    print("VERIFYING COMPLETE REBUILT LIBRARY")
+    print("VERIFYING COMPLETE CLEANED LIBRARY")
     print("=" * 70)
 
     total_expected = 0
@@ -855,6 +1310,7 @@ def verify_generated_library(
         )
 
         if len(files) != expected:
+
             raise RuntimeError(
                 f"{league}: expected "
                 f"{expected} PNG files but found "
@@ -868,6 +1324,26 @@ def verify_generated_library(
                 with Image.open(path) as image:
 
                     image.verify()
+
+                with Image.open(path) as image:
+
+                    if image.mode != "RGBA":
+
+                        raise RuntimeError(
+                            f"Image is not RGBA: "
+                            f"{path}"
+                        )
+
+                    if (
+                        image.width != 1024
+                        and
+                        path.name.lower().endswith(
+                            ".png"
+                        )
+                    ):
+                        # Matchup files intentionally have
+                        # 1024x512 dimensions.
+                        pass
 
             except Exception as exc:
 
@@ -886,6 +1362,7 @@ def verify_generated_library(
     )
 
     if total_found != total_expected:
+
         raise RuntimeError(
             "Final generated file count does "
             "not match expected count."
@@ -893,73 +1370,199 @@ def verify_generated_library(
 
 
 # ============================================================
-# REPLACE SPORTS-LOGOS
+# VERIFY TRANSPARENCY
 #
-# IMPORTANT:
+# Confirms the output actually contains transparent pixels.
+# ============================================================
+
+def verify_transparency(
+    build_root,
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING TRANSPARENT BACKGROUNDS")
+    print("=" * 70)
+
+    checked = 0
+
+    for league in sorted(LEAGUES):
+
+        league_root = (
+            build_root
+            /
+            league
+        )
+
+        for path in league_root.rglob(
+            "*.png"
+        ):
+
+            with Image.open(path) as image:
+
+                image = image.convert("RGBA")
+
+                alpha = image.getchannel(
+                    "A"
+                )
+
+                extrema = alpha.getextrema()
+
+                if extrema is None:
+
+                    raise RuntimeError(
+                        f"Could not inspect alpha: "
+                        f"{path}"
+                    )
+
+                minimum, maximum = extrema
+
+                if minimum != 0:
+
+                    raise RuntimeError(
+                        f"No transparent pixels found "
+                        f"in generated logo: {path}"
+                    )
+
+            checked += 1
+
+    print()
+    print(
+        f"Transparency verified on "
+        f"{checked} PNG files."
+    )
+
+
+# ============================================================
+# VERIFY DIMENSIONS
+# ============================================================
+
+def verify_dimensions(
+    build_root,
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING OUTPUT DIMENSIONS")
+    print("=" * 70)
+
+    solo_count = 0
+    matchup_count = 0
+
+    for league in sorted(LEAGUES):
+
+        teams = teams_by_league[league]
+
+        for team in teams.values():
+
+            team_folder = (
+                build_root
+                /
+                league
+                /
+                filesystem_name(
+                    team["name"]
+                )
+            )
+
+            for path in team_folder.glob(
+                "*.png"
+            ):
+
+                with Image.open(path) as image:
+
+                    if (
+                        "_vs_" in path.stem
+                    ):
+
+                        expected = (
+                            MATCHUP_SIZE
+                        )
+
+                        matchup_count += 1
+
+                    else:
+
+                        expected = (
+                            SOLO_SIZE
+                        )
+
+                        solo_count += 1
+
+                    actual = (
+                        image.width,
+                        image.height
+                    )
+
+                    if actual != expected:
+
+                        raise RuntimeError(
+                            f"Wrong dimensions: "
+                            f"{path} "
+                            f"is {actual}, "
+                            f"expected {expected}"
+                        )
+
+    print()
+    print(
+        f"Solo logos verified: {solo_count}"
+    )
+
+    print(
+        f"Matchup logos verified: {matchup_count}"
+    )
+
+
+# ============================================================
+# INSTALL NEW LIBRARY
 #
-# SOURCE_ROOT = temp/New folder
-#
-# ROOT = sports-logos
-#
-# ONLY sports-logos is replaced.
-#
-# temp/New folder is NEVER renamed, deleted,
-# or modified.
-#
-# The replacement happens ONLY after the complete
-# rebuilt library has passed verification.
+# Existing sports-logos is NOT removed until the entire build
+# has passed all verification.
 # ============================================================
 
 def install_new_library():
 
-    backup_root = (
-        ROOT.parent
-        /
-        "_sports_logos_old"
-    )
-
-    if backup_root.exists():
+    if BACKUP_ROOT.exists():
 
         shutil.rmtree(
-            backup_root
+            BACKUP_ROOT
         )
 
     print()
     print("=" * 70)
-    print("INSTALLING REBUILT SPORTS LOGO LIBRARY")
+    print("INSTALLING CLEANED SPORTS LOGO LIBRARY")
     print("=" * 70)
 
     print()
     print(
-        f"TRUE SOURCE: {SOURCE_ROOT}"
+        f"SOURCE: {ROOT}"
     )
 
     print(
-        f"DESTINATION: {ROOT}"
+        f"NEW BUILD: {BUILD_ROOT}"
     )
 
     # --------------------------------------------------------
-    # BACK UP EXISTING SPORTS-LOGOS.
-    #
-    # This does NOT touch temp/New folder.
+    # Move current source out of the way.
     # --------------------------------------------------------
 
     if ROOT.exists():
 
         print()
         print(
-            f"Moving existing library to temporary backup: "
-            f"{ROOT}"
+            "Moving existing sports-logos to temporary backup."
         )
 
         ROOT.rename(
-            backup_root
+            BACKUP_ROOT
         )
 
     try:
 
         # ----------------------------------------------------
-        # INSTALL THE VERIFIED REBUILD AS sports-logos.
+        # Install verified build.
         # ----------------------------------------------------
 
         BUILD_ROOT.rename(
@@ -969,39 +1572,34 @@ def install_new_library():
     except Exception:
 
         # ----------------------------------------------------
-        # ROLLBACK IF INSTALLATION FAILS.
+        # Roll back if installation fails.
         # ----------------------------------------------------
 
         if (
-            backup_root.exists()
-            and not ROOT.exists()
+            BACKUP_ROOT.exists()
+            and
+            not ROOT.exists()
         ):
 
-            backup_root.rename(
+            BACKUP_ROOT.rename(
                 ROOT
             )
 
         raise
 
     # --------------------------------------------------------
-    # DELETE ONLY THE OLD sports-logos BACKUP.
-    #
-    # temp/New folder remains completely untouched.
+    # Delete backup only after successful installation.
     # --------------------------------------------------------
 
-    if backup_root.exists():
+    if BACKUP_ROOT.exists():
 
         shutil.rmtree(
-            backup_root
+            BACKUP_ROOT
         )
 
     print()
     print(
-        "New sports-logos library installed successfully."
-    )
-
-    print(
-        f"Source library preserved at: {SOURCE_ROOT}"
+        "Cleaned sports-logos library installed successfully."
     )
 
 
@@ -1025,7 +1623,9 @@ def verify_installed_library(
 
         teams = teams_by_league[league]
 
-        expected_per_team = len(teams)
+        expected_per_team = len(
+            teams
+        )
 
         expected = (
             len(teams)
@@ -1040,6 +1640,7 @@ def verify_installed_library(
         )
 
         if not league_root.is_dir():
+
             raise RuntimeError(
                 f"Missing installed league: "
                 f"{league_root}"
@@ -1050,6 +1651,7 @@ def verify_installed_library(
         )
 
         if len(files) != expected:
+
             raise RuntimeError(
                 f"{league}: installed "
                 f"{len(files)} files, "
@@ -1067,6 +1669,7 @@ def verify_installed_library(
             )
 
             if not team_folder.is_dir():
+
                 raise RuntimeError(
                     f"Missing installed team folder: "
                     f"{team_folder}"
@@ -1079,6 +1682,7 @@ def verify_installed_library(
             )
 
             if not solo.is_file():
+
                 raise RuntimeError(
                     f"Missing installed solo logo: "
                     f"{solo}"
@@ -1088,7 +1692,11 @@ def verify_installed_library(
 
                 opponent_name = opponent["name"]
 
-                if clean_name(opponent_name) == clean_name(team_name):
+                if (
+                    clean_name(opponent_name)
+                    ==
+                    clean_name(team_name)
+                ):
                     continue
 
                 matchup = (
@@ -1103,6 +1711,7 @@ def verify_installed_library(
                 )
 
                 if not matchup.is_file():
+
                     raise RuntimeError(
                         f"Missing installed matchup: "
                         f"{matchup}"
@@ -1123,61 +1732,10 @@ def verify_installed_library(
     )
 
     if total_found != total_expected:
+
         raise RuntimeError(
             "Installed library verification failed."
         )
-
-
-# ============================================================
-# VERIFY SOURCE STILL EXISTS
-#
-# This provides an additional safety check that the TRUE
-# SOURCE was not accidentally removed or replaced.
-# ============================================================
-
-def verify_source_still_exists(
-    teams_by_league
-):
-
-    print()
-    print("=" * 70)
-    print("VERIFYING TRUE SOURCE WAS PRESERVED")
-    print("=" * 70)
-
-    if not SOURCE_ROOT.is_dir():
-        raise RuntimeError(
-            f"TRUE SOURCE WAS REMOVED: "
-            f"{SOURCE_ROOT}"
-        )
-
-    for league in sorted(LEAGUES):
-
-        league_root = (
-            SOURCE_ROOT
-            /
-            league
-        )
-
-        if not league_root.is_dir():
-            raise RuntimeError(
-                f"TRUE SOURCE LEAGUE WAS REMOVED: "
-                f"{league_root}"
-            )
-
-        for team in teams_by_league[league].values():
-
-            source = team["source"]
-
-            if not source.is_file():
-                raise RuntimeError(
-                    f"TRUE SOURCE LOGO WAS REMOVED: "
-                    f"{source}"
-                )
-
-    print()
-    print(
-        f"TRUE SOURCE PRESERVED: {SOURCE_ROOT}"
-    )
 
 
 # ============================================================
@@ -1187,53 +1745,69 @@ def verify_source_still_exists(
 def main():
 
     print("=" * 70)
-    print("SPORTS MATCHUP LOGO REBUILDER")
+    print("SPORTS LOGO CLEANUP AND MATCHUP REBUILDER")
     print("=" * 70)
 
     print()
-    print("TRUE SOURCE:")
+    print("SOURCE AND DESTINATION:")
     print(
-        "  temp/New folder/<LEAGUE>/<TEAM>/<TEAM>.png"
+        "  sports-logos/<LEAGUE>/<TEAM>/<TEAM>.png"
     )
 
     print()
-    print("FINAL DESTINATION:")
+    print("PROCESS:")
     print(
-        "  sports-logos/<LEAGUE>/<TEAM>/"
+        "  Existing solo PNGs are cleaned."
+    )
+
+    print(
+        "  White backgrounds connected to the image edge "
+        "are made transparent."
+    )
+
+    print(
+        "  Legitimate enclosed white portions of logos "
+        "are preserved."
+    )
+
+    print(
+        "  Artwork is tightly cropped."
+    )
+
+    print(
+        "  Solo logos are rendered at 1024x1024."
+    )
+
+    print(
+        "  Artwork fills approximately 90% of the canvas."
+    )
+
+    print(
+        "  Matchups are rendered at 1024x512."
+    )
+
+    print(
+        "  Every matchup is rebuilt from cleaned solo logos."
     )
 
     print()
-    print("IMPORTANT:")
+    print("SAFETY:")
     print(
-        "  temp/New folder is the TRUE SOURCE OF TRUTH."
+        "  The original sports-logos directory is NOT "
+        "modified during the build."
     )
 
     print(
-        "  temp/New folder is NEVER modified."
+        "  A separate temporary build is created first."
     )
 
     print(
-        "  Existing sports-logos logos are NOT used as sources."
+        "  The current library is replaced ONLY after "
+        "complete verification."
     )
 
     print(
-        "  Existing matchup logos are NOT used as sources."
-    )
-
-    print(
-        "  Every solo logo comes directly from temp/New folder."
-    )
-
-    print(
-        "  Every matchup is rebuilt from two TRUE SOURCE logos."
-    )
-
-    print(
-        "  Both home/away matchup directions are generated."
-    )
-
-    print(
-        "  No logos are downloaded."
+        "  No external downloads are performed."
     )
 
     print()
@@ -1241,8 +1815,22 @@ def main():
         f"Build workers: {BUILD_WORKERS}"
     )
 
+    print(
+        f"Solo size: {SOLO_SIZE[0]}x{SOLO_SIZE[1]}"
+    )
+
+    print(
+        f"Solo artwork scale: "
+        f"{int(SOLO_LOGO_SCALE * 100)}%"
+    )
+
+    print(
+        f"Matchup size: "
+        f"{MATCHUP_SIZE[0]}x{MATCHUP_SIZE[1]}"
+    )
+
     # --------------------------------------------------------
-    # NEVER BUILD ON TOP OF THE SOURCE.
+    # Clean up an incomplete previous build.
     # --------------------------------------------------------
 
     if BUILD_ROOT.exists():
@@ -1258,18 +1846,26 @@ def main():
         )
 
     # --------------------------------------------------------
-    # DISCOVER TEAMS FROM TRUE SOURCE.
+    # Discover current source library.
     # --------------------------------------------------------
 
-    teams_by_league = discover_source_teams()
-
-    total_teams = verify_source_library(
-        teams_by_league
+    teams_by_league = (
+        discover_source_teams()
     )
+
+    total_teams = (
+        verify_source_library(
+            teams_by_league
+        )
+    )
+
+    # --------------------------------------------------------
+    # Calculate expected output.
+    # --------------------------------------------------------
 
     print()
     print("=" * 70)
-    print("EXPECTED REBUILT LIBRARY")
+    print("EXPECTED CLEANED LIBRARY")
     print("=" * 70)
 
     total_expected = 0
@@ -1305,7 +1901,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # BUILD EVERY LEAGUE FROM TRUE SOURCE.
+    # Build everything from the CURRENT sports-logos source.
     # --------------------------------------------------------
 
     generated_total = 0
@@ -1319,7 +1915,7 @@ def main():
         )
 
     # --------------------------------------------------------
-    # COMPLETE BUILD VERIFICATION.
+    # Verify complete build.
     # --------------------------------------------------------
 
     verify_generated_library(
@@ -1327,16 +1923,24 @@ def main():
         teams_by_league
     )
 
+    verify_transparency(
+        BUILD_ROOT,
+        teams_by_league
+    )
+
+    verify_dimensions(
+        BUILD_ROOT,
+        teams_by_league
+    )
+
     # --------------------------------------------------------
-    # INSTALL INTO sports-logos.
-    #
-    # temp/New folder is NOT touched.
+    # Install only after everything passes.
     # --------------------------------------------------------
 
     install_new_library()
 
     # --------------------------------------------------------
-    # VERIFY THE ACTUAL INSTALLED LIBRARY.
+    # Verify installed library.
     # --------------------------------------------------------
 
     verify_installed_library(
@@ -1344,15 +1948,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # VERIFY TRUE SOURCE STILL EXISTS.
-    # --------------------------------------------------------
-
-    verify_source_still_exists(
-        teams_by_league
-    )
-
-    # --------------------------------------------------------
-    # FINAL REPORT.
+    # Final report.
     # --------------------------------------------------------
 
     print()
@@ -1362,7 +1958,7 @@ def main():
 
     print()
     print(
-        f"TRUE SOURCE: {SOURCE_ROOT}"
+        f"SOURCE USED: {ROOT}"
     )
 
     print(
@@ -1379,40 +1975,39 @@ def main():
 
     print()
     print(
-        "The sports-logos library was completely rebuilt "
-        "from the logos in temp/New folder."
+        "The existing sports-logos solo PNGs were used "
+        "as the source."
     )
 
     print(
-        "Every team has a solo logo from the new source."
+        "White edge-connected backgrounds were removed."
     )
 
     print(
-        "Every team has a matchup against every other "
-        "team in its league."
+        "Legitimate enclosed white logo details were preserved."
     )
 
     print(
-        "Both home/away matchup directions were generated."
+        "Solo logos were cropped and enlarged to "
+        "1024x1024 transparent PNGs."
     )
 
     print(
-        "Existing sports-logos matchup files were never "
-        "used as sources."
+        "Matchup logos were rebuilt from the cleaned "
+        "solo logos at 1024x512."
     )
 
     print(
-        "Existing sports-logos solo logos were never "
-        "used as sources."
+        "Existing matchup files were never used as sources."
     )
 
     print(
-        "temp/New folder was preserved as the permanent "
-        "source library."
+        "The rebuilt sports-logos library was installed "
+        "only after verification succeeded."
     )
 
     print(
-        "No external logo downloads were performed."
+        "No external downloads were performed."
     )
 
 
