@@ -13,6 +13,11 @@ from html.parser import HTMLParser
 import requests
 from PIL import Image
 
+try:
+    import cairosvg
+except ImportError:
+    cairosvg = None
+
 
 # ============================================================
 # CONFIG
@@ -43,373 +48,32 @@ HEADERS = {
 
 
 # ============================================================
-# CDNLOGO COLLECTIONS
-#
-# CDNLogo's normal search page is not reliable for automated
-# scraping. These collection pages provide another way to
-# discover the actual CDNLogo team pages.
-# ============================================================
-
-COLLECTION_URLS = {
-    "MLB": [
-        "https://cdnlogo.com/logos-collection/mlb-teams",
-        "https://cdnlogo.com/logos-vector/mlb",
-        "https://cdnlogo.com/logos-vector/baseball",
-        "https://cdnlogo.com/logos-vector/sports",
-    ],
-
-    "NBA": [
-        "https://cdnlogo.com/logos-collection/nba-teams",
-        "https://cdnlogo.com/logos-vector/nba",
-        "https://cdnlogo.com/logos-vector/basketball",
-        "https://cdnlogo.com/logos-vector/sports",
-    ],
-
-    "NFL": [
-        "https://cdnlogo.com/logos-collection/nfl-teams",
-        "https://cdnlogo.com/logos-vector/nfl",
-        "https://cdnlogo.com/logos-vector/football",
-        "https://cdnlogo.com/logos-vector/sports",
-    ],
-
-    "NHL": [
-        "https://cdnlogo.com/logos-collection/nhl-teams",
-        "https://cdnlogo.com/logos-vector/nhl",
-        "https://cdnlogo.com/logos-vector/hockey",
-        "https://cdnlogo.com/logos-vector/sports",
-    ],
-}
-
-
-# ============================================================
 # TEAM NAME NORMALIZATION
 # ============================================================
 
 ALIASES = {
     "Los_Angeles_Angels": "Los Angeles Angels",
     "Los_Angeles_Angels_Of_Anaheim": "Los Angeles Angels",
-
     "Cleveland_Indians": "Cleveland Guardians",
-
     "Washington_Redskins": "Washington Commanders",
     "Washington_Football_Team": "Washington Commanders",
-
     "New_Jersey_Nets": "Brooklyn Nets",
     "Charlotte_Bobcats": "Charlotte Hornets",
-
     "Phoenix_Coyotes": "Arizona Coyotes",
-    "Arizona_Coyotes": "Arizona Coyotes",
-
     "Atlanta_Thrashers": "Winnipeg Jets",
 
-    "Anaheim_Mighty_Ducks": "Anaheim Ducks",
-
-    "New_York_Giants": "New York Giants",
-
-    "Oakland_Raiders": "Las Vegas Raiders",
+    # Current / alternate naming variations
+    "Oakland_Athletics": "Athletics",
     "Las_Vegas_Raiders": "Las Vegas Raiders",
-
-    "San_Diego_Chargers": "Los Angeles Chargers",
-    "Los_Angeles_Chargers": "Los Angeles Chargers",
-
     "St_Louis_Rams": "Los Angeles Rams",
-    "Los_Angeles_Rams": "Los Angeles Rams",
-
-    "Tampa_Bay_Devil_Rays": "Tampa Bay Rays",
-
-    "Florida_Marlins": "Miami Marlins",
-
-    "Montreal_Expos": "Washington Nationals",
-
-    "Seattle_Supersonics": "Oklahoma City Thunder",
-
-    "New_Orleans_Hornets": "New Orleans Pelicans",
-
-    "New_Orleans_Oklahoma_City_Hornets":
-        "New Orleans Pelicans",
-
-    "Vancouver_Grizzlies": "Memphis Grizzlies",
-
-    "Minnesota_North_Stars": "Minnesota Wild",
-
-    "Hartford_Whalers": "Carolina Hurricanes",
-
-    "Quebec_Nordiques": "Colorado Avalanche",
-
-    "Colorado_Rockies": "Colorado Avalanche",
-
-    "Winnipeg_Thrashers": "Winnipeg Jets",
-
-    "Atlanta_Hawks": "Atlanta Hawks",
-}
-
-
-# Additional textual aliases used when matching CDNLogo
-# search/collection names to our canonical team names.
-
-SEARCH_ALIASES = {
-    "los angeles angels": [
-        "los angeles angels",
-        "los angeles angels of anaheim",
-        "angels",
-    ],
-
-    "anaheim ducks": [
-        "anaheim ducks",
-        "ducks",
-    ],
-
-    "arizona diamondbacks": [
-        "arizona diamondbacks",
-        "arizona diamondbacks",
-        "diamondbacks",
-    ],
-
-    "atlanta braves": [
-        "atlanta braves",
-        "braves",
-    ],
-
-    "baltimore orioles": [
-        "baltimore orioles",
-        "orioles",
-    ],
-
-    "boston red sox": [
-        "boston red sox",
-        "red sox",
-    ],
-
-    "chicago cubs": [
-        "chicago cubs",
-        "cubs",
-    ],
-
-    "chicago white sox": [
-        "chicago white sox",
-        "white sox",
-    ],
-
-    "cincinnati reds": [
-        "cincinnati reds",
-        "reds",
-    ],
-
-    "cleveland guardians": [
-        "cleveland guardians",
-        "guardians",
-    ],
-
-    "colorado rockies": [
-        "colorado rockies",
-        "rockies",
-    ],
-
-    "detroit tigers": [
-        "detroit tigers",
-        "tigers",
-    ],
-
-    "houston astros": [
-        "houston astros",
-        "astros",
-    ],
-
-    "kansas city royals": [
-        "kansas city royals",
-        "royals",
-    ],
-
-    "los angeles dodgers": [
-        "los angeles dodgers",
-        "dodgers",
-    ],
-
-    "miami marlins": [
-        "miami marlins",
-        "florida marlins",
-        "marlins",
-    ],
-
-    "milwaukee brewers": [
-        "milwaukee brewers",
-        "brewers",
-    ],
-
-    "minnesota twins": [
-        "minnesota twins",
-        "twins",
-    ],
-
-    "new york mets": [
-        "new york mets",
-        "mets",
-    ],
-
-    "new york yankees": [
-        "new york yankees",
-        "yankees",
-    ],
-
-    "oakland athletics": [
-        "oakland athletics",
-        "oakland as",
-        "athletics",
-        "as",
-    ],
-
-    "philadelphia phillies": [
-        "philadelphia phillies",
-        "phillies",
-    ],
-
-    "pittsburgh pirates": [
-        "pittsburgh pirates",
-        "pirates",
-    ],
-
-    "san diego padres": [
-        "san diego padres",
-        "padres",
-    ],
-
-    "san francisco giants": [
-        "san francisco giants",
-        "giants",
-    ],
-
-    "seattle mariners": [
-        "seattle mariners",
-        "mariners",
-    ],
-
-    "st louis cardinals": [
-        "st louis cardinals",
-        "st. louis cardinals",
-        "cardinals",
-    ],
-
-    "tampa bay rays": [
-        "tampa bay rays",
-        "tampa bay devil rays",
-        "devil rays",
-        "rays",
-    ],
-
-    "texas rangers": [
-        "texas rangers",
-        "rangers",
-    ],
-
-    "toronto blue jays": [
-        "toronto blue jays",
-        "blue jays",
-    ],
-
-    "washington nationals": [
-        "washington nationals",
-        "montreal expos",
-        "nationals",
-    ],
-
-    "las vegas raiders": [
-        "las vegas raiders",
-        "oakland raiders",
-        "raiders",
-    ],
-
-    "los angeles chargers": [
-        "los angeles chargers",
-        "san diego chargers",
-        "chargers",
-    ],
-
-    "los angeles rams": [
-        "los angeles rams",
-        "st louis rams",
-        "st. louis rams",
-        "rams",
-    ],
-
-    "los angeles lakers": [
-        "los angeles lakers",
-        "lakers",
-    ],
-
-    "los angeles clippers": [
-        "los angeles clippers",
-        "clippers",
-    ],
-
-    "new orleans pelicans": [
-        "new orleans pelicans",
-        "new orleans hornets",
-        "pelicans",
-    ],
-
-    "oklahoma city thunder": [
-        "oklahoma city thunder",
-        "seattle supersonics",
-        "seattle supersonics",
-        "thunder",
-    ],
-
-    "brooklyn nets": [
-        "brooklyn nets",
-        "new jersey nets",
-        "nets",
-    ],
-
-    "memphis grizzlies": [
-        "memphis grizzlies",
-        "vancouver grizzlies",
-        "grizzlies",
-    ],
-
-    "carolina hurricanes": [
-        "carolina hurricanes",
-        "hartford whalers",
-        "hurricanes",
-    ],
-
-    "colorado avalanche": [
-        "colorado avalanche",
-        "quebec nordiques",
-        "avalanche",
-    ],
-
-    "minnesota wild": [
-        "minnesota wild",
-        "minnesota north stars",
-        "wild",
-    ],
-
-    "winnipeg jets": [
-        "winnipeg jets",
-        "atlanta thrashers",
-        "jets",
-    ],
+    "San_Diego_Chargers": "Los Angeles Chargers",
 }
 
 
 def clean_name(value):
-    """
-    Convert filenames/team names into a normalized searchable name.
-    """
+    value = os.path.splitext(value)[0]
 
-    value = os.path.splitext(
-        str(value)
-    )[0]
-
-    value = value.replace(
-        "_",
-        " "
-    )
-
-    value = value.replace(
-        "-",
-        " "
-    )
+    value = value.replace("_", " ")
 
     value = unicodedata.normalize(
         "NFKD",
@@ -433,38 +97,108 @@ def clean_name(value):
         value
     )
 
-    value = value.strip().lower()
-
-    return value
+    return value.strip().lower()
 
 
 def display_team_name(raw):
 
-    raw = os.path.splitext(
-        raw
-    )[0]
+    raw = os.path.splitext(raw)[0]
 
     if raw in ALIASES:
+        return ALIASES[raw]
 
-        return ALIASES[
-            raw
-        ]
-
-    return raw.replace(
-        "_",
-        " "
-    )
+    return raw.replace("_", " ")
 
 
 def normalized_search_name(raw):
 
-    name = display_team_name(
-        raw
+    return clean_name(
+        display_team_name(raw)
     )
 
-    return clean_name(
-        name
+
+# ============================================================
+# SEARCH NAME VARIATIONS
+# ============================================================
+
+def team_search_variations(team_name):
+
+    original = display_team_name(
+        team_name
     )
+
+    variations = [
+        original
+    ]
+
+    normalized = clean_name(
+        original
+    )
+
+    # Common CDNLogo naming differences.
+    replacements = {
+        "los angeles angels":
+            "los angeles angels of anaheim",
+
+        "athletics":
+            "oakland athletics",
+
+        "new york giants":
+            "new york giants",
+
+        "new york jets":
+            "new york jets",
+
+        "utah mammoth":
+            "utah mammoth",
+
+        "washington commanders":
+            "washington commanders",
+    }
+
+    if normalized in replacements:
+
+        variations.append(
+            replacements[normalized]
+        )
+
+    # Remove common sports suffixes where CDNLogo uses
+    # abbreviated or alternate naming.
+    simplified = re.sub(
+        r"\b(football|basketball|hockey|baseball)\b",
+        "",
+        original,
+        flags=re.IGNORECASE
+    )
+
+    simplified = re.sub(
+        r"\s+",
+        " ",
+        simplified
+    ).strip()
+
+    if simplified and simplified.lower() != original.lower():
+
+        variations.append(
+            simplified
+        )
+
+    # Unique values, preserving order.
+    output = []
+
+    seen = set()
+
+    for value in variations:
+
+        key = clean_name(value)
+
+        if key and key not in seen:
+
+            seen.add(key)
+
+            output.append(value)
+
+    return output
 
 
 # ============================================================
@@ -493,18 +227,12 @@ class CDNLogoHTMLParser(HTMLParser):
         attrs
     ):
 
-        attributes = dict(
-            attrs
-        )
+        attributes = dict(attrs)
 
         if tag.lower() == "a":
 
             self.current_link = {
-                "href":
-                    attributes.get(
-                        "href"
-                    ),
-
+                "href": attributes.get("href"),
                 "text": []
             }
 
@@ -516,10 +244,7 @@ class CDNLogoHTMLParser(HTMLParser):
                 attributes
             )
 
-    def handle_data(
-        self,
-        data
-    ):
+    def handle_data(self, data):
 
         if self.current_link is not None:
 
@@ -527,10 +252,7 @@ class CDNLogoHTMLParser(HTMLParser):
                 data
             )
 
-    def handle_endtag(
-        self,
-        tag
-    ):
+    def handle_endtag(self, tag):
 
         if tag.lower() == "a":
 
@@ -551,9 +273,7 @@ class CDNLogoHTMLParser(HTMLParser):
             self.current_link_text = []
 
 
-def parse_html(
-    response_text
-):
+def parse_html(response_text):
 
     parser = CDNLogoHTMLParser()
 
@@ -588,191 +308,39 @@ def get(url):
 
 
 # ============================================================
-# COLLECTION DISCOVERY
+# CDNLOGO INDEX SEARCH
+#
+# CDNLogo's old /search?q= endpoint is not reliable anymore.
+#
+# We instead search CDNLogo's public logo index pages.
 # ============================================================
 
-COLLECTION_CACHE = {}
-
-
-def collection_candidates(
-    league
-):
-    """
-    Crawl CDNLogo collection/vector pages and extract every
-    CDNLogo logo page found there.
-
-    This is used because CDNLogo's search page is not dependable
-    for automated requests.
-    """
-
-    if league in COLLECTION_CACHE:
-
-        return COLLECTION_CACHE[
-            league
-        ]
+def search_cdnlogo_index(team_name):
 
     candidates = []
 
-    seen = set()
-
-    urls = COLLECTION_URLS.get(
-        league,
-        []
-    )
-
-    for collection_url in urls:
-
-        try:
-
-            response = get(
-                collection_url
-            )
-
-        except Exception as exc:
-
-            print(
-                f"  Collection unavailable: "
-                f"{collection_url}"
-            )
-
-            continue
-
-        parser = parse_html(
-            response.text
-        )
-
-        for link in parser.links:
-
-            href = link.get(
-                "href"
-            )
-
-            if not href:
-
-                continue
-
-            href = html.unescape(
-                href
-            )
-
-            href = urljoin(
-                collection_url,
-                href
-            )
-
-            if (
-                "cdnlogo.com" not in
-                href.lower()
-            ):
-
-                continue
-
-            if "/logo/" not in href:
-
-                continue
-
-            title = link.get(
-                "text",
-                ""
-            ).strip()
-
-            key = (
-                title,
-                href
-            )
-
-            if key in seen:
-
-                continue
-
-            seen.add(
-                key
-            )
-
-            candidates.append(
-                (
-                    title,
-                    href
-                )
-            )
-
-        time.sleep(
-            REQUEST_DELAY
-        )
-
-    COLLECTION_CACHE[
-        league
-    ] = candidates
-
-    return candidates
-
-
-# ============================================================
-# CDNLOGO SEARCH
-# ============================================================
-
-def search_cdnlogo(
-    team_name,
-    league=None
-):
-    """
-    Discover CDNLogo pages.
-
-    First use CDNLogo's collection pages. Then try the normal
-    search page as a secondary fallback.
-    """
-
-    candidates = []
-
-    seen = set()
-
-    # --------------------------------------------------------
-    # COLLECTION SEARCH
-    # --------------------------------------------------------
-
-    if league:
-
-        for title, href in collection_candidates(
-            league
-        ):
-
-            key = (
-                title,
-                href
-            )
-
-            if key not in seen:
-
-                seen.add(
-                    key
-                )
-
-                candidates.append(
-                    (
-                        title,
-                        href
-                    )
-                )
-
-    # --------------------------------------------------------
-    # NORMAL CDNLOGO SEARCH
-    # --------------------------------------------------------
-
-    query = quote(
+    variations = team_search_variations(
         team_name
     )
 
-    urls = [
-        f"{CDNLOGO_BASE}/search?q={query}",
-        f"{CDNLOGO_BASE}/?q={query}",
+    # CDNLogo sports index.
+    index_urls = [
+        f"{CDNLOGO_BASE}/logos/sports",
+        f"{CDNLOGO_BASE}/logos/sports?page=1",
     ]
 
-    for url in urls:
+    # Also try CDNLogo's alphabetical/general index.
+    index_urls.extend([
+        f"{CDNLOGO_BASE}/logos",
+        f"{CDNLOGO_BASE}/logos?page=1",
+    ])
+
+    for index_url in index_urls:
 
         try:
 
             response = get(
-                url
+                index_url
             )
 
         except Exception:
@@ -790,7 +358,6 @@ def search_cdnlogo(
             )
 
             if not href:
-
                 continue
 
             href = html.unescape(
@@ -803,31 +370,33 @@ def search_cdnlogo(
             )
 
             if "/logo/" not in href:
-
                 continue
 
-            title = link.get(
+            text = link.get(
                 "text",
                 ""
             ).strip()
 
-            key = (
-                title,
-                href
-            )
+            if not text:
+                continue
 
-            if key not in seen:
+            for variation in variations:
 
-                seen.add(
-                    key
+                score = score_candidate(
+                    variation,
+                    text
                 )
 
-                candidates.append(
-                    (
-                        title,
-                        href
+                if score >= 0.65:
+
+                    candidates.append(
+                        (
+                            text,
+                            href
+                        )
                     )
-                )
+
+                    break
 
         if candidates:
 
@@ -837,113 +406,248 @@ def search_cdnlogo(
             REQUEST_DELAY
         )
 
-    return candidates
+    return unique_candidates(
+        candidates
+    )
 
 
 # ============================================================
-# DIRECT CDNLOGO PAGE DISCOVERY
+# CDNLOGO DIRECT SEARCH THROUGH SITE'S INDEX
+#
+# CDNLogo pages use predictable /logo/ URLs, but the numeric
+# suffix varies. We first discover the slug through CDNLogo's
+# indexed pages, then verify the actual page.
 # ============================================================
 
-def search_engine_fallback(
-    team_name
-):
-    """
-    Try likely CDNLogo slugs.
+def search_cdnlogo_slug(team_name):
 
-    CDNLogo assigns numeric IDs to pages, so the exact numeric
-    ID cannot be reliably guessed. These attempts are therefore
-    only a final fallback.
-    """
+    candidates = []
 
-    normalized = clean_name(
+    variations = team_search_variations(
         team_name
     )
 
-    slugs = [
-        normalized.replace(
+    for variation in variations:
+
+        slug = clean_name(
+            variation
+        ).replace(
             " ",
             "-"
-        ),
-
-        normalized.replace(
-            " ",
-            "_"
-        ),
-    ]
-
-    results = []
-
-    for slug in slugs:
+        )
 
         urls = [
             f"{CDNLOGO_BASE}/logo/{slug}.html",
-            f"{CDNLOGO_BASE}/logos/{slug}",
+            f"{CDNLOGO_BASE}/logo/{slug}",
         ]
 
         for url in urls:
 
             try:
 
-                response = get(
-                    url
+                response = session.get(
+                    url,
+                    timeout=REQUEST_TIMEOUT,
+                    allow_redirects=True
                 )
-
-                if response.status_code == 200:
-
-                    results.append(
-                        (
-                            team_name,
-                            response.url
-                        )
-                    )
 
             except Exception:
 
-                pass
+                continue
 
-    return results
+            if response.status_code != 200:
+
+                continue
+
+            final_url = response.url
+
+            if "/logo/" not in final_url:
+
+                continue
+
+            candidates.append(
+                (
+                    variation,
+                    final_url
+                )
+            )
+
+            break
+
+        if candidates:
+
+            break
+
+        time.sleep(
+            REQUEST_DELAY
+        )
+
+    return unique_candidates(
+        candidates
+    )
+
+
+# ============================================================
+# CDNLOGO WEB SEARCH FALLBACK
+#
+# This is the important fallback for cases such as:
+#
+# Arizona Diamondbacks
+#
+# where CDNLogo has a valid page such as:
+#
+# /logo/arizona-diamondbacks_31851.html
+#
+# but there is no predictable URL without the numeric ID.
+# ============================================================
+
+def search_web_for_cdnlogo(team_name):
+
+    candidates = []
+
+    variations = team_search_variations(
+        team_name
+    )
+
+    for variation in variations:
+
+        query = quote(
+            f'site:cdnlogo.com/logo "{variation}"'
+        )
+
+        urls = [
+            f"https://www.google.com/search?q={query}",
+            f"https://www.bing.com/search?q={query}",
+        ]
+
+        for search_url in urls:
+
+            try:
+
+                response = session.get(
+                    search_url,
+                    timeout=REQUEST_TIMEOUT
+                )
+
+            except Exception:
+
+                continue
+
+            if response.status_code != 200:
+
+                continue
+
+            parser = parse_html(
+                response.text
+            )
+
+            for link in parser.links:
+
+                href = link.get(
+                    "href"
+                )
+
+                if not href:
+                    continue
+
+                href = html.unescape(
+                    href
+                )
+
+                # Google/Bing may wrap the destination.
+                if "cdnlogo.com/logo/" not in href:
+
+                    continue
+
+                match = re.search(
+                    r'https?://cdnlogo\.com/logo/[^&"\']+',
+                    href,
+                    re.IGNORECASE
+                )
+
+                if match:
+
+                    href = match.group(0)
+
+                href = href.replace(
+                    "&amp;",
+                    "&"
+                )
+
+                text = link.get(
+                    "text",
+                    ""
+                ).strip()
+
+                if not text:
+
+                    text = variation
+
+                candidates.append(
+                    (
+                        text,
+                        href
+                    )
+                )
+
+            if candidates:
+
+                return unique_candidates(
+                    candidates
+                )
+
+            time.sleep(
+                REQUEST_DELAY
+            )
+
+    return unique_candidates(
+        candidates
+    )
+
+
+# ============================================================
+# UNIQUE CANDIDATES
+# ============================================================
+
+def unique_candidates(candidates):
+
+    output = []
+
+    seen = set()
+
+    for title, url in candidates:
+
+        key = (
+            clean_name(title),
+            url.lower()
+        )
+
+        if key in seen:
+
+            continue
+
+        seen.add(
+            key
+        )
+
+        output.append(
+            (
+                title,
+                url
+            )
+        )
+
+    return output
 
 
 # ============================================================
 # MATCH RESULT
 # ============================================================
 
-def aliases_for_team(
-    team_name
-):
-
-    wanted = clean_name(
-        team_name
-    )
-
-    aliases = SEARCH_ALIASES.get(
-        wanted
-    )
-
-    if aliases:
-
-        return [
-            clean_name(x)
-            for x in aliases
-        ]
-
-    return [
-        wanted
-    ]
-
-
 def score_candidate(
     team_name,
     candidate_name
 ):
-    """
-    Score a CDNLogo result against the requested team.
-
-    Exact canonical and known aliases receive the strongest
-    scores. This prevents "Anaheim Ducks" from accidentally
-    becoming "Anaheim Mighty Ducks" simply because it contains
-    similar words.
-    """
 
     wanted = clean_name(
         team_name
@@ -957,95 +661,23 @@ def score_candidate(
 
         return 0.0
 
-    aliases = aliases_for_team(
-        team_name
-    )
-
-    # --------------------------------------------------------
-    # Exact canonical/alias match
-    # --------------------------------------------------------
-
-    if candidate in aliases:
+    if candidate == wanted:
 
         return 1.0
 
-    # --------------------------------------------------------
-    # Candidate contains a canonical alias
-    # --------------------------------------------------------
+    if wanted in candidate:
 
-    for alias in aliases:
+        return 0.95
 
-        if (
-            len(alias) >= 6
-            and alias in candidate
-        ):
+    if candidate in wanted:
 
-            return 0.96
+        return 0.90
 
-    # --------------------------------------------------------
-    # Candidate is contained by an alias
-    # --------------------------------------------------------
-
-    for alias in aliases:
-
-        if (
-            len(candidate) >= 6
-            and candidate in alias
-        ):
-
-            return 0.94
-
-    # --------------------------------------------------------
-    # Token overlap
-    # --------------------------------------------------------
-
-    wanted_tokens = set(
-        wanted.split()
-    )
-
-    candidate_tokens = set(
-        candidate.split()
-    )
-
-    if wanted_tokens:
-
-        overlap = (
-            len(
-                wanted_tokens &
-                candidate_tokens
-            )
-            /
-            len(
-                wanted_tokens
-            )
-        )
-
-        if overlap == 1.0:
-
-            return 0.93
-
-    # --------------------------------------------------------
-    # Fuzzy match
-    # --------------------------------------------------------
-
-    best_ratio = SequenceMatcher(
+    return SequenceMatcher(
         None,
         wanted,
         candidate
     ).ratio()
-
-    for alias in aliases:
-
-        best_ratio = max(
-            best_ratio,
-            SequenceMatcher(
-                None,
-                alias,
-                candidate
-            ).ratio()
-        )
-
-    return best_ratio
 
 
 def choose_candidate(
@@ -1057,9 +689,42 @@ def choose_candidate(
 
     for title, url in candidates:
 
-        score = score_candidate(
+        # Score the visible title.
+        title_score = score_candidate(
             team_name,
             title
+        )
+
+        # Also score the URL slug. This is important because
+        # CDNLogo search-engine results can have titles with
+        # extra words such as "Logo PNG Vector SVG".
+        url_name = re.sub(
+            r"^https?://[^/]+/logo/",
+            "",
+            url,
+            flags=re.IGNORECASE
+        )
+
+        url_name = re.sub(
+            r"_\d+\.html.*$",
+            "",
+            url_name,
+            flags=re.IGNORECASE
+        )
+
+        url_name = url_name.replace(
+            "-",
+            " "
+        )
+
+        url_score = score_candidate(
+            team_name,
+            url_name
+        )
+
+        score = max(
+            title_score,
+            url_score
         )
 
         scored.append(
@@ -1079,20 +744,10 @@ def choose_candidate(
 
         return None
 
-    # --------------------------------------------------------
-    # Prefer exact/very strong matches.
-    # --------------------------------------------------------
-
-    for item in scored:
-
-        if item[0] >= 0.95:
-
-            return item
-
     best = scored[0]
 
-    # Do not accept wildly unrelated results.
-    if best[0] < 0.72:
+    # Require a real match.
+    if best[0] < 0.70:
 
         return None
 
@@ -1107,14 +762,6 @@ def extract_image_from_page(
     page_url,
     team_name
 ):
-    """
-    Extract the CDNLogo-hosted image.
-
-    PNG is preferred, but SVG is accepted and Pillow will
-    convert it if the installed Pillow build supports SVG
-    through the available decoder. If not, the raw SVG is
-    converted using the embedded XML/vector fallback below.
-    """
 
     response = get(
         page_url
@@ -1144,7 +791,6 @@ def extract_image_from_page(
             )
 
             if not value:
-
                 continue
 
             value = html.unescape(
@@ -1158,7 +804,7 @@ def extract_image_from_page(
 
             if (
                 "static.cdnlogo.com"
-                in value
+                in value.lower()
             ):
 
                 if value not in candidates:
@@ -1172,8 +818,8 @@ def extract_image_from_page(
     # --------------------------------------------------------
 
     patterns = [
-        r'https?://static\.cdnlogo\.com/[^"\']+\.png',
-        r'https?://static\.cdnlogo\.com/[^"\']+\.svg',
+        r'https?://static\.cdnlogo\.com/[^"\']+\.(?:png|svg)',
+        r'//static\.cdnlogo\.com/[^"\']+\.(?:png|svg)',
     ]
 
     for pattern in patterns:
@@ -1188,6 +834,10 @@ def extract_image_from_page(
                 match
             )
 
+            if match.startswith("//"):
+
+                match = "https:" + match
+
             if match not in candidates:
 
                 candidates.append(
@@ -1195,7 +845,7 @@ def extract_image_from_page(
                 )
 
     # --------------------------------------------------------
-    # RELATIVE REFERENCES
+    # RELATIVE IMAGE REFERENCES
     # --------------------------------------------------------
 
     relative_patterns = [
@@ -1222,7 +872,7 @@ def extract_image_from_page(
 
             if (
                 "static.cdnlogo.com"
-                in absolute
+                in absolute.lower()
             ):
 
                 if absolute not in candidates:
@@ -1232,12 +882,11 @@ def extract_image_from_page(
                     )
 
     # --------------------------------------------------------
-    # PREFER PNG
+    # PREFER FULL-SIZE PNG
     # --------------------------------------------------------
 
     pngs = [
-        x
-        for x in candidates
+        x for x in candidates
         if ".png" in x.lower()
         and "thumb" not in x.lower()
     ]
@@ -1246,23 +895,12 @@ def extract_image_from_page(
 
         return pngs[0]
 
-    pngs = [
-        x
-        for x in candidates
-        if ".png" in x.lower()
-    ]
-
-    if pngs:
-
-        return pngs[0]
-
     # --------------------------------------------------------
-    # SVG
+    # THEN SVG
     # --------------------------------------------------------
 
     svgs = [
-        x
-        for x in candidates
+        x for x in candidates
         if ".svg" in x.lower()
         and "thumb" not in x.lower()
     ]
@@ -1271,9 +909,21 @@ def extract_image_from_page(
 
         return svgs[0]
 
+    # --------------------------------------------------------
+    # THUMBNAIL FALLBACK
+    # --------------------------------------------------------
+
+    pngs = [
+        x for x in candidates
+        if ".png" in x.lower()
+    ]
+
+    if pngs:
+
+        return pngs[0]
+
     svgs = [
-        x
-        for x in candidates
+        x for x in candidates
         if ".svg" in x.lower()
     ]
 
@@ -1294,16 +944,10 @@ def extract_image_from_page(
 SOURCE_CACHE = {}
 
 
-def find_team_source(
-    team_name,
-    league
-):
+def find_team_source(team_name):
 
-    cache_key = (
-        league,
-        clean_name(
-            team_name
-        )
+    cache_key = clean_name(
+        team_name
     )
 
     if cache_key in SOURCE_CACHE:
@@ -1315,17 +959,16 @@ def find_team_source(
     print()
 
     print(
-        f"Finding CDNLogo source: "
-        f"{team_name}"
+        f"Finding CDNLogo source: {team_name}"
     )
 
     # --------------------------------------------------------
-    # Search collection pages + normal search.
+    # METHOD 1:
+    # CDNLogo public index.
     # --------------------------------------------------------
 
-    candidates = search_cdnlogo(
-        team_name,
-        league
+    candidates = search_cdnlogo_index(
+        team_name
     )
 
     best = choose_candidate(
@@ -1334,12 +977,31 @@ def find_team_source(
     )
 
     # --------------------------------------------------------
-    # Direct slug fallback.
+    # METHOD 2:
+    # Predictable CDNLogo slug.
     # --------------------------------------------------------
 
     if not best:
 
-        candidates = search_engine_fallback(
+        candidates = search_cdnlogo_slug(
+            team_name
+        )
+
+        best = choose_candidate(
+            team_name,
+            candidates
+        )
+
+    # --------------------------------------------------------
+    # METHOD 3:
+    # Google/Bing site search.
+    #
+    # This handles CDNLogo URLs containing numeric IDs.
+    # --------------------------------------------------------
+
+    if not best:
+
+        candidates = search_web_for_cdnlogo(
             team_name
         )
 
@@ -1351,8 +1013,8 @@ def find_team_source(
     if not best:
 
         raise RuntimeError(
-            f"Could not find a sufficiently "
-            f"close CDNLogo result for: "
+            "Could not find a sufficiently "
+            "close CDNLogo result for: "
             f"{team_name}"
         )
 
@@ -1403,16 +1065,10 @@ def find_team_source(
 IMAGE_CACHE = {}
 
 
-def download_logo(
-    team_name,
-    league
-):
+def download_logo(team_name):
 
-    key = (
-        league,
-        clean_name(
-            team_name
-        )
+    key = clean_name(
+        team_name
     )
 
     if key in IMAGE_CACHE:
@@ -1422,8 +1078,7 @@ def download_logo(
         ].copy()
 
     image_url, page_url = find_team_source(
-        team_name,
-        league
+        team_name
     )
 
     response = get(
@@ -1438,12 +1093,41 @@ def download_logo(
     )
 
     # --------------------------------------------------------
-    # First attempt: Pillow.
-    #
-    # This works for PNG and other raster formats.
+    # SVG
     # --------------------------------------------------------
 
-    try:
+    if (
+        ".svg" in image_url.lower()
+        or "svg" in content_type
+        or response.content.lstrip().startswith(
+            b"<svg"
+        )
+    ):
+
+        if cairosvg is None:
+
+            raise RuntimeError(
+                "CairoSVG is required to convert "
+                f"SVG logo: {team_name}"
+            )
+
+        png_bytes = cairosvg.svg2png(
+            bytestring=response.content,
+            output_width=None,
+            output_height=None
+        )
+
+        image = Image.open(
+            io.BytesIO(
+                png_bytes
+            )
+        )
+
+    # --------------------------------------------------------
+    # PNG / other raster image
+    # --------------------------------------------------------
+
+    else:
 
         image = Image.open(
             io.BytesIO(
@@ -1451,92 +1135,24 @@ def download_logo(
             )
         )
 
-        image.load()
+    image.load()
 
-        image = image.convert(
-            "RGBA"
-        )
-
-        IMAGE_CACHE[
-            key
-        ] = image
-
-        return image.copy()
-
-    except Exception:
-        pass
-
-    # --------------------------------------------------------
-    # SVG fallback.
-    #
-    # CDNLogo commonly serves SVG as the source. If Pillow
-    # cannot decode it directly, try an optional cairosvg
-    # installation if present.
-    # --------------------------------------------------------
-
-    if (
-        "svg" in content_type
-        or image_url.lower().endswith(
-            ".svg"
-        )
-        or b"<svg" in response.content[:1000].lower()
-    ):
-
-        try:
-
-            import cairosvg
-
-            png_bytes = cairosvg.svg2png(
-                bytestring=response.content
-            )
-
-            image = Image.open(
-                io.BytesIO(
-                    png_bytes
-                )
-            )
-
-            image.load()
-
-            image = image.convert(
-                "RGBA"
-            )
-
-            IMAGE_CACHE[
-                key
-            ] = image
-
-            return image.copy()
-
-        except ImportError:
-
-            raise RuntimeError(
-                "CDNLogo returned an SVG and "
-                "Pillow cannot decode SVG directly. "
-                "Install cairosvg or allow the workflow "
-                "to install it."
-            )
-
-        except Exception as exc:
-
-            raise RuntimeError(
-                f"Could not convert CDNLogo SVG "
-                f"for {team_name}: {exc}"
-            )
-
-    raise RuntimeError(
-        f"Could not decode CDNLogo image for "
-        f"{team_name}: {image_url}"
+    image = image.convert(
+        "RGBA"
     )
+
+    IMAGE_CACHE[
+        key
+    ] = image
+
+    return image.copy()
 
 
 # ============================================================
 # IMAGE PROCESSING
 # ============================================================
 
-def trim_transparency(
-    image
-):
+def trim_transparency(image):
 
     image = image.convert(
         "RGBA"
@@ -1596,10 +1212,7 @@ def fit_logo(
     )
 
     return image.resize(
-        (
-            width,
-            height
-        ),
+        (width, height),
         Image.Resampling.LANCZOS
     )
 
@@ -1608,13 +1221,9 @@ def fit_logo(
 # EXISTING IMAGE DIMENSIONS
 # ============================================================
 
-def existing_dimensions(
-    path
-):
+def existing_dimensions(path):
 
-    with Image.open(
-        path
-    ) as image:
+    with Image.open(path) as image:
 
         return image.size
 
@@ -1625,8 +1234,7 @@ def existing_dimensions(
 
 def rebuild_solo(
     path,
-    team,
-    league
+    team
 ):
 
     width, height = existing_dimensions(
@@ -1634,50 +1242,32 @@ def rebuild_solo(
     )
 
     source = download_logo(
-        team,
-        league
+        team
     )
 
     logo = fit_logo(
         source,
-        int(
-            width * 0.90
-        ),
-        int(
-            height * 0.90
-        )
+        int(width * 0.90),
+        int(height * 0.90)
     )
 
     canvas = Image.new(
         "RGBA",
-        (
-            width,
-            height
-        ),
-        (
-            0,
-            0,
-            0,
-            0
-        )
+        (width, height),
+        (0, 0, 0, 0)
     )
 
     x = (
-        width -
-        logo.width
+        width - logo.width
     ) // 2
 
     y = (
-        height -
-        logo.height
+        height - logo.height
     ) // 2
 
     canvas.alpha_composite(
         logo,
-        (
-            x,
-            y
-        )
+        (x, y)
     )
 
     canvas.save(
@@ -1694,120 +1284,69 @@ def rebuild_solo(
 def rebuild_matchup(
     path,
     home_team,
-    away_team,
-    league
+    away_team
 ):
 
     width, height = existing_dimensions(
         path
     )
 
-    # --------------------------------------------------------
-    # The first team in the filename is treated as HOME.
-    # The second team is treated as AWAY.
-    #
-    # Example:
-    #
-    # Arizona_Cardinals_vs_Tennessee_Titans.png
-    #
-    # Arizona Cardinals = LEFT / HOME
-    # Tennessee Titans   = RIGHT / AWAY
-    # --------------------------------------------------------
-
     home_source = download_logo(
-        home_team,
-        league
+        home_team
     )
 
     away_source = download_logo(
-        away_team,
-        league
+        away_team
     )
 
     half_width = width // 2
 
     home = fit_logo(
         home_source,
-        int(
-            half_width * 0.88
-        ),
-        int(
-            height * 0.88
-        )
+        int(half_width * 0.88),
+        int(height * 0.88)
     )
 
     away = fit_logo(
         away_source,
-        int(
-            half_width * 0.88
-        ),
-        int(
-            height * 0.88
-        )
+        int(half_width * 0.88),
+        int(height * 0.88)
     )
 
     canvas = Image.new(
         "RGBA",
-        (
-            width,
-            height
-        ),
-        (
-            0,
-            0,
-            0,
-            0
-        )
+        (width, height),
+        (0, 0, 0, 0)
     )
 
-    # --------------------------------------------------------
-    # HOME / LEFT
-    # --------------------------------------------------------
-
     home_x = (
-        half_width -
-        home.width
+        half_width - home.width
     ) // 2
 
     home_y = (
-        height -
-        home.height
+        height - home.height
     ) // 2
 
-    # --------------------------------------------------------
-    # AWAY / RIGHT
-    # --------------------------------------------------------
-
     away_x = (
-        half_width +
-        (
-            (
-                half_width -
-                away.width
-            )
+        half_width
+        + (
+            (half_width - away.width)
             // 2
         )
     )
 
     away_y = (
-        height -
-        away.height
+        height - away.height
     ) // 2
 
     canvas.alpha_composite(
         home,
-        (
-            home_x,
-            home_y
-        )
+        (home_x, home_y)
     )
 
     canvas.alpha_composite(
         away,
-        (
-            away_x,
-            away_y
-        )
+        (away_x, away_y)
     )
 
     canvas.save(
@@ -1827,30 +1366,20 @@ def discover_files():
         LEAGUES
     ):
 
-        league_dir = (
-            ROOT /
-            league
-        )
+        league_dir = ROOT / league
 
         if not league_dir.is_dir():
 
             continue
 
         for path in sorted(
-            league_dir.rglob(
-                "*.png"
-            )
+            league_dir.rglob("*.png")
         ):
 
-            yield (
-                league,
-                path
-            )
+            yield league, path
 
 
-def teams_from_file(
-    path
-):
+def teams_from_file(path):
 
     filename = path.stem
 
@@ -1862,18 +1391,12 @@ def teams_from_file(
         )
 
         return [
-            display_team_name(
-                home
-            ),
-            display_team_name(
-                away
-            )
+            display_team_name(home),
+            display_team_name(away)
         ]
 
     return [
-        display_team_name(
-            filename
-        )
+        display_team_name(filename)
     ]
 
 
@@ -1892,23 +1415,15 @@ def discover_all_teams():
             path
         ):
 
-            key = (
-                league,
-                clean_name(
-                    team
-                )
+            key = clean_name(
+                team
             )
 
             teams[key] = team
 
     return sorted(
-        teams.items(),
-        key=lambda item: (
-            item[0][0],
-            clean_name(
-                item[1]
-            )
-        )
+        teams.values(),
+        key=lambda x: clean_name(x)
     )
 
 
@@ -1920,45 +1435,33 @@ def discover_all_teams():
 # successfully discovered CDNLogo source.
 # ============================================================
 
-def verify_sources(
-    teams
-):
+def verify_sources(teams):
 
     print()
 
     print("=" * 70)
-    print(
-        "VERIFYING CDNLOGO SOURCES"
-    )
+    print("VERIFYING CDNLOGO SOURCES")
     print("=" * 70)
 
-    for number, item in enumerate(
+    for number, team in enumerate(
         teams,
         start=1
     ):
 
-        (
-            league,
-            team
-        ) = item
-
         print()
 
         print(
-            f"[{number}/{len(teams)}] "
-            f"{league}: {team}"
+            f"[{number}/{len(teams)}] {team}"
         )
 
         find_team_source(
-            team,
-            league
+            team
         )
 
     print()
 
     print(
-        f"Verified {len(teams)} "
-        f"team sources."
+        f"Verified {len(teams)} team sources."
     )
 
 
@@ -1996,14 +1499,9 @@ def rebuild_library():
                     f"  {path}"
                 )
 
-                print(
-                    f"  TEAM: {teams[0]}"
-                )
-
                 rebuild_solo(
                     path,
-                    teams[0],
-                    league
+                    teams[0]
                 )
 
             else:
@@ -2029,8 +1527,7 @@ def rebuild_library():
                 rebuild_matchup(
                     path,
                     teams[0],
-                    teams[1],
-                    league
+                    teams[1]
                 )
 
             replaced += 1
@@ -2069,9 +1566,7 @@ def main():
     print()
 
     print("=" * 70)
-    print(
-        "CDNLOGO SPORTS LOGO LIBRARY REBUILDER"
-    )
+    print("CDNLOGO SPORTS LOGO LIBRARY REBUILDER")
     print("=" * 70)
 
     if not ROOT.is_dir():
@@ -2099,8 +1594,7 @@ def main():
     print()
 
     print(
-        f"Discovered {len(teams)} "
-        f"unique league/team combinations."
+        f"Discovered {len(teams)} unique teams."
     )
 
     print()
@@ -2113,10 +1607,7 @@ def main():
         LEAGUES
     ):
 
-        directory = (
-            ROOT /
-            league
-        )
+        directory = ROOT / league
 
         if directory.is_dir():
 
@@ -2141,9 +1632,7 @@ def main():
         print()
 
         print("=" * 70)
-        print(
-            "ABORTED"
-        )
+        print("ABORTED")
         print("=" * 70)
 
         print()
@@ -2168,9 +1657,7 @@ def main():
     print()
 
     print("=" * 70)
-    print(
-        "REBUILDING EXISTING LOGO LIBRARY"
-    )
+    print("REBUILDING EXISTING LOGO LIBRARY")
     print("=" * 70)
 
     total, replaced, failed = rebuild_library()
@@ -2178,9 +1665,7 @@ def main():
     print()
 
     print("=" * 70)
-    print(
-        "FINISHED"
-    )
+    print("FINISHED")
     print("=" * 70)
 
     print()
