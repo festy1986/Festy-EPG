@@ -3,35 +3,22 @@ import os
 import re
 import sys
 import time
+import html
+import unicodedata
+from pathlib import Path
+from difflib import SequenceMatcher
+from urllib.parse import quote, urljoin
+
 import requests
+from bs4 import BeautifulSoup
+from PIL import Image
 
-from PIL import Image, ImageOps
 
 # ============================================================
-# SPORTS LOGO REPLACEMENT SCRIPT
-#
-# PURPOSE:
-#   Replace the existing sports logo artwork while preserving
-#   every existing filename and directory path.
-#
-# SUPPORTED:
-#   MLB
-#   NBA
-#   NFL
-#   NHL
-#
-# EXISTING FILE EXAMPLES:
-#
-#   Tennessee_Titans.png
-#   Tennessee_Titans_vs_Arizona_Cardinals.png
-#   Arizona_Cardinals_vs_Tennessee_Titans.png
-#
-# NOTHING IS RENAMED.
-# NOTHING IS MOVED.
+# CONFIG
 # ============================================================
 
-
-ROOT = "sports-logos"
+ROOT = Path("sports-logos")
 
 LEAGUES = {
     "MLB",
@@ -40,7 +27,11 @@ LEAGUES = {
     "NHL",
 }
 
-TIMEOUT = 30
+CDNLOGO_BASE = "https://cdnlogo.com"
+
+REQUEST_TIMEOUT = 30
+
+REQUEST_DELAY = 0.25
 
 HEADERS = {
     "User-Agent": (
@@ -52,214 +43,587 @@ HEADERS = {
 
 
 # ============================================================
-# VERIFIED / MANUAL SOURCE OVERRIDES
-#
-# Put the exact CDNLogo image URL for a team here.
-#
-# These are the sources we have explicitly selected so far.
-# Additional teams can be added as verified URLs are collected.
-# ============================================================
-
-TEAM_SOURCES = {
-    "Tennessee_Titans":
-        "https://static.cdnlogo.com/logos/t/73/tennessee-titans.png",
-
-    # Add verified sources here:
-    #
-    # "Los_Angeles_Rams":
-    #     "https://static.cdnlogo.com/logos/...",
-}
-
-
-# ============================================================
 # TEAM NAME NORMALIZATION
-#
-# Existing filenames are converted to a canonical lookup name.
-# This allows names such as:
-#
-#   Los_Angeles_Rams
-#   New_York_Yankees
-#   Tampa_Bay_Buccaneers
-#
-# to be handled consistently.
 # ============================================================
 
 ALIASES = {
-    # NFL
-    "Washington_Redskins": "Washington_Commanders",
-    "Washington_Football_Team": "Washington_Commanders",
-
-    # MLB
-    "Cleveland_Indians": "Cleveland_Guardians",
-
-    # NBA
-    "New_Jersey_Nets": "Brooklyn_Nets",
-    "Charlotte_Bobcats": "Charlotte_Hornets",
-
-    # NHL
-    "Phoenix_Coyotes": "Arizona_Coyotes",
-    "Atlanta_Thrashers": "Winnipeg_Jets",
+    "Los_Angeles_Angels": "Los Angeles Angels",
+    "Los_Angeles_Angels_Of_Anaheim": "Los Angeles Angels",
+    "Cleveland_Indians": "Cleveland Guardians",
+    "Washington_Redskins": "Washington Commanders",
+    "Washington_Football_Team": "Washington Commanders",
+    "New_Jersey_Nets": "Brooklyn Nets",
+    "Charlotte_Bobcats": "Charlotte Hornets",
+    "Phoenix_Coyotes": "Arizona Coyotes",
+    "Atlanta_Thrashers": "Winnipeg Jets",
 }
 
 
+def clean_name(value):
+    """
+    Convert filenames/folder names into a normalized searchable name.
+    """
+
+    value = os.path.splitext(value)[0]
+
+    value = value.replace("_", " ")
+
+    value = unicodedata.normalize(
+        "NFKD",
+        value
+    )
+
+    value = "".join(
+        c for c in value
+        if not unicodedata.combining(c)
+    )
+
+    value = re.sub(
+        r"[^a-zA-Z0-9 ]+",
+        " ",
+        value
+    )
+
+    value = re.sub(
+        r"\s+",
+        " ",
+        value
+    )
+
+    value = value.strip().lower()
+
+    return value
+
+
+def display_team_name(raw):
+    raw = os.path.splitext(raw)[0]
+
+    if raw in ALIASES:
+        return ALIASES[raw]
+
+    return raw.replace("_", " ")
+
+
+def normalized_search_name(raw):
+    name = display_team_name(raw)
+
+    return clean_name(name)
+
+
 # ============================================================
-# REQUEST SESSION
+# HTTP
 # ============================================================
 
 session = requests.Session()
 session.headers.update(HEADERS)
 
 
-# ============================================================
-# DOWNLOAD
-# ============================================================
-
-def download_image(url):
-    print(f"    Downloading:")
-    print(f"    {url}")
-
+def get(url):
     response = session.get(
         url,
-        timeout=TIMEOUT
+        timeout=REQUEST_TIMEOUT
     )
 
     response.raise_for_status()
 
-    image = Image.open(
-        io.BytesIO(response.content)
-    )
-
-    image.load()
-
-    return image.convert("RGBA")
+    return response
 
 
 # ============================================================
-# TEAM NAME HELPERS
+# CDNLOGO SEARCH
 # ============================================================
 
-def canonical_team(team):
-    return ALIASES.get(team, team)
-
-
-def filename_to_teams(filename):
+def search_cdnlogo(team_name):
     """
-    Converts:
+    Search CDNLogo's own site for the team.
 
-        Tennessee_Titans.png
-
-    into:
-
-        ["Tennessee_Titans"]
-
-    and:
-
-        Tennessee_Titans_vs_Arizona_Cardinals.png
-
-    into:
-
-        [
-            "Tennessee_Titans",
-            "Arizona_Cardinals"
-        ]
+    We deliberately search CDNLogo itself rather than using
+    a hard-coded list of image URLs.
     """
 
-    name = os.path.splitext(filename)[0]
+    query = quote(team_name)
 
-    if "_vs_" in name:
-        first, second = name.split(
-            "_vs_",
-            1
-        )
-
-        return [
-            canonical_team(first),
-            canonical_team(second)
-        ]
-
-    return [
-        canonical_team(name)
+    urls = [
+        f"{CDNLOGO_BASE}/search?q={query}",
+        f"{CDNLOGO_BASE}/?q={query}",
     ]
 
+    candidates = []
+
+    for url in urls:
+
+        try:
+            response = get(url)
+
+        except Exception:
+            continue
+
+        soup = BeautifulSoup(
+            response.text,
+            "html.parser"
+        )
+
+        for link in soup.find_all("a", href=True):
+
+            href = link.get("href")
+
+            if not href:
+                continue
+
+            href = urljoin(
+                CDNLOGO_BASE,
+                href
+            )
+
+            if "/logo/" not in href:
+                continue
+
+            text = link.get_text(
+                " ",
+                strip=True
+            )
+
+            candidates.append(
+                (
+                    text,
+                    href
+                )
+            )
+
+        if candidates:
+            break
+
+        time.sleep(
+            REQUEST_DELAY
+        )
+
+    return candidates
+
 
 # ============================================================
-# SOURCE CACHE
+# DIRECT LOGO PAGE DISCOVERY
+# ============================================================
+
+def search_engine_fallback(team_name):
+    """
+    CDNLogo search pages have changed over time.
+
+    If their search page doesn't expose a usable result,
+    try CDNLogo's searchable URL directly.
+    """
+
+    slug = clean_name(
+        team_name
+    ).replace(
+        " ",
+        "-"
+    )
+
+    urls = [
+        f"{CDNLOGO_BASE}/logo/{slug}.html",
+        f"{CDNLOGO_BASE}/logos/{slug}",
+    ]
+
+    results = []
+
+    for url in urls:
+
+        try:
+            response = get(url)
+
+            if response.status_code == 200:
+
+                soup = BeautifulSoup(
+                    response.text,
+                    "html.parser"
+                )
+
+                results.append(
+                    (
+                        team_name,
+                        response.url
+                    )
+                )
+
+        except Exception:
+            pass
+
+    return results
+
+
+# ============================================================
+# MATCH RESULT
+# ============================================================
+
+def score_candidate(team_name, candidate_name):
+    """
+    Score a CDNLogo result against our team name.
+
+    Exact and near-exact matches win.
+    """
+
+    wanted = clean_name(
+        team_name
+    )
+
+    candidate = clean_name(
+        candidate_name
+    )
+
+    if not candidate:
+        return 0.0
+
+    if candidate == wanted:
+        return 1.0
+
+    if wanted in candidate:
+        return 0.95
+
+    if candidate in wanted:
+        return 0.90
+
+    return SequenceMatcher(
+        None,
+        wanted,
+        candidate
+    ).ratio()
+
+
+def choose_candidate(team_name, candidates):
+    scored = []
+
+    for title, url in candidates:
+
+        score = score_candidate(
+            team_name,
+            title
+        )
+
+        scored.append(
+            (
+                score,
+                title,
+                url
+            )
+        )
+
+    scored.sort(
+        key=lambda x: x[0],
+        reverse=True
+    )
+
+    if not scored:
+        return None
+
+    best = scored[0]
+
+    # Do not accept wildly unrelated results.
+    if best[0] < 0.70:
+        return None
+
+    return best
+
+
+# ============================================================
+# EXTRACT CDN IMAGE FROM LOGO PAGE
+# ============================================================
+
+def extract_png_from_page(page_url, team_name):
+    """
+    CDNLogo logo pages expose their CDN image URL in the page.
+
+    Prefer PNG over SVG because the output library is PNG.
+    """
+
+    response = get(page_url)
+
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )
+
+    candidates = []
+
+    # --------------------------------------------------------
+    # img tags
+    # --------------------------------------------------------
+
+    for img in soup.find_all("img"):
+
+        for attr in (
+            "src",
+            "data-src",
+            "data-original",
+            "data-lazy-src",
+        ):
+
+            value = img.get(attr)
+
+            if not value:
+                continue
+
+            value = html.unescape(
+                value
+            )
+
+            value = urljoin(
+                page_url,
+                value
+            )
+
+            if "static.cdnlogo.com" in value:
+                candidates.append(
+                    value
+                )
+
+    # --------------------------------------------------------
+    # raw HTML
+    # --------------------------------------------------------
+
+    patterns = [
+        r'https?://static\.cdnlogo\.com/[^"\']+\.png',
+        r'https?://static\.cdnlogo\.com/[^"\']+\.svg',
+    ]
+
+    for pattern in patterns:
+
+        for match in re.findall(
+            pattern,
+            response.text,
+            re.IGNORECASE
+        ):
+
+            match = html.unescape(
+                match
+            )
+
+            if match not in candidates:
+                candidates.append(
+                    match
+                )
+
+    # --------------------------------------------------------
+    # Prefer full-size PNG, not thumbnail.
+    # --------------------------------------------------------
+
+    pngs = [
+        x for x in candidates
+        if ".png" in x.lower()
+        and "thumb" not in x.lower()
+    ]
+
+    if pngs:
+        return pngs[0]
+
+    pngs = [
+        x for x in candidates
+        if ".png" in x.lower()
+    ]
+
+    if pngs:
+        return pngs[0]
+
+    # SVG fallback.
+    svgs = [
+        x for x in candidates
+        if ".svg" in x.lower()
+        and "thumb" not in x.lower()
+    ]
+
+    if svgs:
+        return svgs[0]
+
+    raise RuntimeError(
+        f"Could not find CDNLogo image on {page_url} "
+        f"for {team_name}"
+    )
+
+
+# ============================================================
+# FIND TEAM SOURCE
 # ============================================================
 
 SOURCE_CACHE = {}
 
 
-def get_team_logo(team):
+def find_team_source(team_name):
     """
-    Download a source logo once and reuse it for all matchup
-    files involving that team.
+    Find and cache the CDNLogo source for a team.
     """
 
-    team = canonical_team(team)
+    cache_key = clean_name(
+        team_name
+    )
 
-    if team in SOURCE_CACHE:
-        return SOURCE_CACHE[team].copy()
+    if cache_key in SOURCE_CACHE:
+        return SOURCE_CACHE[cache_key]
 
-    url = TEAM_SOURCES.get(team)
+    print()
+    print(
+        f"Finding CDNLogo source: {team_name}"
+    )
 
-    if not url:
-        raise RuntimeError(
-            f"No verified logo source configured for: {team}\n"
-            f"Add {team!r} to TEAM_SOURCES."
+    candidates = search_cdnlogo(
+        team_name
+    )
+
+    best = choose_candidate(
+        team_name,
+        candidates
+    )
+
+    if not best:
+
+        candidates = search_engine_fallback(
+            team_name
         )
 
-    image = download_image(url)
+        best = choose_candidate(
+            team_name,
+            candidates
+        )
 
-    SOURCE_CACHE[team] = image
+    if not best:
+
+        raise RuntimeError(
+            f"Could not find a sufficiently close "
+            f"CDNLogo result for: {team_name}"
+        )
+
+    score, title, page_url = best
+
+    print(
+        f"  Match: {title}"
+    )
+
+    print(
+        f"  Score: {score:.3f}"
+    )
+
+    print(
+        f"  Page: {page_url}"
+    )
+
+    image_url = extract_png_from_page(
+        page_url,
+        team_name
+    )
+
+    print(
+        f"  Image: {image_url}"
+    )
+
+    SOURCE_CACHE[cache_key] = (
+        image_url,
+        page_url
+    )
+
+    time.sleep(
+        REQUEST_DELAY
+    )
+
+    return (
+        image_url,
+        page_url
+    )
+
+
+# ============================================================
+# DOWNLOAD IMAGE
+# ============================================================
+
+IMAGE_CACHE = {}
+
+
+def download_logo(team_name):
+    key = clean_name(
+        team_name
+    )
+
+    if key in IMAGE_CACHE:
+        return IMAGE_CACHE[key].copy()
+
+    image_url, page_url = find_team_source(
+        team_name
+    )
+
+    response = get(
+        image_url
+    )
+
+    image = Image.open(
+        io.BytesIO(
+            response.content
+        )
+    )
+
+    image.load()
+
+    image = image.convert(
+        "RGBA"
+    )
+
+    IMAGE_CACHE[key] = image
 
     return image.copy()
 
 
 # ============================================================
-# TRANSPARENT CANVAS HELPERS
+# IMAGE PROCESSING
 # ============================================================
 
 def trim_transparency(image):
-    """
-    Remove transparent borders around the downloaded source
-    logo so the actual logo can be scaled correctly.
-    """
 
-    image = image.convert("RGBA")
+    image = image.convert(
+        "RGBA"
+    )
 
-    alpha = image.getchannel("A")
+    alpha = image.getchannel(
+        "A"
+    )
 
     bbox = alpha.getbbox()
 
     if bbox:
-        image = image.crop(bbox)
+        image = image.crop(
+            bbox
+        )
 
     return image
 
 
-def fit_logo(image, max_width, max_height):
-    """
-    Scale a logo proportionally into the requested area.
-    """
+def fit_logo(
+    image,
+    max_width,
+    max_height
+):
 
-    image = trim_transparency(image)
+    image = trim_transparency(
+        image
+    )
 
-    if image.width == 0 or image.height == 0:
-        return image
+    if image.width <= 0 or image.height <= 0:
+        raise RuntimeError(
+            "Invalid logo image."
+        )
 
-    ratio = min(
+    scale = min(
         max_width / image.width,
         max_height / image.height
     )
 
     width = max(
         1,
-        int(image.width * ratio)
+        int(
+            image.width * scale
+        )
     )
 
     height = max(
         1,
-        int(image.height * ratio)
+        int(
+            image.height * scale
+        )
     )
 
     return image.resize(
@@ -269,25 +633,31 @@ def fit_logo(image, max_width, max_height):
 
 
 # ============================================================
+# EXISTING IMAGE DIMENSIONS
+# ============================================================
+
+def existing_dimensions(path):
+
+    with Image.open(path) as image:
+        return image.size
+
+
+# ============================================================
 # SOLO LOGO
 # ============================================================
 
-def rebuild_solo(existing_path, team):
-    """
-    Replace the existing solo logo while preserving:
-      - filename
-      - directory
-      - canvas dimensions
-    """
+def rebuild_solo(
+    path,
+    team
+):
 
-    existing = Image.open(
-        existing_path
-    ).convert("RGBA")
+    width, height = existing_dimensions(
+        path
+    )
 
-    width = existing.width
-    height = existing.height
-
-    source = get_team_logo(team)
+    source = download_logo(
+        team
+    )
 
     logo = fit_logo(
         source,
@@ -301,8 +671,13 @@ def rebuild_solo(existing_path, team):
         (0, 0, 0, 0)
     )
 
-    x = (width - logo.width) // 2
-    y = (height - logo.height) // 2
+    x = (
+        width - logo.width
+    ) // 2
+
+    y = (
+        height - logo.height
+    ) // 2
 
     canvas.alpha_composite(
         logo,
@@ -310,7 +685,7 @@ def rebuild_solo(existing_path, team):
     )
 
     canvas.save(
-        existing_path,
+        path,
         "PNG",
         optimize=True
     )
@@ -320,57 +695,34 @@ def rebuild_solo(existing_path, team):
 # MATCHUP LOGO
 # ============================================================
 
-def rebuild_matchup(existing_path, home_team, away_team):
-    """
-    Rebuild an existing directional matchup logo.
+def rebuild_matchup(
+    path,
+    home_team,
+    away_team
+):
 
-    The filename determines the direction:
+    width, height = existing_dimensions(
+        path
+    )
 
-        Home_vs_Away.png
+    home_source = download_logo(
+        home_team
+    )
 
-    Therefore:
-
-        Tennessee_Titans_vs_Arizona_Cardinals.png
-
-    always places Tennessee first and Arizona second.
-
-    The existing PNG dimensions are retained.
-    """
-
-    existing = Image.open(
-        existing_path
-    ).convert("RGBA")
-
-    width = existing.width
-    height = existing.height
-
-    home_logo = get_team_logo(home_team)
-    away_logo = get_team_logo(away_team)
-
-    # Preserve the existing canvas size.
-    #
-    # The two logos are placed side-by-side with transparent
-    # background. The filename remains untouched.
-    #
-    # This gives:
-    #
-    # HOME  |  AWAY
-    #
-    # and the reverse matchup naturally becomes:
-    #
-    # AWAY  |  HOME
-    #
+    away_source = download_logo(
+        away_team
+    )
 
     half_width = width // 2
 
     home = fit_logo(
-        home_logo,
+        home_source,
         int(half_width * 0.88),
         int(height * 0.88)
     )
 
     away = fit_logo(
-        away_logo,
+        away_source,
         int(half_width * 0.88),
         int(height * 0.88)
     )
@@ -391,7 +743,10 @@ def rebuild_matchup(existing_path, home_team, away_team):
 
     away_x = (
         half_width +
-        ((half_width - away.width) // 2)
+        (
+            (half_width - away.width)
+            // 2
+        )
     )
 
     away_y = (
@@ -409,43 +764,202 @@ def rebuild_matchup(existing_path, home_team, away_team):
     )
 
     canvas.save(
-        existing_path,
+        path,
         "PNG",
         optimize=True
     )
 
 
 # ============================================================
-# FILE DISCOVERY
+# DISCOVER EXISTING TEAMS
 # ============================================================
 
-def logo_files():
-    for league in sorted(LEAGUES):
+def discover_files():
 
-        league_path = os.path.join(
-            ROOT,
-            league
-        )
+    for league in sorted(
+        LEAGUES
+    ):
 
-        if not os.path.isdir(league_path):
+        league_dir = ROOT / league
+
+        if not league_dir.is_dir():
             continue
 
-        for directory, _, files in os.walk(
-            league_path
+        for path in sorted(
+            league_dir.rglob("*.png")
         ):
 
-            for filename in sorted(files):
+            yield league, path
 
-                if not filename.lower().endswith(
-                    ".png"
-                ):
-                    continue
 
-                yield (
-                    league,
-                    directory,
-                    filename
+def teams_from_file(path):
+
+    filename = path.stem
+
+    if "_vs_" in filename:
+
+        home, away = filename.split(
+            "_vs_",
+            1
+        )
+
+        return [
+            display_team_name(home),
+            display_team_name(away)
+        ]
+
+    return [
+        display_team_name(filename)
+    ]
+
+
+# ============================================================
+# FIRST PASS:
+# DISCOVER EVERY TEAM BEFORE MODIFYING ANY FILE.
+# ============================================================
+
+def discover_all_teams():
+
+    teams = {}
+
+    for league, path in discover_files():
+
+        for team in teams_from_file(
+            path
+        ):
+
+            key = clean_name(
+                team
+            )
+
+            teams[key] = team
+
+    return sorted(
+        teams.values(),
+        key=lambda x: clean_name(x)
+    )
+
+
+# ============================================================
+# VERIFY ALL SOURCES FIRST
+#
+# IMPORTANT:
+# We do NOT overwrite the library until every team has a
+# successfully discovered CDNLogo source.
+# ============================================================
+
+def verify_sources(teams):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING CDNLOGO SOURCES")
+    print("=" * 70)
+
+    for number, team in enumerate(
+        teams,
+        start=1
+    ):
+
+        print()
+        print(
+            f"[{number}/{len(teams)}] {team}"
+        )
+
+        find_team_source(
+            team
+        )
+
+    print()
+    print(
+        f"Verified {len(teams)} team sources."
+    )
+
+
+# ============================================================
+# REBUILD EXISTING LIBRARY
+# ============================================================
+
+def rebuild_library():
+
+    total = 0
+    replaced = 0
+    failed = 0
+
+    for league, path in discover_files():
+
+        total += 1
+
+        teams = teams_from_file(
+            path
+        )
+
+        try:
+
+            if len(teams) == 1:
+
+                print()
+                print(
+                    f"[{league}] SOLO"
                 )
+
+                print(
+                    f"  {path}"
+                )
+
+                rebuild_solo(
+                    path,
+                    teams[0]
+                )
+
+            else:
+
+                print()
+                print(
+                    f"[{league}] MATCHUP"
+                )
+
+                print(
+                    f"  {path}"
+                )
+
+                print(
+                    f"  HOME: {teams[0]}"
+                )
+
+                print(
+                    f"  AWAY: {teams[1]}"
+                )
+
+                rebuild_matchup(
+                    path,
+                    teams[0],
+                    teams[1]
+                )
+
+            replaced += 1
+
+        except Exception as exc:
+
+            failed += 1
+
+            print()
+            print(
+                "ERROR:"
+            )
+
+            print(
+                f"  {path}"
+            )
+
+            print(
+                f"  {exc}"
+            )
+
+    return (
+        total,
+        replaced,
+        failed
+    )
 
 
 # ============================================================
@@ -455,105 +969,110 @@ def logo_files():
 def main():
 
     print()
-    print("=" * 60)
-    print("SPORTS LOGO REPLACEMENT")
-    print("=" * 60)
-    print()
+    print("=" * 70)
+    print("CDNLOGO SPORTS LOGO LIBRARY REBUILDER")
+    print("=" * 70)
 
-    total = 0
-    replaced = 0
-    skipped = 0
-    failed = 0
+    if not ROOT.is_dir():
 
-    for league, directory, filename in logo_files():
-
-        total += 1
-
-        path = os.path.join(
-            directory,
-            filename
+        print()
+        print(
+            f"ERROR: {ROOT} does not exist."
         )
 
-        teams = filename_to_teams(
-            filename
+        sys.exit(1)
+
+    teams = discover_all_teams()
+
+    if not teams:
+
+        print()
+        print(
+            "ERROR: No PNG logos found."
         )
 
-        try:
+        sys.exit(1)
 
-            if len(teams) == 1:
+    print()
+    print(
+        f"Discovered {len(teams)} unique teams."
+    )
 
-                team = teams[0]
+    print()
+    print(
+        "Leagues:"
+    )
 
-                print(
-                    f"[{league}] SOLO: "
-                    f"{filename}"
-                )
+    for league in sorted(
+        LEAGUES
+    ):
 
-                rebuild_solo(
-                    path,
-                    team
-                )
+        directory = ROOT / league
 
-                replaced += 1
-
-            elif len(teams) == 2:
-
-                home_team = teams[0]
-                away_team = teams[1]
-
-                print(
-                    f"[{league}] MATCHUP: "
-                    f"{filename}"
-                )
-
-                print(
-                    f"    HOME: {home_team}"
-                )
-
-                print(
-                    f"    AWAY: {away_team}"
-                )
-
-                rebuild_matchup(
-                    path,
-                    home_team,
-                    away_team
-                )
-
-                replaced += 1
-
-            else:
-
-                print(
-                    f"SKIPPED: {path}"
-                )
-
-                skipped += 1
-
-        except Exception as exc:
-
-            failed += 1
-
-            print()
+        if directory.is_dir():
             print(
-                f"ERROR: {path}"
+                f"  {league}"
             )
-            print(
-                f"       {exc}"
-            )
-            print()
+
+    # --------------------------------------------------------
+    # VERIFY EVERYTHING FIRST.
+    #
+    # If even one team cannot be found, nothing gets changed.
+    # --------------------------------------------------------
+
+    try:
+
+        verify_sources(
+            teams
+        )
+
+    except Exception as exc:
+
+        print()
+        print("=" * 70)
+        print("ABORTED")
+        print("=" * 70)
+        print()
+        print(
+            "No existing logo files were modified."
+        )
+        print()
+        print(
+            f"Reason: {exc}"
+        )
+
+        sys.exit(1)
+
+    # --------------------------------------------------------
+    # ALL SOURCES VERIFIED.
+    # NOW modify the existing library.
+    # --------------------------------------------------------
 
     print()
-    print("=" * 60)
-    print("COMPLETE")
-    print("=" * 60)
+    print("=" * 70)
+    print("REBUILDING EXISTING LOGO LIBRARY")
+    print("=" * 70)
+
+    total, replaced, failed = rebuild_library()
+
     print()
-    print(f"Files found:     {total}")
-    print(f"Files replaced:  {replaced}")
-    print(f"Files skipped:   {skipped}")
-    print(f"Files failed:    {failed}")
+    print("=" * 70)
+    print("FINISHED")
+    print("=" * 70)
     print()
-    print("Existing filenames and paths were not changed.")
+    print(
+        f"Files found:    {total}"
+    )
+    print(
+        f"Files replaced: {replaced}"
+    )
+    print(
+        f"Files failed:   {failed}"
+    )
+    print()
+    print(
+        "No filenames or directory paths were changed."
+    )
     print()
 
     if failed:
