@@ -5,6 +5,7 @@ import sys
 import time
 import shutil
 import unicodedata
+
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from html.parser import HTMLParser
@@ -58,7 +59,7 @@ HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/151.0 Safari/537.36"
+        "Chrome/151.0.0.0 Safari/537.36"
     ),
     "Accept": (
         "text/html,application/xhtml+xml,"
@@ -66,6 +67,8 @@ HEADERS = {
         "image/apng,*/*;q=0.8"
     ),
     "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.sportslogos.net/",
+    "Upgrade-Insecure-Requests": "1",
 }
 
 
@@ -170,7 +173,10 @@ SPORTSLOGOS_NAME_OVERRIDES = {
 # ============================================================
 
 session = requests.Session()
-session.headers.update(HEADERS)
+
+session.headers.update(
+    HEADERS
+)
 
 
 def get(url):
@@ -498,141 +504,52 @@ def sportslogos_slugs(
 
 
 # ============================================================
-# SPORTSLOGOS.NET YEAR EXTRACTION
+# SPORTSLOGOS.NET YEAR PAGE
+#
+# IMPORTANT:
+#
+# We NEVER use:
+#
+#   /teams/list_by_league/
+#
+# That endpoint is returning HTTP 403 from the GitHub runner.
+#
+# The year pages are used only to obtain the direct
+# /logos/list_by_team/ URL for the franchise.
+#
+# Example:
+#
+#   /teams/list_by_year/62027/2027-NBA-Logos-By-Year/
+#
+# contains direct links to individual team logo histories.
 # ============================================================
 
-def extract_logo_year(
-    url
-):
-
-    if not url:
-        return None
-
-    match = re.search(
-        r"/logos/view/[^/]+/[^/]+/(\d{4})/",
-        url
-    )
-
-    if not match:
-        return None
-
-    try:
-
-        return int(
-            match.group(1)
-        )
-
-    except ValueError:
-
-        return None
-
-
-# ============================================================
-# SPORTSLOGOS.NET LEAGUE TEAM PAGE
-#
-# The current SportsLogos.Net site exposes the actual team
-# history pages from the league page:
-#
-#   /teams/list_by_league/<league-id>/...
-#
-# This is more reliable than trying to discover the team
-# history page through the seasonal "list_by_year" page.
-# ============================================================
-
-SPORTSLOGOS_LEAGUE_PAGES = {
-    "MLB":
-        (
-            "/teams/list_by_league/4/"
-            "Major-League-Baseball-Logos/"
-            "MLB-Logos/"
-        ),
-
-    "NBA":
-        (
-            "/teams/list_by_league/6/"
-            "National-Basketball-Association-Logos/"
-            "NBA-Logos/"
-        ),
-
-    "NFL":
-        (
-            "/teams/list_by_league/7/"
-            "National-Football-League-Logos/"
-            "NFL-Logos/"
-        ),
-
-    "NHL":
-        (
-            "/teams/list_by_league/5/"
-            "National-Hockey-League-Logos/"
-            "NHL-Logos/"
-        ),
-}
-
-
-def sportslogos_league_page(
-    league
-):
-
-    path = SPORTSLOGOS_LEAGUE_PAGES.get(
-        league
-    )
-
-    if not path:
-
-        raise RuntimeError(
-            f"No SportsLogos.Net league page "
-            f"configured for {league}"
-        )
-
-    return urljoin(
-        SPORTSLOGOS_BASE,
-        path
-    )
-
-
-def discover_team_history_url_from_league_page(
+def sportslogos_year_page(
     league,
-    team
+    year
 ):
 
-    names = sportslogos_team_names(
-        league,
-        team
-    )
-
-    name_keys = {
-        clean_name(name)
-        for name in names
-    }
-
-    url = sportslogos_league_page(
+    league_id = SPORTSLOGOS_LEAGUE_IDS[
         league
+    ]
+
+    return (
+        f"{SPORTSLOGOS_BASE}/teams/"
+        f"list_by_year/"
+        f"{league_id}{year}/"
+        f"{year}-{league}-Logos-By-Year/"
     )
 
-    print(
-        f"  Searching SportsLogos.Net "
-        f"{league} team list..."
-    )
 
-    try:
-
-        response = get(
-            url
-        )
-
-    except Exception as exc:
-
-        raise RuntimeError(
-            f"Could not load SportsLogos.Net "
-            f"{league} team list: {exc}"
-        )
+def extract_team_history_links(
+    response
+):
 
     parser = parse_html(
         response.text
     )
 
-    candidates = []
+    results = []
 
     for link in parser.links:
 
@@ -657,107 +574,14 @@ def discover_team_history_url_from_league_page(
 
             continue
 
-        candidates.append(
+        results.append(
             (
                 text,
                 full_url
             )
         )
 
-    # --------------------------------------------------------
-    # Exact normalized match first.
-    # --------------------------------------------------------
-
-    for text, href in candidates:
-
-        candidate_clean = clean_name(
-            text
-        )
-
-        if candidate_clean in name_keys:
-
-            return href
-
-    # --------------------------------------------------------
-    # Sometimes the visible link text can contain additional
-    # SportsLogos.Net text. Check the URL slug as well.
-    # --------------------------------------------------------
-
-    for text, href in candidates:
-
-        parsed_slug = href.rstrip(
-            "/"
-        ).split(
-            "/"
-        )[-1]
-
-        parsed_slug = re.sub(
-            r"-Logos$",
-            "",
-            parsed_slug,
-            flags=re.IGNORECASE
-        )
-
-        candidate_names = [
-            text,
-            parsed_slug,
-        ]
-
-        for candidate_name in candidate_names:
-
-            candidate_clean = clean_name(
-                candidate_name
-            )
-
-            if candidate_clean in name_keys:
-
-                return href
-
-    # --------------------------------------------------------
-    # Fuzzy/word-overlap fallback.
-    # --------------------------------------------------------
-
-    for text, href in candidates:
-
-        for requested_name in names:
-
-            if team_name_matches(
-                requested_name,
-                text
-            ):
-
-                return href
-
-    # --------------------------------------------------------
-    # Final fallback: compare requested names against the
-    # actual team-page slug.
-    # --------------------------------------------------------
-
-    for text, href in candidates:
-
-        slug = href.rstrip(
-            "/"
-        ).split(
-            "/"
-        )[-1]
-
-        slug = re.sub(
-            r"-Logos$",
-            "",
-            slug,
-            flags=re.IGNORECASE
-        )
-
-        for requested_name in names:
-
-            if team_name_matches(
-                requested_name,
-                slug
-            ):
-
-                return href
-
-    return None
+    return results
 
 
 # ============================================================
@@ -796,14 +620,241 @@ def team_name_matches(
     overlap = (
         len(
             requested_words
-            & candidate_words
+            &
+            candidate_words
         )
-        / len(
+        /
+        len(
             requested_words
         )
     )
 
     return overlap >= 0.80
+
+
+# ============================================================
+# DIRECT TEAM HISTORY URL DISCOVERY
+#
+# This is the critical fixed section.
+#
+# We search the current/recent YEAR pages, not the league-wide
+# team list.
+#
+# The year page links directly to:
+#
+#   /logos/list_by_team/<id>/<team>-Logos/
+#
+# Once that URL is found, we never need the league list again.
+# ============================================================
+
+def discover_team_history_url_from_year_page(
+    league,
+    team
+):
+
+    names = sportslogos_team_names(
+        league,
+        team
+    )
+
+    name_keys = {
+        clean_name(name)
+        for name in names
+    }
+
+    # Try the newest seasons first.
+    #
+    # 2027 is particularly important because current 2026/27
+    # logos are now present on SportsLogos.Net.
+    years_to_try = list(
+        range(
+            2027,
+            2018,
+            -1
+        )
+    )
+
+    for year in years_to_try:
+
+        url = sportslogos_year_page(
+            league,
+            year
+        )
+
+        try:
+
+            response = get(
+                url
+            )
+
+        except Exception as exc:
+
+            print(
+                f"    Could not load year page "
+                f"{year}: {exc}"
+            )
+
+            continue
+
+        candidates = (
+            extract_team_history_links(
+                response
+            )
+        )
+
+        if not candidates:
+
+            continue
+
+        # ----------------------------------------------------
+        # FIRST: exact visible-text match.
+        # ----------------------------------------------------
+
+        for text, href in candidates:
+
+            candidate_clean = clean_name(
+                text
+            )
+
+            if candidate_clean in name_keys:
+
+                return href
+
+        # ----------------------------------------------------
+        # SECOND: exact URL slug match.
+        #
+        # This handles cases where the anchor text is empty
+        # or formatted differently.
+        # ----------------------------------------------------
+
+        for text, href in candidates:
+
+            match = re.search(
+                r"/logos/list_by_team/"
+                r"\d+/"
+                r"([^/?#]+)",
+                href,
+                re.IGNORECASE
+            )
+
+            if not match:
+
+                continue
+
+            slug = match.group(1)
+
+            slug = re.sub(
+                r"-Logos?$",
+                "",
+                slug,
+                flags=re.IGNORECASE
+            )
+
+            slug_name = slug.replace(
+                "-",
+                " "
+            )
+
+            slug_clean = clean_name(
+                slug_name
+            )
+
+            if slug_clean in name_keys:
+
+                return href
+
+        # ----------------------------------------------------
+        # THIRD: fuzzy team-name match.
+        # ----------------------------------------------------
+
+        for text, href in candidates:
+
+            for requested_name in names:
+
+                if team_name_matches(
+                    requested_name,
+                    text
+                ):
+
+                    return href
+
+        # ----------------------------------------------------
+        # FOURTH: fuzzy URL-slug match.
+        # ----------------------------------------------------
+
+        for text, href in candidates:
+
+            match = re.search(
+                r"/logos/list_by_team/"
+                r"\d+/"
+                r"([^/?#]+)",
+                href,
+                re.IGNORECASE
+            )
+
+            if not match:
+
+                continue
+
+            slug = match.group(1)
+
+            slug = re.sub(
+                r"-Logos?$",
+                "",
+                slug,
+                flags=re.IGNORECASE
+            )
+
+            slug_name = slug.replace(
+                "-",
+                " "
+            )
+
+            for requested_name in names:
+
+                if team_name_matches(
+                    requested_name,
+                    slug_name
+                ):
+
+                    return href
+
+    return None
+
+
+# ============================================================
+# SPORTSLOGOS.NET YEAR EXTRACTION
+# ============================================================
+
+def extract_logo_year(
+    url
+):
+
+    if not url:
+
+        return None
+
+    match = re.search(
+        r"/logos/view/"
+        r"[^/]+/"
+        r"[^/]+/"
+        r"(\d{4})/",
+        url
+    )
+
+    if not match:
+
+        return None
+
+    try:
+
+        return int(
+            match.group(1)
+        )
+
+    except ValueError:
+
+        return None
 
 
 # ============================================================
@@ -834,7 +885,7 @@ def discover_primary_logo_page(
     )
 
     team_page = (
-        discover_team_history_url_from_league_page(
+        discover_team_history_url_from_year_page(
             league,
             team
         )
@@ -868,6 +919,7 @@ def discover_primary_logo_page(
         )
 
         if not href:
+
             continue
 
         full_url = urljoin(
@@ -898,6 +950,7 @@ def discover_primary_logo_page(
         )
 
         if year is None:
+
             continue
 
         primary_links.append(
@@ -944,8 +997,15 @@ def discover_primary_logo_page(
 # SportsLogos.Net logo pages contain the actual image hosted
 # on content.sportslogos.net.
 #
-# We deliberately select the image from the logo page instead
-# of trying to construct a CDN filename ourselves.
+# We select the image from the logo page instead of guessing
+# the CDN filename.
+#
+# Example:
+#
+#   https://www.sportslogos.net/logos/view/23098672027/
+#   Houston-Rockets-Logo/2027/Primary-Logo
+#
+# contains the actual CDN image corresponding to that logo.
 # ============================================================
 
 def extract_logo_image_url(
@@ -993,6 +1053,7 @@ def extract_logo_image_url(
         for source in sources:
 
             if not source:
+
                 continue
 
             full_url = urljoin(
@@ -1011,49 +1072,49 @@ def extract_logo_image_url(
 
             score = 0
 
-            if (
-                "logo"
-                in alt
-            ):
+            if "logo" in alt:
 
                 score += 5
 
-            if (
-                "primary"
-                in alt
-            ):
+            if "primary" in alt:
 
                 score += 5
 
             if (
                 clean_name(team)
-                in clean_name(alt)
+                in
+                clean_name(alt)
             ):
 
                 score += 4
 
-            if (
-                "logo"
-                in title
-            ):
+            if "logo" in title:
+
+                score += 2
+
+            if "primary" in title:
 
                 score += 2
 
             if (
-                "primary"
-                in title
-            ):
-
-                score += 2
-
-            if (
-                "thumb"
-                in lower_url
-                or "thumbnail"
-                in lower_url
+                "thumb" in lower_url
+                or
+                "thumbnail" in lower_url
             ):
 
                 score -= 5
+
+            # Prefer the full-resolution image path.
+            if "/full/" in lower_url:
+
+                score += 10
+
+            # Prefer PNG files.
+            if lower_url.endswith(
+                ".png"
+            ):
+
+                score += 3
 
             candidates.append(
                 (
@@ -1127,6 +1188,11 @@ def download_sportslogos_logo(
         image_url,
         timeout=REQUEST_TIMEOUT,
         allow_redirects=True,
+        headers={
+            "Referer": logo_page,
+            "Accept": "image/avif,image/webp,image/apng,"
+                      "image/svg+xml,image/*,*/*;q=0.8",
+        },
     )
 
     image_response.raise_for_status()
@@ -1195,6 +1261,7 @@ def discover_files():
         league_dir = ROOT / league
 
         if not league_dir.is_dir():
+
             continue
 
         for path in sorted(
@@ -1300,6 +1367,16 @@ def download_all_logos(
     print(
         "Primary Dark / Alternate / Jersey / "
         "Cap / Wordmark logos are excluded."
+    )
+
+    print(
+        "Team discovery: direct team-history links "
+        "from SportsLogos.Net year pages."
+    )
+
+    print(
+        "League-wide /teams/list_by_league/ pages "
+        "are NOT used."
     )
 
     print(
@@ -1718,7 +1795,8 @@ def rebuild_matchup(
 
     away_x = (
         half_width
-        + (
+        +
+        (
             (half_width - away.width)
             // 2
         )
@@ -1810,7 +1888,8 @@ def rebuild_one(
 
     elapsed = (
         time.monotonic()
-        - started
+        -
+        started
     )
 
     if elapsed > REBUILD_TIMEOUT:
@@ -1904,9 +1983,11 @@ def rebuild_pass(
 
             try:
 
-                result_league, result_path, details = (
-                    future.result()
-                )
+                (
+                    result_league,
+                    result_path,
+                    details
+                ) = future.result()
 
                 replaced += 1
 
@@ -1972,7 +2053,8 @@ def rebuild_library(
     # Initial pass + retry passes.
     total_passes = (
         1
-        + REBUILD_RETRY_PASSES
+        +
+        REBUILD_RETRY_PASSES
     )
 
     for pass_number in range(
@@ -1981,6 +2063,7 @@ def rebuild_library(
     ):
 
         if not pending:
+
             break
 
         failed, replaced = rebuild_pass(
@@ -2046,9 +2129,11 @@ def rebuild_library(
             print(
                 f"PASS {pass_number} COMPLETE"
             )
+
             print(
                 "All remaining files succeeded."
             )
+
             print("=" * 70)
 
     final_failures = []
@@ -2168,6 +2253,16 @@ def main():
         "Cap / Wordmark logos are excluded."
     )
 
+    print(
+        "Team discovery: SportsLogos.Net year pages "
+        "-> direct team-history pages."
+    )
+
+    print(
+        "League-wide /teams/list_by_league/ "
+        "pages are not used."
+    )
+
     if not ROOT.is_dir():
 
         print()
@@ -2258,7 +2353,12 @@ def main():
     print("REBUILDING EXISTING SPORTS LOGO LIBRARY")
     print("=" * 70)
 
-    total, replaced, failed, total_passes = rebuild_library(
+    (
+        total,
+        replaced,
+        failed,
+        total_passes
+    ) = rebuild_library(
         downloaded
     )
 
