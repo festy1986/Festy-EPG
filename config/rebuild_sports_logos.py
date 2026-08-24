@@ -2,7 +2,6 @@ import os
 import re
 import shutil
 import unicodedata
-import json
 import time
 
 from pathlib import Path
@@ -20,27 +19,25 @@ from PIL import Image
 # ============================================================
 # SPORTS-LOGOS
 #
-# The EXISTING sports-logos directory is used ONLY to discover:
+# This directory is used only to discover the EXISTING TEAM
+# NAMES / FOLDER STRUCTURE.
 #
-#   - leagues
-#   - team folder names
+# The existing logo PNGs are NOT used as the new logo source.
 #
-# The existing PNG artwork is NEVER used as the logo source.
+# New logos are downloaded directly from the ESPN CDN.
 #
-# New logo artwork is downloaded from ESPN.
-#
-# A completely separate build is created and verified before
-# sports-logos is replaced.
+# The existing sports-logos directory is never replaced until
+# the complete new library has been downloaded, cleaned,
+# generated, and verified.
 # ============================================================
 
 ROOT = Path("sports-logos")
 
+# Temporary build directory.
 BUILD_ROOT = Path("_sports_logos_rebuild")
 
+# Temporary backup used during installation.
 BACKUP_ROOT = Path("_sports_logos_old")
-
-# Temporary directory containing the logos downloaded from ESPN.
-DOWNLOAD_ROOT = Path("_sports_logo_downloads")
 
 LEAGUES = {
     "MLB",
@@ -51,27 +48,8 @@ LEAGUES = {
 
 BUILD_WORKERS = 8
 
-DOWNLOAD_WORKERS = 8
-
-
 # ============================================================
-# ESPN SOURCES
-# ============================================================
-
-ESPN_API_BASE = (
-    "https://site.api.espn.com/apis/site/v2/sports"
-)
-
-ESPN_LEAGUES = {
-    "MLB": "baseball/mlb",
-    "NBA": "basketball/nba",
-    "NFL": "football/nfl",
-    "NHL": "hockey/nhl",
-}
-
-
-# ============================================================
-# HTTP SETTINGS
+# NETWORK SETTINGS
 # ============================================================
 
 REQUEST_TIMEOUT = 30
@@ -88,19 +66,18 @@ USER_AGENT = (
     "Chrome/151.0 Safari/537.36"
 )
 
-SESSION_HEADERS = {
-    "User-Agent": USER_AGENT,
-    "Accept": "*/*",
-}
-
 
 # ============================================================
 # SOLO LOGO SETTINGS
 # ============================================================
 
+# Final solo logo canvas.
 SOLO_SIZE = (1024, 1024)
 
-# Artwork is allowed to occupy 90% of the canvas.
+# Maximum percentage of the canvas occupied by artwork.
+#
+# The logo itself is tightly cropped first, then enlarged so
+# that it occupies approximately 90% of the available canvas.
 SOLO_LOGO_SCALE = 0.90
 
 
@@ -111,17 +88,226 @@ SOLO_LOGO_SCALE = 0.90
 MATCHUP_SIZE = (1024, 512)
 
 MATCHUP_LOGO_WIDTH_SCALE = 0.88
-
 MATCHUP_LOGO_HEIGHT_SCALE = 0.88
 
 
 # ============================================================
-# BACKGROUND CLEANUP
+# WHITE BACKGROUND REMOVAL
 # ============================================================
 
+# Near-white pixels connected to the OUTSIDE edge are treated
+# as background.
+#
+# White portions enclosed inside the actual logo are preserved.
 WHITE_THRESHOLD = 245
 
+# Existing pixels with alpha <= this are considered
+# transparent during background detection.
 ALPHA_THRESHOLD = 8
+
+
+# ============================================================
+# ESPN CDN
+# ============================================================
+
+ESPN_CDN_BASE = (
+    "https://a.espncdn.com/i/teamlogos"
+)
+
+ESPN_CDN_SCOREBOARD_BASE = (
+    "https://a.espncdn.com/i/teamlogos"
+)
+
+
+# ============================================================
+# ESPN TEAM ABBREVIATIONS
+#
+# These are deliberately hard-coded.
+#
+# IMPORTANT:
+#
+# We do NOT call:
+#
+#   site.api.espn.com
+#
+# The previous workflow failed because GitHub Actions received
+# HTTP 403 from that API.
+#
+# We therefore use the existing team folders as the roster and
+# use this mapping only to determine the ESPN CDN logo URL.
+# ============================================================
+
+ESPN_CODES = {
+
+    # ========================================================
+    # MLB
+    # ========================================================
+
+    "arizona diamondbacks": "ari",
+    "atlanta braves": "atl",
+    "baltimore orioles": "bal",
+    "boston red sox": "bos",
+    "chicago cubs": "chc",
+    "chicago white sox": "chw",
+    "cincinnati reds": "cin",
+    "cleveland guardians": "cle",
+    "colorado rockies": "col",
+    "detroit tigers": "det",
+    "houston astros": "hou",
+    "kansas city royals": "kc",
+    "los angeles angels": "laa",
+    "los angeles dodgers": "lad",
+    "miami marlins": "mia",
+    "milwaukee brewers": "mil",
+    "minnesota twins": "min",
+    "new york mets": "nym",
+    "new york yankees": "nyy",
+    "oakland athletics": "oak",
+    "athletics": "oak",
+    "philadelphia phillies": "phi",
+    "pittsburgh pirates": "pit",
+    "san diego padres": "sd",
+    "san francisco giants": "sf",
+    "seattle mariners": "sea",
+    "st louis cardinals": "stl",
+    "tampa bay rays": "tb",
+    "texas rangers": "tex",
+    "toronto blue jays": "tor",
+    "washington nationals": "wsh",
+
+    # Possible current/folder naming variations.
+    "cleveland indians": "cle",
+    "tampa bay devil rays": "tb",
+    "washington nationals": "wsh",
+
+    # ========================================================
+    # NBA
+    # ========================================================
+
+    "atlanta hawks": "atl",
+    "boston celtics": "bos",
+    "brooklyn nets": "bkn",
+    "charlotte hornets": "cha",
+    "chicago bulls": "chi",
+    "cleveland cavaliers": "cle",
+    "dallas mavericks": "dal",
+    "denver nuggets": "den",
+    "detroit pistons": "det",
+    "golden state warriors": "gs",
+    "houston rockets": "hou",
+    "indiana pacers": "ind",
+    "la clippers": "lac",
+    "los angeles clippers": "lac",
+    "los angeles lakers": "lal",
+    "memphis grizzlies": "mem",
+    "miami heat": "mia",
+    "milwaukee bucks": "mil",
+    "minnesota timberwolves": "min",
+    "new orleans pelicans": "no",
+    "new york knicks": "ny",
+    "oklahoma city thunder": "okc",
+    "orlando magic": "orl",
+    "philadelphia 76ers": "phi",
+    "phoenix suns": "phx",
+    "portland trail blazers": "por",
+    "sacramento kings": "sac",
+    "san antonio spurs": "sa",
+    "toronto raptors": "tor",
+    "utah jazz": "utah",
+    "washington wizards": "wsh",
+
+    # Common alternate folder names.
+    "golden state": "gs",
+    "la clippers": "lac",
+    "oklahoma city": "okc",
+    "philadelphia sixers": "phi",
+
+    # ========================================================
+    # NFL
+    # ========================================================
+
+    "arizona cardinals": "ari",
+    "atlanta falcons": "atl",
+    "baltimore ravens": "bal",
+    "buffalo bills": "buf",
+    "carolina panthers": "car",
+    "chicago bears": "chi",
+    "cincinnati bengals": "cin",
+    "cleveland browns": "cle",
+    "dallas cowboys": "dal",
+    "denver broncos": "den",
+    "detroit lions": "det",
+    "green bay packers": "gb",
+    "houston texans": "hou",
+    "indianapolis colts": "ind",
+    "jacksonville jaguars": "jax",
+    "kansas city chiefs": "kc",
+    "las vegas raiders": "lv",
+    "los angeles chargers": "lac",
+    "los angeles rams": "lar",
+    "miami dolphins": "mia",
+    "minnesota vikings": "min",
+    "new england patriots": "ne",
+    "new orleans saints": "no",
+    "new york giants": "nyg",
+    "new york jets": "nyj",
+    "philadelphia eagles": "phi",
+    "pittsburgh steelers": "pit",
+    "san francisco 49ers": "sf",
+    "seattle seahawks": "sea",
+    "tampa bay buccaneers": "tb",
+    "tennessee titans": "ten",
+    "washington commanders": "wsh",
+
+    # Common variations.
+    "washington football team": "wsh",
+    "washington redskins": "wsh",
+    "oakland raiders": "lv",
+    "st louis rams": "lar",
+    "san diego chargers": "lac",
+
+    # ========================================================
+    # NHL
+    # ========================================================
+
+    "anaheim ducks": "ana",
+    "boston bruins": "bos",
+    "buffalo sabres": "buf",
+    "calgary flames": "cgy",
+    "carolina hurricanes": "car",
+    "chicago blackhawks": "chi",
+    "colorado avalanche": "col",
+    "columbus blue jackets": "cbj",
+    "dallas stars": "dal",
+    "detroit red wings": "det",
+    "edmonton oilers": "edm",
+    "florida panthers": "fla",
+    "los angeles kings": "la",
+    "minnesota wild": "min",
+    "montreal canadiens": "mtl",
+    "nashville predators": "nsh",
+    "new jersey devils": "nj",
+    "new york islanders": "nyi",
+    "new york rangers": "nyr",
+    "ottawa senators": "ott",
+    "philadelphia flyers": "phi",
+    "pittsburgh penguins": "pit",
+    "san jose sharks": "sj",
+    "seattle kraken": "sea",
+    "st louis blues": "stl",
+    "tampa bay lightning": "tb",
+    "toronto maple leafs": "tor",
+    "utah mammoth": "uta",
+    "vancouver canucks": "van",
+    "vegas golden knights": "vgk",
+    "washington capitals": "wsh",
+    "winnipeg jets": "wpg",
+
+    # Older / alternate NHL folder names.
+    "arizona coyotes": "ari",
+    "phoenix coyotes": "ari",
+    "utah hockey club": "uta",
+}
 
 
 # ============================================================
@@ -130,9 +316,14 @@ ALPHA_THRESHOLD = 8
 
 def clean_name(value):
 
-    value = os.path.splitext(value)[0]
+    value = os.path.splitext(
+        value
+    )[0]
 
-    value = value.replace("_", " ")
+    value = value.replace(
+        "_",
+        " "
+    )
 
     value = unicodedata.normalize(
         "NFKD",
@@ -162,9 +353,14 @@ def clean_name(value):
 
 def filesystem_name(team):
 
-    team = os.path.splitext(team)[0]
+    team = os.path.splitext(
+        team
+    )[0]
 
-    team = team.replace("_", " ")
+    team = team.replace(
+        "_",
+        " "
+    )
 
     team = unicodedata.normalize(
         "NFKD",
@@ -193,80 +389,77 @@ def filesystem_name(team):
 
 
 # ============================================================
-# TEAM NAME ALIASES
-#
-# These handle common differences between our folder names
-# and ESPN's names.
+# ESPN CODE LOOKUP
 # ============================================================
 
-TEAM_ALIASES = {
+def get_espn_code(
+    league,
+    team_name
+):
 
-    "la clippers":
-        "los angeles clippers",
-
-    "la lakers":
-        "los angeles lakers",
-
-    "ny knicks":
-        "new york knicks",
-
-    "ny nets":
-        "brooklyn nets",
-
-    "sf giants":
-        "san francisco giants",
-
-    "kc royals":
-        "kansas city royals",
-
-    "tb rays":
-        "tampa bay rays",
-
-    "st louis cardinals":
-        "st. louis cardinals",
-
-    "sd padres":
-        "san diego padres",
-
-    "az diamondbacks":
-        "arizona diamondbacks",
-
-    "washington commanders":
-        "washington commanders",
-
-    "las vegas raiders":
-        "las vegas raiders",
-
-    "vegas golden knights":
-        "vegas golden knights",
-
-    "utah mammoth":
-        "utah mammoth",
-
-    "utah hockey club":
-        "utah mammoth",
-}
-
-
-# ============================================================
-# HTTP HELPERS
-# ============================================================
-
-def create_session():
-
-    session = requests.Session()
-
-    session.headers.update(
-        SESSION_HEADERS
+    key = clean_name(
+        team_name
     )
 
-    return session
+    code = ESPN_CODES.get(
+        key
+    )
 
+    if code:
+        return code
+
+    # --------------------------------------------------------
+    # Last-resort abbreviation guesses for folders where the
+    # team name itself is already an obvious ESPN abbreviation.
+    #
+    # We DO NOT use this silently for normal team names.
+    # --------------------------------------------------------
+
+    raise RuntimeError(
+        f"No ESPN CDN code is configured for "
+        f"{league} team: {team_name}"
+    )
+
+
+# ============================================================
+# ESPN CDN URL
+# ============================================================
+
+def espn_logo_urls(
+    league,
+    code
+):
+
+    sport = league.lower()
+
+    # Primary URL.
+    primary = (
+        f"{ESPN_CDN_BASE}/"
+        f"{sport}/500/"
+        f"{code}.png"
+    )
+
+    # ESPN also exposes scoreboard variants.
+    scoreboard = (
+        f"{ESPN_CDN_SCOREBOARD_BASE}/"
+        f"{sport}/500/"
+        f"scoreboard/"
+        f"{code}.png"
+    )
+
+    return [
+        primary,
+        scoreboard,
+    ]
+
+
+# ============================================================
+# HTTP REQUEST WITH RETRIES
+# ============================================================
 
 def request_with_retry(
     session,
-    url,
-    stream=False
+    url
 ):
 
     last_error = None
@@ -281,7 +474,15 @@ def request_with_retry(
             response = session.get(
                 url,
                 timeout=REQUEST_TIMEOUT,
-                stream=stream
+                headers={
+                    "User-Agent": USER_AGENT,
+                    "Accept": (
+                        "image/avif,image/webp,"
+                        "image/apng,image/svg+xml,"
+                        "image/*,*/*;q=0.8"
+                    ),
+                    "Referer": "https://www.espn.com/",
+                },
             )
 
             response.raise_for_status()
@@ -292,702 +493,138 @@ def request_with_retry(
 
             last_error = exc
 
-            if attempt >= MAX_RETRIES:
+            if attempt < MAX_RETRIES:
 
-                break
+                print(
+                    f"    Retry {attempt}/{MAX_RETRIES - 1}: "
+                    f"{url}"
+                )
 
-            print(
-                f"Retrying request "
-                f"({attempt}/{MAX_RETRIES - 1}): "
-                f"{url}"
-            )
-
-            time.sleep(
-                RETRY_DELAY * attempt
-            )
+                time.sleep(
+                    RETRY_DELAY * attempt
+                )
 
     raise RuntimeError(
         f"Request failed after "
         f"{MAX_RETRIES} attempts: "
-        f"{url} "
-        f"-> {last_error}"
+        f"{url} -> {last_error}"
     )
 
 
 # ============================================================
-# DISCOVER TEAMS FROM EXISTING SPORTS-LOGOS
-#
-# IMPORTANT:
-#
-# Existing logo files are NOT read as artwork.
-#
-# Folder names are the authoritative list of teams.
-# ============================================================
-
-def discover_source_teams():
-
-    teams_by_league = {
-        league: {}
-        for league in LEAGUES
-    }
-
-    if not ROOT.is_dir():
-
-        raise RuntimeError(
-            f"Sports logo directory does not exist: "
-            f"{ROOT}"
-        )
-
-    for league in sorted(LEAGUES):
-
-        league_root = (
-            ROOT
-            /
-            league
-        )
-
-        if not league_root.is_dir():
-
-            raise RuntimeError(
-                f"Missing league directory: "
-                f"{league_root}"
-            )
-
-        team_folders = sorted(
-            path
-            for path in league_root.iterdir()
-            if path.is_dir()
-        )
-
-        if not team_folders:
-
-            raise RuntimeError(
-                f"No team folders found in "
-                f"{league_root}"
-            )
-
-        for team_folder in team_folders:
-
-            team_name = team_folder.name
-
-            key = clean_name(
-                team_name
-            )
-
-            if not key:
-
-                raise RuntimeError(
-                    f"Invalid team folder: "
-                    f"{team_folder}"
-                )
-
-            if key in teams_by_league[league]:
-
-                raise RuntimeError(
-                    f"Duplicate team detected "
-                    f"in {league}: "
-                    f"{team_name}"
-                )
-
-            teams_by_league[league][key] = {
-                "name": team_name,
-                "folder": team_folder,
-            }
-
-    return teams_by_league
-
-
-# ============================================================
-# ESPN TEAM API
-# ============================================================
-
-def fetch_espn_teams(
-    league
-):
-
-    endpoint = (
-        f"{ESPN_API_BASE}/"
-        f"{ESPN_LEAGUES[league]}/"
-        f"teams?limit=1000"
-    )
-
-    print()
-    print(
-        f"Downloading ESPN {league} team data..."
-    )
-
-    session = create_session()
-
-    response = request_with_retry(
-        session,
-        endpoint
-    )
-
-    data = response.json()
-
-    sports = data.get(
-        "sports",
-        []
-    )
-
-    if not sports:
-
-        raise RuntimeError(
-            f"ESPN returned no sports data "
-            f"for {league}"
-        )
-
-    leagues = sports[0].get(
-        "leagues",
-        []
-    )
-
-    if not leagues:
-
-        raise RuntimeError(
-            f"ESPN returned no league data "
-            f"for {league}"
-        )
-
-    teams = leagues[0].get(
-        "teams",
-        []
-    )
-
-    if not teams:
-
-        raise RuntimeError(
-            f"ESPN returned no teams "
-            f"for {league}"
-        )
-
-    result = []
-
-    for item in teams:
-
-        team = item.get(
-            "team",
-            {}
-        )
-
-        if not team:
-
-            continue
-
-        result.append(team)
-
-    if not result:
-
-        raise RuntimeError(
-            f"ESPN returned no usable "
-            f"teams for {league}"
-        )
-
-    print(
-        f"ESPN returned {len(result)} "
-        f"{league} teams."
-    )
-
-    return result
-
-
-# ============================================================
-# ESPN TEAM NAME INDEX
-# ============================================================
-
-def espn_team_names(team):
-
-    values = []
-
-    for key in (
-        "displayName",
-        "shortDisplayName",
-        "name",
-        "location",
-        "abbreviation",
-        "slug",
-        "nickname",
-    ):
-
-        value = team.get(key)
-
-        if value:
-
-            values.append(
-                clean_name(
-                    str(value)
-                )
-            )
-
-    return values
-
-
-def normalized_team_key(
-    value
-):
-
-    value = clean_name(
-        value
-    )
-
-    if value in TEAM_ALIASES:
-
-        value = TEAM_ALIASES[value]
-
-    return value
-
-
-# ============================================================
-# FIND ESPN MATCH
-# ============================================================
-
-def find_espn_team(
-    folder_name,
-    espn_teams
-):
-
-    target = normalized_team_key(
-        folder_name
-    )
-
-    exact_matches = []
-
-    for team in espn_teams:
-
-        names = espn_team_names(
-            team
-        )
-
-        for name in names:
-
-            if normalized_team_key(name) == target:
-
-                exact_matches.append(
-                    team
-                )
-
-                break
-
-    if len(exact_matches) == 1:
-
-        return exact_matches[0]
-
-    if len(exact_matches) > 1:
-
-        raise RuntimeError(
-            f"Multiple ESPN teams matched "
-            f"{folder_name}: "
-            f"{exact_matches}"
-        )
-
-    # --------------------------------------------------------
-    # Secondary matching.
-    #
-    # Compare normalized names after removing common
-    # geographic words and punctuation.
-    # --------------------------------------------------------
-
-    def simplify(value):
-
-        value = normalized_team_key(
-            value
-        )
-
-        replacements = {
-            "los angeles": "la",
-            "new york": "ny",
-            "san francisco": "sf",
-            "tampa bay": "tb",
-            "kansas city": "kc",
-            "st louis": "st",
-        }
-
-        for old, new in replacements.items():
-
-            value = value.replace(
-                old,
-                new
-            )
-
-        return value
-
-    simplified_target = simplify(
-        folder_name
-    )
-
-    matches = []
-
-    for team in espn_teams:
-
-        for name in espn_team_names(team):
-
-            if simplify(name) == simplified_target:
-
-                matches.append(
-                    team
-                )
-
-                break
-
-    if len(matches) == 1:
-
-        return matches[0]
-
-    if len(matches) > 1:
-
-        raise RuntimeError(
-            f"Multiple ESPN teams matched "
-            f"{folder_name}: "
-            f"{matches}"
-        )
-
-    return None
-
-
-# ============================================================
-# FIND ESPN LOGO URL
-# ============================================================
-
-def find_logo_url(
-    espn_team
-):
-
-    logos = espn_team.get(
-        "logos",
-        []
-    )
-
-    if not logos:
-
-        return None
-
-    # Prefer the primary logo.
-    for logo in logos:
-
-        href = logo.get(
-            "href"
-        )
-
-        if not href:
-
-            continue
-
-        rel = logo.get(
-            "rel",
-            []
-        )
-
-        if isinstance(rel, str):
-
-            rel = [rel]
-
-        if (
-            "default"
-            in
-            [str(x).lower() for x in rel]
-        ):
-
-            return href
-
-    # Otherwise use the first valid logo.
-    for logo in logos:
-
-        href = logo.get(
-            "href"
-        )
-
-        if href:
-
-            return href
-
-    return None
-
-
-# ============================================================
-# DOWNLOAD ONE ESPN LOGO
+# DOWNLOAD ESPN LOGO
 # ============================================================
 
 def download_espn_logo(
+    session,
     league,
-    team_name,
-    espn_team
+    team_name
 ):
 
-    logo_url = find_logo_url(
-        espn_team
+    code = get_espn_code(
+        league,
+        team_name
     )
 
-    if not logo_url:
-
-        raise RuntimeError(
-            f"ESPN supplied no logo URL "
-            f"for {league} / {team_name}"
-        )
-
-    destination_folder = (
-        DOWNLOAD_ROOT
-        /
-        league
+    urls = espn_logo_urls(
+        league,
+        code
     )
 
-    destination_folder.mkdir(
-        parents=True,
-        exist_ok=True
-    )
+    last_error = None
 
-    destination = (
-        destination_folder
-        /
-        f"{filesystem_name(team_name)}.png"
-    )
+    for url in urls:
 
-    session = create_session()
+        try:
 
-    response = request_with_retry(
-        session,
-        logo_url,
-        stream=True
-    )
+            print(
+                f"    Downloading: "
+                f"{league} / {team_name} "
+                f"-> {url}"
+            )
 
-    with open(
-        destination,
-        "wb"
-    ) as output:
+            response = request_with_retry(
+                session,
+                url
+            )
 
-        for chunk in response.iter_content(
-            chunk_size=1024 * 64
-        ):
+            content = response.content
 
-            if chunk:
+            if not content:
 
-                output.write(
-                    chunk
+                raise RuntimeError(
+                    "ESPN returned an empty response."
                 )
 
-    # --------------------------------------------------------
-    # Validate that the downloaded file is actually an image.
-    # --------------------------------------------------------
+            return content, url
+
+        except Exception as exc:
+
+            last_error = exc
+
+    raise RuntimeError(
+        f"Could not download ESPN logo for "
+        f"{league} / {team_name}: "
+        f"{last_error}"
+    )
+
+
+# ============================================================
+# LOAD DOWNLOADED LOGO
+# ============================================================
+
+def load_downloaded_logo(
+    content,
+    league,
+    team_name
+):
 
     try:
 
-        with Image.open(destination) as image:
+        from io import BytesIO
+
+        with Image.open(
+            BytesIO(content)
+        ) as image:
 
             image.load()
 
-            if (
-                image.width <= 0
-                or
-                image.height <= 0
-            ):
+            image = image.convert(
+                "RGBA"
+            )
 
-                raise RuntimeError(
-                    "Invalid dimensions."
-                )
+            return image.copy()
 
     except Exception as exc:
 
-        if destination.exists():
-
-            destination.unlink()
-
         raise RuntimeError(
-            f"Downloaded ESPN logo is not "
-            f"a valid image: "
-            f"{destination}: {exc}"
+            f"Downloaded ESPN logo for "
+            f"{league} / {team_name} "
+            f"is not a valid image: "
+            f"{exc}"
         )
-
-    return destination
 
 
 # ============================================================
-# BUILD ESPN SOURCE LIBRARY
-# ============================================================
-
-def build_external_source_library(
-    teams_by_league
-):
-
-    print()
-    print("=" * 70)
-    print("DOWNLOADING NEW LOGO SOURCES FROM ESPN")
-    print("=" * 70)
-
-    if DOWNLOAD_ROOT.exists():
-
-        print()
-        print(
-            f"Removing previous ESPN download cache: "
-            f"{DOWNLOAD_ROOT}"
-        )
-
-        shutil.rmtree(
-            DOWNLOAD_ROOT
-        )
-
-    DOWNLOAD_ROOT.mkdir(
-        parents=True,
-        exist_ok=True
-    )
-
-    matched = {}
-
-    for league in sorted(LEAGUES):
-
-        print()
-        print("=" * 70)
-        print(
-            f"GETTING ESPN {league} LOGOS"
-        )
-        print("=" * 70)
-
-        espn_teams = fetch_espn_teams(
-            league
-        )
-
-        league_matches = {}
-
-        missing = []
-
-        for team in sorted(
-            teams_by_league[league].values(),
-            key=lambda item: clean_name(
-                item["name"]
-            )
-        ):
-
-            team_name = team["name"]
-
-            espn_team = find_espn_team(
-                team_name,
-                espn_teams
-            )
-
-            if espn_team is None:
-
-                missing.append(
-                    team_name
-                )
-
-                continue
-
-            logo_url = find_logo_url(
-                espn_team
-            )
-
-            if not logo_url:
-
-                missing.append(
-                    team_name
-                )
-
-                continue
-
-            league_matches[
-                clean_name(team_name)
-            ] = {
-                "name": team_name,
-                "espn_team": espn_team,
-                "url": logo_url,
-            }
-
-        if missing:
-
-            print()
-            print(
-                f"ERROR: ESPN logos could not "
-                f"be matched for {league}:"
-            )
-
-            for name in missing:
-
-                print(
-                    f"  - {name}"
-                )
-
-            raise RuntimeError(
-                f"Aborting because {len(missing)} "
-                f"{league} teams do not have "
-                f"an unambiguous ESPN logo match."
-            )
-
-        # ----------------------------------------------------
-        # Download concurrently.
-        # ----------------------------------------------------
-
-        jobs = []
-
-        with ThreadPoolExecutor(
-            max_workers=DOWNLOAD_WORKERS
-        ) as executor:
-
-            for team in sorted(
-                teams_by_league[league].values(),
-                key=lambda item: clean_name(
-                    item["name"]
-                )
-            ):
-
-                key = clean_name(
-                    team["name"]
-                )
-
-                match = league_matches[key]
-
-                jobs.append(
-                    executor.submit(
-                        download_espn_logo,
-                        league,
-                        team["name"],
-                        match["espn_team"]
-                    )
-                )
-
-            completed = 0
-
-            for future in as_completed(jobs):
-
-                path = future.result()
-
-                completed += 1
-
-                print(
-                    f"[{completed}/{len(jobs)}] "
-                    f"{league}: "
-                    f"{path.name}"
-                )
-
-        matched[league] = league_matches
-
-    print()
-    print(
-        "All requested teams were matched "
-        "to ESPN logo sources."
-    )
-
-    return matched
-
-
-# ============================================================
-# LOAD IMAGE
-# ============================================================
-
-def load_image(
-    source_path
-):
-
-    with Image.open(source_path) as image:
-
-        image = image.convert(
-            "RGBA"
-        )
-
-        image.load()
-
-        return image.copy()
-
-
-# ============================================================
-# REMOVE EDGE-CONNECTED WHITE BACKGROUND
+# REMOVE EDGE WHITE BACKGROUND
+#
+# IMPORTANT:
+#
+# We do NOT delete every white pixel.
+#
+# Only near-white pixels connected to the OUTSIDE edge are
+# removed.
+#
+# Therefore:
+#
+#   white lettering = preserved
+#   white baseball = preserved
+#   white outlines = preserved
+#   white internal details = preserved
+#
+# while:
+#
+#   giant white rectangular background = removed
 # ============================================================
 
 def remove_edge_white_background(
@@ -1000,7 +637,11 @@ def remove_edge_white_background(
 
     width, height = image.size
 
-    if width <= 0 or height <= 0:
+    if (
+        width <= 0
+        or
+        height <= 0
+    ):
 
         raise RuntimeError(
             "Invalid image dimensions."
@@ -1019,7 +660,10 @@ def remove_edge_white_background(
         y
     ):
 
-        r, g, b, a = pixels[x, y]
+        r, g, b, a = pixels[
+            x,
+            y
+        ]
 
         if a <= ALPHA_THRESHOLD:
 
@@ -1058,10 +702,13 @@ def remove_edge_white_background(
         visited[index] = 1
 
         queue.append(
-            (x, y)
+            (
+                x,
+                y
+            )
         )
 
-    # Seed all edges.
+    # Seed every edge.
     for x in range(width):
 
         add_if_background(
@@ -1096,10 +743,22 @@ def remove_edge_white_background(
         x, y = queue.popleft()
 
         neighbors = (
-            (x - 1, y),
-            (x + 1, y),
-            (x, y - 1),
-            (x, y + 1),
+            (
+                x - 1,
+                y
+            ),
+            (
+                x + 1,
+                y
+            ),
+            (
+                x,
+                y - 1
+            ),
+            (
+                x,
+                y + 1
+            ),
         )
 
         for nx, ny in neighbors:
@@ -1121,7 +780,7 @@ def remove_edge_white_background(
                 ny
             )
 
-    # Make background transparent.
+    # Make detected background transparent.
     for y in range(height):
 
         for x in range(width):
@@ -1134,9 +793,15 @@ def remove_edge_white_background(
 
             if visited[index]:
 
-                r, g, b, a = pixels[x, y]
+                r, g, b, a = pixels[
+                    x,
+                    y
+                ]
 
-                pixels[x, y] = (
+                pixels[
+                    x,
+                    y
+                ] = (
                     r,
                     g,
                     b,
@@ -1177,18 +842,16 @@ def trim_transparency(
 # CLEAN DOWNLOADED ESPN LOGO
 # ============================================================
 
-def clean_source_logo(
-    source_path
+def clean_logo(
+    image,
+    league,
+    team_name
 ):
 
-    image = load_image(
-        source_path
+    image = image.convert(
+        "RGBA"
     )
 
-    # ESPN logos normally already have transparency.
-    #
-    # If a source happens to contain a white rectangular
-    # background, remove only the edge-connected white area.
     image = remove_edge_white_background(
         image
     )
@@ -1205,7 +868,7 @@ def clean_source_logo(
 
         raise RuntimeError(
             f"Logo became empty after cleanup: "
-            f"{source_path}"
+            f"{league} / {team_name}"
         )
 
     return image
@@ -1259,16 +922,27 @@ def fit_logo(
     )
 
     return image.resize(
-        (width, height),
+        (
+            width,
+            height
+        ),
         Image.Resampling.LANCZOS
     )
 
 
 # ============================================================
 # BUILD SOLO LOGO
+#
+# Final:
+#
+# 1024x1024
+# RGBA
+# Transparent
+#
+# Artwork approximately 90% of canvas.
 # ============================================================
 
-def build_solo_logo_from_clean_image(
+def build_solo_logo(
     image,
     destination
 ):
@@ -1298,7 +972,12 @@ def build_solo_logo_from_clean_image(
     canvas = Image.new(
         "RGBA",
         SOLO_SIZE,
-        (0, 0, 0, 0)
+        (
+            0,
+            0,
+            0,
+            0
+        )
     )
 
     x = (
@@ -1315,7 +994,10 @@ def build_solo_logo_from_clean_image(
 
     canvas.alpha_composite(
         logo,
-        (x, y)
+        (
+            x,
+            y
+        )
     )
 
     destination.parent.mkdir(
@@ -1335,6 +1017,8 @@ def build_solo_logo_from_clean_image(
 #
 # HOME = LEFT
 # AWAY = RIGHT
+#
+# Both logos come from the newly downloaded ESPN CDN artwork.
 # ============================================================
 
 def build_matchup(
@@ -1380,7 +1064,12 @@ def build_matchup(
     canvas = Image.new(
         "RGBA",
         MATCHUP_SIZE,
-        (0, 0, 0, 0)
+        (
+            0,
+            0,
+            0,
+            0
+        )
     )
 
     home_x = (
@@ -1442,6 +1131,358 @@ def build_matchup(
 
 
 # ============================================================
+# SOURCE DISCOVERY
+#
+# IMPORTANT:
+#
+# Existing sports-logos provides ONLY the roster and folder
+# names.
+#
+# The existing PNG files are deliberately NOT opened or used
+# as the new logo source.
+# ============================================================
+
+def discover_source_teams():
+
+    teams_by_league = {
+        league: {}
+        for league in LEAGUES
+    }
+
+    if not ROOT.is_dir():
+
+        raise RuntimeError(
+            f"Sports logo directory does not exist: "
+            f"{ROOT}"
+        )
+
+    for league in sorted(
+        LEAGUES
+    ):
+
+        league_root = (
+            ROOT
+            /
+            league
+        )
+
+        if not league_root.is_dir():
+
+            raise RuntimeError(
+                f"Missing league directory: "
+                f"{league_root}"
+            )
+
+        team_folders = sorted(
+            path
+            for path in league_root.iterdir()
+            if path.is_dir()
+        )
+
+        if not team_folders:
+
+            raise RuntimeError(
+                f"No team folders found in "
+                f"{league_root}"
+            )
+
+        for team_folder in team_folders:
+
+            team_name = (
+                team_folder.name
+            )
+
+            key = clean_name(
+                team_name
+            )
+
+            if not key:
+
+                raise RuntimeError(
+                    f"Invalid team folder name: "
+                    f"{team_folder}"
+                )
+
+            if key in teams_by_league[
+                league
+            ]:
+
+                raise RuntimeError(
+                    f"Duplicate team detected in "
+                    f"{league}: "
+                    f"{team_name}"
+                )
+
+            # Verify a CDN mapping exists BEFORE doing any
+            # downloads.
+            code = get_espn_code(
+                league,
+                team_name
+            )
+
+            teams_by_league[
+                league
+            ][key] = {
+                "name": team_name,
+                "folder": team_folder,
+                "espn_code": code,
+            }
+
+    return teams_by_league
+
+
+# ============================================================
+# VERIFY TEAM COUNTS
+# ============================================================
+
+def verify_team_counts(
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING TEAM ROSTER")
+    print("=" * 70)
+
+    expected_counts = {
+        "MLB": 30,
+        "NBA": 30,
+        "NFL": 32,
+        "NHL": 32,
+    }
+
+    total = 0
+
+    for league in sorted(
+        LEAGUES
+    ):
+
+        actual = len(
+            teams_by_league[
+                league
+            ]
+        )
+
+        expected = expected_counts[
+            league
+        ]
+
+        print()
+        print(
+            f"{league}: "
+            f"{actual} teams"
+        )
+
+        if actual != expected:
+
+            raise RuntimeError(
+                f"{league}: expected "
+                f"{expected} teams but found "
+                f"{actual}"
+            )
+
+        total += actual
+
+    print()
+    print(
+        f"TOTAL TEAMS: {total}"
+    )
+
+    if total != 124:
+
+        raise RuntimeError(
+            f"Expected 124 total teams but found "
+            f"{total}"
+        )
+
+    return total
+
+
+# ============================================================
+# PRE-VERIFY ESPN MAPPINGS
+# ============================================================
+
+def verify_espn_mappings(
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING ESPN CDN MAPPINGS")
+    print("=" * 70)
+
+    for league in sorted(
+        LEAGUES
+    ):
+
+        print()
+        print(
+            f"{league}"
+        )
+
+        for team in sorted(
+            teams_by_league[
+                league
+            ].values(),
+            key=lambda item: clean_name(
+                item["name"]
+            )
+        ):
+
+            print(
+                f"  {team['name']}"
+                f" -> "
+                f"{team['espn_code']}"
+            )
+
+
+# ============================================================
+# DOWNLOAD ONE TEAM LOGO
+# ============================================================
+
+def download_one_team_logo(
+    league,
+    team
+):
+
+    team_name = team["name"]
+
+    session = requests.Session()
+
+    try:
+
+        content, url = download_espn_logo(
+            session,
+            league,
+            team_name
+        )
+
+        image = load_downloaded_logo(
+            content,
+            league,
+            team_name
+        )
+
+        cleaned = clean_logo(
+            image,
+            league,
+            team_name
+        )
+
+        return {
+            "league": league,
+            "team": team_name,
+            "code": team["espn_code"],
+            "url": url,
+            "image": cleaned,
+        }
+
+    finally:
+
+        session.close()
+
+
+# ============================================================
+# DOWNLOAD ALL LOGOS
+#
+# Returns CLEANED logo images held in memory.
+#
+# Existing sports-logos is not modified.
+# ============================================================
+
+def download_all_logos(
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("DOWNLOADING NEW LOGO SOURCES FROM ESPN CDN")
+    print("=" * 70)
+
+    cleaned_logos = {}
+
+    jobs = []
+
+    total_teams = sum(
+        len(
+            teams_by_league[
+                league
+            ]
+        )
+        for league in LEAGUES
+    )
+
+    completed = 0
+
+    with ThreadPoolExecutor(
+        max_workers=BUILD_WORKERS
+    ) as executor:
+
+        for league in sorted(
+            LEAGUES
+        ):
+
+            for team in teams_by_league[
+                league
+            ].values():
+
+                jobs.append(
+                    executor.submit(
+                        download_one_team_logo,
+                        league,
+                        team
+                    )
+                )
+
+        for future in as_completed(
+            jobs
+        ):
+
+            result = future.result()
+
+            completed += 1
+
+            key = (
+                result["league"],
+                clean_name(
+                    result["team"]
+                )
+            )
+
+            cleaned_logos[
+                key
+            ] = result["image"]
+
+            print(
+                f"[{completed}/{total_teams}] "
+                f"{result['league']}: "
+                f"{result['team']} "
+                f"({result['code']}) "
+                f"downloaded and cleaned"
+            )
+
+    if len(
+        cleaned_logos
+    ) != total_teams:
+
+        raise RuntimeError(
+            f"Downloaded "
+            f"{len(cleaned_logos)} "
+            f"logos but expected "
+            f"{total_teams}"
+        )
+
+    print()
+    print(
+        f"SUCCESS: "
+        f"{len(cleaned_logos)}/{total_teams} "
+        f"team logos downloaded and cleaned."
+    )
+
+    return cleaned_logos
+
+
+# ============================================================
 # BUILD ONE TEAM FOLDER
 # ============================================================
 
@@ -1449,30 +1490,33 @@ def build_team_folder(
     league,
     home_team,
     all_teams,
-    source_paths,
+    cleaned_logos,
     destination_league
 ):
 
-    home_name = home_team["name"]
-
-    home_key = clean_name(
-        home_name
+    home_name = (
+        home_team["name"]
     )
 
-    home_source = source_paths[
-        league
-    ][
-        home_key
+    home_key = (
+        clean_name(
+            home_name
+        )
+    )
+
+    home_clean_logo = cleaned_logos[
+        (
+            league,
+            home_key
+        )
     ]
-
-    home_clean_logo = clean_source_logo(
-        home_source
-    )
 
     home_folder = (
         destination_league
         /
-        filesystem_name(home_name)
+        filesystem_name(
+            home_name
+        )
     )
 
     home_folder.mkdir(
@@ -1487,10 +1531,13 @@ def build_team_folder(
     solo_path = (
         home_folder
         /
-        f"{filesystem_name(home_name)}.png"
+        (
+            f"{filesystem_name(home_name)}"
+            f".png"
+        )
     )
 
-    build_solo_logo_from_clean_image(
+    build_solo_logo(
         home_clean_logo,
         solo_path
     )
@@ -1498,34 +1545,33 @@ def build_team_folder(
     generated = 1
 
     # --------------------------------------------------------
-    # MATCHUPS
+    # EVERY MATCHUP
     # --------------------------------------------------------
 
     for away_team in all_teams:
 
-        away_name = away_team["name"]
+        away_name = (
+            away_team["name"]
+        )
+
+        away_key = clean_name(
+            away_name
+        )
 
         if (
-            clean_name(away_name)
+            away_key
             ==
             home_key
         ):
 
             continue
 
-        away_key = clean_name(
-            away_name
-        )
-
-        away_source = source_paths[
-            league
-        ][
-            away_key
+        away_clean_logo = cleaned_logos[
+            (
+                league,
+                away_key
+            )
         ]
-
-        away_clean_logo = clean_source_logo(
-            away_source
-        )
 
         matchup_filename = (
             f"{filesystem_name(home_name)}"
@@ -1574,7 +1620,7 @@ def build_team_folder(
 def build_league(
     league,
     teams,
-    source_paths,
+    cleaned_logos,
     build_root
 ):
 
@@ -1642,7 +1688,7 @@ def build_league(
                     league,
                     home_team,
                     sorted_teams,
-                    source_paths,
+                    cleaned_logos,
                     destination_league
                 )
             )
@@ -1668,7 +1714,10 @@ def build_league(
                 f"-> {generated} files"
             )
 
-    # Verify count.
+    # --------------------------------------------------------
+    # VERIFY COUNT
+    # --------------------------------------------------------
+
     actual_files = list(
         destination_league.rglob(
             "*.png"
@@ -1679,19 +1728,26 @@ def build_league(
 
         raise RuntimeError(
             f"{league}: generated "
-            f"{len(actual_files)} files, "
+            f"{len(actual_files)} PNG files, "
             f"expected {expected_files}"
         )
 
-    # Verify every team folder.
+    # --------------------------------------------------------
+    # VERIFY FOLDERS
+    # --------------------------------------------------------
+
     for team in sorted_teams:
 
-        team_name = team["name"]
+        team_name = (
+            team["name"]
+        )
 
         team_folder = (
             destination_league
             /
-            filesystem_name(team_name)
+            filesystem_name(
+                team_name
+            )
         )
 
         if not team_folder.is_dir():
@@ -1720,7 +1776,10 @@ def build_league(
         solo = (
             team_folder
             /
-            f"{filesystem_name(team_name)}.png"
+            (
+                f"{filesystem_name(team_name)}"
+                f".png"
+            )
         )
 
         if not solo.is_file():
@@ -1732,12 +1791,18 @@ def build_league(
 
         for opponent in sorted_teams:
 
-            opponent_name = opponent["name"]
+            opponent_name = (
+                opponent["name"]
+            )
 
             if (
-                clean_name(opponent_name)
+                clean_name(
+                    opponent_name
+                )
                 ==
-                clean_name(team_name)
+                clean_name(
+                    team_name
+                )
             ):
 
                 continue
@@ -1771,7 +1836,7 @@ def build_league(
 
 
 # ============================================================
-# VERIFY GENERATED LIBRARY
+# VERIFY COMPLETE GENERATED LIBRARY
 # ============================================================
 
 def verify_generated_library(
@@ -1787,7 +1852,9 @@ def verify_generated_library(
     total_expected = 0
     total_found = 0
 
-    for league in sorted(LEAGUES):
+    for league in sorted(
+        LEAGUES
+    ):
 
         teams = teams_by_league[
             league
@@ -1811,6 +1878,7 @@ def verify_generated_library(
             )
         )
 
+        print()
         print(
             f"{league}: "
             f"{len(files)}/{expected}"
@@ -1820,8 +1888,9 @@ def verify_generated_library(
 
             raise RuntimeError(
                 f"{league}: expected "
-                f"{expected} PNG files but "
-                f"found {len(files)}"
+                f"{expected} PNG files "
+                f"but found "
+                f"{len(files)}"
             )
 
         for path in files:
@@ -1845,6 +1914,27 @@ def verify_generated_library(
                             f"{path}"
                         )
 
+                    expected_size = (
+                        MATCHUP_SIZE
+                        if "_vs_" in path.stem
+                        else SOLO_SIZE
+                    )
+
+                    actual_size = (
+                        image.width,
+                        image.height
+                    )
+
+                    if actual_size != expected_size:
+
+                        raise RuntimeError(
+                            f"Wrong dimensions: "
+                            f"{path} "
+                            f"is {actual_size}, "
+                            f"expected "
+                            f"{expected_size}"
+                        )
+
             except Exception as exc:
 
                 raise RuntimeError(
@@ -1853,13 +1943,13 @@ def verify_generated_library(
                 )
 
         total_expected += expected
-
         total_found += len(files)
 
     print()
     print(
-        f"TOTAL: {total_found}/"
-        f"{total_expected} PNG files verified."
+        f"TOTAL: "
+        f"{total_found}/{total_expected} "
+        f"PNG files verified."
     )
 
     if total_found != total_expected:
@@ -1875,12 +1965,166 @@ def verify_generated_library(
 # ============================================================
 
 def verify_transparency(
-    build_root
+    build_root,
+    teams_by_league
 ):
 
     print()
     print("=" * 70)
     print("VERIFYING TRANSPARENT BACKGROUNDS")
+    print("=" * 70)
+
+    checked = 0
+
+    for league in sorted(
+        LEAGUES
+    ):
+
+        league_root = (
+            build_root
+            /
+            league
+        )
+
+        for path in league_root.rglob(
+            "*.png"
+        ):
+
+            with Image.open(
+                path
+            ) as image:
+
+                image = image.convert(
+                    "RGBA"
+                )
+
+                alpha = image.getchannel(
+                    "A"
+                )
+
+                minimum, maximum = (
+                    alpha.getextrema()
+                )
+
+                if minimum != 0:
+
+                    raise RuntimeError(
+                        f"No transparent pixels "
+                        f"found in generated "
+                        f"logo: {path}"
+                    )
+
+            checked += 1
+
+    print()
+    print(
+        f"Transparency verified on "
+        f"{checked} PNG files."
+    )
+
+
+# ============================================================
+# VERIFY DIMENSIONS
+# ============================================================
+
+def verify_dimensions(
+    build_root,
+    teams_by_league
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING OUTPUT DIMENSIONS")
+    print("=" * 70)
+
+    solo_count = 0
+    matchup_count = 0
+
+    for league in sorted(
+        LEAGUES
+    ):
+
+        teams = teams_by_league[
+            league
+        ]
+
+        for team in teams.values():
+
+            team_folder = (
+                build_root
+                /
+                league
+                /
+                filesystem_name(
+                    team["name"]
+                )
+            )
+
+            for path in team_folder.glob(
+                "*.png"
+            ):
+
+                with Image.open(
+                    path
+                ) as image:
+
+                    if "_vs_" in path.stem:
+
+                        expected = (
+                            MATCHUP_SIZE
+                        )
+
+                        matchup_count += 1
+
+                    else:
+
+                        expected = (
+                            SOLO_SIZE
+                        )
+
+                        solo_count += 1
+
+                    actual = (
+                        image.width,
+                        image.height
+                    )
+
+                    if actual != expected:
+
+                        raise RuntimeError(
+                            f"Wrong dimensions: "
+                            f"{path} "
+                            f"is {actual}, "
+                            f"expected "
+                            f"{expected}"
+                        )
+
+    print()
+    print(
+        f"Solo logos verified: "
+        f"{solo_count}"
+    )
+
+    print(
+        f"Matchup logos verified: "
+        f"{matchup_count}"
+    )
+
+
+# ============================================================
+# VERIFY NO WHITE EDGE BACKGROUNDS
+#
+# This specifically checks the four corners of every generated
+# image. A transparent corner is what we want.
+# ============================================================
+
+def verify_corners_transparent(
+    build_root
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING CORNER TRANSPARENCY")
     print("=" * 70)
 
     checked = 0
@@ -1897,167 +2141,63 @@ def verify_transparency(
                 "RGBA"
             )
 
-            alpha = image.getchannel(
-                "A"
+            width, height = (
+                image.size
             )
 
-            minimum, maximum = (
-                alpha.getextrema()
+            points = (
+                (
+                    0,
+                    0
+                ),
+                (
+                    width - 1,
+                    0
+                ),
+                (
+                    0,
+                    height - 1
+                ),
+                (
+                    width - 1,
+                    height - 1
+                ),
             )
 
-            if minimum != 0:
+            for x, y in points:
 
-                raise RuntimeError(
-                    f"No transparent pixels "
-                    f"found in: {path}"
+                _, _, _, alpha = (
+                    image.getpixel(
+                        (
+                            x,
+                            y
+                        )
+                    )
                 )
+
+                if alpha != 0:
+
+                    raise RuntimeError(
+                        f"Corner is not transparent "
+                        f"in {path} "
+                        f"at ({x}, {y})"
+                    )
 
         checked += 1
 
     print()
     print(
-        f"Transparency verified on "
+        f"Corner transparency verified on "
         f"{checked} PNG files."
     )
 
 
 # ============================================================
-# VERIFY DIMENSIONS
-# ============================================================
-
-def verify_dimensions(
-    build_root
-):
-
-    print()
-    print("=" * 70)
-    print("VERIFYING OUTPUT DIMENSIONS")
-    print("=" * 70)
-
-    solo_count = 0
-    matchup_count = 0
-
-    for path in build_root.rglob(
-        "*.png"
-    ):
-
-        with Image.open(
-            path
-        ) as image:
-
-            actual = (
-                image.width,
-                image.height
-            )
-
-            if "_vs_" in path.stem:
-
-                expected = MATCHUP_SIZE
-
-                matchup_count += 1
-
-            else:
-
-                expected = SOLO_SIZE
-
-                solo_count += 1
-
-            if actual != expected:
-
-                raise RuntimeError(
-                    f"Wrong dimensions: "
-                    f"{path} is {actual}, "
-                    f"expected {expected}"
-                )
-
-    print()
-    print(
-        f"Solo logos verified: "
-        f"{solo_count}"
-    )
-
-    print(
-        f"Matchup logos verified: "
-        f"{matchup_count}"
-    )
-
-
-# ============================================================
-# VERIFY SOURCE DOWNLOADS
-# ============================================================
-
-def verify_downloaded_sources(
-    source_paths,
-    teams_by_league
-):
-
-    print()
-    print("=" * 70)
-    print("VERIFYING DOWNLOADED ESPN SOURCES")
-    print("=" * 70)
-
-    total = 0
-
-    for league in sorted(LEAGUES):
-
-        for team in teams_by_league[
-            league
-        ].values():
-
-            team_name = team["name"]
-
-            key = clean_name(
-                team_name
-            )
-
-            source = source_paths[
-                league
-            ][
-                key
-            ]
-
-            if not source.is_file():
-
-                raise RuntimeError(
-                    f"Missing ESPN source: "
-                    f"{source}"
-                )
-
-            try:
-
-                with Image.open(
-                    source
-                ) as image:
-
-                    image.load()
-
-                    if (
-                        image.width <= 0
-                        or
-                        image.height <= 0
-                    ):
-
-                        raise RuntimeError(
-                            "Invalid dimensions."
-                        )
-
-            except Exception as exc:
-
-                raise RuntimeError(
-                    f"Invalid ESPN source "
-                    f"{source}: {exc}"
-                )
-
-            total += 1
-
-    print()
-    print(
-        f"Verified {total} ESPN logo sources."
-    )
-
-
-# ============================================================
-# INSTALL
+# INSTALL NEW LIBRARY
+#
+# THIS IS THE ONLY PLACE WHERE sports-logos IS REPLACED.
+#
+# It is called only after all verification passes.
 # ============================================================
 
 def install_new_library():
@@ -2073,8 +2213,22 @@ def install_new_library():
     print("INSTALLING NEW SPORTS LOGO LIBRARY")
     print("=" * 70)
 
+    print()
+    print(
+        f"CURRENT LIBRARY: {ROOT}"
+    )
+
+    print(
+        f"NEW VERIFIED BUILD: {BUILD_ROOT}"
+    )
+
+    # --------------------------------------------------------
+    # Move existing library to backup.
+    # --------------------------------------------------------
+
     if ROOT.exists():
 
+        print()
         print(
             "Moving existing sports-logos "
             "to temporary backup."
@@ -2086,11 +2240,19 @@ def install_new_library():
 
     try:
 
+        # ----------------------------------------------------
+        # Install verified build.
+        # ----------------------------------------------------
+
         BUILD_ROOT.rename(
             ROOT
         )
 
     except Exception:
+
+        # ----------------------------------------------------
+        # Rollback.
+        # ----------------------------------------------------
 
         if (
             BACKUP_ROOT.exists()
@@ -2104,6 +2266,10 @@ def install_new_library():
 
         raise
 
+    # --------------------------------------------------------
+    # Delete old library only after successful replacement.
+    # --------------------------------------------------------
+
     if BACKUP_ROOT.exists():
 
         shutil.rmtree(
@@ -2112,7 +2278,8 @@ def install_new_library():
 
     print()
     print(
-        "New sports-logos library installed."
+        "New ESPN-sourced sports-logos "
+        "library installed successfully."
     )
 
 
@@ -2132,16 +2299,22 @@ def verify_installed_library(
     total_expected = 0
     total_found = 0
 
-    for league in sorted(LEAGUES):
+    for league in sorted(
+        LEAGUES
+    ):
 
         teams = teams_by_league[
             league
         ]
 
+        expected_per_team = len(
+            teams
+        )
+
         expected = (
             len(teams)
             *
-            len(teams)
+            expected_per_team
         )
 
         league_root = (
@@ -2168,12 +2341,48 @@ def verify_installed_library(
             raise RuntimeError(
                 f"{league}: installed "
                 f"{len(files)} files, "
-                f"expected {expected}"
+                f"expected "
+                f"{expected}"
             )
+
+        for path in files:
+
+            with Image.open(
+                path
+            ) as image:
+
+                if image.mode != "RGBA":
+
+                    raise RuntimeError(
+                        f"Installed image "
+                        f"is not RGBA: "
+                        f"{path}"
+                    )
+
+                expected_size = (
+                    MATCHUP_SIZE
+                    if "_vs_" in path.stem
+                    else SOLO_SIZE
+                )
+
+                actual_size = (
+                    image.width,
+                    image.height
+                )
+
+                if actual_size != expected_size:
+
+                    raise RuntimeError(
+                        f"Installed image "
+                        f"has wrong dimensions: "
+                        f"{path}"
+                    )
 
         for team in teams.values():
 
-            team_name = team["name"]
+            team_name = (
+                team["name"]
+            )
 
             team_folder = (
                 league_root
@@ -2186,21 +2395,26 @@ def verify_installed_library(
             if not team_folder.is_dir():
 
                 raise RuntimeError(
-                    f"Missing installed team "
-                    f"folder: {team_folder}"
+                    f"Missing installed "
+                    f"team folder: "
+                    f"{team_folder}"
                 )
 
             solo = (
                 team_folder
                 /
-                f"{filesystem_name(team_name)}.png"
+                (
+                    f"{filesystem_name(team_name)}"
+                    f".png"
+                )
             )
 
             if not solo.is_file():
 
                 raise RuntimeError(
-                    f"Missing installed solo "
-                    f"logo: {solo}"
+                    f"Missing installed "
+                    f"solo logo: "
+                    f"{solo}"
                 )
 
             for opponent in teams.values():
@@ -2236,47 +2450,31 @@ def verify_installed_library(
 
                     raise RuntimeError(
                         f"Missing installed "
-                        f"matchup: {matchup}"
+                        f"matchup: "
+                        f"{matchup}"
                     )
 
         print(
             f"{league}: "
-            f"{len(files)}/{expected} verified"
+            f"{len(files)}/{expected} "
+            f"verified"
         )
 
         total_expected += expected
-
         total_found += len(files)
 
     print()
     print(
         f"Installed library verified: "
-        f"{total_found}/{total_expected} files."
+        f"{total_found}/{total_expected} "
+        f"files."
     )
 
     if total_found != total_expected:
 
         raise RuntimeError(
-            "Installed library verification failed."
-        )
-
-
-# ============================================================
-# CLEANUP DOWNLOAD CACHE
-# ============================================================
-
-def cleanup_download_cache():
-
-    if DOWNLOAD_ROOT.exists():
-
-        print()
-        print(
-            f"Removing temporary ESPN source cache: "
-            f"{DOWNLOAD_ROOT}"
-        )
-
-        shutil.rmtree(
-            DOWNLOAD_ROOT
+            "Installed library verification "
+            "failed."
         )
 
 
@@ -2287,101 +2485,93 @@ def cleanup_download_cache():
 def main():
 
     print("=" * 70)
-    print("ESPN SPORTS LOGO DOWNLOADER / CLEANER / REBUILDER")
+    print("ESPN CDN SPORTS LOGO DOWNLOADER + REBUILDER")
     print("=" * 70)
 
     print()
-    print("TEAM LIST SOURCE:")
+    print("ROSTER SOURCE:")
     print(
-        "  Existing sports-logos folder names"
+        "  Existing sports-logos team folders"
     )
 
     print()
-    print("LOGO ARTWORK SOURCE:")
+    print("LOGO SOURCE:")
     print(
-        "  ESPN team logo data"
+        "  ESPN CDN"
     )
 
     print()
-    print("FINAL OUTPUT:")
     print(
-        "  sports-logos/<LEAGUE>/<TEAM>/"
+        "ESPN API:"
+    )
+
+    print(
+        "  NOT USED"
     )
 
     print()
     print("PROCESS:")
     print(
-        "  Existing PNG artwork is NOT used."
+        "  1. Read the existing 124 team folders."
     )
 
     print(
-        "  Existing matchup files are NOT used."
+        "  2. Map each team to its ESPN CDN abbreviation."
     )
 
     print(
-        "  Team folders are used only to determine "
-        "which teams must be rebuilt."
+        "  3. Download the 500px ESPN CDN logo."
     )
 
     print(
-        "  ESPN supplies the new logo artwork."
+        "  4. Remove edge-connected white backgrounds."
     )
 
     print(
-        "  Downloaded logos are converted to RGBA."
+        "  5. Preserve legitimate enclosed white logo details."
     )
 
     print(
-        "  Edge-connected white backgrounds are removed."
+        "  6. Trim transparent space."
     )
 
     print(
-        "  Logos are tightly cropped."
+        "  7. Build 1024x1024 transparent solo logos."
     )
 
     print(
-        "  Solo logos become 1024x1024 transparent PNGs."
+        "  8. Build 1024x512 transparent matchups."
     )
 
     print(
-        "  Matchups become 1024x512 transparent PNGs."
+        "  9. Verify the complete library."
     )
 
     print(
-        "  Home team is always on the LEFT."
-    )
-
-    print(
-        "  Away team is always on the RIGHT."
-    )
-
-    print(
-        "  Every team gets every other team in its league."
+        " 10. Replace sports-logos only after success."
     )
 
     print()
     print("SAFETY:")
     print(
-        "  The existing sports-logos directory is never "
-        "modified during construction."
+        "  Existing sports-logos is not modified during "
+        "download/build."
     )
 
     print(
-        "  A separate build is created first."
+        "  Existing matchup files are never used as sources."
     )
 
     print(
-        "  The build is completely verified before installation."
+        "  Existing solo PNGs are not used as new logo sources."
     )
 
     print(
-        "  If even ONE team cannot be matched to an ESPN logo, "
-        "the entire run stops."
+        "  If any team fails, the old library remains intact."
     )
 
     print(
-        "  The old sports-logos library remains untouched "
-        "if anything fails."
+        "  No ESPN team-data API is called."
     )
 
     print()
@@ -2390,11 +2580,7 @@ def main():
     )
 
     print(
-        f"Download workers: {DOWNLOAD_WORKERS}"
-    )
-
-    print(
-        f"Solo size: "
+        f"Solo canvas: "
         f"{SOLO_SIZE[0]}x{SOLO_SIZE[1]}"
     )
 
@@ -2404,7 +2590,7 @@ def main():
     )
 
     print(
-        f"Matchup size: "
+        f"Matchup canvas: "
         f"{MATCHUP_SIZE[0]}x{MATCHUP_SIZE[1]}"
     )
 
@@ -2425,87 +2611,30 @@ def main():
         )
 
     # --------------------------------------------------------
-    # Discover teams from existing library.
+    # Discover roster.
     # --------------------------------------------------------
 
     teams_by_league = (
         discover_source_teams()
     )
 
-    total_teams = sum(
-        len(teams)
-        for teams in teams_by_league.values()
-    )
-
-    print()
-    print("=" * 70)
-    print("TEAMS DISCOVERED")
-    print("=" * 70)
-
-    for league in sorted(LEAGUES):
-
-        print(
-            f"{league}: "
-            f"{len(teams_by_league[league])} teams"
-        )
-
-    print()
-    print(
-        f"TOTAL TEAMS: {total_teams}"
-    )
-
-    # --------------------------------------------------------
-    # Download completely new logo sources.
-    # --------------------------------------------------------
-
-    external_matches = (
-        build_external_source_library(
+    total_teams = (
+        verify_team_counts(
             teams_by_league
         )
     )
 
     # --------------------------------------------------------
-    # Build exact source path map.
+    # Verify every team has a CDN mapping BEFORE downloading
+    # anything.
     # --------------------------------------------------------
 
-    source_paths = {
-        league: {}
-        for league in LEAGUES
-    }
-
-    for league in sorted(LEAGUES):
-
-        for team in teams_by_league[
-            league
-        ].values():
-
-            team_name = team["name"]
-
-            key = clean_name(
-                team_name
-            )
-
-            path = (
-                DOWNLOAD_ROOT
-                /
-                league
-                /
-                f"{filesystem_name(team_name)}.png"
-            )
-
-            source_paths[
-                league
-            ][
-                key
-            ] = path
-
-    verify_downloaded_sources(
-        source_paths,
+    verify_espn_mappings(
         teams_by_league
     )
 
     # --------------------------------------------------------
-    # Calculate expected output.
+    # Calculate expected files.
     # --------------------------------------------------------
 
     print()
@@ -2515,24 +2644,26 @@ def main():
 
     total_expected = 0
 
-    for league in sorted(LEAGUES):
+    for league in sorted(
+        LEAGUES
+    ):
 
-        count = len(
+        team_count = len(
             teams_by_league[
                 league
             ]
         )
 
         expected = (
-            count
+            team_count
             *
-            count
+            team_count
         )
 
         print(
             f"{league}: "
-            f"{count} teams -> "
-            f"{count} folders -> "
+            f"{team_count} teams -> "
+            f"{team_count} folders -> "
             f"{expected} files"
         )
 
@@ -2540,27 +2671,50 @@ def main():
 
     print()
     print(
+        f"TOTAL TEAMS: "
+        f"{total_teams}"
+    )
+
+    print(
         f"TOTAL PNG FILES: "
         f"{total_expected}"
     )
 
     # --------------------------------------------------------
-    # Build completely separate library.
+    # DOWNLOAD ALL NEW ESPN LOGOS.
+    #
+    # Nothing in sports-logos is modified here.
+    # --------------------------------------------------------
+
+    cleaned_logos = (
+        download_all_logos(
+            teams_by_league
+        )
+    )
+
+    # --------------------------------------------------------
+    # Build entire new library.
     # --------------------------------------------------------
 
     generated_total = 0
 
-    for league in sorted(LEAGUES):
+    for league in sorted(
+        LEAGUES
+    ):
 
-        generated_total += build_league(
-            league,
-            teams_by_league[league],
-            source_paths,
-            BUILD_ROOT
+        generated_total += (
+            build_league(
+                league,
+                teams_by_league[
+                    league
+                ],
+                cleaned_logos,
+                BUILD_ROOT
+            )
         )
 
     # --------------------------------------------------------
-    # Verify build.
+    # COMPLETE BUILD VERIFICATION.
     # --------------------------------------------------------
 
     verify_generated_library(
@@ -2569,21 +2723,27 @@ def main():
     )
 
     verify_transparency(
+        BUILD_ROOT,
+        teams_by_league
+    )
+
+    verify_corners_transparent(
         BUILD_ROOT
     )
 
     verify_dimensions(
-        BUILD_ROOT
+        BUILD_ROOT,
+        teams_by_league
     )
 
     # --------------------------------------------------------
-    # INSTALL ONLY AFTER EVERYTHING PASSES.
+    # ONLY NOW replace sports-logos.
     # --------------------------------------------------------
 
     install_new_library()
 
     # --------------------------------------------------------
-    # Verify installed result.
+    # Verify actual installed library.
     # --------------------------------------------------------
 
     verify_installed_library(
@@ -2591,13 +2751,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # Remove temporary downloaded source logos.
-    # --------------------------------------------------------
-
-    cleanup_download_cache()
-
-    # --------------------------------------------------------
-    # FINAL REPORT.
+    # Final report.
     # --------------------------------------------------------
 
     print()
@@ -2607,7 +2761,26 @@ def main():
 
     print()
     print(
-        f"Teams rebuilt: {total_teams}"
+        "LOGO SOURCE:"
+    )
+
+    print(
+        "  ESPN CDN"
+    )
+
+    print()
+    print(
+        "ESPN TEAM API:"
+    )
+
+    print(
+        "  NOT USED"
+    )
+
+    print()
+    print(
+        f"Teams processed: "
+        f"{total_teams}"
     )
 
     print(
@@ -2616,52 +2789,52 @@ def main():
     )
 
     print(
-        f"PNG files expected:  "
+        f"PNG files expected: "
         f"{total_expected}"
     )
 
     print()
     print(
-        "NEW logo artwork came from ESPN."
+        "Every team now has a newly downloaded "
+        "ESPN CDN logo."
     )
 
     print(
-        "Existing sports-logos PNG artwork "
-        "was not used as the source."
+        "Edge-connected white backgrounds were "
+        "removed."
     )
 
     print(
-        "Existing matchup PNGs were not used."
+        "Enclosed white logo details were preserved."
     )
 
     print(
-        "White edge-connected backgrounds "
-        "were removed."
+        "Solo logos were tightly cropped and rendered "
+        "as 1024x1024 transparent PNGs."
     )
 
     print(
-        "Solo logos were rendered as "
-        "1024x1024 transparent PNGs."
+        "Matchups were rebuilt as 1024x512 "
+        "transparent PNGs."
     )
 
     print(
-        "Matchup logos were rendered as "
-        "1024x512 transparent PNGs."
+        "Every team has a matchup against every "
+        "other team in its league."
     )
 
     print(
-        "Every team has a matchup against "
-        "every other team in its league."
+        "Both home/away matchup directions were generated."
     )
 
     print(
-        "Both matchup directions were generated."
+        "The old sports-logos library was not replaced "
+        "until the complete build passed verification."
     )
 
     print()
     print(
-        "The rebuilt sports-logos library "
-        "was installed only after verification."
+        "ESPN CDN logo source verified and installed."
     )
 
 
