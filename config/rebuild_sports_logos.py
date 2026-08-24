@@ -55,13 +55,25 @@ USER_AGENT = (
 #
 # IMPORTANT:
 #
-# ESPN logos are NEVER resized.
+# ESPN solo logos are NEVER resized.
 #
-# The logos are downloaded at their native ESPN CDN size and
-# placed onto the matchup canvas without stretching.
+# They remain at their native ESPN CDN dimensions.
+#
+# Matchup images use a 1024x512 transparent canvas.
+#
+# Native ESPN logos are placed on that canvas without
+# enlargement.
+#
+# A small edge margin guarantees that no logo touches the
+# outer edge of the matchup canvas.
 # ============================================================
 
 MATCHUP_SIZE = (1024, 512)
+
+MATCHUP_LOGO_WIDTH_SCALE = 0.88
+MATCHUP_LOGO_HEIGHT_SCALE = 0.88
+
+MATCHUP_EDGE_MARGIN = 2
 
 
 # ============================================================
@@ -80,9 +92,11 @@ ESPN_CDN_SCOREBOARD_BASE = (
 # ============================================================
 # ESPN TEAM ABBREVIATIONS
 #
-# The ESPN team-data API is NOT used.
+# No ESPN team-data API is used.
 #
-# These mappings are used directly against the ESPN CDN.
+# The existing team folders provide the roster.
+#
+# This mapping determines the direct ESPN CDN logo URL.
 # ============================================================
 
 ESPN_CODES = {
@@ -258,14 +272,9 @@ ESPN_CODES = {
 
 def clean_name(value):
 
-    value = os.path.splitext(
-        value
-    )[0]
+    value = os.path.splitext(value)[0]
 
-    value = value.replace(
-        "_",
-        " "
-    )
+    value = value.replace("_", " ")
 
     value = unicodedata.normalize(
         "NFKD",
@@ -295,14 +304,9 @@ def clean_name(value):
 
 def filesystem_name(team):
 
-    team = os.path.splitext(
-        team
-    )[0]
+    team = os.path.splitext(team)[0]
 
-    team = team.replace(
-        "_",
-        " "
-    )
+    team = team.replace("_", " ")
 
     team = unicodedata.normalize(
         "NFKD",
@@ -339,15 +343,12 @@ def get_espn_code(
     team_name
 ):
 
-    key = clean_name(
-        team_name
-    )
+    key = clean_name(team_name)
 
-    code = ESPN_CODES.get(
-        key
-    )
+    code = ESPN_CODES.get(key)
 
     if code:
+
         return code
 
     raise RuntimeError(
@@ -450,11 +451,13 @@ def request_with_retry(
 #
 # IMPORTANT:
 #
-# The returned bytes are the ORIGINAL ESPN CDN PNG.
+# The downloaded ESPN image is returned exactly as provided.
 #
-# No cleanup is performed.
-# No background removal is performed.
-# No resizing is performed.
+# No white-background removal.
+# No trimming.
+# No resizing.
+# No enlargement.
+# No modification of the artwork.
 # ============================================================
 
 def download_espn_logo(
@@ -514,12 +517,7 @@ def download_espn_logo(
 # ============================================================
 # LOAD DOWNLOADED LOGO
 #
-# IMPORTANT:
-#
-# The image is converted to RGBA only so that transparency
-# is retained consistently.
-#
-# Its WIDTH and HEIGHT are NOT changed.
+# The native ESPN dimensions are retained.
 # ============================================================
 
 def load_downloaded_logo(
@@ -538,22 +536,12 @@ def load_downloaded_logo(
 
             image.load()
 
-            original_size = (
-                image.width,
-                image.height
-            )
+            # Preserve the actual ESPN dimensions.
+            # Convert only to RGBA so the PNG output has an
+            # explicit alpha channel.
+            image = image.convert("RGBA")
 
-            image = image.convert(
-                "RGBA"
-            )
-
-            result = image.copy()
-
-            result._espn_original_size = (
-                original_size
-            )
-
-            return result
+            return image.copy()
 
     except Exception as exc:
 
@@ -566,54 +554,168 @@ def load_downloaded_logo(
 
 
 # ============================================================
-# PREPARE DOWNLOADED ESPN LOGO
+# DOWNLOAD ONE TEAM LOGO
 #
 # NO CLEANUP.
-# NO WHITE BACKGROUND REMOVAL.
-# NO TRIMMING.
-# NO RESIZING.
 #
-# The ESPN CDN image is preserved at its exact downloaded
+# The returned image is the ESPN CDN logo at its native size.
+# ============================================================
+
+def download_one_team_logo(
+    league,
+    team
+):
+
+    team_name = team["name"]
+
+    session = requests.Session()
+
+    try:
+
+        content, url = download_espn_logo(
+            session,
+            league,
+            team_name
+        )
+
+        image = load_downloaded_logo(
+            content,
+            league,
+            team_name
+        )
+
+        return {
+            "league": league,
+            "team": team_name,
+            "code": team["espn_code"],
+            "url": url,
+            "image": image,
+            "native_size": (
+                image.width,
+                image.height
+            ),
+        }
+
+    finally:
+
+        session.close()
+
+
+# ============================================================
+# DOWNLOAD ALL LOGOS
+#
+# Existing sports-logos is not modified.
+#
+# The actual ESPN logos are retained in their native
 # dimensions.
 # ============================================================
 
-def prepare_logo(
-    image,
-    league,
-    team_name
+def download_all_logos(
+    teams_by_league
 ):
 
-    image = image.convert(
-        "RGBA"
+    print()
+    print("=" * 70)
+    print("DOWNLOADING NEW LOGO SOURCES FROM ESPN CDN")
+    print("=" * 70)
+
+    cleaned_logos = {}
+
+    jobs = []
+
+    total_teams = sum(
+        len(
+            teams_by_league[
+                league
+            ]
+        )
+        for league in LEAGUES
     )
 
-    if (
-        image.width <= 0
-        or
-        image.height <= 0
-    ):
+    completed = 0
+
+    with ThreadPoolExecutor(
+        max_workers=BUILD_WORKERS
+    ) as executor:
+
+        for league in sorted(
+            LEAGUES
+        ):
+
+            for team in teams_by_league[
+                league
+            ].values():
+
+                jobs.append(
+                    executor.submit(
+                        download_one_team_logo,
+                        league,
+                        team
+                    )
+                )
+
+        for future in as_completed(
+            jobs
+        ):
+
+            result = future.result()
+
+            completed += 1
+
+            key = (
+                result["league"],
+                clean_name(
+                    result["team"]
+                )
+            )
+
+            cleaned_logos[
+                key
+            ] = result["image"]
+
+            print(
+                f"[{completed}/{total_teams}] "
+                f"{result['league']}: "
+                f"{result['team']} "
+                f"({result['code']}) "
+                f"downloaded "
+                f"{result['native_size'][0]}x"
+                f"{result['native_size'][1]}"
+            )
+
+    if len(
+        cleaned_logos
+    ) != total_teams:
 
         raise RuntimeError(
-            f"Invalid ESPN logo dimensions: "
-            f"{league} / {team_name}"
+            f"Downloaded "
+            f"{len(cleaned_logos)} "
+            f"logos but expected "
+            f"{total_teams}"
         )
 
-    return image.copy()
+    print()
+    print(
+        f"SUCCESS: "
+        f"{len(cleaned_logos)}/{total_teams} "
+        f"team logos downloaded."
+    )
+
+    return cleaned_logos
 
 
 # ============================================================
-# SAVE SOLO LOGO
+# BUILD SOLO LOGO
 #
 # IMPORTANT:
 #
-# The SOLO PNG is the ESPN logo itself.
+# The solo logo is written at the EXACT native ESPN CDN
+# dimensions.
 #
-# It is NOT placed on a 1024x1024 canvas.
-# It is NOT enlarged.
-# It is NOT shrunk.
-# It is NOT cropped.
-#
-# The exact ESPN CDN dimensions are retained.
+# There is NO 1024x1024 canvas.
+# There is NO scaling.
+# There is NO trimming.
+# There is NO background removal.
 # ============================================================
 
 def build_solo_logo(
@@ -621,9 +723,11 @@ def build_solo_logo(
     destination
 ):
 
-    image = image.convert(
-        "RGBA"
-    )
+    if image.width <= 0 or image.height <= 0:
+
+        raise RuntimeError(
+            "Invalid ESPN logo dimensions."
+        )
 
     destination.parent.mkdir(
         parents=True,
@@ -638,18 +742,81 @@ def build_solo_logo(
 
 
 # ============================================================
+# FIT LOGO FOR MATCHUP
+#
+# IMPORTANT:
+#
+# Logos are NEVER enlarged.
+#
+# If the native ESPN logo is already smaller than the
+# available matchup area, its native dimensions are retained.
+#
+# If an ESPN logo is larger than the available matchup area,
+# it is reduced only enough to fit.
+#
+# This does NOT alter the source logo held in memory.
+# ============================================================
+
+def fit_logo_for_matchup(
+    image,
+    max_width,
+    max_height
+):
+
+    if image.width <= 0 or image.height <= 0:
+
+        raise RuntimeError(
+            "Invalid logo image."
+        )
+
+    scale = min(
+        1.0,
+        max_width / image.width,
+        max_height / image.height
+    )
+
+    if scale >= 1.0:
+
+        return image.copy()
+
+    width = max(
+        1,
+        int(
+            round(
+                image.width * scale
+            )
+        )
+    )
+
+    height = max(
+        1,
+        int(
+            round(
+                image.height * scale
+            )
+        )
+    )
+
+    return image.resize(
+        (
+            width,
+            height
+        ),
+        Image.Resampling.LANCZOS
+    )
+
+
+# ============================================================
 # BUILD MATCHUP
 #
 # HOME = LEFT
 # AWAY = RIGHT
 #
-# IMPORTANT:
+# The original ESPN logo artwork is used.
 #
-# Neither logo is resized.
+# Native-size logos are never enlarged.
 #
-# The native ESPN dimensions are preserved.
-#
-# The matchup canvas remains 1024x512.
+# A small transparent edge margin is guaranteed.
 # ============================================================
 
 def build_matchup(
@@ -658,12 +825,62 @@ def build_matchup(
     destination
 ):
 
-    home_logo = home_logo.convert(
-        "RGBA"
+    canvas_width, canvas_height = MATCHUP_SIZE
+
+    half_width = (
+        canvas_width
+        //
+        2
     )
 
-    away_logo = away_logo.convert(
-        "RGBA"
+    available_width = (
+        int(
+            half_width
+            *
+            MATCHUP_LOGO_WIDTH_SCALE
+        )
+        -
+        (
+            MATCHUP_EDGE_MARGIN
+            *
+            2
+        )
+    )
+
+    available_height = (
+        int(
+            canvas_height
+            *
+            MATCHUP_LOGO_HEIGHT_SCALE
+        )
+        -
+        (
+            MATCHUP_EDGE_MARGIN
+            *
+            2
+        )
+    )
+
+    available_width = max(
+        1,
+        available_width
+    )
+
+    available_height = max(
+        1,
+        available_height
+    )
+
+    home = fit_logo_for_matchup(
+        home_logo,
+        available_width,
+        available_height
+    )
+
+    away = fit_logo_for_matchup(
+        away_logo,
+        available_width,
+        available_height
     )
 
     canvas = Image.new(
@@ -677,66 +894,92 @@ def build_matchup(
         )
     )
 
-    half_width = (
-        MATCHUP_SIZE[0]
+    # --------------------------------------------------------
+    # LEFT / HOME
+    # --------------------------------------------------------
+
+    home_area_left = MATCHUP_EDGE_MARGIN
+
+    home_area_right = (
+        half_width
+        -
+        MATCHUP_EDGE_MARGIN
+    )
+
+    home_area_width = (
+        home_area_right
+        -
+        home_area_left
+    )
+
+    home_x = (
+        home_area_left
+        +
+        (
+            home_area_width
+            -
+            home.width
+        )
         //
         2
     )
 
-    # --------------------------------------------------------
-    # HOME LOGO
-    #
-    # Native dimensions are preserved.
-    # --------------------------------------------------------
-
-    home_x = (
-        half_width
-        -
-        home_logo.width
-    ) // 2
-
     home_y = (
-        MATCHUP_SIZE[1]
+        canvas_height
         -
-        home_logo.height
+        home.height
     ) // 2
 
-    # If an ESPN logo is larger than the matchup canvas,
-    # do NOT resize it. Instead, position it naturally.
-    canvas.alpha_composite(
-        home_logo,
-        (
-            home_x,
-            home_y
-        )
-    )
-
     # --------------------------------------------------------
-    # AWAY LOGO
-    #
-    # Native dimensions are preserved.
+    # RIGHT / AWAY
     # --------------------------------------------------------
 
-    away_x = (
+    away_area_left = (
         half_width
         +
+        MATCHUP_EDGE_MARGIN
+    )
+
+    away_area_right = (
+        canvas_width
+        -
+        MATCHUP_EDGE_MARGIN
+    )
+
+    away_area_width = (
+        away_area_right
+        -
+        away_area_left
+    )
+
+    away_x = (
+        away_area_left
+        +
         (
-            half_width
+            away_area_width
             -
-            away_logo.width
+            away.width
         )
         //
         2
     )
 
     away_y = (
-        MATCHUP_SIZE[1]
+        canvas_height
         -
-        away_logo.height
+        away.height
     ) // 2
 
     canvas.alpha_composite(
-        away_logo,
+        home,
+        (
+            home_x,
+            home_y
+        )
+    )
+
+    canvas.alpha_composite(
+        away,
         (
             away_x,
             away_y
@@ -758,13 +1001,12 @@ def build_matchup(
 # ============================================================
 # SOURCE DISCOVERY
 #
-# Existing sports-logos is used ONLY for:
+# Existing sports-logos provides ONLY:
 #
 #   - league names
-#   - team names
-#   - folder structure
+#   - team folder names
 #
-# Existing logo files are NEVER used as image sources.
+# Existing PNGs are NEVER used as logo sources.
 # ============================================================
 
 def discover_source_teams():
@@ -813,9 +1055,7 @@ def discover_source_teams():
 
         for team_folder in team_folders:
 
-            team_name = (
-                team_folder.name
-            )
+            team_name = team_folder.name
 
             key = clean_name(
                 team_name
@@ -939,9 +1179,7 @@ def verify_espn_mappings(
     ):
 
         print()
-        print(
-            f"{league}"
-        )
+        print(league)
 
         for team in sorted(
             teams_by_league[
@@ -960,174 +1198,104 @@ def verify_espn_mappings(
 
 
 # ============================================================
-# DOWNLOAD ONE TEAM LOGO
+# VERIFY NATIVE ESPN DIMENSIONS
 # ============================================================
-
-def download_one_team_logo(
-    league,
-    team
-):
-
-    team_name = team["name"]
-
-    session = requests.Session()
-
-    try:
-
-        content, url = download_espn_logo(
-            session,
-            league,
-            team_name
-        )
-
-        image = load_downloaded_logo(
-            content,
-            league,
-            team_name
-        )
-
-        prepared = prepare_logo(
-            image,
-            league,
-            team_name
-        )
-
-        return {
-            "league": league,
-            "team": team_name,
-            "code": team["espn_code"],
-            "url": url,
-            "image": prepared,
-            "size": (
-                prepared.width,
-                prepared.height
-            ),
-        }
-
-    finally:
-
-        session.close()
-
-
-# ============================================================
-# DOWNLOAD ALL LOGOS
 #
-# Existing sports-logos is NOT modified.
+# The 124 solo logos must remain at exactly the dimensions
+# supplied by ESPN.
 #
-# The downloaded images remain at their native ESPN dimensions.
+# This function records those dimensions from the downloaded
+# source images and verifies the final solo files against them.
 # ============================================================
 
-def download_all_logos(
-    teams_by_league
+def verify_native_dimensions(
+    build_root,
+    native_dimensions
 ):
 
     print()
     print("=" * 70)
-    print("DOWNLOADING NEW LOGO SOURCES FROM ESPN CDN")
+    print("VERIFYING NATIVE ESPN LOGO DIMENSIONS")
     print("=" * 70)
 
-    print()
-    print(
-        "IMPORTANT: ESPN logos are being saved at their "
-        "native downloaded dimensions."
-    )
+    checked = 0
 
-    print(
-        "No white-background cleanup is being performed."
-    )
+    for key, expected_size in sorted(
+        native_dimensions.items()
+    ):
 
-    print(
-        "No cropping is being performed."
-    )
+        league, team_key = key
 
-    print(
-        "No enlargement or shrinking is being performed."
-    )
+        team_name = team_key
 
-    cleaned_logos = {}
+        team_folder = None
 
-    jobs = []
-
-    total_teams = sum(
-        len(
-            teams_by_league[
-                league
-            ]
+        league_root = (
+            build_root
+            /
+            league
         )
-        for league in LEAGUES
-    )
 
-    completed = 0
+        for folder in league_root.iterdir():
 
-    with ThreadPoolExecutor(
-        max_workers=BUILD_WORKERS
-    ) as executor:
-
-        for league in sorted(
-            LEAGUES
-        ):
-
-            for team in teams_by_league[
-                league
-            ].values():
-
-                jobs.append(
-                    executor.submit(
-                        download_one_team_logo,
-                        league,
-                        team
-                    )
-                )
-
-        for future in as_completed(
-            jobs
-        ):
-
-            result = future.result()
-
-            completed += 1
-
-            key = (
-                result["league"],
+            if (
+                folder.is_dir()
+                and
                 clean_name(
-                    result["team"]
+                    folder.name
                 )
+                == team_key
+            ):
+
+                team_folder = folder
+                break
+
+        if team_folder is None:
+
+            raise RuntimeError(
+                f"Could not locate generated "
+                f"folder for "
+                f"{league} / {team_name}"
             )
 
-            cleaned_logos[
-                key
-            ] = result["image"]
-
-            width, height = result["size"]
-
-            print(
-                f"[{completed}/{total_teams}] "
-                f"{result['league']}: "
-                f"{result['team']} "
-                f"({result['code']}) "
-                f"{width}x{height} "
-                f"downloaded"
-            )
-
-    if len(
-        cleaned_logos
-    ) != total_teams:
-
-        raise RuntimeError(
-            f"Downloaded "
-            f"{len(cleaned_logos)} "
-            f"logos but expected "
-            f"{total_teams}"
+        solo = (
+            team_folder
+            /
+            f"{filesystem_name(team_folder.name)}.png"
         )
+
+        if not solo.is_file():
+
+            raise RuntimeError(
+                f"Missing solo logo: {solo}"
+            )
+
+        with Image.open(
+            solo
+        ) as image:
+
+            actual = (
+                image.width,
+                image.height
+            )
+
+            if actual != expected_size:
+
+                raise RuntimeError(
+                    f"Native ESPN dimensions changed "
+                    f"for {league} / "
+                    f"{team_folder.name}: "
+                    f"{actual}, expected "
+                    f"{expected_size}"
+                )
+
+        checked += 1
 
     print()
     print(
-        f"SUCCESS: "
-        f"{len(cleaned_logos)}/{total_teams} "
-        f"team logos downloaded from ESPN."
+        f"Native ESPN dimensions verified on "
+        f"{checked} solo logos."
     )
-
-    return cleaned_logos
 
 
 # ============================================================
@@ -1138,21 +1306,17 @@ def build_team_folder(
     league,
     home_team,
     all_teams,
-    cleaned_logos,
+    downloaded_logos,
     destination_league
 ):
 
-    home_name = (
-        home_team["name"]
+    home_name = home_team["name"]
+
+    home_key = clean_name(
+        home_name
     )
 
-    home_key = (
-        clean_name(
-            home_name
-        )
-    )
-
-    home_logo = cleaned_logos[
+    home_logo = downloaded_logos[
         (
             league,
             home_key
@@ -1175,7 +1339,7 @@ def build_team_folder(
     # --------------------------------------------------------
     # SOLO
     #
-    # Native ESPN dimensions.
+    # Exact native ESPN dimensions.
     # --------------------------------------------------------
 
     solo_path = (
@@ -1200,23 +1364,17 @@ def build_team_folder(
 
     for away_team in all_teams:
 
-        away_name = (
-            away_team["name"]
-        )
+        away_name = away_team["name"]
 
         away_key = clean_name(
             away_name
         )
 
-        if (
-            away_key
-            ==
-            home_key
-        ):
+        if away_key == home_key:
 
             continue
 
-        away_logo = cleaned_logos[
+        away_logo = downloaded_logos[
             (
                 league,
                 away_key
@@ -1270,7 +1428,7 @@ def build_team_folder(
 def build_league(
     league,
     teams,
-    cleaned_logos,
+    downloaded_logos,
     build_root
 ):
 
@@ -1338,7 +1496,7 @@ def build_league(
                     league,
                     home_team,
                     sorted_teams,
-                    cleaned_logos,
+                    downloaded_logos,
                     destination_league
                 )
             )
@@ -1364,10 +1522,6 @@ def build_league(
                 f"-> {generated} files"
             )
 
-    # --------------------------------------------------------
-    # VERIFY COUNT
-    # --------------------------------------------------------
-
     actual_files = list(
         destination_league.rglob(
             "*.png"
@@ -1382,15 +1536,9 @@ def build_league(
             f"expected {expected_files}"
         )
 
-    # --------------------------------------------------------
-    # VERIFY FOLDERS
-    # --------------------------------------------------------
-
     for team in sorted_teams:
 
-        team_name = (
-            team["name"]
-        )
+        team_name = team["name"]
 
         team_folder = (
             destination_league
@@ -1441,9 +1589,7 @@ def build_league(
 
         for opponent in sorted_teams:
 
-            opponent_name = (
-                opponent["name"]
-            )
+            opponent_name = opponent["name"]
 
             if (
                 clean_name(
@@ -1487,12 +1633,6 @@ def build_league(
 
 # ============================================================
 # VERIFY COMPLETE GENERATED LIBRARY
-#
-# Solo logos:
-#   Native ESPN dimensions.
-#
-# Matchup logos:
-#   1024x512.
 # ============================================================
 
 def verify_generated_library(
@@ -1570,43 +1710,43 @@ def verify_generated_library(
                             f"{path}"
                         )
 
-                    # Matchup canvases remain 1024x512.
-                    # Solo logos are allowed to retain their
-                    # native ESPN dimensions.
-
                     if "_vs_" in path.stem:
 
                         expected_size = (
                             MATCHUP_SIZE
                         )
 
-                        actual_size = (
+                    else:
+
+                        # Solo dimensions are checked
+                        # separately against the native
+                        # ESPN dimensions.
+
+                        expected_size = (
                             image.width,
                             image.height
                         )
 
-                        if actual_size != expected_size:
+                    actual_size = (
+                        image.width,
+                        image.height
+                    )
 
-                            raise RuntimeError(
-                                f"Wrong matchup dimensions: "
-                                f"{path} "
-                                f"is {actual_size}, "
-                                f"expected "
-                                f"{expected_size}"
-                            )
+                    if (
+                        "_vs_" in path.stem
+                        and
+                        actual_size
+                        !=
+                        expected_size
+                    ):
 
-                    else:
-
-                        if (
-                            image.width <= 0
-                            or
-                            image.height <= 0
-                        ):
-
-                            raise RuntimeError(
-                                f"Invalid solo dimensions: "
-                                f"{path}"
-                            )
+                        raise RuntimeError(
+                            f"Wrong dimensions: "
+                            f"{path} "
+                            f"is {actual_size}, "
+                            f"expected "
+                            f"{expected_size}"
+                        )
 
             except Exception as exc:
 
@@ -1634,16 +1774,10 @@ def verify_generated_library(
 
 
 # ============================================================
-# VERIFY PNG FORMAT
-#
-# We verify RGBA and valid images.
-#
-# We DO NOT require transparency.
-#
-# ESPN's own transparency is preserved exactly.
+# VERIFY PNG FILES
 # ============================================================
 
-def verify_pngs(
+def verify_png_files(
     build_root
 ):
 
@@ -1677,17 +1811,6 @@ def verify_pngs(
                         f"{path}"
                     )
 
-                if (
-                    image.width <= 0
-                    or
-                    image.height <= 0
-                ):
-
-                    raise RuntimeError(
-                        f"Invalid dimensions: "
-                        f"{path}"
-                    )
-
         except Exception as exc:
 
             raise RuntimeError(
@@ -1700,98 +1823,6 @@ def verify_pngs(
     print()
     print(
         f"{checked} PNG files verified."
-    )
-
-
-# ============================================================
-# VERIFY SOLO NATIVE DIMENSIONS
-#
-# We compare each generated solo logo against the original
-# downloaded ESPN image dimensions.
-#
-# This guarantees that the script never stretches or shrinks
-# the ESPN logo.
-# ============================================================
-
-def verify_solo_native_dimensions(
-    build_root,
-    teams_by_league,
-    cleaned_logos
-):
-
-    print()
-    print("=" * 70)
-    print("VERIFYING NATIVE ESPN LOGO DIMENSIONS")
-    print("=" * 70)
-
-    checked = 0
-
-    for league in sorted(
-        LEAGUES
-    ):
-
-        for team in teams_by_league[
-            league
-        ].values():
-
-            team_name = team["name"]
-
-            key = (
-                league,
-                clean_name(
-                    team_name
-                )
-            )
-
-            source_logo = cleaned_logos[
-                key
-            ]
-
-            expected = (
-                source_logo.width,
-                source_logo.height
-            )
-
-            solo_path = (
-                build_root
-                /
-                league
-                /
-                filesystem_name(
-                    team_name
-                )
-                /
-                (
-                    f"{filesystem_name(team_name)}"
-                    f".png"
-                )
-            )
-
-            with Image.open(
-                solo_path
-            ) as image:
-
-                actual = (
-                    image.width,
-                    image.height
-                )
-
-            if actual != expected:
-
-                raise RuntimeError(
-                    f"Solo logo was resized: "
-                    f"{solo_path} "
-                    f"is {actual}, "
-                    f"expected native ESPN size "
-                    f"{expected}"
-                )
-
-            checked += 1
-
-    print()
-    print(
-        f"Native ESPN dimensions verified on "
-        f"{checked} solo logos."
     )
 
 
@@ -1811,8 +1842,12 @@ def verify_matchup_dimensions(
     checked = 0
 
     for path in build_root.rglob(
-        "*_vs_*.png"
+        "*.png"
     ):
+
+        if "_vs_" not in path.stem:
+
+            continue
 
         with Image.open(
             path
@@ -1823,15 +1858,13 @@ def verify_matchup_dimensions(
                 image.height
             )
 
-        if actual != MATCHUP_SIZE:
+            if actual != MATCHUP_SIZE:
 
-            raise RuntimeError(
-                f"Wrong matchup dimensions: "
-                f"{path} "
-                f"is {actual}, "
-                f"expected "
-                f"{MATCHUP_SIZE}"
-            )
+                raise RuntimeError(
+                    f"Wrong matchup dimensions: "
+                    f"{path} is {actual}, "
+                    f"expected {MATCHUP_SIZE}"
+                )
 
         checked += 1
 
@@ -1843,12 +1876,12 @@ def verify_matchup_dimensions(
 
 
 # ============================================================
-# VERIFY CORNER TRANSPARENCY
+# VERIFY MATCHUP CORNER TRANSPARENCY
 #
-# Matchup canvases are transparent.
+# Only matchup files are checked.
 #
-# Solo logos are NOT required to have transparent corners,
-# because we no longer modify the ESPN artwork.
+# The corners must remain transparent because the matchup
+# canvas itself is transparent.
 # ============================================================
 
 def verify_matchup_corners_transparent(
@@ -1863,8 +1896,12 @@ def verify_matchup_corners_transparent(
     checked = 0
 
     for path in build_root.rglob(
-        "*_vs_*.png"
+        "*.png"
     ):
+
+        if "_vs_" not in path.stem:
+
+            continue
 
         with Image.open(
             path
@@ -1874,9 +1911,7 @@ def verify_matchup_corners_transparent(
                 "RGBA"
             )
 
-            width, height = (
-                image.size
-            )
+            width, height = image.size
 
             points = (
                 (
@@ -1912,7 +1947,8 @@ def verify_matchup_corners_transparent(
 
                     raise RuntimeError(
                         f"Matchup corner is not "
-                        f"transparent in {path} "
+                        f"transparent in "
+                        f"{path} "
                         f"at ({x}, {y})"
                     )
 
@@ -1920,15 +1956,74 @@ def verify_matchup_corners_transparent(
 
     print()
     print(
-        f"Matchup corner transparency verified "
-        f"on {checked} PNG files."
+        f"Matchup corner transparency "
+        f"verified on {checked} PNG files."
+    )
+
+
+# ============================================================
+# VERIFY TRANSPARENCY
+#
+# We do NOT require every image to contain transparent pixels
+# around the artwork because the ESPN solo logo itself is
+# preserved exactly as provided.
+#
+# Matchup canvases are explicitly verified separately.
+# ============================================================
+
+def verify_transparency(
+    build_root
+):
+
+    print()
+    print("=" * 70)
+    print("VERIFYING TRANSPARENCY")
+    print("=" * 70)
+
+    checked = 0
+
+    for path in build_root.rglob(
+        "*.png"
+    ):
+
+        with Image.open(
+            path
+        ) as image:
+
+            image = image.convert(
+                "RGBA"
+            )
+
+            if "_vs_" in path.stem:
+
+                # Matchups must have transparency because
+                # their canvas is transparent.
+                alpha = image.getchannel(
+                    "A"
+                )
+
+                minimum, maximum = (
+                    alpha.getextrema()
+                )
+
+                if minimum != 0:
+
+                    raise RuntimeError(
+                        f"Matchup has no transparent "
+                        f"pixels: {path}"
+                    )
+
+        checked += 1
+
+    print()
+    print(
+        f"{checked} PNG files checked for "
+        f"transparency."
     )
 
 
 # ============================================================
 # INSTALL NEW LIBRARY
-#
-# Only called after the entire new library passes verification.
 # ============================================================
 
 def install_new_library():
@@ -2004,7 +2099,7 @@ def install_new_library():
 
 def verify_installed_library(
     teams_by_league,
-    cleaned_logos
+    native_dimensions
 ):
 
     print()
@@ -2075,43 +2170,28 @@ def verify_installed_library(
                         f"{path}"
                     )
 
-                if (
-                    image.width <= 0
-                    or
-                    image.height <= 0
-                ):
-
-                    raise RuntimeError(
-                        f"Installed image "
-                        f"has invalid dimensions: "
-                        f"{path}"
-                    )
-
                 if "_vs_" in path.stem:
 
-                    actual = (
+                    expected_size = (
+                        MATCHUP_SIZE
+                    )
+
+                    actual_size = (
                         image.width,
                         image.height
                     )
 
-                    if actual != MATCHUP_SIZE:
+                    if actual_size != expected_size:
 
                         raise RuntimeError(
                             f"Installed matchup "
                             f"has wrong dimensions: "
-                            f"{path} "
-                            f"is {actual}"
+                            f"{path}"
                         )
-
-        # ----------------------------------------------------
-        # Verify team folders.
-        # ----------------------------------------------------
 
         for team in teams.values():
 
-            team_name = (
-                team["name"]
-            )
+            team_name = team["name"]
 
             team_folder = (
                 league_root
@@ -2146,11 +2226,7 @@ def verify_installed_library(
                     f"{solo}"
                 )
 
-            # ------------------------------------------------
-            # Verify solo retained its native ESPN dimensions.
-            # ------------------------------------------------
-
-            source_logo = cleaned_logos[
+            expected_native = native_dimensions[
                 (
                     league,
                     clean_name(
@@ -2158,11 +2234,6 @@ def verify_installed_library(
                     )
                 )
             ]
-
-            expected_native = (
-                source_logo.width,
-                source_logo.height
-            )
 
             with Image.open(
                 solo
@@ -2173,26 +2244,20 @@ def verify_installed_library(
                     image.height
                 )
 
-            if actual_native != expected_native:
+                if actual_native != expected_native:
 
-                raise RuntimeError(
-                    f"Installed solo logo "
-                    f"was resized: "
-                    f"{solo} "
-                    f"is {actual_native}, "
-                    f"expected "
-                    f"{expected_native}"
-                )
-
-            # ------------------------------------------------
-            # Verify matchups.
-            # ------------------------------------------------
+                    raise RuntimeError(
+                        f"Installed solo logo "
+                        f"dimension changed: "
+                        f"{solo} "
+                        f"is {actual_native}, "
+                        f"expected "
+                        f"{expected_native}"
+                    )
 
             for opponent in teams.values():
 
-                opponent_name = (
-                    opponent["name"]
-                )
+                opponent_name = opponent["name"]
 
                 if (
                     clean_name(
@@ -2279,40 +2344,41 @@ def main():
 
     print()
     print("PROCESS:")
+
     print(
         "  1. Read the existing 124 team folders."
     )
 
     print(
-        "  2. Map each team directly to its ESPN CDN abbreviation."
+        "  2. Map each team to its ESPN CDN abbreviation."
     )
 
     print(
-        "  3. Download the ESPN CDN PNG."
+        "  3. Download the direct ESPN CDN logo."
     )
 
     print(
-        "  4. Preserve the exact native ESPN dimensions."
+        "  4. Preserve the ESPN logo exactly as supplied."
     )
 
     print(
-        "  5. Preserve ESPN's original transparency."
+        "  5. Preserve native ESPN dimensions."
     )
 
     print(
-        "  6. Do NOT remove white backgrounds."
+        "  6. Preserve ESPN transparency."
     )
 
     print(
-        "  7. Do NOT crop the downloaded logo."
+        "  7. Build native-size solo logos."
     )
 
     print(
-        "  8. Do NOT enlarge or shrink the downloaded logo."
+        "  8. Build 1024x512 transparent matchups."
     )
 
     print(
-        "  9. Build matchup PNGs using the native logo sizes."
+        "  9. Never enlarge an ESPN logo."
     )
 
     print(
@@ -2324,7 +2390,34 @@ def main():
     )
 
     print()
+    print("IMPORTANT:")
+    print(
+        "  No white-background removal is performed."
+    )
+
+    print(
+        "  No logo trimming is performed."
+    )
+
+    print(
+        "  No solo-logo resizing is performed."
+    )
+
+    print(
+        "  No solo-logo stretching is performed."
+    )
+
+    print(
+        "  ESPN native dimensions are retained."
+    )
+
+    print(
+        "  ESPN logo artwork is not altered."
+    )
+
+    print()
     print("SAFETY:")
+
     print(
         "  Existing sports-logos is not modified during "
         "download/build."
@@ -2351,35 +2444,14 @@ def main():
         f"Build workers: {BUILD_WORKERS}"
     )
 
-    print()
-    print(
-        "ESPN LOGO SIZE:"
-    )
-
-    print(
-        "  Native CDN dimensions"
-    )
-
-    print(
-        "  No resizing"
-    )
-
-    print(
-        "  No stretching"
-    )
-
-    print(
-        "  No shrinking"
-    )
-
-    print(
-        "  No white-background cleanup"
-    )
-
-    print()
     print(
         f"Matchup canvas: "
         f"{MATCHUP_SIZE[0]}x{MATCHUP_SIZE[1]}"
+    )
+
+    print(
+        f"Matchup edge margin: "
+        f"{MATCHUP_EDGE_MARGIN}px"
     )
 
     # --------------------------------------------------------
@@ -2413,7 +2485,7 @@ def main():
     )
 
     # --------------------------------------------------------
-    # Verify every team has an ESPN CDN mapping.
+    # Verify mappings before downloading.
     # --------------------------------------------------------
 
     verify_espn_mappings(
@@ -2469,15 +2541,28 @@ def main():
 
     # --------------------------------------------------------
     # DOWNLOAD ALL NEW ESPN LOGOS.
-    #
-    # Nothing in sports-logos is modified here.
     # --------------------------------------------------------
 
-    cleaned_logos = (
+    downloaded_logos = (
         download_all_logos(
             teams_by_league
         )
     )
+
+    # --------------------------------------------------------
+    # Record native dimensions BEFORE building.
+    # --------------------------------------------------------
+
+    native_dimensions = {}
+
+    for key, image in downloaded_logos.items():
+
+        native_dimensions[
+            key
+        ] = (
+            image.width,
+            image.height
+        )
 
     # --------------------------------------------------------
     # Build entire new library.
@@ -2495,7 +2580,7 @@ def main():
                 teams_by_league[
                     league
                 ],
-                cleaned_logos,
+                downloaded_logos,
                 BUILD_ROOT
             )
         )
@@ -2509,14 +2594,13 @@ def main():
         teams_by_league
     )
 
-    verify_pngs(
+    verify_png_files(
         BUILD_ROOT
     )
 
-    verify_solo_native_dimensions(
+    verify_native_dimensions(
         BUILD_ROOT,
-        teams_by_league,
-        cleaned_logos
+        native_dimensions
     )
 
     verify_matchup_dimensions(
@@ -2524,6 +2608,10 @@ def main():
     )
 
     verify_matchup_corners_transparent(
+        BUILD_ROOT
+    )
+
+    verify_transparency(
         BUILD_ROOT
     )
 
@@ -2539,7 +2627,7 @@ def main():
 
     verify_installed_library(
         teams_by_league,
-        cleaned_logos
+        native_dimensions
     )
 
     # --------------------------------------------------------
@@ -2592,40 +2680,35 @@ def main():
     )
 
     print(
-        "The original ESPN CDN dimensions were preserved."
+        "ESPN logo artwork was not cleaned, "
+        "trimmed, or otherwise altered."
     )
 
     print(
-        "No logo was stretched."
+        "Solo logos remain at their exact "
+        "native ESPN dimensions."
     )
 
     print(
-        "No logo was enlarged."
+        "Solo logos are never enlarged or stretched."
     )
 
     print(
-        "No logo was shrunk."
+        "ESPN-provided transparency is preserved."
     )
 
     print(
-        "No white-background cleanup was performed."
+        "Matchups use the same ESPN source artwork "
+        "without enlargement."
     )
 
     print(
-        "No logo was cropped."
+        "Matchups are 1024x512 transparent PNGs."
     )
 
     print(
-        "ESPN's original transparency was preserved."
-    )
-
-    print(
-        "Solo logos remain at their native ESPN dimensions."
-    )
-
-    print(
-        "Matchups were rebuilt as 1024x512 "
-        "transparent PNGs without resizing either logo."
+        "A transparent edge margin prevents matchup "
+        "logos from touching the canvas boundary."
     )
 
     print(
