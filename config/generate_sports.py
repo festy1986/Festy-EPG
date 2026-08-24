@@ -18,6 +18,7 @@ OUTPUT_FILE = "guides/sports.xml"
 SPORTS_LOGO_ROOT = "sports-logos"
 SUPPORTED_MAJOR_LEAGUES = ("MLB", "NBA", "NFL", "NHL")
 
+
 GITHUB_RAW_ROOT = (
     "https://raw.githubusercontent.com/"
     "festy1986/festy-epg/main/"
@@ -64,7 +65,6 @@ os.makedirs(
 # --------------------------------------------------
 
 session = requests.Session()
-
 
 session.headers.update(
     {
@@ -347,6 +347,7 @@ def extract_provider_matchup(text):
         maxsplit=1,
         flags=re.IGNORECASE
     )[0]
+
 
     text = re.split(
         r"\bstop\s*[:=]",
@@ -1580,13 +1581,9 @@ def canonicalize_team_name(
 # --------------------------------------------------
 
 def recover_logo_typo_matchup(
-
     canonical_matchup,
-
     league_hint,
-
     preferred_date
-
 ):
 
     if league_hint not in team_aliases:
@@ -1595,9 +1592,7 @@ def recover_logo_typo_matchup(
 
 
     parts = matchup_parts(
-
         canonical_matchup
-
     )
 
 
@@ -1609,9 +1604,7 @@ def recover_logo_typo_matchup(
     normalized_parts = [
 
         normalize_team_name(
-
             part
-
         )
 
         for part in parts
@@ -1625,9 +1618,7 @@ def recover_logo_typo_matchup(
 
 
     for index, normalized_part in enumerate(
-
         normalized_parts
-
     ):
 
         if normalized_part in team_aliases[league_hint]:
@@ -1655,19 +1646,13 @@ def recover_logo_typo_matchup(
 
 
     for normalized_alias, official_name in team_aliases[
-
         league_hint
-
     ].items():
 
         score = SequenceMatcher(
-
             None,
-
             normalized_parts[unknown_index],
-
             normalized_alias
-
         ).ratio()
 
 
@@ -1681,9 +1666,7 @@ def recover_logo_typo_matchup(
     if not best_team or best_score < 0.90:
 
         debug_stats[
-
             "logo_typo_correction_failures"
-
         ] += 1
 
         return None
@@ -1708,75 +1691,59 @@ def recover_logo_typo_matchup(
     print()
 
     print(
-
         "[LOGO TYPO RECOVERY]"
-
     )
 
-    print(
 
+    print(
         f"  Provider spelling: {provider_team}"
-
     )
 
-    print(
 
+    print(
         f"  Candidate correction: {best_team}"
-
     )
 
-    print(
 
+    print(
         f"  Similarity: {best_score:.0%}"
-
     )
 
+
     print(
-
         f"  Proposed matchup: {candidate_matchup}"
-
     )
 
 
     verified_event = find_public_event(
-
         candidate_matchup,
-
         preferred_date,
-
         league_hint
-
     )
 
 
     if not verified_event:
 
         debug_stats[
-
             "logo_typo_correction_failures"
-
         ] += 1
 
+
         print(
-
             "  ESPN did not verify the proposed matchup."
-
         )
+
 
         return None
 
 
     debug_stats[
-
         "logo_typo_corrections"
-
     ] += 1
 
 
     print(
-
         "  ESPN verified the proposed matchup."
-
     )
 
 
@@ -2238,13 +2205,9 @@ def get_public_events(
 # --------------------------------------------------
 
 def find_public_event(
-
     canonical_matchup,
-
     preferred_date,
-
     league_hint
-
 ):
 
     global public_api_matches
@@ -2730,11 +2693,8 @@ def find_public_event(
 # --------------------------------------------------
 
 def team_matches(
-
     wanted_team,
-
     actual_team
-
 ):
 
     wanted_team = normalize_team_name(
@@ -2879,22 +2839,34 @@ def normalize_logo_team_name(
 
 
     if league_hint == "NBA" and normalized in {
+
         "new york knicks",
+
         "ny knicks",
+
         "knicks"
+
     }:
 
         return "new york knicks"
 
 
     if league_hint == "NHL" and normalized in {
+
         "arizona coyotes",
+
         "phoenix coyotes",
+
         "coyotes",
+
         "utah hockey club",
+
         "utah hc",
+
         "utah mammoth",
+
         "mammoth"
+
     }:
 
         return "utah mammoth"
@@ -2944,11 +2916,8 @@ def matchup_logo_key(
 # --------------------------------------------------
 
 def find_matchup_logo(
-
     canonical_matchup,
-
     league_hint
-
 ):
 
     global logos_found
@@ -3744,9 +3713,7 @@ def find_single_team_logo(
 # --------------------------------------------------
 
 def build_event_info(
-
     stream
-
 ):
 
     global verified_public_times_used
@@ -4118,9 +4085,11 @@ def build_event_info(
 
                     logos_missing -= 1
 
+
                 if debug_stats["logo_not_found"] > 0:
 
                     debug_stats["logo_not_found"] -= 1
+
 
                 logo_url = find_matchup_logo(
 
@@ -4413,7 +4382,6 @@ print(
 
 matched = 0
 
-
 channel_elements = {}
 
 
@@ -4500,13 +4468,15 @@ for channel_id, requested_name in wanted.items():
 # If ESPN provides a verified game start inside one of
 # those blocks, the schedule is split around the game:
 #
-#   normal block start -> game start
-#   game start -> game start + 3 hours
-#   game end -> next normal 3-hour boundary
+# normal block start -> game start
+# game start -> game start + 3 hours
+# game end -> next normal 3-hour boundary
 #
 # The actual game remains exactly 3 hours.
-# Upcoming and Post Game titles are applied only to
-# the portions before and after the game.
+#
+# Everything BEFORE the game is Upcoming.
+# The actual game keeps the normal title.
+# Everything AFTER the game is Post Game.
 # --------------------------------------------------
 
 print()
@@ -4654,6 +4624,29 @@ for channel_id, requested_name in wanted.items():
     )
 
 
+    # --------------------------------------------------
+    # ONE scheduling-state flag.
+    #
+    # This is the fix:
+    #
+    # - False = game has not yet occurred
+    # - True  = game has finished
+    #
+    # It also correctly handles a verified game that
+    # started before guide_start.
+    # --------------------------------------------------
+
+    game_has_occurred = (
+
+        bool(game_end)
+
+        and
+
+        game_end <= guide_start
+
+    )
+
+
     if game_start:
 
         print()
@@ -4734,13 +4727,17 @@ for channel_id, requested_name in wanted.items():
 
             current_start <= game_start < original_block_end
 
+            and
+
+            not game_has_occurred
+
         ):
 
             # --------------------------------------------------
             # PRE-GAME / UPCOMING
             #
-            # The first block may be shorter because the
-            # verified game starts inside the 3-hour block.
+            # Everything before the verified game start is
+            # explicitly Upcoming.
             # --------------------------------------------------
 
             if current_start < game_start:
@@ -4900,21 +4897,7 @@ for channel_id, requested_name in wanted.items():
             # --------------------------------------------------
             # POST-GAME
             #
-            # If the game ends before the next normal 3-hour
-            # boundary, fill the remainder of that boundary
-            # with Post Game.
-            #
-            # Example:
-            #
-            # 6:00 PM - 7:15 PM  Upcoming
-            # 7:15 PM - 10:15 PM Game
-            # 10:15 PM - 12:00 AM Post Game
-            #
-            # Then:
-            #
-            # 12:00 AM - 3:00 AM Post Game
-            # 3:00 AM - 6:00 AM Post Game
-            #
+            # Everything after the game ends is Post Game.
             # --------------------------------------------------
 
             if actual_game_end < original_block_end:
@@ -4978,6 +4961,8 @@ for channel_id, requested_name in wanted.items():
 
                 current_start = original_block_end
 
+                game_has_occurred = True
+
             else:
 
                 # --------------------------------------------------
@@ -4987,11 +4972,14 @@ for channel_id, requested_name in wanted.items():
                 # The game itself remains one continuous 3-hour
                 # programme. Once it ends, create a short
                 # Post Game segment up to the next normal
-                # 3-hour boundary, then resume normal 3-hour
+                # 3-hour boundary, then resume normal
                 # Post Game blocks.
                 # --------------------------------------------------
 
                 current_start = actual_game_end
+
+
+                game_has_occurred = True
 
 
                 if current_start < guide_end:
@@ -5118,8 +5106,9 @@ for channel_id, requested_name in wanted.items():
 
 
             # --------------------------------------------------
-            # Game has now been consumed. All subsequent
-            # normal 3-hour blocks are Post Game.
+            # Game has now been consumed.
+            #
+            # All subsequent blocks are Post Game.
             # --------------------------------------------------
 
             game_start = None
@@ -5133,10 +5122,16 @@ for channel_id, requested_name in wanted.items():
         # --------------------------------------------------
         # NORMAL 3-HOUR BLOCK
         #
-        # Once a verified game has already occurred, these
-        # normal blocks become Post Game blocks.
+        # FIX:
         #
-        # Otherwise they remain the normal game title.
+        # If the game has already finished, this block is
+        # Post Game.
+        #
+        # If the game is still in the future, this block is
+        # Upcoming.
+        #
+        # If there is no verified game, preserve the original
+        # title exactly as before.
         # --------------------------------------------------
 
         current_stop = original_block_end
@@ -5184,7 +5179,17 @@ for channel_id, requested_name in wanted.items():
         )
 
 
-        title.text = title_text
+        if game_has_occurred:
+
+            title.text = post_game_title_text
+
+        elif game_start:
+
+            title.text = upcoming_title_text
+
+        else:
+
+            title.text = title_text
 
 
         desc = ET.SubElement(
