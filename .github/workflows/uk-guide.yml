@@ -21,15 +21,42 @@ jobs:
     steps:
       - name: Checkout repository
         id: checkout_repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         timeout-minutes: 15
         continue-on-error: true
         with:
           fetch-depth: 1
 
-      - name: Retry checkout repository
+      - name: Clean failed checkout after attempt 1
         if: steps.checkout_repository.outcome == 'failure'
-        uses: actions/checkout@v4
+        run: |
+          rm -rf .git
+
+      - name: Wait before checkout attempt 2
+        if: steps.checkout_repository.outcome == 'failure'
+        run: sleep 30
+
+      - name: Checkout repository attempt 2
+        id: checkout_repository_2
+        if: steps.checkout_repository.outcome == 'failure'
+        uses: actions/checkout@v5
+        timeout-minutes: 15
+        continue-on-error: true
+        with:
+          fetch-depth: 1
+
+      - name: Clean failed checkout after attempt 2
+        if: steps.checkout_repository.outcome == 'failure' && steps.checkout_repository_2.outcome == 'failure'
+        run: |
+          rm -rf .git
+
+      - name: Wait before checkout attempt 3
+        if: steps.checkout_repository.outcome == 'failure' && steps.checkout_repository_2.outcome == 'failure'
+        run: sleep 60
+
+      - name: Checkout repository attempt 3
+        if: steps.checkout_repository.outcome == 'failure' && steps.checkout_repository_2.outcome == 'failure'
+        uses: actions/checkout@v5
         timeout-minutes: 15
         with:
           fetch-depth: 1
@@ -1205,7 +1232,6 @@ jobs:
             echo "No UK guide changes to commit."
             exit 0
           fi
-
           git commit -m "Update UK guide"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
