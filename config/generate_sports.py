@@ -635,10 +635,15 @@ def extract_provider_matchup(text):
 
 
 # --------------------------------------------------
-# Extract provider start timestamp
+# Extract flexible provider date/time clues
 #
-# Used only to determine the date ESPN should search.
-# It is NOT used as the final displayed game time.
+# IMPORTANT:
+# Provider channel names are human-maintained and may use
+# different formats and time zones from one update to the next.
+#
+# These clues are NEVER authoritative guide times. They are
+# only fingerprints used to identify the correct ESPN event.
+# ESPN remains the final authoritative time source.
 # --------------------------------------------------
 
 def extract_start_datetime(text):
@@ -730,32 +735,6 @@ def extract_provider_date_hint(text):
     )
 
 
-    match = re.search(
-        r"\b(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?\b",
-        text
-    )
-
-
-    if not match:
-
-        return None
-
-
-    month = int(
-        match.group(1)
-    )
-
-
-    day = int(
-        match.group(2)
-    )
-
-
-    year_text = match.group(
-        3
-    )
-
-
     eastern_now = datetime.now(
         ZoneInfo(
             "America/New_York"
@@ -763,74 +742,731 @@ def extract_provider_date_hint(text):
     )
 
 
-    if year_text:
+    # Numeric M/D[/Y].
+    match = re.search(
+        r"\b(\d{1,2})[/-](\d{1,2})(?:[/-](\d{2,4}))?\b",
+        text
+    )
 
-        year = int(
-            year_text
+
+    if match:
+
+        month = int(
+            match.group(1)
+        )
+
+        day = int(
+            match.group(2)
+        )
+
+        year_text = match.group(
+            3
         )
 
 
-        if year < 100:
+        if year_text:
 
-            year += 2000
+            year = int(
+                year_text
+            )
 
+            if year < 100:
 
-        try:
+                year += 2000
 
-            return datetime(
-                year,
-                month,
-                day
-            ).date()
+            try:
 
+                return datetime(
+                    year,
+                    month,
+                    day
+                ).date()
 
-        except ValueError:
+            except ValueError:
 
-            return None
-
-
-    candidates = []
-
-
-    for year in (
-        eastern_now.year - 1,
-        eastern_now.year,
-        eastern_now.year + 1
-    ):
-
-        try:
-
-            candidate = datetime(
-                year,
-                month,
-                day
-            ).date()
+                pass
 
 
-        except ValueError:
+        else:
 
-            continue
+            candidates = []
+
+            for year in (
+                eastern_now.year - 1,
+                eastern_now.year,
+                eastern_now.year + 1
+            ):
+
+                try:
+
+                    candidates.append(
+                        datetime(
+                            year,
+                            month,
+                            day
+                        ).date()
+                    )
+
+                except ValueError:
+
+                    continue
 
 
-        candidates.append(
-            candidate
+            if candidates:
+
+                return min(
+                    candidates,
+                    key=lambda candidate: abs(
+                        (
+                            candidate
+                            - eastern_now.date()
+                        ).days
+                    )
+                )
+
+
+    # Month-name forms:
+    # Aug 29, Aug 29 2026, August 29th 2026,
+    # 29 Aug, 29 August 2026.
+    month_lookup = {
+        "jan": 1,
+        "january": 1,
+        "feb": 2,
+        "february": 2,
+        "mar": 3,
+        "march": 3,
+        "apr": 4,
+        "april": 4,
+        "may": 5,
+        "jun": 6,
+        "june": 6,
+        "jul": 7,
+        "july": 7,
+        "aug": 8,
+        "august": 8,
+        "sep": 9,
+        "sept": 9,
+        "september": 9,
+        "oct": 10,
+        "october": 10,
+        "nov": 11,
+        "november": 11,
+        "dec": 12,
+        "december": 12
+    }
+
+
+    month_first = re.search(
+        r"\b("
+        r"Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|"
+        r"Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|"
+        r"Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+        r"Nov(?:ember)?|Dec(?:ember)?"
+        r")\.?\s+"
+        r"(\d{1,2})(?:st|nd|rd|th)?"
+        r"(?:,\s*|\s+)?"
+        r"(\d{4})?\b",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    day_first = re.search(
+        r"\b(\d{1,2})(?:st|nd|rd|th)?\s+"
+        r"("
+        r"Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|"
+        r"Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|"
+        r"Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|"
+        r"Nov(?:ember)?|Dec(?:ember)?"
+        r")\.?"
+        r"(?:,\s*|\s+)?"
+        r"(\d{4})?\b",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    month = None
+    day = None
+    year_text = None
+
+
+    if month_first:
+
+        month = month_lookup.get(
+            month_first.group(1).lower()
+        )
+
+        day = int(
+            month_first.group(2)
+        )
+
+        year_text = month_first.group(
+            3
         )
 
 
-    if not candidates:
+    elif day_first:
+
+        day = int(
+            day_first.group(1)
+        )
+
+        month = month_lookup.get(
+            day_first.group(2).lower()
+        )
+
+        year_text = day_first.group(
+            3
+        )
+
+
+    if month and day:
+
+        if year_text:
+
+            years = [
+                int(year_text)
+            ]
+
+        else:
+
+            years = [
+                eastern_now.year - 1,
+                eastern_now.year,
+                eastern_now.year + 1
+            ]
+
+
+        candidates = []
+
+        for year in years:
+
+            try:
+
+                candidates.append(
+                    datetime(
+                        year,
+                        month,
+                        day
+                    ).date()
+                )
+
+            except ValueError:
+
+                continue
+
+
+        if candidates:
+
+            return min(
+                candidates,
+                key=lambda candidate: abs(
+                    (
+                        candidate
+                        - eastern_now.date()
+                    ).days
+                )
+            )
+
+
+    return None
+
+
+def extract_provider_game_number(text):
+
+    if not text:
 
         return None
 
 
-    return min(
-        candidates,
-        key=lambda candidate: abs(
+    text = clean_text(
+        text
+    )
+
+
+    patterns = [
+
+        r"\bgame\s*#?\s*(\d{1,2})\b",
+
+        r"\bg\s*#?\s*(\d{1,2})\b",
+
+        r"\b(?:doubleheader|dh)\s*"
+        r"(?:game\s*)?#?\s*(\d{1,2})\b"
+
+    ]
+
+
+    for pattern in patterns:
+
+        match = re.search(
+            pattern,
+            text,
+            flags=re.IGNORECASE
+        )
+
+
+        if match:
+
+            try:
+
+                number = int(
+                    match.group(1)
+                )
+
+            except ValueError:
+
+                continue
+
+
+            if number >= 1:
+
+                return number
+
+
+    return None
+
+
+def extract_explicit_timezone(text):
+
+    if not text:
+
+        return None
+
+
+    text = clean_text(
+        text
+    )
+
+
+    # Prefer explicit IANA names if the provider ever supplies one.
+    iana_match = re.search(
+        r"\b([A-Za-z]+/[A-Za-z_+-]+)\b",
+        text
+    )
+
+
+    if iana_match:
+
+        zone_name = iana_match.group(
+            1
+        )
+
+        try:
+
+            ZoneInfo(
+                zone_name
+            )
+
+            return zone_name
+
+        except Exception:
+
+            pass
+
+
+    timezone_aliases = {
+
+        "ET": "America/New_York",
+        "EST": "America/New_York",
+        "EDT": "America/New_York",
+
+        "CT": "America/Chicago",
+        "CST": "America/Chicago",
+        "CDT": "America/Chicago",
+
+        "MT": "America/Denver",
+        "MST": "America/Denver",
+        "MDT": "America/Denver",
+
+        "PT": "America/Los_Angeles",
+        "PST": "America/Los_Angeles",
+        "PDT": "America/Los_Angeles",
+
+        "GMT": "UTC",
+        "UTC": "UTC",
+        "BST": "Europe/London",
+        "CET": "Europe/Paris",
+        "CEST": "Europe/Paris"
+
+    }
+
+
+    matches = re.findall(
+        r"\b(?:ET|EST|EDT|CT|CST|CDT|MT|MST|MDT|"
+        r"PT|PST|PDT|GMT|UTC|BST|CET|CEST)\b",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    if matches:
+
+        return timezone_aliases.get(
+            matches[-1].upper()
+        )
+
+
+    return None
+
+
+def extract_provider_time_clues(
+    text,
+    provider_timezone
+):
+
+    if not text:
+
+        return []
+
+
+    text = clean_text(
+        text
+    )
+
+
+    eastern_zone = ZoneInfo(
+        "America/New_York"
+    )
+
+
+    provider_date = extract_provider_date_hint(
+        text
+    )
+
+
+    explicit_timezone = extract_explicit_timezone(
+        text
+    )
+
+
+    clues = []
+
+
+    def add_clue(
+        naive_datetime,
+        zone_name,
+        source,
+        confidence
+    ):
+
+        if not naive_datetime:
+
+            return
+
+
+        try:
+
+            source_zone = ZoneInfo(
+                zone_name
+            )
+
+        except Exception:
+
+            source_zone = timezone.utc
+
+
+        aware_datetime = naive_datetime.replace(
+            tzinfo=source_zone
+        )
+
+
+        eastern_datetime = aware_datetime.astimezone(
+            eastern_zone
+        )
+
+
+        key = (
+            eastern_datetime.isoformat(),
+            source
+        )
+
+
+        for existing in clues:
+
+            if (
+                existing["datetime"].isoformat(),
+                existing["source"]
+            ) == key:
+
+                return
+
+
+        clues.append(
+            {
+                "datetime": eastern_datetime,
+                "source": source,
+                "confidence": confidence
+            }
+        )
+
+
+    # 1. Structured provider start timestamp.
+    #
+    # These have historically been provider-local server time,
+    # so the provider timezone is the primary interpretation.
+    structured_start = extract_start_datetime(
+        text
+    )
+
+
+    if structured_start:
+
+        add_clue(
+            structured_start,
+            provider_timezone,
+            "structured provider start",
+            100
+        )
+
+
+        # Safety interpretation only. If a human has embedded an
+        # ISO-looking timestamp that is actually Eastern, ESPN can
+        # still identify the correct event from this alternative.
+        add_clue(
+            structured_start,
+            "America/New_York",
+            "structured start interpreted as Eastern",
+            55
+        )
+
+
+    # 2. Human-entered clock times.
+    #
+    # Accept:
+    #   7 PM
+    #   7:00 PM
+    #   7.15pm
+    #   19:00
+    #   19.15
+    #
+    # We intentionally generate more than one plausible timezone
+    # interpretation when no explicit timezone is present. ESPN,
+    # not the provider text, decides which event is the real one.
+    time_matches = []
+
+
+    twelve_hour_pattern = re.compile(
+        r"(?<!\d)"
+        r"(\d{1,2})"
+        r"(?:[:.](\d{2}))?"
+        r"\s*"
+        r"(a\.?m\.?|p\.?m\.?)"
+        r"(?![A-Za-z])",
+        flags=re.IGNORECASE
+    )
+
+
+    for match in twelve_hour_pattern.finditer(
+        text
+    ):
+
+        hour = int(
+            match.group(1)
+        )
+
+        minute = int(
+            match.group(2)
+            or 0
+        )
+
+        meridiem = re.sub(
+            r"[^apm]",
+            "",
+            match.group(3).lower()
+        )
+
+
+        if hour < 1 or hour > 12 or minute > 59:
+
+            continue
+
+
+        if meridiem.startswith(
+            "p"
+        ) and hour != 12:
+
+            hour += 12
+
+
+        if meridiem.startswith(
+            "a"
+        ) and hour == 12:
+
+            hour = 0
+
+
+        time_matches.append(
             (
-                candidate
-                - eastern_now.date()
-            ).days
+                match.start(),
+                hour,
+                minute,
+                "12-hour"
+            )
+        )
+
+
+    twenty_four_pattern = re.compile(
+        r"(?<![\d:/.-])"
+        r"([01]?\d|2[0-3])"
+        r"[:.]"
+        r"([0-5]\d)"
+        r"(?!\s*(?:a\.?m\.?|p\.?m\.?))"
+        r"(?![\d:/.-])",
+        flags=re.IGNORECASE
+    )
+
+
+    for match in twenty_four_pattern.finditer(
+        text
+    ):
+
+        time_matches.append(
+            (
+                match.start(),
+                int(match.group(1)),
+                int(match.group(2)),
+                "24-hour"
+            )
+        )
+
+
+    # Avoid treating the time inside a structured start timestamp
+    # as an unrelated human clue when we already parsed that field.
+    structured_span = None
+
+    structured_match = re.search(
+        r"\bstart\s*[:=]\s*"
+        r"\d{4}-\d{2}-\d{2}\s+"
+        r"\d{1,2}:\d{2}(?::\d{2})?",
+        text,
+        flags=re.IGNORECASE
+    )
+
+
+    if structured_match:
+
+        structured_span = (
+            structured_match.start(),
+            structured_match.end()
+        )
+
+
+    seen_clock_values = set()
+
+
+    for position, hour, minute, format_name in sorted(
+        time_matches,
+        key=lambda value: value[0]
+    ):
+
+        if (
+            structured_span
+            and structured_span[0] <= position < structured_span[1]
+        ):
+
+            continue
+
+
+        clock_key = (
+            hour,
+            minute
+        )
+
+
+        if clock_key in seen_clock_values:
+
+            continue
+
+
+        seen_clock_values.add(
+            clock_key
+        )
+
+
+        if provider_date:
+
+            candidate_dates = [
+                provider_date
+            ]
+
+        elif structured_start:
+
+            candidate_dates = [
+                structured_start.date()
+            ]
+
+        else:
+
+            eastern_now = datetime.now(
+                eastern_zone
+            )
+
+            candidate_dates = [
+                eastern_now.date()
+            ]
+
+
+        for candidate_date in candidate_dates:
+
+            naive_datetime = datetime(
+                candidate_date.year,
+                candidate_date.month,
+                candidate_date.day,
+                hour,
+                minute
+            )
+
+
+            if explicit_timezone:
+
+                add_clue(
+                    naive_datetime,
+                    explicit_timezone,
+                    f"human {format_name} explicit timezone",
+                    95
+                )
+
+
+            else:
+
+                # Human channel labels from this provider have not
+                # been consistent about timezone. Preserve both the
+                # provider-local and Eastern interpretations and let
+                # ESPN event proximity resolve the ambiguity.
+                add_clue(
+                    naive_datetime,
+                    provider_timezone,
+                    f"human {format_name} provider-zone interpretation",
+                    70
+                )
+
+
+                add_clue(
+                    naive_datetime,
+                    "America/New_York",
+                    f"human {format_name} Eastern interpretation",
+                    75
+                )
+
+
+                add_clue(
+                    naive_datetime,
+                    "UTC",
+                    f"human {format_name} UTC interpretation",
+                    45
+                )
+
+
+    clues.sort(
+        key=lambda clue: (
+            -clue["confidence"],
+            clue["datetime"]
         )
     )
+
+
+    return clues
 
 
 # --------------------------------------------------
@@ -2403,7 +3039,9 @@ def find_public_event(
     canonical_matchup,
     preferred_date,
     league_hint,
-    provider_start_eastern=None
+    provider_start_eastern=None,
+    provider_time_clues=None,
+    provider_game_number=None
 ):
 
     global public_api_matches
@@ -2422,6 +3060,27 @@ def find_public_event(
     wanted_first = parts[0]
 
     wanted_second = parts[1]
+
+
+    if provider_time_clues is None:
+
+        provider_time_clues = []
+
+
+    # Backward compatibility for callers that still pass only
+    # the older converted provider start value.
+    if (
+        provider_start_eastern
+        and not provider_time_clues
+    ):
+
+        provider_time_clues = [
+            {
+                "datetime": provider_start_eastern,
+                "source": "converted provider start",
+                "confidence": 100
+            }
+        ]
 
 
     print()
@@ -2779,79 +3438,380 @@ def find_public_event(
 
 
     # --------------------------------------------------
-    # DOUBLEHEADER / DUPLICATE MATCHUP HANDLING
+    # SAME-TEAM MULTIPLE-GAME SAFETY CHECK
     #
-    # Provider time is ONLY the identifier.
+    # Normal one-game matching is unchanged.
     #
-    # Example:
-    #   provider 18:05 Europe/London -> 1:05 PM Eastern
-    #   provider 00:15 Europe/London -> 7:15 PM Eastern
+    # If ESPN exposes more than one game for the same two
+    # teams, NEVER silently default to the first event.
     #
-    # Compare that converted provider datetime against all
-    # matching ESPN events and choose the closest one.
+    # Resolution order:
+    #   1. Restrict to the relevant Eastern calendar date.
+    #   2. If provider explicitly says Game 1 / Game 2 / G1 /
+    #      G2, use that ordinal within ESPN's chronological
+    #      games for that date.
+    #   3. Otherwise compare every flexible provider time clue
+    #      against the ESPN candidates and choose the closest.
+    #   4. If multiple same-day games remain and there is no
+    #      usable clue, fail safely instead of assigning Game 1
+    #      to every channel.
     #
-    # The chosen ESPN datetime remains the FINAL guide time.
+    # ESPN's selected datetime is always the FINAL guide time.
     # --------------------------------------------------
 
-    if provider_start_eastern:
+    events_by_eastern_date = {}
 
-        selected = min(
-            matching_events,
-            key=lambda candidate: abs(
+
+    for candidate in matching_events:
+
+        event_date = candidate[
+            "datetime"
+        ].date()
+
+
+        events_by_eastern_date.setdefault(
+            event_date,
+            []
+        ).append(
+            candidate
+        )
+
+
+    for date_candidates in events_by_eastern_date.values():
+
+        date_candidates.sort(
+            key=lambda candidate: candidate[
+                "datetime"
+            ]
+        )
+
+
+    target_events = events_by_eastern_date.get(
+        preferred_date,
+        []
+    )
+
+
+    # If the preferred date has no ESPN match, use provider
+    # datetime clues to identify the nearest event/date.
+    if not target_events and provider_time_clues:
+
+        nearest_overall = min(
+            (
                 (
-                    candidate["datetime"]
-                    - provider_start_eastern
-                ).total_seconds()
+                    abs(
+                        (
+                            candidate["datetime"]
+                            - clue["datetime"]
+                        ).total_seconds()
+                    ),
+                    candidate
+                )
+                for candidate in matching_events
+                for clue in provider_time_clues
+            ),
+            key=lambda item: item[0],
+            default=None
+        )
+
+
+        if nearest_overall:
+
+            nearest_date = nearest_overall[
+                1
+            ][
+                "datetime"
+            ].date()
+
+
+            target_events = events_by_eastern_date.get(
+                nearest_date,
+                []
             )
-        )
 
 
-        print()
+    # If there is still no date-specific set, preserve normal
+    # behavior only when ESPN found exactly one total event.
+    if not target_events:
 
-        print(
-            "[ESPN PROVIDER-TIME SELECTION]"
-        )
+        if len(matching_events) == 1:
 
-
-        print(
-            f"  Converted provider start: "
-            f"{provider_start_eastern}"
-        )
+            selected = matching_events[0]
 
 
-        print(
-            f"  Selected ESPN event: "
-            f"{selected['datetime']}"
-        )
+        else:
+
+            print()
+
+            print(
+                "[ESPN MULTIPLE MATCHES AMBIGUOUS]"
+            )
 
 
-        print(
-            f"  Difference: "
-            f"{abs((selected['datetime'] - provider_start_eastern).total_seconds()) / 60:.1f} minutes"
-        )
+            print(
+                "  Could not determine the relevant ESPN date."
+            )
+
+
+            print(
+                "  Refusing to default to the first event."
+            )
+
+
+            return None
+
+
+    elif len(target_events) == 1:
+
+        # Normal one-game day. No matching behavior change.
+        selected = target_events[0]
 
 
     else:
 
-        selected = matching_events[0]
+        print()
 
+        print(
+            "[ESPN SAME-TEAM MULTIPLE-GAME CHECK]"
+        )
+
+
+        print(
+            f"  Eastern date: {target_events[0]['datetime'].date()}"
+        )
+
+
+        print(
+            f"  Same-team games on date: {len(target_events)}"
+        )
+
+
+        for index, candidate in enumerate(
+            target_events,
+            start=1
+        ):
+
+            print(
+                f"  ESPN game {index}: "
+                f"{candidate['datetime']}"
+            )
+
+
+        selected = None
+
+
+        # Strongest human clue: explicit Game 1 / Game 2 / G1 / G2.
+        if (
+            provider_game_number
+            and
+            1 <= provider_game_number <= len(target_events)
+        ):
+
+            selected = target_events[
+                provider_game_number - 1
+            ]
+
+
+            print(
+                f"  Provider game number: "
+                f"{provider_game_number}"
+            )
+
+
+            print(
+                "  Resolution: explicit game ordinal"
+            )
+
+
+        # Otherwise use every plausible timezone interpretation
+        # produced by the flexible provider-time parser.
+        if selected is None and provider_time_clues:
+
+            scored_candidates = []
+
+
+            for candidate in target_events:
+
+                best_for_candidate = None
+
+
+                for clue in provider_time_clues:
+
+                    difference_seconds = abs(
+                        (
+                            candidate["datetime"]
+                            - clue["datetime"]
+                        ).total_seconds()
+                    )
+
+
+                    score = (
+                        difference_seconds,
+                        -int(
+                            clue.get(
+                                "confidence",
+                                0
+                            )
+                        )
+                    )
+
+
+                    if (
+                        best_for_candidate is None
+                        or score < best_for_candidate["score"]
+                    ):
+
+                        best_for_candidate = {
+                            "score": score,
+                            "difference_seconds": difference_seconds,
+                            "clue": clue
+                        }
+
+
+                if best_for_candidate:
+
+                    scored_candidates.append(
+                        {
+                            "candidate": candidate,
+                            "difference_seconds": best_for_candidate[
+                                "difference_seconds"
+                            ],
+                            "clue": best_for_candidate[
+                                "clue"
+                            ]
+                        }
+                    )
+
+
+            scored_candidates.sort(
+                key=lambda item: (
+                    item["difference_seconds"],
+                    -int(
+                        item["clue"].get(
+                            "confidence",
+                            0
+                        )
+                    ),
+                    item["candidate"]["datetime"]
+                )
+            )
+
+
+            if scored_candidates:
+
+                best = scored_candidates[0]
+
+
+                # Detect a true tie. If two ESPN games are equally
+                # supported by the available provider clues, do not
+                # guess which one it is.
+                tied = [
+                    item
+                    for item in scored_candidates
+                    if abs(
+                        item["difference_seconds"]
+                        - best["difference_seconds"]
+                    ) < 1
+                ]
+
+
+                if len(tied) == 1:
+
+                    selected = best[
+                        "candidate"
+                    ]
+
+
+                    print(
+                        "  Resolution: closest provider-time clue"
+                    )
+
+
+                    print(
+                        f"  Winning clue: "
+                        f"{best['clue']['source']}"
+                    )
+
+
+                    print(
+                        f"  Winning clue Eastern: "
+                        f"{best['clue']['datetime']}"
+                    )
+
+
+                    print(
+                        f"  Difference: "
+                        f"{best['difference_seconds'] / 60:.1f} minutes"
+                    )
+
+
+                else:
+
+                    print(
+                        "  Provider clues produced an exact tie."
+                    )
+
+
+        if selected is None:
+
+            print()
+
+            print(
+                "[ESPN MULTIPLE MATCHES AMBIGUOUS]"
+            )
+
+
+            print(
+                f"  Matchup: {canonical_matchup}"
+            )
+
+
+            print(
+                "  ESPN has multiple same-day games."
+            )
+
+
+            print(
+                "  No provider clue safely identifies which one."
+            )
+
+
+            print(
+                "  Refusing to reuse the first ESPN game."
+            )
+
+
+            return None
+
+
+    if provider_time_clues:
 
         print()
 
         print(
-            "[ESPN PROVIDER-TIME SELECTION]"
+            "[PROVIDER TIME CLUES]"
         )
 
 
-        print(
-            "  No converted provider start available."
-        )
+        for clue in provider_time_clues:
+
+            print(
+                f"  {clue['datetime']} | "
+                f"{clue['source']} | "
+                f"confidence={clue.get('confidence', 0)}"
+            )
 
 
-        print(
-            f"  Using first matching ESPN event: "
-            f"{selected['datetime']}"
-        )
+    print()
+
+    print(
+        "[ESPN EVENT SELECTED]"
+    )
+
+
+    print(
+        f"  {selected['datetime']}"
+    )
 
 
     event_datetime = selected[
@@ -4119,6 +5079,22 @@ def build_event_info(
         )
 
 
+    provider_time_clues = extract_provider_time_clues(
+
+        provider_name,
+
+        provider_timezone
+
+    )
+
+
+    provider_game_number = extract_provider_game_number(
+
+        provider_name
+
+    )
+
+
     provider_date_hint = extract_provider_date_hint(
 
         provider_name
@@ -4234,7 +5210,11 @@ def build_event_info(
 
             league_hint,
 
-            provider_start_eastern
+            provider_start_eastern,
+
+            provider_time_clues,
+
+            provider_game_number
 
         )
 
