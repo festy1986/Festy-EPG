@@ -2441,6 +2441,18 @@ def find_public_event(
     )
 
 
+    if provider_start_eastern:
+
+        print(
+            "Provider start converted to Eastern:"
+        )
+
+
+        print(
+            f"  {provider_start_eastern}"
+        )
+
+
     search_dates = [
 
         preferred_date,
@@ -2458,6 +2470,25 @@ def find_public_event(
         )
 
     ]
+
+
+    # --------------------------------------------------
+    # IMPORTANT:
+    #
+    # Do NOT return after the first ESPN date that has a
+    # matching event. A doubleheader can otherwise collapse
+    # to Game 1 if ESPN exposes the two games differently
+    # across scoreboard date queries.
+    #
+    # Collect every matching ESPN event across all search
+    # dates first, deduplicate them, and only then use the
+    # converted provider start to identify which ESPN game
+    # this provider channel represents.
+    #
+    # ESPN remains the authoritative FINAL time source.
+    # --------------------------------------------------
+
+    all_matching_events = []
 
 
     for date_value in search_dates:
@@ -2482,9 +2513,6 @@ def find_public_event(
             f"[ESPN] {date_value}: "
             f"{len(events)} events"
         )
-
-
-        matching_events = []
 
 
         for event in events:
@@ -2650,156 +2678,235 @@ def find_public_event(
                 continue
 
 
-            matching_events.append(
-                {
-                    "datetime": event_datetime,
-                    "event_teams": event_teams
-                }
-            )
-
-
-        if not matching_events:
-
-            continue
-
-
-        selected = matching_events[0]
-
-
-        # --------------------------------------------------
-        # DOUBLEHEADER / DUPLICATE MATCHUP HANDLING
-        #
-        # The provider start timestamp is NOT authoritative.
-        #
-        # It has already been converted from the provider's
-        # local timezone into Eastern by build_event_info().
-        #
-        # When ESPN returns more than one event for the same
-        # two teams, use that converted provider time only to
-        # determine WHICH ESPN event this channel represents.
-        #
-        # The selected ESPN datetime remains the final,
-        # authoritative guide time.
-        # --------------------------------------------------
-
-        if (
-            len(matching_events) > 1
-            and provider_start_eastern
-        ):
-
-            selected = min(
-                matching_events,
-                key=lambda candidate: abs(
-                    (
-                        candidate["datetime"]
-                        - provider_start_eastern
-                    ).total_seconds()
+            event_id = clean_text(
+                event.get(
+                    "id",
+                    ""
                 )
             )
 
 
-            print()
-
-            print(
-                "[ESPN MULTIPLE MATCHES]"
+            all_matching_events.append(
+                {
+                    "datetime": event_datetime,
+                    "event_teams": event_teams,
+                    "event_id": event_id
+                }
             )
 
 
-            print(
-                f"  Matching events: "
-                f"{len(matching_events)}"
-            )
-
-
-            print(
-                "  Converted provider start:"
-            )
-
-
-            print(
-                f"  {provider_start_eastern}"
-            )
-
-
-            print(
-                "  Selected ESPN event:"
-            )
-
-
-            print(
-                f"  {selected['datetime']}"
-            )
-
-
-        event_datetime = selected[
-            "datetime"
-        ]
-
-
-        event_teams = selected[
-            "event_teams"
-        ]
-
-
-        public_api_matches += 1
-
-
-        debug_stats[
-            "public_events_success"
-        ] += 1
-
+    if not all_matching_events:
 
         print()
 
         print(
-            "[ESPN MATCH SUCCESS]"
+            "[ESPN MATCH FAIL]"
         )
 
 
         print(
-            f"  Clean matchup: "
+            f"  No event/time found for: "
             f"{canonical_matchup}"
         )
 
 
-        print(
-            "  ESPN event teams:"
+        return None
+
+
+    # --------------------------------------------------
+    # DEDUPLICATE ESPN RESULTS
+    #
+    # The same event can be returned by more than one
+    # scoreboard date query. Prefer ESPN event ID when
+    # available; otherwise use its Eastern datetime.
+    # --------------------------------------------------
+
+    unique_events = {}
+
+    for candidate in all_matching_events:
+
+        event_id = candidate.get(
+            "event_id"
         )
 
 
-        for team in event_teams:
+        if event_id:
 
-            print(
-                f"    {team['display_name']}"
+            key = (
+                "id",
+                event_id
+            )
+
+        else:
+
+            key = (
+                "datetime",
+                candidate["datetime"].isoformat()
             )
 
 
-        print(
-            f"  Verified Eastern time: "
-            f"{event_datetime}"
-        )
+        if key not in unique_events:
+
+            unique_events[
+                key
+            ] = candidate
 
 
-        # ESPN supplies only the verified datetime.
-        return {
-            "datetime": event_datetime
-        }
+    matching_events = list(
+        unique_events.values()
+    )
+
+
+    matching_events.sort(
+        key=lambda candidate: candidate[
+            "datetime"
+        ]
+    )
 
 
     print()
 
     print(
-        "[ESPN MATCH FAIL]"
+        "[ESPN MATCHING EVENTS]"
+    )
+
+
+    for candidate in matching_events:
+
+        print(
+            f"  {candidate['datetime']}"
+        )
+
+
+    # --------------------------------------------------
+    # DOUBLEHEADER / DUPLICATE MATCHUP HANDLING
+    #
+    # Provider time is ONLY the identifier.
+    #
+    # Example:
+    #   provider 18:05 Europe/London -> 1:05 PM Eastern
+    #   provider 00:15 Europe/London -> 7:15 PM Eastern
+    #
+    # Compare that converted provider datetime against all
+    # matching ESPN events and choose the closest one.
+    #
+    # The chosen ESPN datetime remains the FINAL guide time.
+    # --------------------------------------------------
+
+    if provider_start_eastern:
+
+        selected = min(
+            matching_events,
+            key=lambda candidate: abs(
+                (
+                    candidate["datetime"]
+                    - provider_start_eastern
+                ).total_seconds()
+            )
+        )
+
+
+        print()
+
+        print(
+            "[ESPN PROVIDER-TIME SELECTION]"
+        )
+
+
+        print(
+            f"  Converted provider start: "
+            f"{provider_start_eastern}"
+        )
+
+
+        print(
+            f"  Selected ESPN event: "
+            f"{selected['datetime']}"
+        )
+
+
+        print(
+            f"  Difference: "
+            f"{abs((selected['datetime'] - provider_start_eastern).total_seconds()) / 60:.1f} minutes"
+        )
+
+
+    else:
+
+        selected = matching_events[0]
+
+
+        print()
+
+        print(
+            "[ESPN PROVIDER-TIME SELECTION]"
+        )
+
+
+        print(
+            "  No converted provider start available."
+        )
+
+
+        print(
+            f"  Using first matching ESPN event: "
+            f"{selected['datetime']}"
+        )
+
+
+    event_datetime = selected[
+        "datetime"
+    ]
+
+
+    event_teams = selected[
+        "event_teams"
+    ]
+
+
+    public_api_matches += 1
+
+
+    debug_stats[
+        "public_events_success"
+    ] += 1
+
+
+    print()
+
+    print(
+        "[ESPN MATCH SUCCESS]"
     )
 
 
     print(
-        f"  No event/time found for: "
+        f"  Clean matchup: "
         f"{canonical_matchup}"
     )
 
 
-    return None
+    print(
+        "  ESPN event teams:"
+    )
+
+
+    for team in event_teams:
+
+        print(
+            f"    {team['display_name']}"
+        )
+
+
+    print(
+        f"  Verified Eastern time: "
+        f"{event_datetime}"
+    )
+
+
+    # ESPN supplies only the verified datetime.
+    return {
+        "datetime": event_datetime
+    }
 
 
 # --------------------------------------------------
