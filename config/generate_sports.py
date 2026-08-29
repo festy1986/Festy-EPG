@@ -834,86 +834,6 @@ def extract_provider_date_hint(text):
 
 
 # --------------------------------------------------
-# Extract provider-advertised game time.
-#
-# Used ONLY as a tie-breaker when ESPN returns more than
-# one event for the same two teams on the same date.
-#
-# ESPN remains the authoritative final game time.
-# --------------------------------------------------
-
-def extract_provider_time_hint(text):
-
-    if not text:
-
-        return None
-
-
-    text = clean_text(
-        text
-    )
-
-
-    matches = list(
-        re.finditer(
-            r"(?<!\d)"
-            r"(\d{1,2})"
-            r"(?:\s*:\s*(\d{2}))?"
-            r"\s*(AM|PM)\b",
-            text,
-            flags=re.IGNORECASE
-        )
-    )
-
-
-    if not matches:
-
-        return None
-
-
-    # Use the last advertised AM/PM time in the channel name.
-    match = matches[-1]
-
-
-    hour = int(
-        match.group(1)
-    )
-
-
-    minute = int(
-        match.group(2)
-        or 0
-    )
-
-
-    meridiem = match.group(
-        3
-    ).upper()
-
-
-    if hour < 1 or hour > 12 or minute > 59:
-
-        return None
-
-
-    if meridiem == "AM":
-
-        if hour == 12:
-
-            hour = 0
-
-    elif hour != 12:
-
-        hour += 12
-
-
-    return (
-        hour,
-        minute
-    )
-
-
-# --------------------------------------------------
 # Get provider timezone
 # --------------------------------------------------
 
@@ -2474,15 +2394,16 @@ def get_public_events(
 # ESPN is the authoritative TIME source only.
 #
 # If the same matchup appears more than once on the same
-# day, the provider channel's advertised time is used only
-# to select the correct ESPN event.
+# day, the provider start timestamp is first converted from
+# the provider timezone to Eastern, then used only to select
+# the correct ESPN event.
 # --------------------------------------------------
 
 def find_public_event(
     canonical_matchup,
     preferred_date,
     league_hint,
-    provider_time_hint=None
+    provider_start_eastern=None
 ):
 
     global public_api_matches
@@ -2745,42 +2666,35 @@ def find_public_event(
         selected = matching_events[0]
 
 
-        # Doubleheader / duplicate-matchup handling.
+        # --------------------------------------------------
+        # DOUBLEHEADER / DUPLICATE MATCHUP HANDLING
+        #
+        # The provider start timestamp is NOT authoritative.
+        #
+        # It has already been converted from the provider's
+        # local timezone into Eastern by build_event_info().
+        #
+        # When ESPN returns more than one event for the same
+        # two teams, use that converted provider time only to
+        # determine WHICH ESPN event this channel represents.
+        #
+        # The selected ESPN datetime remains the final,
+        # authoritative guide time.
+        # --------------------------------------------------
+
         if (
             len(matching_events) > 1
-            and provider_time_hint
+            and provider_start_eastern
         ):
-
-            provider_minutes = (
-                provider_time_hint[0]
-                * 60
-                + provider_time_hint[1]
-            )
-
-
-            def time_distance(candidate):
-
-                event_datetime = candidate[
-                    "datetime"
-                ]
-
-
-                event_minutes = (
-                    event_datetime.hour
-                    * 60
-                    + event_datetime.minute
-                )
-
-
-                return abs(
-                    event_minutes
-                    - provider_minutes
-                )
-
 
             selected = min(
                 matching_events,
-                key=time_distance
+                key=lambda candidate: abs(
+                    (
+                        candidate["datetime"]
+                        - provider_start_eastern
+                    ).total_seconds()
+                )
             )
 
 
@@ -2798,7 +2712,17 @@ def find_public_event(
 
 
             print(
-                "  Selected by provider time hint:"
+                "  Converted provider start:"
+            )
+
+
+            print(
+                f"  {provider_start_eastern}"
+            )
+
+
+            print(
+                "  Selected ESPN event:"
             )
 
 
@@ -4095,13 +4019,6 @@ def build_event_info(
     )
 
 
-    provider_time_hint = extract_provider_time_hint(
-
-        provider_name
-
-    )
-
-
     preferred_date = (
 
         provider_start_eastern.date()
@@ -4210,7 +4127,7 @@ def build_event_info(
 
             league_hint,
 
-            provider_time_hint
+            provider_start_eastern
 
         )
 
