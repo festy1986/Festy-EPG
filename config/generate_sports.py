@@ -322,6 +322,14 @@ def extract_provider_event_text(text):
 
 # --------------------------------------------------
 # Extract matchup from provider channel name
+#
+# MLB / NBA / NFL / NHL FIX:
+# - Keep the original separator parser first.
+# - If it cannot cleanly identify two teams, scan the
+#   whole channel name against sports_teams.txt aliases.
+# - Longest known aliases win.
+# - This fallback is ONLY for MLB/NBA/NFL/NHL.
+# - All other sports/events keep the original behavior.
 # --------------------------------------------------
 
 def extract_provider_matchup(text):
@@ -335,9 +343,17 @@ def extract_provider_matchup(text):
         return ""
 
 
-    text = clean_text(
+    original_text = clean_text(
         text
     )
+
+
+    league_hint = detect_league(
+        original_text
+    )
+
+
+    text = original_text
 
 
     # Remove provider scheduling metadata first.
@@ -406,7 +422,7 @@ def extract_provider_matchup(text):
 
 
     # Remove provider abbreviations such as (NYK), (MIN), etc.
-    # The canonical team alias lookup supplies the full official names.
+    # The canonical team alias lookup supplies official names.
     text = re.sub(
         r"\s*\([A-Za-z0-9]{2,5}\)\s*",
         " ",
@@ -419,6 +435,7 @@ def extract_provider_matchup(text):
     )
 
 
+    # Original path first.
     matchup = normalize_matchup(
         text
     )
@@ -429,13 +446,184 @@ def extract_provider_matchup(text):
     )
 
 
-    if len(parts) != 2:
+    if len(parts) == 2:
+
+        debug_stats[
+            "provider_event_extracted"
+        ] += 1
+
+        return matchup
+
+
+    # Major-league-only fallback.
+    if league_hint not in SUPPORTED_MAJOR_LEAGUES:
 
         debug_stats[
             "provider_event_failed"
         ] += 1
 
         return ""
+
+
+    normalized_source = normalize_team_name(
+        original_text
+    )
+
+
+    if not normalized_source:
+
+        debug_stats[
+            "provider_event_failed"
+        ] += 1
+
+        return ""
+
+
+    alias_hits = []
+
+
+    # Longest aliases first so a specific full/nickname alias
+    # wins over a shorter overlapping alias.
+    sorted_aliases = sorted(
+        team_aliases[
+            league_hint
+        ].items(),
+        key=lambda item: len(item[0]),
+        reverse=True
+    )
+
+
+    for normalized_alias, official_name in sorted_aliases:
+
+        if not normalized_alias:
+
+            continue
+
+
+        pattern = (
+            r"(?<![a-z0-9])"
+            + re.escape(
+                normalized_alias
+            )
+            + r"(?![a-z0-9])"
+        )
+
+
+        for match in re.finditer(
+            pattern,
+            normalized_source
+        ):
+
+            alias_hits.append(
+                {
+                    "start": match.start(),
+                    "end": match.end(),
+                    "alias": normalized_alias,
+                    "official": official_name
+                }
+            )
+
+
+    if not alias_hits:
+
+        debug_stats[
+            "provider_event_failed"
+        ] += 1
+
+        return ""
+
+
+    alias_hits.sort(
+        key=lambda hit: (
+            hit["start"],
+            -(
+                hit["end"]
+                - hit["start"]
+            )
+        )
+    )
+
+
+    filtered_hits = []
+
+
+    for hit in alias_hits:
+
+        overlaps = False
+
+
+        for kept in filtered_hits:
+
+            if not (
+                hit["end"] <= kept["start"]
+                or hit["start"] >= kept["end"]
+            ):
+
+                overlaps = True
+                break
+
+
+        if not overlaps:
+
+            filtered_hits.append(
+                hit
+            )
+
+
+    ordered_teams = []
+
+
+    for hit in sorted(
+        filtered_hits,
+        key=lambda value: value["start"]
+    ):
+
+        official_name = hit[
+            "official"
+        ]
+
+
+        if official_name in ordered_teams:
+
+            continue
+
+
+        ordered_teams.append(
+            official_name
+        )
+
+
+    if len(ordered_teams) != 2:
+
+        debug_stats[
+            "provider_event_failed"
+        ] += 1
+
+        return ""
+
+
+    matchup = (
+        f"{ordered_teams[0]}"
+        f" vs. "
+        f"{ordered_teams[1]}"
+    )
+
+
+    print()
+
+    print(
+        "[MAJOR LEAGUE TEAM SCAN]"
+    )
+
+
+    print(
+        f"  Provider name: {original_text}"
+    )
+
+
+    print(
+        f"  Identified matchup: {matchup}"
+    )
 
 
     debug_stats[
@@ -642,6 +830,86 @@ def extract_provider_date_hint(text):
                 - eastern_now.date()
             ).days
         )
+    )
+
+
+# --------------------------------------------------
+# Extract provider-advertised game time.
+#
+# Used ONLY as a tie-breaker when ESPN returns more than
+# one event for the same two teams on the same date.
+#
+# ESPN remains the authoritative final game time.
+# --------------------------------------------------
+
+def extract_provider_time_hint(text):
+
+    if not text:
+
+        return None
+
+
+    text = clean_text(
+        text
+    )
+
+
+    matches = list(
+        re.finditer(
+            r"(?<!\d)"
+            r"(\d{1,2})"
+            r"(?:\s*:\s*(\d{2}))?"
+            r"\s*(AM|PM)\b",
+            text,
+            flags=re.IGNORECASE
+        )
+    )
+
+
+    if not matches:
+
+        return None
+
+
+    # Use the last advertised AM/PM time in the channel name.
+    match = matches[-1]
+
+
+    hour = int(
+        match.group(1)
+    )
+
+
+    minute = int(
+        match.group(2)
+        or 0
+    )
+
+
+    meridiem = match.group(
+        3
+    ).upper()
+
+
+    if hour < 1 or hour > 12 or minute > 59:
+
+        return None
+
+
+    if meridiem == "AM":
+
+        if hour == 12:
+
+            hour = 0
+
+    elif hour != 12:
+
+        hour += 12
+
+
+    return (
+        hour,
+        minute
     )
 
 
@@ -2202,12 +2470,19 @@ def get_public_events(
 
 # --------------------------------------------------
 # Find ESPN event
+#
+# ESPN is the authoritative TIME source only.
+#
+# If the same matchup appears more than once on the same
+# day, the provider channel's advertised time is used only
+# to select the correct ESPN event.
 # --------------------------------------------------
 
 def find_public_event(
     canonical_matchup,
     preferred_date,
-    league_hint
+    league_hint,
+    provider_time_hint=None
 ):
 
     global public_api_matches
@@ -2267,45 +2542,35 @@ def find_public_event(
     for date_value in search_dates:
 
         events = get_public_events(
-
             date_value,
-
             league_hint
-
         )
 
 
         if not events:
 
             print(
-
                 f"[ESPN] {date_value}: "
-
                 f"no events returned"
-
             )
-
 
             continue
 
 
         print(
-
             f"[ESPN] {date_value}: "
-
             f"{len(events)} events"
-
         )
+
+
+        matching_events = []
 
 
         for event in events:
 
             competitions = event.get(
-
                 "competitions",
-
                 []
-
             )
 
 
@@ -2318,11 +2583,8 @@ def find_public_event(
 
 
             competitors = competition.get(
-
                 "competitors",
-
                 []
-
             )
 
 
@@ -2337,102 +2599,51 @@ def find_public_event(
             for competitor in competitors:
 
                 team = competitor.get(
-
                     "team",
-
                     {}
-
                 )
 
 
                 display_name = clean_text(
-
                     team.get(
-
                         "displayName",
-
                         ""
-
                     )
-
                 )
 
 
                 short_name = clean_text(
-
                     team.get(
-
                         "shortDisplayName",
-
                         ""
-
                     )
-
                 )
 
 
                 location = clean_text(
-
                     team.get(
-
                         "location",
-
                         ""
-
                     )
-
                 )
 
 
                 nickname = clean_text(
-
                     team.get(
-
                         "name",
-
                         ""
-
                     )
-
                 )
 
 
-                home_away = clean_text(
-
-                    competitor.get(
-
-                        "homeAway",
-
-                        ""
-
-                    )
-
-                ).lower()
-
-
-                event_teams.append({
-
-                    "display_name":
-
-                    display_name,
-
-                    "short_name":
-
-                    short_name,
-
-                    "location":
-
-                    location,
-
-                    "nickname":
-
-                    nickname,
-
-                    "home_away":
-
-                    home_away
-
-                })
+                event_teams.append(
+                    {
+                        "display_name": display_name,
+                        "short_name": short_name,
+                        "location": location,
+                        "nickname": nickname
+                    }
+                )
 
 
             if len(event_teams) < 2:
@@ -2446,117 +2657,70 @@ def find_public_event(
             for team in event_teams:
 
                 candidates = [
-
                     team["display_name"],
-
                     team["short_name"],
-
                     team["location"],
-
                     team["nickname"]
-
                 ]
 
 
                 event_team_names.append(
-
                     [
-
                         canonicalize_team_name(
-
                             candidate,
-
                             league_hint
-
                         )
-
                         for candidate in candidates
-
                         if candidate
-
                     ]
-
                 )
 
 
             wanted_first_match = any(
-
                 team_matches(
-
                     wanted_first,
-
                     candidate
-
                 )
-
                 for candidate in event_team_names[0]
-
             ) or any(
-
                 team_matches(
-
                     wanted_first,
-
                     candidate
-
                 )
-
                 for candidate in event_team_names[1]
-
             )
 
 
             wanted_second_match = any(
-
                 team_matches(
-
                     wanted_second,
-
                     candidate
-
                 )
-
                 for candidate in event_team_names[0]
-
             ) or any(
-
                 team_matches(
-
                     wanted_second,
-
                     candidate
-
                 )
-
                 for candidate in event_team_names[1]
-
             )
 
 
             if not (
-
                 wanted_first_match
-
                 and
-
                 wanted_second_match
-
             ):
 
                 debug_stats[
-
                     "public_events_team_match_failed"
-
                 ] += 1
-
 
                 continue
 
 
             event_datetime = parse_espn_datetime(
-
                 event
-
             )
 
 
@@ -2565,111 +2729,137 @@ def find_public_event(
                 continue
 
 
-            public_api_matches += 1
+            matching_events.append(
+                {
+                    "datetime": event_datetime,
+                    "event_teams": event_teams
+                }
+            )
 
 
-            debug_stats[
+        if not matching_events:
 
-                "public_events_success"
+            continue
 
-            ] += 1
+
+        selected = matching_events[0]
+
+
+        # Doubleheader / duplicate-matchup handling.
+        if (
+            len(matching_events) > 1
+            and provider_time_hint
+        ):
+
+            provider_minutes = (
+                provider_time_hint[0]
+                * 60
+                + provider_time_hint[1]
+            )
+
+
+            def time_distance(candidate):
+
+                event_datetime = candidate[
+                    "datetime"
+                ]
+
+
+                event_minutes = (
+                    event_datetime.hour
+                    * 60
+                    + event_datetime.minute
+                )
+
+
+                return abs(
+                    event_minutes
+                    - provider_minutes
+                )
+
+
+            selected = min(
+                matching_events,
+                key=time_distance
+            )
 
 
             print()
 
             print(
-                "[ESPN MATCH SUCCESS]"
+                "[ESPN MULTIPLE MATCHES]"
             )
 
 
             print(
-                f"  Clean matchup: "
-                f"{canonical_matchup}"
+                f"  Matching events: "
+                f"{len(matching_events)}"
             )
 
 
             print(
-                "  ESPN event teams:"
+                "  Selected by provider time hint:"
             )
-
-
-            for team in event_teams:
-
-                print(
-
-                    f"    {team['display_name']}"
-
-                )
 
 
             print(
-                f"  Verified Eastern time: "
-                f"{event_datetime}"
+                f"  {selected['datetime']}"
             )
 
 
-            away_team = None
-
-            home_team = None
-
-
-            for team in event_teams:
-
-                team_name = (
-
-                    team["display_name"]
-
-                    or
-
-                    team["short_name"]
-
-                    or
-
-                    team["location"]
-
-                    or
-
-                    team["nickname"]
-
-                )
+        event_datetime = selected[
+            "datetime"
+        ]
 
 
-                canonical_team = canonicalize_team_name(
-
-                    team_name,
-
-                    league_hint
-
-                )
+        event_teams = selected[
+            "event_teams"
+        ]
 
 
-                if team["home_away"] == "away":
-
-                    away_team = canonical_team
+        public_api_matches += 1
 
 
-                elif team["home_away"] == "home":
-
-                    home_team = canonical_team
-
-
-            if away_team and home_team:
-
-                print(
-                    f"  Verified away/home: "
-                    f"{away_team} vs. {home_team}"
-                )
+        debug_stats[
+            "public_events_success"
+        ] += 1
 
 
-            return {
+        print()
 
-                "datetime": event_datetime,
+        print(
+            "[ESPN MATCH SUCCESS]"
+        )
 
-                "away_team": away_team,
 
-                "home_team": home_team
+        print(
+            f"  Clean matchup: "
+            f"{canonical_matchup}"
+        )
 
-            }
+
+        print(
+            "  ESPN event teams:"
+        )
+
+
+        for team in event_teams:
+
+            print(
+                f"    {team['display_name']}"
+            )
+
+
+        print(
+            f"  Verified Eastern time: "
+            f"{event_datetime}"
+        )
+
+
+        # ESPN supplies only the verified datetime.
+        return {
+            "datetime": event_datetime
+        }
 
 
     print()
@@ -3704,8 +3894,8 @@ def find_single_team_logo(
 # 1. Read provider matchup
 # 2. Clean team names using sports_teams.txt
 # 3. Use provider date only as an ESPN search hint
-# 4. ESPN verifies date/time and away/home order
-# 5. Build title/description and select the ordered logo
+# 4. ESPN verifies the matching game's date/time only
+# 5. Build title/description and select our ordered logo
 #
 # The verified ESPN datetime is returned to the caller so
 # the scheduler can use it without making another ESPN API
@@ -3905,6 +4095,13 @@ def build_event_info(
     )
 
 
+    provider_time_hint = extract_provider_time_hint(
+
+        provider_name
+
+    )
+
+
     preferred_date = (
 
         provider_start_eastern.date()
@@ -3997,8 +4194,7 @@ def build_event_info(
 
     # --------------------------------------------------
     # STEP 6:
-    # ESPN verifies the matching game's date/time
-    # and away/home team order.
+    # ESPN verifies the matching game's date/time only.
     # --------------------------------------------------
 
     public_event = None
@@ -4012,31 +4208,16 @@ def build_event_info(
 
             preferred_date,
 
-            league_hint
+            league_hint,
 
-        )
-
-
-    if (
-        public_event
-        and public_event.get("away_team")
-        and public_event.get("home_team")
-    ):
-
-        canonical_matchup = (
-
-            f"{public_event['away_team']}"
-
-            f" vs. "
-
-            f"{public_event['home_team']}"
+            provider_time_hint
 
         )
 
 
     # --------------------------------------------------
     # STEP 7:
-    # Find the matchup logo AFTER ESPN ordering.
+    # Find the matchup logo using OUR cleaned matchup.
     # --------------------------------------------------
 
     logo_url = None
