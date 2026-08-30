@@ -3,16 +3,14 @@ name: Festy TVGuide OTA
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 4 * * *"
-    - cron: "35 16 * * *"
+    - cron: '0 0 * * *'
+      timezone: "America/New_York"
+    - cron: '0 12 * * *'
+      timezone: "America/New_York"
 
 permissions:
   contents: write
 
-concurrency:
-  group: festy-epg-build-queue
-  cancel-in-progress: false
-  queue: max
 
 jobs:
   build-festy-tvguide-ota:
@@ -1572,53 +1570,72 @@ jobs:
           rm -f guides/OTALocalsguide.pass*.log
           rm -f guides/OTALocalsguide.pass*.count
 
-      - name: Commit OTA guide safely
+      - name: Package generated files for publishing
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          tar -czf /tmp/ota-publish.tar.gz guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
 
-          git fetch origin main
+      - name: Upload publish package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ota-publish-${{ github.run_id }}
+          path: /tmp/ota-publish.tar.gz
+          retention-days: 1
 
-          # Preserve compressed guides created by the other workflows.
-          # This workflow should only update its own GZ output.
-          git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+  publish-ota-publish:
+    needs: build-festy-tvguide-ota
+    runs-on: ubuntu-latest
 
-          git add guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
-          git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
+    concurrency:
+      group: festy-epg-push-queue
+      cancel-in-progress: false
+      queue: max
 
-          if git diff --cached --quiet; then
-            echo "No OTA guide changes to commit"
-            exit 0
-          fi
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
 
-          git commit -m "Update OTA guide"
+      - name: Download generated files
+        uses: actions/download-artifact@v4
+        with:
+          name: ota-publish-${{ github.run_id }}
+          path: /tmp/ota-publish
+
+      - name: Publish with retry protection
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          PACKAGE="/tmp/ota-publish/ota-publish.tar.gz"
 
           for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
+            echo "Publish attempt $attempt"
 
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
+            git fetch origin main
+            git reset --hard origin/main
+            tar -xzf "$PACKAGE" -C .
+
+            git add guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
+
+            if git diff --cached --quiet; then
+              echo "No changes to publish"
               exit 0
             fi
 
-            echo "Push failed, retrying after fresh fetch/rebase..."
+            git commit -m "Update OTA guide"
 
-            git fetch origin main
-            git rebase origin/main
-
-            git checkout origin/main -- guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-            git add guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
-            git add guides/TVPassport.xml.gz guides/tvguidetivimateguide.xml.gz 2>/dev/null || true
-
-            if git diff --cached --quiet; then
-              echo "No new commit needed after rebase, retrying push..."
-            else
-              git commit -m "Update OTA guide"
+            if git push origin HEAD:main; then
+              echo "Publish succeeded"
+              exit 0
             fi
 
-            sleep 5
+            echo "Push failed because main changed or GitHub rejected the push; retrying from newest main..."
+            sleep $((attempt * 10))
           done
 
-          echo "Push failed after retries"
+          echo "Publish failed after 5 attempts"
           exit 1
