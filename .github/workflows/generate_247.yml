@@ -4,16 +4,13 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: "15 4 * * *"
-    - cron: "15 16 * * *"
+    - cron: '0 0 * * *'
+      timezone: "America/New_York"
+    - cron: '0 12 * * *'
+      timezone: "America/New_York"
 
 permissions:
   contents: write
-
-concurrency:
-  group: festy-epg-build-queue
-  cancel-in-progress: false
-  queue: max
 
 jobs:
 
@@ -27,7 +24,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Verify provider credentials
-
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
           XTREAM_USERNAME: ${{ secrets.XTREAM_USERNAME }}
@@ -40,31 +36,22 @@ jobs:
           if [ -z "$XTREAM_URL" ]; then
 
             echo "XTREAM_URL missing"
-
             exit 1
-
           fi
 
           if [ -z "$XTREAM_USERNAME" ]; then
 
             echo "XTREAM_USERNAME missing"
-
             exit 1
-
           fi
-
           if [ -z "$XTREAM_PASSWORD" ]; then
 
             echo "XTREAM_PASSWORD missing"
-
             exit 1
-
           fi
 
           echo "XTREAM_URL exists"
-
           echo "XTREAM_USERNAME exists"
-
           echo "XTREAM_PASSWORD exists"
 
       - name: Install Python requirements
@@ -102,7 +89,6 @@ jobs:
           GUIDE_FILE = "guides/24-7.xml"
 
           LOGO_FOLDER = "logos/config/247logos"
-
           RAW_ROOT = (
               "https://raw.githubusercontent.com/"
               "festy1986/festy-epg/main/"
@@ -124,8 +110,6 @@ jobs:
 
 
           logo_by_channel_id = {}
-
-
           for filename in sorted(
               os.listdir(LOGO_FOLDER)
           ):
@@ -144,8 +128,6 @@ jobs:
               stem, extension = os.path.splitext(
                   filename
               )
-
-
               if extension.lower() not in {
                   ".png",
                   ".jpg",
@@ -170,7 +152,6 @@ jobs:
                   )
 
                   continue
-
 
               channel_id = match.group(1)
 
@@ -205,7 +186,6 @@ jobs:
 
 
           matched = 0
-
           missing = 0
 
 
@@ -222,7 +202,6 @@ jobs:
 
 
               if not channel_id:
-
                   continue
 
 
@@ -232,9 +211,7 @@ jobs:
 
 
               if not filename:
-
                   missing += 1
-
                   display_names = [
                       element.text
                       for element
@@ -243,7 +220,6 @@ jobs:
                       )
                       if element.text
                   ]
-
                   print(
                       "No logo found: "
                       f"{channel_id} | "
@@ -262,8 +238,6 @@ jobs:
                   f"{LOGO_FOLDER}/"
                   f"{filename}"
               )
-
-
               encoded_path = urllib.parse.quote(
                   relative_path,
                   safe="/",
@@ -282,7 +256,6 @@ jobs:
                       channel,
                       "icon",
                   )
-
 
               existing_icon.set(
                   "src",
@@ -317,24 +290,79 @@ jobs:
               f"Logos matched: {matched}"
           )
 
+
           print(
               f"Channels without logos: {missing}"
           )
 
           PY
 
-      - name: Commit and push guide
-
+      - name: Package generated files for publishing
         run: |
+          tar -czf /tmp/247-publish.tar.gz guides/24-7.xml
 
-          git config --global user.name "github-actions"
+      - name: Upload publish package
+        uses: actions/upload-artifact@v4
+        with:
+          name: 247-publish-${{ github.run_id }}
+          path: /tmp/247-publish.tar.gz
+          retention-days: 1
 
-          git config --global user.email "github-actions@github.com"
+  publish-247-publish:
+    needs: guide-247
+    runs-on: ubuntu-latest
 
-          git add guides/24-7.xml
+    concurrency:
+      group: festy-epg-push-queue
+      cancel-in-progress: false
+      queue: max
 
-          git commit -m "Update 24/7 guide" || echo "No changes"
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
 
-          git pull --rebase origin main
+      - name: Download generated files
+        uses: actions/download-artifact@v4
+        with:
+          name: 247-publish-${{ github.run_id }}
+          path: /tmp/247-publish
 
-          git push origin main
+      - name: Publish with retry protection
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          PACKAGE="/tmp/247-publish/247-publish.tar.gz"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Publish attempt $attempt"
+
+            git fetch origin main
+            git reset --hard origin/main
+            tar -xzf "$PACKAGE" -C .
+
+            git add guides/24-7.xml
+
+            if git diff --cached --quiet; then
+              echo "No changes to publish"
+              exit 0
+            fi
+
+            git commit -m "Update 24/7 guide"
+
+            if git push origin HEAD:main; then
+              echo "Publish succeeded"
+              exit 0
+            fi
+
+            echo "Push failed because main changed or GitHub rejected the push; retrying from newest main..."
+            sleep $((attempt * 10))
+          done
+
+          echo "Publish failed after 5 attempts"
+          exit 1
