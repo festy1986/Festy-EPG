@@ -4,16 +4,13 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron: "10 4 * * *"
-    - cron: "10 16 * * *"
+    - cron: '0 0 * * *'
+      timezone: "America/New_York"
+    - cron: '0 12 * * *'
+      timezone: "America/New_York"
 
 permissions:
   contents: write
-
-concurrency:
-  group: festy-epg-build-queue
-  cancel-in-progress: false
-  queue: max
 
 jobs:
 
@@ -25,7 +22,6 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Verify provider credentials
         env:
           XTREAM_URL: ${{ secrets.XTREAM_URL }}
@@ -39,31 +35,23 @@ jobs:
           if [ -z "$XTREAM_URL" ]; then
 
             echo "XTREAM_URL missing"
-
             exit 1
-
           fi
 
           if [ -z "$XTREAM_USERNAME" ]; then
 
             echo "XTREAM_USERNAME missing"
-
             exit 1
-
           fi
 
           if [ -z "$XTREAM_PASSWORD" ]; then
 
             echo "XTREAM_PASSWORD missing"
-
             exit 1
-
           fi
 
           echo "XTREAM_URL exists"
-
           echo "XTREAM_USERNAME exists"
-
           echo "XTREAM_PASSWORD exists"
 
       - name: Install Python requirements
@@ -81,37 +69,71 @@ jobs:
 
           python config/generate_matched_guide.py
 
-      - name: Commit and push guide
+      - name: Package generated files for publishing
         run: |
+          tar -czf /tmp/matched-publish.tar.gz guides/matched.xml
 
-          git config --global user.name "github-actions"
+      - name: Upload publish package
+        uses: actions/upload-artifact@v4
+        with:
+          name: matched-publish-${{ github.run_id }}
+          path: /tmp/matched-publish.tar.gz
+          retention-days: 1
 
-          git config --global user.email "github-actions@github.com"
+  publish-matched-publish:
+    needs: matched-guide
+    runs-on: ubuntu-latest
 
-          git add guides/matched.xml
+    concurrency:
+      group: festy-epg-push-queue
+      cancel-in-progress: false
+      queue: max
 
-          if git diff --cached --quiet; then
-            echo "No changes"
-            exit 0
-          fi
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
 
-          git commit -m "Update matched channel guide"
+      - name: Download generated files
+        uses: actions/download-artifact@v4
+        with:
+          name: matched-publish-${{ github.run_id }}
+          path: /tmp/matched-publish
+
+      - name: Publish with retry protection
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          PACKAGE="/tmp/matched-publish/matched-publish.tar.gz"
 
           for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
+            echo "Publish attempt $attempt"
 
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
+            git fetch origin main
+            git reset --hard origin/main
+            tar -xzf "$PACKAGE" -C .
+
+            git add guides/matched.xml
+
+            if git diff --cached --quiet; then
+              echo "No changes to publish"
               exit 0
             fi
 
-            echo "Push failed, fetching latest main and rebasing..."
+            git commit -m "Update matched channel guide"
 
-            git fetch origin main
-            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Publish succeeded"
+              exit 0
+            fi
 
-            sleep 5
+            echo "Push failed because main changed or GitHub rejected the push; retrying from newest main..."
+            sleep $((attempt * 10))
           done
-
-          echo "Push failed after retries"
+          echo "Publish failed after 5 attempts"
           exit 1
