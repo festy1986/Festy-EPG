@@ -3041,7 +3041,8 @@ def find_public_event(
     league_hint,
     provider_start_eastern=None,
     provider_time_clues=None,
-    provider_game_number=None
+    provider_game_number=None,
+    return_doubleheader_if_unassigned=False
 ):
 
     global public_api_matches
@@ -3528,6 +3529,59 @@ def find_public_event(
                 nearest_date,
                 []
             )
+
+
+    # --------------------------------------------------
+    # SINGLE-PROVIDER-CHANNEL DOUBLEHEADER MODE
+    #
+    # The caller may explicitly request both games ONLY after
+    # it has already verified that the provider exposes exactly
+    # one channel for this canonical matchup/Eastern date.
+    #
+    # This never activates for a matchup such as Red Sox/Yankees
+    # when two provider channels are present. In that case each
+    # channel continues through the normal one-event selector.
+    # --------------------------------------------------
+    if (
+        return_doubleheader_if_unassigned
+        and len(target_events) == 2
+    ):
+
+        doubleheader_datetimes = [
+            candidate["datetime"]
+            for candidate in target_events
+        ]
+
+        doubleheader_datetimes.sort()
+
+        print()
+        print(
+            "[SINGLE-CHANNEL DOUBLEHEADER DETECTED]"
+        )
+        print(
+            f"  Matchup: {canonical_matchup}"
+        )
+        print(
+            f"  Eastern date: {preferred_date}"
+        )
+        print(
+            "  Provider matching channels: 1"
+        )
+        print(
+            f"  ESPN Game 1: {doubleheader_datetimes[0]}"
+        )
+        print(
+            f"  ESPN Game 2: {doubleheader_datetimes[1]}"
+        )
+
+        public_api_matches += 2
+        debug_stats[
+            "public_events_success"
+        ] += 2
+
+        return {
+            "doubleheader_datetimes": doubleheader_datetimes
+        }
 
 
     # If there is still no date-specific set, preserve normal
@@ -4894,7 +4948,8 @@ def find_single_team_logo(
 # --------------------------------------------------
 
 def build_event_info(
-    stream
+    stream,
+    provider_matchup_channel_count=1
 ):
 
     global verified_public_times_used
@@ -5214,9 +5269,34 @@ def build_event_info(
 
             provider_time_clues,
 
-            provider_game_number
+            provider_game_number,
+
+            return_doubleheader_if_unassigned=(
+                provider_matchup_channel_count == 1
+            )
 
         )
+
+
+    doubleheader_datetimes = None
+
+    if (
+        public_event
+        and public_event.get(
+            "doubleheader_datetimes"
+        )
+    ):
+
+        doubleheader_datetimes = list(
+            public_event[
+                "doubleheader_datetimes"
+            ]
+        )
+
+        # There is deliberately no single selected ESPN event
+        # in this mode. Both verified times belong to this one
+        # provider channel.
+        public_event = None
 
 
     # --------------------------------------------------
@@ -5340,6 +5420,39 @@ def build_event_info(
     verified_game_datetime = None
 
 
+    if doubleheader_datetimes:
+
+        verified_public_times_used += len(
+            doubleheader_datetimes
+        )
+
+        print()
+        print(
+            "[FINAL DOUBLEHEADER EVENT DATA]"
+        )
+        print(
+            f"  Matchup: {canonical_matchup}"
+        )
+        print(
+            f"  Game 1: {doubleheader_datetimes[0]}"
+        )
+        print(
+            f"  Game 2: {doubleheader_datetimes[1]}"
+        )
+        print(
+            f"  Logo: {logo_url}"
+        )
+
+        return (
+            canonical_matchup,
+            description_text,
+            logo_url,
+            True,
+            None,
+            doubleheader_datetimes
+        )
+
+
     if public_event:
 
         verified_public_times_used += 1
@@ -5433,7 +5546,9 @@ def build_event_info(
 
             True,
 
-            verified_game_datetime
+            verified_game_datetime,
+
+            None
 
         )
 
@@ -5483,6 +5598,8 @@ def build_event_info(
         logo_url,
 
         False,
+
+        None,
 
         None
 
@@ -5671,6 +5788,130 @@ print(
 )
 
 
+# --------------------------------------------------
+# Count provider channels per canonical major-league matchup/date.
+#
+# This is the gate for the special one-channel doubleheader mode.
+# Two provider channels for the same matchup/date means each channel
+# keeps normal independent event selection. Only exactly ONE provider
+# channel allows two same-day ESPN games to share that channel.
+# --------------------------------------------------
+major_matchup_channel_counts = {}
+major_matchup_key_by_channel = {}
+
+
+def provider_major_matchup_key(stream):
+
+    provider_name = clean_text(
+        rename_legacy_team_identity(
+            stream.get(
+                "name",
+                ""
+            )
+        )
+    )
+
+    league_hint = detect_league(
+        provider_name
+    )
+
+    if league_hint not in SUPPORTED_MAJOR_LEAGUES:
+        return None
+
+    provider_event = extract_provider_matchup(
+        provider_name
+    )
+
+    canonical_matchup = canonicalize_matchup(
+        provider_event,
+        league_hint
+    )
+
+    parts = matchup_parts(
+        canonical_matchup
+    )
+
+    if len(parts) != 2:
+        return None
+
+    provider_start = extract_start_datetime(
+        provider_name
+    )
+
+    provider_start_eastern = (
+        convert_to_eastern(
+            provider_start,
+            provider_timezone
+        )
+        if provider_start
+        else None
+    )
+
+    provider_date_hint = extract_provider_date_hint(
+        provider_name
+    )
+
+    eastern_date = (
+        provider_start_eastern.date()
+        if provider_start_eastern
+        else (
+            provider_date_hint
+            if provider_date_hint
+            else datetime.now(
+                ZoneInfo(
+                    "America/New_York"
+                )
+            ).date()
+        )
+    )
+
+    # Team order is intentionally ignored for counting so a provider
+    # reversing home/away text still counts as the same matchup.
+    team_key = tuple(
+        sorted(
+            normalize_team_name(
+                team
+            )
+            for team in parts
+        )
+    )
+
+    return (
+        league_hint,
+        team_key,
+        eastern_date
+    )
+
+
+for channel_id, requested_name in wanted.items():
+
+    if channel_id not in provider:
+        continue
+
+    matchup_key = provider_major_matchup_key(
+        provider[
+            channel_id
+        ]
+    )
+
+    if not matchup_key:
+        continue
+
+    major_matchup_key_by_channel[
+        channel_id
+    ] = matchup_key
+
+    major_matchup_channel_counts[
+        matchup_key
+    ] = (
+        major_matchup_channel_counts.get(
+            matchup_key,
+            0
+        )
+        + 1
+    )
+
+
 for channel_id, requested_name in wanted.items():
 
     if channel_id not in provider:
@@ -5704,11 +5945,22 @@ for channel_id, requested_name in wanted.items():
 
         has_real_epg,
 
-        verified_game_datetime
+        verified_game_datetime,
+
+        doubleheader_datetimes
 
     ) = build_event_info(
 
-        stream
+        stream,
+
+        provider_matchup_channel_count=(
+            major_matchup_channel_counts.get(
+                major_matchup_key_by_channel.get(
+                    channel_id
+                ),
+                1
+            )
+        )
 
     )
 
@@ -5744,6 +5996,295 @@ for channel_id, requested_name in wanted.items():
             logo_url
 
         )
+
+
+    # --------------------------------------------------
+    # SPECIAL: ONE-CHANNEL DOUBLEHEADER
+    #
+    # This branch exists only when ESPN found exactly two games
+    # for the same canonical teams/Eastern date AND the provider
+    # pre-scan found exactly one matching channel.
+    #
+    # Sequence:
+    #   Upcoming Game 1 -> Game 1 (3h) -> Post Game 1 (1h)
+    #   -> Upcoming Game 2 -> Game 2 (3h) -> normal Post Game 2
+    #
+    # After Game 2, normal boundary-aligned Post Game behavior
+    # continues exactly like an ordinary verified game.
+    # --------------------------------------------------
+    if doubleheader_datetimes:
+
+        game1_start, game2_start = sorted(
+            doubleheader_datetimes
+        )
+
+        game1_end = (
+            game1_start
+            + timedelta(
+                hours=3
+            )
+        )
+
+        game2_end = (
+            game2_start
+            + timedelta(
+                hours=3
+            )
+        )
+
+        game1_time_text = game1_start.strftime(
+            "%-I:%M %p"
+        )
+
+        game2_time_text = game2_start.strftime(
+            "%-I:%M %p"
+        )
+
+        game1_title = (
+            f"{title_text} - "
+            f"Game 1 of Doubleheader - "
+            f"{game1_time_text}"
+        )
+
+        game2_title = (
+            f"{title_text} - "
+            f"Game 2 of Doubleheader - "
+            f"{game2_time_text}"
+        )
+
+        game1_description = (
+            f"{title_text}\n"
+            f"Game 1 of Doubleheader\n"
+            f"{game1_start.strftime('%A')} "
+            f"{game1_start.strftime('%m/%d/%Y')}"
+            f" - {game1_time_text}"
+        )
+
+        game2_description = (
+            f"{title_text}\n"
+            f"Game 2 of Doubleheader\n"
+            f"{game2_start.strftime('%A')} "
+            f"{game2_start.strftime('%m/%d/%Y')}"
+            f" - {game2_time_text}"
+        )
+
+        upcoming_game1_title = (
+            f"Upcoming: {game1_title}"
+        )
+
+        post_game1_title = (
+            f"Post Game: {game1_title}"
+        )
+
+        upcoming_game2_title = (
+            f"Upcoming: {game2_title}"
+        )
+
+        post_game2_title = (
+            f"Post Game: {game2_title}"
+        )
+
+        print()
+        print(
+            "[DOUBLEHEADER BLOCK SCHEDULING]"
+        )
+        print(
+            f"  Game 1: {game1_start} -> {game1_end}"
+        )
+        print(
+            f"  Game 2: {game2_start} -> {game2_end}"
+        )
+        print(
+            "  Game 1 Post Game forced for first hour after Game 1"
+        )
+        print(
+            "  Game 2 Post Game resumes normal blocking after Game 2"
+        )
+
+        def emit_doubleheader_programme(
+            start_value,
+            stop_value,
+            programme_title,
+            programme_description
+        ):
+
+            clipped_start = max(
+                start_value,
+                guide_start
+            )
+
+            clipped_stop = min(
+                stop_value,
+                guide_end
+            )
+
+            if clipped_start >= clipped_stop:
+                return
+
+            programme = ET.SubElement(
+                tv,
+                "programme",
+                {
+                    "start": clipped_start.strftime(
+                        "%Y%m%d%H%M%S %z"
+                    ),
+                    "stop": clipped_stop.strftime(
+                        "%Y%m%d%H%M%S %z"
+                    ),
+                    "channel": channel_id
+                }
+            )
+
+            title = ET.SubElement(
+                programme,
+                "title"
+            )
+
+            title.text = programme_title
+
+            desc = ET.SubElement(
+                programme,
+                "desc"
+            )
+
+            desc.text = programme_description
+
+        # Upcoming Game 1 keeps the normal three-hour boundary
+        # structure until the exact ESPN Game 1 start.
+        current_start = guide_start
+
+        while current_start < min(
+            game1_start,
+            guide_end
+        ):
+
+            elapsed_seconds = (
+                current_start
+                - guide_start
+            ).total_seconds()
+
+            completed_blocks = int(
+                elapsed_seconds
+                // (3 * 60 * 60)
+            )
+
+            next_boundary = (
+                guide_start
+                + timedelta(
+                    hours=(
+                        completed_blocks + 1
+                    ) * 3
+                )
+            )
+
+            current_stop = min(
+                next_boundary,
+                game1_start,
+                guide_end
+            )
+
+            emit_doubleheader_programme(
+                current_start,
+                current_stop,
+                upcoming_game1_title,
+                game1_description
+            )
+
+            current_start = current_stop
+
+        # Exact three-hour Game 1 block.
+        emit_doubleheader_programme(
+            game1_start,
+            game1_end,
+            game1_title,
+            game1_description
+        )
+
+        # The FIRST hour after Game 1 is always Post Game, unless
+        # Game 2 itself starts sooner (never overlap programmes).
+        game1_post_end = min(
+            game1_end + timedelta(
+                hours=1
+            ),
+            game2_start
+        )
+
+        emit_doubleheader_programme(
+            game1_end,
+            game1_post_end,
+            post_game1_title,
+            game1_description
+        )
+
+        # After that one Post Game hour, switch to Upcoming Game 2
+        # and hold it until ESPN's exact Game 2 start.
+        emit_doubleheader_programme(
+            game1_post_end,
+            game2_start,
+            upcoming_game2_title,
+            game2_description
+        )
+
+        # Exact three-hour Game 2 block.
+        emit_doubleheader_programme(
+            game2_start,
+            game2_end,
+            game2_title,
+            game2_description
+        )
+
+        # After Game 2, resume the same normal Post Game blocking
+        # used by an ordinary game: first to the next anchored
+        # three-hour boundary, then full three-hour blocks.
+        current_start = max(
+            game2_end,
+            guide_start
+        )
+
+        while current_start < guide_end:
+
+            elapsed_seconds = (
+                current_start
+                - guide_start
+            ).total_seconds()
+
+            completed_blocks = int(
+                elapsed_seconds
+                // (3 * 60 * 60)
+            )
+
+            next_boundary = (
+                guide_start
+                + timedelta(
+                    hours=(
+                        completed_blocks + 1
+                    ) * 3
+                )
+            )
+
+            if next_boundary <= current_start:
+                next_boundary = (
+                    current_start
+                    + timedelta(
+                        hours=3
+                    )
+                )
+
+            current_stop = min(
+                next_boundary,
+                guide_end
+            )
+
+            emit_doubleheader_programme(
+                current_start,
+                current_stop,
+                post_game2_title,
+                game2_description
+            )
+
+            current_start = current_stop
+
+        continue
 
 
     # --------------------------------------------------
