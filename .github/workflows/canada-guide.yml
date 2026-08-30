@@ -3,16 +3,14 @@ name: Canada Guide
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 7 * * *'
-    - cron: '30 19 * * *'
+    - cron: '0 0 * * *'
+      timezone: "America/New_York"
+    - cron: '0 12 * * *'
+      timezone: "America/New_York"
 
 permissions:
   contents: write
 
-concurrency:
-  group: festy-epg-build-queue
-  cancel-in-progress: false
-  queue: max
 
 jobs:
   build-canada-guide:
@@ -1254,17 +1252,72 @@ jobs:
           test -s guides/canada.xml.gz
           ls -lh guides/canada.xml.gz
 
-      - name: Commit guide
+      - name: Package generated files for publishing
+        run: |
+          tar -czf /tmp/canada-publish.tar.gz guides/canada.xml.gz
+
+      - name: Upload publish package
+        uses: actions/upload-artifact@v4
+        with:
+          name: canada-publish-${{ github.run_id }}
+          path: /tmp/canada-publish.tar.gz
+          retention-days: 1
+
+  publish-canada-publish:
+    needs: build-canada-guide
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: festy-epg-push-queue
+      cancel-in-progress: false
+      queue: max
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download generated files
+        uses: actions/download-artifact@v4
+        with:
+          name: canada-publish-${{ github.run_id }}
+          path: /tmp/canada-publish
+
+      - name: Publish with retry protection
         run: |
           set -euo pipefail
+
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add guides/canada.xml.gz
 
-          if git diff --cached --quiet; then
-            echo "No Canada guide changes to commit."
-            exit 0
-          fi
-          git commit -m "Update Canada guide"
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          PACKAGE="/tmp/canada-publish/canada-publish.tar.gz"
+
+          for attempt in 1 2 3 4 5; do
+            echo "Publish attempt $attempt"
+
+            git fetch origin main
+            git reset --hard origin/main
+            tar -xzf "$PACKAGE" -C .
+
+            git add guides/canada.xml.gz
+
+            if git diff --cached --quiet; then
+              echo "No changes to publish"
+              exit 0
+            fi
+
+            git commit -m "Update Canada guide"
+
+            if git push origin HEAD:main; then
+              echo "Publish succeeded"
+              exit 0
+            fi
+
+            echo "Push failed because main changed or GitHub rejected the push; retrying from newest main..."
+            sleep $((attempt * 10))
+          done
+
+          echo "Publish failed after 5 attempts"
+          exit 1
