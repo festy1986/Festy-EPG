@@ -2,7 +2,6 @@ name: Sports Guide
 
 on:
   workflow_dispatch:
-
   schedule:
     - cron: '0 0 * * *'
     - cron: '0 1 * * *'
@@ -32,11 +31,6 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: festy-epg-build-queue
-  cancel-in-progress: false
-  queue: max
-
 jobs:
   sports-guide:
     runs-on: ubuntu-latest
@@ -57,7 +51,6 @@ jobs:
             echo "XTREAM_URL is missing"
             exit 1
           fi
-
           if [ -z "$XTREAM_USERNAME" ]; then
             echo "XTREAM_USERNAME is missing"
             exit 1
@@ -84,35 +77,71 @@ jobs:
         run: |
           python config/generate_sports.py
 
-      - name: Commit and push sports guide
+      - name: Package generated files for publishing
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
+          tar -czf /tmp/sports-publish.tar.gz guides/sports.xml
 
-          git add guides/sports.xml
+      - name: Upload publish package
+        uses: actions/upload-artifact@v4
+        with:
+          name: sports-publish-${{ github.run_id }}
+          path: /tmp/sports-publish.tar.gz
+          retention-days: 1
 
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-            exit 0
-          fi
+  publish-sports-publish:
+    needs: sports-guide
+    runs-on: ubuntu-latest
 
-          git commit -m "Update sports guide"
+    concurrency:
+      group: festy-epg-push-queue
+      cancel-in-progress: false
+      queue: max
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download generated files
+        uses: actions/download-artifact@v4
+        with:
+          name: sports-publish-${{ github.run_id }}
+          path: /tmp/sports-publish
+
+      - name: Publish with retry protection
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          PACKAGE="/tmp/sports-publish/sports-publish.tar.gz"
 
           for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
+            echo "Publish attempt $attempt"
 
-            if git push origin HEAD:main; then
-              echo "Push succeeded"
+            git fetch origin main
+            git reset --hard origin/main
+            tar -xzf "$PACKAGE" -C .
+
+            git add guides/sports.xml
+
+            if git diff --cached --quiet; then
+              echo "No changes to publish"
               exit 0
             fi
 
-            echo "Push failed, fetching latest main and rebasing..."
+            git commit -m "Update sports guide"
 
-            git fetch origin main
-            git rebase origin/main
+            if git push origin HEAD:main; then
+              echo "Publish succeeded"
+              exit 0
+            fi
 
-            sleep 5
+            echo "Push failed because main changed or GitHub rejected the push; retrying from newest main..."
+            sleep $((attempt * 10))
           done
-
-          echo "Push failed after retries"
+          echo "Publish failed after 5 attempts"
           exit 1
