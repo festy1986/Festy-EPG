@@ -3,16 +3,14 @@ name: TVPassport-TiviMate
 on:
   workflow_dispatch:
   schedule:
-    - cron: "35 6 * * *"
-    - cron: "35 18 * * *"
+    - cron: '0 0 * * *'
+      timezone: "America/New_York"
+    - cron: '0 12 * * *'
+      timezone: "America/New_York"
 
 permissions:
   contents: write
 
-concurrency:
-  group: festy-epg-build-queue
-  cancel-in-progress: false
-  queue: max
 
 jobs:
   build-tvpassport-tivimate:
@@ -1340,45 +1338,71 @@ jobs:
         run: |
           gzip -c guides/TVPassport.xml > guides/TVPassport.xml.gz
 
-      - name: Commit and push TVPassport guide safely
+      - name: Package generated files for publishing
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          tar -czf /tmp/tvpassport-publish.tar.gz guides/TVPassport.xml guides/TVPassport.xml.gz
 
-          # Keep an untouched copy of this run's generated TVPassport outputs.
-          cp guides/TVPassport.xml /tmp/TVPassport.xml
-          cp guides/TVPassport.xml.gz /tmp/TVPassport.xml.gz
+      - name: Upload publish package
+        uses: actions/upload-artifact@v4
+        with:
+          name: tvpassport-publish-${{ github.run_id }}
+          path: /tmp/tvpassport-publish.tar.gz
+          retention-days: 1
+
+  publish-tvpassport-publish:
+    needs: build-tvpassport-tivimate
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: festy-epg-push-queue
+      cancel-in-progress: false
+      queue: max
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download generated files
+        uses: actions/download-artifact@v4
+        with:
+          name: tvpassport-publish-${{ github.run_id }}
+          path: /tmp/tvpassport-publish
+
+      - name: Publish with retry protection
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          PACKAGE="/tmp/tvpassport-publish/tvpassport-publish.tar.gz"
 
           for attempt in 1 2 3 4 5; do
-            echo "Push attempt $attempt"
+            echo "Publish attempt $attempt"
 
             git fetch origin main
-
-            # Start from the newest remote main so generated binary files are
-            # never rebased or merged against another workflow's commit.
             git reset --hard origin/main
-
-            # Restore only this workflow's freshly generated outputs.
-            cp /tmp/TVPassport.xml guides/TVPassport.xml
-            cp /tmp/TVPassport.xml.gz guides/TVPassport.xml.gz
+            tar -xzf "$PACKAGE" -C .
 
             git add guides/TVPassport.xml guides/TVPassport.xml.gz
 
             if git diff --cached --quiet; then
-              echo "No TVPassport guide changes to commit"
+              echo "No changes to publish"
               exit 0
             fi
 
             git commit -m "Update TVPassport guide"
 
             if git push origin HEAD:main; then
-              echo "Push succeeded"
+              echo "Publish succeeded"
               exit 0
             fi
 
-            echo "Push failed because main changed again; retrying from newest remote main..."
-            sleep 5
+            echo "Push failed because main changed or GitHub rejected the push; retrying from newest main..."
+            sleep $((attempt * 10))
           done
-
-          echo "Push failed after retries"
+          echo "Publish failed after 5 attempts"
           exit 1
