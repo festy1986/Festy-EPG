@@ -10,7 +10,7 @@
     <display-name>End | Police FC vs. Slingerz FC | GFF Elite League - Guyana | 2026-08-31 | 01:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 2</display-name>
   </channel>
   <channel id="1899999">
-    <display-name>Next | Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</display-name>
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</display-name>
   </channel>
   <channel id="1899998">
     <display-name>Next | MFA Žalgiris vs, TransINVEST Vilnius | A Lyga Women - Lithuania | 2026-08-31 | 15:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</display-name>
@@ -1753,7 +1753,7 @@
     <display-name>End | Police FC vs. Slingerz FC | GFF Elite League - Guyana | 2026-08-31 | 01:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 2</display-name>
   </channel>
   <channel id="1912600">
-    <display-name>Next | Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 3</display-name>
+    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 3</display-name>
   </channel>
   <channel id="1912599">
     <display-name>Next | MFA Žalgiris vs, TransINVEST Vilnius | A Lyga Women - Lithuania | 2026-08-31 | 15:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 4</display-name>
@@ -2206,7 +2206,7 @@
     <display-name>ENDED | SPORTSNET CENTRAL: AUGUST 30 | Mon 31 Aug 06:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 1</display-name>
   </channel>
   <channel id="1488482">
-    <display-name>NEXT | JAYS TALK PLUS: AUGUST 31 | Mon 31 Aug 11:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 2</display-name>
+    <display-name>LIVE | JAYS TALK PLUS: AUGUST 31 | Mon 31 Aug 11:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 2</display-name>
   </channel>
   <channel id="1488481">
     <display-name>NEXT | BLAIR &amp; BARKER: AUGUST 31 | Mon 31 Aug 17:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 3</display-name>
@@ -3047,7 +3047,7 @@
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 3</display-name>
   </channel>
   <channel id="1899898">
-    <display-name>Next | Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</display-name>
+    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 4</display-name>
   </channel>
   <channel id="1899897">
     <display-name>Next | MFA Žalgiris vs, TransINVEST Vilnius | A Lyga Women - Lithuania | 2026-08-31 | 15:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 5</display-name>
@@ -4548,7 +4548,7 @@
     <display-name>####### ESPN+ PPV ⱽᴵᴾ #######</display-name>
   </channel>
   <channel id="1924729">
-    <display-name>NEXT | THE GOLICS | Mon 31 Aug 10:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 1</display-name>
+    <display-name>LIVE | THE GOLICS | Mon 31 Aug 10:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 1</display-name>
   </channel>
   <channel id="1924728">
     <display-name>NEXT | INSIDE GEORGIA SOUTHERN FOOTBALL WITH CLAY HELTON | Mon 31 Aug 11:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 2</display-name>
@@ -9407,6 +9407,12 @@
   <channel id="1632703">
     <display-name>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1893165">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</display-name>
+  </channel>
+  <channel id="1881033">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</display-name>
+  </channel>
   <channel id="284684">
     <display-name>IT: SKY SPORT NBA UHD</display-name>
   </channel>
@@ -9431,6 +9437,9 @@
   <channel id="1686819">
     <display-name>VIP: NBA TV</display-name>
   </channel>
+  <channel id="1884204">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</display-name>
+  </channel>
   <channel id="293277">
     <display-name>AF: NBA TV</display-name>
   </channel>
@@ -9452,6 +9461,9 @@
   <channel id="1688731">
     <display-name>VIP: SPORT TV NBA ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1893378">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</display-name>
+  </channel>
   <channel id="386374">
     <display-name>PT: SPORT TV NBA</display-name>
   </channel>
@@ -9460,6 +9472,9 @@
   </channel>
   <channel id="1977564">
     <display-name>End | NHL Tonight | NHL  2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2</display-name>
+  </channel>
+  <channel id="1899799">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</display-name>
   </channel>
   <channel id="1977357">
     <display-name>End | NHL Tonight | NHL  2026 | 2026-06-02 | 12:30 (GMT) | 8K EXCLUSIVE | NO: VIAPLAY PPV 9</display-name>
@@ -9764,6 +9779,9 @@
   </channel>
   <channel id="1500239">
     <display-name>- NO EVENT STREAMING - | 8K EXCLUSIVE | BR: NBA PASS PPV 620</display-name>
+  </channel>
+  <channel id="1899697">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</display-name>
   </channel>
   <channel id="2096081">
     <display-name>VIP: MLB EI 1</display-name>
@@ -10203,123 +10221,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899999">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899998">
@@ -79803,123 +79821,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1912600">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | CA: DAZN PPV 3
+    <title>8K EXCLUSIVE | CA: DAZN PPV 3</title>
+    <desc>8K EXCLUSIVE | CA: DAZN PPV 3
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1912599">
@@ -131403,123 +131421,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899898">
-    <title>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>Vora FK vs. KF Egnatia | Superliga - Albania | 2026-08-31 | 14:00 | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899897">
@@ -378122,6 +378140,246 @@ Monday 08/31/2026</desc>
     <desc>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ
 Monday 08/31/2026</desc>
   </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1893165">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1881033">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="284684">
     <title>IT: SKY SPORT NBA UHD</title>
     <desc>IT: SKY SPORT NBA UHD
@@ -379082,6 +379340,126 @@ Monday 08/31/2026</desc>
     <desc>VIP: NBA TV
 Monday 08/31/2026</desc>
   </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1884204">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="293277">
     <title>AF: NBA TV</title>
     <desc>AF: NBA TV
@@ -379922,6 +380300,126 @@ Monday 08/31/2026</desc>
     <desc>VIP: SPORT TV NBA ᴿᴬᵂ
 Monday 08/31/2026</desc>
   </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1893378">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="386374">
     <title>PT: SPORT TV NBA</title>
     <desc>PT: SPORT TV NBA
@@ -380281,6 +380779,126 @@ Monday 06/01/2026</desc>
     <title>NHL Tonight | NHL 2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2</title>
     <desc>NHL Tonight | NHL 2026 | 2026-06-01 | 10:00 (GMT) | 8K EXCLUSIVE | SE: VIAPLAY PPV 2
 Monday 06/01/2026</desc>
+  </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899799">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | SE: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1977357">
     <title>NHL Tonight | NHL 2026 | 2026-06-02 | 12:30 (GMT) | 8K EXCLUSIVE | NO: VIAPLAY PPV 9</title>
@@ -392400,6 +393018,126 @@ Monday 08/31/2026</desc>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1500239">
     <title>8K EXCLUSIVE | BR: NBA PASS PPV 620</title>
     <desc>8K EXCLUSIVE | BR: NBA PASS PPV 620
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899697">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 5
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="2096081">
