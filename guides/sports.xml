@@ -556,7 +556,7 @@
     <display-name>LIVE EVENT 03 - 8:30pm High Limit Racing Douglas Co</display-name>
   </channel>
   <channel id="605784">
-    <display-name>LIVE EVENT 04 - NO EVENT</display-name>
+    <display-name>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</display-name>
   </channel>
   <channel id="605783">
     <display-name>LIVE EVENT 05 - NO EVENT</display-name>
@@ -2209,7 +2209,7 @@
     <display-name>ENDED | JAYS TALK PLUS: AUGUST 31 | Mon 31 Aug 11:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 2</display-name>
   </channel>
   <channel id="1488481">
-    <display-name>NEXT | BLAIR &amp; BARKER: AUGUST 31 | Mon 31 Aug 17:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 3</display-name>
+    <display-name>LIVE | BLAIR &amp; BARKER: AUGUST 31 | Mon 31 Aug 17:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 3</display-name>
   </channel>
   <channel id="1488480">
     <display-name>NEXT | THE FAN PREGAME: AUGUST 31 | Mon 31 Aug 19:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 4</display-name>
@@ -2693,7 +2693,7 @@
     <display-name>LIVE EVENT 03 - 8:30pm High Limit Racing Douglas Co</display-name>
   </channel>
   <channel id="605886">
-    <display-name>LIVE EVENT 04 - NO EVENT</display-name>
+    <display-name>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</display-name>
   </channel>
   <channel id="605885">
     <display-name>LIVE EVENT 05 - NO EVENT</display-name>
@@ -3062,7 +3062,7 @@
     <display-name>End | Jonathan David, almost there. Gabriel Jesus, done | DAZN Transfer by Fabrizio Romano | 2026-08-31 | 18:30 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 8</display-name>
   </channel>
   <channel id="1899893">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 9</display-name>
+    <display-name>End | Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</display-name>
   </channel>
   <channel id="1899892">
     <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 10</display-name>
@@ -4560,7 +4560,7 @@
     <display-name>ENDED | K.C. KEELER WEEKLY PRESS CONFERENCE | Mon 31 Aug 12:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 4</display-name>
   </channel>
   <channel id="1924725">
-    <display-name>LIVE | THE PAT MCAFEE SHOW | Mon 31 Aug 12:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 5</display-name>
+    <display-name>ENDED | THE PAT MCAFEE SHOW | Mon 31 Aug 12:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 5</display-name>
   </channel>
   <channel id="1924724">
     <display-name>ENDED | UTSA WEEKLY SOCCER PRESS CONFERENCE | Mon 31 Aug 12:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 6</display-name>
@@ -4608,7 +4608,7 @@
     <display-name>LIVE | 2026 WSL CHAMPIONSHIP TOUR: FIJI PRO | Mon 31 Aug 15:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 20</display-name>
   </channel>
   <channel id="1924709">
-    <display-name>NEXT | MORGAN SCALLEY PRESS CONFERENCE | Mon 31 Aug 16:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 21</display-name>
+    <display-name>LIVE | MORGAN SCALLEY PRESS CONFERENCE | Mon 31 Aug 16:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 21</display-name>
   </channel>
   <channel id="1924708">
     <display-name>NEXT | MON, 8/31 - ESPN FC | Mon 31 Aug 17:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 22</display-name>
@@ -9446,11 +9446,8 @@
   <channel id="1548073">
     <display-name>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ</display-name>
   </channel>
-  <channel id="1881132">
-    <display-name>End | NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</display-name>
-  </channel>
-  <channel id="1881127">
-    <display-name>End | America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</display-name>
+  <channel id="1881133">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</display-name>
   </channel>
   <channel id="1695190">
     <display-name>MEO: NBA TV ᴿᴬᵂ</display-name>
@@ -32061,123 +32058,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="605784">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="605783">
@@ -117291,123 +117288,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="605886">
-    <title>LIVE EVENT 04 - NO EVENT</title>
-    <desc>LIVE EVENT 04 - NO EVENT
+    <title>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak</title>
+    <desc>LIVE EVENT 04 - 7:15pm World of Outlaws Sprint Cars Nodak
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="605885">
@@ -132051,123 +132048,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899893">
-    <title>8K EXCLUSIVE | US: DAZN PPV 9</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 9
+    <title>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9</title>
+    <desc>Inside The Ring - Aug 31 | Inside The Ring | 2026-08-31 | 18:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 9
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899892">
@@ -379810,245 +379807,125 @@ Monday 08/31/2026</desc>
     <desc>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ
 Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
-  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1881132">
-    <title>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4</title>
-    <desc>NFL GameDay Final | NFL Game Pass | 2026-08-30 | 01:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 4
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
-  </programme>
-  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1881127">
-    <title>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9</title>
-    <desc>America’s Game: 2025 Seattle Seahawks | NFL Game Pass | 2026-08-30 | 02:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 9
-Sunday 08/30/2026</desc>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1881133">
+    <title>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-08-31 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 3
+Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1695190">
     <title>MEO: NBA TV ᴿᴬᵂ</title>
