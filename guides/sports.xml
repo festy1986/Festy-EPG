@@ -2221,7 +2221,7 @@
     <display-name>LIVE | SEATTLE @ BOSTON | Mon 31 Aug 20:00 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 6</display-name>
   </channel>
   <channel id="1488477">
-    <display-name>NEXT | ATHLETICS @ TEXAS | Mon 31 Aug 21:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 7</display-name>
+    <display-name>LIVE | ATHLETICS @ TEXAS | Mon 31 Aug 21:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 7</display-name>
   </channel>
   <channel id="1488476">
     <display-name>NEXT | NEW YORK YANKEES @ LOS ANGELES ANGELS | Mon 31 Aug 23:00 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 8</display-name>
@@ -4617,16 +4617,16 @@
     <display-name>ENDED | NORTHEASTERN VS. SIENA | Mon 31 Aug 17:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 23</display-name>
   </channel>
   <channel id="1924706">
-    <display-name>LIVE | WAKE FOREST VS. BOWLING GREEN | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 24</display-name>
+    <display-name>ENDED | WAKE FOREST VS. BOWLING GREEN | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 24</display-name>
   </channel>
   <channel id="1924705">
-    <display-name>LIVE | YALE VS. ARMY | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 25</display-name>
+    <display-name>ENDED | YALE VS. ARMY | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 25</display-name>
   </channel>
   <channel id="1924704">
-    <display-name>LIVE | NIAGARA VS. ST. BONAVENTURE | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 26</display-name>
+    <display-name>ENDED | NIAGARA VS. ST. BONAVENTURE | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 26</display-name>
   </channel>
   <channel id="1924703">
-    <display-name>LIVE | MEMPHIS VS. BUTLER | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 27</display-name>
+    <display-name>ENDED | MEMPHIS VS. BUTLER | Mon 31 Aug 18:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 27</display-name>
   </channel>
   <channel id="1924702">
     <display-name>LIVE | PURDUE FORT WAYNE VS. DAYTON | Mon 31 Aug 19:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 28</display-name>
@@ -4650,7 +4650,7 @@
     <display-name>LIVE | BOSTON UNIVERSITY VS. PROVIDENCE | Mon 31 Aug 19:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 34</display-name>
   </channel>
   <channel id="1924695">
-    <display-name>NEXT | CREIGHTON VS. TULSA | Mon 31 Aug 20:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 35</display-name>
+    <display-name>LIVE | CREIGHTON VS. TULSA | Mon 31 Aug 20:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 35</display-name>
   </channel>
   <channel id="1924694">
     <display-name>NEXT | MON, 8/31 - FUTBOL AMERICAS | Mon 31 Aug 20:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 36</display-name>
@@ -9380,6 +9380,9 @@
   <channel id="1562719">
     <display-name>AF: NBA TV ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1896478">
+    <display-name>NEXT | MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</display-name>
+  </channel>
   <channel id="1565560">
     <display-name>JOYN: NFL NETWORK ᴿᴬᵂ</display-name>
   </channel>
@@ -9541,7 +9544,7 @@
     <display-name>US: MLB STRIKE ZONE HD</display-name>
   </channel>
   <channel id="1940147">
-    <display-name>Next | MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</display-name>
+    <display-name>Live | MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</display-name>
   </channel>
   <channel id="1126472">
     <display-name>####### VIAPLAY NHL PPV #######</display-name>
@@ -9764,6 +9767,9 @@
   </channel>
   <channel id="1899684">
     <display-name>End | NFL Live | NFL Game Pass | 2026-08-31 | 22:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 18</display-name>
+  </channel>
+  <channel id="1899683">
+    <display-name>End | The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</display-name>
   </channel>
   <channel id="1899680">
     <display-name>End | NFL Fantasy Live | NFL Game Pass | 2026-08-31 | 21:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 22</display-name>
@@ -377155,6 +377161,126 @@ Monday 08/31/2026</desc>
     <desc>AF: NBA TV ᴿᴬᵂ
 Monday 08/31/2026</desc>
   </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1896478">
+    <title>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8</title>
+    <desc>MLB LEAD OFF | Tue 01 Sep 23:00 UTC (UK) | 8K EXCLUSIVE | UK: MAX PPV 8
+Wednesday 09/23/2026</desc>
+  </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1565560">
     <title>JOYN: NFL NETWORK ᴿᴬᵂ</title>
     <desc>JOYN: NFL NETWORK ᴿᴬᵂ
@@ -383516,123 +383642,123 @@ Monday 08/31/2026</desc>
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1940147">
-    <title>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
-    <desc>MLB Big Inning: 8.31.26 | all | 31-08-2026 | 17:00 (GMT) | 8K EXCLUSIVE | US: SOCCER PPV 10
+    <title>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10</title>
+    <desc>MLB Big Inning: 8.31.26 | all | 8K EXCLUSIVE | US: SOCCER PPV 10
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1126472">
@@ -392513,6 +392639,126 @@ Monday 08/31/2026</desc>
   <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899684">
     <title>NFL Live | NFL Game Pass | 2026-08-31 | 22:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 18</title>
     <desc>NFL Live | NFL Game Pass | 2026-08-31 | 22:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 18
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831030000 -0400" stop="20260831060000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831060000 -0400" stop="20260831090000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831090000 -0400" stop="20260831120000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831120000 -0400" stop="20260831150000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831150000 -0400" stop="20260831180000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831180000 -0400" stop="20260831210000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260831210000 -0400" stop="20260901000000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901000000 -0400" stop="20260901030000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901030000 -0400" stop="20260901060000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901060000 -0400" stop="20260901090000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901090000 -0400" stop="20260901120000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901120000 -0400" stop="20260901150000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901150000 -0400" stop="20260901180000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901180000 -0400" stop="20260901210000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260901210000 -0400" stop="20260902000000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902000000 -0400" stop="20260902030000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902030000 -0400" stop="20260902060000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902060000 -0400" stop="20260902090000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902090000 -0400" stop="20260902120000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902120000 -0400" stop="20260902150000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902150000 -0400" stop="20260902180000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902180000 -0400" stop="20260902210000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
+Monday 08/31/2026</desc>
+  </programme>
+  <programme start="20260902210000 -0400" stop="20260903000000 -0400" channel="1899683">
+    <title>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19</title>
+    <desc>The Insiders | NFL Game Pass | 2026-08-31 | 23:00 (GMT) | 8K EXCLUSIVE | BR: DAZN PPV 19
 Monday 08/31/2026</desc>
   </programme>
   <programme start="20260831000000 -0400" stop="20260831030000 -0400" channel="1899680">
