@@ -1256,31 +1256,6 @@ jobs:
         run: |
           tar -czf /tmp/canada-publish.tar.gz guides/canada.xml.gz
 
-      - name: Upload publish package
-        uses: actions/upload-artifact@v4
-        with:
-          name: canada-publish-${{ github.run_id }}
-          path: /tmp/canada-publish.tar.gz
-          retention-days: 1
-
-  publish-canada-publish:
-    needs: build-canada-guide
-    runs-on: ubuntu-latest
-
-
-    steps:
-      - name: Checkout latest main
-        uses: actions/checkout@v5
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Download generated files
-        uses: actions/download-artifact@v4
-        with:
-          name: canada-publish-${{ github.run_id }}
-          path: /tmp/canada-publish
-
       - name: Publish with retry protection
         run: |
           set -euo pipefail
@@ -1288,7 +1263,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          PACKAGE="/tmp/canada-publish/canada-publish.tar.gz"
+          PACKAGE="/tmp/canada-publish.tar.gz"
 
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
             echo "Publish attempt $attempt"
