@@ -301,31 +301,6 @@ jobs:
         run: |
           tar -czf /tmp/247-publish.tar.gz guides/24-7.xml
 
-      - name: Upload publish package
-        uses: actions/upload-artifact@v4
-        with:
-          name: 247-publish-${{ github.run_id }}
-          path: /tmp/247-publish.tar.gz
-          retention-days: 1
-
-  publish-247-publish:
-    needs: guide-247
-    runs-on: ubuntu-latest
-
-
-    steps:
-      - name: Checkout latest main
-        uses: actions/checkout@v5
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Download generated files
-        uses: actions/download-artifact@v4
-        with:
-          name: 247-publish-${{ github.run_id }}
-          path: /tmp/247-publish
-
       - name: Publish with retry protection
         run: |
           set -euo pipefail
@@ -333,7 +308,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          PACKAGE="/tmp/247-publish/247-publish.tar.gz"
+          PACKAGE="/tmp/247-publish.tar.gz"
 
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
             echo "Publish attempt $attempt"
