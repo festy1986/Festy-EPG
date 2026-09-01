@@ -1,4 +1,4 @@
-name: Festy TVGuide OTA
+name: TVguide-Tivimate
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ permissions:
 
 
 jobs:
-  build-festy-tvguide-ota:
+  build-tvguide-tivimate:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,34 +39,68 @@ jobs:
           cd epg
           npm ci
 
-      - name: Build OTA channel source from RAW
+      - name: Build TiviMate channel source from curated list plus raw IDs
         run: |
           mkdir -p epg/sites/tvguide.com
 
           node <<'EOF'
           const fs = require('fs')
 
-          const inputPath = 'guides/OTALocalsguide.raw.xml'
-          const outputPath = 'epg/sites/tvguide.com/festy-ota.channels.xml'
-          const OTA_PROVIDER_ID = '9100000664'
+          const sourcePath = 'guides/tvguidetivimate.xml'
+          const rawPath = 'guides/tvguide.xml'
+          const outputPath = 'epg/sites/tvguide.com/festy-tivimate.channels.xml'
 
-          const wanted = {
-            'WCBB-DT': 'PBS',
-            'WCSH': 'NBC PORTLAND',
-            'WGME': 'CBS PORTLAND',
-            'WGME-DT2': 'FOX PORTLAND',
-            'WPME': 'ION',
-            'WIPL-DT2': 'COURT TV',
-            'WIPL-DT4': 'GRIT',
-            'WIPL-DT5': 'ION PLUS',
-            'WIPL-DT7': 'GAME SHOW NETWORK',
-            'WMTW': 'ABC PORTLAND',
-            'WMTW-DT2': 'METV',
-            'WMTW-DT3': 'LAFF',
-            'WPFO-DT2': 'CHARGE',
-            'WPFO-DT3': 'COMET',
-            'WPXT-DT2': 'HEROES & ICONS',
-            'WPXT-DT3': 'ION MYSTERY'
+          const aliases = {
+            'MS.NOW.us': ['MSNBC.us'],
+            'ESPN.NEWS.us': ['ESPN.NEWS.us', 'ESPNEWS.us'],
+            'CBS.SPORTS.NETWORK.us': ['CBS.SPORTS.NETWORK.us', 'CBSSN.us'],
+            'USA.NETWORK.us': ['USA.NETWORK.us', 'USA.us'],
+            'PARAMOUNT.NETWORK.us': ['PARAMOUNT.NETWORK.us'],
+            'COMEDY.CENTRAL.us': ['COMEDY.CENTRAL.us'],
+            'BBC.AMERICA.us': ['BBC.AMERICA.us'],
+            'FOOD.NETWORK.us': ['FOOD.NETWORK.us'],
+            'TRAVEL.CHANNEL.us': ['TRAVEL.CHANNEL.us'],
+            'DISCOVERY.LIFE.us': ['DISCOVERY.LIFE.us'],
+            'DISCOVERY.FAMILY.us': ['DISCOVERY.FAMILY.us'],
+            'DISCOVERY.SCIENCE.us': ['DISCOVERY.SCIENCE.us'],
+            'INVESTIGATION.DISCOVERY.us': ['INVESTIGATION.DISCOVERY.us'],
+            'ANIMAL.PLANET.us': ['ANIMAL.PLANET.us'],
+            'NATIONAL.GEOGRAPHIC.us': ['NATIONAL.GEOGRAPHIC.us'],
+            'NAT.GEO.WILD.us': ['NAT.GEO.WILD.us'],
+            'SMITHSONIAN.CHANNEL.us': ['SMITHSONIAN.CHANNEL.us'],
+            'THE.WEATHER.CHANNEL.us': ['THE.WEATHER.CHANNEL.us'],
+            'GREAT.AMERICAN.FAMILY.us': ['GREAT.AMERICAN.FAMILY.us'],
+            'DISNEY.CHANNEL.us': ['DISNEY.CHANNEL.us'],
+            'CARTOON.NETWORK.us': ['CARTOON.NETWORK.us'],
+            'HALLMARK.CHANNEL.us': ['HALLMARK.CHANNEL.us'],
+            'HALLMARK.MYSTERY.us': ['HALLMARK.MYSTERY.us'],
+            'GAME.SHOW.NETWORK.us': ['GAME.SHOW.NETWORK.us'],
+            'COOKING.CHANNEL.us': ['COOKING.CHANNEL.us'],
+            'OUTDOOR.CHANNEL.us': ['OUTDOOR.CHANNEL.us'],
+            'AMERICAN.HEROES.CHANNEL.us': ['AMERICAN.HEROES.CHANNEL.us'],
+            'CRIME.AND.INVESTIGATION.us': ['CRIME.AND.INVESTIGATION.us'],
+            'PARAMOUNTPLUS.WITH.SHOWTIME.us': ['PARAMOUNTPLUS.WITH.SHOWTIME.us'],
+            'SHOWTIME.2.us': ['SHOWTIME.2.us'],
+            'SHOWTIME.EXTREME.us': ['SHOWTIME.EXTREME.us'],
+            'SHOWTIME.FAMILY.ZONE.us': ['SHOWTIME.FAMILY.ZONE.us'],
+            'SHOWTIME.NEXT.us': ['SHOWTIME.NEXT.us'],
+            'SHOWTIME.WOMEN.us': ['SHOWTIME.WOMEN.us'],
+            'SHOWTIME.SHOWCASE.us': ['SHOWTIME.SHOWCASE.us'],
+            'THE.MOVIE.CHANNEL.us': ['THE.MOVIE.CHANNEL.us'],
+            'TMC.XTRA.us': ['TMC.XTRA.us'],
+            'STARZ.EDGE.us': ['STARZ.EDGE.us'],
+            'STARZ.CINEMA.us': ['STARZ.CINEMA.us'],
+            'STARZ.COMEDY.us': ['STARZ.COMEDY.us'],
+            'STARZ.ENCORE.us': ['STARZ.ENCORE.us'],
+            'STARZ.ENCORE.ACTION.us': ['STARZ.ENCORE.ACTION.us'],
+            'STARZ.ENCORE.BLACK.us': ['STARZ.ENCORE.BLACK.us'],
+            'STARZ.ENCORE.CLASSIC.us': ['STARZ.ENCORE.CLASSIC.us'],
+            'STARZ.ENCORE.SUSPENSE.us': ['STARZ.ENCORE.SUSPENSE.us'],
+            'STARZ.ENCORE.FAMILY.us': ['STARZ.ENCORE.FAMILY.us'],
+            'STARZ.INBLACK.us': ['STARZ.INBLACK.us'],
+            'MGMPLUS.HITS.us': ['MGMPLUS.HITS.us'],
+            'MGMPLUS.MARQUEE.us': ['MGMPLUS.MARQUEE.us'],
+            'MGMPLUS.DRIVE.IN.us': ['MGMPLUS.DRIVE.IN.us']
           }
 
           function decodeXml(s) {
@@ -86,76 +120,120 @@ jobs:
               .replace(/>/g, '&gt;')
           }
 
-          function xmltvId(name) {
-            return String(name)
-              .toUpperCase()
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
+          function cleanBody(body) {
+            const display = body.match(/<display-name[^>]*>([\s\S]*?)<\/display-name>/i)
+            if (display) return decodeXml(display[1].replace(/<[^>]+>/g, '').trim())
+            return decodeXml(body.replace(/<url>[\s\S]*?<\/url>/gi, '').replace(/<[^>]+>/g, '').trim())
+          }
+
+          function norm(s) {
+            return decodeXml(s)
+              .replace(/\.us$/i, '')
               .replace(/&/g, 'AND')
               .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/g, '.')
-              .replace(/^\.+|\.+$/g, '') + '.us'
+              .replace(/[^A-Z0-9]+/gi, '.')
+              .replace(/^\.+|\.+$/g, '')
+              .toUpperCase()
           }
 
-          if (!fs.existsSync(inputPath)) {
-            console.error(`Missing ${inputPath}`)
+          function parseChannels(xml) {
+            return [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)].map(m => {
+              const attrs = m[1]
+              const body = m[2]
+              return {
+                id: attr(attrs, 'id') || attr(attrs, 'xmltv_id'),
+                xmltv_id: attr(attrs, 'xmltv_id') || attr(attrs, 'id'),
+                site_id: attr(attrs, 'site_id') || attr(attrs, 'site-id'),
+                name: cleanBody(body)
+              }
+            })
+          }
+
+          if (!fs.existsSync(sourcePath)) {
+            console.error(`Missing ${sourcePath}`)
             process.exit(1)
           }
 
-          const xml = fs.readFileSync(inputPath, 'utf8')
-          const channelBlocks = [...xml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)]
-
-          const outputChannels = []
-          const found = new Set()
-
-          for (const match of channelBlocks) {
-            const attrs = match[1]
-            const body = match[2]
-
-            const idMatch = attrs.match(/id="([^"]+)"/i)
-            if (!idMatch) continue
-
-            const siteIdRaw = decodeXml(idMatch[1]).trim()
-            const names = [...body.matchAll(/<display-name[^>]*>([\s\S]*?)<\/display-name>/gi)]
-              .map(m => decodeXml(m[1].replace(/<[^>]+>/g, '').trim()))
-              .filter(Boolean)
-
-            const shortName = names[0]
-            if (!shortName) continue
-            if (!wanted[shortName]) continue
-
-            const sourceId = siteIdRaw.split('#').pop()
-            const siteId = `${OTA_PROVIDER_ID}#${sourceId}`
-            const finalName = wanted[shortName]
-
-            outputChannels.push(
-              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(xmltvId(finalName))}" site_id="${escapeXml(siteId)}">${escapeXml(finalName)}</channel>`
-            )
-
-            found.add(shortName)
-            console.log(`[ADD] ${finalName} <= ${shortName} | ${siteId}`)
+          if (!fs.existsSync(rawPath)) {
+            console.error(`Missing ${rawPath}`)
+            process.exit(1)
           }
 
-          const missing = Object.keys(wanted).filter(name => !found.has(name))
+          const sourceChannels = parseChannels(fs.readFileSync(sourcePath, 'utf8'))
+          const rawChannels = parseChannels(fs.readFileSync(rawPath, 'utf8'))
+
+          const rawById = new Map()
+          const rawByName = new Map()
+
+          for (const ch of rawChannels) {
+            if (ch.xmltv_id && ch.site_id) rawById.set(norm(ch.xmltv_id), ch)
+            if (ch.name && ch.site_id) rawByName.set(norm(ch.name), ch)
+          }
+
+          const out = []
+          const missing = []
+          const seen = new Set()
+
+          for (const src of sourceChannels) {
+            const wantedId = src.id || src.xmltv_id
+            const wantedName = src.name || wantedId
+
+            let siteId = src.site_id
+            let match = null
+
+            if (!siteId) {
+              const keys = [wantedId, wantedName, ...(aliases[wantedId] || [])].map(norm)
+
+              for (const key of keys) {
+                match = rawById.get(key) || rawByName.get(key)
+                if (match) break
+              }
+
+              if (match) siteId = match.site_id
+            }
+
+            if (!wantedId || !siteId) {
+              missing.push(`${wantedId || '(no id)'} (${wantedName})`)
+              continue
+            }
+
+            const key = `${wantedId}|${siteId}`
+            if (seen.has(key)) continue
+            seen.add(key)
+
+            out.push(
+              `  <channel site="tvguide.com" lang="en" xmltv_id="${escapeXml(wantedId)}" site_id="${escapeXml(siteId)}">${escapeXml(wantedName)}</channel>`
+            )
+          }
+
+          console.log(`Source channels: ${sourceChannels.length}`)
+          console.log(`Raw channels: ${rawChannels.length}`)
+          console.log(`Built channels: ${out.length}`)
+          console.log(`Missing site_id after raw lookup: ${missing.length}`)
 
           if (missing.length) {
-            console.log('\nMissing selected OTA channels:')
-            missing.forEach(name => console.log(`- ${name}`))
+            console.log('\nMissing site_id:')
+            missing.forEach(x => console.log(`- ${x}`))
             process.exit(1)
           }
 
-          if (outputChannels.length !== 16) {
-            console.error(`Expected exactly 16 OTA channels, built ${outputChannels.length}`)
+          if (out.length < 123) {
+            console.error(`Refusing to run: expected at least 123 channels, built ${out.length}`)
             process.exit(1)
           }
 
           fs.writeFileSync(
             outputPath,
-            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${outputChannels.join('\n')}\n</channels>\n`
+            `<?xml version="1.0" encoding="UTF-8"?>\n<channels>\n${out.join('\n')}\n</channels>\n`
           )
-
-          console.log(`Built ${outputChannels.length} OTA channels`)
           EOF
 
-      - name: Write enriched TVGuide OTA config
+      - name: Write enriched TVGuide config
         run: |
           cat > epg/sites/tvguide.com/tvguide.com.config.js <<'EOF'
           const axios = require('axios')
@@ -206,7 +284,7 @@ jobs:
 
                 const results = await Promise.all(
                   batch.map(async item => {
-                    const details = await loadProgramDetails(item)
+                    const details = await loadProgramDetails(item, channel)
 
                     const title = cleanTitle(item.title || details.title || '')
                     const episodeTitle = cleanSpaces(details.episodeTitle || details.subtitle || details.subTitle || '')
@@ -258,9 +336,9 @@ jobs:
                       category: buildCategories(programType)
                     }
 
-                    // Keep display metadata packed in <desc> only.
-                    // Do not emit separate sub-title, episode-num, or date tags,
-                    // because the target guide display reads title + desc.
+                    // Keep TiviMate display clean: title-only row, all episode/date metadata packed in <desc>.
+                    // Do not emit separate sub-title, episode-num, or date fields here, because TiviMate
+                    // may use them to rebuild/duplicate display text outside the packed description.
 
                     return program
                   })
@@ -289,7 +367,7 @@ jobs:
             return false
           }
 
-          async function fetchProgramDetailsOnce(url, title, timeout, label, attempt, attempts) {
+          async function fetchProgramDetailsOnce(url, channelName, title, timeout, label, attempt, attempts) {
             try {
               const response = await axios.get(url, {
                 timeout,
@@ -300,7 +378,7 @@ jobs:
               })
 
               if (attempt > 1 || label.includes('MICRO')) {
-                console.log(`[${label} OK] ${title} | attempt=${attempt}/${attempts}`)
+                console.log(`[${label} OK] ${channelName} | ${title} | attempt=${attempt}/${attempts}`)
               }
 
               return {
@@ -311,7 +389,7 @@ jobs:
               const status = err.response?.status || err.code || err.message || 'unknown'
 
               if (err.response?.status === 404) {
-                console.log(`[${label} MISSING] ${title} | 404`)
+                console.log(`[${label} MISSING] ${channelName} | ${title} | 404`)
                 return {
                   ok: true,
                   value: {}
@@ -326,41 +404,42 @@ jobs:
             }
           }
 
-          async function tryProgramDetails(url, title, options) {
+          async function tryProgramDetails(url, channelName, title, options) {
             const { label, attempts, timeout, baseDelay, maxDelay } = options
 
             for (let attempt = 1; attempt <= attempts; attempt++) {
-              const result = await fetchProgramDetailsOnce(url, title, timeout, label, attempt, attempts)
+              const result = await fetchProgramDetailsOnce(url, channelName, title, timeout, label, attempt, attempts)
 
               if (result.ok) return result.value
 
               if (!result.retryable) {
-                console.log(`[${label} FAIL] ${title} | ${result.status}`)
+                console.log(`[${label} FAIL] ${channelName} | ${title} | ${result.status}`)
                 return null
               }
 
               if (attempt < attempts) {
                 const delay = Math.min(maxDelay, baseDelay * Math.pow(2, attempt - 1)) + Math.floor(Math.random() * 500)
-                console.log(`[${label} RETRY] ${title} | ${result.status} | attempt=${attempt}/${attempts} | wait=${delay}ms`)
+                console.log(`[${label} RETRY] ${channelName} | ${title} | ${result.status} | attempt=${attempt}/${attempts} | wait=${delay}ms`)
                 await sleep(delay)
               } else {
-                console.log(`[${label} EXHAUSTED] ${title} | ${result.status} | attempts=${attempts}`)
+                console.log(`[${label} EXHAUSTED] ${channelName} | ${title} | ${result.status} | attempts=${attempts}`)
               }
             }
 
             return null
           }
 
-          async function loadProgramDetails(item) {
+          async function loadProgramDetails(item, channel) {
             if (!item.programDetails) return {}
 
             const url = item.programDetails.includes('?')
               ? `${item.programDetails}&apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
               : `${item.programDetails}?apiKey=DI9elXhZ3bU6ujsA2gXEKOANyncXGUGc`
 
+            const channelName = channel?.name || 'Unknown channel'
             const title = item.title || 'Unknown title'
 
-            const fastResult = await tryProgramDetails(url, title, {
+            const fastResult = await tryProgramDetails(url, channelName, title, {
               label: 'DETAIL FAST',
               attempts: 1,
               timeout: 8000,
@@ -370,7 +449,7 @@ jobs:
 
             if (fastResult) return fastResult
 
-            const retryResult = await tryProgramDetails(url, title, {
+            const backupResult = await tryProgramDetails(url, channelName, title, {
               label: 'DETAIL BACKUP',
               attempts: 5,
               timeout: 8000,
@@ -378,11 +457,11 @@ jobs:
               maxDelay: 30000
             })
 
-            if (retryResult) return retryResult
+            if (backupResult) return backupResult
 
-            console.log(`[DETAIL MICRO PASS] ${title} | starting slow cleanup pass`)
+            console.log(`[DETAIL MICRO PASS] ${channelName} | ${title} | starting slow cleanup pass`)
 
-            const microResult = await tryProgramDetails(url, title, {
+            const microResult = await tryProgramDetails(url, channelName, title, {
               label: 'DETAIL MICRO',
               attempts: 4,
               timeout: 20000,
@@ -392,7 +471,7 @@ jobs:
 
             if (microResult) return microResult
 
-            console.log(`[DETAIL FINAL MISS] ${title} | no details after fast + backup + micro`)
+            console.log(`[DETAIL FINAL MISS] ${channelName} | ${title} | no details after fast + backup + micro`)
             return {}
           }
 
@@ -546,8 +625,8 @@ jobs:
 
           function cleanPackedDescription(value) {
             return cleanSpaces(value)
-              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
-              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.??\s*$/i, ' ($1)')
+              .replace(/\s+Aired\s+(\d{1,2}\/\d{1,2}\/\d{4})\.?\s*$/i, ' ($1)')
+              .replace(/\s+\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*\((\d{1,2}\/\d{1,2}\/\d{4}|\d{4})\)\s*$/g, ' ($2)')
               .trim()
           }
 
@@ -612,14 +691,14 @@ jobs:
           }
           EOF
 
-      - name: Grab TVGuide OTA guide with schedule recovery
+      - name: Grab TiviMate guide with schedule recovery
         run: |
           cd epg
 
-          rm -f ../guides/OTALocalsguide.build.xml
-          rm -f ../guides/OTALocalsguide.pass*.xml
-          rm -f ../guides/OTALocalsguide.pass*.log
-          rm -f ../guides/OTALocalsguide.pass*.count
+          rm -f ../guides/tvguidetivimateguide.xml
+          rm -f ../guides/tvguidetivimateguide.pass*.xml
+          rm -f ../guides/tvguidetivimateguide.pass*.log
+          rm -f ../guides/tvguidetivimateguide.pass*.count
 
           run_pass() {
             PASS_NAME="$1"
@@ -637,11 +716,11 @@ jobs:
 
             set +e
             npx tsx scripts/commands/epg/grab.ts \
-              --channels=sites/tvguide.com/festy-ota.channels.xml \
-              --output="../guides/OTALocalsguide.${PASS_NAME}.xml" \
+              --channels=sites/tvguide.com/festy-tivimate.channels.xml \
+              --output="../guides/tvguidetivimateguide.${PASS_NAME}.xml" \
               --days=14 \
               --maxConnections="$MAX_CONNECTIONS" \
-              2>&1 | tee "../guides/OTALocalsguide.${PASS_NAME}.log"
+              2>&1 | tee "../guides/tvguidetivimateguide.${PASS_NAME}.log"
 
             STATUS=${PIPESTATUS[0]}
             set -e
@@ -650,22 +729,22 @@ jobs:
               echo "$PASS_NAME exited with status $STATUS"
             fi
 
-            if [ ! -f "../guides/OTALocalsguide.${PASS_NAME}.xml" ]; then
+            if [ ! -f "../guides/tvguidetivimateguide.${PASS_NAME}.xml" ]; then
               echo "$PASS_NAME did not create an XML file"
-              echo "0" > "../guides/OTALocalsguide.${PASS_NAME}.programmes.count"
-              echo "0" > "../guides/OTALocalsguide.${PASS_NAME}.descriptions.count"
-              echo "999999" > "../guides/OTALocalsguide.${PASS_NAME}.schedule_issues.count"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.programmes.count"
+              echo "0" > "../guides/tvguidetivimateguide.${PASS_NAME}.descriptions.count"
+              echo "999999" > "../guides/tvguidetivimateguide.${PASS_NAME}.issues.count"
               return 0
             fi
 
-            PR=$(grep -c '<programme ' "../guides/OTALocalsguide.${PASS_NAME}.xml" || true)
-            DESC=$(grep -c '<desc ' "../guides/OTALocalsguide.${PASS_NAME}.xml" || true)
+            PR=$(grep -c '<programme ' "../guides/tvguidetivimateguide.${PASS_NAME}.xml" || true)
+            DESC=$(grep -c '<desc ' "../guides/tvguidetivimateguide.${PASS_NAME}.xml" || true)
 
-            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/OTALocalsguide.${PASS_NAME}.log" || true)
+            ISSUE_COUNT=$(grep -Eic 'ERR:|timeout|programs=0|ECONNABORTED|ETIMEDOUT|ECONNRESET|ENOTFOUND|EAI_AGAIN| 408 | 429 | 500 | 502 | 503 | 504 ' "../guides/tvguidetivimateguide.${PASS_NAME}.log" || true)
 
-            echo "$PR" > "../guides/OTALocalsguide.${PASS_NAME}.programmes.count"
-            echo "$DESC" > "../guides/OTALocalsguide.${PASS_NAME}.descriptions.count"
-            echo "$ISSUE_COUNT" > "../guides/OTALocalsguide.${PASS_NAME}.schedule_issues.count"
+            echo "$PR" > "../guides/tvguidetivimateguide.${PASS_NAME}.programmes.count"
+            echo "$DESC" > "../guides/tvguidetivimateguide.${PASS_NAME}.descriptions.count"
+            echo "$ISSUE_COUNT" > "../guides/tvguidetivimateguide.${PASS_NAME}.issues.count"
 
             echo "$PASS_NAME programmes: $PR"
             echo "$PASS_NAME descriptions: $DESC"
@@ -674,7 +753,7 @@ jobs:
 
           run_pass "pass1-fast" 10 8000
 
-          PASS1_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
+          PASS1_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
 
           if [ "$PASS1_ISSUES" -gt 0 ]; then
             echo ""
@@ -686,14 +765,14 @@ jobs:
           fi
 
           BEST_PASS="pass1-fast"
-          BEST_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
-          BEST_DESC=$(cat ../guides/OTALocalsguide.pass1-fast.descriptions.count)
-          BEST_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
+          BEST_PR=$(cat ../guides/tvguidetivimateguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/tvguidetivimateguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
 
-          if [ -f ../guides/OTALocalsguide.pass2-backup.programmes.count ]; then
-            PASS2_PR=$(cat ../guides/OTALocalsguide.pass2-backup.programmes.count)
-            PASS2_DESC=$(cat ../guides/OTALocalsguide.pass2-backup.descriptions.count)
-            PASS2_ISSUES=$(cat ../guides/OTALocalsguide.pass2-backup.schedule_issues.count)
+          if [ -f ../guides/tvguidetivimateguide.pass2-backup.programmes.count ]; then
+            PASS2_PR=$(cat ../guides/tvguidetivimateguide.pass2-backup.programmes.count)
+            PASS2_DESC=$(cat ../guides/tvguidetivimateguide.pass2-backup.descriptions.count)
+            PASS2_ISSUES=$(cat ../guides/tvguidetivimateguide.pass2-backup.issues.count)
 
             if [ "$PASS2_PR" -gt "$BEST_PR" ]; then
               BEST_PASS="pass2-backup"
@@ -723,15 +802,15 @@ jobs:
           fi
 
           BEST_PASS="pass1-fast"
-          BEST_PR=$(cat ../guides/OTALocalsguide.pass1-fast.programmes.count)
-          BEST_DESC=$(cat ../guides/OTALocalsguide.pass1-fast.descriptions.count)
-          BEST_ISSUES=$(cat ../guides/OTALocalsguide.pass1-fast.schedule_issues.count)
+          BEST_PR=$(cat ../guides/tvguidetivimateguide.pass1-fast.programmes.count)
+          BEST_DESC=$(cat ../guides/tvguidetivimateguide.pass1-fast.descriptions.count)
+          BEST_ISSUES=$(cat ../guides/tvguidetivimateguide.pass1-fast.issues.count)
 
           for PASS in pass2-backup pass3-micro; do
-            if [ -f "../guides/OTALocalsguide.${PASS}.programmes.count" ]; then
-              CANDIDATE_PR=$(cat "../guides/OTALocalsguide.${PASS}.programmes.count")
-              CANDIDATE_DESC=$(cat "../guides/OTALocalsguide.${PASS}.descriptions.count")
-              CANDIDATE_ISSUES=$(cat "../guides/OTALocalsguide.${PASS}.schedule_issues.count")
+            if [ -f "../guides/tvguidetivimateguide.${PASS}.programmes.count" ]; then
+              CANDIDATE_PR=$(cat "../guides/tvguidetivimateguide.${PASS}.programmes.count")
+              CANDIDATE_DESC=$(cat "../guides/tvguidetivimateguide.${PASS}.descriptions.count")
+              CANDIDATE_ISSUES=$(cat "../guides/tvguidetivimateguide.${PASS}.issues.count")
 
               if [ "$CANDIDATE_PR" -gt "$BEST_PR" ]; then
                 BEST_PASS="$PASS"
@@ -760,28 +839,28 @@ jobs:
           echo "Best possible issues: $BEST_ISSUES"
           echo "============================================================"
 
-          cp "../guides/OTALocalsguide.${BEST_PASS}.xml" "../guides/OTALocalsguide.build.xml"
+          cp "../guides/tvguidetivimateguide.${BEST_PASS}.xml" "../guides/tvguidetivimateguide.xml"
 
           echo ""
           echo "Pass summary:"
           for PASS in pass1-fast pass2-backup pass3-micro; do
-            if [ -f "../guides/OTALocalsguide.${PASS}.programmes.count" ]; then
+            if [ -f "../guides/tvguidetivimateguide.${PASS}.programmes.count" ]; then
               echo "$PASS:"
-              echo "  programmes:   $(cat ../guides/OTALocalsguide.${PASS}.programmes.count)"
-              echo "  descriptions: $(cat ../guides/OTALocalsguide.${PASS}.descriptions.count)"
-              echo "  issues:       $(cat ../guides/OTALocalsguide.${PASS}.schedule_issues.count)"
+              echo "  programmes:   $(cat ../guides/tvguidetivimateguide.${PASS}.programmes.count)"
+              echo "  descriptions: $(cat ../guides/tvguidetivimateguide.${PASS}.descriptions.count)"
+              echo "  issues:       $(cat ../guides/tvguidetivimateguide.${PASS}.issues.count)"
             fi
           done
 
           cd ..
 
-      - name: Fill missing OTA metadata from TVMaze
+      - name: Fill missing TiviMate metadata from TVMaze
         run: |
           node <<'EOF'
           const fs = require('fs')
 
-          const guidePath = 'guides/OTALocalsguide.build.xml'
-          const cachePath = 'guides/.tvmaze-ota-cache.json'
+          const guidePath = 'guides/tvguidetivimateguide.xml'
+          const cachePath = 'config/.tvmaze-tivimate-cache.json'
 
           if (!fs.existsSync(guidePath)) {
             console.error(`Missing ${guidePath}`)
@@ -978,7 +1057,7 @@ jobs:
               try {
                 const response = await fetch(url, {
                   headers: {
-                    'User-Agent': 'festy-epg-tvmaze-fill-missing-only/1.0'
+                    'User-Agent': 'festy-epg-tvmaze-tivimate-fill-missing-only/1.0'
                   }
                 })
 
@@ -1109,6 +1188,8 @@ jobs:
             return desc.includes(`(${displayDate})`) || desc.includes(displayDate)
           }
 
+
+
           function shouldSuppressTvmazeDisplayDate(block, airdate) {
             if (!airdate) return false
 
@@ -1136,7 +1217,6 @@ jobs:
             // and similar listings, suppress dates when TVMaze only found the current airing date.
             return Math.abs(scheduleDate.getTime() - parsedAirDate.getTime()) / 86400000 <= 45
           }
-
           function cleanPackedTvmazeDescription(value) {
             return String(value || '')
               .replace(/\s+/g, ' ')
@@ -1382,66 +1462,49 @@ jobs:
           })
           EOF
 
-      - name: Validate OTA output
+      - name: Validate TiviMate output
         run: |
-          CH=$(grep -c '<channel ' guides/OTALocalsguide.build.xml || true)
-          PR=$(grep -c '<programme ' guides/OTALocalsguide.build.xml || true)
-          DESC=$(grep -c '<desc ' guides/OTALocalsguide.build.xml || true)
+          CH=$(grep -c '<channel ' guides/tvguidetivimateguide.xml || true)
+          PR=$(grep -c '<programme ' guides/tvguidetivimateguide.xml || true)
+          DESC=$(grep -c '<desc ' guides/tvguidetivimateguide.xml || true)
 
-          echo "OTA channels: $CH"
-          echo "OTA programmes: $PR"
-          echo "OTA descriptions: $DESC"
+          echo "TiviMate channels: $CH"
+          echo "TiviMate programmes: $PR"
+          echo "TiviMate descriptions: $DESC"
 
-          if [ "$CH" -ne 16 ]; then
-            echo "Invalid OTA output — expected exactly 16 channels"
+          if [ "$CH" -lt 123 ]; then
+            echo "Invalid TiviMate output - expected at least 123 channels"
             exit 1
           fi
 
           if [ "$PR" -lt 1 ]; then
-            echo "Invalid OTA output — no programmes"
+            echo "Invalid TiviMate output - no programmes"
             exit 1
           fi
 
           if [ "$DESC" -lt 1 ]; then
-            echo "Invalid OTA output — no descriptions"
+            echo "Invalid TiviMate output - no descriptions"
             exit 1
           fi
 
-      - name: Inject RAW OTA logos into generated guide
+
+
+      - name: Inject curated TiviMate logos into generated guide
         run: |
           node <<'EOF'
           const fs = require('fs')
 
-          const rawPath = 'guides/OTALocalsguide.raw.xml'
-          const guidePath = 'guides/OTALocalsguide.build.xml'
+          const curatedPath = 'guides/tvguidetivimate.xml'
+          const guidePath = 'guides/tvguidetivimateguide.xml'
 
-          if (!fs.existsSync(rawPath)) {
-            console.error(`Missing RAW OTA source: ${rawPath}`)
+          if (!fs.existsSync(curatedPath)) {
+            console.error(`Missing curated channel list: ${curatedPath}`)
             process.exit(1)
           }
 
           if (!fs.existsSync(guidePath)) {
-            console.error(`Missing generated OTA guide: ${guidePath}`)
+            console.error(`Missing generated guide: ${guidePath}`)
             process.exit(1)
-          }
-
-          const wanted = {
-            'WCBB-DT': 'PBS',
-            'WCSH': 'NBC PORTLAND',
-            'WGME': 'CBS PORTLAND',
-            'WGME-DT2': 'FOX PORTLAND',
-            'WPME': 'ION',
-            'WIPL-DT2': 'COURT TV',
-            'WIPL-DT4': 'GRIT',
-            'WIPL-DT5': 'ION PLUS',
-            'WIPL-DT7': 'GAME SHOW NETWORK',
-            'WMTW': 'ABC PORTLAND',
-            'WMTW-DT2': 'METV',
-            'WMTW-DT3': 'LAFF',
-            'WPFO-DT2': 'CHARGE',
-            'WPFO-DT3': 'COMET',
-            'WPXT-DT2': 'HEROES & ICONS',
-            'WPXT-DT3': 'ION MYSTERY'
           }
 
           function decodeXml(s) {
@@ -1461,55 +1524,47 @@ jobs:
               .replace(/>/g, '&gt;')
           }
 
+          function attr(attrs, name) {
+            const m = attrs.match(new RegExp(`${name}="([^"]*)"`, 'i'))
+            return m ? decodeXml(m[1]).trim() : ''
+          }
+
           function normalize(s) {
             return decodeXml(s)
-              .toUpperCase()
-              .replace(/&/g, 'AND')
-              .replace(/\+/g, 'PLUS')
-              .replace(/[^A-Z0-9]+/g, ' ')
+              .toLowerCase()
+              .replace(/&/g, 'and')
+              .replace(/\+/g, 'plus')
+              .replace(/\.us$/i, '')
+              .replace(/[^a-z0-9]+/g, ' ')
               .trim()
           }
 
-          function channelNames(block) {
-            return [...block.matchAll(/<display-name[^>]*>([\s\S]*?)<\/display-name>/gi)]
-              .map(m => decodeXml(m[1].replace(/<[^>]+>/g, '').trim()))
-              .filter(Boolean)
+          function channelName(block) {
+            const m = block.match(/<display-name\b[^>]*>([\s\S]*?)<\/display-name>/i)
+            return m ? decodeXml(m[1].replace(/<[^>]+>/g, '').trim()) : ''
           }
 
-          function channelId(block) {
-            const m = block.match(/<channel\b[^>]*\bid="([^"]+)"/i)
-            return m ? decodeXml(m[1]).trim() : ''
-          }
-
-          function iconSrc(block) {
-            const m = block.match(/<icon\b[^>]*src="([^"]+)"/i)
-            return m ? decodeXml(m[1]).trim() : ''
-          }
-
-          const rawXml = fs.readFileSync(rawPath, 'utf8')
+          const curatedXml = fs.readFileSync(curatedPath, 'utf8')
           let guideXml = fs.readFileSync(guidePath, 'utf8')
 
-          const logosByFinalName = new Map()
-          const logosById = new Map()
+          const logoById = new Map()
+          const logoByName = new Map()
 
-          for (const match of rawXml.matchAll(/<channel\b[\s\S]*?<\/channel>/gi)) {
-            const block = match[0]
-            const id = channelId(block)
-            const names = channelNames(block)
-            const shortName = names[0]
-            const logo = iconSrc(block)
+          for (const match of curatedXml.matchAll(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi)) {
+            const attrs = match[1]
+            const body = match[2]
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(match[0])
+            const iconMatch = match[0].match(/<icon\b[^>]*src="([^"]+)"/i)
 
+            if (!iconMatch) continue
+
+            const logo = decodeXml(iconMatch[1]).trim()
             if (!logo) continue
 
-            if (id) logosById.set(normalize(id), logo)
-
-            if (shortName && wanted[shortName]) {
-              logosByFinalName.set(normalize(wanted[shortName]), logo)
-            }
-
-            for (const name of names) {
-              logosByFinalName.set(normalize(name), logo)
-            }
+            if (id) logoById.set(id, logo)
+            if (id) logoById.set(decodeXml(id).replace(/&amp;/g, '&'), logo)
+            if (name) logoByName.set(normalize(name), logo)
           }
 
           let scanned = 0
@@ -1517,16 +1572,16 @@ jobs:
           let updated = 0
           let missing = 0
 
-          guideXml = guideXml.replace(/<channel\b[^>]*>[\s\S]*?<\/channel>/gi, block => {
+          guideXml = guideXml.replace(/<channel\b([^>]*)>([\s\S]*?)<\/channel>/gi, (block, attrs) => {
             scanned++
 
-            const id = channelId(block)
-            const names = channelNames(block)
-            const displayName = names[0] || ''
+            const id = attr(attrs, 'id') || attr(attrs, 'xmltv_id')
+            const name = channelName(block)
 
             const logo =
-              logosByFinalName.get(normalize(displayName)) ||
-              logosById.get(normalize(id))
+              logoById.get(id) ||
+              logoById.get(decodeXml(id).replace(/&amp;/g, '&')) ||
+              logoByName.get(normalize(name))
 
             if (!logo) {
               missing++
@@ -1545,59 +1600,29 @@ jobs:
 
           fs.writeFileSync(guidePath, guideXml)
 
-          console.log(`OTA channels scanned: ${scanned}`)
-          console.log(`RAW OTA logos available: ${logosByFinalName.size}`)
-          console.log(`OTA icons added: ${added}`)
-          console.log(`OTA icons updated: ${updated}`)
-          console.log(`OTA channels still missing logo: ${missing}`)
+          console.log(`Generated guide channels scanned: ${scanned}`)
+          console.log(`Curated logos available: ${logoById.size}`)
+          console.log(`Icons added to generated guide: ${added}`)
+          console.log(`Icons updated in generated guide: ${updated}`)
+          console.log(`Generated guide channels still without curated logo match: ${missing}`)
 
-          if (scanned !== 16) {
-            console.error(`Expected 16 OTA channels, scanned ${scanned}`)
-            process.exit(1)
-          }
-
-          if (added + updated < 10) {
-            console.error('Refusing to continue: expected at least 10 OTA logos to be injected')
+          if (added + updated < 100) {
+            console.error('Refusing to continue: expected at least 100 curated logos to be injected into generated guide')
             process.exit(1)
           }
           EOF
 
-      - name: Compress OTA guide
+      - name: Normalize Air Disasters title
         run: |
-          gzip -c guides/OTALocalsguide.build.xml > guides/OTALocalsguide.xml.gz
-          rm -f guides/OTALocalsguide.build.xml
-          rm -f guides/OTALocalsguide.pass*.xml
-          rm -f guides/OTALocalsguide.pass*.log
-          rm -f guides/OTALocalsguide.pass*.count
+          perl -0pi -e 's/Mayday: Air Disaster/Air Disasters/g' guides/tvguidetivimateguide.xml
+
+      - name: Compress TiviMate guide
+        run: |
+          gzip -c guides/tvguidetivimateguide.xml > guides/tvguidetivimateguide.xml.gz
 
       - name: Package generated files for publishing
         run: |
-          tar -czf /tmp/ota-publish.tar.gz guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
-
-      - name: Upload publish package
-        uses: actions/upload-artifact@v4
-        with:
-          name: ota-publish-${{ github.run_id }}
-          path: /tmp/ota-publish.tar.gz
-          retention-days: 1
-
-  publish-ota-publish:
-    needs: build-festy-tvguide-ota
-    runs-on: ubuntu-latest
-
-
-    steps:
-      - name: Checkout latest main
-        uses: actions/checkout@v5
-        with:
-          ref: main
-          fetch-depth: 0
-
-      - name: Download generated files
-        uses: actions/download-artifact@v4
-        with:
-          name: ota-publish-${{ github.run_id }}
-          path: /tmp/ota-publish
+          tar -czf /tmp/tvguide-publish.tar.gz guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
 
       - name: Publish with retry protection
         run: |
@@ -1606,7 +1631,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          PACKAGE="/tmp/ota-publish/ota-publish.tar.gz"
+          PACKAGE="/tmp/tvguide-publish.tar.gz"
 
           for attempt in 1 2 3 4 5 6 7 8 9 10; do
             echo "Publish attempt $attempt"
@@ -1615,14 +1640,14 @@ jobs:
             git reset --hard origin/main
             tar -xzf "$PACKAGE" -C .
 
-            git add guides/OTALocalsguide.xml.gz config/.tvmaze-ota-cache.json
+            git add guides/tvguidetivimateguide.xml guides/tvguidetivimateguide.xml.gz
 
             if git diff --cached --quiet; then
               echo "No changes to publish"
               exit 0
             fi
 
-            git commit -m "Update OTA guide"
+            git commit -m "Update TiviMate guide"
 
             if git push origin HEAD:main; then
               echo "Publish succeeded"
