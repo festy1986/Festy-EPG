@@ -12,7 +12,7 @@ CHANNEL_FILE = "config/matcheverychannel.tx"
 
 OUTPUT_FILE = "guides/matched.xml"
 
-DAYS = 7
+DAYS = 14
 
 BLOCK_HOURS = 2
 
@@ -444,7 +444,7 @@ for channel_data in matched_channels:
 
 
 # ---------------------------------
-# Generate 7 Days
+# Generate 14 Days
 # 2 Hour Blocks
 # ---------------------------------
 
