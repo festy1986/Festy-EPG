@@ -69,6 +69,172 @@ jobs:
 
           cp "$SOURCE" "$OUTPUT"
 
+      - name: Normalize all TVPassport station slugs
+        run: |
+          cd epg
+
+          node <<'EOFJS'
+          const fs = require('fs')
+
+          const channelsPath = 'sites/tvpassport.com/festy-tvpassport.channels.xml'
+
+          if (!fs.existsSync(channelsPath)) {
+            console.error(`Missing ${channelsPath}`)
+            process.exit(1)
+          }
+
+          let xml = fs.readFileSync(channelsPath, 'utf8')
+
+          const siteIds = [
+            ...new Set(
+              [...xml.matchAll(/site_id="([^"]+)"/g)]
+                .map(match => match[1])
+                .filter(Boolean)
+            )
+          ]
+
+          console.log(`TVPassport site_ids to validate: ${siteIds.length}`)
+
+          function numericStationId(siteId) {
+            const match = String(siteId || '').match(/\/(\d+)$/)
+            return match ? match[1] : ''
+          }
+
+          function siteIdFromUrl(value, expectedNumericId) {
+            const match = String(value || '').match(
+              /\/tv-listings\/stations\/([^/?#]+\/(\d+))(?:[/?#]|$)/i
+            )
+
+            if (!match) return ''
+            if (expectedNumericId && match[2] !== expectedNumericId) return ''
+
+            return match[1]
+          }
+
+          function canonicalHrefFromHtml(html) {
+            const a = String(html || '').match(
+              /<link\b[^>]*rel=["'][^"']*\bcanonical\b[^"']*["'][^>]*href=["']([^"']+)["'][^>]*>/i
+            )
+
+            if (a) return a[1]
+
+            const b = String(html || '').match(
+              /<link\b[^>]*href=["']([^"']+)["'][^>]*rel=["'][^"']*\bcanonical\b[^"']*["'][^>]*>/i
+            )
+
+            return b ? b[1] : ''
+          }
+
+          async function resolveCanonical(siteId) {
+            const expectedNumericId = numericStationId(siteId)
+
+            if (!expectedNumericId) {
+              throw new Error(`Invalid TVPassport site_id: ${siteId}`)
+            }
+
+            const url = `https://www.tvpassport.com/tv-listings/stations/${siteId}`
+
+            for (let attempt = 1; attempt <= 3; attempt++) {
+              try {
+                const response = await fetch(url, {
+                  redirect: 'follow',
+                  headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                  }
+                })
+
+                if (!response.ok) {
+                  throw new Error(`HTTP ${response.status}`)
+                }
+
+                const html = await response.text()
+
+                const fromResponseUrl = siteIdFromUrl(response.url, expectedNumericId)
+                const canonicalHref = canonicalHrefFromHtml(html)
+                const fromCanonical = siteIdFromUrl(canonicalHref, expectedNumericId)
+
+                const canonical = fromCanonical || fromResponseUrl
+
+                if (!canonical) {
+                  throw new Error(`Could not determine canonical station URL`)
+                }
+
+                return canonical
+              } catch (err) {
+                if (attempt === 3) throw err
+
+                console.log(
+                  `[SLUG RETRY] ${siteId} | ${err.message} | attempt=${attempt}/3`
+                )
+
+                await new Promise(resolve => setTimeout(resolve, 1000 * attempt))
+              }
+            }
+
+            return siteId
+          }
+
+          async function main() {
+            const replacements = new Map()
+            const failures = []
+            let nextIndex = 0
+
+            async function worker() {
+              while (true) {
+                const index = nextIndex++
+                if (index >= siteIds.length) return
+
+                const original = siteIds[index]
+
+                try {
+                  const canonical = await resolveCanonical(original)
+                  replacements.set(original, canonical)
+
+                  if (canonical !== original) {
+                    console.log(`[SLUG FIX] ${original} -> ${canonical}`)
+                  } else {
+                    console.log(`[SLUG OK] ${original}`)
+                  }
+                } catch (err) {
+                  failures.push(`${original}: ${err.message}`)
+                  console.log(`[SLUG FAIL] ${original} | ${err.message}`)
+                }
+              }
+            }
+
+            const workerCount = Math.min(5, Math.max(1, siteIds.length))
+            await Promise.all(Array.from({ length: workerCount }, () => worker()))
+
+            for (const [original, canonical] of replacements) {
+              if (original === canonical) continue
+
+              xml = xml.replaceAll(
+                `site_id="${original}"`,
+                `site_id="${canonical}"`
+              )
+            }
+
+            fs.writeFileSync(channelsPath, xml)
+
+            const changed = [...replacements].filter(([a, b]) => a !== b).length
+            const unchanged = [...replacements].filter(([a, b]) => a === b).length
+
+            console.log(`TVPassport canonical slugs changed: ${changed}`)
+            console.log(`TVPassport canonical slugs already correct: ${unchanged}`)
+            console.log(`TVPassport canonical slug failures: ${failures.length}`)
+
+            if (failures.length) {
+              console.error('Could not validate every TVPassport station slug:')
+              for (const failure of failures) console.error(`  ${failure}`)
+              process.exit(1)
+            }
+          }
+
+          main().catch(err => {
+            console.error(err)
+            process.exit(1)
+          })
+          EOFJS
 
       - name: Write enriched TVPassport config
         run: |
@@ -488,7 +654,7 @@ jobs:
 
           cd ..
 
-      - name: Merge previous 24 hours of TVPassport listings
+      - name: Merge previous 36 hours of TVPassport listings
         run: |
           node <<'EOFJS'
           const fs = require('fs')
@@ -502,14 +668,14 @@ jobs:
           }
 
           if (!fs.existsSync(previousPath)) {
-            console.log('No previous TVPassport guide found; skipping previous-24-hour merge')
+            console.log('No previous TVPassport guide found; skipping previous-36-hour merge')
             process.exit(0)
           }
 
           const currentXml = fs.readFileSync(currentPath, 'utf8')
           const previousXml = fs.readFileSync(previousPath, 'utf8')
 
-          const cutoff = Date.now() - 24 * 60 * 60 * 1000
+          const cutoff = Date.now() - 36 * 60 * 60 * 1000
 
           function parseXmltvTimestamp(value) {
             const match = String(value || '').match(
