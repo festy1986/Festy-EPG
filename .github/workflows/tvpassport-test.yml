@@ -1,0 +1,243 @@
+name: TVPassport TEST
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tvpassport-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone IPTV-org EPG engine
+        run: |
+          rm -rf epg
+          git clone --depth 1 https://github.com/iptv-org/epg.git epg
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: epg/package-lock.json
+
+      - name: Install EPG dependencies
+        run: |
+          cd epg
+          npm ci
+
+      - name: Write TEST TVPassport channels
+        run: |
+          mkdir -p epg/sites/tvpassport.com
+
+          cat > epg/sites/tvpassport.com/festy-tvpassport-test.channels.xml <<'EOFXML'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <channels>
+            <channel site="tvpassport.com" site_id="fox-wfxt--ma-hd/3657" xmltv_id="FOX..us">FOX Boston</channel>
+            <channel site="tvpassport.com" site_id="nbc-wbts-cd-nashua-nh-hd/30964" xmltv_id="NBC.BOSTON.us">NBC Boston</channel>
+            <channel site="tvpassport.com" site_id="adult-swim--east-hd/7336" xmltv_id="ADULT.SWIM.us">Adult Swim</channel>
+            <channel site="tvpassport.com" site_id="hgtv-canada-hd/8793" xmltv_id="HOME.NETWORK.ca">Home Network</channel>
+            <channel site="tvpassport.com" site_id="cbs-wbz-boston-ma-hd/3653" xmltv_id="CBS.BOSTON.us">CBS Boston</channel>
+          </channels>
+          EOFXML
+
+      - name: Write diagnostic TVPassport config
+        run: |
+          cat > epg/sites/tvpassport.com/tvpassport.com.config.js <<'EOFJS'
+          const axios = require('axios')
+          const dayjs = require('dayjs')
+          const cheerio = require('cheerio')
+          const utc = require('dayjs/plugin/utc')
+          const timezone = require('dayjs/plugin/timezone')
+          const customParseFormat = require('dayjs/plugin/customParseFormat')
+
+          dayjs.extend(utc)
+          dayjs.extend(timezone)
+          dayjs.extend(customParseFormat)
+
+          module.exports = {
+            site: 'tvpassport.com',
+            days: 14,
+
+            url({ channel, date }) {
+              return `https://www.tvpassport.com/tv-listings/stations/${channel.site_id}/${date.format('YYYY-MM-DD')}`
+            },
+
+            async request() {
+              return {
+                timeout: Number(process.env.TVPASSPORT_SCHEDULE_TIMEOUT || 30000),
+                headers: {
+                  Cookie: await getCookie(),
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0 Safari/537.36'
+                }
+              }
+            },
+
+            parser({ content, channel, date }) {
+              const programs = []
+              const currentTimezone = parseCurrentTimezone(content)
+              const items = parseItems(content)
+
+              const rawStarts = items
+                .map(item => {
+                  const $item = cheerio.load(item)
+                  return $item('*').data('st')
+                })
+                .filter(Boolean)
+                .map(String)
+                .sort()
+
+              const firstReturned = rawStarts.length ? rawStarts[0] : 'NONE'
+              const lastReturned = rawStarts.length ? rawStarts[rawStarts.length - 1] : 'NONE'
+
+              console.log(
+                `[PULL] ${channel.name} | requested=${date.format('YYYY-MM-DD')} | ` +
+                `programs=${items.length} | returned=${firstReturned} -> ${lastReturned} | ` +
+                `timezone=${currentTimezone}`
+              )
+
+              for (const item of items) {
+                const $item = cheerio.load(item)
+                const start = parseStart($item, currentTimezone)
+                const duration = parseDuration($item)
+                const stop = start.add(duration, 'm')
+
+                const title = parseTitle($item)
+                const description = parseDescription($item)
+
+                programs.push({
+                  title,
+                  description,
+                  start,
+                  stop
+                })
+              }
+
+              return programs
+            }
+          }
+
+          async function getCookie() {
+            const res = await axios.get('https://www.tvpassport.com/tv-listings')
+            const setCookie = res.headers['set-cookie']
+            if (!setCookie || setCookie.length === 0) return ''
+            const cookies = setCookie.map(cookie => cookie.split(';')[0])
+            return cookies.join('; ')
+          }
+
+          function parseDescription($item) {
+            return $item('*').data('description') || ''
+          }
+
+          function parseTitle($item) {
+            return $item('*').data('showname')?.toString() || ''
+          }
+
+          function parseStart($item, currentTimezone) {
+            const time = $item('*').data('st')
+            return dayjs.tz(time, 'YYYY-MM-DD HH:mm:ss', currentTimezone)
+          }
+
+          function parseDuration($item) {
+            const duration = $item('*').data('duration')
+            return parseInt(duration || 0, 10)
+          }
+
+          function parseItems(content) {
+            if (!content) return []
+            const $ = cheerio.load(content)
+            return $('[data-st][data-duration][data-showname]').toArray()
+          }
+
+          function parseCurrentTimezone(content) {
+            if (!content) return 'America/New_York'
+            const $ = cheerio.load(content)
+            return $('#timezone_selector').val() || 'America/New_York'
+          }
+          EOFJS
+
+      - name: Run 14-day TVPassport diagnostic
+        run: |
+          cd epg
+
+          export TVPASSPORT_SCHEDULE_TIMEOUT=30000
+
+          TODAY_EASTERN=$(TZ=America/New_York date +%Y-%m-%d)
+          echo "Starting TEST guide from: $TODAY_EASTERN"
+          echo "Requesting 14 days"
+          export CURR_DATE="${TODAY_EASTERN}T12:00:00Z"
+
+          set +e
+          npx tsx scripts/commands/epg/grab.ts \
+            --channels=sites/tvpassport.com/festy-tvpassport-test.channels.xml \
+            --output="../TVPassport.TEST.xml" \
+            --days=14 \
+            --maxConnections=5 \
+            2>&1 | tee ../TVPassport.TEST.log
+
+          STATUS=${PIPESTATUS[0]}
+          set -e
+
+          echo ""
+          echo "============================================================"
+          echo "DIAGNOSTIC PULL RESULTS"
+          echo "============================================================"
+          grep '^\[PULL\]' ../TVPassport.TEST.log || true
+
+          echo ""
+          echo "============================================================"
+          echo "DUPLICATE / DATE SUMMARY"
+          echo "============================================================"
+
+          node <<'EOFJS'
+          const fs = require('fs')
+
+          const path = '../TVPassport.TEST.xml'
+          if (!fs.existsSync(path)) {
+            console.log('No TEST XML created')
+            process.exit(0)
+          }
+
+          const xml = fs.readFileSync(path, 'utf8')
+          const channels = [
+            ['FOX..us', 'FOX Boston'],
+            ['NBC.BOSTON.us', 'NBC Boston'],
+            ['ADULT.SWIM.us', 'Adult Swim'],
+            ['HOME.NETWORK.ca', 'Home Network'],
+            ['CBS.BOSTON.us', 'CBS Boston']
+          ]
+
+          for (const [id, name] of channels) {
+            const escaped = id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const re = new RegExp(`<programme\\b[^>]*channel="${escaped}"[^>]*>[\\s\\S]*?<\\/programme>`, 'gi')
+            const blocks = [...xml.matchAll(re)].map(m => m[0])
+
+            const rows = []
+            for (const block of blocks) {
+              const start = block.match(/\\bstart="([^"]+)"/i)?.[1] || ''
+              const stop = block.match(/\\bstop="([^"]+)"/i)?.[1] || ''
+              rows.push({ start, stop })
+            }
+
+            const uniquePairs = new Set(rows.map(r => `${r.start}|${r.stop}`))
+            const starts = rows.map(r => r.start).filter(Boolean).sort()
+            const stops = rows.map(r => r.stop).filter(Boolean).sort()
+
+            console.log(`${name}`)
+            console.log(`  programme rows: ${rows.length}`)
+            console.log(`  unique start/stop pairs: ${uniquePairs.size}`)
+            console.log(`  earliest start: ${starts[0] || 'NONE'}`)
+            console.log(`  latest stop: ${stops[stops.length - 1] || 'NONE'}`)
+          }
+          EOFJS
+
+          echo ""
+          echo "grab.ts exit status: $STATUS"
+          exit "$STATUS"
