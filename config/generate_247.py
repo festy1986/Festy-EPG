@@ -15,7 +15,7 @@ XTREAM_URL = os.environ["XTREAM_URL"].rstrip("/")
 USERNAME = os.environ["XTREAM_USERNAME"]
 PASSWORD = os.environ["XTREAM_PASSWORD"]
 
-DAYS = 2
+DAYS = 14
 BLOCK_HOURS = 2
 
 
@@ -485,7 +485,7 @@ for channel_data in matched_channels:
 
 # ---------------------------------
 # Generate Programming
-# 2 Days / 48 Hours
+# 14 Days / 336 Hours
 # 2 Hour Blocks
 # ---------------------------------
 
@@ -526,10 +526,12 @@ for channel_data in matched_channels:
     current = start_date
 
 
-    # 2 days × 12 blocks per day
-    # = 24 total 2-hour blocks
+    # 14 days × 12 blocks per day
+    # = 168 total 2-hour blocks
 
-    for block in range(24):
+    for block in range(
+        DAYS * 24 // BLOCK_HOURS
+    ):
 
 
         stop = current + timedelta(
