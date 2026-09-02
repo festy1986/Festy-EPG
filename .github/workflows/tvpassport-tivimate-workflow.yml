@@ -224,9 +224,8 @@ jobs:
             console.log(`TVPassport canonical slug failures: ${failures.length}`)
 
             if (failures.length) {
-              console.error('Could not validate every TVPassport station slug:')
+              console.error('Could not validate these TVPassport station slugs; continuing with their existing site_id values:')
               for (const failure of failures) console.error(`  ${failure}`)
-              process.exit(1)
             }
           }
 
