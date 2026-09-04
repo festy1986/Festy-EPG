@@ -2201,7 +2201,7 @@
     <display-name>####### SPORTSNET PPV #######</display-name>
   </channel>
   <channel id="1488483">
-    <display-name>NEXT | SPORTSNET CENTRAL: SEP. 3 | Fri 04 Sep 06:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 1</display-name>
+    <display-name>LIVE | SPORTSNET CENTRAL: SEP. 3 | Fri 04 Sep 06:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 1</display-name>
   </channel>
   <channel id="1488482">
     <display-name>NEXT | RABBITOHS VS. ROOSTERS | Fri 04 Sep 07:20 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 2</display-name>
@@ -3700,67 +3700,68 @@
     <display-name>MLB: MLB NETWORK (US)</display-name>
   </channel>
   <channel id="762779">
-    <display-name>San Francisco Giants vs Pittsburgh Pirates @ Sep 3 12:35 PM :MLB  01</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/San_Francisco_Giants/San_Francisco_Giants_vs_Pittsburgh_Pirates.png" />
+    <display-name>MLB 01 | Tigers x Guardians start:2026-09-04 19:10:00 stop:2026-09-05 02:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Detroit_Tigers/Detroit_Tigers_vs_Cleveland_Guardians.png" />
   </channel>
   <channel id="762778">
-    <display-name>Toronto Blue Jays vs Cleveland Guardians @ Sep 3 1:10 PM :MLB  02</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Toronto_Blue_Jays/Toronto_Blue_Jays_vs_Cleveland_Guardians.png" />
+    <display-name>MLB 02 | Tigers x Guardians start:2026-09-05 00:15:00 stop:2026-09-05 07:28:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Detroit_Tigers/Detroit_Tigers_vs_Cleveland_Guardians.png" />
   </channel>
   <channel id="762777">
-    <display-name>Chicago White Sox vs Houston Astros @ Sep 3 2:10 PM :MLB  03</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Chicago_White_Sox/Chicago_White_Sox_vs_Houston_Astros.png" />
+    <display-name>MLB 03 | Brewers x Reds start:2026-09-04 23:10:00 stop:2026-09-05 06:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Milwaukee_Brewers/Milwaukee_Brewers_vs_Cincinnati_Reds.png" />
   </channel>
   <channel id="762776">
-    <display-name>Boston Red Sox vs Baltimore Orioles @ Sep 3 7:15 PM :MLB  04</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Boston_Red_Sox/Boston_Red_Sox_vs_Baltimore_Orioles.png" />
+    <display-name>MLB 04 | Braves x Phillies start:2026-09-04 23:40:00 stop:2026-09-05 06:53:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Atlanta_Braves/Atlanta_Braves_vs_Philadelphia_Phillies.png" />
   </channel>
   <channel id="762775">
-    <display-name>Milwaukee Brewers vs Chicago Cubs @ Sep 3 7:15 PM :MLB  05</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Milwaukee_Brewers/Milwaukee_Brewers_vs_Chicago_Cubs.png" />
+    <display-name>MLB 05 |  Angels x Pirates start:2026-09-04 23:45:00 stop:2026-09-05 06:58:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Los_Angeles_Angels/Los_Angeles_Angels_vs_Pittsburgh_Pirates.png" />
   </channel>
   <channel id="762774">
-    <display-name>Miami Marlins vs Kansas City Royals @ Sep 3 7:40 PM :MLB  06</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Miami_Marlins/Miami_Marlins_vs_Kansas_City_Royals.png" />
+    <display-name>MLB 06 |  Red Sox x Orioles start:2026-09-05 00:05:00 stop:2026-09-05 07:18:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Boston_Red_Sox/Boston_Red_Sox_vs_Baltimore_Orioles.png" />
   </channel>
   <channel id="762773">
-    <display-name>Tampa Bay Rays vs Texas Rangers @ Sep 3 8:05 PM :MLB  07</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Tampa_Bay_Rays/Tampa_Bay_Rays_vs_Texas_Rangers.png" />
+    <display-name>MLB 07 |  Giants x Mets start:2026-09-05 00:10:00 stop:2026-09-05 07:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/San_Francisco_Giants/San_Francisco_Giants_vs_New_York_Mets.png" />
   </channel>
   <channel id="762772">
-    <display-name>Athletics vs Seattle Mariners @ Sep 3 9:40 PM :MLB  08</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Athletics/Athletics_vs_Seattle_Mariners.png" />
+    <display-name>MLB 08 | Cubs x Marlins start:2026-09-05 00:10:00 stop:2026-09-05 07:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Chicago_Cubs/Chicago_Cubs_vs_Miami_Marlins.png" />
   </channel>
   <channel id="762771">
-    <display-name>St. Louis Cardinals vs Los Angeles Dodgers @ Sep 3 10:10 PM :MLB  09</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/St_Louis_Cardinals/St_Louis_Cardinals_vs_Los_Angeles_Dodgers.png" />
+    <display-name>MLB 09 |  Twins x White Sox start:2026-09-05 00:40:00 stop:2026-09-05 07:53:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Minnesota_Twins/Minnesota_Twins_vs_Chicago_White_Sox.png" />
   </channel>
   <channel id="762770">
-    <display-name>MLB 10 |  Tigers x Twins start:2026-09-03 00:40:00 stop:2026-09-03 07:53:20</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Detroit_Tigers/Detroit_Tigers_vs_Minnesota_Twins.png" />
+    <display-name>MLB 10 |  Rays x Rangers start:2026-09-05 01:05:00 stop:2026-09-05 08:18:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Tampa_Bay_Rays/Tampa_Bay_Rays_vs_Texas_Rangers.png" />
   </channel>
   <channel id="762769">
-    <display-name>MLB 11 |  Marlins x Royals start:2026-09-03 00:40:00 stop:2026-09-03 07:53:20</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Miami_Marlins/Miami_Marlins_vs_Kansas_City_Royals.png" />
+    <display-name>MLB 11 |  D-backs x Astros start:2026-09-05 01:10:00 stop:2026-09-05 08:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Arizona_Diamondbacks/Arizona_Diamondbacks_vs_Houston_Astros.png" />
   </channel>
   <channel id="762768">
-    <display-name>MLB 12 |  Brewers x Cubs start:2026-09-03 00:40:00 stop:2026-09-03 07:53:20</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Milwaukee_Brewers/Milwaukee_Brewers_vs_Chicago_Cubs.png" />
+    <display-name>MLB 12 |  Blue Jays x Royals start:2026-09-05 01:10:00 stop:2026-09-05 08:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Toronto_Blue_Jays/Toronto_Blue_Jays_vs_Kansas_City_Royals.png" />
   </channel>
   <channel id="762767">
-    <display-name>MLB 13 |  White Sox x Astros start:2026-09-03 01:10:00 stop:2026-09-03 08:23:20</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Chicago_White_Sox/Chicago_White_Sox_vs_Houston_Astros.png" />
+    <display-name>MLB 13 |  Cardinals x Rockies start:2026-09-05 01:40:00 stop:2026-09-05 08:53:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/St_Louis_Cardinals/St_Louis_Cardinals_vs_Colorado_Rockies.png" />
   </channel>
   <channel id="762766">
-    <display-name>MLB 14 |  Yankees x Angels start:2026-09-03 02:38:00 stop:2026-09-03 09:51:20</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/New_York_Yankees/New_York_Yankees_vs_Los_Angeles_Angels.png" />
+    <display-name>MLB 14 |  Nationals x Dodgers start:2026-09-05 03:10:00 stop:2026-09-05 10:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Washington_Nationals/Washington_Nationals_vs_Los_Angeles_Dodgers.png" />
   </channel>
   <channel id="762765">
-    <display-name>MLB 15 |  Cardinals x Dodgers start:2026-09-03 03:10:00 stop:2026-09-03 10:23:20</display-name>
-    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/St_Louis_Cardinals/St_Louis_Cardinals_vs_Los_Angeles_Dodgers.png" />
+    <display-name>MLB 15 |  Athletics x Mariners start:2026-09-05 03:10:00 stop:2026-09-05 10:23:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/Athletics/Athletics_vs_Seattle_Mariners.png" />
   </channel>
   <channel id="762764">
-    <display-name>MLB 16 |</display-name>
+    <display-name>MLB 16 |  Yankees x Padres start:2026-09-05 02:40:00 stop:2026-09-05 09:53:20</display-name>
+    <icon src="https://raw.githubusercontent.com/festy1986/festy-epg/main/sports-logos/MLB/New_York_Yankees/New_York_Yankees_vs_San_Diego_Padres.png" />
   </channel>
   <channel id="762763">
     <display-name>MLB 17 | Marlins x Astros start:2026-07-23 01:10:00 stop:2026-07-23 08:23:20</display-name>
@@ -156361,1923 +156362,1923 @@ Friday 09/04/2026</desc>
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762779">
-    <title>Post Game: San Francisco Giants vs. Pittsburgh Pirates - 12:35 PM</title>
-    <desc>San Francisco Giants vs. Pittsburgh Pirates
-Thursday 09/03/2026 - 12:35 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762778">
-    <title>Post Game: Toronto Blue Jays vs. Cleveland Guardians - 1:10 PM</title>
-    <desc>Toronto Blue Jays vs. Cleveland Guardians
-Thursday 09/03/2026 - 1:10 PM</desc>
+    <title>Detroit Tigers vs. Cleveland Guardians</title>
+    <desc>Detroit Tigers vs. Cleveland Guardians
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762777">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>Milwaukee Brewers vs. Cincinnati Reds</title>
+    <desc>Milwaukee Brewers vs. Cincinnati Reds
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762776">
-    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
-    <desc>Boston Red Sox vs. Baltimore Orioles
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762776">
+    <title>Atlanta Braves vs. Philadelphia Phillies</title>
+    <desc>Atlanta Braves vs. Philadelphia Phillies
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762775">
+    <title>Los Angeles Angels vs. Pittsburgh Pirates</title>
+    <desc>Los Angeles Angels vs. Pittsburgh Pirates
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762774">
     <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
     <desc>Boston Red Sox vs. Baltimore Orioles
 Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
-  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762775">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
-  </programme>
-  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
-  </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762774">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Post Game: Boston Red Sox vs. Baltimore Orioles - 7:15 PM</title>
+    <desc>Boston Red Sox vs. Baltimore Orioles
+Thursday 09/03/2026 - 7:15 PM</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762773">
-    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
-    <desc>Tampa Bay Rays vs. Texas Rangers
-Thursday 09/03/2026 - 8:05 PM</desc>
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762773">
+    <title>San Francisco Giants vs. New York Mets</title>
+    <desc>San Francisco Giants vs. New York Mets
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762772">
+    <title>Chicago Cubs vs. Miami Marlins</title>
+    <desc>Chicago Cubs vs. Miami Marlins
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762771">
+    <title>Minnesota Twins vs. Chicago White Sox</title>
+    <desc>Minnesota Twins vs. Chicago White Sox
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762770">
     <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
     <desc>Tampa Bay Rays vs. Texas Rangers
 Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
-  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762772">
-    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
-    <desc>Athletics vs. Seattle Mariners
-Thursday 09/03/2026 - 9:40 PM</desc>
-  </programme>
-  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762771">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
-  </programme>
-  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
-  </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762770">
-    <title>Detroit Tigers vs. Minnesota Twins</title>
-    <desc>Detroit Tigers vs. Minnesota Twins
-Wednesday 09/02/2026</desc>
+    <title>Post Game: Tampa Bay Rays vs. Texas Rangers - 8:05 PM</title>
+    <desc>Tampa Bay Rays vs. Texas Rangers
+Thursday 09/03/2026 - 8:05 PM</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762769">
-    <title>Post Game: Miami Marlins vs. Kansas City Royals - 7:40 PM</title>
-    <desc>Miami Marlins vs. Kansas City Royals
-Thursday 09/03/2026 - 7:40 PM</desc>
+    <title>Arizona Diamondbacks vs. Houston Astros</title>
+    <desc>Arizona Diamondbacks vs. Houston Astros
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762768">
-    <title>Post Game: Milwaukee Brewers vs. Chicago Cubs - 7:15 PM</title>
-    <desc>Milwaukee Brewers vs. Chicago Cubs
-Thursday 09/03/2026 - 7:15 PM</desc>
+    <title>Toronto Blue Jays vs. Kansas City Royals</title>
+    <desc>Toronto Blue Jays vs. Kansas City Royals
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762767">
-    <title>Post Game: Chicago White Sox vs. Houston Astros - 2:10 PM</title>
-    <desc>Chicago White Sox vs. Houston Astros
-Thursday 09/03/2026 - 2:10 PM</desc>
+    <title>St. Louis Cardinals vs. Colorado Rockies</title>
+    <desc>St. Louis Cardinals vs. Colorado Rockies
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762766">
-    <title>New York Yankees vs. Los Angeles Angels</title>
-    <desc>New York Yankees vs. Los Angeles Angels
-Wednesday 09/02/2026</desc>
+    <title>Washington Nationals vs. Los Angeles Dodgers</title>
+    <desc>Washington Nationals vs. Los Angeles Dodgers
+Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762765">
-    <title>Upcoming: St. Louis Cardinals vs. Los Angeles Dodgers - 10:10 PM</title>
-    <desc>St. Louis Cardinals vs. Los Angeles Dodgers
-Thursday 09/03/2026 - 10:10 PM</desc>
+    <title>Upcoming: Athletics vs. Seattle Mariners - 9:40 PM</title>
+    <desc>Athletics vs. Seattle Mariners
+Thursday 09/03/2026 - 9:40 PM</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="762764">
-    <title>MLB 16 |</title>
-    <desc>MLB 16 |
+    <title>New York Yankees vs. San Diego Padres</title>
+    <desc>New York Yankees vs. San Diego Padres
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="762763">
