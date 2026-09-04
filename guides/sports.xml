@@ -10,10 +10,10 @@
     <display-name>End | Spomer vs. Abubakari: Press Conference | Spomer v Abubakari | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 2</display-name>
   </channel>
   <channel id="1899999">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | GB: DAZN PPV 3</display-name>
+    <display-name>End | Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</display-name>
   </channel>
   <channel id="1899998">
-    <display-name>Next | TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</display-name>
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</display-name>
   </channel>
   <channel id="1899997">
     <display-name>Next | Valkenswaard - GCL Round 2 | Longines Global Champions Tour | 2026-09-04 | 14:40 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 5</display-name>
@@ -1756,10 +1756,10 @@
     <display-name>End | Spomer vs. Abubakari: Press Conference | Spomer v Abubakari | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 4</display-name>
   </channel>
   <channel id="1912598">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | CA: DAZN PPV 5</display-name>
+    <display-name>End | Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</display-name>
   </channel>
   <channel id="1912597">
-    <display-name>Next | TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</display-name>
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</display-name>
   </channel>
   <channel id="1912596">
     <display-name>Next | Valkenswaard - GCL Round 2 | Longines Global Champions Tour | 2026-09-04 | 14:40 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 7</display-name>
@@ -2206,7 +2206,7 @@
     <display-name>ENDED | RABBITOHS VS. ROOSTERS | Fri 04 Sep 07:20 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 2</display-name>
   </channel>
   <channel id="1488481">
-    <display-name>NEXT | JAYS TALK PLUS: SEP. 4 | Fri 04 Sep 11:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 3</display-name>
+    <display-name>LIVE | JAYS TALK PLUS: SEP. 4 | Fri 04 Sep 11:30 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 3</display-name>
   </channel>
   <channel id="1488480">
     <display-name>NEXT | TOULOUSE OLYMPIQUE VS. HULL FC | Fri 04 Sep 14:20 NDT (CA) | 8K EXCLUSIVE | CA: SPORTSNET PPV 4</display-name>
@@ -3041,10 +3041,10 @@
     <display-name>End | Spomer vs. Abubakari: Press Conference | Spomer v Abubakari | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 2</display-name>
   </channel>
   <channel id="1899899">
-    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 3</display-name>
+    <display-name>End | Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</display-name>
   </channel>
   <channel id="1899898">
-    <display-name>Next | TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</display-name>
+    <display-name>NO EVENT STREAMING NOW - | 8K EXCLUSIVE | US: DAZN PPV 4</display-name>
   </channel>
   <channel id="1899897">
     <display-name>Next | Valkenswaard - GCL Round 2 | Longines Global Champions Tour | 2026-09-04 | 14:40 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 5</display-name>
@@ -4546,10 +4546,10 @@
     <display-name>####### ESPN+ PPV ⱽᴵᴾ #######</display-name>
   </channel>
   <channel id="1924729">
-    <display-name>NEXT | THE GOLICS | Fri 04 Sep 10:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 1</display-name>
+    <display-name>LIVE | THE GOLICS | Fri 04 Sep 10:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 1</display-name>
   </channel>
   <channel id="1924728">
-    <display-name>NEXT | UNC WILMINGTON VS. GARDNER-WEBB | Fri 04 Sep 10:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 2</display-name>
+    <display-name>LIVE | UNC WILMINGTON VS. GARDNER-WEBB | Fri 04 Sep 10:00 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 2</display-name>
   </channel>
   <channel id="1924727">
     <display-name>NEXT | EVANSVILLE VS. MIAMI (OH) | Fri 04 Sep 10:30 EDT (US) | 8K EXCLUSIVE | US: ESPN+ PPV 3</display-name>
@@ -9406,6 +9406,12 @@
   <channel id="1632703">
     <display-name>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1893164">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</display-name>
+  </channel>
+  <channel id="1881016">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</display-name>
+  </channel>
   <channel id="284684">
     <display-name>IT: SKY SPORT NBA UHD</display-name>
   </channel>
@@ -9427,8 +9433,14 @@
   <channel id="351699">
     <display-name>IT: DAZN NFL</display-name>
   </channel>
+  <channel id="1884302">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</display-name>
+  </channel>
   <channel id="1686819">
     <display-name>VIP: NBA TV</display-name>
+  </channel>
+  <channel id="1884203">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</display-name>
   </channel>
   <channel id="293277">
     <display-name>AF: NBA TV</display-name>
@@ -9445,6 +9457,9 @@
   <channel id="2140551">
     <display-name>ES: NFL NETWORK: LIVE 24/7 COVERAGE ᴿᴬᵂ</display-name>
   </channel>
+  <channel id="1881096">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</display-name>
+  </channel>
   <channel id="1695190">
     <display-name>MEO: NBA TV ᴿᴬᵂ</display-name>
   </channel>
@@ -9453,6 +9468,9 @@
   </channel>
   <channel id="1688731">
     <display-name>VIP: SPORT TV NBA ᴿᴬᵂ</display-name>
+  </channel>
+  <channel id="1893368">
+    <display-name>End | Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</display-name>
   </channel>
   <channel id="386374">
     <display-name>PT: SPORT TV NBA</display-name>
@@ -10202,243 +10220,243 @@ Friday 09/04/2026</desc>
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1899999">
-    <title>8K EXCLUSIVE | GB: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | GB: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1899998">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | GB: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1899997">
@@ -80042,243 +80060,243 @@ Friday 09/04/2026</desc>
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1912598">
-    <title>8K EXCLUSIVE | CA: DAZN PPV 5</title>
-    <desc>8K EXCLUSIVE | CA: DAZN PPV 5
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 5
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1912597">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | CA: DAZN PPV 6
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1912596">
@@ -131282,243 +131300,243 @@ Friday 09/04/2026</desc>
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1899899">
-    <title>8K EXCLUSIVE | US: DAZN PPV 3</title>
-    <desc>8K EXCLUSIVE | US: DAZN PPV 3
+    <title>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3</title>
+    <desc>Valkenswaard - GCL Round 1 | Longines Global Champions Tour | 2026-09-04 | 12:05 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 3
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1899898">
-    <title>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4</title>
-    <desc>TAIF Racing Season 2026 - Week 7, Day 1 | TAIF Racing | 2026-09-04 | 13:15 (GMT) | 8K EXCLUSIVE | US: DAZN PPV 4
+    <title>8K EXCLUSIVE | US: DAZN PPV 4</title>
+    <desc>8K EXCLUSIVE | US: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1899897">
@@ -378121,6 +378139,246 @@ Friday 09/04/2026</desc>
     <desc>PRIME: NBA TV INTERNATIONAL ᴿᴬᵂ
 Friday 09/04/2026</desc>
   </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1893164">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | NL: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1881016">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | BE: DAZN PPV 20
+Friday 09/04/2026</desc>
+  </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="284684">
     <title>IT: SKY SPORT NBA UHD</title>
     <desc>IT: SKY SPORT NBA UHD
@@ -378961,6 +379219,126 @@ Friday 09/04/2026</desc>
     <desc>IT: DAZN NFL
 Friday 09/04/2026</desc>
   </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1884302">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | IT: DAZN PPV 5
+Friday 09/04/2026</desc>
+  </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1686819">
     <title>VIP: NBA TV</title>
     <desc>VIP: NBA TV
@@ -379079,6 +379457,126 @@ Friday 09/04/2026</desc>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1686819">
     <title>VIP: NBA TV</title>
     <desc>VIP: NBA TV
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1884203">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | FR: DAZN PPV 4
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="293277">
@@ -379681,6 +380179,126 @@ Friday 09/04/2026</desc>
     <desc>ES: NFL NETWORK: LIVE 24/7 COVERAGE ᴿᴬᵂ
 Friday 09/04/2026</desc>
   </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1881096">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | ES: DAZN PPV 40
+Friday 09/04/2026</desc>
+  </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1695190">
     <title>MEO: NBA TV ᴿᴬᵂ</title>
     <desc>MEO: NBA TV ᴿᴬᵂ
@@ -380039,6 +380657,126 @@ Friday 09/04/2026</desc>
   <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1688731">
     <title>VIP: SPORT TV NBA ᴿᴬᵂ</title>
     <desc>VIP: SPORT TV NBA ᴿᴬᵂ
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904030000 -0400" stop="20260904060000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904060000 -0400" stop="20260904090000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904090000 -0400" stop="20260904120000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904120000 -0400" stop="20260904150000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904150000 -0400" stop="20260904180000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904180000 -0400" stop="20260904210000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260904210000 -0400" stop="20260905000000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905000000 -0400" stop="20260905030000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905030000 -0400" stop="20260905060000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905060000 -0400" stop="20260905090000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905090000 -0400" stop="20260905120000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905120000 -0400" stop="20260905150000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905150000 -0400" stop="20260905180000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905180000 -0400" stop="20260905210000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260905210000 -0400" stop="20260906000000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906000000 -0400" stop="20260906030000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906030000 -0400" stop="20260906060000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906060000 -0400" stop="20260906090000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906090000 -0400" stop="20260906120000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906120000 -0400" stop="20260906150000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906150000 -0400" stop="20260906180000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906180000 -0400" stop="20260906210000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
+Friday 09/04/2026</desc>
+  </programme>
+  <programme start="20260906210000 -0400" stop="20260907000000 -0400" channel="1893368">
+    <title>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13</title>
+    <desc>Good Morning Football | NFL Game Pass | 2026-09-04 | 12:00 (GMT) | 8K EXCLUSIVE | PT: DAZN PPV 13
 Friday 09/04/2026</desc>
   </programme>
   <programme start="20260904000000 -0400" stop="20260904030000 -0400" channel="386374">
